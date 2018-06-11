@@ -3,3 +3,7 @@
 @import 'styles-variables';
 
 @import 'styles-reset';
+
+@import '~@angular/material/theming';
+
+@include mat-core();
