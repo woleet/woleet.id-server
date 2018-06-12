@@ -1,9 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
-
 @import 'styles-variables';
-
 @import 'styles-reset';
-
 @import '~@angular/material/theming';
 
 @include mat-core();
+
+body {
+  background-color: #fafafa;
+}
+
+$primary-color-dark:   #00796B;
+$primary-color:        #009688;
+$primary-color-light:  #B2DFDB;
+$primary-color-text:   #FFFFFF;
+$accent-color:         #009688;
+$primary-text-color:   #212121;
+$secondary-text-color: #757575;
+$divider-color:        #BDBDBD;
+
+$light-primary: mat-palette($mat-teal, 200, 500, 300);
+$light-accent: mat-palette($mat-brown, 200);
+$light-warn: mat-palette($mat-deep-orange, 200);
+
+$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+
+@include angular-material-theme($light-theme);
