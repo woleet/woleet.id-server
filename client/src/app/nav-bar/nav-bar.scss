@@ -31,24 +31,8 @@ nav {
     box-shadow: none !important;
   }
 
-  .mat-list-item {
-    $mat-list-item-height: 36px;
-    height: $mat-list-item-height;
-    min-height: $mat-list-item-height;
-    margin: 0;
-
-    i {
-      float: left;
-      margin: 5px 15px 0;
-    }
-
-    span {
-      line-height: $mat-list-item-height;
-    }
-  }
-
   .sidenav {
-    width: 200px;
+    width: 100px;
     padding-top: $nav-top-height;
     transition: width cubic-bezier(0.4, 0, 0.2, 1) .2s;
     height: 100%;
@@ -57,6 +41,41 @@ nav {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+
+    .mat-button {
+      height: 36px;
+      width: 100%;
+      text-align: left;
+      padding: 0 8px;
+      margin: 0;
+      font-weight: 400;
+      border-radius: 0;
+      text-decoration: none;
+      text-transform: none;
+    }
+
+    .mat-list-item {
+      $mat-list-item-height: 36px;
+      height: $mat-list-item-height;
+      min-height: $mat-list-item-height;
+      margin: 0;
+
+      i {
+        float: left;
+        margin: 5px 15px 0;
+      }
+
+      span {
+        line-height: $mat-list-item-height;
+        overflow: hidden;
+        display: block;
+      }
+    }
+
+    &:hover {
+      width: 200px;
+    }
+
   }
 
 }

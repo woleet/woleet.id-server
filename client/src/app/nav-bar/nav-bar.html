@@ -1,14 +1,6 @@
 <nav role="navigation">
 
   <mat-toolbar>
-    <button
-      type="button"
-      aria-label="Toggle sidenav"
-      mat-icon-button
-      (click)="drawer.toggle()"
-      *ngIf="isHandset$ | async">
-      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-    </button>
     <span>Application Title</span>
   </mat-toolbar>
 
@@ -17,24 +9,24 @@
       #drawer
       class="sidenav"
       fixedInViewport="true"
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="!(isHandset$ | async)">
+      role="navigation"
+      mode="side"
+      opened="true">
       <mat-nav-list>
         <mat-list-item routerLink="/setup-page">
-          <div>
+          <div class="mat-button">
             <i class="material-icons">settings_power</i>
             <span>Setup</span>
           </div>
         </mat-list-item>
         <mat-list-item routerLink="/setup-page">
-          <div>
+          <div class="mat-button">
             <i class="material-icons">fingerprint</i>
             <span>Identity</span>
           </div>
         </mat-list-item>
         <mat-list-item routerLink="/setup-page">
-          <div>
+          <div class="mat-button">
             <i class="material-icons">settings</i>
             <span>Settings</span>
           </div>
