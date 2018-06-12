@@ -32,9 +32,12 @@ nav {
   }
 
   .sidenav {
+    $nav-transition: width cubic-bezier(0.4, 0, 0.2, 1) .2s;
+    $mat-list-item-height: 36px;
+
     width: 100px;
     padding-top: $nav-top-height;
-    transition: width cubic-bezier(0.4, 0, 0.2, 1) .2s;
+    transition: $nav-transition;
     height: 100%;
     background-color: $nav-bg;
     border-right: $nav-border;
@@ -43,7 +46,7 @@ nav {
     overflow: hidden;
 
     .mat-button {
-      height: 36px;
+      height: $mat-list-item-height;
       width: 100%;
       text-align: left;
       padding: 0 8px;
@@ -52,10 +55,10 @@ nav {
       border-radius: 0;
       text-decoration: none;
       text-transform: none;
+      overflow: hidden;
     }
 
     .mat-list-item {
-      $mat-list-item-height: 36px;
       height: $mat-list-item-height;
       min-height: $mat-list-item-height;
       margin: 0;
@@ -74,6 +77,7 @@ nav {
 
     &:hover {
       width: 200px;
+      transition: $nav-transition .7s;
     }
 
   }

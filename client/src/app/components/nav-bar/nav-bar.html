@@ -1,17 +1,12 @@
 <nav role="navigation">
 
   <mat-toolbar>
-    <span>Application Title</span>
+    <span>Application {{title}}</span>
   </mat-toolbar>
 
   <mat-sidenav-container>
-    <mat-sidenav
-      #drawer
-      class="sidenav"
-      fixedInViewport="true"
-      role="navigation"
-      mode="side"
-      opened="true">
+    <mat-sidenav class="sidenav" fixedInViewport="true"
+      role="navigation" mode="side" opened="true">
       <mat-nav-list>
         <mat-list-item routerLink="/setup-page">
           <div class="mat-button">
@@ -19,19 +14,33 @@
             <span>Setup</span>
           </div>
         </mat-list-item>
-        <mat-list-item routerLink="/setup-page">
+        <mat-list-item routerLink="/user-page">
           <div class="mat-button">
             <i class="material-icons">fingerprint</i>
             <span>Identity</span>
           </div>
         </mat-list-item>
-        <mat-list-item routerLink="/setup-page">
+        <mat-list-item routerLink="/credentials-page">
+          <div class="mat-button">
+            <i class="material-icons">vpn_key</i>
+            <span>Credentials</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item routerLink="/settings-page">
           <div class="mat-button">
             <i class="material-icons">settings</i>
             <span>Settings</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item routerLink="/about-page">
+          <div class="mat-button">
+            <i class="material-icons">info</i>
+            <span>About</span>
           </div>
         </mat-list-item>
       </mat-nav-list>
     </mat-sidenav>
   </mat-sidenav-container>
 </nav>
+
+<ng-content></ng-content>
