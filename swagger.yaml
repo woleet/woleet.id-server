@@ -1,0 +1,655 @@
+openapi: 3.0.0
+servers:
+  - description: A woleet.id test server.
+    url: https://testing.woleet.id/
+  - description: woleet.id development server.
+    url: https://dev.woleet.id/
+info:
+  description: |
+    This is woleet.id server. You can find out more about woleet.id at [https://doc.woleet.id](https://doc.woleet.id).
+  version: 1.0.0
+  title: woleet.id server
+  termsOfService: 'https://woleet.id/terms/'
+  contact:
+    email: contact@woleet.com
+  license:
+    name: MIT
+tags:
+  - name: authentication
+  - name: key
+  - name: user
+  - name: identity
+  - name: signature
+security:
+  - BasicAuth: []
+  - BearerAuth: []
+paths:
+  /login:
+    get:
+      tags:
+        - authentication
+      summary: Logs user into the system
+      operationId: login
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: Successfully logged in.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    $ref: '#/components/schemas/SessionToken'
+        '400':
+          description: "Missing username or password"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Invalid username or password"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /info:
+    get:
+      tags:
+        - authentication
+      summary: Return information about current user session
+      operationId: getUserInfo
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTOGet'
+  # Identity
+  /signature:
+    get:
+      operationId: signature
+      summary: Sign some data using the bitcoin identity of your backend.
+      tags:
+        - signature
+      description: >
+        Use this endpoint to sign some data using the bitcoin identity of your backend.
+          You first need to compute the SHA256 hash of your data (client side) and then provide it in the `hashToSign` parameter.
+          The signature produced is the signature of this hash using the bitcoin address provided in the `pubKey` parameter (or by the default bitcoin address of your backend if not set).
+          This endpoint is protected by an API token, provided to you at backend kit installation time. However, for security reason, **this endpoint SHOULD NEVER be exposed** outside your backend. To facilitate the isolation of this endpoint, a dedicated port can be specified at installation time.
+      parameters:        
+        - $ref: '#/components/parameters/PubKeyQueryParameter'
+        - $ref: '#/components/parameters/HashToSignQueryParameter'
+      security:
+        - AuthBearer: []
+      responses:
+        '200':
+          description: The signature of `hashToSign` is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignatureResult'
+        '400':
+          description: Missing or invalid query parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: /signature endpoint is not reachable on this port
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /identity:
+    get:
+      operationId: identity
+      summary: Prove the bitcoin identity of your backend.
+      tags:
+        - identity
+      description: >
+        This endpoint can be used by anyone wanting to verify the bitcoin identity of your backend.
+          Calling this endpoint (that should be accessible publicly) makes your backend sign some random data (built by concatenating the `leftData` parameter provided by the client and the `rightData` parameter provided by your backend) using the bitcoin address provided in the `pubKey` parameter.
+          The caller can then verify that the produced signature is valid for the given bitcoin address (which validate the ownership of this address by your backend) and can optionally read the TLS certificate securing this endpoint to get the certified identity of your backend.
+      parameters:
+        - $ref: '#/components/parameters/PubKeyQueryParameter'
+        - $ref: '#/components/parameters/LeftDataQueryParameter'
+      responses:
+        '200':
+          description: The signature of the concatenation of `leftData` and `rightData` using the bitcoin address `pubKey` is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityResult'
+        '400':
+          description: Missing or invalid query parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: /identity endpoint is not reachable on this port.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  # End Identity
+  /logout:
+    get:
+      tags:
+        - authentication
+      summary: Logs out current logged in user
+      operationId: logout
+      responses:
+        '200':
+          description: Successfully logged out the user.
+  # Admin
+  # Key
+  /user/{userId}/key:
+    post:
+      tags:
+        - key
+      summary: Add a new key to the user's store
+      operationId: addKey
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '400':
+          description: Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        $ref: '#/components/requestBodies/KeyPost'
+  /user/{userId}/key/{keyId}:
+    get:
+      tags:
+        - key
+      summary: Find key by ID
+      description: Returns a key.
+      operationId: getKeyById
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/KeyIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '400':
+          description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Key not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    put:
+      tags:
+        - key
+      summary: Update an existing key
+      operationId: updateKey
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/KeyIdParameter'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '400':
+          description: Invalid ID or body supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Key not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/KeyPut'
+  # End Key
+  # User
+  /user:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: This can only be done by the logged in user.
+      operationId: createUser
+      security:
+        - BearerAuth: []
+      responses:
+        default:
+          description: Successful operation.
+      requestBody:
+        description: Created user object.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPost'
+  /user/{userId}:
+    get:
+      tags:
+        - user
+      summary: Get user by user id.
+      operationId: getUserById
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGet'
+        '400':
+          description: Invalid username supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    put:
+      tags:
+        - user
+      summary: Updated user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '400':
+          description: Invalid user supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPut'
+        description: Updated user object.
+        required: true
+  # End User
+  # End Admin
+externalDocs:
+  description: Find out more about woleet.id
+  url: 'https://doc.woleet.id/'
+components:
+  schemas:
+    UserBase:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email.
+          example: "user.foo@example.com"
+        username:
+          type: string
+          description: User's alias.
+          example: "user-alias"
+        firstName:
+          type: string
+          description: User's first name.
+          example: "user"
+        lastName:
+          type: string
+          description: User's last name.
+          example: "foo"
+        type:
+          $ref: '#/components/schemas/UserTypeEnum'
+    UserDetail:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              readOnly: true
+              example: "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3"
+            type:
+              $ref: '#/components/schemas/UserTypeEnum'
+            status:
+              type: string
+              enum:
+              - active
+              - locked
+              - disabled
+              default: "active"
+              description: |
+                User Status:
+                  - A locked user cannot sign.
+                  - A disabled user cannot sign nor login.
+              example: "active"
+            created:
+              type: integer
+              format: int64
+              readOnly: true
+              description: Date of creation (Unix ms timestamp).
+              example: 1529050145516
+            lastModified:
+              type: integer
+              format: int64
+              readOnly: true
+              description: Date of last modification (Unix ms timestamp).
+              example: 1529050145516
+            lastLogin:
+              type: integer
+              format: int64
+              readOnly: true
+              description: Date of last login (Unix ms timestamp).
+              example: 1529050155459
+        - $ref: '#/components/schemas/UserBase'
+    Password:
+      type: string
+      format: password
+      description: Password of the user (it must be provided at creation time).
+      example: "nSBa+rV3%2/LpD"
+    PublicKey:
+      type: string
+      description: Public key.
+      example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
+    UserTypeEnum:
+      type: string
+      enum:
+       - user
+       - admin
+      default: "user"
+      description: User type.
+      example: "user"
+    UserGet:
+      allOf:
+        - $ref: '#/components/schemas/UserDetail'
+        - type: object
+          required:
+            - username
+            - firstName
+            - lastName
+    UserPut:
+      allOf:
+        - $ref: '#/components/schemas/UserDetail'
+        - type: object
+          properties:
+            password:
+              $ref: '#/components/schemas/Password'
+    UserPost:
+      allOf:
+        - $ref: '#/components/schemas/UserPut'
+        - type: object
+          required:
+            - username
+            - firstName
+            - lastName
+            - password
+    UserDTOGet:
+      description: A user DTO accessible from regular user.
+      allOf:
+        - $ref: '#/components/schemas/UserBase'
+        - type: object
+    KeyBase:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Key name"
+          description: Key name.
+        status:
+          type: string
+          enum:
+          - active
+          - revoked
+          - expired
+          description: Key status.
+          default: "active"
+          example: "active"
+    Key:
+      allOf:
+        - type: object
+          required:
+          - name
+          properties:
+            id:
+              readOnly: true
+              type: string
+              format: uuid
+              description: Key id.
+              example: "a35c9fee-3893-4eb7-adde-205e1be03209"
+            value:
+              $ref: '#/components/schemas/PublicKey'
+            type:
+              type: string
+              enum:
+              - Bip39
+              description: Key type.
+              example: "Bip39"
+            created:
+              type: integer
+              format: int64
+              readOnly: true
+              description: Date of creation (Unix ms timestamp).
+              example: 1529052551419
+            lastModified:
+              type: integer
+              format: int64
+              readOnly: true
+              description: Date of last modification (Unix ms timestamp).
+              example: 1529052551419
+            lastUsed:
+              type: integer
+              format: int64
+              readOnly: true
+              description: Date of last utilisation (Unix ms timestamp).
+              example: 1529059167339
+        - $ref: '#/components/schemas/KeyBase'
+    KeyExpiration:
+      type: integer
+      format: int64
+      readOnly: true
+      description: Date to disable the key.
+      example: 1531651039296
+    KeyPost:
+      allOf:
+        - $ref: '#/components/schemas/KeyBase'
+        - type: object
+          required:
+          - name
+        - type: object
+          properties:
+            expiration:
+              $ref: '#/components/schemas/KeyExpiration'
+    KeyPut:
+      allOf:
+        - $ref: '#/components/schemas/KeyBase'
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              format: int32
+              example: 418
+            message:
+              type: string
+              example: "I'm a teapot"
+          required:
+            - code
+            - message
+    # JSONWebToken:
+    #   type: string
+    #   example: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNYlRqbmVSM1NtdWxScTg5djB5cTBnPT0ifQ.ggNDtcSoMQJ7J1l31yeKRZtT2b3UBUmh4EHusUrM5mA"
+    SessionToken:
+      type: string
+      example: "doy7GCOUR0uGz6ssPvF6wQ=="
+    SignatureResult:
+      type: object
+      properties:
+        pubKey:
+          type: string
+          description: The bitcoin address used to sign (same as the `pubKey` parameter, if provided).
+        signedHash:
+          type: string
+          description: The hash that is signed (same as the `hashToSign` parameter).
+        signature:
+          type: string
+          description: The signature of `hashToSign` using the bitcoin address `pubKey`.
+        identityURL:
+          type: string
+          description: The public URL of the `/identity` endpoint (ie. the URL that anyone can use to verify the bitcoin identity of your backend).
+    IdentityResult:
+      type: object
+      properties:
+        rightData:
+          type: string
+          description: The right part of the signed data (generated ramdomly).
+        signature:
+          type: string
+          description: The signature of the concatenation of `leftData` and `rightData` using the bitcoin address `pubKey`.
+
+
+  parameters:
+    UserIdParameter:
+      name: userId
+      in: path
+      description: Identifier of the user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 'feb37e23-d04e-4e71-bf53-1f1a75ba3a68'
+    KeyIdParameter:
+      name: keyId
+      in: path
+      description: Identifier of the key.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: "552aa3fd-3b5e-434f-bdd3-9b6c58c269c1"
+    PubKeyQueryParameter:
+      name: pubKey
+      in: query
+      description: The bitcoin address to use to sign.
+      required: true
+      schema:
+        type: string
+        example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
+    LeftDataQueryParameter:
+      name: leftData
+      in: query
+      description: Left part of the random data to sign (should be generated randomly).
+      required: true
+      schema:
+        type: string
+        example: '00c8a2b0c373050e7f2abbb2e4c631a42c10d402'
+    HashToSignQueryParameter:
+      name: hashToSign
+      in: query
+      description: The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}).
+      required: true
+      schema:
+        type: string
+        example: 'd8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975'
+  requestBodies:
+    Key:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Key'
+      required: true
+    KeyPost:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/KeyPost'
+      description: Key object to be added to the store.
+      required: true
+    KeyPut:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/KeyPut'
+      description: Replacement key object.
+      required: true
+    UserArray:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/UserGet'
+      description: List of user object.
+      required: true
+  securitySchemes:    
+    BasicAuth:
+      type: http
+      scheme: basic
+    BearerAuth:
+      type: http
+      scheme: bearer
