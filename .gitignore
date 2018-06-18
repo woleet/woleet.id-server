@@ -19,3 +19,6 @@
 # System Files
 .DS_Store
 Thumbs.db
+
+# Log files
+*.log
