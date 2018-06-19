@@ -1,6 +1,12 @@
-import { Router } from "express";
-import { NotImplementedError } from "http-typed-errors";
-import { validate } from './schemas'
+import { NotImplemented } from "http-errors";
+import { validate } from './schemas';
+import * as Router from "koa-router";
+
+import * as Debug from 'debug';
+const debug = Debug('id:api:key');
+
+const vkid = validate.param('id', 'uuid');
+const vuid = validate.param('userId', 'uuid');
 
 /**
  * Key
@@ -9,16 +15,17 @@ import { validate } from './schemas'
  *  tags: [key]
  */
 
-const router = Router();
+const router = new Router({ prefix: '/user/:userId/key' });
 
 /**
  * @route: /key/
  * @swagger
  *  operationId: addKey
  */
-router.post('/', validate('addKey'), async function (req, res, next) {
-  const { name, status } = req.body;
-  throw new NotImplementedError();
+router.post('/', vuid, validate.body('addKey'), function (ctx) {
+  const { name, status } = ctx.request.body;
+  debug('addkey', { name, status });
+  throw new NotImplemented();
 });
 
 /**
@@ -26,8 +33,9 @@ router.post('/', validate('addKey'), async function (req, res, next) {
  * @swagger
  *  operationId: getKeyById
  */
-router.get('/:id', async function (req, res, next) {
-  throw new NotImplementedError();
+router.get('/:id', vuid, vkid, function (ctx) {
+  console.log('Validated UUID')
+  throw new NotImplemented();
 });
 
 /**
@@ -36,11 +44,12 @@ router.get('/:id', async function (req, res, next) {
  * @swagger
  *  operationId: updateKey
  */
-router.put('/:id', validate('updateKey'), async function (req, res, next) {
-  const { id } = req.params;
-  const { name, status } = req.body;
-  throw new NotImplementedError();
-});
+router.put('/:id', vuid, vkid, validate.body('updateKey'),
+  async function (ctx) {
+    const { id } = ctx.params;
+    const { name, status } = ctx.request.body;
+    throw new NotImplemented();
+  });
 
 /**
  * @route: /key/{keyId}
@@ -48,9 +57,9 @@ router.put('/:id', validate('updateKey'), async function (req, res, next) {
  * @swagger
  *  operationId: updateKey
  */
-router.delete('/:id', async function (req, res, next) {
-  const { id } = req.params;
-  throw new NotImplementedError();
+router.delete('/:id', vuid, vkid, async function (ctx) {
+  const { id } = ctx.params;
+  throw new NotImplemented();
 });
 
 export { router };

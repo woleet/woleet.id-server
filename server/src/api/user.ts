@@ -1,6 +1,11 @@
-import { Request, Response, NextFunction, Router } from "express";
-import { NotImplementedError } from "http-typed-errors";
+import { NotImplemented } from "http-errors";
 import { validate } from './schemas'
+import * as Router from "koa-router";
+
+import * as Debug from 'debug';
+const debug = Debug('id:api:key');
+
+const vid = validate.param('id', 'uuid');
 
 /**
  * User
@@ -9,16 +14,16 @@ import { validate } from './schemas'
  *  tags: [user]
  */
 
-const router = Router();
+const router = new Router({ prefix: '/user' });
 
 /**
  * @route: /user/
  * @swagger
  *  operationId: createUser
  */
-router.post('/', validate('createUser'), async function (req, res, next) {
-  const { name, status } = req.body;
-  throw new NotImplementedError();
+router.post('/', validate.body('createUser'), async function (ctx) {
+  const { name, status } = ctx.request.body;
+  throw new NotImplemented();
 });
 
 /**
@@ -26,8 +31,8 @@ router.post('/', validate('createUser'), async function (req, res, next) {
  * @swagger
  *  operationId: getUserById
  */
-router.get('/:id', async function (req, res, next) {
-  throw new NotImplementedError();
+router.get('/:id', vid, async function (ctx) {
+  throw new NotImplemented();
 });
 
 /**
@@ -36,10 +41,10 @@ router.get('/:id', async function (req, res, next) {
  * @swagger
  *  operationId: updateUser
  */
-router.put('/:id', validate('updateUser'), async function (req, res, next) {
-  const { id } = req.params;
-  const { name, status } = req.body;
-  throw new NotImplementedError();
+router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
+  const { id } = ctx.params;
+  const { name, status } = ctx.request.body;
+  throw new NotImplemented();
 });
 
 /**
@@ -48,9 +53,9 @@ router.put('/:id', validate('updateUser'), async function (req, res, next) {
  * @swagger
  *  operationId: deleteUser
  */
-router.delete('/:id', async function (req, res, next) {
-  const { id } = req.params;
-  throw new NotImplementedError();
+router.delete('/:id', vid, async function (ctx) {
+  const { id } = ctx.params;
+  throw new NotImplemented();
 });
 
 export { router };

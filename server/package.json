@@ -4,7 +4,7 @@
   "description": "This is a repository to go with my article on creating an Express web application using TypeScript 2.",
   "main": "index.js",
   "scripts": {
-    "tsc": "npx tsc",
+    "compile": "npx tsc",
     "prestart": "npx tsc",
     "start": "node src-js",
     "dev": "DEBUG=id* npx ts-node-dev src/index.ts",
@@ -15,18 +15,21 @@
   "license": "ISC",
   "devDependencies": {
     "@types/debug": "0.0.30",
-    "@types/express": "^4.16.0",
+    "@types/http-errors": "^1.6.1",
     "@types/joi": "^13.0.8",
+    "@types/koa": "^2.0.46",
+    "@types/koa-bodyparser": "^4.2.0",
+    "@types/koa-morgan": "^1.0.4",
+    "@types/koa-router": "^7.0.28",
     "@types/node": "^10.3.2",
     "ts-node-dev": "^1.0.0-pre.26",
     "typescript": "^2.9.1"
   },
   "dependencies": {
-    "cookie-parser": "^1.4.3",
-    "express": "^4.16.3",
-    "express-async-errors": "^3.0.0",
-    "http-typed-errors": "^1.0.1",
     "joi": "^13.4.0",
-    "morgan": "^1.9.0"
+    "koa": "^2.5.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-morgan": "^1.0.1",
+    "koa-router": "^7.4.0"
   }
 }

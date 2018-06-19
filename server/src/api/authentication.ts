@@ -1,5 +1,6 @@
-import { Request, Response, NextFunction, Router } from "express";
-import { NotImplementedError } from "http-typed-errors";
+import { NotImplemented } from "http-errors";
+
+import * as Router from "koa-router";
 
 /**
  * Authentification
@@ -8,15 +9,24 @@ import { NotImplementedError } from "http-typed-errors";
  *  tags: [authentication]
  */
 
-const router = Router();
+const router = new Router();
 
 /**
  * @route: /login
  * @swagger
  *  operationId: login
  */
-router.get('/login', async function (req, res, next) {
-  throw new NotImplementedError();
+router.get('/login', async function (ctx) {
+  throw new NotImplemented();
+});
+
+/**
+ * @route: /info
+ * @swagger
+ *  operationId: getUserInfo
+ */
+router.get('/info', async function (ctx) {
+  throw new NotImplemented();
 });
 
 /**
@@ -24,8 +34,8 @@ router.get('/login', async function (req, res, next) {
  * @swagger
  *  operationId: logout
  */
-router.get('/logout', function (req, res, next) {
-  throw new NotImplementedError();
+router.all('/logout', function (ctx) {
+  throw new NotImplemented();
 });
 
 export { router };
