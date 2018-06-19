@@ -22,6 +22,9 @@
     "@types/koa-morgan": "^1.0.4",
     "@types/koa-router": "^7.0.28",
     "@types/node": "^10.3.2",
+    "@types/pg": "^7.4.9",
+    "@types/sequelize": "^4.27.22",
+    "pgtest": "^0.2.2",
     "ts-node-dev": "^1.0.0-pre.26",
     "typescript": "^2.9.1"
   },
@@ -30,6 +33,9 @@
     "koa": "^2.5.1",
     "koa-bodyparser": "^4.2.1",
     "koa-morgan": "^1.0.1",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "pg": "^7.4.3",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.37.10"
   }
 }

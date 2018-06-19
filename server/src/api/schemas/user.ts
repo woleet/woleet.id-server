@@ -13,7 +13,7 @@ const createUser = Joi.object().keys({
   username: RWord,
   firstName: RWord,
   lastName: RWord,
-  password: Joi.string()
+  password: RWord
 });
 
 const updateUser = Joi.object().keys({
@@ -23,7 +23,7 @@ const updateUser = Joi.object().keys({
   username: Word,
   firstName: Word,
   lastName: Word,
-  password: Joi.string()
+  password: Word
 });
 
 export { createUser, updateUser }

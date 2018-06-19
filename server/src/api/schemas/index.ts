@@ -40,9 +40,6 @@ function validateParam(name: string, schema: string): IMiddleware {
 
   return async function (ctx, next) {
     const param = ctx.params[name];
-
-    console.warn(ctx.params)
-
     if (!param)
       throw new BadRequest(`Path variable "${name}" is missing`);
 

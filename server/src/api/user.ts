@@ -1,9 +1,12 @@
 import { NotImplemented } from "http-errors";
-import { validate } from './schemas'
 import * as Router from "koa-router";
-
 import * as Debug from 'debug';
-const debug = Debug('id:api:key');
+
+import { validate } from './schemas';
+import { createUser } from '../ctr/user';
+import { UserObject } from "../typings";
+
+const debug = Debug('id:api:user');
 
 const vid = validate.param('id', 'uuid');
 
@@ -22,8 +25,9 @@ const router = new Router({ prefix: '/user' });
  *  operationId: createUser
  */
 router.post('/', validate.body('createUser'), async function (ctx) {
-  const { name, status } = ctx.request.body;
-  throw new NotImplemented();
+  const user: UserObject = ctx.request.body;
+  debug('Creating user', user);
+  createUser(user);
 });
 
 /**
