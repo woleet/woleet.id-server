@@ -4,7 +4,7 @@
   "description": "This is a repository to go with my article on creating an Express web application using TypeScript 2.",
   "main": "index.js",
   "scripts": {
-    "compile": "npx tsc",
+    "transpile": "npx tsc",
     "prestart": "npx tsc",
     "start": "node src-js",
     "dev": "DEBUG=id* npx ts-node-dev src/index.ts",
@@ -24,7 +24,6 @@
     "@types/node": "^10.3.2",
     "@types/pg": "^7.4.9",
     "@types/sequelize": "^4.27.22",
-    "pgtest": "^0.2.2",
     "ts-node-dev": "^1.0.0-pre.26",
     "typescript": "^2.9.1"
   },

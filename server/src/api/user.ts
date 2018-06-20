@@ -1,10 +1,11 @@
-import { NotImplemented } from "http-errors";
+import { Conflict, NotFound } from "http-errors";
 import * as Router from "koa-router";
 import * as Debug from 'debug';
 
 import { validate } from './schemas';
-import { createUser } from '../ctr/user';
-import { UserObject } from "../typings";
+import { createUser, getUserById, updateUser } from '../ctr/user';
+import { ApiPostUserObject } from "../typings";
+import { serialiseUser } from "./serialize/user";
 
 const debug = Debug('id:api:user');
 
@@ -25,9 +26,17 @@ const router = new Router({ prefix: '/user' });
  *  operationId: createUser
  */
 router.post('/', validate.body('createUser'), async function (ctx) {
-  const user: UserObject = ctx.request.body;
-  debug('Creating user', user);
-  createUser(user);
+  const user: ApiPostUserObject = ctx.request.body;
+  try {
+    ctx.body = serialiseUser(await createUser(user));
+  } catch (err) {
+    switch (err.name) {
+      case 'DuplicatedUserError':
+        throw new Conflict(err.message);
+      default:
+        throw err;
+    }
+  }
 });
 
 /**
@@ -36,7 +45,14 @@ router.post('/', validate.body('createUser'), async function (ctx) {
  *  operationId: getUserById
  */
 router.get('/:id', vid, async function (ctx) {
-  throw new NotImplemented();
+  const { id } = ctx.params;
+
+  const user = await getUserById(id);
+
+  if (!user)
+    throw new NotFound;
+
+  ctx.body = serialiseUser(user);
 });
 
 /**
@@ -47,19 +63,22 @@ router.get('/:id', vid, async function (ctx) {
  */
 router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const { id } = ctx.params;
-  const { name, status } = ctx.request.body;
-  throw new NotImplemented();
-});
+  const update = ctx.request.body;
+  try {
+    const user = await updateUser(id, update);
 
-/**
- * @route: /user/{userId}
- * @schema: key.put
- * @swagger
- *  operationId: deleteUser
- */
-router.delete('/:id', vid, async function (ctx) {
-  const { id } = ctx.params;
-  throw new NotImplemented();
+    if (!user)
+      throw new NotFound;
+
+    ctx.body = serialiseUser(user);
+  } catch (err) {
+    switch (err.name) {
+      case 'DuplicatedUserError':
+        throw new Conflict(err.message);
+      default:
+        throw err;
+    }
+  }
 });
 
 export { router };

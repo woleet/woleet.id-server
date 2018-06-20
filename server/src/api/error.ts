@@ -6,7 +6,6 @@ const errorHandler: IMiddleware = async function(ctx, next) {
     await next();
     const status = ctx.status || 404;
     if (status === 404) {
-      // console.error('RRR', ctx);
       ctx.throw(new NotFound)
     }
   } catch (err) {

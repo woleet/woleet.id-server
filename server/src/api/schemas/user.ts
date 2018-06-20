@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 
 const userTypeEnum = ['user', 'admin'];
-const userStatusEnum = ['active', 'locked', 'disabled'];
+const userStatusEnum = ['active', 'blocked', 'removed'];
 
 const Word = Joi.string().alphanum().min(3).max(30);
 const RWord = Word.required();
