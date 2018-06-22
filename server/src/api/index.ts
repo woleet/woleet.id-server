@@ -1,7 +1,7 @@
-import { router as auth } from "./authentication";
-import { router as info } from "./info";
-import { router as user } from "./user";
-import { router as key } from "./key";
+import { router as auth } from "./routers/authentication";
+import { router as info } from "./routers/info";
+import { router as user } from "./routers/user";
+import { router as key } from "./routers/key";
 
 import * as Router from "koa-router";
 

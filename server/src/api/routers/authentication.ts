@@ -3,7 +3,7 @@ import { BadRequest, Unauthorized } from "http-errors";
 import * as auth from "basic-auth";
 import * as Router from "koa-router";
 
-import { createSession, delSession } from "../ctr/authentication";
+import { createSession, delSession } from "../../ctr/authentication";
 
 /**
  * Authentification

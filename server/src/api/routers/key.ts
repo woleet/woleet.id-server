@@ -1,5 +1,5 @@
 import { NotImplemented } from "http-errors";
-import { validate } from './schemas';
+import { validate } from '../schemas';
 import * as Router from "koa-router";
 
 import * as Debug from 'debug';

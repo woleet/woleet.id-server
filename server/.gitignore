@@ -17,6 +17,3 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
-
-# js
-/src-js

@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist/out-tsc",
     "target": "es2017",
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "src-js"
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "test/**/*.ts"
   ],
   "exclude": [
     "node_modules"
