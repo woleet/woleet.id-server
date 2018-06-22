@@ -1,8 +1,11 @@
-import { router as auth } from "./authentication"
-import { router as user } from "./user"
-import { router as key } from "./key"
+import { router as auth } from "./authentication";
+import { router as info } from "./info";
+import { router as user } from "./user";
+import { router as key } from "./key";
 
 import * as Router from "koa-router";
+
+import session from '../session';
 
 const router = new Router();
 
@@ -14,7 +17,8 @@ router.get('/', function (ctx) {
 });
 
 router.use(auth.routes());
-router.use(user.routes());
-router.use(key.routes());
+router.use(session, info.routes());
+router.use(session, user.routes());
+router.use(session, key.routes());
 
 export { router as api };

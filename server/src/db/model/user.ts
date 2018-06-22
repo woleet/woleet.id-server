@@ -1,7 +1,7 @@
 
-import { STRING, ENUM, UUID, UUIDV4, DATE } from 'sequelize';
+import { STRING, ENUM, UUID, UUIDV4, DATE, DOUBLE, CHAR } from 'sequelize';
 
-import { InternalUserObject, ApiPostUserObject } from '../../typings';
+import { SequelizeUserObject, InternalUserObject, ApiPostUserObject } from '../../typings';
 import { AbstractInstanceAccess } from '../abstract';
 
 const userModel = {
@@ -12,7 +12,9 @@ const userModel = {
   username: { type: STRING, unique: true, allowNull: false },
   firstName: { type: STRING, allowNull: false },
   lastName: { type: STRING, allowNull: false },
-  password: { type: STRING, allowNull: false },
+  password_hash: { type: CHAR(1024), allowNull: false },
+  password_salt: { type: CHAR(256), allowNull: false },
+  password_itrs: { type: DOUBLE, allowNull: false },
   lastLogin: { type: DATE, defaultValue: null }
 };
 
@@ -21,6 +23,14 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiPostUserO
   constructor(client) {
     super(client)
     this.init('user', userModel);
+  }
+
+  async getByUsername(username: string): Promise<SequelizeUserObject> {
+    return this.model.findOne({ where: { username } });
+  }
+
+  async getByEmail(email: string): Promise<SequelizeUserObject> {
+    return this.model.findOne({ where: { email } });
   }
 
 }

@@ -1,6 +1,9 @@
-import { NotImplemented } from "http-errors";
+import { BadRequest, Unauthorized } from "http-errors";
 
+import * as auth from "basic-auth";
 import * as Router from "koa-router";
+
+import { createSession, delSession } from "../ctr/authentication";
 
 /**
  * Authentification
@@ -14,19 +17,22 @@ const router = new Router();
 /**
  * @route: /login
  * @swagger
- *  operationId: login
+ *  operationId: createSession
  */
 router.get('/login', async function (ctx) {
-  throw new NotImplemented();
-});
+  const basic = auth(ctx.req);
+  console.log(basic);
 
-/**
- * @route: /info
- * @swagger
- *  operationId: getUserInfo
- */
-router.get('/info', async function (ctx) {
-  throw new NotImplemented();
+  if (!basic)
+    throw new BadRequest();
+
+  const { name, pass } = basic;
+  const token = await createSession(name, pass);
+
+  if (!token)
+    throw new Unauthorized();
+
+  ctx.body = { token };
 });
 
 /**
@@ -34,8 +40,9 @@ router.get('/info', async function (ctx) {
  * @swagger
  *  operationId: logout
  */
-router.all('/logout', function (ctx) {
-  throw new NotImplemented();
+router.all('/logout', async function (ctx) {
+  await delSession(ctx.session.id);
+  ctx.body = '';
 });
 
 export { router };

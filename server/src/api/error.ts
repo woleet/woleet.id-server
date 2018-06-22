@@ -1,7 +1,8 @@
 import { IMiddleware } from "koa-router";
 import { NotFound, HttpError } from "http-errors";
+import { NotFoundDBObjectError, DuplicatedDBObjectError } from "../errors";
 
-const errorHandler: IMiddleware = async function(ctx, next) {
+const errorHandler: IMiddleware = async function (ctx, next) {
   try {
     await next();
     const status = ctx.status || 404;
@@ -12,6 +13,12 @@ const errorHandler: IMiddleware = async function(ctx, next) {
     if (err instanceof HttpError) {
       ctx.status = err.status;
       ctx.body = { message: err.message, status: err.status };
+    } else if (err instanceof NotFoundDBObjectError) {
+      ctx.status = 404;
+      ctx.body = { message: err.message, status: 404 };
+    } else if (err instanceof DuplicatedDBObjectError) {
+      ctx.status = 409;
+      ctx.body = { message: err.message, status: 409 };
     } else {
       console.error('Unhandled error', err);
       ctx.status = 500;

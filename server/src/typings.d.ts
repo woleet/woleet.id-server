@@ -1,5 +1,6 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
 import { Instance } from "sequelize";
+import { SessionStore } from "./session";
 
 export interface Dictionary<T> {
   [Key: string]: T;
@@ -27,10 +28,12 @@ export interface InternalUserObject extends UserObject {
   type: UserTypeEnum,
   status: UserStatusEnum,
   email: string | null,
-  password: string
+  password_hash: string,
+  password_salt: string,
+  password_itrs: number
 }
 
-export interface SequelizeUserObject extends Instance<InternalUserObject> {}
+export interface SequelizeUserObject extends Instance<InternalUserObject> { }
 
 export interface ApiUserObject extends UserObject {
   id: string,
@@ -62,4 +65,15 @@ export interface ApiPutUserObject extends UserObject {
   status?: UserStatusEnum,
   email?: string,
   password?: string
+}
+
+export interface Session {
+  id: string,
+  user: SequelizeUserObject
+}
+
+declare module 'koa' {
+  interface Context {
+    session: Session | null;
+  }
 }

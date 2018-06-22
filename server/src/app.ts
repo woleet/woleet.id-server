@@ -1,15 +1,13 @@
 import * as Koa from 'koa';
 import * as morgan from 'koa-morgan';
 import * as bodyParser from 'koa-bodyparser';
-
 import { api } from './api/';
 import { errorHandler } from './api/error';
-
-const app = new Koa();
+export const app = new Koa();
 
 app.use(errorHandler);
 
-app.use(morgan('dev'))
+app.use(morgan('dev'));
 app.use(bodyParser());
 
 app.use(api.routes());

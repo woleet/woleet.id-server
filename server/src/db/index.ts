@@ -1,9 +1,7 @@
 import * as Sequelize from 'sequelize';
 import * as Debug from 'debug';
-
+import { EventEmitter } from 'events';
 import { userModel, UserAccess } from './model/user';
-import { SequelizeUserObject, ApiPostUserObject, Dictionary } from '../typings';
-import { AbstractInstanceAccess } from './abstract';
 
 const debug = Debug('id:db');
 

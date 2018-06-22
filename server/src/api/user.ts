@@ -1,13 +1,9 @@
-import { Conflict, NotFound } from "http-errors";
 import * as Router from "koa-router";
-import * as Debug from 'debug';
 
 import { validate } from './schemas';
-import { createUser, getUserById, updateUser } from '../ctr/user';
+import { createUser, getUserById, updateUser, getAllUsers } from '../ctr/user';
 import { ApiPostUserObject } from "../typings";
 import { serialiseUser } from "./serialize/user";
-
-const debug = Debug('id:api:user');
 
 const vid = validate.param('id', 'uuid');
 
@@ -27,16 +23,17 @@ const router = new Router({ prefix: '/user' });
  */
 router.post('/', validate.body('createUser'), async function (ctx) {
   const user: ApiPostUserObject = ctx.request.body;
-  try {
-    ctx.body = serialiseUser(await createUser(user));
-  } catch (err) {
-    switch (err.name) {
-      case 'DuplicatedUserError':
-        throw new Conflict(err.message);
-      default:
-        throw err;
-    }
-  }
+  ctx.body = serialiseUser(await createUser(user));
+});
+
+/**
+ * @route: /user/list
+ * @swagger
+ *  operationId: getUserList
+ */
+router.get('/list', async function (ctx) {
+  const users = await getAllUsers();
+  ctx.body = users.map(serialiseUser);
 });
 
 /**
@@ -46,12 +43,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
  */
 router.get('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
-
   const user = await getUserById(id);
-
-  if (!user)
-    throw new NotFound;
-
   ctx.body = serialiseUser(user);
 });
 
@@ -64,21 +56,8 @@ router.get('/:id', vid, async function (ctx) {
 router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const { id } = ctx.params;
   const update = ctx.request.body;
-  try {
-    const user = await updateUser(id, update);
-
-    if (!user)
-      throw new NotFound;
-
-    ctx.body = serialiseUser(user);
-  } catch (err) {
-    switch (err.name) {
-      case 'DuplicatedUserError':
-        throw new Conflict(err.message);
-      default:
-        throw err;
-    }
-  }
+  const user = await updateUser(id, update);
+  ctx.body = serialiseUser(user);
 });
 
 export { router };

@@ -1,27 +1,34 @@
-import { Request, Response, NextFunction } from "express";
+import * as Debug from 'debug';
+const debug = Debug('id:ctr:authentication');
 
-/**
- * Key
- * Request handlers for key.
- * @alias module:handlers.Key
- * @swagger
- *  tags: [authentication]
- */
+import { db } from '../db';
+import { store as sessionStore } from '../session';
+import { validate } from './utils/password';
+import { SequelizeUserObject } from '../typings';
 
-/**
- * @swagger
- *  operationId: addKey
- */
-function addKey(req: Request, res: Response, next: NextFunction) {
+export async function createSession(login: string, password: string): Promise<string> {
+  let user: SequelizeUserObject = null;
+  if (login.search('@') != -1) {
+    user = await db.user.getByEmail(login);
+  } else {
+    user = await db.user.getByUsername(login);
+  }
 
+  if (!user)
+    return null;
+
+  const success = await validate(password, {
+    hash: user.getDataValue('password_hash'),
+    salt: user.getDataValue('password_salt'),
+    iterations: user.getDataValue('password_itrs'),
+  })
+
+  if (!success)
+    return null;
+
+  return sessionStore.create(user);
 }
 
-/**
- * @swagger
- *  operationId: logout
- */
-function updateKey(req: Request, res: Response, next: NextFunction) {
-
+export async function delSession(id: string): Promise<void> {
+  return sessionStore.del(id);
 }
-
-export { addKey, updateKey }
