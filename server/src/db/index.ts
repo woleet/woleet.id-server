@@ -1,7 +1,6 @@
 import * as Sequelize from 'sequelize';
 import * as Debug from 'debug';
-import { EventEmitter } from 'events';
-import { userModel, UserAccess } from './model/user';
+import { UserAccess } from './model/user';
 
 const debug = Debug('id:db');
 

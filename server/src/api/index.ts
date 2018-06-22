@@ -5,7 +5,7 @@ import { router as key } from "./routers/key";
 
 import * as Router from "koa-router";
 
-import session from '../session';
+import session from './session';
 
 const router = new Router();
 

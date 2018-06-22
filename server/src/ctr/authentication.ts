@@ -1,8 +1,5 @@
-import * as Debug from 'debug';
-const debug = Debug('id:ctr:authentication');
-
 import { db } from '../db';
-import { store as sessionStore } from '../session';
+import { store as sessionStore } from './session';
 import { validate } from './utils/password';
 import { SequelizeUserObject } from '../typings';
 

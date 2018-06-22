@@ -1,6 +1,5 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
 import { Instance } from "sequelize";
-import { SessionStore } from "./session";
 
 export interface Dictionary<T> {
   [Key: string]: T;

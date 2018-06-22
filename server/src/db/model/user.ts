@@ -2,7 +2,7 @@
 import { STRING, ENUM, UUID, UUIDV4, DATE, DOUBLE, CHAR } from 'sequelize';
 
 import { SequelizeUserObject, InternalUserObject, ApiPostUserObject } from '../../typings';
-import { AbstractInstanceAccess } from '../abstract';
+import { AbstractInstanceAccess } from './abstract';
 
 const userModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },

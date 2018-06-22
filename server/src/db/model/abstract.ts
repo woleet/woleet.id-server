@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize';
 
 import { UniqueConstraintError, Instance } from 'sequelize';
-import { DuplicatedUserError } from '../errors';
+import { DuplicatedUserError } from '../../errors';
 
 export abstract class AbstractInstanceAccess<TInstance, TPost> {
   client: Sequelize.Sequelize;

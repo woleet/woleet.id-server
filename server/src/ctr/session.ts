@@ -1,8 +1,7 @@
 import { Cache } from 'lru-cache';
 import * as uuid from 'uuid/v4';
 import * as LRU from 'lru-cache';
-import { SequelizeUserObject, Session } from './typings';
-import { BadRequest } from 'http-errors';
+import { SequelizeUserObject, Session } from '../typings';
 
 export class SessionStore {
   lru: Cache<string, Session>;
@@ -28,19 +27,3 @@ export class SessionStore {
 }
 
 export const store = new SessionStore;
-
-export default async function (ctx, next) {
-  ctx.sessions = store;
-  const { header } = ctx.request;
-  if (header && header.authorization) {
-    const parts = header.authorization.split(' ');
-    if (parts.length === 2 && parts[0] === 'Bearer') {
-      const sid = parts[1];
-      ctx.session = await store.get(sid);
-    } else {
-      throw new BadRequest('Invalid token');
-    }
-  }
-
-  return next();
-};
