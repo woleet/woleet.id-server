@@ -6,9 +6,9 @@ servers:
     url: https://dev.woleet.id/
 info:
   description: |
-    This is woleet.id server. You can find out more about woleet.id at [https://doc.woleet.id](https://doc.woleet.id).
+    This is Woleet.ID Server. You can find out more about woleet.id at [https://doc.woleet.id](https://doc.woleet.id).
   version: 1.0.0
-  title: woleet.id server
+  title: Woleet.ID Server
   termsOfService: 'https://woleet.id/terms/'
   contact:
     email: contact@woleet.com
@@ -40,25 +40,25 @@ paths:
               schema:
                 type: object
                 properties:
-                  ok:
+                  token:
                     $ref: '#/components/schemas/SessionToken'
         '400':
           description: "Missing username or password"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
         '401':
           description: "Invalid username or password"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
   /info:
     get:
       tags:
         - authentication
-      summary: Return information about current user session
+      summary: Return information about the current logged user.
       operationId: getUserInfo
       security:
         - BearerAuth: []
@@ -81,7 +81,7 @@ paths:
           You first need to compute the SHA256 hash of your data (client side) and then provide it in the `hashToSign` parameter.
           The signature produced is the signature of this hash using the bitcoin address provided in the `pubKey` parameter (or by the default bitcoin address of your backend if not set).
           This endpoint is protected by an API token, provided to you at backend kit installation time. However, for security reason, **this endpoint SHOULD NEVER be exposed** outside your backend. To facilitate the isolation of this endpoint, a dedicated port can be specified at installation time.
-      parameters:        
+      parameters:
         - $ref: '#/components/parameters/PubKeyQueryParameter'
         - $ref: '#/components/parameters/HashToSignQueryParameter'
       security:
@@ -98,25 +98,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
         '401':
           description: Missing or bad token
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
         '404':
           description: /signature endpoint is not reachable on this port
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
         '500':
           description: Unexpected server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
   /identity:
     get:
       operationId: identity
@@ -142,19 +142,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
         '404':
           description: /identity endpoint is not reachable on this port.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
         '500':
           description: Unexpected server error.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
   # End Identity
   /logout:
     get:
@@ -167,11 +167,11 @@ paths:
           description: Successfully logged out the user.
   # Admin
   # Key
-  /user/{userId}/key:
+  /key:
     post:
       tags:
         - key
-      summary: Add a new key to the user's store
+      summary: Create a new key for a user.
       operationId: addKey
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
@@ -189,18 +189,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
       requestBody:
         $ref: '#/components/requestBodies/KeyPost'
-  /user/{userId}/key/{keyId}:
+  /key/{keyId}:
     get:
       tags:
         - key
-      summary: Find key by ID
+      summary: Get a key by its identifier.
       description: Returns a key.
       operationId: getKeyById
       parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
         - $ref: '#/components/parameters/KeyIdParameter'
       security:
         - BearerAuth: []
@@ -216,20 +215,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
         '404':
           description: Key not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
     put:
       tags:
         - key
       summary: Update an existing key
       operationId: updateKey
       parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
         - $ref: '#/components/parameters/KeyIdParameter'
       responses:
         '200':
@@ -243,13 +241,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
         '404':
           description: Key not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
       security:
         - BearerAuth: []
       requestBody:
@@ -266,8 +264,18 @@ paths:
       security:
         - BearerAuth: []
       responses:
-        default:
+        '200':
           description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/User'
+        '400':
+          description: Invalid object supplied / Invalid user identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
       requestBody:
         description: Created user object.
         required: true
@@ -291,19 +299,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserGet'
+                $ref: '#/components/responses/User'
         '400':
-          description: Invalid username supplied.
+          description: Invalid user identifier.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
         '404':
           description: User not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/responses/ApiError'
     put:
       tags:
         - user
@@ -314,19 +322,6 @@ paths:
         - $ref: '#/components/parameters/UserIdParameter'
       security:
         - BearerAuth: []
-      responses:
-        '400':
-          description: Invalid user supplied.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '404':
-          description: User not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
       requestBody:
         content:
           application/json:
@@ -334,6 +329,25 @@ paths:
               $ref: '#/components/schemas/UserPut'
         description: Updated user object.
         required: true
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/User'
+        '400':
+          description: Invalid object supplied / Invalid user identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
   # End User
   # End Admin
 externalDocs:
@@ -375,24 +389,14 @@ components:
             type:
               $ref: '#/components/schemas/UserTypeEnum'
             status:
-              type: string
-              enum:
-              - active
-              - locked
-              - disabled
-              default: "active"
-              description: |
-                User Status:
-                  - A locked user cannot sign.
-                  - A disabled user cannot sign nor login.
-              example: "active"
-            created:
+              $ref: '#/components/schemas/UserStatusEnum'
+            createdAt:
               type: integer
               format: int64
               readOnly: true
               description: Date of creation (Unix ms timestamp).
               example: 1529050145516
-            lastModified:
+            updatedAt:
               type: integer
               format: int64
               readOnly: true
@@ -422,21 +426,29 @@ components:
       default: "user"
       description: User type.
       example: "user"
-    UserGet:
-      allOf:
-        - $ref: '#/components/schemas/UserDetail'
-        - type: object
-          required:
-            - username
-            - firstName
-            - lastName
+    UserStatusEnum:
+      type: string
+      enum:
+       - active
+       - blocked
+       - removed
+      default: "active"
+      description: |
+        User Status:
+         - A locked user cannot sign.
+         - A disabled user cannot sign nor login.
+      example: "active"
     UserPut:
       allOf:
-        - $ref: '#/components/schemas/UserDetail'
         - type: object
           properties:
+            type:
+              $ref: '#/components/schemas/UserTypeEnum'
+            status:
+              $ref: '#/components/schemas/UserStatusEnum'
             password:
               $ref: '#/components/schemas/Password'
+        - $ref: '#/components/schemas/UserBase'
     UserPost:
       allOf:
         - $ref: '#/components/schemas/UserPut'
@@ -451,6 +463,12 @@ components:
       allOf:
         - $ref: '#/components/schemas/UserBase'
         - type: object
+    KeyTypeEnum:
+      type: string
+      enum:
+       - bip39
+      description: Key type.
+      example: "bip39"
     KeyBase:
       type: object
       properties:
@@ -482,18 +500,14 @@ components:
             value:
               $ref: '#/components/schemas/PublicKey'
             type:
-              type: string
-              enum:
-              - Bip39
-              description: Key type.
-              example: "Bip39"
-            created:
+              $ref: '#/components/schemas/KeyTypeEnum'
+            createdAt:
               type: integer
               format: int64
               readOnly: true
               description: Date of creation (Unix ms timestamp).
               example: 1529052551419
-            lastModified:
+            updatedAt:
               type: integer
               format: int64
               readOnly: true
@@ -525,22 +539,6 @@ components:
     KeyPut:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
-    ApiError:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: integer
-              format: int32
-              example: 418
-            message:
-              type: string
-              example: "I'm a teapot"
-          required:
-            - code
-            - message
     # JSONWebToken:
     #   type: string
     #   example: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNYlRqbmVSM1NtdWxScTg5djB5cTBnPT0ifQ.ggNDtcSoMQJ7J1l31yeKRZtT2b3UBUmh4EHusUrM5mA"
@@ -571,8 +569,22 @@ components:
         signature:
           type: string
           description: The signature of the concatenation of `leftData` and `rightData` using the bitcoin address `pubKey`.
-
-
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              format: int32
+              example: 418
+            message:
+              type: string
+              example: "I'm a teapot"
+          required:
+            - code
+            - message
   parameters:
     UserIdParameter:
       name: userId
@@ -643,10 +655,15 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/UserGet'
+              $ref: '#/components/schemas/UserDetail'
       description: List of user object.
       required: true
-  securitySchemes:    
+  responses:
+    User:
+      $ref: '#/components/schemas/UserDetail'
+    ApiError:
+      $ref: '#/components/schemas/ApiError'
+  securitySchemes:
     BasicAuth:
       type: http
       scheme: basic
