@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 
 const userTypeEnum = ['user', 'admin'];
-const userStatusEnum = ['active', 'locked', 'disabled'];
+const userStatusEnum = ['active', 'blocked', 'removed'];
 
 const Word = Joi.string().alphanum().min(3).max(30);
 const RWord = Word.required();
@@ -13,7 +13,7 @@ const createUser = Joi.object().keys({
   username: RWord,
   firstName: RWord,
   lastName: RWord,
-  password: Joi.string()
+  password: RWord
 });
 
 const updateUser = Joi.object().keys({
@@ -23,7 +23,7 @@ const updateUser = Joi.object().keys({
   username: Word,
   firstName: Word,
   lastName: Word,
-  password: Joi.string()
+  password: Word
 });
 
 export { createUser, updateUser }

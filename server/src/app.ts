@@ -1,38 +1,20 @@
-require('express-async-errors');
+import * as Koa from 'koa';
+import * as morgan from 'koa-morgan';
+import * as bodyParser from 'koa-bodyparser';
+import { api } from './api/';
+import { errorHandler } from './api/error';
+export const app = new Koa();
 
-import * as express from 'express';
-import * as logger from 'morgan';
-import * as bodyParser from 'body-parser';
+app.use(errorHandler);
 
-import { NotFoundError } from "http-typed-errors/lib";
+app.use(morgan('dev'));
+app.use(bodyParser());
 
-import { api } from './api/root';
+app.use(api.routes());
 
-var swagger = require('swagger-express');
+app.on('error', async (err, ctx) => {
+  console.log('errrr', err);
 
-const app = express();
-
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use(api);
-
-// 404
-app.use(() => {
-    throw new NotFoundError;
-});
-
-app.use((err, req, res, next) => {
-    let error;
-    if (err && err.statusCode && err.name) {
-        error = { message: err.message, statusCode: err.statusCode };
-    } else {
-        console.error(err);
-        error = { message: 'Internal Server Error', statusCode: 500 };
-    }
-
-    res.status(error.statusCode).json({ error })
 });
 
 export default app;

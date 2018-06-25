@@ -5,5 +5,6 @@ set -e
 # nvm use 10
 
 tmux -v \
-  new-session  "cd client && ng serve --port 4080" \; \
-  split-window -h "cd server && npm run dev" \;
+  new-session  "cd server && npm run dev" \; \
+  split-window -h "cd client && ng serve --port 4080"\; \
+  split-window "sh start-pg-dev" \;
