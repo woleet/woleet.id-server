@@ -18,3 +18,8 @@ export class NotFoundUserError extends NotFoundDBObjectError {
   constructor() { super('User not found') }
   name = 'NotFoundUserError'
 }
+
+export class NotFoundKeyError extends NotFoundDBObjectError {
+  constructor() { super('User not found') }
+  name = 'NotFoundUserError'
+}

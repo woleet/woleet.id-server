@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize';
 import * as Debug from 'debug';
 import { UserAccess } from './model/user';
+import { KeyAccess } from './model/key';
 
 const debug = Debug('id:db');
 
@@ -26,7 +27,8 @@ const options = {
 const client = new Sequelize(DATABASE, USERNAME, PASSWORD, options);
 
 const db = {
-  user: new UserAccess(client)
+  user: new UserAccess(client),
+  key: new KeyAccess(client),
 };
 
 // Connection

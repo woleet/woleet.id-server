@@ -3,6 +3,8 @@ import { validate } from '../schemas';
 import * as Router from "koa-router";
 
 import * as Debug from 'debug';
+import { ApiPostKeyObject } from "../../typings";
+import { addKey } from "../../ctr/key";
 const debug = Debug('id:api:key');
 
 const vkid = validate.param('id', 'uuid');
@@ -23,9 +25,9 @@ const router = new Router({ prefix: '/user/:userId/key' });
  *  operationId: addKey
  */
 router.post('/', vuid, validate.body('addKey'), function (ctx) {
-  const { name, status } = ctx.request.body;
-  debug('addkey', { name, status });
-  throw new NotImplemented();
+  const key: ApiPostKeyObject = ctx.request.body;
+  debug('addkey', key);
+  ctx.body = addKey(key);
 });
 
 /**

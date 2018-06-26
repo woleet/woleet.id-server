@@ -19,15 +19,18 @@ export interface UserObject {
 }
 
 export interface InternalUserObject extends UserObject {
+  /** Key name */
   id: string,
-  lastLogin: string,
-  updatedAt: string,
-  createdAt: string,
+  lastLogin: Date,
+  updatedAt: Date,
+  createdAt: Date,
 
   type: UserTypeEnum,
   status: UserStatusEnum,
   email: string | null,
+  /** Hexadecimal represention password hash */
   password_hash: string,
+  /** Hexadecimal represention password salt */
   password_salt: string,
   password_itrs: number
 }
@@ -35,9 +38,13 @@ export interface InternalUserObject extends UserObject {
 export interface SequelizeUserObject extends Instance<InternalUserObject> { }
 
 export interface ApiUserObject extends UserObject {
+  /** UUID */
   id: string,
+  /** Unix timestamp (ms) */
   createdAt: number,
+  /** Unix timestamp (ms) */
   updatedAt: number,
+  /** Unix timestamp (ms) */
   lastLogin: number,
 
   type: UserTypeEnum,
@@ -64,6 +71,65 @@ export interface ApiPutUserObject extends UserObject {
   status?: UserStatusEnum,
   email?: string,
   password?: string
+}
+
+
+type KeyTypeEnum = 'bip39';
+type KeyStatusEnum = 'active' | 'expired' | 'removed';
+
+export interface KeyObject { }
+
+export interface InternalKeyObject extends KeyObject {
+  /** UUID */
+  id: string,
+  updatedAt: Date,
+  createdAt: Date,
+  lastUsed: Date,
+
+  name: string,
+  type: KeyTypeEnum,
+  status: KeyStatusEnum,
+
+  /** Hexadecimal represention of the private key */
+  private_key: string
+}
+
+export interface SequelizeKeyObject extends Instance<InternalKeyObject> { }
+
+export interface ApiKeyObject extends KeyObject {
+  /** UUID */
+  id: string,
+  /** Key name */
+  name: string,
+  /** Hexadecimal represention of the public key */
+  pubKey: string,
+  type: KeyTypeEnum,
+  /** Unix timestamp (ms) */
+  createdAt: number,
+  /** Unix timestamp (ms) */
+  updatedAt: number,
+  /** Unix timestamp (ms) */
+  lastUsed: number,
+  status: KeyStatusEnum
+}
+
+export interface ApiPostKeyObject extends KeyObject {
+  name: string
+  type?: KeyTypeEnum,
+  status?: KeyStatusEnum
+}
+
+export interface ApiPostKeyObjectWithValue extends KeyObject {
+  name: string
+  type?: KeyTypeEnum,
+  status?: KeyStatusEnum,
+  /** Hexadecimal represention of the private key */
+  private_key: string
+}
+
+export interface ApiPutKeyObject extends KeyObject {
+  name?: string,
+  status?: KeyStatusEnum
 }
 
 export interface Session {
