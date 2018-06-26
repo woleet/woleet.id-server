@@ -167,7 +167,7 @@ paths:
           description: Successfully logged out the user.
   # Admin
   # Key
-  /key:
+  /user/{userId}/key:
     post:
       tags:
         - key
@@ -192,6 +192,37 @@ paths:
                 $ref: '#/components/responses/ApiError'
       requestBody:
         $ref: '#/components/requestBodies/KeyPost'
+  /userd/{userId}/key/list:
+    get:
+      tags:
+        - key
+      summary: Get a key by its identifier.
+      description: Returns a key.
+      operationId: getKeyById
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Array of key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/KeyArray'
+        '400':
+          description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: Key not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+
   /key/{keyId}:
     get:
       tags:
@@ -348,6 +379,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+  /user/list:
+    get:
+      tags:
+        - user
+      summary: Get all users.
+      operationId: getUserById
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: User list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserArray'
   # End User
   # End Admin
 externalDocs:
@@ -585,6 +633,14 @@ components:
           required:
             - code
             - message
+    UserArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserDetail'
+    KeyArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Key'
   parameters:
     UserIdParameter:
       name: userId
@@ -649,20 +705,15 @@ components:
             $ref: '#/components/schemas/KeyPut'
       description: Replacement key object.
       required: true
-    UserArray:
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/UserDetail'
-      description: List of user object.
-      required: true
   responses:
     User:
       $ref: '#/components/schemas/UserDetail'
     ApiError:
       $ref: '#/components/schemas/ApiError'
+    UserArray:
+      $ref: '#/components/schemas/UserArray'
+    KeyArray:
+      $ref: '#/components/schemas/KeyArray'
   securitySchemes:
     BasicAuth:
       type: http
