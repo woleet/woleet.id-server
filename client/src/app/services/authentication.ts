@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Injectable()
-export class AuthenticationService {
+export class AuthService {
+
+  private authenticated = false;
 
   constructor(private router: Router) { }
 
@@ -13,7 +15,11 @@ export class AuthenticationService {
 
   async login(user) {
     console.log('login', user)
-    return true;
+    return this.authenticated = true;
+  }
+
+  async isAuthenticated(): Promise<boolean> {
+    return this.authenticated;
   }
 
 }

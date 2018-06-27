@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthenticationService } from '@services/authentication';
+import { AuthService } from '@services/authentication';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,12 +11,14 @@ export class LoginPageComponent {
 
   user: { username, password };
 
-  constructor(private service: AuthenticationService) {
+  constructor(private service: AuthService, private router: Router) {
     this.user = { username: '', password: '' };
   }
 
   login() {
-    if (!this.service.login(this.user)) {
+    if (this.service.login(this.user)) {
+      this.router.navigate(['main'])
+    } else {
       // this.errorMsg = 'Failed to login! try again ...';
     }
   }

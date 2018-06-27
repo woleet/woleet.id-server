@@ -18,8 +18,10 @@ import { SetupPageComponent } from '@pages/setup';
 import { CredentialsPageComponent } from '@pages/credentials';
 import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
-import { SettingsPageComponent } from '@pages/settings';
-import { AuthenticationService } from '@services/authentication';
+import { SettingsPageComponent } from '@pages/settings';3
+
+import { AuthService } from '@services/authentication';
+import { AuthGuardService } from '@services/auth-guard';
 
 /*
 import {
@@ -91,7 +93,7 @@ import {
     // app
     AppRoutingModule
   ],
-  providers: [AuthenticationService],
+  providers: [AuthService, AuthGuardService],
   bootstrap: [AppComponent]
 })
 

@@ -1,7 +1,8 @@
-<nav role="navigation">
+<nav role="navigation" *ngIf="router.url != '/login'">
+
 
   <mat-toolbar>
-    <span>Application {{title}}</span>
+    <span>Application {{title}} "{{router.url}}"</span>
   </mat-toolbar>
 
   <mat-sidenav-container>
