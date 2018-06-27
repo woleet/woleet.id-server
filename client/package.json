@@ -2,11 +2,12 @@
   "name": "client",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint"
+    "ng": "npx ng",
+    "dev": "npx ng serve --port 4220 -o",
+    "start": "npx ng serve",
+    "build": "npx ng build",
+    "test": "npx ng test",
+    "lint": "npx ng lint"
   },
   "private": true,
   "dependencies": {

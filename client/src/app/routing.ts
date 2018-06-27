@@ -1,14 +1,20 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 
-import {SetupComponent, AboutComponent, UserComponent, SettingsComponent, CredentialsComponent} from "./components";
+import { LoginPageComponent } from '@pages/login';
+import { SetupPageComponent } from '@pages/setup';
+import { CredentialsPageComponent } from '@pages/credentials';
+import { UserPageComponent } from '@pages/user';
+import { AboutPageComponent } from '@pages/about';
+import { SettingsPageComponent } from '@pages/settings';
 
 const routes: Routes = [
-  {path: 'setup-page', component: SetupComponent},
-  {path: 'user-page', component: UserComponent},
-  {path: 'settings-page', component: SettingsComponent},
-  {path: 'credentials-page', component: CredentialsComponent},
-  {path: 'about-page', component: AboutComponent}
+  {path: '', component: LoginPageComponent},
+  {path: 'setup-page', component: SetupPageComponent},
+  {path: 'user-page', component: UserPageComponent},
+  {path: 'settings-page', component: SettingsPageComponent},
+  {path: 'credentials-page', component: CredentialsPageComponent},
+  {path: 'about-page', component: AboutPageComponent}
   // {
   //   path: '',
   //   redirectTo: 'about',

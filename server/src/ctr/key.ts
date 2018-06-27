@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import { ApiPostKeyObject, ApiPutKeyObject, InternalKeyObject } from "../typings";
-import { NotFoundKeyError, NotFoundUserError } from "../errors";
+import { NotFoundKeyError } from "../errors";
 import { db } from "../db";
 
 /**
@@ -17,9 +17,6 @@ import { db } from "../db";
  */
 export async function addKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
   const privateKey = crypto.randomBytes(32).toString('hex');
-
-  console.log(Object.assign({}, key, { privateKey }))
-
   const newKey = await db.Key.create(Object.assign({}, key, { privateKey, userId }));
   return newKey.toJSON();
 }
