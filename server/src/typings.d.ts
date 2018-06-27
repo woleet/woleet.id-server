@@ -29,10 +29,10 @@ export interface InternalUserObject extends UserObject {
   status: UserStatusEnum,
   email: string | null,
   /** Hexadecimal represention password hash */
-  password_hash: string,
+  passwordHash: string,
   /** Hexadecimal represention password salt */
-  password_salt: string,
-  password_itrs: number
+  passwordSalt: string,
+  passwordItrs: number
 }
 
 export interface SequelizeUserObject extends Instance<InternalUserObject> { }
@@ -91,7 +91,8 @@ export interface InternalKeyObject extends KeyObject {
   status: KeyStatusEnum,
 
   /** Hexadecimal represention of the private key */
-  private_key: string
+  privateKey: string,
+  userId: any
 }
 
 export interface SequelizeKeyObject extends Instance<InternalKeyObject> { }
@@ -119,12 +120,13 @@ export interface ApiPostKeyObject extends KeyObject {
   status?: KeyStatusEnum
 }
 
-export interface ApiPostKeyObjectWithValue extends KeyObject {
+export interface FullApiPostKeyObject extends KeyObject {
   name: string
   type?: KeyTypeEnum,
   status?: KeyStatusEnum,
   /** Hexadecimal represention of the private key */
-  private_key: string
+  privateKey: string,
+  userId: string
 }
 
 export interface ApiPutKeyObject extends KeyObject {

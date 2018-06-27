@@ -21,15 +21,16 @@ const options = {
     idle: 10000
   },
 
-  logging: false
+  logging: false,
+  operatorsAliases: false
 };
 
 const client = new Sequelize(DATABASE, USERNAME, PASSWORD, options);
 
-const db = {
-  user: new UserAccess(client),
-  key: new KeyAccess(client),
-};
+const User = new UserAccess(client);
+const Key = new KeyAccess(client, User.model);
+
+const db = { User, Key };
 
 // Connection
 (async () => {
@@ -37,10 +38,7 @@ const db = {
   await client.authenticate();
   debug('Connected to database.');
   debug('Synchronizing user model...');
-  Object
-    .keys(db)
-    .map((n): { client: Sequelize.Model<any, any> } => db[n])
-    .forEach(({ client }) => client.sync({ force: true }));
+  await Promise.all([User.client.sync(), Key.client.sync()]);
   debug('Synchronized user model.');
   debug('Ready.');
 })().catch((err) => {

@@ -1,25 +1,55 @@
 
-import { STRING, ENUM, UUID, UUIDV4, DATE, DOUBLE, CHAR } from 'sequelize';
+import { STRING, ENUM, UUID, UUIDV4, DATE } from 'sequelize';
+import { Deferrable, Sequelize } from 'sequelize';
 
-import { InternalKeyObject, ApiPostKeyObjectWithValue } from '../../typings';
+import { ForeignKeyConstraintError } from 'sequelize';
+import { InvalidUserTargetedKeyError } from '../../errors';
+
+import { InternalKeyObject, FullApiPostKeyObject, SequelizeKeyObject } from '../../typings';
 import { AbstractInstanceAccess } from './abstract';
 
-const keyModel = {
-  id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
-  type: { type: ENUM(['bip39']), defaultValue: 'bip39' },
-  status: { type: ENUM(['active', 'expired', 'removed']), defaultValue: 'active' },
-  name: { type: STRING, allowNull: false },
-  private_key: { type: STRING, unique: true, allowNull: false },
-  lastUsed: { type: DATE, defaultValue: null }
-};
+function keyModelFactory(userModelInstance) {
+  return ({
+    id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
+    type: { type: ENUM(['bip39']), defaultValue: 'bip39' },
+    status: { type: ENUM(['active', 'expired', 'removed']), defaultValue: 'active' },
+    name: { type: STRING, allowNull: false },
+    privateKey: { type: STRING, unique: true, allowNull: false },
+    lastUsed: { type: DATE, defaultValue: null },
+    userId: {
+      type: UUID,
 
-class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiPostKeyObjectWithValue> {
+      references: {
+        // This is a reference to another model
+        model: userModelInstance,
+        // This is the column name of the referenced model
+        key: 'id',
+        // This declares when to check the foreign key constraint. PostgreSQL only.
+        deferrable: Deferrable.INITIALLY_IMMEDIATE
+      }
+    }
+  })
+}
 
-  constructor(client) {
+class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, FullApiPostKeyObject> {
+
+  constructor(client: Sequelize, userModelInstance) {
     super(client)
-    this.init('user', keyModel);
+    this.init('key', keyModelFactory(userModelInstance))
+  }
+
+  async getAllKeysOfUser(userId: string): Promise<SequelizeKeyObject[]> {
+    return this.model.findAll({ where: { userId } });
+  }
+
+  handleError(err: any) {
+    if (err instanceof ForeignKeyConstraintError) {
+      const field = Object.keys(err['fields']);
+      console.error({ field });
+      throw new InvalidUserTargetedKeyError(`Contraint on field ${field}`, err);
+    }
   }
 
 }
 
-export { keyModel, KeyAccess }
+export { KeyAccess }

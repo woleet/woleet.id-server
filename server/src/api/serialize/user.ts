@@ -9,9 +9,9 @@ export function serialiseUser(user: InternalUserObject): ApiUserObject {
 
   const ret = Object.assign({}, user, dates);
 
-  delete ret.password_hash;
-  delete ret.password_salt;
-  delete ret.password_itrs;
+  delete ret.passwordHash;
+  delete ret.passwordSalt;
+  delete ret.passwordItrs;
 
   return ret;
 }

@@ -4,7 +4,7 @@ import * as Router from "koa-router";
 
 import * as Debug from 'debug';
 import { ApiPostKeyObject } from "../../typings";
-import { addKey } from "../../ctr/key";
+import { addKey, getAllKeysOfUser } from "../../ctr/key";
 const debug = Debug('id:api:key');
 
 const vkid = validate.param('id', 'uuid');
@@ -17,17 +17,29 @@ const vuid = validate.param('userId', 'uuid');
  *  tags: [key]
  */
 
-const router = new Router({ prefix: '/user/:userId/key' });
+const router = new Router();
 
 /**
- * @route: /key/
+ * @route: /user/{userId}/key/
  * @swagger
  *  operationId: addKey
  */
-router.post('/', vuid, validate.body('addKey'), function (ctx) {
+router.post('/user/:userId/key', vuid, validate.body('addKey'), async function (ctx) {
   const key: ApiPostKeyObject = ctx.request.body;
   debug('addkey', key);
-  ctx.body = addKey(key);
+  const { userId } = ctx.params;
+  ctx.body = await addKey(userId, key);
+});
+
+/**
+ * @route: /user/{userId}/key/list
+ * @swagger
+ *  operationId: getKeysOfUser
+ */
+router.get('/user/:userId/key/list', vuid, async function (ctx) {
+  const { userId } = ctx.params;
+  const keys = await getAllKeysOfUser(userId);
+  ctx.body = keys;
 });
 
 /**
@@ -35,7 +47,7 @@ router.post('/', vuid, validate.body('addKey'), function (ctx) {
  * @swagger
  *  operationId: getKeyById
  */
-router.get('/:id', vuid, vkid, function (ctx) {
+router.get('/key/:id', vkid, function (ctx) {
   console.log('Validated UUID')
   throw new NotImplemented();
 });
@@ -46,7 +58,7 @@ router.get('/:id', vuid, vkid, function (ctx) {
  * @swagger
  *  operationId: updateKey
  */
-router.put('/:id', vuid, vkid, validate.body('updateKey'),
+router.put('/key/:id', vkid, validate.body('updateKey'),
   async function (ctx) {
     const { id } = ctx.params;
     const { name, status } = ctx.request.body;
@@ -59,7 +71,7 @@ router.put('/:id', vuid, vkid, validate.body('updateKey'),
  * @swagger
  *  operationId: updateKey
  */
-router.delete('/:id', vuid, vkid, async function (ctx) {
+router.delete('/key/:id', vkid, async function (ctx) {
   const { id } = ctx.params;
   throw new NotImplemented();
 });
