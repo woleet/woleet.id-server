@@ -36,9 +36,13 @@ const db = { User, Key };
 (async () => {
   debug('Connecting to database...');
   await client.authenticate();
+
   debug('Connected to database.');
   debug('Synchronizing user model...');
-  await Promise.all([User.client.sync(), Key.client.sync()]);
+  await User.client.drop();
+  await Key.client.drop();
+  await User.client.sync();
+  await Key.client.sync();
   debug('Synchronized user model.');
   debug('Ready.');
 })().catch((err) => {

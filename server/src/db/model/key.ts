@@ -44,9 +44,7 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, FullApiPostKey
 
   handleError(err: any) {
     if (err instanceof ForeignKeyConstraintError) {
-      const field = Object.keys(err['fields']);
-      console.error({ field });
-      throw new InvalidUserTargetedKeyError(`Contraint on field ${field}`, err);
+      throw new InvalidUserTargetedKeyError(`Invalid user id provided`, err);
     }
   }
 

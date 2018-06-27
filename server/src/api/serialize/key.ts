@@ -1,17 +1,15 @@
-import { InternalUserObject, ApiUserObject, InternalKeyObject } from "../../typings";
+import { ApiKeyObject, InternalKeyObject } from "../../typings";
 
-export function serialiseKey(key: InternalKeyObject): ApiUserObject {
+export function serialiseKey(key: InternalKeyObject): ApiKeyObject {
   const dates = {
-    createdAt: +user.createdAt,
-    updatedAt: +user.updatedAt,
-    lastUsed: +user.lastUsed
+    createdAt: +key.createdAt,
+    updatedAt: +key.updatedAt,
+    lastUsed: +key.lastUsed
   };
 
-  const ret = Object.assign({}, user, dates);
+  const ret = Object.assign({}, key, dates, { pubKey: 'todo' });
 
-  delete ret.password_hash;
-  delete ret.password_salt;
-  delete ret.password_itrs;
+  delete ret.privateKey;
 
   return ret;
 }

@@ -20,13 +20,8 @@ export async function addKey(userId: string, key: ApiPostKeyObject): Promise<Int
 
   console.log(Object.assign({}, key, { privateKey }))
 
-  try {
-    const newKey = await db.Key.create(Object.assign({}, key, { privateKey, userId }));
-    return newKey.toJSON();
-  } catch (err) {
-
-  }
-
+  const newKey = await db.Key.create(Object.assign({}, key, { privateKey, userId }));
+  return newKey.toJSON();
 }
 
 /**

@@ -6,6 +6,7 @@ import 'mocha';
 import 'chai-http';
 
 import * as chai from 'chai'
+import { expect } from 'chai';
 
 chai.use(require('chai-http'));
 chai.should();
@@ -45,5 +46,11 @@ export function assertError(done: () => any, status: number, message?: string) {
       messageTest.that.equal(message)
     }
     done();
+  }
+}
+
+export function exclisiveInclude(input: Object, expectedKeys: string[]) {
+  for (const key of Object.keys(input)) {
+    expect(expectedKeys, `Unepected property "${key}"`).to.include(key)
   }
 }
