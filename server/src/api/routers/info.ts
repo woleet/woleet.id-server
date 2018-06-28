@@ -1,6 +1,5 @@
-import { NotImplemented, BadRequest, Unauthorized } from "http-errors";
-
 import * as Router from "koa-router";
+import { serialiseUserDTO } from "../serialize/userDTO";
 
 
 /**
@@ -18,7 +17,7 @@ const router = new Router();
  *  operationId: getUserInfo
  */
 router.get('/info', async function (ctx) {
-  throw new NotImplemented();
+  ctx.body = serialiseUserDTO(ctx.session.user.toJSON())
 });
 
 export { router };

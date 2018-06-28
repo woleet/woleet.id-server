@@ -5,7 +5,7 @@ import { Sequelize } from 'sequelize';
 import { UniqueConstraintError } from 'sequelize';
 import { DuplicatedUserError } from '../../errors';
 
-import { SequelizeUserObject, InternalUserObject, ApiPostUserObject } from '../../typings';
+import { SequelizeUserObject, InternalUserObject, FullApiPostUserObject } from '../../typings';
 import { AbstractInstanceAccess } from './abstract';
 
 const UserModel = {
@@ -22,7 +22,7 @@ const UserModel = {
   lastLogin: { type: DATE, defaultValue: null }
 };
 
-class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiPostUserObject> {
+class UserAccess extends AbstractInstanceAccess<InternalUserObject, FullApiPostUserObject> {
 
   constructor(client: Sequelize) {
     super(client);

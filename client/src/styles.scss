@@ -25,3 +25,13 @@ $light-warn: mat-palette($mat-deep-orange, 200);
 $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 
 @include angular-material-theme($light-theme);
+
+.w-100 {
+  width: 100%;
+}
+
+.form-container {
+  width: 50%;
+  margin: auto;
+  padding-top: 5em;
+}

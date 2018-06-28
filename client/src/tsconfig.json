@@ -9,7 +9,8 @@
       "@components/*": ["app/components/*"],
       "@pages/*": ["app/components/pages/*"],
       "@parts/*": ["app/components/parts/*"],
-      "@services/*": ["app/services/*"]
+      "@services/*": ["app/services/*"],
+      "@guards/*": ["app/services/guards/*"]
     }
   },
   "exclude": [

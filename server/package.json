@@ -37,6 +37,7 @@
     "typescript": "^2.9.1"
   },
   "dependencies": {
+    "@koa/cors": "^2.2.1",
     "basic-auth": "^2.0.0",
     "joi": "^13.4.0",
     "koa": "^2.5.1",

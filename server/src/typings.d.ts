@@ -1,5 +1,6 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
 import { Instance } from "sequelize";
+import { SessionStore } from "./ctr/session";
 
 export interface Dictionary<T> {
   [Key: string]: T;
@@ -52,11 +53,25 @@ export interface ApiUserObject extends UserObject {
   email: string | null,
 }
 
+export interface ApiUserDTOObject extends UserObject {
+  email: string | null,
+  type: UserTypeEnum
+}
+
 export interface ApiFullUserObject extends UserObject {
   type: UserTypeEnum,
   status: UserStatusEnum,
   email: string,
   password: string
+}
+
+export interface FullApiPostUserObject extends UserObject {
+  type?: UserTypeEnum,
+  status?: UserStatusEnum,
+  email?: string,
+  passwordHash: string,
+  passwordSalt: string,
+  passwordItrs: number,
 }
 
 export interface ApiPostUserObject extends UserObject {
@@ -141,6 +156,7 @@ export interface Session {
 
 declare module 'koa' {
   interface Context {
+    sessions: SessionStore;
     session: Session | null;
   }
 }

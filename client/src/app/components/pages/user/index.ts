@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { InfoService } from '@services/info';
 
 @Component({
-  selector: 'app-user',
   templateUrl: './user.html',
   styleUrls: ['./user.scss']
 })
 export class UserPageComponent implements OnInit {
 
-  constructor() { }
+  info$: Promise<ApiUserDTOObject>
+
+  constructor(private service: InfoService) { }
 
   ngOnInit() {
+    this.info$ = this.service.getInfo()
   }
 
 }

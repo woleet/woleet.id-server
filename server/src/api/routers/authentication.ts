@@ -21,7 +21,6 @@ const router = new Router();
  */
 router.get('/login', async function (ctx) {
   const basic = auth(ctx.req);
-  console.log(basic);
 
   if (!basic)
     throw new BadRequest();

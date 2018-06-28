@@ -33,9 +33,9 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
     delete attrs.password;
 
     Object.assign(attrs, {
-      password_hash: key.hash,
-      password_salt: key.salt,
-      password_itrs: key.iterations
+      passwordHash: key.hash,
+      passwordSalt: key.salt,
+      passwordItrs: key.iterations
     });
   }
 

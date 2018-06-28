@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
-import { AuthService } from '@services/authentication';
+import { AuthService } from '@services/auth';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
 export class LoginPageComponent {
 
-  user: { username, password };
+  user: BasicAuthObject;
 
   constructor(private service: AuthService, private router: Router) {
     this.user = { username: '', password: '' };

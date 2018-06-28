@@ -22,9 +22,7 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
 
   async create(obj: TPost): Promise<Instance<TInstance>> {
     try {
-      const u = await this.model.create(obj);
-      console.info('Created', JSON.stringify(u));
-      return u;
+      return await this.model.create(obj);
     } catch (err) {
       this.handleError(err);
       throw err;
