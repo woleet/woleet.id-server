@@ -15,6 +15,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { AppComponent } from '@parts/main';
 import { NavBarComponent } from '@parts/nav-bar';
 import { UserCreateComponent } from '@parts/user.create';
+import { UserSettingsComponent } from '@parts/user.settings';
+import { ServerSettingsComponent } from '@parts/server.settings';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -51,6 +53,8 @@ import { ForbiddenInterceptorService } from '@services/interceptors/forbidden';
     UserCreatePageComponent,
     UserEditPageComponent,
     AboutPageComponent,
+    UserSettingsComponent,
+    ServerSettingsComponent
   ],
   imports: [
     // angular

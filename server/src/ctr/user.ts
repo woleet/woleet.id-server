@@ -1,5 +1,3 @@
-import { ApiPostUserObject, InternalUserObject, ApiPutUserObject } from '../typings';
-
 import { db } from '../db';
 
 import * as Debug from 'debug';

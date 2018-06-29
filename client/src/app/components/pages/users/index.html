@@ -1,16 +1,22 @@
-<button mat-raised-button color="primary" routerLink="/user/create" type="submit">ADD USER</button>
-<hr>
+<mat-card>
+  <button routerLink="/user/create" mat-button>ADD USER</button>
+</mat-card>
+<br>
 
 <div *ngIf="(users$ | async) as users; else loading">
   <div *ngIf="users.length; else noUser">
     <div *ngFor="let user of users">
-      <a [routerLink]="['/user/', user.id]" >{{ user.username }}</a>
-      <div>{{ user.email }}</div>
-      <div>{{ user.firstName }}</div>
-      <div>{{ user.lastName }}</div>
-      <hr>
+      <mat-card>
+        <a [routerLink]="['/user/', user.id]">{{ user.username }}</a>
+        <div>{{ user.email }}</div>
+        <div>{{ user.firstName }}</div>
+        <div>{{ user.lastName }}</div>
+      </mat-card>
+      <br>
     </div>
   </div>
   <ng-template #noUser>No user yet</ng-template>
 </div>
-<ng-template #loading>Loading...</ng-template>
+<ng-template #loading>
+  <mat-card>Loading...</mat-card>
+</ng-template>

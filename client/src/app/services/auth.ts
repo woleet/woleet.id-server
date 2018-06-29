@@ -19,7 +19,7 @@ export class AuthService {
     console.log('login', user)
 
     const headers = (new HttpHeaders()).append("Authorization", "Basic " + btoa(`${user.username}:${user.password}`));
-    const auth: TokenObject = await this.http.get<TokenObject>(`${serverURL}/login/`, { headers })
+    const auth: AuthResponseObject = await this.http.get<AuthResponseObject>(`${serverURL}/login/`, { headers })
       .toPromise().catch(() => null);
 
     if (!auth)
@@ -28,6 +28,7 @@ export class AuthService {
     console.log('Logged', { auth });
 
     localStorage.setItem('session', auth.token);
+    localStorage.setItem('admin', auth.admin ? 'admin' : '');
     this.router.navigate(['main']);
   }
 
@@ -37,6 +38,10 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!localStorage.getItem('session');
+  }
+
+  isAdmin(): boolean {
+    return localStorage.getItem('admin') === 'admin';
   }
 
 }

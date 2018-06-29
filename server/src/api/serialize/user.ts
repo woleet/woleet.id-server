@@ -1,5 +1,3 @@
-import { InternalUserObject, ApiUserObject } from "../../typings";
-
 export function serialiseUser(user: InternalUserObject): ApiUserObject {
   const dates = {
     createdAt: +user.createdAt,

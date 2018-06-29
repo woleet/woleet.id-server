@@ -1,7 +1,6 @@
 import { Cache } from 'lru-cache';
 import * as uuid from 'uuid/v4';
 import * as LRU from 'lru-cache';
-import { SequelizeUserObject, Session } from '../typings';
 
 export class SessionStore {
   lru: Cache<string, Session>;

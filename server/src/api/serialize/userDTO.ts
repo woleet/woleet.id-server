@@ -1,5 +1,3 @@
-import { InternalUserObject, ApiUserDTOObject } from "../../typings";
-
 export function serialiseUserDTO(user: InternalUserObject): ApiUserDTOObject {
   return {
     email: user.email,

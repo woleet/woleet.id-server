@@ -26,12 +26,12 @@ router.get('/login', async function (ctx) {
     throw new BadRequest();
 
   const { name, pass } = basic;
-  const token = await createSession(name, pass);
+  const authorization: AuthResponseObject = await createSession(name, pass);
 
-  if (!token)
+  if (!auth)
     throw new Unauthorized();
 
-  ctx.body = { token };
+  ctx.body = authorization;
 });
 
 /**
