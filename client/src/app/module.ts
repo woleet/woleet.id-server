@@ -35,9 +35,10 @@ import { AuthGuardService } from '@guards/auth';
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
-import { TokenInterceptorService } from '@services/interceptors/bearer';
-import { UnauthorizedInterceptorService } from '@services/interceptors/unauthorized';
-import { ForbiddenInterceptorService } from '@services/interceptors/forbidden';
+
+import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
+import { UnauthorizedInterceptorService } from '@interceptors/unauthorized';
+import { ForbiddenInterceptorService } from '@interceptors/forbidden';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,7 @@ import { ForbiddenInterceptorService } from '@services/interceptors/forbidden';
   ],
   providers: [
     AuthService, AuthGuardService, KeyService, UserService, InfoService,
-    TokenInterceptorService, UnauthorizedInterceptorService, ForbiddenInterceptorService
+    UnauthorizedInterceptorService, ForbiddenInterceptorService, AllowCredentialsInterceptorService
   ],
   bootstrap: [AppComponent]
 })

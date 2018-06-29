@@ -1,7 +1,7 @@
 /* Key */
 
 type KeyTypeEnum = 'bip39';
-type KeyStatusEnum = 'active' | 'expired' | 'removed';
+type KeyStatusEnum = 'active' | 'revoked';
 
 interface KeyObject { }
 

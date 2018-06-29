@@ -4,6 +4,7 @@ import * as auth from "basic-auth";
 import * as Router from "koa-router";
 
 import { createSession, delSession } from "../../ctr/authentication";
+import { serialiseUserDTO } from "../serialize/userDTO";
 
 /**
  * Authentification
@@ -26,12 +27,13 @@ router.get('/login', async function (ctx) {
     throw new BadRequest();
 
   const { name, pass } = basic;
-  const authorization: AuthResponseObject = await createSession(name, pass);
+  const authorization = await createSession(name, pass);
 
-  if (!auth)
+  if (!authorization)
     throw new Unauthorized();
 
-  ctx.body = authorization;
+  ctx.cookies.set('session', authorization.token)
+  ctx.body = { user: serialiseUserDTO(authorization.user) };
 });
 
 /**
@@ -40,7 +42,9 @@ router.get('/login', async function (ctx) {
  *  operationId: logout
  */
 router.all('/logout', async function (ctx) {
-  await delSession(ctx.session.id);
+  if (ctx.session)
+    await delSession(ctx.session.id);
+  ctx.cookies.set('session', null);
   ctx.body = '';
 });
 

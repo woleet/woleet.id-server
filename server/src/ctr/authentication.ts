@@ -2,7 +2,7 @@ import { db } from '../db';
 import { store as sessionStore } from './session';
 import { validate } from './utils/password';
 
-export async function createSession(login: string, password: string): Promise<AuthResponseObject> {
+export async function createSession(login: string, password: string): Promise<{ token: string, user: InternalUserObject }> {
   let user: SequelizeUserObject = null;
   if (login.search('@') != -1) {
     user = await db.User.getByEmail(login);
@@ -16,7 +16,7 @@ export async function createSession(login: string, password: string): Promise<Au
   const success = await validate(password, {
     hash: user.getDataValue('passwordHash'),
     salt: user.getDataValue('passwordSalt'),
-    iterations: user.getDataValue('passwordItrs'),
+    iterations: user.getDataValue('passwordItrs')
   })
 
   if (!success)
@@ -24,9 +24,7 @@ export async function createSession(login: string, password: string): Promise<Au
 
   const token = await sessionStore.create(user);
 
-  const admin = 'admin' === user.getDataValue('username')
-
-  return { token, admin }
+  return { token, user: user.toJSON() }
 }
 
 export async function delSession(id: string): Promise<void> {

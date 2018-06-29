@@ -10,7 +10,8 @@
       "@pages/*": ["app/components/pages/*"],
       "@parts/*": ["app/components/parts/*"],
       "@services/*": ["app/services/*"],
-      "@guards/*": ["app/services/guards/*"]
+      "@guards/*": ["app/services/guards/*"],
+      "@interceptors/*": ["app/services/interceptors/*"]
     }
   }
 }

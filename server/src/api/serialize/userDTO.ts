@@ -4,6 +4,6 @@ export function serialiseUserDTO(user: InternalUserObject): ApiUserDTOObject {
     username: user.username,
     firstName: user.firstName,
     lastName: user.lastName,
-    type: user.type,
+    type: user.type
   };
 }
