@@ -1,7 +1,14 @@
-import { store } from '../ctr/session';
-import { BadRequest } from 'http-errors';
 import { Context } from 'koa';
+import { store } from '../ctr/session';
 
+export default async function (ctx: Context, next) {
+  ctx.sessions = store;
+  const sid = ctx.cookies.get('session');
+  ctx.session = (sid && (await store.get(sid))) || null;
+  return next();
+};
+
+/*
 export default async function (ctx: Context, next) {
   ctx.sessions = store;
   const { header } = ctx.request;
@@ -17,3 +24,4 @@ export default async function (ctx: Context, next) {
 
   return next();
 };
+ */

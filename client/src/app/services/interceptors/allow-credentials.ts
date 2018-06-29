@@ -2,24 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpInterceptor, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthService } from '@services/auth';
 
+// https://github.com/angular/angular/issues/5254
+
 @Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+export class AllowCredentialsInterceptor implements HttpInterceptor {
   constructor(public auth: AuthService) { }
   intercept(request: HttpRequest<any>, next: HttpHandler) {
-    const token = this.auth.getToken();
-    if (token) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-    }
-    return next.handle(request);
+    return next.handle(request.clone({ withCredentials: true }));
   }
 }
 
-export const TokenInterceptorService = {
+export const AllowCredentialsInterceptorService = {
   provide: HTTP_INTERCEPTORS,
-  useClass: TokenInterceptor,
+  useClass: AllowCredentialsInterceptor,
   multi: true
 };

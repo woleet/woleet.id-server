@@ -7,7 +7,7 @@ import { api } from './api/';
 import { errorHandler } from './api/error';
 export const app = new Koa();
 
-app.use(cors());
+app.use(cors({ credentials: true }));
 app.use(errorHandler);
 
 app.use(morgan('dev'));

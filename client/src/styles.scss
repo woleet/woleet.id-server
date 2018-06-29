@@ -9,20 +9,19 @@ body {
   background-color: #fafafa;
 }
 
-$primary-color-dark:   #00796B;
-$primary-color:        #009688;
-$primary-color-light:  #B2DFDB;
+$primary-color-dark:   #1976D2;
+$primary-color:        #2196F3;
+$primary-color-light:  #BBDEFB;
 $primary-color-text:   #FFFFFF;
-$accent-color:         #009688;
+$accent-color:         #448AFF;
 $primary-text-color:   #212121;
 $secondary-text-color: #757575;
 $divider-color:        #BDBDBD;
 
-$light-primary: mat-palette($mat-teal, 200, 500, 300);
-$light-accent: mat-palette($mat-brown, 200);
-$light-warn: mat-palette($mat-deep-orange, 200);
+$light-primary: mat-palette($mat-blue);
+$light-accent: mat-palette($mat-yellow, 400);
 
-$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+$light-theme: mat-light-theme($light-primary, $light-accent);
 
 @include angular-material-theme($light-theme);
 
