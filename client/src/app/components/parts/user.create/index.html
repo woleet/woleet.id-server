@@ -1,0 +1,31 @@
+<div class="form-container">
+  <form role="form" (submit)="submit()" #f="ngForm">
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="Username" [(ngModel)]="user.username" name="username" autocomplete="username">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="email" placeholder="Email" [(ngModel)]="user.email" name="email" autocomplete="email">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="password" placeholder="Password" [(ngModel)]="user.password" name="password" autocomplete="current-password">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="First name" [(ngModel)]="user.firstName" name="firstName" autocomplete="given-name">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="First name" [(ngModel)]="user.lastName" name="lastName" autocomplete="family-name">
+      </mat-form-field>
+    </div>
+    <br>
+    <button mat-raised-button color="primary" class="w-100" type="submit">CREATE</button>
+  </form>
+</div>

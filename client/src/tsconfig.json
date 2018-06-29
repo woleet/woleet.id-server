@@ -1,0 +1,20 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "baseUrl": "./",
+    "module": "es2015",
+    "types": [],
+    "paths": {
+      "@components/*": ["app/components/*"],
+      "@pages/*": ["app/components/pages/*"],
+      "@parts/*": ["app/components/parts/*"],
+      "@services/*": ["app/services/*"],
+      "@guards/*": ["app/services/guards/*"]
+    }
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
+}

@@ -2,15 +2,17 @@
   "name": "client",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint"
+    "ng": "npx ng",
+    "dev": "npx ng serve --port 4220 -o",
+    "start": "npx ng serve",
+    "build": "npx ng build",
+    "test": "npx ng test",
+    "lint": "npx ng lint"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "6.0.4",
+    "@angular/cdk": "6.2.1",
     "@angular/common": "6.0.4",
     "@angular/compiler": "6.0.4",
     "@angular/core": "6.0.4",
@@ -21,9 +23,8 @@
     "@angular/platform-browser-dynamic": "6.0.4",
     "@angular/router": "6.0.4",
     "core-js": "2.5.6",
-    "rxjs": "6.1.0",
-    "zone.js": "0.8.26",
-    "@angular/cdk": "6.2.1"
+    "rxjs": "^6.1.0",
+    "zone.js": "0.8.26"
   },
   "devDependencies": {
     "@angular/compiler-cli": "6.0.4",

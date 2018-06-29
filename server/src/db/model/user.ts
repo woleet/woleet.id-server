@@ -1,10 +1,14 @@
 
 import { STRING, ENUM, UUID, UUIDV4, DATE, DOUBLE, CHAR } from 'sequelize';
+import { Sequelize } from 'sequelize';
 
-import { SequelizeUserObject, InternalUserObject, ApiPostUserObject } from '../../typings';
+import { UniqueConstraintError } from 'sequelize';
+import { DuplicatedUserError } from '../../errors';
+
+import { SequelizeUserObject, InternalUserObject, FullApiPostUserObject } from '../../typings';
 import { AbstractInstanceAccess } from './abstract';
 
-const userModel = {
+const UserModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
   type: { type: ENUM(['user', 'admin']), defaultValue: 'user' },
   status: { type: ENUM(['active', 'blocked', 'removed']), defaultValue: 'active' },
@@ -12,17 +16,17 @@ const userModel = {
   username: { type: STRING, unique: true, allowNull: false },
   firstName: { type: STRING, allowNull: false },
   lastName: { type: STRING, allowNull: false },
-  password_hash: { type: CHAR(1024), allowNull: false },
-  password_salt: { type: CHAR(256), allowNull: false },
-  password_itrs: { type: DOUBLE, allowNull: false },
+  passwordHash: { type: CHAR(1024), allowNull: false },
+  passwordSalt: { type: CHAR(256), allowNull: false },
+  passwordItrs: { type: DOUBLE, allowNull: false },
   lastLogin: { type: DATE, defaultValue: null }
 };
 
-class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiPostUserObject> {
+class UserAccess extends AbstractInstanceAccess<InternalUserObject, FullApiPostUserObject> {
 
-  constructor(client) {
-    super(client)
-    this.init('user', userModel);
+  constructor(client: Sequelize) {
+    super(client);
+    this.init('user', UserModel);
   }
 
   async getByUsername(username: string): Promise<SequelizeUserObject> {
@@ -33,6 +37,13 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiPostUserO
     return this.model.findOne({ where: { email } });
   }
 
+  handleError(err: any) {
+    if (err instanceof UniqueConstraintError) {
+      const field = Object.keys(err['fields']);
+      throw new DuplicatedUserError(`Duplicated field ${field}`, err);
+    }
+  }
+
 }
 
-export { userModel, UserAccess }
+export { UserAccess }

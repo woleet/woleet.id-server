@@ -1,7 +1,6 @@
 import * as Sequelize from 'sequelize';
 
-import { UniqueConstraintError, Instance } from 'sequelize';
-import { DuplicatedUserError } from '../../errors';
+import { Instance } from 'sequelize';
 
 export abstract class AbstractInstanceAccess<TInstance, TPost> {
   client: Sequelize.Sequelize;
@@ -10,6 +9,8 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
   constructor(client: Sequelize.Sequelize) {
     this.client = client;
   }
+
+  abstract handleError(error);
 
   protected init(
     modelName: string,
@@ -21,16 +22,9 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
 
   async create(obj: TPost): Promise<Instance<TInstance>> {
     try {
-      const u = await this.model.create(obj);
-      console.info('Created', JSON.stringify(u));
-      return u;
+      return await this.model.create(obj);
     } catch (err) {
-
-      if (err instanceof UniqueConstraintError) {
-        const field = Object.keys(err['fields']);
-        throw new DuplicatedUserError(`Duplicated field ${field}`, err);
-      }
-
+      this.handleError(err);
       throw err;
     }
   }
@@ -46,22 +40,17 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
 
       return up;
     } catch (err) {
-
-      if (err instanceof UniqueConstraintError) {
-        const field = Object.keys(err['fields']);
-        throw new DuplicatedUserError(`Duplicated field ${field}`, err);
-      }
-
+      this.handleError(err);
       throw err;
     }
   }
 
-  async getAll(): Promise<Instance<TInstance>[]> {
-    return this.model.findAll()
+  async getAll({ offset = 0, limit = 100 } = {}): Promise<Instance<TInstance>[]> {
+    return this.model.findAll({ offset, limit, order: [["id", "ASC"]] });
   }
 
   async getById(id: string): Promise<Instance<TInstance> | null> {
-    return this.model.findById(id)
+    return this.model.findById(id);
   }
 
 }

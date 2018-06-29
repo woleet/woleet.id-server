@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+docker run \
+  -p 4080:80 \
+  -e "PGADMIN_DEFAULT_EMAIL=pguser" \
+  -e "PGADMIN_DEFAULT_PASSWORD=pass" \
+  dpage/pgadmin4

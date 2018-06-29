@@ -14,10 +14,10 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
 
   delete user.password;
 
-  const newUser = await db.user.create(Object.assign({}, user, {
-    password_hash: key.hash,
-    password_salt: key.salt,
-    password_itrs: key.iterations
+  const newUser = await db.User.create(Object.assign({}, user, {
+    passwordHash: key.hash,
+    passwordSalt: key.salt,
+    passwordItrs: key.iterations
   }));
 
   debug('Created user', newUser);
@@ -33,13 +33,13 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
     delete attrs.password;
 
     Object.assign(attrs, {
-      password_hash: key.hash,
-      password_salt: key.salt,
-      password_itrs: key.iterations
+      passwordHash: key.hash,
+      passwordSalt: key.salt,
+      passwordItrs: key.iterations
     });
   }
 
-  const user = await db.user.update(id, attrs);
+  const user = await db.User.update(id, attrs);
 
   if (!user)
     throw new NotFoundUserError();
@@ -51,7 +51,7 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
 export async function getUserById(id: string): Promise<InternalUserObject> {
   debug('Get user' + id);
 
-  const user = await db.user.getById(id);
+  const user = await db.User.getById(id);
 
   if (!user)
     throw new NotFoundUserError();
@@ -61,6 +61,6 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
 }
 
 export async function getAllUsers(): Promise<InternalUserObject[]> {
-  const users = await db.user.getAll();
+  const users = await db.User.getAll();
   return users.map((user) => user.toJSON());
 }

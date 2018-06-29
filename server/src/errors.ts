@@ -1,4 +1,4 @@
-class WidError extends Error {
+class DBError extends Error {
   original: Error;
   constructor(message, original: Error = null) {
     super(message);
@@ -7,14 +7,26 @@ class WidError extends Error {
   }
 }
 
-export abstract class DuplicatedDBObjectError extends WidError { }
-export abstract class NotFoundDBObjectError extends WidError { }
+export abstract class DuplicatedDBObjectError extends DBError { }
 
-export class DuplicatedUserError extends DuplicatedDBObjectError { name = 'DuplicatedUserError' }
+export class DuplicatedUserError extends DuplicatedDBObjectError {
+  name = 'DuplicatedUserError'
+}
 
-export class ProtectedUserError extends WidError { name = 'ProtectedUserError' }
+export abstract class NotFoundDBObjectError extends DBError { }
 
 export class NotFoundUserError extends NotFoundDBObjectError {
   constructor() { super('User not found') }
   name = 'NotFoundUserError'
 }
+
+export class NotFoundKeyError extends NotFoundDBObjectError {
+  constructor() { super('User not found') }
+  name = 'NotFoundUserError'
+}
+
+export abstract class ForeignKeyDBError extends DBError { }
+
+export class InvalidUserTargetedKeyError extends ForeignKeyDBError { }
+
+export class ProtectedUserError extends DBError { name = 'ProtectedUserError' }

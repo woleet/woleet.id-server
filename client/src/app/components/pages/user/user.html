@@ -1,0 +1,13 @@
+<div *ngIf="(info$ | async) as user; else loading">
+  <mat-card>
+    <div>{{ user.email }}</div>
+    <hr>
+    <span>{{ user.firstName }} {{ user.lastName }}</span>
+    (<span>{{ user.username }}</span>)
+  </mat-card>
+  <br>
+  <mat-card>
+    <div>{{ user.email }}</div>
+  </mat-card>
+</div>
+<ng-template #loading>Loading...</ng-template>

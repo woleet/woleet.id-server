@@ -1,38 +1,38 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
-import {SetupComponent, AboutComponent, UserComponent, SettingsComponent, CredentialsComponent} from "./components";
+import { AuthGuardService as AuthGuard } from '@guards/auth';
+
+const MAIN = '';
+
+import { LoginPageComponent } from '@pages/login';
+import { SetupPageComponent } from '@pages/setup';
+import { CredentialsPageComponent } from '@pages/credentials';
+import { UserPageComponent } from '@pages/user';
+import { AboutPageComponent } from '@pages/about';
+import { SettingsPageComponent } from '@pages/settings';
+import { UsersPageComponent } from '@pages/users';
+import { UserCreatePageComponent } from '@pages/user.create';
+import { UserEditPageComponent } from '@pages/user.edit';
 
 const routes: Routes = [
-  {path: 'setup-page', component: SetupComponent},
-  {path: 'user-page', component: UserComponent},
-  {path: 'settings-page', component: SettingsComponent},
-  {path: 'credentials-page', component: CredentialsComponent},
-  {path: 'about-page', component: AboutComponent}
-  // {
-  //   path: '',
-  //   redirectTo: 'about',
-  //   pathMatch: 'full'
-  // },
-  // {
-  //   path: 'settings',
-  //   // component: SettingsComponent,
-  //   data: {
-  //     title: 'Settings'
-  //   }
-  // },
-  // {
-  //   path: 'examples',
-  //   loadChildren: 'app/examples/examples.module#ExamplesModule'
-  // },
-  // {
-  //   path: '**',
-  //   redirectTo: 'about'
-  // }
+  { path: 'login', component: LoginPageComponent },
+  { path: 'setup', component: SetupPageComponent, canActivate: [AuthGuard] },
+  { path: 'user', component: UserPageComponent, canActivate: [AuthGuard] },
+  { path: 'user/create', component: UserCreatePageComponent, canActivate: [AuthGuard] },
+  { path: 'user/:id', component: UserEditPageComponent, canActivate: [AuthGuard] },
+  { path: 'users', component: UsersPageComponent, canActivate: [AuthGuard] },
+  { path: 'settings', component: SettingsPageComponent, canActivate: [AuthGuard] },
+  { path: 'credentials', component: CredentialsPageComponent, canActivate: [AuthGuard] },
+  { path: 'about', component: AboutPageComponent, canActivate: [AuthGuard] },
+  {
+    path: '**',
+    redirectTo: 'user'
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {useHash: true})],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 
