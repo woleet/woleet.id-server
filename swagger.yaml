@@ -15,11 +15,12 @@ info:
   license:
     name: MIT
 tags:
-  - name: authentication
-  - name: key
-  - name: user
-  - name: identity
-  - name: signature
+  - name: Authentication
+  - name: APIKey
+  - name: Key
+  - name: User
+  - name: Identity
+  - name: Signature
 security:
   - BasicAuth: []
   - BearerAuth: []
@@ -27,7 +28,7 @@ paths:
   /login:
     get:
       tags:
-        - authentication
+        - Authentication
       summary: Logs user into the system
       operationId: login
       security:
@@ -57,7 +58,7 @@ paths:
   /info:
     get:
       tags:
-        - authentication
+        - Authentication
       summary: Return information about the current logged user.
       operationId: getUserInfo
       security:
@@ -75,7 +76,7 @@ paths:
       operationId: getSignature
       summary: Sign some data using the bitcoin identity of your backend.
       tags:
-        - signature
+        - Signature
       description: >
         Use this endpoint to sign some data using the bitcoin identity of your backend.
           You first need to compute the SHA256 hash of your data (client side) and then provide it in the `hashToSign` parameter.
@@ -122,7 +123,7 @@ paths:
       operationId: getIdentity
       summary: Prove the bitcoin identity of your backend.
       tags:
-        - identity
+        - Identity
       description: >
         This endpoint can be used by anyone wanting to verify the bitcoin identity of your backend.
           Calling this endpoint (that should be accessible publicly) makes your backend sign some random data (built by concatenating the `leftData` parameter provided by the client and the `rightData` parameter provided by your backend) using the bitcoin address provided in the `pubKey` parameter.
@@ -159,7 +160,7 @@ paths:
   /logout:
     get:
       tags:
-        - authentication
+        - Authentication
       summary: Logs out current logged in user
       operationId: logout
       responses:
@@ -170,7 +171,7 @@ paths:
   /user/{userId}/key:
     post:
       tags:
-        - key
+        - Key
       summary: Create a new key for a user.
       operationId: createKey
       parameters:
@@ -195,7 +196,7 @@ paths:
   /userd/{userId}/key/list:
     get:
       tags:
-        - key
+        - Key
       summary: Get all keys of a user.
       description: Returns a key.
       operationId: getKeyById
@@ -226,7 +227,7 @@ paths:
   /key/{keyId}:
     get:
       tags:
-        - key
+        - Key
       summary: Get a key by its identifier.
       description: Returns a key.
       operationId: getKeyById
@@ -255,7 +256,7 @@ paths:
                 $ref: '#/components/responses/ApiError'
     put:
       tags:
-        - key
+        - Key
       summary: Update an existing key
       operationId: updateKey
       parameters:
@@ -288,7 +289,7 @@ paths:
   /user:
     post:
       tags:
-        - user
+        - User
       summary: Create user
       description: This can only be done by the logged in user.
       operationId: createUser
@@ -317,7 +318,7 @@ paths:
   /user/{userId}:
     get:
       tags:
-        - user
+        - User
       summary: Get user by user id.
       operationId: getUserById
       parameters:
@@ -345,7 +346,7 @@ paths:
                 $ref: '#/components/responses/ApiError'
     put:
       tags:
-        - user
+        - User
       summary: Updated user
       description: This can only be done by the logged in user.
       operationId: updateUser
@@ -382,7 +383,7 @@ paths:
   /user/list:
     get:
       tags:
-        - user
+        - User
       summary: Get all users.
       operationId: getAllUsers
       parameters:
@@ -403,6 +404,7 @@ paths:
       tags:
         - APIKey
       summary: Create api key
+      description: This can only be done by an admin.
       operationId: createAPIKey
       security:
         - BearerAuth: []
@@ -459,6 +461,7 @@ paths:
       tags:
         - APIKey
       summary: Updated APIKey
+      description: This can only be done by the logged in APIKey.
       operationId: updateAPIKey
       parameters:
         - $ref: '#/components/parameters/APIKeyIdParameter'
