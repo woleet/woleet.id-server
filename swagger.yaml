@@ -72,7 +72,7 @@ paths:
   # Identity
   /signature:
     get:
-      operationId: signature
+      operationId: getSignature
       summary: Sign some data using the bitcoin identity of your backend.
       tags:
         - signature
@@ -119,7 +119,7 @@ paths:
                 $ref: '#/components/responses/ApiError'
   /identity:
     get:
-      operationId: identity
+      operationId: getIdentity
       summary: Prove the bitcoin identity of your backend.
       tags:
         - identity
@@ -172,7 +172,7 @@ paths:
       tags:
         - key
       summary: Create a new key for a user.
-      operationId: addKey
+      operationId: createKey
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
       security:
@@ -196,7 +196,7 @@ paths:
     get:
       tags:
         - key
-      summary: Get a key by its identifier.
+      summary: Get all keys of a user.
       description: Returns a key.
       operationId: getKeyById
       parameters:
@@ -384,7 +384,7 @@ paths:
       tags:
         - user
       summary: Get all users.
-      operationId: getUserById
+      operationId: getAllUsers
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
       security:
@@ -397,6 +397,115 @@ paths:
               schema:
                 $ref: '#/components/responses/UserArray'
   # End User
+  # APIKey
+  /APIKey:
+    post:
+      tags:
+        - APIKey
+      summary: Create api key
+      operationId: createAPIKey
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIKey'
+        '400':
+          description: Invalid object supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+      requestBody:
+        description: Created APIKey object.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APIKeyPost'
+  /APIKey/{APIKeyId}:
+    get:
+      tags:
+        - APIKey
+      summary: Get APIKey by APIKey id.
+      operationId: getAPIKeyById
+      parameters:
+        - $ref: '#/components/parameters/APIKeyIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIKey'
+        '400':
+          description: Invalid APIKey identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: APIKey not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+    put:
+      tags:
+        - APIKey
+      summary: Updated APIKey
+      operationId: updateAPIKey
+      parameters:
+        - $ref: '#/components/parameters/APIKeyIdParameter'
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APIKeyPut'
+        description: Updated APIKey object.
+        required: true
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIKey'
+        '400':
+          description: Invalid object supplied / Invalid APIKey identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: APIKey not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+  /APIKey/list:
+    get:
+      tags:
+        - APIKey
+      summary: Get all APIKeys.
+      operationId: getAllAPIKeys
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: APIKey list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIKeyArray'
+  # End APIKey
   # End Admin
 externalDocs:
   description: Find out more about woleet.id
@@ -439,23 +548,11 @@ components:
             status:
               $ref: '#/components/schemas/UserStatusEnum'
             createdAt:
-              type: integer
-              format: int64
-              readOnly: true
-              description: Date of creation (Unix ms timestamp).
-              example: 1529050145516
+              $ref: '#/components/schemas/CreatedAt'
             updatedAt:
-              type: integer
-              format: int64
-              readOnly: true
-              description: Date of last modification (Unix ms timestamp).
-              example: 1529050145516
+              $ref: '#/components/schemas/UpdatedAt'
             lastLogin:
-              type: integer
-              format: int64
-              readOnly: true
-              description: Date of last login (Unix ms timestamp).
-              example: 1529050155459
+              $ref: '#/components/schemas/LastLogin'
         - $ref: '#/components/schemas/UserBase'
     Password:
       type: string
@@ -466,6 +563,30 @@ components:
       type: string
       description: Public key.
       example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
+    CreatedAt:
+      type: integer
+      format: int64
+      readOnly: true
+      description: Date of creation (Unix ms timestamp).
+      example: 1529052551419
+    UpdatedAt:
+      type: integer
+      format: int64
+      readOnly: true
+      description: Date of last modification (Unix ms timestamp).
+      example: 1529052551419
+    LastUsed:
+      type: integer
+      format: int64
+      readOnly: true
+      description: Date of last utilisation (Unix ms timestamp).
+      example: 1529059167339
+    LastLogin:
+      type: integer
+      format: int64
+      readOnly: true
+      description: Date of last login (Unix ms timestamp).
+      example: 1529050155459
     UserTypeEnum:
       type: string
       enum:
@@ -479,12 +600,12 @@ components:
       enum:
        - active
        - blocked
-       - removed
+       - revoked
       default: "active"
       description: |
         User Status:
-         - A locked user cannot sign.
-         - A disabled user cannot sign nor login.
+         - A blocked user cannot sign.
+         - A revoked user cannot sign nor login.
       example: "active"
     UserPut:
       allOf:
@@ -517,6 +638,51 @@ components:
        - bip39
       description: Key type.
       example: "bip39"
+    # APIKey
+    APIKeyBase:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "APIKey name"
+          description: Key name.
+        status:
+          type: string
+          enum:
+          - active
+          - revoked
+          description: Key status.
+          default: "active"
+          example: "active"
+    APIKey:
+      allOf:
+        - type: object
+          required:
+          - name
+          properties:
+            id:
+              readOnly: true
+              type: string
+              format: uuid
+              description: API Key id.
+              example: "a35c9fee-3893-4eb7-adde-205e1be03209"
+            createdAt:
+              $ref: '#/components/schemas/CreatedAt'
+            updatedAt:
+              $ref: '#/components/schemas/UpdatedAt'
+            lastUsed:
+              $ref: '#/components/schemas/LastUsed'
+        - $ref: '#/components/schemas/APIKeyBase'
+    APIKeyPost:
+      allOf:
+        - $ref: '#/components/schemas/APIKeyBase'
+        - type: object
+          required:
+          - name
+    APIKeyPut:
+      allOf:
+        - $ref: '#/components/schemas/APIKeyBase'
+    # Key
     KeyBase:
       type: object
       properties:
@@ -529,7 +695,6 @@ components:
           enum:
           - active
           - revoked
-          - expired
           description: Key status.
           default: "active"
           example: "active"
@@ -550,40 +715,24 @@ components:
             type:
               $ref: '#/components/schemas/KeyTypeEnum'
             createdAt:
-              type: integer
-              format: int64
-              readOnly: true
-              description: Date of creation (Unix ms timestamp).
-              example: 1529052551419
+              $ref: '#/components/schemas/CreatedAt'
             updatedAt:
-              type: integer
-              format: int64
-              readOnly: true
-              description: Date of last modification (Unix ms timestamp).
-              example: 1529052551419
+              $ref: '#/components/schemas/UpdatedAt'
             lastUsed:
-              type: integer
-              format: int64
-              readOnly: true
-              description: Date of last utilisation (Unix ms timestamp).
-              example: 1529059167339
+              $ref: '#/components/schemas/LastUsed'
         - $ref: '#/components/schemas/KeyBase'
-    KeyExpiration:
-      type: integer
-      format: int64
-      readOnly: true
-      description: Date to disable the key.
-      example: 1531651039296
+    # KeyExpiration:
+    #   type: integer
+    #   format: int64
+    #   readOnly: true
+    #   description: Date to disable the key.
+    #   example: 1531651039296
     KeyPost:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
         - type: object
           required:
           - name
-        - type: object
-          properties:
-            expiration:
-              $ref: '#/components/schemas/KeyExpiration'
     KeyPut:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
@@ -641,6 +790,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Key'
+    APIKeyArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/APIKey'
   parameters:
     UserIdParameter:
       name: userId
@@ -660,6 +813,15 @@ components:
         type: string
         format: uuid
         example: "552aa3fd-3b5e-434f-bdd3-9b6c58c269c1"
+    APIKeyIdParameter:
+      name: APIKeyId
+      in: path
+      description: Identifier of the APIKey.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: "f34d92e3-4f71-49ab-862f-69443bd48266"
     PubKeyQueryParameter:
       name: pubKey
       in: query
@@ -696,7 +858,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/KeyPost'
-      description: Key object to be added to the store.
+      description: Key object to add.
       required: true
     KeyPut:
       content:
@@ -704,6 +866,20 @@ components:
           schema:
             $ref: '#/components/schemas/KeyPut'
       description: Replacement key object.
+      required: true
+    APIKeyPost:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIKeyPost'
+      description: APIKey object to add.
+      required: true
+    APIKeyPut:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIKeyPut'
+      description: Attributes of APIKey to replace.
       required: true
   responses:
     User:
@@ -714,6 +890,10 @@ components:
       $ref: '#/components/schemas/UserArray'
     KeyArray:
       $ref: '#/components/schemas/KeyArray'
+    APIKey:
+      $ref: '#/components/schemas/APIKey'
+    APIKeyArray:
+      $ref: '#/components/schemas/APIKeyArray'
   securitySchemes:
     BasicAuth:
       type: http

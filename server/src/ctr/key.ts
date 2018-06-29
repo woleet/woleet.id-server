@@ -14,7 +14,7 @@ import { db } from "../db";
  * @swagger
  *  operationId: addKey
  */
-export async function addKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
+export async function createKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
   const privateKey = crypto.randomBytes(32).toString('hex');
   const newKey = await db.Key.create(Object.assign({}, key, { privateKey, userId }));
   return newKey.toJSON();

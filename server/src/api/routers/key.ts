@@ -3,7 +3,7 @@ import { validate } from '../schemas';
 import * as Router from "koa-router";
 
 import * as Debug from 'debug';
-import { addKey, getAllKeysOfUser } from "../../ctr/key";
+import { createKey, getAllKeysOfUser } from "../../ctr/key";
 const debug = Debug('id:api:key');
 
 const vkid = validate.param('id', 'uuid');
@@ -27,7 +27,7 @@ router.post('/user/:userId/key', vuid, validate.body('addKey'), async function (
   const key: ApiPostKeyObject = ctx.request.body;
   debug('addkey', key);
   const { userId } = ctx.params;
-  ctx.body = await addKey(userId, key);
+  ctx.body = await createKey(userId, key);
 });
 
 /**
