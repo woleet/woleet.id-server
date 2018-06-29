@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@services/auth';
 
 @Component({
   templateUrl: './settings.html',
@@ -6,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsPageComponent implements OnInit {
 
-  constructor() { }
+  admin = false;
+
+  constructor(private auth: AuthService) { }
 
   ngOnInit() {
+    this.admin = this.auth.isAdmin();
   }
 
 }

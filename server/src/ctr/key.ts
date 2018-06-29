@@ -1,5 +1,4 @@
 import * as crypto from "crypto";
-import { ApiPostKeyObject, ApiPutKeyObject, InternalKeyObject } from "../typings";
 import { NotFoundKeyError } from "../errors";
 import { db } from "../db";
 

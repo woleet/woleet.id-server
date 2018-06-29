@@ -5,7 +5,6 @@ import { Deferrable, Sequelize } from 'sequelize';
 import { ForeignKeyConstraintError } from 'sequelize';
 import { InvalidUserTargetedKeyError } from '../../errors';
 
-import { InternalKeyObject, FullApiPostKeyObject, SequelizeKeyObject } from '../../typings';
 import { AbstractInstanceAccess } from './abstract';
 
 function keyModelFactory(userModelInstance) {
@@ -31,7 +30,7 @@ function keyModelFactory(userModelInstance) {
   })
 }
 
-class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, FullApiPostKeyObject> {
+class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKeyObject> {
 
   constructor(client: Sequelize, userModelInstance) {
     super(client)

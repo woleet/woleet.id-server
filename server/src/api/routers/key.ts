@@ -3,7 +3,6 @@ import { validate } from '../schemas';
 import * as Router from "koa-router";
 
 import * as Debug from 'debug';
-import { ApiPostKeyObject } from "../../typings";
 import { addKey, getAllKeysOfUser } from "../../ctr/key";
 const debug = Debug('id:api:key');
 

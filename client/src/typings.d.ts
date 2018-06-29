@@ -1,8 +1,12 @@
+/* Client types */
+
 /* SystemJS module definition */
 declare var module: NodeModule;
 interface NodeModule {
   id: string;
 }
+
+/* User */
 
 type UserTypeEnum = 'user' | 'admin';
 type UserStatusEnum = 'active' | 'blocked' | 'removed';
@@ -11,6 +15,21 @@ interface UserObject {
   username: string,
   firstName: string,
   lastName: string
+}
+
+interface ApiUserObject extends UserObject {
+  /** UUID */
+  id: string,
+  /** Unix timestamp (ms) */
+  createdAt: number,
+  /** Unix timestamp (ms) */
+  updatedAt: number,
+  /** Unix timestamp (ms) */
+  lastLogin: number,
+
+  type: UserTypeEnum,
+  status: UserStatusEnum,
+  email: string | null,
 }
 
 interface ApiUserDTOObject extends UserObject {
@@ -32,26 +51,14 @@ interface ApiPutUserObject extends UserObject {
   password?: string
 }
 
-interface ApiUserObject extends UserObject {
-  /** UUID */
-  id: string,
-  /** Unix timestamp (ms) */
-  createdAt: number,
-  /** Unix timestamp (ms) */
-  updatedAt: number,
-  /** Unix timestamp (ms) */
-  lastLogin: number,
-
-  type: UserTypeEnum,
-  status: UserStatusEnum,
-  email: string | null,
-}
+/* Authorization */
 
 interface BasicAuthObject {
   username: string;
   password: string;
 }
 
-interface TokenObject {
+interface AuthResponseObject {
   token: string;
+  admin: boolean;
 }
