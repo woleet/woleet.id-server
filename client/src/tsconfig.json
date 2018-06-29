@@ -12,9 +12,5 @@
       "@services/*": ["app/services/*"],
       "@guards/*": ["app/services/guards/*"]
     }
-  },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
-  ]
+  }
 }
