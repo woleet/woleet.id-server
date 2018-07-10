@@ -1,7 +1,7 @@
 <nav role="navigation" *ngIf="router.url != '/login'">
 
   <mat-toolbar>
-    <span>Application {{title}} "{{router.url}}"  {{  isAdmin()  }}</span>
+    <span>Application {{ title }} "{{ router.url }}" {{ isAdmin() }}</span>
 
     <div>
       <button mat-icon-button	(click)="logout()">

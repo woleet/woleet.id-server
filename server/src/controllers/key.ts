@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import { NotFoundKeyError } from "../errors";
-import { db } from "../db";
+import { db } from "../database";
 
 /**
  * Key

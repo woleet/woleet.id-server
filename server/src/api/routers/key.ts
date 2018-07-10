@@ -3,7 +3,7 @@ import { validate } from '../schemas';
 import * as Router from "koa-router";
 
 import * as Debug from 'debug';
-import { createKey, getAllKeysOfUser } from "../../ctr/key";
+import { createKey, getAllKeysOfUser } from "../../controllers/key";
 const debug = Debug('id:api:key');
 
 const vkid = validate.param('id', 'uuid');

@@ -1,4 +1,4 @@
-import { db } from '../db';
+import { db } from '../database';
 import { store as sessionStore } from './session';
 import { validate } from './utils/password';
 

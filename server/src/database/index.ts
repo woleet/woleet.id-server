@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize';
 import * as Debug from 'debug';
 import { UserAccess } from './model/user';
 import { KeyAccess } from './model/key';
-import { encode } from '../ctr/utils/password';
+import { encode } from '../controllers/utils/password';
 
 const debug = Debug('id:db');
 
