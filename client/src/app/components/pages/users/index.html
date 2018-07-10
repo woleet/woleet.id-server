@@ -7,7 +7,10 @@
   <div *ngIf="users.length; else noUser">
     <div *ngFor="let user of users">
       <mat-card>
-        <a [routerLink]="['/user/', user.id]">{{ user.username }}</a>
+        <button mat-icon-button color="primary" class="edit-button">
+          <mat-icon aria-label="Edit user" [routerLink]="['/user/', user.id]">edit</mat-icon>
+        </button>
+        <a>{{ user.username }}</a>
         <div>{{ user.email }}</div>
         <div>{{ user.firstName }}</div>
         <div>{{ user.lastName }}</div>

@@ -7,7 +7,8 @@ import { AppRoutingModule } from './routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
-  MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatInputModule, MatCardModule
+  MatToolbarModule, MatButtonModule, MatSidenavModule,
+  MatIconModule, MatListModule, MatInputModule, MatCardModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -30,7 +31,7 @@ import { UsersPageComponent } from '@pages/users';
 
 // Services
 import { AuthService } from '@services/auth';
-import { AuthGuardService } from '@guards/auth';
+import { AdminGuardService, UserGuardService, AnonymousGuardService } from '@guards/auth';
 
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
@@ -87,7 +88,7 @@ import { ForbiddenInterceptorService } from '@interceptors/forbidden';
     AppRoutingModule
   ],
   providers: [
-    AuthService, AuthGuardService, KeyService, UserService, InfoService,
+    AuthService, AdminGuardService, UserGuardService, AnonymousGuardService, KeyService, UserService, InfoService,
     UnauthorizedInterceptorService, ForbiddenInterceptorService, AllowCredentialsInterceptorService
   ],
   bootstrap: [AppComponent]

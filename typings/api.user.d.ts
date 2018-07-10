@@ -1,7 +1,7 @@
 /* User */
 
 type UserTypeEnum = 'user' | 'admin';
-type UserStatusEnum = 'active' | 'blocked' | 'revoked';
+type UserStatusEnum = 'active' | 'blocked';
 
 interface UserObject {
   username: string,

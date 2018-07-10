@@ -15,4 +15,8 @@ export class NavBarComponent {
     this.auth.logout()
   }
 
+  isAdmin() {
+    return this.auth.isAdmin()
+  }
+
 }

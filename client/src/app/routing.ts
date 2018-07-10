@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthGuardService as AuthGuard } from '@guards/auth';
-
-const MAIN = '';
+import { UserGuardService as IsUser } from '@guards/auth';
+import { AdminGuardService as IsAdmin } from '@guards/auth';
+import { AnonymousGuardService as IsAnonymous } from '@guards/auth';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -16,15 +16,15 @@ import { UserCreatePageComponent } from '@pages/user.create';
 import { UserEditPageComponent } from '@pages/user.edit';
 
 const routes: Routes = [
-  { path: 'login', component: LoginPageComponent },
-  { path: 'setup', component: SetupPageComponent, canActivate: [AuthGuard] },
-  { path: 'user', component: UserPageComponent, canActivate: [AuthGuard] },
-  { path: 'user/create', component: UserCreatePageComponent, canActivate: [AuthGuard] },
-  { path: 'user/:id', component: UserEditPageComponent, canActivate: [AuthGuard] },
-  { path: 'users', component: UsersPageComponent, canActivate: [AuthGuard] },
-  { path: 'settings', component: SettingsPageComponent, canActivate: [AuthGuard] },
-  { path: 'credentials', component: CredentialsPageComponent, canActivate: [AuthGuard] },
-  { path: 'about', component: AboutPageComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginPageComponent, canActivate: [IsAnonymous] },
+  { path: 'setup', component: SetupPageComponent, canActivate: [IsAdmin] },
+  { path: 'user', component: UserPageComponent, canActivate: [IsUser] },
+  { path: 'user/create', component: UserCreatePageComponent, canActivate: [IsAdmin] },
+  { path: 'user/:id', component: UserEditPageComponent, canActivate: [IsAdmin] },
+  { path: 'users', component: UsersPageComponent, canActivate: [IsAdmin] },
+  { path: 'settings', component: SettingsPageComponent, canActivate: [IsAdmin] },
+  { path: 'credentials', component: CredentialsPageComponent, canActivate: [IsAdmin] },
+  { path: 'about', component: AboutPageComponent, canActivate: [IsUser] },
   {
     path: '**',
     redirectTo: 'user'
@@ -32,7 +32,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes, { useHash: false })],
   exports: [RouterModule]
 })
 

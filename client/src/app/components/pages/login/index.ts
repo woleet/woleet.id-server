@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '@services/auth';
 import { Router } from '@angular/router';
+import { mainRoute } from '@app/config';
 
 @Component({
   templateUrl: './index.html',
@@ -16,7 +17,7 @@ export class LoginPageComponent {
 
   login() {
     if (this.service.login(this.user)) {
-      this.router.navigate(['main'])
+      this.router.navigate([mainRoute])
     } else {
       // this.errorMsg = 'Failed to login! try again ...';
     }
