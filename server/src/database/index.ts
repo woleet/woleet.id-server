@@ -1,42 +1,17 @@
-import * as Sequelize from 'sequelize';
+import { sequelize } from './sequelize';
 import * as Debug from 'debug';
-import { UserAccess } from './model/user';
-import { KeyAccess } from './model/key';
+import { User } from './model/user';
+import { Key } from './model/key';
 import { encode } from '../controllers/utils/password';
 
 const debug = Debug('id:db');
 
-const DATABASE = 'wid';
-const PASSWORD = 'pass';
-const USERNAME = 'pguser';
-
-const options = {
-  dialect: 'postgres',
-  host: 'localhost',
-  port: 5432,
-
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  },
-
-  logging: false,
-  operatorsAliases: false
-};
-
-const client = new Sequelize(DATABASE, USERNAME, PASSWORD, options);
-
-const User = new UserAccess(client);
-const Key = new KeyAccess(client, User.model);
-
-const db = { User, Key };
+export const db = { User, Key };
 
 // Connection
 (async () => {
   debug('Connecting to database...');
-  await client.authenticate();
+  await sequelize.authenticate();
 
   debug('Connected to database.');
   debug('Synchronizing user model...');
@@ -59,5 +34,3 @@ const db = { User, Key };
   console.error(err);
   process.exit(1);
 });
-
-export { db };

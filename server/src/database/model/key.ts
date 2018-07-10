@@ -6,6 +6,8 @@ import { ForeignKeyConstraintError } from 'sequelize';
 import { InvalidUserTargetedKeyError } from '../../errors';
 
 import { AbstractInstanceAccess } from './abstract';
+import { sequelize } from '../sequelize';
+import { User } from './user';
 
 function keyModelFactory(userModelInstance) {
   return ({
@@ -32,9 +34,9 @@ function keyModelFactory(userModelInstance) {
 
 class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKeyObject> {
 
-  constructor(client: Sequelize, userModelInstance) {
-    super(client)
-    this.init('key', keyModelFactory(userModelInstance))
+  constructor() {
+    super(sequelize)
+    this.init('key', keyModelFactory(User.model))
   }
 
   async getAllKeysOfUser(userId: string): Promise<SequelizeKeyObject[]> {
@@ -49,4 +51,4 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
 
 }
 
-export { KeyAccess }
+export const Key = new KeyAccess();

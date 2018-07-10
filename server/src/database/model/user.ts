@@ -1,10 +1,9 @@
-
 import { STRING, ENUM, UUID, UUIDV4, DATE, DOUBLE, CHAR } from 'sequelize';
-import { Sequelize } from 'sequelize';
 
 import { UniqueConstraintError } from 'sequelize';
 import { DuplicatedUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
+import { sequelize } from '../sequelize';
 
 const UserModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
@@ -22,8 +21,8 @@ const UserModel = {
 
 class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostUserObject> {
 
-  constructor(client: Sequelize) {
-    super(client);
+  constructor() {
+    super(sequelize);
     this.init('user', UserModel);
   }
 
@@ -44,4 +43,4 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
 
 }
 
-export { UserAccess }
+export const User = new UserAccess();
