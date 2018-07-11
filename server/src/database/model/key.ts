@@ -1,5 +1,5 @@
 
-import { STRING, ENUM, UUID, UUIDV4, DATE } from 'sequelize';
+import { STRING, ENUM, UUID, UUIDV4, DATE, BOOLEAN } from 'sequelize';
 import { Deferrable, Sequelize } from 'sequelize';
 
 import { ForeignKeyConstraintError } from 'sequelize';
@@ -12,8 +12,10 @@ import { User } from './user';
 function keyModelFactory(userModelInstance) {
   return ({
     id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
+    customKeyId: { type: STRING, defaultValue: null, unique: true },
     type: { type: ENUM(['bip39']), defaultValue: 'bip39' },
-    status: { type: ENUM(['active', 'expired', 'removed']), defaultValue: 'active' },
+    status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
+    default: { type: BOOLEAN, defaultValue: false },
     name: { type: STRING, allowNull: false },
     privateKey: { type: STRING, unique: true, allowNull: false },
     lastUsed: { type: DATE, defaultValue: null },
@@ -36,7 +38,7 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
 
   constructor() {
     super(sequelize)
-    this.init('key', keyModelFactory(User.model))
+    this.define('key', keyModelFactory(User.model), { paranoid: true })
   }
 
   async getAllKeysOfUser(userId: string): Promise<SequelizeKeyObject[]> {

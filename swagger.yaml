@@ -70,8 +70,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDTOGet'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
   # Identity
-  /signature:
+  /sign:
     get:
       operationId: getSignature
       summary: Sign some data using the bitcoin identity of your backend.
@@ -85,6 +91,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/PubKeyQueryParameter'
         - $ref: '#/components/parameters/HashToSignQueryParameter'
+        - $ref: '#/components/parameters/CustomUserIdQueryParameter'
       security:
         - AuthBearer: []
       responses:
@@ -107,7 +114,13 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '404':
-          description: /signature endpoint is not reachable on this port
+          description: The provided parameters did not match any key to sign with.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '409':
+          description: The `pubKey` parameter was not provided and the user has no default key to fallback on.
           content:
             application/json:
               schema:
@@ -140,6 +153,12 @@ paths:
                 $ref: '#/components/schemas/IdentityResult'
         '400':
           description: Missing or invalid query parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
           content:
             application/json:
               schema:
@@ -191,6 +210,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
       requestBody:
         $ref: '#/components/requestBodies/KeyPost'
   /userd/{userId}/key/list:
@@ -202,6 +227,7 @@ paths:
       operationId: getKeyById
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/FullListQueryParameter'
       security:
         - BearerAuth: []
       responses:
@@ -213,6 +239,12 @@ paths:
                 $ref: '#/components/responses/KeyArray'
         '400':
           description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
           content:
             application/json:
               schema:
@@ -248,6 +280,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
         '404':
           description: Key not found.
           content:
@@ -274,6 +312,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
         '404':
           description: Key not found.
           content:
@@ -284,6 +328,41 @@ paths:
         - BearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/KeyPut'
+    delete:
+      tags:
+        - Key
+      summary: Deletes a key
+      description: This can only be done by an admin.
+      operationId: deleteKey
+      parameters:
+        - $ref: '#/components/parameters/KeyIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '400':
+          description: Invalid key identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: Key not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
   # End Key
   # User
   /user:
@@ -302,6 +381,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/User'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
         '400':
           description: Invalid object supplied / Invalid user identifier.
           content:
@@ -338,6 +423,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
         '404':
           description: User not found.
           content:
@@ -347,7 +438,7 @@ paths:
     put:
       tags:
         - User
-      summary: Updated user
+      summary: Update a user
       description: This can only be done by the logged in user.
       operationId: updateUser
       parameters:
@@ -374,6 +465,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+    delete:
+      tags:
+        - User
+      summary: Deletes a user
+      description: This can only be done by an admin.
+      operationId: deleteUser
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/User'
+        '400':
+          description: Invalid user identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
         '404':
           description: User not found.
           content:
@@ -388,6 +520,7 @@ paths:
       operationId: getAllUsers
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/FullListQueryParameter'
       security:
         - BearerAuth: []
       responses:
@@ -421,6 +554,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
       requestBody:
         description: Created APIKey object.
         required: true
@@ -447,6 +586,12 @@ paths:
                 $ref: '#/components/responses/APIKey'
         '400':
           description: Invalid APIKey identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
           content:
             application/json:
               schema:
@@ -487,6 +632,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: APIKey not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+    delete:
+      tags:
+        - APIKey
+      summary: Deletes an APIKey.
+      description: This can only be done by an admin.
+      operationId: deleteAPIKey
+      parameters:
+        - $ref: '#/components/parameters/APIKeyIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIKey'
+        '400':
+          description: Invalid APIKey identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
         '404':
           description: APIKey not found.
           content:
@@ -501,6 +687,8 @@ paths:
       operationId: getAllAPIKeys
       security:
         - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/FullListQueryParameter'
       responses:
         '200':
           description: APIKey list.
@@ -508,6 +696,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIKeyArray'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
   # End APIKey
   # End Admin
 externalDocs:
@@ -515,28 +709,54 @@ externalDocs:
   url: 'https://doc.woleet.id/'
 components:
   schemas:
+    Identity:
+      type: object
+      description: X.500 attributes as defined in https://www.ietf.org/rfc/rfc4519.txt.
+      properties:
+        commonName:
+          type: string
+          description: commonName (CN) (2.5.4.3)
+          example: "Jim Smith"
+        organization:
+          type: string
+          description: organizationName (O) (2.5.4.10)
+          example: "Woleet"
+        organizationalUnit:
+          type: string
+          description: organizationalUnitName (OU) (2.5.4.11)
+          example: "Sales"
+        locality:
+          type: string
+          description: localityName (L) (2.5.4.7)
+          example: "Rennes"
+        country:
+          type: string
+          description: countryName (C) (2.5.4.6)
+          example: "France"
+        userId:
+          type: string
+          description: |
+            userId (UID) (0.9.2342.19200300.100.1.1)
+            This identifier must be unique and can be used to identify a user.
+          example: "wol.jim-smith.01"
     UserBase:
       type: object
       properties:
         email:
           type: string
           format: email
+          default: null # step 1
           description: User's email.
           example: "user.foo@example.com"
         username:
           type: string
+          default: null # step 1
           description: User's alias.
           example: "user-alias"
-        firstName:
-          type: string
-          description: User's first name.
-          example: "user"
-        lastName:
-          type: string
-          description: User's last name.
-          example: "foo"
         type:
           $ref: '#/components/schemas/UserTypeEnum'
+        identity:
+          $ref: '#/components/schemas/Identity'
     UserDetail:
       allOf:
         - type: object
@@ -554,13 +774,17 @@ components:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:
               $ref: '#/components/schemas/UpdatedAt'
+            deletedAt:
+              $ref: '#/components/schemas/DeletedAt'
             lastLogin:
               $ref: '#/components/schemas/LastLogin'
         - $ref: '#/components/schemas/UserBase'
     Password:
       type: string
       format: password
-      description: Password of the user (it must be provided at creation time).
+      # description: Password of the user (it must be provided at creation time).
+      default: null # step 1
+      description: Password of the user (optional for now).
       example: "nSBa+rV3%2/LpD"
     PublicKey:
       type: string
@@ -577,6 +801,14 @@ components:
       format: int64
       readOnly: true
       description: Date of last modification (Unix ms timestamp).
+      example: 1529052551419
+    DeletedAt:
+      type: integer
+      format: int64
+      readOnly: true
+      description: |
+        Date of last modification (Unix ms timestamp).
+        Set to "null" if not deleted.
       example: 1529052551419
     LastUsed:
       type: integer
@@ -603,12 +835,12 @@ components:
       enum:
        - active
        - blocked
-       - revoked
+       - deleted
       default: "active"
       description: |
         User Status:
          - A blocked user cannot sign.
-         - A revoked user cannot sign nor login.
+         - A deleted user cannot sign nor login.
       example: "active"
     UserPut:
       allOf:
@@ -626,10 +858,9 @@ components:
         - $ref: '#/components/schemas/UserPut'
         - type: object
           required:
-            - username
-            - firstName
-            - lastName
-            - password
+            # - username # step2
+            # - password # step2
+            - identity
     UserDTOGet:
       description: A user DTO accessible from regular user.
       allOf:
@@ -653,7 +884,7 @@ components:
           type: string
           enum:
           - active
-          - revoked
+          - deleted
           description: Key status.
           default: "active"
           example: "active"
@@ -673,6 +904,8 @@ components:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:
               $ref: '#/components/schemas/UpdatedAt'
+            deletedAt:
+              $ref: '#/components/schemas/DeletedAt'
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
         - $ref: '#/components/schemas/APIKeyBase'
@@ -697,7 +930,7 @@ components:
           type: string
           enum:
           - active
-          - revoked
+          - deleted
           description: Key status.
           default: "active"
           example: "active"
@@ -721,6 +954,8 @@ components:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:
               $ref: '#/components/schemas/UpdatedAt'
+            deletedAt:
+              $ref: '#/components/schemas/DeletedAt'
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
         - $ref: '#/components/schemas/KeyBase'
@@ -829,10 +1064,28 @@ components:
       name: pubKey
       in: query
       description: The bitcoin address to use to sign.
-      required: true
+      required: false
       schema:
         type: string
         example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
+    FullListQueryParameter:
+      name: full
+      in: query
+      description: Include deleted elements in the returned list.
+      required: false
+      schema:
+        type: boolean
+        example: true
+    CustomUserIdQueryParameter:
+      name: uid
+      in: query
+      description: |
+        The custom user id set in the user's identity.
+        If PubKeyQueryParameter is not set, the default pubKey will be used to sign.
+      required: true
+      schema:
+        type: string
+        example: "wol.jim-smith.01"
     LeftDataQueryParameter:
       name: leftData
       in: query
@@ -887,6 +1140,8 @@ components:
   responses:
     User:
       $ref: '#/components/schemas/UserDetail'
+    Identity:
+      $ref: '#/components/schemas/Identity'
     ApiError:
       $ref: '#/components/schemas/ApiError'
     UserArray:

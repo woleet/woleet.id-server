@@ -8,11 +8,15 @@ import { sequelize } from '../sequelize';
 const UserModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
   type: { type: ENUM(['user', 'admin']), defaultValue: 'user' },
-  status: { type: ENUM(['active', 'blocked', 'removed']), defaultValue: 'active' },
+  status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   email: { type: STRING, unique: true },
   username: { type: STRING, unique: true, allowNull: false },
-  firstName: { type: STRING, allowNull: false },
-  lastName: { type: STRING, allowNull: false },
+  x500CommonName: { type: STRING, allowNull: false },
+  x500Organization: { type: STRING, allowNull: false },
+  x500OrganizationalUnit: { type: STRING, allowNull: false },
+  x500Locality: { type: STRING, allowNull: false },
+  x500Country: { type: STRING, allowNull: false },
+  x500UserId: { type: STRING },
   passwordHash: { type: CHAR(1024), allowNull: false },
   passwordSalt: { type: CHAR(256), allowNull: false },
   passwordItrs: { type: DOUBLE, allowNull: false },
@@ -23,7 +27,7 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
 
   constructor() {
     super(sequelize);
-    this.init('user', UserModel);
+    this.define('user', UserModel, { paranoid: true });
   }
 
   async getByUsername(username: string): Promise<SequelizeUserObject> {

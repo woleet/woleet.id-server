@@ -1,19 +1,39 @@
 import * as Joi from 'joi';
 
 const userTypeEnum = ['user', 'admin'];
-const userStatusEnum = ['active', 'blocked', 'removed'];
+const userStatusEnum = ['active', 'blocked'];
 
-const Word = Joi.string().alphanum().min(3).max(30);
+const Word = Joi.string().regex(/^[a-z0-9]{3,30}$/i);
+const Name = Joi.string().regex(/^[a-z0-9 \-]{3,30}$/i);
 const RWord = Word.required();
+const RName = Name.required();
+const CountryCode = Joi.string().regex(/^[A-Z]{2}$/);
+
+const createIdentity = Joi.object().keys({
+  commonName: RName,
+  organization: RName,
+  organizationalUnit: RName,
+  locality: RName,
+  country: CountryCode.required(),
+  userId: Word
+});
+
+const updateIdentity = Joi.object().keys({
+  commonName: Name,
+  organization: Name,
+  organizationalUnit: Name,
+  locality: Name,
+  country: CountryCode,
+  userId: Word
+});
 
 const createUser = Joi.object().keys({
   type: Joi.string().valid(userTypeEnum),
   status: Joi.string().valid(userStatusEnum),
-  email: Joi.string().email(),
-  username: RWord,
-  firstName: RWord,
-  lastName: RWord,
-  password: RWord
+  email: Joi.string().email().allow(null), // not required for step 1 (allowing null - but should be specified)
+  username: Word.allow(null), // not required for step 1 (allowing null - but should be specified)
+  password: Word.allow(null), // not required for step 1 (allowing null - but should be specified)
+  identity: createIdentity
 });
 
 const updateUser = Joi.object().keys({
@@ -21,9 +41,8 @@ const updateUser = Joi.object().keys({
   status: Joi.string().valid(userStatusEnum),
   email: Joi.string().email(),
   username: Word,
-  firstName: Word,
-  lastName: Word,
-  password: Word
+  password: Word,
+  identity: updateIdentity
 });
 
 export { createUser, updateUser }

@@ -18,6 +18,8 @@ interface ApiKeyObject extends KeyObject {
   /** Unix timestamp (ms) */
   updatedAt: number;
   /** Unix timestamp (ms) */
+  deletedAt: number;
+  /** Unix timestamp (ms) */
   lastUsed: number;
   status: KeyStatusEnum;
 }

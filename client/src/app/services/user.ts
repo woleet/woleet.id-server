@@ -20,7 +20,7 @@ export class UserService {
     return this.http.post<ApiUserObject>(`${serverURL}/user/`, user).toPromise()
   }
 
-  async edit(userId: string, userAttrs: ApiPutUserObject): Promise<ApiUserObject> {
+  async update(userId: string, userAttrs: ApiPutUserObject): Promise<ApiUserObject> {
     return this.http.put<ApiUserObject>(`${serverURL}/user/${userId}/`, userAttrs).toPromise()
   }
 

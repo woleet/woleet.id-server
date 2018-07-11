@@ -1,0 +1,60 @@
+<div class="form-container" *ngIf="user; else loading">
+  <form role="form" (submit)="submit(user)" #f="ngForm">
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="Username" [(ngModel)]="user.username" name="username" autocomplete="false">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="email" placeholder="Email" [(ngModel)]="user.email" name="email" autocomplete="false">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="password" placeholder="Password" [(ngModel)]="user.password" name="password" autocomplete="false">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="Common name" [(ngModel)]="user.identity.commonName" name="commonName" autocomplete="false">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="Organization" [(ngModel)]="user.identity.organization" name="organization" autocomplete="false">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="Organizational Unit" [(ngModel)]="user.identity.organizationalUnit" name="off" autocomplete="false">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="Locality" [(ngModel)]="user.identity.locality" name="locality" autocomplete="false">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="Country" [(ngModel)]="user.identity.country" name="country" autocomplete="false">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="userId" [(ngModel)]="user.identity['userId']" name="userId" autocomplete="false">
+      </mat-form-field>
+    </div>
+    <br>
+    <div class="helper" *ngIf="helper">
+      <div>
+        {{ helper }}
+      </div>
+      <br>
+    </div>
+    <button mat-raised-button color="primary" class="w-100" type="submit"> {{ mode.toUpperCase() }} </button>
+  </form>
+</div>
+<ng-template #loading>
+  <mat-card>Loading...</mat-card>
+</ng-template>
