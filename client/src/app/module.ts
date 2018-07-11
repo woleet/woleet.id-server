@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 import {
   MatToolbarModule, MatButtonModule, MatSidenavModule,
@@ -76,6 +78,7 @@ import { ForbiddenInterceptorService } from '@interceptors/forbidden';
 
     // nav
     LayoutModule,
+    FlexLayoutModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,

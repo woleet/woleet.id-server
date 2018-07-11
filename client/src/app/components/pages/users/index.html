@@ -1,18 +1,30 @@
-<mat-card>
-  <button routerLink="/user/create" mat-button>ADD USER</button>
-</mat-card>
+<button routerLink="/user/create" mat-raised-button color="primary">ADD USER</button>
+<br><br>
+<mat-divider></mat-divider>
 <br>
-
 <div *ngIf="(users$ | async) as users; else loading">
   <div *ngIf="users.length; else noUser">
     <div *ngFor="let user of users">
-      <mat-card>
+      <!-- layout="row"  layout-align="space-between start" -->
+      <mat-card fxLayout="row" fxLayoutAlign="space-between start">
+        <div fxLayout="column">
+          <a *ngIf="user.username">{{ user.username }}
+            <!-- optional step 1 -->
+          </a>
+          <div *ngIf="user.email">{{ user.email }}
+            <!-- optional step 1 -->
+          </div>
+          <div>{{ user.identity.commonName }}</div>
+          <div>{{ user.identity.organization }} ({{ user.identity.organizationalUnit }})</div>
+        </div>
+        <div fxLayout="column" fxHide fxShow.gt-xs>
+          <div>{{ user.identity.locality }}</div>
+          <div>{{ user.identity.country }}</div>
+        </div>
+        <div fxLayout="column"></div>
         <button mat-icon-button color="primary" class="edit-button">
           <mat-icon aria-label="Edit user" [routerLink]="['/user/', user.id]">edit</mat-icon>
         </button>
-        <a>{{ user.username }}</a>
-        <div>{{ user.email }}</div>
-        <div>{{ user.identity.commonName }}</div>
       </mat-card>
       <br>
     </div>
