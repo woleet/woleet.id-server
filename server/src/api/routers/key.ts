@@ -4,6 +4,7 @@ import * as Router from "koa-router";
 
 import * as Debug from 'debug';
 import { createKey, getAllKeysOfUser } from "../../controllers/key";
+import { serialiseKey } from "../serialize/key";
 const debug = Debug('id:api:key');
 
 const vkid = validate.param('id', 'uuid');
@@ -38,7 +39,7 @@ router.post('/user/:userId/key', vuid, validate.body('addKey'), async function (
 router.get('/user/:userId/key/list', vuid, async function (ctx) {
   const { userId } = ctx.params;
   const keys = await getAllKeysOfUser(userId);
-  ctx.body = keys;
+  ctx.body = keys.map(serialiseKey);
 });
 
 /**

@@ -10,7 +10,7 @@ export function serialiseUser(user: InternalUserObject): ApiUserObject {
 
   const identity = serializeIdentity(user);
 
-  const { id, type, status, email } = user;
+  const { id, type, status, email, defaultKeyId } = user;
 
-  return Object.assign({ id, type, status, email }, dates, { identity });
+  return Object.assign({ id, type, status, email, defaultKeyId, identity }, dates);
 }

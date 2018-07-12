@@ -1,15 +1,9 @@
 openapi: 3.0.0
-servers:
-  - description: A woleet.id test server.
-    url: https://testing.woleet.id/
-  - description: woleet.id development server.
-    url: https://dev.woleet.id/
 info:
   description: |
-    This is Woleet.ID Server. You can find out more about woleet.id at [https://doc.woleet.id](https://doc.woleet.id).
+    This is Woleet.ID Server. You can find out more about woleet.io at [doc.woleet.io](https://doc.woleet.io).
   version: 1.0.0
   title: Woleet.ID Server
-  termsOfService: 'https://woleet.id/terms/'
   contact:
     email: contact@woleet.com
   license:
@@ -69,7 +63,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTOGet'
+                $ref: '#/components/schemas/User'
         '401':
           description: Missing or bad token
           content:
@@ -86,12 +80,13 @@ paths:
       description: >
         Use this endpoint to sign some data using the bitcoin identity of your backend.
           You first need to compute the SHA256 hash of your data (client side) and then provide it in the `hashToSign` parameter.
-          The signature produced is the signature of this hash using the bitcoin address provided in the `pubKey` parameter (or by the default bitcoin address of your backend if not set).
-          This endpoint is protected by an API token, provided to you at backend kit installation time. However, for security reason, **this endpoint SHOULD NEVER be exposed** outside your backend. To facilitate the isolation of this endpoint, a dedicated port can be specified at installation time.
+          <br>The signature produced is the signature of this hash using the key provided in the `pubKey` parameter (or by the default key of your user).
+          <br>This endpoint is protected by an API key.
       parameters:
-        - $ref: '#/components/parameters/PubKeyQueryParameter'
         - $ref: '#/components/parameters/HashToSignQueryParameter'
+        - $ref: '#/components/parameters/PubKeyQueryParameter'
         - $ref: '#/components/parameters/CustomUserIdQueryParameter'
+        - $ref: '#/components/parameters/UserIdQueryParameter'
       security:
         - AuthBearer: []
       responses:
@@ -121,12 +116,6 @@ paths:
                 $ref: '#/components/responses/ApiError'
         '409':
           description: The `pubKey` parameter was not provided and the user has no default key to fallback on.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-        '500':
-          description: Unexpected server error
           content:
             application/json:
               schema:
@@ -165,12 +154,6 @@ paths:
                 $ref: '#/components/responses/ApiError'
         '404':
           description: /identity endpoint is not reachable on this port.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-        '500':
-          description: Unexpected server error.
           content:
             application/json:
               schema:
@@ -216,13 +199,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
       requestBody:
         $ref: '#/components/requestBodies/KeyPost'
   /userd/{userId}/key/list:
     get:
       tags:
         - Key
-      summary: Get all keys of a user.
+      summary: List all keys of a user.
       description: Returns a key.
       operationId: getKeyById
       parameters:
@@ -250,7 +239,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '404':
-          description: Key not found.
+          description: User not found.
           content:
             application/json:
               schema:
@@ -369,7 +358,7 @@ paths:
     post:
       tags:
         - User
-      summary: Create user
+      summary: Create a new user.
       description: This can only be done by the logged in user.
       operationId: createUser
       security:
@@ -404,7 +393,7 @@ paths:
     get:
       tags:
         - User
-      summary: Get user by user id.
+      summary: Get a user by his identifier.
       operationId: getUserById
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
@@ -438,7 +427,7 @@ paths:
     put:
       tags:
         - User
-      summary: Update a user
+      summary: Update a user.
       description: This can only be done by the logged in user.
       operationId: updateUser
       parameters:
@@ -480,7 +469,7 @@ paths:
     delete:
       tags:
         - User
-      summary: Deletes a user
+      summary: Delete a user.
       description: This can only be done by an admin.
       operationId: deleteUser
       parameters:
@@ -516,7 +505,7 @@ paths:
     get:
       tags:
         - User
-      summary: Get all users.
+      summary: List all users.
       operationId: getAllUsers
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
@@ -536,7 +525,7 @@ paths:
     post:
       tags:
         - APIKey
-      summary: Create api key
+      summary: Create an API key suitable to call the /sign endpoint.
       description: This can only be done by an admin.
       operationId: createAPIKey
       security:
@@ -571,7 +560,7 @@ paths:
     get:
       tags:
         - APIKey
-      summary: Get APIKey by APIKey id.
+      summary: Get an API key by its identifier.
       operationId: getAPIKeyById
       parameters:
         - $ref: '#/components/parameters/APIKeyIdParameter'
@@ -585,7 +574,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIKey'
         '400':
-          description: Invalid APIKey identifier.
+          description: Invalid API key identifier.
           content:
             application/json:
               schema:
@@ -597,7 +586,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '404':
-          description: APIKey not found.
+          description: API key not found.
           content:
             application/json:
               schema:
@@ -605,8 +594,8 @@ paths:
     put:
       tags:
         - APIKey
-      summary: Updated APIKey
-      description: This can only be done by the logged in APIKey.
+      summary: Update an API key.
+      description: This can only be done by the logged in API key.
       operationId: updateAPIKey
       parameters:
         - $ref: '#/components/parameters/APIKeyIdParameter'
@@ -617,7 +606,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/APIKeyPut'
-        description: Updated APIKey object.
+        description: Updated API key object.
         required: true
       responses:
         '200':
@@ -627,7 +616,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIKey'
         '400':
-          description: Invalid object supplied / Invalid APIKey identifier.
+          description: Invalid object supplied / Invalid API key identifier.
           content:
             application/json:
               schema:
@@ -639,7 +628,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '404':
-          description: APIKey not found.
+          description: API key not found.
           content:
             application/json:
               schema:
@@ -647,7 +636,7 @@ paths:
     delete:
       tags:
         - APIKey
-      summary: Deletes an APIKey.
+      summary: Delete an API key.
       description: This can only be done by an admin.
       operationId: deleteAPIKey
       parameters:
@@ -662,7 +651,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIKey'
         '400':
-          description: Invalid APIKey identifier.
+          description: Invalid API key identifier.
           content:
             application/json:
               schema:
@@ -674,7 +663,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '404':
-          description: APIKey not found.
+          description: API key not found.
           content:
             application/json:
               schema:
@@ -683,7 +672,7 @@ paths:
     get:
       tags:
         - APIKey
-      summary: Get all APIKeys.
+      summary: List all API keys.
       operationId: getAllAPIKeys
       security:
         - BearerAuth: []
@@ -691,7 +680,7 @@ paths:
         - $ref: '#/components/parameters/FullListQueryParameter'
       responses:
         '200':
-          description: APIKey list.
+          description: API key list.
           content:
             application/json:
               schema:
@@ -704,9 +693,6 @@ paths:
                 $ref: '#/components/responses/ApiError'
   # End APIKey
   # End Admin
-externalDocs:
-  description: Find out more about woleet.id
-  url: 'https://doc.woleet.id/'
 components:
   schemas:
     Identity:
@@ -753,8 +739,8 @@ components:
           default: null # step 1
           description: User's alias.
           example: "user-alias"
-        type:
-          $ref: '#/components/schemas/UserTypeEnum'
+        role:
+          $ref: '#/components/schemas/UserRoleEnum'
         identity:
           $ref: '#/components/schemas/Identity'
     UserDetail:
@@ -767,7 +753,7 @@ components:
               readOnly: true
               example: "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3"
             type:
-              $ref: '#/components/schemas/UserTypeEnum'
+              $ref: '#/components/schemas/UserRoleEnum'
             status:
               $ref: '#/components/schemas/UserStatusEnum'
             createdAt:
@@ -778,6 +764,11 @@ components:
               $ref: '#/components/schemas/DeletedAt'
             lastLogin:
               $ref: '#/components/schemas/LastLogin'
+            defaultKeyId:
+              type: string
+              format: uuid
+              readOnly: true
+              example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
         - $ref: '#/components/schemas/UserBase'
     Password:
       type: string
@@ -822,7 +813,7 @@ components:
       readOnly: true
       description: Date of last login (Unix ms timestamp).
       example: 1529050155459
-    UserTypeEnum:
+    UserRoleEnum:
       type: string
       enum:
        - user
@@ -835,19 +826,17 @@ components:
       enum:
        - active
        - blocked
-       - deleted
       default: "active"
       description: |
         User Status:
          - A blocked user cannot sign.
-         - A deleted user cannot sign nor login.
       example: "active"
     UserPut:
       allOf:
         - type: object
           properties:
             type:
-              $ref: '#/components/schemas/UserTypeEnum'
+              $ref: '#/components/schemas/UserRoleEnum'
             status:
               $ref: '#/components/schemas/UserStatusEnum'
             password:
@@ -861,7 +850,7 @@ components:
             # - username # step2
             # - password # step2
             - identity
-    UserDTOGet:
+    User:
       description: A user DTO accessible from regular user.
       allOf:
         - $ref: '#/components/schemas/UserBase'
@@ -878,13 +867,13 @@ components:
       properties:
         name:
           type: string
-          example: "APIKey name"
+          example: "API key name"
           description: Key name.
         status:
           type: string
           enum:
           - active
-          - deleted
+          - blocked
           description: Key status.
           default: "active"
           example: "active"
@@ -930,7 +919,7 @@ components:
           type: string
           enum:
           - active
-          - deleted
+          - blocked
           description: Key status.
           default: "active"
           example: "active"
@@ -946,7 +935,7 @@ components:
               format: uuid
               description: Key id.
               example: "a35c9fee-3893-4eb7-adde-205e1be03209"
-            value:
+            publicKey:
               $ref: '#/components/schemas/PublicKey'
             type:
               $ref: '#/components/schemas/KeyTypeEnum'
@@ -985,15 +974,23 @@ components:
       properties:
         pubKey:
           type: string
+          format: base58
+          example: "1KjQ8LgUgYVSqeK7JFhA9W8FVsHCzFrFi8"
           description: The bitcoin address used to sign (same as the `pubKey` parameter, if provided).
         signedHash:
           type: string
+          format: hex
+          example: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
           description: The hash that is signed (same as the `hashToSign` parameter).
         signature:
           type: string
+          format: base64
+          example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
           description: The signature of `hashToSign` using the bitcoin address `pubKey`.
         identityURL:
           type: string
+          format: URL
+          example: "https://api.woleet.io/v1/identity"
           description: The public URL of the `/identity` endpoint (ie. the URL that anyone can use to verify the bitcoin identity of your backend).
     IdentityResult:
       type: object
@@ -1054,7 +1051,7 @@ components:
     APIKeyIdParameter:
       name: APIKeyId
       in: path
-      description: Identifier of the APIKey.
+      description: Identifier of the API key.
       required: true
       schema:
         type: string
@@ -1077,15 +1074,26 @@ components:
         type: boolean
         example: true
     CustomUserIdQueryParameter:
-      name: uid
+      name: customUserId
       in: query
       description: |
         The custom user id set in the user's identity.
-        If PubKeyQueryParameter is not set, the default pubKey will be used to sign.
-      required: true
+        <br>If the "pubKey" query parameter is not set, the default pubKey will be used to sign.
+      required: false
       schema:
         type: string
         example: "wol.jim-smith.01"
+    UserIdQueryParameter:
+      name: userId
+      in: query
+      description: |
+        The user identifier.
+        <br>If the "pubKey" query parameter is not set, the default pubKey will be used to sign.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: "345a4513-0266-419a-8344-2daf645b78ed"
     LeftDataQueryParameter:
       name: leftData
       in: query
@@ -1135,7 +1143,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIKeyPut'
-      description: Attributes of APIKey to replace.
+      description: Attributes of the API key to replace.
       required: true
   responses:
     User:

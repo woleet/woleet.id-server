@@ -1,5 +1,5 @@
 
-import { STRING, ENUM, UUID, UUIDV4, DATE, BOOLEAN } from 'sequelize';
+import { STRING, ENUM, UUID, UUIDV4, DATE, BOOLEAN, CHAR } from 'sequelize';
 import { Deferrable, Sequelize } from 'sequelize';
 
 import { ForeignKeyConstraintError } from 'sequelize';
@@ -9,36 +9,35 @@ import { AbstractInstanceAccess } from './abstract';
 import { sequelize } from '../sequelize';
 import { User } from './user';
 
-function keyModelFactory(userModelInstance) {
-  return ({
-    id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
-    customKeyId: { type: STRING, defaultValue: null, unique: true },
-    type: { type: ENUM(['bip39']), defaultValue: 'bip39' },
-    status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
-    default: { type: BOOLEAN, defaultValue: false },
-    name: { type: STRING, allowNull: false },
-    privateKey: { type: STRING, unique: true, allowNull: false },
-    lastUsed: { type: DATE, defaultValue: null },
-    userId: {
-      type: UUID,
+const KeyModel = {
+  id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
+  customKeyId: { type: STRING, defaultValue: null, unique: true },
+  type: { type: ENUM(['bip39']), defaultValue: 'bip39' },
+  status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
+  default: { type: BOOLEAN, defaultValue: false },
+  name: { type: STRING, allowNull: false },
+  privateKey: { type: CHAR(64), unique: true, allowNull: false },
+  publicKey: { type: STRING, unique: true, allowNull: false },
+  lastUsed: { type: DATE, defaultValue: null },
+  // userId: {
+  //   type: UUID,
 
-      references: {
-        // This is a reference to another model
-        model: userModelInstance,
-        // This is the column name of the referenced model
-        key: 'id',
-        // This declares when to check the foreign key constraint. PostgreSQL only.
-        deferrable: Deferrable.INITIALLY_IMMEDIATE
-      }
-    }
-  })
+  //   references: {
+  //     // This is a reference to another model
+  //     model: User.model,
+  //     // This is the column name of the referenced model
+  //     key: 'id',
+  //     // This declares when to check the foreign key constraint. PostgreSQL only.
+  //     deferrable: Deferrable.INITIALLY_IMMEDIATE
+  //   }
+  // }
 }
 
 class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKeyObject> {
 
   constructor() {
     super(sequelize)
-    this.define('key', keyModelFactory(User.model), { paranoid: true })
+    this.define('key', KeyModel, { paranoid: true })
   }
 
   async getAllKeysOfUser(userId: string): Promise<SequelizeKeyObject[]> {

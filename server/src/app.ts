@@ -1,4 +1,4 @@
-
+import './startup';
 import * as Koa from 'koa';
 import * as cors from '@koa/cors';
 import * as morgan from 'koa-morgan';

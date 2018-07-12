@@ -1,9 +1,11 @@
 import { STRING, ENUM, UUID, UUIDV4, DATE, DOUBLE, CHAR } from 'sequelize';
+import { Deferrable } from 'sequelize';
 
 import { UniqueConstraintError } from 'sequelize';
 import { DuplicatedUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 import { sequelize } from '../sequelize';
+import { Key } from '..';
 
 const UserModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },

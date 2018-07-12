@@ -1,10 +1,10 @@
 /* Server types */
 
 import { Instance } from "sequelize";
-import { SessionStore } from "./controllers/session";
-import '../../typings/api.user';
-import '../../typings/api.key';
-import '../../typings/api';
+import { SessionStore } from "../controllers/session";
+import '../../../types/api.user';
+import '../../../types/api.key';
+import '../../../types/api';
 
 declare global {
 
@@ -32,6 +32,8 @@ declare global {
     /** Hexadecimal represention password salt */
     passwordSalt: string;
     passwordItrs: number;
+
+    defaultKeyId: string;
   }
 
   interface InternalIdentityObject {
@@ -70,7 +72,10 @@ declare global {
 
     /** Hexadecimal represention of the private key */
     privateKey: string;
-    userId: any;
+    /** Base 58 represention of the public key */
+    publicKey: string;
+
+    userId: string;
   }
 
   interface ApiFullPostKeyObject extends KeyObject {
@@ -79,6 +84,9 @@ declare global {
     status?: KeyStatusEnum;
     /** Hexadecimal represention of the private key */
     privateKey: string;
+    /** Base 58 represention of the public key */
+    publicKey: string;
+    /** Reference to the owner of the key */
     userId: string;
   }
 

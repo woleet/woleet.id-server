@@ -1,8 +1,9 @@
-import { db } from '../database';
+import { User, Key } from '../database';
 
 import * as Debug from 'debug';
 import { NotFoundUserError } from '../errors';
 import { encode } from './utils/password';
+import { createKey } from './key';
 const debug = Debug('id:ctr');
 
 async function serializeAndEncodePassword(password: string) {
@@ -31,12 +32,21 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
 
   const identity = serializeIdentity(user.identity);
   delete user.identity;
-  const key = await serializeAndEncodePassword(user.password);
+  const password = await serializeAndEncodePassword(user.password);
   delete user.password;
 
-  const newUser = await db.User.create(Object.assign(identity, user, key));
+  const newUser = await User.create(Object.assign(identity, user, password));
+  const userId: string = newUser.getDataValue('id');
+  debug('Created user', newUser.toJSON());
 
-  debug('Created user', newUser);
+  const key = await createKey(userId, { name: 'default' })
+
+  debug('Created user\'s default key', key);
+  newUser.setDataValue('defaultKeyId', key.id);
+
+  const newUserWithDefaultKey = await newUser.save();
+
+  debug('Created user\'s with key', newUserWithDefaultKey.toJSON());
   return newUser.toJSON();
 }
 
@@ -64,7 +74,7 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
 
   debug('Updating', update);
 
-  const user = await db.User.update(id, update);
+  const user = await User.update(id, update);
 
   if (!user)
     throw new NotFoundUserError();
@@ -76,7 +86,7 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
 export async function getUserById(id: string): Promise<InternalUserObject> {
   debug('Get user' + id);
 
-  const user = await db.User.getById(id);
+  const user = await User.getById(id);
 
   if (!user)
     throw new NotFoundUserError();
@@ -86,6 +96,6 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
 }
 
 export async function getAllUsers(): Promise<InternalUserObject[]> {
-  const users = await db.User.getAll();
+  const users = await User.getAll();
   return users.map((user) => user.toJSON());
 }

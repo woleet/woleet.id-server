@@ -31,6 +31,7 @@ interface ApiUserObject extends UserObject {
   type: UserTypeEnum;
   status: UserStatusEnum;
   email: string | null;
+  defaultKeyId: string | null;
 }
 
 interface ApiUserDTOObject extends UserObject {

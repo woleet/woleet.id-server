@@ -1,13 +1,13 @@
-import { db } from '../database';
+import { User } from '../database';
 import { store as sessionStore } from './session';
 import { validate } from './utils/password';
 
 export async function createSession(login: string, password: string): Promise<{ token: string, user: InternalUserObject }> {
   let user: SequelizeUserObject = null;
   if (login.search('@') != -1) {
-    user = await db.User.getByEmail(login);
+    user = await User.getByEmail(login);
   } else {
-    user = await db.User.getByUsername(login);
+    user = await User.getByUsername(login);
   }
 
   if (!user)

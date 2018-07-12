@@ -1,6 +1,7 @@
 /* Client types */
-import '../../typings/api.user';
-import '../../typings/api';
+import '../../../types/api.user';
+import '../../../types/api.key';
+import '../../../types/api';
 
 /* SystemJS module definition */
 declare var module: NodeModule;

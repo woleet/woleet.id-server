@@ -20,6 +20,8 @@ import { NavBarComponent } from '@parts/nav-bar';
 import { UserFormComponent } from '@parts/user.form';
 import { UserSettingsComponent } from '@parts/user.settings';
 import { ServerSettingsComponent } from '@parts/server.settings';
+import { UserCardComponent } from '@parts/user.card';
+import { KeyCardComponent } from '@parts/key.card';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -30,6 +32,7 @@ import { SettingsPageComponent } from '@pages/settings';
 import { UserCreatePageComponent } from '@pages/user.create';
 import { UserEditPageComponent } from '@pages/user.edit';
 import { UsersPageComponent } from '@pages/users';
+import { UserDetailPageComponent } from '@pages/user.detail';
 
 // Services
 import { AuthService } from '@services/auth';
@@ -56,9 +59,12 @@ import { ForbiddenInterceptorService } from '@interceptors/forbidden';
     UserFormComponent,
     UserCreatePageComponent,
     UserEditPageComponent,
+    UserDetailPageComponent,
     AboutPageComponent,
     UserSettingsComponent,
-    ServerSettingsComponent
+    ServerSettingsComponent,
+    UserCardComponent,
+    KeyCardComponent
   ],
   imports: [
     // angular
