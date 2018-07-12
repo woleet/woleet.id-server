@@ -1,17 +1,11 @@
-<mat-card>
-  <button routerLink="/user/create" mat-button>ADD USER</button>
-</mat-card>
+<button routerLink="/user/create" mat-raised-button color="primary">ADD USER</button>
+<br><br>
+<mat-divider></mat-divider>
 <br>
-
 <div *ngIf="(users$ | async) as users; else loading">
   <div *ngIf="users.length; else noUser">
     <div *ngFor="let user of users">
-      <mat-card>
-        <a [routerLink]="['/user/', user.id]">{{ user.username }}</a>
-        <div>{{ user.email }}</div>
-        <div>{{ user.firstName }}</div>
-        <div>{{ user.lastName }}</div>
-      </mat-card>
+      <app-user-card [user]="user" mode="detail"></app-user-card>
       <br>
     </div>
   </div>

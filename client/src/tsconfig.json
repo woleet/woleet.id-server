@@ -11,7 +11,9 @@
       "@parts/*": ["app/components/parts/*"],
       "@services/*": ["app/services/*"],
       "@guards/*": ["app/services/guards/*"],
-      "@interceptors/*": ["app/services/interceptors/*"]
+      "@interceptors/*": ["app/services/interceptors/*"],
+      "@app/*": ["app/*"],
+      "@env/*": ["environments/*"]
     }
   }
 }

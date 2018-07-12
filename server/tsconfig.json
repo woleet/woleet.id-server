@@ -7,8 +7,8 @@
     "moduleResolution": "node",
     "typeRoots": [
       "node_modules/@types",
-      "src/typings.d.ts"
-    ],
+      "./types"
+    ]
   },
   "include": [
     "src/**/*.ts",

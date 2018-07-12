@@ -1,0 +1,20 @@
+<div *ngIf="(user$ | async) as user; else loadingUser">
+  <app-user-card [user]="user" mode="edit"></app-user-card>
+</div>
+<ng-template #loadingUser>
+  <mat-card>Loading...</mat-card>
+</ng-template>
+<br>
+<div *ngIf="(keys$ | async) as keys; else loadingKeys">
+  <div *ngIf="keys.length; else noKeys">
+    <div *ngFor="let key of keys">
+      <app-key-card [key]="key"></app-key-card>
+    </div>
+  </div>
+  <ng-template #noKeys>
+    <mat-card>No key</mat-card>
+  </ng-template>
+</div>
+<ng-template #loadingKeys>
+  <mat-card>Loading...</mat-card>
+</ng-template>

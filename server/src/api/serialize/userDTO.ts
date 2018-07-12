@@ -1,9 +1,10 @@
+import { serializeIdentity } from "./identity";
+
 export function serialiseUserDTO(user: InternalUserObject): ApiUserDTOObject {
   return {
     email: user.email,
     username: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    type: user.type
+    type: user.type,
+    identity: serializeIdentity(user)
   };
 }

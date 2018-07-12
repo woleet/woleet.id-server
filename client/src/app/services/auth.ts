@@ -23,9 +23,10 @@ export class AuthService {
   }
 
   async logout() {
+    this.user = null;
     localStorage.removeItem('user');
     await this.http.get(`${serverURL}/logout/`).toPromise().catch(() => null);
-    this.router.navigate(['/login']);
+    this.router.navigate(['login']);
   }
 
   async login(user: BasicAuthObject) {
@@ -42,6 +43,7 @@ export class AuthService {
 
     console.log('Logged', auth);
 
+    this.user = auth.user;
     localStorage.setItem('user', JSON.stringify(auth.user));
     this.router.navigate(['main']);
   }
@@ -55,7 +57,7 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.getUser().type == 'admin';
+    return this.isAuthenticated() && this.getUser().type == 'admin';
   }
 
 }

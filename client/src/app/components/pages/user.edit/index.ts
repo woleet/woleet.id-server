@@ -1,16 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
 
 @Component({
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class UserEditPageComponent implements OnInit {
-
-  constructor(private route: ActivatedRoute) { }
-
-  ngOnInit() {
-    
-  }
-
-}
+export class UserEditPageComponent { }

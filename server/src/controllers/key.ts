@@ -1,6 +1,8 @@
 import * as crypto from "crypto";
 import { NotFoundKeyError } from "../errors";
-import { db } from "../db";
+import { Key } from "../database";
+import { generatePrivateKey, publicKeyCreate } from "./utils/key";
+import * as bs58check from 'bs58check';
 
 /**
  * Key
@@ -14,9 +16,10 @@ import { db } from "../db";
  * @swagger
  *  operationId: addKey
  */
-export async function addKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
-  const privateKey = crypto.randomBytes(32).toString('hex');
-  const newKey = await db.Key.create(Object.assign({}, key, { privateKey, userId }));
+export async function createKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
+  const privateKey = generatePrivateKey();
+  const publicKey = bs58check.encode(publicKeyCreate(privateKey, true));
+  const newKey = await Key.create(Object.assign({}, key, { privateKey: privateKey.toString('hex'), publicKey, userId }));
   return newKey.toJSON();
 }
 
@@ -25,7 +28,7 @@ export async function addKey(userId: string, key: ApiPostKeyObject): Promise<Int
  *  operationId: logout
  */
 export async function updateKey(id: string, attrs: ApiPutKeyObject) {
-  const key = await db.Key.update(id, attrs);
+  const key = await Key.update(id, attrs);
 
   if (!key)
     throw new NotFoundKeyError();
@@ -34,7 +37,7 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
 }
 
 export async function getKeyById(id: string): Promise<InternalKeyObject> {
-  const key = await db.Key.getById(id);
+  const key = await Key.getById(id);
 
   if (!key)
     throw new NotFoundKeyError();
@@ -43,11 +46,11 @@ export async function getKeyById(id: string): Promise<InternalKeyObject> {
 }
 
 export async function getAllKeys(): Promise<InternalKeyObject[]> {
-  const keys = await db.Key.getAll();
+  const keys = await Key.getAll();
   return keys.map((key) => key.toJSON());
 }
 
 export async function getAllKeysOfUser(userId: string): Promise<InternalKeyObject[]> {
-  const keys = await db.Key.getAll();
+  const keys = await Key.getAll();
   return keys.map((key) => key.toJSON());
 }

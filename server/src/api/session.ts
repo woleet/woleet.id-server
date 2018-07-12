@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { store } from '../ctr/session';
+import { store } from '../controllers/session';
 
 export default async function (ctx: Context, next) {
   ctx.sessions = store;

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -6,17 +7,21 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
 import {
-  MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatInputModule, MatCardModule
+  MatToolbarModule, MatButtonModule, MatSidenavModule,
+  MatIconModule, MatListModule, MatInputModule, MatCardModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { AppComponent } from '@parts/main';
 import { NavBarComponent } from '@parts/nav-bar';
-import { UserCreateComponent } from '@parts/user.create';
+import { UserFormComponent } from '@parts/user.form';
 import { UserSettingsComponent } from '@parts/user.settings';
 import { ServerSettingsComponent } from '@parts/server.settings';
+import { UserCardComponent } from '@parts/user.card';
+import { KeyCardComponent } from '@parts/key.card';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -27,10 +32,11 @@ import { SettingsPageComponent } from '@pages/settings';
 import { UserCreatePageComponent } from '@pages/user.create';
 import { UserEditPageComponent } from '@pages/user.edit';
 import { UsersPageComponent } from '@pages/users';
+import { UserDetailPageComponent } from '@pages/user.detail';
 
 // Services
 import { AuthService } from '@services/auth';
-import { AuthGuardService } from '@guards/auth';
+import { AdminGuardService, UserGuardService, AnonymousGuardService } from '@guards/auth';
 
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
@@ -50,12 +56,15 @@ import { ForbiddenInterceptorService } from '@interceptors/forbidden';
     CredentialsPageComponent,
     UserPageComponent,
     UsersPageComponent,
-    UserCreateComponent,
+    UserFormComponent,
     UserCreatePageComponent,
     UserEditPageComponent,
+    UserDetailPageComponent,
     AboutPageComponent,
     UserSettingsComponent,
-    ServerSettingsComponent
+    ServerSettingsComponent,
+    UserCardComponent,
+    KeyCardComponent
   ],
   imports: [
     // angular
@@ -75,6 +84,7 @@ import { ForbiddenInterceptorService } from '@interceptors/forbidden';
 
     // nav
     LayoutModule,
+    FlexLayoutModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -87,7 +97,7 @@ import { ForbiddenInterceptorService } from '@interceptors/forbidden';
     AppRoutingModule
   ],
   providers: [
-    AuthService, AuthGuardService, KeyService, UserService, InfoService,
+    AuthService, AdminGuardService, UserGuardService, AnonymousGuardService, KeyService, UserService, InfoService,
     UnauthorizedInterceptorService, ForbiddenInterceptorService, AllowCredentialsInterceptorService
   ],
   bootstrap: [AppComponent]

@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 
-const keyStatusEnum = ['active', 'locked', 'disabled'];
+const keyStatusEnum = ['active', 'blocked'];
 
 const addKey = Joi.object().keys({
   name: Joi.string().alphanum().min(3).max(30).required(),
@@ -10,4 +10,3 @@ const addKey = Joi.object().keys({
 const updateKey = addKey;
 
 export { addKey, updateKey }
-

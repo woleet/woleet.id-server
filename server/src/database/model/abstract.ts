@@ -12,7 +12,7 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
 
   abstract handleError(error);
 
-  protected init(
+  protected define(
     modelName: string,
     attributes: Sequelize.DefineAttributes,
     options?: Sequelize.DefineOptions<Instance<TInstance>>

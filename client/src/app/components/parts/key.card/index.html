@@ -1,0 +1,12 @@
+<mat-card fxLayout="row" fxLayoutAlign="space-between start">
+    <div fxLayout="column">
+      <div>{{ key.name }}</div>
+      <div><span>Public&nbsp;key</span><code>{{ key.publicKey }}</code></div>
+      <div><span>Created&nbsp;at</span>&nbsp;&nbsp;<span>{{ key.createdAt | date }}</span></div>
+    </div>
+    <div fxLayout="column">
+    <button mat-icon-button color="warn">
+      <mat-icon aria-label="Delete key" (click)="deleteKey()">delete</mat-icon>
+    </button>
+    </div>
+  </mat-card>

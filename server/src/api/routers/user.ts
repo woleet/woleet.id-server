@@ -1,7 +1,7 @@
 import * as Router from "koa-router";
 
 import { validate } from '../schemas';
-import { createUser, getUserById, updateUser, getAllUsers } from '../../ctr/user';
+import { createUser, getUserById, updateUser, getAllUsers } from '../../controllers/user';
 import { serialiseUser } from "../serialize/user";
 
 const vid = validate.param('id', 'uuid');
