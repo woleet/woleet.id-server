@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: |
-    This is Woleet.ID Server. You can find out more about woleet.io at [doc.woleet.io](https://doc.woleet.io).
+    This is Woleet.ID Server API documentation.
   version: 1.0.0
   title: Woleet.ID Server
   contact:
@@ -752,8 +752,6 @@ components:
               format: uuid
               readOnly: true
               example: "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3"
-            type:
-              $ref: '#/components/schemas/UserRoleEnum'
             status:
               $ref: '#/components/schemas/UserStatusEnum'
             createdAt:
@@ -835,8 +833,6 @@ components:
       allOf:
         - type: object
           properties:
-            type:
-              $ref: '#/components/schemas/UserRoleEnum'
             status:
               $ref: '#/components/schemas/UserStatusEnum'
             password:
