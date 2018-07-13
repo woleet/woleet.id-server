@@ -1,0 +1,15 @@
+<mat-card fxLayout="row" fxLayoutAlign="space-between start">
+    <div fxLayout="column">
+      <div><span>Name</span>&nbsp;<i>{{ apiKey.name }}</i></div>
+      <div><span>Created&nbsp;at</span>&nbsp;&nbsp;<span>{{ apiKey.createdAt | date }}</span></div>
+    </div>
+    <div fxLayout="column">
+      <button mat-button color="warn" (click)="reveal()" *ngIf="!displayApiKey">REVEAL</button>
+      <pre *ngIf="displayApiKey" class="key-val"><code>{{ apiKey.value }}</code></pre>
+    </div>
+    <div fxLayout="column">
+    <button mat-icon-button color="warn">
+      <mat-icon aria-label="Delete key" (click)="deleteKey()">delete</mat-icon>
+    </button>
+    </div>
+  </mat-card>

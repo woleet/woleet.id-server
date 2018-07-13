@@ -1,6 +1,6 @@
 /* User */
 
-type UserTypeEnum = 'user' | 'admin';
+type UserRoleEnum = 'user' | 'admin';
 type UserStatusEnum = 'active' | 'blocked';
 
 interface UserObject {
@@ -28,20 +28,20 @@ interface ApiUserObject extends UserObject {
   /** Unix timestamp (ms) */
   lastLogin: number;
 
-  type: UserTypeEnum;
+  role: UserRoleEnum;
   status: UserStatusEnum;
-  email: string | null;
+  email: string | null; // step 1: will be mandatory
   defaultKeyId: string | null;
 }
 
 interface ApiUserDTOObject extends UserObject {
   email: string | null;
-  type: UserTypeEnum;
+  role: UserRoleEnum;
   identity: APIIdentityObject;
 }
 
 interface ApiPostUserObject extends UserObject {
-  type?: UserTypeEnum;
+  role?: UserRoleEnum;
   status?: UserStatusEnum;
   email?: string;
   password: string;
@@ -49,7 +49,7 @@ interface ApiPostUserObject extends UserObject {
 }
 
 interface ApiPutUserObject extends UserObject {
-  type?: UserTypeEnum;
+  role?: UserRoleEnum;
   status?: UserStatusEnum;
   email?: string;
   password?: string;

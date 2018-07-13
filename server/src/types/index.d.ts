@@ -2,6 +2,7 @@
 
 import { Instance } from "sequelize";
 import { SessionStore } from "../controllers/session";
+import '../../../types/api.api-key';
 import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api';
@@ -12,19 +13,22 @@ declare global {
     [Key: string]: T;
   }
 
+  interface CommonInternalProperties {
+    /** UUID */
+    id: string;
+    updatedAt: Date;
+    createdAt: Date;
+    deletedAt: Date;
+  }
+
   /* User: server specific */
 
   interface SequelizeUserObject extends Instance<InternalUserObject> { }
 
-  interface InternalUserObject extends UserObject, InternalIdentityObject {
-    /** Key name */
-    id: string;
+  interface InternalUserObject extends UserObject, InternalIdentityObject, CommonInternalProperties {
     lastLogin: Date;
-    updatedAt: Date;
-    createdAt: Date;
-    deletedAt: Date;
 
-    type: UserTypeEnum;
+    role: UserRoleEnum;
     status: UserStatusEnum;
     email: string | null;
     /** Hexadecimal represention password hash */
@@ -46,7 +50,7 @@ declare global {
   }
 
   interface ApiFullPostUserObject extends UserObject, InternalIdentityObject {
-    type?: UserTypeEnum;
+    role?: UserRoleEnum;
     status?: UserStatusEnum;
     email?: string;
     passwordHash: string;
@@ -58,12 +62,7 @@ declare global {
 
   interface SequelizeKeyObject extends Instance<InternalKeyObject> { }
 
-  interface InternalKeyObject extends KeyObject {
-    /** UUID */
-    id: string;
-    updatedAt: Date;
-    createdAt: Date;
-    deletedAt: Date;
+  interface InternalKeyObject extends KeyObject, CommonInternalProperties {
     lastUsed: Date;
 
     name: string;
@@ -88,6 +87,25 @@ declare global {
     publicKey: string;
     /** Reference to the owner of the key */
     userId: string;
+  }
+
+  /* APIKey: server specific */
+
+  interface SequelizeAPIKeyObject extends Instance<InternalAPIKeyObject> { }
+
+  interface InternalAPIKeyObject extends APIKeyObject, CommonInternalProperties {
+    lastUsed: Date;
+
+    name: string;
+    status: APIKeyStatusEnum;
+    value: string;
+  }
+
+  interface ApiFullPostAPIKeyObject extends APIKeyObject {
+    name: string;
+    type?: KeyTypeEnum;
+    status?: KeyStatusEnum;
+    value: string;
   }
 
   /* Authorization */

@@ -1,0 +1,14 @@
+<mat-card>
+  <mat-card-content>
+    <div>
+      <mat-form-field class="w-100" hideRequiredMarker>
+        <input matInput placeholder="Key name" [formControl]="apiKeyName" required>
+        <mat-error *ngIf="apiKeyName.invalid">{{ getErrorMessage() }}</mat-error>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions fxLayout="row" fxLayoutAlign="space-between start">
+    <button mat-raised-button color="primary" (click)="createAPIKey()" [disabled]="apiKeyName.invalid">CREATE</button>
+    <button mat-button (click)="cancelAPIKey()">CANCEL</button>
+  </mat-card-actions>
+</mat-card>

@@ -9,7 +9,7 @@ wait(1000)
     debug('Creating admin user');
     return createUser({
       password: 'pass',
-      type: 'admin',
+      role: 'admin',
       username: 'admin',
       identity: {
         commonName: 'Admin',

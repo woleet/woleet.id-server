@@ -1,4 +1,5 @@
 import { router as auth } from "./routers/authentication";
+import { router as apiKey } from "./routers/api-key";
 import { router as info } from "./routers/info";
 import { router as user } from "./routers/user";
 import { router as key } from "./routers/key";
@@ -22,5 +23,6 @@ router.use(auth.routes());
 router.use(session, userAuth, info.routes());
 router.use(session, adminAuth, user.routes());
 router.use(session, adminAuth, key.routes());
+router.use(session, adminAuth, apiKey.routes());
 
 export { router as api };

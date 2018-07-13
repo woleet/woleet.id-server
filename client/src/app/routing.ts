@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { NeedConfigGuardService as NeedConfig } from '@guards/config';
 import { UserGuardService as IsUser } from '@guards/auth';
 import { AdminGuardService as IsAdmin } from '@guards/auth';
 import { AnonymousGuardService as IsAnonymous } from '@guards/auth';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
-import { CredentialsPageComponent } from '@pages/credentials';
+import { APIKeysPageComponent } from '@pages/api-keys';
 import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
 import { SettingsPageComponent } from '@pages/settings';
@@ -18,14 +19,14 @@ import { UserDetailPageComponent } from '@pages/user.detail';
 
 const routes: Routes = [
   { path: 'login', component: LoginPageComponent, canActivate: [IsAnonymous] },
-  { path: 'setup', component: SetupPageComponent, canActivate: [IsAdmin] },
+  { path: 'setup', component: SetupPageComponent, canActivate: [NeedConfig] },
   { path: 'user', component: UserPageComponent, canActivate: [IsUser] },
   { path: 'user/create', component: UserCreatePageComponent, canActivate: [IsAdmin] },
   { path: 'user/:id', component: UserDetailPageComponent, canActivate: [IsAdmin] },
   { path: 'user/:id/edit', component: UserEditPageComponent, canActivate: [IsAdmin] },
   { path: 'users', component: UsersPageComponent, canActivate: [IsAdmin] },
   { path: 'settings', component: SettingsPageComponent, canActivate: [IsAdmin] },
-  { path: 'credentials', component: CredentialsPageComponent, canActivate: [IsAdmin] },
+  { path: 'api-keys', component: APIKeysPageComponent, canActivate: [IsAdmin] },
   { path: 'about', component: AboutPageComponent, canActivate: [IsUser] },
   {
     path: '**',

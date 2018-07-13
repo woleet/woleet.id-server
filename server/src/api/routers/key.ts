@@ -24,7 +24,7 @@ const router = new Router();
  * @swagger
  *  operationId: addKey
  */
-router.post('/user/:userId/key', vuid, validate.body('addKey'), async function (ctx) {
+router.post('/user/:userId/key', vuid, validate.body('createKey'), async function (ctx) {
   const key: ApiPostKeyObject = ctx.request.body;
   debug('addkey', key);
   const { userId } = ctx.params;

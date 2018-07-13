@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
-const serverURL = 'http://localhost:3000'
+import { serverURL } from './config';
 
 
 @Injectable()
@@ -29,7 +28,7 @@ export class AuthService {
     this.router.navigate(['login']);
   }
 
-  async login(user: BasicAuthObject) {
+  async login(user: BasicAuthObject, redirect = true) {
     console.log('login', user)
 
     const headers = (new HttpHeaders()).append("Authorization", "Basic " + btoa(`${user.username}:${user.password}`));
@@ -45,7 +44,9 @@ export class AuthService {
 
     this.user = auth.user;
     localStorage.setItem('user', JSON.stringify(auth.user));
-    this.router.navigate(['main']);
+
+    if (redirect)
+      this.router.navigate(['main']);
   }
 
   getUser(): ApiUserDTOObject {
@@ -57,7 +58,7 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.isAuthenticated() && this.getUser().type == 'admin';
+    return this.isAuthenticated() && this.user.role == 'admin';
   }
 
 }

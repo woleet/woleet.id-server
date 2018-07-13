@@ -6,5 +6,5 @@ set -e
 
 tmux -v \
   new-session  "cd server && npm run dev" \; \
-  split-window -h "cd client && ng serve --port 4080"\; \
+  split-window -h "cd client && npm run dev"\; \
   split-window "sh start-pg-dev" \;

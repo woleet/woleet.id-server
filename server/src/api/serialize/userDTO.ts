@@ -4,7 +4,7 @@ export function serialiseUserDTO(user: InternalUserObject): ApiUserDTOObject {
   return {
     email: user.email,
     username: user.username,
-    type: user.type,
+    role: user.role,
     identity: serializeIdentity(user)
   };
 }

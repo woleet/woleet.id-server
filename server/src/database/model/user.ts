@@ -1,15 +1,12 @@
 import { STRING, ENUM, UUID, UUIDV4, DATE, DOUBLE, CHAR } from 'sequelize';
-import { Deferrable } from 'sequelize';
-
 import { UniqueConstraintError } from 'sequelize';
 import { DuplicatedUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 import { sequelize } from '../sequelize';
-import { Key } from '..';
 
 const UserModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
-  type: { type: ENUM(['user', 'admin']), defaultValue: 'user' },
+  role: { type: ENUM(['user', 'admin']), defaultValue: 'user' },
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   email: { type: STRING, unique: true },
   username: { type: STRING, unique: true, allowNull: false },

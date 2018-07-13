@@ -22,10 +22,12 @@ import { UserSettingsComponent } from '@parts/user.settings';
 import { ServerSettingsComponent } from '@parts/server.settings';
 import { UserCardComponent } from '@parts/user.card';
 import { KeyCardComponent } from '@parts/key.card';
+import { APIKeyCreateCardComponent } from '@parts/api-key.card.create';
+import { APIKeyCardComponent } from '@parts/api-key.card';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
-import { CredentialsPageComponent } from '@pages/credentials';
+import { APIKeysPageComponent } from '@pages/api-keys';
 import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
 import { SettingsPageComponent } from '@pages/settings';
@@ -41,10 +43,13 @@ import { AdminGuardService, UserGuardService, AnonymousGuardService } from '@gua
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
+import { APIKeyService } from '@services/api-key';
 
 import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
 import { UnauthorizedInterceptorService } from '@interceptors/unauthorized';
 import { ForbiddenInterceptorService } from '@interceptors/forbidden';
+import { NeedConfigGuardService } from '@services/guards/config';
+import { ConfigService } from '@services/config';
 
 @NgModule({
   declarations: [
@@ -53,7 +58,7 @@ import { ForbiddenInterceptorService } from '@interceptors/forbidden';
     LoginPageComponent,
     SetupPageComponent,
     SettingsPageComponent,
-    CredentialsPageComponent,
+    APIKeysPageComponent,
     UserPageComponent,
     UsersPageComponent,
     UserFormComponent,
@@ -64,7 +69,9 @@ import { ForbiddenInterceptorService } from '@interceptors/forbidden';
     UserSettingsComponent,
     ServerSettingsComponent,
     UserCardComponent,
-    KeyCardComponent
+    KeyCardComponent,
+    APIKeyCardComponent,
+    APIKeyCreateCardComponent
   ],
   imports: [
     // angular
@@ -97,7 +104,8 @@ import { ForbiddenInterceptorService } from '@interceptors/forbidden';
     AppRoutingModule
   ],
   providers: [
-    AuthService, AdminGuardService, UserGuardService, AnonymousGuardService, KeyService, UserService, InfoService,
+    AuthService, AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
+    KeyService, UserService, InfoService, ConfigService, APIKeyService,
     UnauthorizedInterceptorService, ForbiddenInterceptorService, AllowCredentialsInterceptorService
   ],
   bootstrap: [AppComponent]

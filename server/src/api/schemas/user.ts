@@ -1,13 +1,8 @@
 import * as Joi from 'joi';
+import { RName, CountryCode, Word, Name } from './misc';
 
 const userTypeEnum = ['user', 'admin'];
 const userStatusEnum = ['active', 'blocked'];
-
-const Word = Joi.string().regex(/^[a-z0-9]{3,30}$/i);
-const Name = Joi.string().regex(/^[a-z0-9 \-]{3,30}$/i);
-const RWord = Word.required();
-const RName = Name.required();
-const CountryCode = Joi.string().regex(/^[A-Z]{2}$/);
 
 const createIdentity = Joi.object().keys({
   commonName: RName,

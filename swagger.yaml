@@ -889,6 +889,11 @@ components:
               format: uuid
               description: API Key id.
               example: "a35c9fee-3893-4eb7-adde-205e1be03209"
+            value:
+              readOnly: true
+              type: string
+              description: Token to use for the signature endpoint.
+              example: "b9PXEeMpSCyeaPpQiZ3Bvw=="
             createdAt:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:

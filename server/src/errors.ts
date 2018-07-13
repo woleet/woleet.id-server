@@ -20,6 +20,11 @@ export class NotFoundUserError extends NotFoundDBObjectError {
   name = 'NotFoundUserError'
 }
 
+export class NotFoundAPIKeyError extends NotFoundDBObjectError {
+  constructor() { super('API key not found') }
+  name = 'NotFoundAPIKeyError'
+}
+
 export class NotFoundKeyError extends NotFoundDBObjectError {
   constructor() { super('User not found') }
   name = 'NotFoundUserError'

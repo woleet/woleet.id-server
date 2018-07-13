@@ -5,11 +5,13 @@ import { IMiddleware } from 'koa-router';
 import * as keySchemas from './key';
 import * as userSchemas from './user';
 import * as miscSchemas from './misc';
+import * as apiKeySchemas from './api-key';
 
 const schemas: { [id: string]: ObjectSchema } = (<any>Object).assign({},
   keySchemas,
   userSchemas,
-  miscSchemas
+  miscSchemas,
+  apiKeySchemas
 );
 
 function validateBody(schema: string): IMiddleware {

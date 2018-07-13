@@ -1,12 +1,13 @@
 import * as Joi from 'joi';
+import { Name } from './misc';
 
 const keyStatusEnum = ['active', 'blocked'];
 
-const addKey = Joi.object().keys({
-  name: Joi.string().alphanum().min(3).max(30).required(),
+const createKey = Joi.object().keys({
+  name: Name,
   status: Joi.string().valid(keyStatusEnum)
 });
 
-const updateKey = addKey;
+const updateKey = createKey;
 
-export { addKey, updateKey }
+export { createKey, updateKey }
