@@ -11,7 +11,7 @@ import { expect } from 'chai';
 chai.use(require('chai-http'));
 chai.should();
 
-import app from '../src/app'
+import app from 'src/app'
 
 let server = null;
 

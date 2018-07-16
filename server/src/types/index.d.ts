@@ -1,7 +1,7 @@
 /* Server types */
 
 import { Instance } from "sequelize";
-import { SessionStore } from "../controllers/session";
+import { SessionStore } from "../controllers/store.session";
 import '../../../types/api.api-key';
 import '../../../types/api.user';
 import '../../../types/api.key';

@@ -7,7 +7,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 function clearEmptyString(obj) {
   for (const v in obj) {
-    console.log('CAX', v, obj[v])
     if (obj[v] === '')
       obj[v] = null;
   }

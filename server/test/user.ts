@@ -1,4 +1,4 @@
-import { request, uuid, assertError, exclisiveInclude } from './index'
+import { request, uuid, assertError, exclisiveInclude } from '.'
 
 describe('/user', () => {
   describe('/user (get)', () => {

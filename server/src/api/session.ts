@@ -1,12 +1,4 @@
-import { Context } from 'koa';
-import { store } from '../controllers/session';
 
-export default async function (ctx: Context, next) {
-  ctx.sessions = store;
-  const sid = ctx.cookies.get('session');
-  ctx.session = (sid && (await store.get(sid))) || null;
-  return next();
-};
 
 /*
 export default async function (ctx: Context, next) {

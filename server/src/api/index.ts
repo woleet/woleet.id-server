@@ -4,11 +4,12 @@ import { router as info } from "./routers/info";
 import { router as user } from "./routers/user";
 import { router as key } from "./routers/key";
 
-import { user as userAuth, admin as adminAuth } from "./authentication"
+import { router as sign } from "./routers/sign";
+import { router as identity } from "./routers/identity";
+
+import { user as userAuth, admin as adminAuth, session } from "./authentication"
 
 import * as Router from "koa-router";
-
-import session from './session';
 
 const router = new Router();
 
@@ -18,6 +19,10 @@ const router = new Router();
 router.get('/', function (ctx) {
   ctx.body = { message: 'welcome' };
 });
+
+
+router.use(sign.routes());
+router.use(identity.routes());
 
 router.use(auth.routes());
 router.use(session, userAuth, info.routes());

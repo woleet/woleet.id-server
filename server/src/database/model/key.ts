@@ -6,6 +6,7 @@ import { InvalidUserTargetedKeyError } from '../../errors';
 
 import { AbstractInstanceAccess } from './abstract';
 import { sequelize } from '../sequelize';
+import { User } from '..';
 
 const KeyModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
@@ -27,6 +28,15 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
 
   async getAllKeysOfUser(userId: string): Promise<SequelizeKeyObject[]> {
     return this.model.findAll({ where: { userId } });
+  }
+
+  /**
+   * @description Returns a keu by it's public key (bitcoin address)
+   * @param publicKey: the requested public key
+   * @param userId: optional parameter for extra check
+   */
+  async getByPubKey(publicKey: string, userId?: string): Promise<SequelizeKeyObject> {
+    return this.model.findOne({ where: { publicKey, userId } });
   }
 
   handleError(err: any) {

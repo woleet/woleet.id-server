@@ -33,6 +33,10 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
     return this.model.findOne({ where: { username } });
   }
 
+  async getByCustomUserId(customId: string): Promise<SequelizeUserObject> {
+    return this.model.findOne({ where: { x500UserId: customId } });
+  }
+
   async getByEmail(email: string): Promise<SequelizeUserObject> {
     return this.model.findOne({ where: { email } });
   }
