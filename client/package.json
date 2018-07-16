@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "npx ng",
     "dev": "npx ng serve --port 4220 -o",
+    "dev:prod": "npx ng serve --port 4220 -o --prod",
     "start": "npx ng serve",
     "build": "npx ng build",
     "test": "npx ng test",
