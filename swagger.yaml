@@ -10,7 +10,7 @@ info:
     name: MIT
 tags:
   - name: Authentication
-  - name: APIKey
+  - name: API Key
   - name: Key
   - name: User
   - name: Identity
@@ -70,7 +70,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
-  # Identity
+
   /sign:
     get:
       operationId: getSignature
@@ -158,7 +158,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
-  # End Identity
+
   /logout:
     get:
       tags:
@@ -168,8 +168,7 @@ paths:
       responses:
         '200':
           description: Successfully logged out the user.
-  # Admin
-  # Key
+
   /user/{userId}/key:
     post:
       tags:
@@ -352,8 +351,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
-  # End Key
-  # User
+
   /user:
     post:
       tags:
@@ -519,12 +517,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/UserArray'
-  # End User
-  # APIKey
+
   /APIKey:
     post:
       tags:
-        - APIKey
+        - API Key
       summary: Create an API key suitable to call the /sign endpoint.
       description: This can only be done by an admin.
       operationId: createAPIKey
@@ -550,7 +547,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
       requestBody:
-        description: Created APIKey object.
+        description: Created API Key object.
         required: true
         content:
           application/json:
@@ -559,7 +556,7 @@ paths:
   /APIKey/{APIKeyId}:
     get:
       tags:
-        - APIKey
+        - API Key
       summary: Get an API key by its identifier.
       operationId: getAPIKeyById
       parameters:
@@ -593,7 +590,7 @@ paths:
                 $ref: '#/components/responses/ApiError'
     put:
       tags:
-        - APIKey
+        - API Key
       summary: Update an API key.
       description: This can only be done by the logged in API key.
       operationId: updateAPIKey
@@ -635,7 +632,7 @@ paths:
                 $ref: '#/components/responses/ApiError'
     delete:
       tags:
-        - APIKey
+        - API Key
       summary: Delete an API key.
       description: This can only be done by an admin.
       operationId: deleteAPIKey
@@ -671,7 +668,7 @@ paths:
   /APIKey/list:
     get:
       tags:
-        - APIKey
+        - API Key
       summary: List all API keys.
       operationId: getAllAPIKeys
       security:
@@ -691,8 +688,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
-  # End APIKey
-  # End Admin
+
 components:
   schemas:
     Identity:
@@ -731,14 +727,14 @@ components:
         email:
           type: string
           format: email
-          default: null # step 1
-          description: User's email.
-          example: "user.foo@example.com"
+          default: null
+          description: User's eMail.
+          example: "john.doe@acme.com"
         username:
           type: string
-          default: null # step 1
-          description: User's alias.
-          example: "user-alias"
+          default: null
+          description: User's alias (for login).
+          example: "johndoe"
         role:
           $ref: '#/components/schemas/UserRoleEnum'
         identity:
@@ -765,15 +761,14 @@ components:
             defaultKeyId:
               type: string
               format: uuid
-              readOnly: true
+							description: Identifier of the default key to use for this user.
               example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
         - $ref: '#/components/schemas/UserBase'
     Password:
       type: string
       format: password
-      # description: Password of the user (it must be provided at creation time).
-      default: null # step 1
-      description: Password of the user (optional for now).
+      default: null
+      description: User's password (optional for now).
       example: "nSBa+rV3%2/LpD"
     PublicKey:
       type: string
@@ -843,8 +838,8 @@ components:
         - $ref: '#/components/schemas/UserPut'
         - type: object
           required:
-            # - username # step2
-            # - password # step2
+            # - username # step2 only
+            # - password # step2 only
             - identity
     User:
       description: A user DTO accessible from regular user.
@@ -857,7 +852,6 @@ components:
        - bip39
       description: Key type.
       example: "bip39"
-    # APIKey
     APIKeyBase:
       type: object
       properties:
@@ -908,7 +902,6 @@ components:
     APIKeyPut:
       allOf:
         - $ref: '#/components/schemas/APIKeyBase'
-    # Key
     KeyBase:
       type: object
       properties:
@@ -949,12 +942,6 @@ components:
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
         - $ref: '#/components/schemas/KeyBase'
-    # KeyExpiration:
-    #   type: integer
-    #   format: int64
-    #   readOnly: true
-    #   description: Date to disable the key.
-    #   example: 1531651039296
     KeyPost:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
@@ -964,9 +951,6 @@ components:
     KeyPut:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
-    # JSONWebToken:
-    #   type: string
-    #   example: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNYlRqbmVSM1NtdWxScTg5djB5cTBnPT0ifQ.ggNDtcSoMQJ7J1l31yeKRZtT2b3UBUmh4EHusUrM5mA"
     SessionToken:
       type: string
       example: "doy7GCOUR0uGz6ssPvF6wQ=="
@@ -1137,7 +1121,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIKeyPost'
-      description: APIKey object to add.
+      description: API Key object to add.
       required: true
     APIKeyPut:
       content:
