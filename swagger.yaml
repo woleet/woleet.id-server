@@ -10,7 +10,7 @@ info:
     name: MIT
 tags:
   - name: Authentication
-  - name: APIKey
+  - name: API Key
   - name: Key
   - name: User
   - name: Identity
@@ -23,13 +23,13 @@ paths:
     get:
       tags:
         - Authentication
-      summary: Logs user into the system
+      summary: Log into the system. Both email or username can be used to authentify.
       operationId: login
       security:
         - BasicAuth: []
       responses:
         '200':
-          description: Successfully logged in.
+          description: User successfully logged in.
           content:
             application/json:
               schema:
@@ -38,17 +38,26 @@ paths:
                   token:
                     $ref: '#/components/schemas/SessionToken'
         '400':
-          description: "Missing username or password"
+          description: Missing email/username or password.
           content:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: "Invalid username or password"
+          description: Invalid email/username or password.
           content:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+  /logout:
+    get:
+      tags:
+        - Authentication
+      summary: Log out from the system.
+      operationId: logout
+      responses:
+        '200':
+          description: User successfully logged out.
   /info:
     get:
       tags:
@@ -70,7 +79,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
-  # Identity
+
   /sign:
     get:
       operationId: getSignature
@@ -84,11 +93,11 @@ paths:
           <br>This endpoint is protected by an API key.
       parameters:
         - $ref: '#/components/parameters/HashToSignQueryParameter'
-        - $ref: '#/components/parameters/PubKeyQueryParameter'
+        - $ref: '#/components/parameters/PubKeyToSignQueryParameter'
         - $ref: '#/components/parameters/CustomUserIdQueryParameter'
         - $ref: '#/components/parameters/UserIdQueryParameter'
       security:
-        - AuthBearer: []
+        - APIKeyAuth: []
       responses:
         '200':
           description: The signature of `hashToSign` is returned.
@@ -120,10 +129,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+
   /identity:
     get:
       operationId: getIdentity
       summary: Prove the bitcoin identity of your backend.
+      security: []
       tags:
         - Identity
       description: >
@@ -131,7 +142,7 @@ paths:
           Calling this endpoint (that should be accessible publicly) makes your backend sign some random data (built by concatenating the `leftData` parameter provided by the client and the `rightData` parameter provided by your backend) using the bitcoin address provided in the `pubKey` parameter.
           The caller can then verify that the produced signature is valid for the given bitcoin address (which validate the ownership of this address by your backend) and can optionally read the TLS certificate securing this endpoint to get the certified identity of your backend.
       parameters:
-        - $ref: '#/components/parameters/PubKeyQueryParameter'
+        - $ref: '#/components/parameters/PubKeyToVerifyQueryParameter'
         - $ref: '#/components/parameters/LeftDataQueryParameter'
       responses:
         '200':
@@ -154,92 +165,6 @@ paths:
                 $ref: '#/components/responses/ApiError'
         '404':
           description: /identity endpoint is not reachable on this port.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-  # End Identity
-  /logout:
-    get:
-      tags:
-        - Authentication
-      summary: Logs out current logged in user
-      operationId: logout
-      responses:
-        '200':
-          description: Successfully logged out the user.
-  # Admin
-  # Key
-  /user/{userId}/key:
-    post:
-      tags:
-        - Key
-      summary: Create a new key for a user.
-      operationId: createKey
-      parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
-      security:
-        - BearerAuth: []
-      responses:
-        '200':
-          description: Successful operation.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Key'
-        '400':
-          description: Invalid input.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-        '401':
-          description: Missing or bad token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-        '404':
-          description: User not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-      requestBody:
-        $ref: '#/components/requestBodies/KeyPost'
-  /userd/{userId}/key/list:
-    get:
-      tags:
-        - Key
-      summary: List all keys of a user.
-      description: Returns a key.
-      operationId: getKeyById
-      parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
-        - $ref: '#/components/parameters/FullListQueryParameter'
-      security:
-        - BearerAuth: []
-      responses:
-        '200':
-          description: Array of key.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/KeyArray'
-        '400':
-          description: Invalid ID supplied.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-        '401':
-          description: Missing or bad token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-        '404':
-          description: User not found.
           content:
             application/json:
               schema:
@@ -352,8 +277,81 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
-  # End Key
-  # User
+  /user/{userId}/key:
+    post:
+      tags:
+        - Key
+      summary: Create a new key for a user.
+      operationId: createKey
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '400':
+          description: Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+      requestBody:
+        $ref: '#/components/requestBodies/KeyPost'
+  /user/{userId}/key/list:
+    get:
+      tags:
+        - Key
+      summary: List all keys of a user.
+      description: Returns a key.
+      operationId: getKeyById
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/FullListQueryParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Array of key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/KeyArray'
+        '400':
+          description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+
   /user:
     post:
       tags:
@@ -519,12 +517,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/UserArray'
-  # End User
-  # APIKey
+
   /APIKey:
     post:
       tags:
-        - APIKey
+        - API Key
       summary: Create an API key suitable to call the /sign endpoint.
       description: This can only be done by an admin.
       operationId: createAPIKey
@@ -550,7 +547,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
       requestBody:
-        description: Created APIKey object.
+        description: Created API Key object.
         required: true
         content:
           application/json:
@@ -559,7 +556,7 @@ paths:
   /APIKey/{APIKeyId}:
     get:
       tags:
-        - APIKey
+        - API Key
       summary: Get an API key by its identifier.
       operationId: getAPIKeyById
       parameters:
@@ -593,7 +590,7 @@ paths:
                 $ref: '#/components/responses/ApiError'
     put:
       tags:
-        - APIKey
+        - API Key
       summary: Update an API key.
       description: This can only be done by the logged in API key.
       operationId: updateAPIKey
@@ -635,7 +632,7 @@ paths:
                 $ref: '#/components/responses/ApiError'
     delete:
       tags:
-        - APIKey
+        - API Key
       summary: Delete an API key.
       description: This can only be done by an admin.
       operationId: deleteAPIKey
@@ -671,7 +668,7 @@ paths:
   /APIKey/list:
     get:
       tags:
-        - APIKey
+        - API Key
       summary: List all API keys.
       operationId: getAllAPIKeys
       security:
@@ -691,8 +688,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
-  # End APIKey
-  # End Admin
+
 components:
   schemas:
     Identity:
@@ -730,59 +726,15 @@ components:
               userId (UID) (0.9.2342.19200300.100.1.1)
               This identifier must be unique and can be used to identify a user.
             example: "wol.jim-smith.01"
-    UserBase:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          default: null # step 1
-          description: User's email.
-          example: "user.foo@example.com"
-        username:
-          type: string
-          default: null # step 1
-          description: User's alias.
-          example: "user-alias"
-        role:
-          $ref: '#/components/schemas/UserRoleEnum'
-        identity:
-          $ref: '#/components/schemas/FullIdentity'
-    UserDetail:
-      allOf:
-        - type: object
-          properties:
-            id:
-              type: string
-              format: uuid
-              readOnly: true
-              example: "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3"
-            status:
-              $ref: '#/components/schemas/UserStatusEnum'
-            createdAt:
-              $ref: '#/components/schemas/CreatedAt'
-            updatedAt:
-              $ref: '#/components/schemas/UpdatedAt'
-            deletedAt:
-              $ref: '#/components/schemas/DeletedAt'
-            lastLogin:
-              $ref: '#/components/schemas/LastLogin'
-            defaultKeyId:
-              type: string
-              format: uuid
-              readOnly: true
-              example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
-        - $ref: '#/components/schemas/UserBase'
     Password:
       type: string
       format: password
-      # description: Password of the user (it must be provided at creation time).
-      default: null # step 1
-      description: Password of the user (optional for now).
+      default: null
+      description: User's password (optional for now).
       example: "nSBa+rV3%2/LpD"
-    PublicKey:
+    PubKey:
       type: string
-      description: Public key.
+      description: Public key (bitcoin address when using bip39 keys).
       example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
     CreatedAt:
       type: integer
@@ -834,6 +786,49 @@ components:
         User Status:
          - A blocked user cannot sign.
       example: "active"
+    UserBase:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          default: null
+          description: User's email.
+          example: "john.doe@acme.com"
+        username:
+          type: string
+          default: null
+          description: User's alias (for login).
+          example: "johndoe"
+        role:
+          $ref: '#/components/schemas/UserRoleEnum'
+        identity:
+          $ref: '#/components/schemas/FullIdentity'
+    UserDetail:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              readOnly: true
+              example: "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3"
+            status:
+              $ref: '#/components/schemas/UserStatusEnum'
+            createdAt:
+              $ref: '#/components/schemas/CreatedAt'
+            updatedAt:
+              $ref: '#/components/schemas/UpdatedAt'
+            deletedAt:
+              $ref: '#/components/schemas/DeletedAt'
+            lastLogin:
+              $ref: '#/components/schemas/LastLogin'
+            defaultKeyId:
+              type: string
+              format: uuid
+              description: Identifier of the default key to use for this user.
+              example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
+        - $ref: '#/components/schemas/UserBase'
     UserPut:
       allOf:
         - type: object
@@ -848,11 +843,10 @@ components:
         - $ref: '#/components/schemas/UserPut'
         - type: object
           required:
-            # - username # step2
-            # - password # step2
+            # - username # step2 only
+            # - password # step2 only
             - identity
     UserInfo:
-      description: A user DTO accessible from regular user.
       allOf:
         - $ref: '#/components/schemas/UserBase'
         - type: object
@@ -862,20 +856,19 @@ components:
        - bip39
       description: Key type.
       example: "bip39"
-    # APIKey
     APIKeyBase:
       type: object
       properties:
         name:
           type: string
-          example: "API key name"
+          example: "My API key name"
           description: Key name.
         status:
           type: string
           enum:
           - active
           - blocked
-          description: Key status.
+          description: API key status.
           default: "active"
           example: "active"
     APIKey:
@@ -913,13 +906,12 @@ components:
     APIKeyPut:
       allOf:
         - $ref: '#/components/schemas/APIKeyBase'
-    # Key
     KeyBase:
       type: object
       properties:
         name:
           type: string
-          example: "Key name"
+          example: "My key name"
           description: Key name.
         status:
           type: string
@@ -941,8 +933,8 @@ components:
               format: uuid
               description: Key id.
               example: "a35c9fee-3893-4eb7-adde-205e1be03209"
-            publicKey:
-              $ref: '#/components/schemas/PublicKey'
+            pubKey:
+              $ref: '#/components/schemas/PubKey'
             type:
               $ref: '#/components/schemas/KeyTypeEnum'
             createdAt:
@@ -954,12 +946,6 @@ components:
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
         - $ref: '#/components/schemas/KeyBase'
-    # KeyExpiration:
-    #   type: integer
-    #   format: int64
-    #   readOnly: true
-    #   description: Date to disable the key.
-    #   example: 1531651039296
     KeyPost:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
@@ -969,10 +955,8 @@ components:
     KeyPut:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
-    # JSONWebToken:
-    #   type: string
-    #   example: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNYlRqbmVSM1NtdWxScTg5djB5cTBnPT0ifQ.ggNDtcSoMQJ7J1l31yeKRZtT2b3UBUmh4EHusUrM5mA"
     SessionToken:
+      description: Session token.
       type: string
       example: "doy7GCOUR0uGz6ssPvF6wQ=="
     SignatureResult:
@@ -1068,11 +1052,19 @@ components:
         type: string
         format: uuid
         example: "f34d92e3-4f71-49ab-862f-69443bd48266"
-    PubKeyQueryParameter:
+    PubKeyToSignQueryParameter:
       name: pubKey
       in: query
-      description: The bitcoin address to use to sign.
+      description: The bitcoin address to use to sign. When not provided, the default key of the user is used (if any).
       required: false
+      schema:
+        type: string
+        example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
+    PubKeyToVerifyQueryParameter:
+      name: pubKey
+      in: query
+      description: The bitcoin address to verify.
+      required: true
       schema:
         type: string
         example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
@@ -1089,7 +1081,6 @@ components:
       in: query
       description: |
         The custom user id set in the user's identity.
-        <br>If the "pubKey" query parameter is not set, the default pubKey will be used to sign.
       required: false
       schema:
         type: string
@@ -1099,7 +1090,6 @@ components:
       in: query
       description: |
         The user identifier.
-        <br>If the "pubKey" query parameter is not set, the default pubKey will be used to sign.
       required: false
       schema:
         type: string
@@ -1147,7 +1137,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIKeyPost'
-      description: APIKey object to add.
+      description: API Key object to add.
       required: true
     APIKeyPut:
       content:
@@ -1175,6 +1165,12 @@ components:
     BasicAuth:
       type: http
       scheme: basic
+      description: Use your email/username and password to authenticate.
     BearerAuth:
       type: http
       scheme: bearer
+      description: Use a session token to authentify (see /login).
+    APIKeyAuth:
+      type: http
+      scheme: bearer
+      description: Use an API key to authentify (see /APIKey).
