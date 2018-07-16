@@ -1,12 +1,26 @@
 <mat-card fxLayout="row" fxLayoutAlign="space-between start">
-    <div fxLayout="column">
-      <div>{{ key.name }}</div>
-      <div><span>Public&nbsp;key</span><code>{{ key.publicKey }}</code></div>
-      <div><span>Created&nbsp;at</span>&nbsp;&nbsp;<span>{{ key.createdAt | date }}</span></div>
+  <div fxLayout="column">
+    <div>{{ key.name }}</div>
+    <div>
+      <span>Public&nbsp;key</span>
+      <code>{{ key.publicKey }}</code>
     </div>
-    <div fxLayout="column">
-    <button mat-icon-button color="warn">
-      <mat-icon aria-label="Delete key" (click)="deleteKey()">delete</mat-icon>
-    </button>
+    <div>
+      <span>Created&nbsp;at</span>&nbsp;&nbsp;
+      <span>{{ key.createdAt | date }}</span>
     </div>
-  </mat-card>
+  </div>
+  <div fxLayout="column">
+    <div>
+      <button mat-icon-button color="warn">
+        <mat-icon matTooltip="Delete key" aria-label="Delete key button" (click)="deleteKey()">delete</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" *ngIf="key.status !== 'blocked'">
+        <mat-icon matTooltip="Block key" aria-label="Block key button" (click)="blockKey()">pause_circle_outline</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" *ngIf="key.status === 'blocked'">
+        <mat-icon matTooltip="Unblock key" aria-label="Unblock key button" (click)="unblockKey()">play_circle_outline</mat-icon>
+      </button>
+    </div>
+  </div>
+</mat-card>

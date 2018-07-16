@@ -19,8 +19,8 @@ export class APIKeyService {
     return this.http.post<ApiAPIKeyObject>(`${serverURL}/api-key`, apiKey).toPromise()
   }
 
-  edit(apiKeyId: string, apiKey: ApiPutAPIKeyObject) {
-    return this.http.put<ApiAPIKeyObject[]>(`${serverURL}/api-key/${apiKeyId}/key/list`, apiKey).toPromise()
+  update(apiKeyId: string, apiKey: ApiPutAPIKeyObject) {
+    return this.http.put<ApiAPIKeyObject>(`${serverURL}/api-key/${apiKeyId}`, apiKey).toPromise()
   }
 
   delete(apiKeyId: string) {

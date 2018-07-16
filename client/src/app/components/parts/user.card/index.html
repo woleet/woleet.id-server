@@ -7,7 +7,9 @@
       <!-- optional step 1 -->
     </div>
     <div>{{ user.identity.commonName }}</div>
-    <div>{{ user.identity.organization }} ({{ user.identity.organizationalUnit }})</div>
+    <div>{{ user.identity.organization }}
+      <span *ngIf="user.identity.organizationalUnit">({{ user.identity.organizationalUnit }})</span>
+    </div>
   </div>
   <div fxLayout="column" fxHide fxShow.gt-xs>
     <div>{{ user.identity.locality }}</div>
@@ -15,14 +17,22 @@
   </div>
   <div fxLayout="column"></div>
   <div *ngIf="modes" fxLayout="column">
-    <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')">
-      <mat-icon aria-label="Edit user" [routerLink]="['/user/', user.id, 'edit']">edit</mat-icon>
-    </button>
-    <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('detail')">
-      <mat-icon aria-label="Edit user" [routerLink]="['/user/', user.id]">visibility</mat-icon>
-    </button>
-    <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('delete')">
-      <mat-icon color="warn" aria-label="Delete user" (click)="delete()">delete</mat-icon>
-    </button>
+    <div>
+      <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')">
+        <mat-icon matTooltip="Edit user" aria-label="Edit user button" [routerLink]="['/user/', user.id, 'edit']">edit</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('detail')">
+        <mat-icon matTooltip="Go to user detail" aria-label="Go to user detail button" [routerLink]="['/user/', user.id]">visibility</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('delete')">
+        <mat-icon color="warn" matTooltip="Delete user" aria-label="Delete user button" (click)="deleteUser()">delete</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" *ngIf="user.status !== 'blocked'">
+        <mat-icon matTooltip="Block user" aria-label="Block user button" (click)="blockUser()">pause_circle_outline</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" *ngIf="user.status === 'blocked'">
+        <mat-icon matTooltip="Unblock user" aria-label="Unblock user button" (click)="unblockUser()">play_circle_outline</mat-icon>
+      </button>
+    </div>
   </div>
 </mat-card>

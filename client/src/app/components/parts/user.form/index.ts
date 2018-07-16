@@ -5,6 +5,14 @@ import { updatedDiff as diff } from 'deep-object-diff';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
 
+function clearEmptyString(obj) {
+  for (const v in obj) {
+    console.log('CAX', v, obj[v])
+    if (obj[v] === '')
+      obj[v] = null;
+  }
+}
+
 @Component({
   selector: 'create-edit-user',
   templateUrl: './index.html',
@@ -28,9 +36,10 @@ export class UserFormComponent implements OnInit {
       this.user = copy<ApiUserObject>(this.originalUser);
     } else {
       const user: ApiPostUserObject = ({
-        username: undefined,
-        email: undefined,
-        password: undefined,
+        username: '',
+        email: '',
+        password: '',
+        role: 'user',
         identity: {
           commonName: undefined,
           organization: undefined,
@@ -45,6 +54,12 @@ export class UserFormComponent implements OnInit {
   }
 
   async submit(user) {
+    console.log('Create', user);
+
+    // Replacing empty strings by null
+    clearEmptyString(user);
+    clearEmptyString(user.identity);
+
     console.log('Create', user);
 
     this.helper = null;

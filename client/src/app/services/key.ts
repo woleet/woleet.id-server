@@ -23,8 +23,8 @@ export class KeyService {
     return this.http.post<ApiKeyObject>(`${serverURL}/user/${userId}/key`, key).toPromise()
   }
 
-  edit(keyId: string, key: ApiPutKeyObject) {
-    return this.http.put<ApiKeyObject[]>(`${serverURL}/key/${keyId}/key/list`, key).toPromise()
+  update(keyId: string, key: ApiPutKeyObject) {
+    return this.http.put<ApiKeyObject>(`${serverURL}/key/${keyId}`, key).toPromise()
   }
 
   delete(keyId: string) {

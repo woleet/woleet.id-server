@@ -29,8 +29,7 @@ $light-theme: mat-light-theme($light-primary, $light-accent);
   width: 100%;
 }
 
-.form-container {
-  width: 50%;
+.mw-500 {
+  max-width: 500px;
   margin: auto;
-  padding-top: 5em;
 }

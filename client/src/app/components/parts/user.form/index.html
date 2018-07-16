@@ -1,48 +1,56 @@
-<div class="form-container" *ngIf="user; else loading">
-  <form role="form" (submit)="submit(user)" #f="ngForm">
+<div *ngIf="user; else loading">
+  <form role="form" autoComplete="off" (submit)="submit(user)" #f="ngForm">
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Username" [(ngModel)]="user.username" name="username" autocomplete="false">
+        <mat-select type="text" [(ngModel)]="user.role" name="role">
+          <mat-option value="user">user</mat-option>
+          <mat-option value="admin">admin</mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="email" placeholder="Email" [(ngModel)]="user.email" name="email" autocomplete="false">
+        <input matInput type="text" placeholder="Username" [(ngModel)]="user.username" name="username" autoComplete="new-password">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="password" placeholder="Password" [(ngModel)]="user.password" name="password" autocomplete="false">
+        <input matInput type="email" placeholder="Email" [(ngModel)]="user.email" name="email" autoComplete="new-password">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Common name" [(ngModel)]="user.identity.commonName" name="commonName" autocomplete="false">
+        <input matInput type="password" placeholder="Password" [(ngModel)]="user.password" name="password" autoComplete="new-password">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Organization" [(ngModel)]="user.identity.organization" name="organization" autocomplete="false">
+        <input matInput type="text" placeholder="Common name" [(ngModel)]="user.identity.commonName" name="commonName" [required]="mode == 'create'">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Organizational Unit" [(ngModel)]="user.identity.organizationalUnit" name="off" autocomplete="false">
+        <input matInput type="text" placeholder="Organization" [(ngModel)]="user.identity.organization" name="organization">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Locality" [(ngModel)]="user.identity.locality" name="locality" autocomplete="false">
+        <input matInput type="text" placeholder="Organizational Unit" [(ngModel)]="user.identity.organizationalUnit" name="organizationalUnit">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Country" [(ngModel)]="user.identity.country" name="country" autocomplete="false">
+        <input matInput type="text" placeholder="Locality" [(ngModel)]="user.identity.locality" name="locality">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="userId" [(ngModel)]="user.identity['userId']" name="userId" autocomplete="false">
+        <input matInput type="text" placeholder="Country" [(ngModel)]="user.identity.country" name="countryCode">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="userId" [(ngModel)]="user.identity['userId']" name="userId">
       </mat-form-field>
     </div>
     <br>
@@ -52,7 +60,7 @@
       </div>
       <br>
     </div>
-    <button mat-raised-button color="primary" class="w-100" type="submit"> {{ mode.toUpperCase() }} </button>
+    <button mat-raised-button color="primary" class="w-100" type="submit" [disabled]="f.invalid"> {{ mode.toUpperCase() }} </button>
   </form>
 </div>
 <ng-template #loading>

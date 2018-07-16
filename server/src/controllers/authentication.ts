@@ -13,6 +13,9 @@ export async function createSession(login: string, password: string): Promise<{ 
   if (!user)
     return null;
 
+  if (!user.getDataValue('passwordHash'))  // step 1: user may have no password
+    return null;
+
   const success = await validate(password, {
     hash: user.getDataValue('passwordHash'),
     salt: user.getDataValue('passwordSalt'),

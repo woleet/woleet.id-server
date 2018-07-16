@@ -32,8 +32,13 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
 
   const identity = serializeIdentity(user.identity);
   delete user.identity;
-  const password = await serializeAndEncodePassword(user.password);
-  delete user.password;
+
+  // step 1: user may have no password
+  let password;
+  if (user.password) {
+    password = await serializeAndEncodePassword(user.password);
+    delete user.password;
+  }
 
   const newUser = await User.create(Object.assign(identity, user, password));
   const userId: string = newUser.getDataValue('id');
