@@ -19,8 +19,8 @@ export class KeyService {
     return this.http.get<ApiKeyObject[]>(`${serverURL}/key/list`).toPromise()
   }
 
-  add(userId: string, key: ApiPostKeyObject) {
-    return this.http.post<ApiKeyObject[]>(`${serverURL}/user/${userId}/key`, key).toPromise()
+  create(userId: string, key: ApiPostKeyObject) {
+    return this.http.post<ApiKeyObject>(`${serverURL}/user/${userId}/key`, key).toPromise()
   }
 
   edit(keyId: string, key: ApiPutKeyObject) {

@@ -56,6 +56,8 @@ declare global {
     passwordHash: string;
     passwordSalt: string;
     passwordItrs: number;
+
+    defaultKeyId?: string;
   }
 
   /* Key: server specific */

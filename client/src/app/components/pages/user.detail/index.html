@@ -1,20 +1,34 @@
 <div *ngIf="(user$ | async) as user; else loadingUser">
-  <app-user-card [user]="user" mode="edit"></app-user-card>
-</div>
-<ng-template #loadingUser>
-  <mat-card>Loading...</mat-card>
-</ng-template>
-<br>
-<div *ngIf="(keys$ | async) as keys; else loadingKeys">
-  <div *ngIf="keys.length; else noKeys">
-    <div *ngFor="let key of keys">
-      <app-key-card [key]="key"></app-key-card>
+  <app-user-card [user]="user" [modes]="['edit', 'delete']"></app-user-card>
+  <br>
+  <div *ngIf="(keys$ | async) as keys; else loadingKeys">
+    <div *ngIf="keys.length; else noKeys">
+      <div *ngIf="!formOpened">
+        <button mat-raised-button color="primary" class="w-100" (click)="formOpened=true">CREATE KEY</button>
+        <br>
+      </div>
+      <div *ngIf="formOpened">
+        <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="user.id"></key-card-create>
+      </div>
+      <div *ngFor="let key of keys">
+        <br>
+        <app-key-card [key]="key" (delete)="refreshKeyList()"></app-key-card>
+      </div>
     </div>
+    <ng-template #noKeys>
+      <mat-card fxLayout="row" fxLayoutAlign="space-between start" *ngIf="!formOpened">
+        <span>This user does not have any key</span>
+        <button mat-raised-button color="primary" (click)="formOpened=true">CREATE ONE</button>
+      </mat-card>
+      <div *ngIf="formOpened">
+        <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="user.id"></key-card-create>
+      </div>
+    </ng-template>
   </div>
-  <ng-template #noKeys>
-    <mat-card>No key</mat-card>
+  <ng-template #loadingKeys>
+    <mat-card>Loading...</mat-card>
   </ng-template>
 </div>
-<ng-template #loadingKeys>
+<ng-template #loadingUser>
   <mat-card>Loading...</mat-card>
 </ng-template>

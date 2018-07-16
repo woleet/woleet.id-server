@@ -24,6 +24,7 @@ import { UserCardComponent } from '@parts/user.card';
 import { KeyCardComponent } from '@parts/key.card';
 import { APIKeyCreateCardComponent } from '@parts/api-key.card.create';
 import { APIKeyCardComponent } from '@parts/api-key.card';
+import { KeyCreateCardComponent } from '@parts/key.card.create';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -71,7 +72,8 @@ import { ConfigService } from '@services/config';
     UserCardComponent,
     KeyCardComponent,
     APIKeyCardComponent,
-    APIKeyCreateCardComponent
+    APIKeyCreateCardComponent,
+    KeyCreateCardComponent
   ],
   imports: [
     // angular
