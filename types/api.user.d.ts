@@ -9,10 +9,10 @@ interface UserObject {
 
 interface APIIdentityObject {
   commonName: string;
-  organization: string;
-  organizationalUnit: string;
-  locality: string;
-  country: string;
+  organization?: string;
+  organizationalUnit?: string;
+  locality?: string;
+  country?: string;
   userId?: string;
 }
 

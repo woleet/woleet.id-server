@@ -8,7 +8,7 @@
 <br>
 <div *ngIf="(apiKeys$ | async) as apiKeys; else loading">
   <div *ngIf="apiKeys.length; else noApiKeys">
-    <div *ngFor="let apiKey of apiKeys">
+    <div *ngFor="let apiKey of apiKeys; trackBy: trackById;">
       <app-api-key-card [apiKey]="apiKey" (delete)="refreshList()"></app-api-key-card>
       <br>
     </div>

@@ -8,18 +8,33 @@ import { KeyService } from '@services/key';
 })
 export class KeyCardComponent {
 
-  constructor(private keyService: KeyService) { }
+  @Input()
+  key: ApiKeyObject;
 
   @Output()
   delete = new EventEmitter<ApiKeyObject>();
 
-  @Input()
-  key: ApiKeyObject;
+  @Output()
+  update = new EventEmitter<ApiKeyObject>();
+
+  constructor(private keyService: KeyService) { }
 
   async deleteKey() {
-    console.log(`Deleting ${this.key.id}`)
-    await this.keyService.delete(this.key.id);
-    this.delete.emit();
+    const del = await this.keyService.delete(this.key.id);
+    this.key = del;
+    this.delete.emit(del);
+  }
+
+  async blockKey() {
+    const up = await this.keyService.update(this.key.id, { status: 'blocked' });
+    this.key = up;
+    this.update.emit(up);
+  }
+
+  async unblockKey() {
+    const up = await this.keyService.update(this.key.id, { status: 'active' });
+    this.key = up;
+    this.update.emit(up);
   }
 
 }

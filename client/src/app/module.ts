@@ -10,7 +10,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
   MatToolbarModule, MatButtonModule, MatSidenavModule,
-  MatIconModule, MatListModule, MatInputModule, MatCardModule
+  MatIconModule, MatListModule, MatInputModule, MatCardModule,
+  MatSelectModule,
+  MatTooltipModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -100,7 +102,9 @@ import { ConfigService } from '@services/config';
     MatIconModule,
     MatListModule,
     MatInputModule,
+    MatSelectModule,
     MatCardModule,
+    MatTooltipModule
 
     // app
     AppRoutingModule

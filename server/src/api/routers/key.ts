@@ -3,7 +3,7 @@ import { validate } from '../schemas';
 import * as Router from "koa-router";
 
 import * as Debug from 'debug';
-import { createKey, getAllKeysOfUser, deleteKey } from "../../controllers/key";
+import { getKeyById, createKey, updateKey, getAllKeysOfUser, deleteKey } from "../../controllers/key";
 import { serialiseKey } from "../serialize/key";
 const debug = Debug('id:api:key');
 
@@ -28,7 +28,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
   const key: ApiPostKeyObject = ctx.request.body;
   debug('addkey', key);
   const { userId } = ctx.params;
-  ctx.body = await createKey(userId, key);
+  ctx.body = serialiseKey(await createKey(userId, key));
 });
 
 /**
@@ -47,9 +47,10 @@ router.get('/user/:userId/key/list', vuid, async function (ctx) {
  * @swagger
  *  operationId: getKeyById
  */
-router.get('/key/:id', vkid, function (ctx) {
-  console.log('Validated UUID')
-  throw new NotImplemented();
+router.get('/key/:id', vkid, async function (ctx) {
+  const { id } = ctx.params;
+  const apiKey = await getKeyById(id);
+  ctx.body = serialiseKey(apiKey);
 });
 
 /**
@@ -58,12 +59,12 @@ router.get('/key/:id', vkid, function (ctx) {
  * @swagger
  *  operationId: updateKey
  */
-router.put('/key/:id', vkid, validate.body('updateKey'),
-  async function (ctx) {
-    const { id } = ctx.params;
-    const { name, status } = ctx.request.body;
-    throw new NotImplemented();
-  });
+router.put('/key/:id', vkid, validate.body('updateKey'), async function (ctx) {
+  const { id } = ctx.params;
+  const update: ApiPutKeyObject = ctx.request.body;
+  const apiKey = await updateKey(id, update);
+  ctx.body = serialiseKey(apiKey);
+});
 
 /**
  * @route: /key/{keyId}

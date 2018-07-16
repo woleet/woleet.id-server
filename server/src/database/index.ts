@@ -37,7 +37,7 @@ export { User, Key, APIKey };
   await sequelize.authenticate();
   debug('Connected to database.');
   debug('Synchronizing db model...');
-  await sequelize.sync({ force: true });
+  await sequelize.sync(/* { force: true } */);
   debug('Synchronized db model.');
   debug('Ready.');
 })().catch((err) => {

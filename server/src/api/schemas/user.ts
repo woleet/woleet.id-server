@@ -1,15 +1,15 @@
 import * as Joi from 'joi';
 import { RName, CountryCode, Word, Name } from './misc';
 
-const userTypeEnum = ['user', 'admin'];
+const userRoleEnum = ['user', 'admin'];
 const userStatusEnum = ['active', 'blocked'];
 
 const createIdentity = Joi.object().keys({
   commonName: RName,
-  organization: RName,
-  organizationalUnit: RName,
-  locality: RName,
-  country: CountryCode.required(),
+  organization: Name,
+  organizationalUnit: Name,
+  locality: Name,
+  country: CountryCode,
   userId: Word
 });
 
@@ -23,7 +23,7 @@ const updateIdentity = Joi.object().keys({
 });
 
 const createUser = Joi.object().keys({
-  type: Joi.string().valid(userTypeEnum),
+  role: Joi.string().valid(userRoleEnum),
   status: Joi.string().valid(userStatusEnum),
   email: Joi.string().email().allow(null), // not required for step 1 (allowing null - but should be specified)
   username: Word.allow(null), // not required for step 1 (allowing null - but should be specified)
@@ -32,7 +32,7 @@ const createUser = Joi.object().keys({
 });
 
 const updateUser = Joi.object().keys({
-  type: Joi.string().valid(userTypeEnum),
+  role: Joi.string().valid(userRoleEnum),
   status: Joi.string().valid(userStatusEnum),
   email: Joi.string().email(),
   username: Word,

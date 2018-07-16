@@ -9,16 +9,16 @@ const UserModel = {
   role: { type: ENUM(['user', 'admin']), defaultValue: 'user' },
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   email: { type: STRING, unique: true },
-  username: { type: STRING, unique: true, allowNull: false },
+  username: { type: STRING, unique: true, /* allowNull: false */ }, // step 1
   x500CommonName: { type: STRING, allowNull: false },
-  x500Organization: { type: STRING, allowNull: false },
-  x500OrganizationalUnit: { type: STRING, allowNull: false },
-  x500Locality: { type: STRING, allowNull: false },
-  x500Country: { type: STRING, allowNull: false },
+  x500Organization: { type: STRING, /* allowNull: false */ }, // step 1
+  x500OrganizationalUnit: { type: STRING, /* allowNull: false */ }, // step 1
+  x500Locality: { type: STRING, /* allowNull: false */ }, // step 1
+  x500Country: { type: STRING, /* allowNull: false */ }, // step 1
   x500UserId: { type: STRING },
-  passwordHash: { type: CHAR(1024), allowNull: false },
-  passwordSalt: { type: CHAR(256), allowNull: false },
-  passwordItrs: { type: DOUBLE, allowNull: false },
+  passwordHash: { type: CHAR(1024), /* allowNull: false */ }, // step 1
+  passwordSalt: { type: CHAR(256), /* allowNull: false */ }, // step 1
+  passwordItrs: { type: DOUBLE, /* allowNull: false */ }, // step 1
   lastLogin: { type: DATE, defaultValue: null }
 };
 
