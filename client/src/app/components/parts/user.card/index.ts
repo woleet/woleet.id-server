@@ -8,9 +8,13 @@ import { Component, Input } from '@angular/core';
 export class UserCardComponent {
 
   @Input()
-  mode: 'edit' | 'detail';
+  modes: ('edit' | 'detail' | 'delete')[];
 
   @Input()
   user: ApiUserObject;
+
+  delete() {
+    console.log('Todo: delete ' + this.user.id);
+  }
 
 }

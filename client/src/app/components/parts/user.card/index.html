@@ -1,21 +1,28 @@
 <mat-card fxLayout="row" fxLayoutAlign="space-between start">
-    <div fxLayout="column">
-      <a *ngIf="user.username">{{ user.username }}
-        <!-- optional step 1 -->
-      </a>
-      <div *ngIf="user.email">{{ user.email }}
-        <!-- optional step 1 -->
-      </div>
-      <div>{{ user.identity.commonName }}</div>
-      <div>{{ user.identity.organization }} ({{ user.identity.organizationalUnit }})</div>
+  <div fxLayout="column">
+    <a *ngIf="user.username">{{ user.username }}
+      <!-- optional step 1 -->
+    </a>
+    <div *ngIf="user.email">{{ user.email }}
+      <!-- optional step 1 -->
     </div>
-    <div fxLayout="column" fxHide fxShow.gt-xs>
-      <div>{{ user.identity.locality }}</div>
-      <div>{{ user.identity.country }}</div>
-    </div>
-    <div fxLayout="column"></div>
-    <button mat-icon-button color="primary" class="edit-button" *ngIf="mode">
-      <mat-icon *ngIf="mode === 'edit'" aria-label="Edit user" [routerLink]="['/user/', user.id, 'edit']">edit</mat-icon>
-      <mat-icon *ngIf="mode === 'detail'" aria-label="Edit user" [routerLink]="['/user/', user.id]">visibility</mat-icon>
+    <div>{{ user.identity.commonName }}</div>
+    <div>{{ user.identity.organization }} ({{ user.identity.organizationalUnit }})</div>
+  </div>
+  <div fxLayout="column" fxHide fxShow.gt-xs>
+    <div>{{ user.identity.locality }}</div>
+    <div>{{ user.identity.country }}</div>
+  </div>
+  <div fxLayout="column"></div>
+  <div *ngIf="modes" fxLayout="column">
+    <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')">
+      <mat-icon aria-label="Edit user" [routerLink]="['/user/', user.id, 'edit']">edit</mat-icon>
     </button>
-  </mat-card>
+    <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('detail')">
+      <mat-icon aria-label="Edit user" [routerLink]="['/user/', user.id]">visibility</mat-icon>
+    </button>
+    <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('delete')">
+      <mat-icon color="warn" aria-label="Delete user" (click)="delete()">delete</mat-icon>
+    </button>
+  </div>
+</mat-card>

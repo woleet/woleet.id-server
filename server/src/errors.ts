@@ -26,8 +26,8 @@ export class NotFoundAPIKeyError extends NotFoundDBObjectError {
 }
 
 export class NotFoundKeyError extends NotFoundDBObjectError {
-  constructor() { super('User not found') }
-  name = 'NotFoundUserError'
+  constructor() { super('Key not found') }
+  name = 'NotFoundKeyError'
 }
 
 export abstract class ForeignKeyDBError extends DBError { }

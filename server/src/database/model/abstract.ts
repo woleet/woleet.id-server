@@ -53,4 +53,36 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
     return this.model.findById(id);
   }
 
+  async delete(id: string): Promise<Instance<TInstance>> {
+    try {
+      const up = await this.model.findById(id);
+
+      if (!up)
+        return null;
+
+      await up.destroy();
+
+      return up;
+    } catch (err) {
+      this.handleError(err);
+      throw err;
+    }
+  }
+
+  async restore(id: string): Promise<Instance<TInstance>> {
+    try {
+      const up = await this.model.findById(id, { paranoid: false });
+
+      if (!up)
+        return null;
+
+      await up.restore();
+
+      return up;
+    } catch (err) {
+      this.handleError(err);
+      throw err;
+    }
+  }
+
 }

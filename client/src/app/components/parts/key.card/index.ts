@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { KeyService } from '@services/key';
 
 @Component({
@@ -10,13 +10,16 @@ export class KeyCardComponent {
 
   constructor(private keyService: KeyService) { }
 
+  @Output()
+  delete = new EventEmitter<ApiKeyObject>();
+
   @Input()
   key: ApiKeyObject;
 
   async deleteKey() {
     console.log(`Deleting ${this.key.id}`)
-    await this.keyService.delete(this.key.id); // todo update view
+    await this.keyService.delete(this.key.id);
+    this.delete.emit();
   }
-
 
 }

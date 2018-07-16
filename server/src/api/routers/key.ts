@@ -3,7 +3,7 @@ import { validate } from '../schemas';
 import * as Router from "koa-router";
 
 import * as Debug from 'debug';
-import { createKey, getAllKeysOfUser } from "../../controllers/key";
+import { createKey, getAllKeysOfUser, deleteKey } from "../../controllers/key";
 import { serialiseKey } from "../serialize/key";
 const debug = Debug('id:api:key');
 
@@ -69,11 +69,12 @@ router.put('/key/:id', vkid, validate.body('updateKey'),
  * @route: /key/{keyId}
  * @schema: key.put
  * @swagger
- *  operationId: updateKey
+ *  operationId: deleteKey
  */
 router.delete('/key/:id', vkid, async function (ctx) {
   const { id } = ctx.params;
-  throw new NotImplemented();
+  const key = await deleteKey(id);
+  ctx.body = serialiseKey(key);
 });
 
 export { router };

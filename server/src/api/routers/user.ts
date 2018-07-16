@@ -1,7 +1,7 @@
 import * as Router from "koa-router";
 
 import { validate } from '../schemas';
-import { createUser, getUserById, updateUser, getAllUsers } from '../../controllers/user';
+import { createUser, getUserById, updateUser, getAllUsers, deleteUser } from '../../controllers/user';
 import { serialiseUser } from "../serialize/user";
 
 const vid = validate.param('id', 'uuid');
@@ -56,6 +56,17 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const { id } = ctx.params;
   const update = ctx.request.body;
   const user = await updateUser(id, update);
+  ctx.body = serialiseUser(user);
+});
+
+/**
+ * @route: /user/{userId}
+ * @swagger
+ *  operationId: deleteUser
+ */
+router.delete('/:id', vid, async function (ctx) {
+  const { id } = ctx.params;
+  const user = await deleteUser(id);
   ctx.body = serialiseUser(user);
 });
 
