@@ -63,7 +63,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/responses/UserInfo'
         '401':
           description: Missing or bad token
           content:
@@ -369,7 +369,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/User'
+                $ref: '#/components/responses/UserDetail'
         '401':
           description: Missing or bad token
           content:
@@ -405,7 +405,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/User'
+                $ref: '#/components/responses/UserDetail'
         '400':
           description: Invalid user identifier.
           content:
@@ -447,7 +447,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/User'
+                $ref: '#/components/responses/UserDetail'
         '400':
           description: Invalid object supplied / Invalid user identifier.
           content:
@@ -482,7 +482,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/User'
+                $ref: '#/components/responses/UserDetail'
         '400':
           description: Invalid user identifier.
           content:
@@ -718,13 +718,18 @@ components:
         country:
           type: string
           description: countryName (C) (2.5.4.6)
-          example: "France"
-        userId:
-          type: string
-          description: |
-            userId (UID) (0.9.2342.19200300.100.1.1)
-            This identifier must be unique and can be used to identify a user.
-          example: "wol.jim-smith.01"
+          example: "FR"
+    FullIdentity:
+      allOf:
+      - $ref: '#/components/schemas/Identity'
+      - type: object
+        properties:
+          userId:
+            type: string
+            description: |
+              userId (UID) (0.9.2342.19200300.100.1.1)
+              This identifier must be unique and can be used to identify a user.
+            example: "wol.jim-smith.01"
     UserBase:
       type: object
       properties:
@@ -742,7 +747,7 @@ components:
         role:
           $ref: '#/components/schemas/UserRoleEnum'
         identity:
-          $ref: '#/components/schemas/Identity'
+          $ref: '#/components/schemas/FullIdentity'
     UserDetail:
       allOf:
         - type: object
@@ -846,7 +851,7 @@ components:
             # - username # step2
             # - password # step2
             - identity
-    User:
+    UserInfo:
       description: A user DTO accessible from regular user.
       allOf:
         - $ref: '#/components/schemas/UserBase'
@@ -994,14 +999,19 @@ components:
           example: "https://api.woleet.io/v1/identity"
           description: The public URL of the `/identity` endpoint (ie. the URL that anyone can use to verify the bitcoin identity of your backend).
     IdentityResult:
-      type: object
-      properties:
-        rightData:
-          type: string
-          description: The right part of the signed data (generated ramdomly).
-        signature:
-          type: string
-          description: The signature of the concatenation of `leftData` and `rightData` using the bitcoin address `pubKey`.
+      allOf:
+        - type: object
+          properties:
+            rightData:
+              type: string
+              description: The right part of the signed data (generated ramdomly).
+            signature:
+              type: string
+              description: The signature of the concatenation of `leftData` and `rightData` using the bitcoin address `pubKey`.
+        - type: object
+          properties:
+            identity:
+              $ref: '#/components/schemas/Identity'
     ApiError:
       type: object
       properties:
@@ -1147,10 +1157,10 @@ components:
       description: Attributes of the API key to replace.
       required: true
   responses:
-    User:
+    UserDetail:
       $ref: '#/components/schemas/UserDetail'
-    Identity:
-      $ref: '#/components/schemas/Identity'
+    UserInfo:
+      $ref: '#/components/schemas/UserInfo'
     ApiError:
       $ref: '#/components/schemas/ApiError'
     UserArray:
