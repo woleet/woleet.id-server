@@ -49,6 +49,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+  /logout:
+    get:
+      tags:
+        - Authentication
+      summary: Logs out current logged in user
+      operationId: logout
+      responses:
+        '200':
+          description: Successfully logged out the user.
   /info:
     get:
       tags:
@@ -120,6 +129,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+
   /identity:
     get:
       operationId: getIdentity
@@ -154,91 +164,6 @@ paths:
                 $ref: '#/components/responses/ApiError'
         '404':
           description: /identity endpoint is not reachable on this port.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-
-  /logout:
-    get:
-      tags:
-        - Authentication
-      summary: Logs out current logged in user
-      operationId: logout
-      responses:
-        '200':
-          description: Successfully logged out the user.
-
-  /user/{userId}/key:
-    post:
-      tags:
-        - Key
-      summary: Create a new key for a user.
-      operationId: createKey
-      parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
-      security:
-        - BearerAuth: []
-      responses:
-        '200':
-          description: Successful operation.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Key'
-        '400':
-          description: Invalid input.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-        '401':
-          description: Missing or bad token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-        '404':
-          description: User not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-      requestBody:
-        $ref: '#/components/requestBodies/KeyPost'
-  /userd/{userId}/key/list:
-    get:
-      tags:
-        - Key
-      summary: List all keys of a user.
-      description: Returns a key.
-      operationId: getKeyById
-      parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
-        - $ref: '#/components/parameters/FullListQueryParameter'
-      security:
-        - BearerAuth: []
-      responses:
-        '200':
-          description: Array of key.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/KeyArray'
-        '400':
-          description: Invalid ID supplied.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-        '401':
-          description: Missing or bad token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/ApiError'
-        '404':
-          description: User not found.
           content:
             application/json:
               schema:
@@ -347,6 +272,80 @@ paths:
                 $ref: '#/components/responses/ApiError'
         '404':
           description: Key not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+  /user/{userId}/key:
+    post:
+      tags:
+        - Key
+      summary: Create a new key for a user.
+      operationId: createKey
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Key'
+        '400':
+          description: Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+      requestBody:
+        $ref: '#/components/requestBodies/KeyPost'
+  /userd/{userId}/key/list:
+    get:
+      tags:
+        - Key
+      summary: List all keys of a user.
+      description: Returns a key.
+      operationId: getKeyById
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/FullListQueryParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Array of key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/KeyArray'
+        '400':
+          description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: User not found.
           content:
             application/json:
               schema:
@@ -766,7 +765,7 @@ components:
             defaultKeyId:
               type: string
               format: uuid
-							description: Identifier of the default key to use for this user.
+              description: Identifier of the default key to use for this user.
               example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
         - $ref: '#/components/schemas/UserBase'
     Password:
