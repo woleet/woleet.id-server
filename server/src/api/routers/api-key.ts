@@ -1,7 +1,7 @@
 import * as Router from "koa-router";
 
 import { validate } from '../schemas';
-import { createAPIKey, updateAPIKey, getAPIKeyById, getAllAPIKeys } from '../../controllers/api-key';
+import { createAPIKey, updateAPIKey, getAPIKeyById, getAllAPIKeys, deleteAPIKey } from '../../controllers/api-key';
 import { serialiseApiKey } from "../serialize/api-key";
 
 const vid = validate.param('id', 'uuid');
@@ -56,6 +56,18 @@ router.put('/:id', vid, validate.body('updateApiKey'), async function (ctx) {
   const { id } = ctx.params;
   const update: ApiPutAPIKeyObject = ctx.request.body;
   const apiKey = await updateAPIKey(id, update);
+  ctx.body = serialiseApiKey(apiKey);
+});
+
+/**
+ * @route: /api-key/{id}
+ * @schema: key.put
+ * @swagger
+ *  operationId: updateAPIKey
+ */
+router.delete('/:id', vid, async function (ctx) {
+  const { id } = ctx.params;
+  const apiKey = await deleteAPIKey(id);
   ctx.body = serialiseApiKey(apiKey);
 });
 

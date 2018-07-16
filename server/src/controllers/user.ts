@@ -99,3 +99,15 @@ export async function getAllUsers(): Promise<InternalUserObject[]> {
   const users = await User.getAll();
   return users.map((user) => user.toJSON());
 }
+
+export async function deleteUser(id: string): Promise<InternalUserObject> {
+  debug('Del user' + id);
+
+  const user = await User.delete(id);
+
+  if (!user)
+    throw new NotFoundUserError();
+
+  debug('Deleted user');
+  return user.toJSON();
+}

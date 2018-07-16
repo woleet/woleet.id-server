@@ -1,0 +1,14 @@
+<mat-card>
+  <mat-card-content>
+    <div>
+      <mat-form-field class="w-100" hideRequiredMarker>
+        <input matInput placeholder="Key name" [formControl]="keyName" required>
+        <mat-error *ngIf="keyName.invalid">{{ getErrorMessage() }}</mat-error>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="createKey()" [disabled]="keyName.invalid">CREATE</button>
+    <button mat-button (click)="cancelKey()">CANCEL</button>
+  </mat-card-actions>
+</mat-card>

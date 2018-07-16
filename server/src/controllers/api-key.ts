@@ -36,3 +36,13 @@ export async function getAllAPIKeys(): Promise<InternalAPIKeyObject[]> {
   const apiKeys = await APIKey.getAll();
   return apiKeys.map((apiKey) => apiKey.toJSON());
 }
+
+export async function deleteAPIKey(id: string): Promise<InternalAPIKeyObject> {
+
+  const apiKey = await APIKey.delete(id);
+
+  if (!apiKey)
+    throw new NotFoundAPIKeyError();
+
+  return apiKey.toJSON();
+}

@@ -14,7 +14,7 @@ export class APIKeyCreateCardComponent {
   @Output()
   create = new EventEmitter<ApiAPIKeyObject>();
 
-  apiKeyName = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]);
+  apiKeyName = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
 
   constructor(private apiKeyService: APIKeyService) { }
 

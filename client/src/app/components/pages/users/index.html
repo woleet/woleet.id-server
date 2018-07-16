@@ -1,11 +1,12 @@
 <button routerLink="/user/create" mat-raised-button color="primary">ADD USER</button>
-<br><br>
+<br>
+<br>
 <mat-divider></mat-divider>
 <br>
 <div *ngIf="(users$ | async) as users; else loading">
   <div *ngIf="users.length; else noUser">
     <div *ngFor="let user of users">
-      <app-user-card [user]="user" mode="detail"></app-user-card>
+      <app-user-card [user]="user" [modes]="['detail']"></app-user-card>
       <br>
     </div>
   </div>

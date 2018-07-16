@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { APIKeyService } from '@services/api-key';
 
 @Component({
@@ -11,11 +11,15 @@ export class APIKeyCardComponent {
 
   @Input()
   apiKey: ApiAPIKeyObject;
+
+  @Output()
+  delete = new EventEmitter<ApiAPIKeyObject>();
+
   displayApiKey = false;
 
   async deleteKey() {
-    console.log(`Deleting ${this.apiKey.id}`)
-    await this.apiKeyService.delete(this.apiKey.id); // todo update view
+    const deleted = await this.apiKeyService.delete(this.apiKey.id);
+    this.delete.emit(deleted);
   }
 
   reveal() {

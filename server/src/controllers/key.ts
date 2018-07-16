@@ -54,3 +54,14 @@ export async function getAllKeysOfUser(userId: string): Promise<InternalKeyObjec
   const keys = await Key.getAllKeysOfUser(userId);
   return keys.map((key) => key.toJSON());
 }
+
+export async function deleteKey(id: string): Promise<InternalKeyObject> {
+
+  const key = await Key.delete(id);
+
+  if (!key)
+    throw new NotFoundKeyError();
+
+  return key.toJSON();
+}
+
