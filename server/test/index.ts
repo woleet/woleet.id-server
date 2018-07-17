@@ -11,7 +11,9 @@ import { expect } from 'chai';
 chai.use(require('chai-http'));
 chai.should();
 
-import app from 'src/apps'
+import { apps } from 'src/apps';
+
+const app = apps.values()[0];
 
 let server = null;
 

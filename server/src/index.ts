@@ -6,10 +6,13 @@ import * as cors from '@koa/cors';
 
 import { apps as definitions } from './apps';
 import { errorHandler } from './api/error';
+import { Server } from 'http';
 
 const debug = Debug('id:server');
 
-export const apps = definitions.map(({ name, port, router }) => {
+export const apps: Dictionary<Server> = {};
+
+definitions.map(({ name, port, router }) => {
 
   const app = new Koa();
 
@@ -40,6 +43,6 @@ export const apps = definitions.map(({ name, port, router }) => {
 
   server.on('listening', () => debug(`[${name}] listening on ${port}`));
 
-  return server;
+  apps[name] = server;
 
 });
