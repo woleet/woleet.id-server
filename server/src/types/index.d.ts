@@ -77,6 +77,7 @@ declare global {
     publicKey: string;
 
     userId: string;
+    user?: InternalUserObject;
   }
 
   interface ApiFullPostKeyObject extends KeyObject {

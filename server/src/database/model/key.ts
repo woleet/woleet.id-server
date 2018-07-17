@@ -35,8 +35,16 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
    * @param publicKey: the requested public key
    * @param userId: optional parameter for extra check
    */
-  async getByPubKey(publicKey: string, userId?: string): Promise<SequelizeKeyObject> {
-    return this.model.findOne({ where: { publicKey, userId } });
+  async getByPubKey(publicKey: string, userId?: string, loadUser = false): Promise<SequelizeKeyObject> {
+    const query = { where: { publicKey } };
+
+    if (userId)
+      query.where['userId'] = userId;
+
+    if (loadUser)
+      query['include'] = [{ model: User.model }];
+
+    return this.model.findOne(query);
   }
 
   handleError(err: any) {
