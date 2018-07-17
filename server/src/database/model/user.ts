@@ -9,7 +9,7 @@ const UserModel = {
   role: { type: ENUM(['user', 'admin']), defaultValue: 'user' },
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   email: { type: STRING, unique: true },
-  username: { type: STRING, unique: true, /* allowNull: false */ }, // step 1
+  username: { type: STRING, unique: true, allowNull: true /* allowNull: false */ }, // step 1
   x500CommonName: { type: STRING, allowNull: false },
   x500Organization: { type: STRING, /* allowNull: false */ }, // step 1
   x500OrganizationalUnit: { type: STRING, /* allowNull: false */ }, // step 1
@@ -31,6 +31,10 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
 
   async getByUsername(username: string): Promise<SequelizeUserObject> {
     return this.model.findOne({ where: { username } });
+  }
+
+  async getByCustomUserId(customId: string): Promise<SequelizeUserObject> {
+    return this.model.findOne({ where: { x500UserId: customId } });
   }
 
   async getByEmail(email: string): Promise<SequelizeUserObject> {

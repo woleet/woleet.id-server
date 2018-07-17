@@ -20,7 +20,6 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { AppComponent } from '@parts/main';
 import { NavBarComponent } from '@parts/nav-bar';
 import { UserFormComponent } from '@parts/user.form';
-import { UserSettingsComponent } from '@parts/user.settings';
 import { ServerSettingsComponent } from '@parts/server.settings';
 import { UserCardComponent } from '@parts/user.card';
 import { KeyCardComponent } from '@parts/key.card';
@@ -69,7 +68,6 @@ import { ConfigService } from '@services/config';
     UserEditPageComponent,
     UserDetailPageComponent,
     AboutPageComponent,
-    UserSettingsComponent,
     ServerSettingsComponent,
     UserCardComponent,
     KeyCardComponent,
@@ -104,7 +102,7 @@ import { ConfigService } from '@services/config';
     MatInputModule,
     MatSelectModule,
     MatCardModule,
-    MatTooltipModule
+    MatTooltipModule,
 
     // app
     AppRoutingModule

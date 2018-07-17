@@ -54,6 +54,24 @@ function validateParam(name: string, schema: string): IMiddleware {
   }
 }
 
-const validate = { param: validateParam, body: validateBody };
+function validateValue(schema: string): ((value: any) => Promise<boolean>) {
+
+  const _schema = schemas[schema];
+
+  // Thrown at initialization.
+  if (!_schema)
+    throw new Error(`Cannot find "${schema}" schema`);
+
+  return async function (value): Promise<boolean> {
+    try {
+      await _schema.validate(value)
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+}
+
+const validate = { param: validateParam, body: validateBody, raw: validateValue };
 
 export { schemas, validate };

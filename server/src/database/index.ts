@@ -10,6 +10,7 @@ User.model.hasMany(Key.model, { onDelete: 'cascade', hooks: true });
 
 User.model.belongsTo(Key.model, { as: 'defaultKey', constraints: false, hooks: true });
 
+User.model.removeAttribute
 Key.model.belongsTo(User.model, { foreignKey: { allowNull: false } });
 
 Key.model.beforeDelete(async (key) => {

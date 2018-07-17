@@ -1,5 +1,5 @@
 import { User } from '../database';
-import { store as sessionStore } from './session';
+import { store as sessionStore } from './store.session';
 import { validate } from './utils/password';
 
 export async function createSession(login: string, password: string): Promise<{ token: string, user: InternalUserObject }> {
@@ -11,6 +11,10 @@ export async function createSession(login: string, password: string): Promise<{ 
   }
 
   if (!user)
+    return null;
+
+  // A blocked user cannot login
+  if (user.getDataValue('status') === 'blocked')
     return null;
 
   if (!user.getDataValue('passwordHash'))  // step 1: user may have no password

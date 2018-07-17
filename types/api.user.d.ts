@@ -32,6 +32,7 @@ interface ApiUserObject extends UserObject {
   status: UserStatusEnum;
   email: string | null; // step 1: will be mandatory
   defaultKeyId: string | null;
+  identity: APIIdentityObject;
 }
 
 interface ApiUserDTOObject extends UserObject {

@@ -1,31 +1,45 @@
 import * as Debug from 'debug';
-import * as assert from 'assert';
 
-import { app } from './app';
+import * as Koa from 'koa';
+import * as morgan from 'koa-morgan';
+import * as cors from '@koa/cors';
+
+import { apps as definitions } from './apps';
+import { errorHandler } from './api/error';
 
 const debug = Debug('id:server');
 
-const port = parseInt(process.env.PORT || '3000');
+export const apps = definitions.map(({ name, port, router }) => {
 
-assert(Number.isInteger(port), 'Port should be an integer');
+  const app = new Koa();
 
-const server = app.listen(port);
+  app.use(morgan('dev'));
+  app.use(cors({ credentials: true }));
+  app.use(router.routes());
+  app.use(errorHandler);
 
-server.on('error', (error: NodeJS.ErrnoException) => {
-  if (error.syscall !== 'listen') throw error;
-  let bind = (typeof port === 'string') ? 'Pipe ' + port : 'Port ' + port;
-  switch (error.code) {
-    case 'EACCES':
-      console.error(`${bind} requires elevated privileges`);
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(`${bind} is already in use`);
-      process.exit(1);
-      break;
-    default:
+  const server = app.listen(port);
+
+  server.on('error', (error: NodeJS.ErrnoException) => {
+    if (error.syscall !== 'listen')
       throw error;
-  }
-});
+    const bind = `[${name}] on port ${port}`;
+    switch (error.code) {
+      case 'EACCES':
+        console.error(`${bind} requires elevated privileges`);
+        process.exit(1);
+        break;
+      case 'EADDRINUSE':
+        console.error(`${bind} is already in use`);
+        process.exit(1);
+        break;
+      default:
+        throw error;
+    }
+  });
 
-server.on('listening', () => debug(`Listening on ${port}`));
+  server.on('listening', () => debug(`[${name}] listening on ${port}`));
+
+  return server;
+
+});

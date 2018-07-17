@@ -35,3 +35,20 @@ export abstract class ForeignKeyDBError extends DBError { }
 export class InvalidUserTargetedKeyError extends ForeignKeyDBError { }
 
 export class ProtectedUserError extends DBError { name = 'ProtectedUserError' }
+
+export abstract class BlockedResourceError extends Error { }
+
+export class BlockedUserError extends BlockedResourceError {
+  constructor() { super('User is blocked') }
+  name = 'BlockedUserError'
+}
+
+export class BlockedKeyError extends BlockedResourceError {
+  constructor() { super('Key is blocked') }
+  name = 'BlockedKeyError'
+}
+
+export class BlockedAPIKeyError extends BlockedResourceError {
+  constructor() { super('API key is blocked') }
+  name = 'BlockedAPIKeyError'
+}

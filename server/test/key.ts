@@ -1,4 +1,4 @@
-import { request, assertError } from './index'
+import { request, assertError } from '.'
 
 describe('keys tests', () => {
   const validKey = { "name": "key1" };
