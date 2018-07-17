@@ -11,23 +11,32 @@ import { user as userAuth, admin as adminAuth, session } from "./authentication"
 
 import * as Router from "koa-router";
 
-const router = new Router();
+import * as bodyParser from 'koa-bodyparser';
+/**
+ * API
+ */
+const apiRouter = new Router();
+apiRouter.use(bodyParser());
+apiRouter.use(auth.routes());
+apiRouter.use(session, userAuth, info.routes());
+apiRouter.use(session, adminAuth, user.routes());
+apiRouter.use(session, adminAuth, key.routes());
+apiRouter.use(session, adminAuth, apiKey.routes());
 
 /**
- * Route : /
+ * Identity
  */
-router.get('/', function (ctx) {
-  ctx.body = { message: 'welcome' };
-});
+const identityRouter = new Router();
+identityRouter.use(identity.routes());
 
+/**
+ * Signature
+ */
+const signatureRouter = new Router();
+signatureRouter.use(sign.routes());
 
-router.use(sign.routes());
-router.use(identity.routes());
-
-router.use(auth.routes());
-router.use(session, userAuth, info.routes());
-router.use(session, adminAuth, user.routes());
-router.use(session, adminAuth, key.routes());
-router.use(session, adminAuth, apiKey.routes());
-
-export { router as api };
+export {
+  apiRouter as api,
+  identityRouter as identity,
+  signatureRouter as signature
+};
