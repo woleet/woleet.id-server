@@ -14,33 +14,27 @@ interface AppDefinition {
   router: Router;
 }
 
-interface AppMerge {
-  name: string[];
-  port: number;
-  router: Router;
-}
-
-const dict: Dictionary<AppDefinition[]> = {};
+const defs: Dictionary<AppDefinition[]> = {};
 
 for (const name of names) {
   const router: Router = routes[name];
   const port = ports[name];
   const app = { name, port, router };
 
-  if (dict[port])
-    dict[port].push(app);
+  if (defs[port])
+    defs[port].push(app);
   else
-    dict[port] = [app];
+    defs[port] = [app];
 }
 
-export const apps = Object.keys(dict).reduce<AppDefinition[]>((acc, port) => {
+export const apps = Object.keys(defs).reduce<AppDefinition[]>((acc, port) => {
 
-  const apps: AppDefinition[] = dict[port];
+  const apps: AppDefinition[] = defs[port];
 
-  const app = apps.reduce<AppDefinition>((p, c) => ({
-    name: p.name ? (p.name + ', ' + c.name) : c.name,
-    port: p.port || c.port,
-    router: p.router.use(c.router.routes())
+  const app = apps.reduce<AppDefinition>((acc, app) => ({
+    name: acc.name ? (acc.name + ', ' + app.name) : app.name,
+    port: acc.port || app.port,
+    router: acc.router.use(app.router.routes())
   }), { name: '', port: 0, router: new Router() })
 
   return [...acc, app];

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '@services/user';
 import { ActivatedRoute, Router } from '@angular/router';
-import { updatedDiff as diff } from 'deep-object-diff';
+import { diff } from 'deep-object-diff';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -67,7 +67,7 @@ export class UserFormComponent implements OnInit {
     if (this.mode == 'edit') {
       const _user: ApiUserObject = user;
       const _diff = diff(this.originalUser, _user);
-      console.log('Diff', _diff);
+      console.log('Diff', _diff, this.originalUser, _user);
       u = this.service.update(user.id, _diff);
     } else {
       const _user: ApiPostUserObject = user;

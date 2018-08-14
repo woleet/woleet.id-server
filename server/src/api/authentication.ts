@@ -10,6 +10,27 @@ export async function session(ctx: Context, next) {
   return next();
 };
 
+export async function apiKeyAuth(ctx: Context, next) {
+
+  const { header } = ctx.request;
+
+  // Check if "authorization" header is set
+  if (header && header.authorization) {
+    const parts = header.authorization.split(' ');
+
+    // Check if apiKey exists
+    if (parts.length === 2 && parts[0] === 'Bearer') {
+      const apiKey = await apiKeyStore.get(parts[1]);
+
+      if (apiKey && apiKey.status === 'active') {
+        return next();
+      }
+    }
+  }
+
+  throw new Unauthorized('Invalid or missing API key');
+};
+
 export async function user(ctx: Context, next) {
   if (!ctx.session)
     throw new Unauthorized;
@@ -23,13 +44,6 @@ export async function admin(ctx: Context, next) {
 
   if (ctx.session.user.getDataValue('username') != 'admin')
     throw new Forbidden('Invalid user level');
-
-  return next();
-};
-
-export async function apiKeyAuth(ctx: Context, next) {
-
-
 
   return next();
 };

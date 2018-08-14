@@ -15,9 +15,14 @@ export class LoginPageComponent {
     this.user = { username: '', password: '' };
   }
 
-  login() {
-    if (this.service.login(this.user)) {
-      this.router.navigate([mainRoute])
+  async login() {
+    const user = await this.service.login(this.user);
+    if (user) {
+      if (user.role === 'admin') {
+        this.router.navigate(['users'])
+      } else {
+        this.router.navigate([mainRoute])
+      }
     } else {
       // this.errorMsg = 'Failed to login! try again ...';
     }

@@ -13,6 +13,7 @@
   <mat-sidenav-container *ngIf="isAdmin()">
     <mat-sidenav class="sidenav" fixedInViewport="true" role="navigation" mode="side" opened="true">
       <mat-nav-list>
+        <!--
         <mat-list-item routerLink="/setup">
           <div mat-button>
             <i class="material-icons">settings_power</i>
@@ -25,19 +26,8 @@
             <span>Identity</span>
           </div>
         </mat-list-item>
-        <mat-list-item routerLink="/settings">
-          <div mat-button>
-            <i class="material-icons">settings</i>
-            <span>Settings</span>
-          </div>
-        </mat-list-item>
-        <mat-list-item routerLink="/about">
-          <div mat-button>
-            <i class="material-icons">info</i>
-            <span>About</span>
-          </div>
-        </mat-list-item>
         <mat-divider></mat-divider>
+        -->
         <mat-list-item routerLink="/users">
           <div mat-button>
             <i class="material-icons">perm_identity</i>
@@ -48,6 +38,18 @@
           <div mat-button>
             <i class="material-icons">vpn_key</i>
             <span>API keys</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item routerLink="/settings">
+          <div mat-button>
+            <i class="material-icons">settings</i>
+            <span>Settings</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item routerLink="/about">
+          <div mat-button>
+            <i class="material-icons">info</i>
+            <span>About</span>
           </div>
         </mat-list-item>
       </mat-nav-list>

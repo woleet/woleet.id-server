@@ -28,7 +28,7 @@ export class AuthService {
     this.router.navigate(['login']);
   }
 
-  async login(user: BasicAuthObject, redirect = true) {
+  async login(user: BasicAuthObject): Promise<ApiUserDTOObject | null> {
     console.log('login', user)
 
     const headers = (new HttpHeaders()).append("Authorization", "Basic " + btoa(`${user.username}:${user.password}`));
@@ -38,15 +38,14 @@ export class AuthService {
       .catch(() => null);
 
     if (!auth)
-      return false;
+      return null;
 
     console.log('Logged', auth);
 
     this.user = auth.user;
     localStorage.setItem('user', JSON.stringify(auth.user));
 
-    if (redirect)
-      this.router.navigate(['main']);
+    return this.user;
   }
 
   getUser(): ApiUserDTOObject {
