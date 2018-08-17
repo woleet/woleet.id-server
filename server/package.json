@@ -40,7 +40,7 @@
   "dependencies": {
     "@koa/cors": "^2.2.1",
     "basic-auth": "^2.0.0",
-    "bcoin": "^1.0.0-beta.15",
+    "bcoin": "^1.0.2",
     "bitcoinjs-message": "^2.0.0",
     "bufio": "^0.2.0",
     "joi": "^13.4.0",

@@ -71,6 +71,8 @@ declare global {
     type: KeyTypeEnum;
     status: KeyStatusEnum;
 
+    /** Hexadecimal represention of the mnemonic phrase */
+    mnemonicEntropy: string;
     /** Hexadecimal represention of the private key */
     privateKey: string;
     /** Base 58 represention of the public key */
@@ -84,6 +86,9 @@ declare global {
     name: string;
     type?: KeyTypeEnum;
     status?: KeyStatusEnum;
+
+    /** Hexadecimal represention of the mnemonic phrase */
+    mnemonicEntropy: string;
     /** Hexadecimal represention of the private key */
     privateKey: string;
     /** Base 58 represention of the public key */

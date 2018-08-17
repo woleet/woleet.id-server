@@ -1,8 +1,6 @@
-import * as crypto from "crypto";
-import { NotFoundKeyError } from "../errors";
 import { Key } from "../database";
-import { generatePrivateKey, publicKeyCreate } from "./utils/key";
-import * as bs58check from 'bs58check';
+import { NotFoundKeyError } from "../errors";
+import { Mnemonic, HDPrivateKey, KeyRing } from "bcoin";
 
 /**
  * Key
@@ -17,9 +15,26 @@ import * as bs58check from 'bs58check';
  *  operationId: addKey
  */
 export async function createKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
-  const privateKey = generatePrivateKey();
-  const publicKey = bs58check.encode(publicKeyCreate(privateKey, true));
-  const newKey = await Key.create(Object.assign({}, key, { privateKey: privateKey.toString('hex'), publicKey, userId }));
+
+  // Get new phrase
+  const mnemonic = new Mnemonic();
+
+  // Create an HD private key
+  const master = HDPrivateKey.fromMnemonic(mnemonic);
+  const xkey = master.derivePath("m/44'/0'/0'");
+
+  const ring = KeyRing.fromPrivate(xkey.privateKey, true);
+
+  const publicKey = ring.getAddress('base58');
+  const privateKey = ring.getPrivateKey().toString('hex');
+
+  const newKey = await Key.create(Object.assign({}, key, {
+    mnemonicEntropy: mnemonic.getEntropy().toString('hex'),
+    privateKey,
+    publicKey,
+    userId
+  }));
+
   return newKey.toJSON();
 }
 
@@ -43,6 +58,18 @@ export async function getKeyById(id: string): Promise<InternalKeyObject> {
     throw new NotFoundKeyError();
 
   return key.toJSON();
+}
+
+export async function exportKey(id: string): Promise<string> {
+  const key = await Key.getById(id);
+
+  if (!key)
+    throw new NotFoundKeyError();
+
+  // Get key phrase phrase
+  const mnemonic = Mnemonic.fromEntropy(Buffer.from(key.getDataValue('mnemonicEntropy'), 'hex'));
+
+  return mnemonic.getPhrase()
 }
 
 export async function getAllKeys(): Promise<InternalKeyObject[]> {

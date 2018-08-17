@@ -269,6 +269,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
+  /key/{keyId}/export:
+    get:
+      tags:
+        - Key
+      summary: Get the secret recoveryphrase associated to a key.
+      description: Returns a passprase.
+      operationId: exportKey
+      parameters:
+        - $ref: '#/components/parameters/KeyIdParameter'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Passphrase'
+        '400':
+          description: Invalid key identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '401':
+          description: Missing or bad session token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
+        '404':
+          description: Key not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ApiError'
   /user/{userId}/key:
     post:
       tags:
@@ -724,6 +760,13 @@ components:
       default: null
       description: User's password (optional for now).
       example: "nSBa+rV3%2/LpD"
+    Passphrase:
+      type: object
+      properties:
+        phrase:
+          type: string
+          description: Passphrase used to recover or import a key.
+          example: "abandon ability able about above absent"
     PubKey:
       type: string
       description: Public key (bitcoin address when using BIP39 keys).

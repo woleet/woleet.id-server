@@ -3,7 +3,7 @@ import { validate } from '../schemas';
 import * as Router from "koa-router";
 
 import * as Debug from 'debug';
-import { getKeyById, createKey, updateKey, getAllKeysOfUser, deleteKey } from "../../controllers/key";
+import { getKeyById, createKey, updateKey, getAllKeysOfUser, deleteKey, exportKey } from "../../controllers/key";
 import { serialiseKey } from "../serialize/key";
 const debug = Debug('id:api:key');
 
@@ -40,6 +40,17 @@ router.get('/user/:userId/key/list', vuid, async function (ctx) {
   const { userId } = ctx.params;
   const keys = await getAllKeysOfUser(userId);
   ctx.body = keys.map(serialiseKey);
+});
+
+/**
+ * @route: /key/{keyId}/export
+ * @swagger
+ *  operationId: exportKey
+ */
+router.get('/key/:id/export', vkid, async function (ctx) {
+  const { id } = ctx.params;
+  const phrase = await exportKey(id);
+  ctx.body = { phrase };
 });
 
 /**
