@@ -9,7 +9,7 @@ import { AuthService } from '@services/auth';
 })
 export class NavBarComponent {
 
-  constructor(private router: Router, private auth: AuthService) { }
+  constructor(public router: Router, private auth: AuthService) { }
 
   logout() {
     this.auth.logout()

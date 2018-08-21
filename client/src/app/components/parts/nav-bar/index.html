@@ -1,7 +1,7 @@
 <nav role="navigation" *ngIf="router.url != '/login'">
 
   <mat-toolbar>
-    <span>Application {{ title }} "{{ router.url }}" {{ isAdmin() }}</span>
+    <span>Application {{ title }} {{ isAdmin() ? '[admin]' : '' }}</span>
 
     <div>
       <button mat-icon-button matTooltip="Logout" (click)="logout()">
@@ -40,12 +40,12 @@
             <span>API keys</span>
           </div>
         </mat-list-item>
-        <mat-list-item routerLink="/settings">
+        <!-- <mat-list-item routerLink="/settings">
           <div mat-button>
             <i class="material-icons">settings</i>
             <span>Settings</span>
           </div>
-        </mat-list-item>
+        </mat-list-item> -->
         <mat-list-item routerLink="/about">
           <div mat-button>
             <i class="material-icons">info</i>
@@ -59,5 +59,5 @@
 
 <div class='ml-100' [ngClass]="{ 'ml-100' : isAdmin() }">
 
-<ng-content></ng-content>
+  <ng-content></ng-content>
 </div>
