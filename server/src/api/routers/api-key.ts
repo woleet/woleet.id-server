@@ -31,7 +31,8 @@ router.post('/', validate.body('createApiKey'), async function (ctx) {
  *  operationId: getAPIKeyList
  */
 router.get('/list', async function (ctx) {
-  const users = await getAllAPIKeys();
+  const full = (ctx.query.full || '').toLowerCase() == 'true';
+  const users = await getAllAPIKeys(full);
   ctx.body = users.map(serialiseApiKey);
 });
 

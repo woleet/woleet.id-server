@@ -32,8 +32,8 @@ export async function getAPIKeyById(id: string): Promise<InternalAPIKeyObject> {
   return apiKey.toJSON();
 }
 
-export async function getAllAPIKeys(): Promise<InternalAPIKeyObject[]> {
-  const apiKeys = await APIKey.getAll();
+export async function getAllAPIKeys(full = false): Promise<InternalAPIKeyObject[]> {
+  const apiKeys = await APIKey.getAll({ full });
   return apiKeys.map((apiKey) => apiKey.toJSON());
 }
 

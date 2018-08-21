@@ -38,7 +38,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
  */
 router.get('/user/:userId/key/list', vuid, async function (ctx) {
   const { userId } = ctx.params;
-  const full = ctx.query.full == 'true';
+  const full = (ctx.query.full || '').toLowerCase() == 'true';
   const keys = await getAllKeysOfUser(userId, full);
   ctx.body = keys.map(serialiseKey);
 });
