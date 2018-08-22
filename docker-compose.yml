@@ -1,0 +1,36 @@
+version: '3.4'
+
+networks:
+  client-server:
+    driver: bridge
+  postgres-server:
+    driver: bridge
+
+services:
+  wid-postgres:
+    image: postgres:10.4-alpine
+    networks:
+      - postgres-server
+    environment:
+      POSTGRES_DB: wid
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pass
+  wid-client:
+    build: ./client
+    restart: on-failure
+    depends_on:
+      - wid-server
+    networks:
+      - client-server
+  wid-server:
+    build: ./server
+    restart: on-failure
+    depends_on:
+      - wid-postgres
+    environment:
+      POSTGRES_DB: wid
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pass
+    networks:
+      - client-server
+      - postgres-server

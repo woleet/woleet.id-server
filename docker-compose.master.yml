@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  wid-client:
+    image: ${WOLEET_ID_SERVER_REGISTRY}:client-master
+    ports:
+      - 4220:80
+  wid-server:
+    image: ${WOLEET_ID_SERVER_REGISTRY}:server-master
+    environment:
+      POSTGRES_HOST: wid-postgres

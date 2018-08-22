@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  // use current protocol + host
+  serverURL: '/api'
 };
