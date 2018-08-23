@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@services/auth';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'nav-bar',
@@ -9,7 +10,11 @@ import { AuthService } from '@services/auth';
 })
 export class NavBarComponent {
 
-  constructor(private router: Router, private auth: AuthService) { }
+  production = false;
+
+  constructor(private router: Router, private auth: AuthService) {
+    this.production = environment.production;
+  }
 
   logout() {
     this.auth.logout()

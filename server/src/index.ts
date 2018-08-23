@@ -16,10 +16,10 @@ definitions.map(({ name, port, router }) => {
 
   const app = new Koa();
 
+  app.use(errorHandler);
   app.use(morgan('dev'));
   app.use(cors({ credentials: true }));
   app.use(router.routes());
-  app.use(errorHandler);
 
   const server = app.listen(port);
 

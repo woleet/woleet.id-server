@@ -1,7 +1,8 @@
 <nav role="navigation" *ngIf="router.url != '/login'">
 
   <mat-toolbar>
-    <span>Application {{ title }} "{{ router.url }}" {{ isAdmin() }}</span>
+    <span *ngIf="!production">Application {{ title }} "{{ router.url }}" {{ isAdmin() }}</span>
+    <span *ngIf="production">woleet.id-servzer</span>
 
     <div>
       <button mat-icon-button matTooltip="Logout" (click)="logout()">

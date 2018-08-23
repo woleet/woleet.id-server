@@ -1,8 +1,8 @@
 <div *ngIf="user; else loading">
-  <form role="form" autoComplete="off" (submit)="submit(user)" #f="ngForm">
+  <form role="form" autoComplete="off" (submit)="submit()" #f="ngForm">
     <div>
       <mat-form-field class="w-100">
-        <mat-select type="text" [(ngModel)]="user.role" name="role">
+        <mat-select type="text" [(ngModel)]="user.role" name="role" placeholder="User role">
           <mat-option value="user">user</mat-option>
           <mat-option value="admin">admin</mat-option>
         </mat-select>
@@ -10,47 +10,73 @@
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Username" [(ngModel)]="user.username" name="username" autoComplete="new-password">
+        <input matInput type="text" placeholder="Username" [formControl]="user.username" autoComplete="new-password" (focus)="user.username.focused = true"
+          (focusout)="user.username.focused = false">
+        <mat-error *ngIf="user.username.invalid">{{ getErrorMessage(user.username) }}</mat-error>
+        <mat-hint *ngIf="user.username.focused">Alias used to login</mat-hint>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="email" placeholder="Email" [(ngModel)]="user.email" name="email" autoComplete="new-password">
+        <input matInput type="email" placeholder="Email" [formControl]="user.email" autoComplete="new-password" (focus)="user.email.focused = true"
+          (focusout)="user.email.focused = false">
+        <mat-error *ngIf="user.email.invalid">{{ getErrorMessage(user.email) }}</mat-error>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="password" placeholder="Password" [(ngModel)]="user.password" name="password" autoComplete="new-password">
+        <input matInput type="password" placeholder="Password" [formControl]="user.password" autoComplete="new-password" (focus)="user.password.focused = true"
+          (focusout)="user.password.focused = false">
+        <mat-error *ngIf="user.password.invalid">{{ getErrorMessage(user.password) }}</mat-error>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Common name" [(ngModel)]="user.identity.commonName" name="commonName" [required]="mode == 'create'">
+        <input matInput type="text" placeholder="Common name" [formControl]="user.identity.commonName" required (focus)="user.identity.commonName.focused = true"
+          (focusout)="user.identity.commonName.focused = false">
+        <mat-error *ngIf="user.identity.commonName.invalid">{{ getErrorMessage(user.identity.commonName) }}</mat-error>
+        <mat-hint *ngIf="user.identity.commonName.focused">Full user's name (CN)</mat-hint>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Organization" [(ngModel)]="user.identity.organization" name="organization">
+        <input matInput type="text" placeholder="Organization" [formControl]="user.identity.organization" (focus)="user.identity.organization.focused = true"
+          (focusout)="user.identity.organization.focused = false">
+        <mat-error *ngIf="user.identity.organization.invalid">{{ getErrorMessage(user.identity.organization) }}</mat-error>
+        <!-- <mat-hint *ngIf="user.identity.organization.focused"></mat-hint> -->
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Organizational Unit" [(ngModel)]="user.identity.organizationalUnit" name="organizationalUnit">
+        <input matInput type="text" placeholder="Organizational Unit" [formControl]="user.identity.organizationalUnit" (focus)="user.identity.organizationalUnit.focused = true"
+          (focusout)="user.identity.organizationalUnit.focused = false">
+        <mat-error *ngIf="user.identity.organizationalUnit.invalid">{{ getErrorMessage(user.identity.organizationalUnit)
+          }}</mat-error>
+        <!-- <mat-hint *ngIf="user.identity.organizationalUnit.focused"></mat-hint> -->
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Locality" [(ngModel)]="user.identity.locality" name="locality">
+        <input matInput type="text" placeholder="Locality" [formControl]="user.identity.locality" (focus)="user.identity.locality.focused = true"
+          (focusout)="user.identity.locality.focused = false">
+        <mat-error *ngIf="user.identity.locality.invalid">{{ getErrorMessage(user.identity.locality) }}</mat-error>
+        <!-- <mat-hint *ngIf="user.identity.locality.focused"></mat-hint> -->
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Country" [(ngModel)]="user.identity.country" name="countryCode">
+        <input matInput type="text" placeholder="Country" [formControl]="user.identity.country" (focus)="user.identity.country.focused = true"
+          (focusout)="user.identity.country.focused = false">
+        <mat-error *ngIf="user.identity.country.invalid">{{ getErrorMessage(user.identity.country) }}</mat-error>
+        <mat-hint *ngIf="user.identity.country.focused">Attribute type that contains a two-letter ISO 3166 [ISO3166] country code.</mat-hint>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="userId" [(ngModel)]="user.identity['userId']" name="userId">
+        <input matInput type="text" placeholder="userId" [formControl]="user.identity.userId" (focus)="user.identity.userId.focused = true"
+          (focusout)="user.identity.userId.focused = false">
+        <mat-error *ngIf="user.identity.userId.invalid">{{ getErrorMessage(user.identity.userId) }}</mat-error>
+        <mat-hint *ngIf="user.identity.userId.focused">An external user identifier, it can be used to select a user when esking for a signature, it must be unique.</mat-hint>
       </mat-form-field>
     </div>
     <br>
@@ -60,7 +86,8 @@
       </div>
       <br>
     </div>
-    <button mat-raised-button color="primary" class="w-100" type="submit" [disabled]="f.invalid"> {{ mode.toUpperCase() }} </button>
+    <button mat-raised-button color="primary" class="w-100" type="submit" [disabled]="f.invalid || !isValid()"> {{ mode.toUpperCase() }}
+    </button>
   </form>
 </div>
 <ng-template #loading>
