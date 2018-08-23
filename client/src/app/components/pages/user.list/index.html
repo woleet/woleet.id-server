@@ -6,7 +6,7 @@
 <div *ngIf="(users$ | async) as users; else loading">
   <div *ngIf="users.length; else noUser">
     <div *ngFor="let user of users">
-      <app-user-card [user]="user" [modes]="['detail']"></app-user-card>
+      <app-user-card [user]="user" [modes]="['detail', 'delete', 'edit']"></app-user-card>
       <br>
     </div>
   </div>

@@ -5,7 +5,7 @@ import { UserService } from '@services/user';
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class UsersPageComponent implements OnInit {
+export class UserListPageComponent implements OnInit {
 
   users$: Promise<ApiUserObject[]>;
 
