@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Script to start postgres in a
+# standalone non-persitent mode
 
 set -e
 

@@ -1,12 +1,13 @@
 import * as Sequelize from 'sequelize';
+import { db } from '../config';
 
-const DATABASE = 'wid';
-const PASSWORD = 'pass';
-const USERNAME = 'pguser';
+const DATABASE = db.database;
+const PASSWORD = db.password;
+const USERNAME = db.username;
 
 const options = {
   dialect: 'postgres',
-  host: 'localhost',
+  host: db.host,
   port: 5432,
 
   pool: {

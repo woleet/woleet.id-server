@@ -29,7 +29,7 @@ export class AuthService {
   }
 
   async login(user: BasicAuthObject): Promise<ApiUserDTOObject | null> {
-    console.log('login', user)
+    console.log('login', user, serverURL);
 
     const headers = (new HttpHeaders()).append("Authorization", "Basic " + btoa(`${user.username}:${user.password}`));
     const auth: AuthResponseObject = await this.http
