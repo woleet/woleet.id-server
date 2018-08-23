@@ -32,10 +32,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    $ref: '#/components/schemas/SessionToken'
+                $ref: '#/components/responses/UserInfo'
         '400':
           description: Missing email/username or password.
           content:
