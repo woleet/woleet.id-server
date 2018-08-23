@@ -20,6 +20,10 @@ export class NavBarComponent {
     this.auth.logout()
   }
 
+  url() {
+    return this.router.url
+  }
+
   isAdmin() {
     return this.auth.isAdmin()
   }

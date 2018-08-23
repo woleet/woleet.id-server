@@ -1,9 +1,9 @@
-<nav role="navigation" *ngIf="router.url != '/login'">
+<nav role="navigation" *ngIf="url() != '/login'">
 
   <mat-toolbar>
-    <span *ngIf="!production">Application {{ title }} "{{ router.url }}" {{ isAdmin() }}</span>
-    <span *ngIf="production">woleet.id-servzer</span>
-    <span>Application {{ title }} {{ isAdmin() ? '[admin]' : '' }}</span>
+    <!-- <img src="/assets/logo.svg"> -->
+    <span *ngIf="production">woleet.id-server</span>
+    <span *ngIf="!production">Application "{{ url() }}" {{ isAdmin() ? '[admin]' : '' }}</span>
 
     <div>
       <button mat-icon-button matTooltip="Logout" (click)="logout()">
