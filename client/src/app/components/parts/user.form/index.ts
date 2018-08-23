@@ -1,15 +1,35 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '@services/user';
 import { ActivatedRoute, Router } from '@angular/router';
-import { diff } from 'deep-object-diff';
+import { diff as diff } from 'deep-object-diff';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { ErrorMessageProvider, cleanupObject, replaceInObject } from '@components/util';
+import * as traverse from 'traverse';
 
-function clearEmptyString(obj) {
-  for (const v in obj) {
-    if (obj[v] === '')
-      obj[v] = null;
-  }
+function noSpaceValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+  if (str && str.indexOf(' ') != -1)
+    return ({ noSpace: true })
+
+  return null;
+}
+
+function lettersOnlyValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+  if (str && !/^[a-z]+$/i.test(str))
+    return ({ lettersOnly: true })
+
+  return null;
+}
+
+function uppercaseOnlyValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+  if (str && !/^[A-Z]$/.test(str))
+    return ({ uppercaseOnly: true })
+
+  return null;
 }
 
 @Component({
@@ -17,7 +37,7 @@ function clearEmptyString(obj) {
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
   @Input()
   mode: 'create' | 'edit';
@@ -25,62 +45,79 @@ export class UserFormComponent implements OnInit {
   helper;
 
   user;
+
   originalUser;
 
-  constructor(private service: UserService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private service: UserService, private route: ActivatedRoute, private router: Router) {
+    super();
+  }
+
+  private setFormControl(user) {
+    return {
+      username: new FormControl(user.username, [lettersOnlyValidator, Validators.minLength(3), Validators.maxLength(30)]),
+      email: new FormControl(user.email, [Validators.email]),
+      password: new FormControl(undefined, [Validators.minLength(3), Validators.maxLength(250)]),
+      role: user.role,
+      identity: {
+        commonName: new FormControl(user.identity.commonName, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
+        organization: new FormControl(user.identity.organization, [Validators.minLength(3), Validators.maxLength(250)]),
+        organizationalUnit: new FormControl(user.identity.organizationalUnit, [Validators.minLength(3), Validators.maxLength(250)]),
+        locality: new FormControl(user.identity.locality, [Validators.minLength(3), Validators.maxLength(250)]),
+        country: new FormControl(user.identity.country, [lettersOnlyValidator, Validators.minLength(2), Validators.maxLength(2)]),
+        userId: new FormControl(user.identity.userId, [noSpaceValidator, Validators.minLength(3), Validators.maxLength(250)])
+      }
+    }
+  }
+
+  private getFormObject() {
+    // get "value" attribute of each form control attibutes recursively
+    // deleting falsy ones
+    const user = traverse(this.user).map(function (e) {
+      if (e instanceof FormControl)
+        return e.value === null ? this.delete(false) : e.value
+    });
+
+    return user;
+  }
 
   async ngOnInit() {
     if (this.mode == 'edit') {
       this.originalUser = await this.service.getById(this.route.snapshot.params.id);
-      this.user = copy<ApiUserObject>(this.originalUser);
+      this.user = this.setFormControl(copy<ApiUserObject>(this.originalUser));
     } else {
-      const user: ApiPostUserObject = ({
-        username: '',
-        email: '',
-        password: '',
-        role: 'user',
-        identity: {
-          commonName: undefined,
-          organization: undefined,
-          organizationalUnit: undefined,
-          locality: undefined,
-          country: undefined,
-          userId: undefined
-        }
-      });
-      this.user = user;
+      Number.isInteger
+      this.user = this.setFormControl({ role: 'user', identity: {} });
     }
   }
 
-  async submit(user) {
-    console.log('Create', user);
+  async submit() {
 
-    // Replacing empty strings by null
-    clearEmptyString(user);
-    clearEmptyString(user.identity);
-
-    console.log('Create', user);
+    const user = this.getFormObject();
 
     this.helper = null;
 
-    let u;
+    const cleaned = replaceInObject(user, "", null);
+
+    console.log('CLERAND', user, cleaned)
+
+    let promise;
     if (this.mode == 'edit') {
-      const _user: ApiUserObject = user;
-      const _diff = diff(this.originalUser, _user);
-      console.log('Diff', _diff, this.originalUser, _user);
-      u = this.service.update(user.id, _diff);
+      promise = this.service.update(this.originalUser.id, cleaned);
     } else {
-      const _user: ApiPostUserObject = user;
-      u = this.service.create(_user);
+      promise = this.service.create(cleaned);
     }
 
-    u
+    promise
       .then(() => this.router.navigate(['/users']))
       .catch((err: HttpErrorResponse) => {
         console.error('err', err);
         this.helper = err.error.message;
       })
 
+  }
+
+  isValid() {
+    return traverse(this.user).reduce((acc: boolean, e) => acc && ((e instanceof FormControl) ? e.valid : true));
   }
 
 }

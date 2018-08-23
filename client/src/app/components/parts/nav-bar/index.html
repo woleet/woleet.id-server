@@ -1,6 +1,8 @@
 <nav role="navigation" *ngIf="router.url != '/login'">
 
   <mat-toolbar>
+    <span *ngIf="!production">Application {{ title }} "{{ router.url }}" {{ isAdmin() }}</span>
+    <span *ngIf="production">woleet.id-servzer</span>
     <span>Application {{ title }} {{ isAdmin() ? '[admin]' : '' }}</span>
 
     <div>
