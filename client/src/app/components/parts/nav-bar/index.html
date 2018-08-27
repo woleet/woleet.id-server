@@ -2,13 +2,15 @@
 
   <mat-toolbar>
     <!-- <img src="/assets/logo.svg"> -->
-    <span *ngIf="production">woleet.id-server</span>
-    <span *ngIf="!production">Application "{{ url() }}" {{ isAdmin() ? '[admin]' : '' }}</span>
-
     <div>
-      <button mat-icon-button matTooltip="Logout" (click)="logout()">
-        <i class="material-icons">clear</i>
-      </button>
+      <span *ngIf="production">Woleet.ID Server</span>
+      <span *ngIf="!production">Woleet.ID Server "{{ url() }}" {{ isAdmin() ? '[admin]' : '' }}</span>
+    </div>
+
+    <div fxLayout="row">
+      <h1 class="mat-title text-center" style="line-height: 40px; margin-right: 12px">{{ commonName() }}</h1>
+      <mat-divider vertical></mat-divider>
+      <button mat-icon-button matTooltip="Logout" (click)="logout()"><i class="material-icons">clear</i></button>
     </div>
   </mat-toolbar>
 

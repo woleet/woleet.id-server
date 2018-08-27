@@ -1,19 +1,28 @@
-<button (click)="formOpened=true" mat-raised-button color="primary" *ngIf="!formOpened">ADD API KEY</button>
-<div *ngIf="formOpened">
-  <api-key-create-card (reset)="formOpened=false" (create)="refreshList()"></api-key-create-card>
-</div>
-<br>
-<br>
-<mat-divider></mat-divider>
-<br>
 <div *ngIf="(apiKeys$ | async) as apiKeys; else loading">
   <div *ngIf="apiKeys.length; else noApiKeys">
+
+    <div *ngIf="!formOpened">
+      <button mat-raised-button color="primary" (click)="formOpened=true">ADD API KEY</button>
+    </div>
+    <div *ngIf="formOpened">
+      <api-key-create-card (reset)="formOpened=false" (create)="refreshList()"></api-key-create-card>
+    </div>
+    <br>
+    <mat-divider></mat-divider>
     <div *ngFor="let apiKey of apiKeys; trackBy: trackById;">
-      <app-api-key-card [apiKey]="apiKey" (delete)="refreshList()"></app-api-key-card>
       <br>
+      <app-api-key-card [apiKey]="apiKey" (delete)="refreshList()"></app-api-key-card>
     </div>
   </div>
-  <ng-template #noApiKeys>No api key yet</ng-template>
+  <ng-template #noApiKeys>
+    <mat-card fxLayout="row" fxLayoutAlign="space-between start" *ngIf="!formOpened">
+      <span>There is no api key yet</span>
+      <button mat-raised-button color="primary" (click)="formOpened=true">ADD ONE</button>
+    </mat-card>
+    <div *ngIf="formOpened">
+      <api-key-create-card (reset)="formOpened=false" (create)="refreshList()"></api-key-create-card>
+    </div>
+  </ng-template>
 </div>
 <ng-template #loading>
   <mat-card>Loading...</mat-card>

@@ -12,7 +12,8 @@ import {
   MatToolbarModule, MatButtonModule, MatSidenavModule,
   MatIconModule, MatListModule, MatInputModule, MatCardModule,
   MatSelectModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatRippleModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -52,6 +53,8 @@ import { UnauthorizedInterceptorService } from '@interceptors/unauthorized';
 import { ForbiddenInterceptorService } from '@interceptors/forbidden';
 import { NeedConfigGuardService } from '@services/guards/config';
 import { ConfigService } from '@services/config';
+import { StopPropagationDirective } from '@directives/stop-propagation';
+import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagation';
 
 @NgModule({
   declarations: [
@@ -73,7 +76,9 @@ import { ConfigService } from '@services/config';
     KeyCardComponent,
     APIKeyCardComponent,
     APIKeyCreateCardComponent,
-    KeyCreateCardComponent
+    KeyCreateCardComponent,
+    StopPropagationDirective,
+    StopRipplePropagationDirective
   ],
   imports: [
     // angular
@@ -93,6 +98,7 @@ import { ConfigService } from '@services/config';
 
     // nav
     LayoutModule,
+    MatRippleModule,
     FlexLayoutModule,
     MatToolbarModule,
     MatButtonModule,

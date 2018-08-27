@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "This is a repository to go with my article on creating an Express web application using TypeScript 2.",
   "main": "index.js",
   "scripts": {

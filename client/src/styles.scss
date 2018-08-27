@@ -33,3 +33,7 @@ $light-theme: mat-light-theme($light-primary, $light-accent);
   max-width: 500px;
   margin: auto;
 }
+
+.clickable {
+  cursor: pointer;
+}
