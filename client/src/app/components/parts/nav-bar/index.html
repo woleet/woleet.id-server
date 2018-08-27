@@ -4,7 +4,7 @@
     <!-- <img src="/assets/logo.svg"> -->
     <div>
       <span *ngIf="production">Woleet.ID Server</span>
-      <span *ngIf="!production">Woleet.ID Server "{{ url() }}" {{ isAdmin() ? '[admin]' : '' }}</span>
+      <span *ngIf="!production">Woleet.ID Server "{{ page() }}" {{ isAdmin() ? '[admin]' : '' }}</span>
     </div>
 
     <div fxLayout="row">
@@ -62,6 +62,5 @@
 </nav>
 
 <div class='ml-100' [ngClass]="{ 'ml-100' : isAdmin() }">
-
   <ng-content></ng-content>
 </div>
