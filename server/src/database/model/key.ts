@@ -18,13 +18,13 @@ const KeyModel = {
   privateKey: { type: CHAR(64), unique: true, allowNull: false },
   publicKey: { type: STRING, unique: true, allowNull: false },
   lastUsed: { type: DATE, defaultValue: null }
-}
+};
 
 class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKeyObject> {
 
   constructor() {
-    super(sequelize)
-    this.define('key', KeyModel, { paranoid: true })
+    super(sequelize);
+    this.define('key', KeyModel, { paranoid: true });
   }
 
   async getAllKeysOfUser(userId: string, full = false): Promise<SequelizeKeyObject[]> {
@@ -39,11 +39,13 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
   async getByPubKey(publicKey: string, userId?: string, loadUser = false): Promise<SequelizeKeyObject> {
     const query = { where: { publicKey } };
 
-    if (userId)
+    if (userId) {
       query.where['userId'] = userId;
+    }
 
-    if (loadUser)
+    if (loadUser) {
       query['include'] = [{ model: User.model }];
+    }
 
     return this.model.findOne(query);
   }

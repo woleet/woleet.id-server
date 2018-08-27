@@ -31,14 +31,15 @@ export class AuthService {
   async login(user: BasicAuthObject): Promise<ApiUserDTOObject | null> {
     console.log('login', user, serverURL);
 
-    const headers = (new HttpHeaders()).append("Authorization", "Basic " + btoa(`${user.username}:${user.password}`));
+    const headers = (new HttpHeaders()).append('Authorization', 'Basic ' + btoa(`${user.username}:${user.password}`));
     const auth: AuthResponseObject = await this.http
       .get<AuthResponseObject>(`${serverURL}/login/`, { headers })
       .toPromise()
       .catch(() => null);
 
-    if (!auth)
+    if (!auth) {
       return null;
+    }
 
     console.log('Logged', auth);
 
@@ -57,7 +58,7 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.isAuthenticated() && this.user.role == 'admin';
+    return this.isAuthenticated() && this.user.role === 'admin';
   }
 
 }

@@ -18,7 +18,7 @@ export class SetupInterceptor implements HttpInterceptor {
           return of(false);
         }
         return next.handle(request);
-      }))
+      }));
   }
 }
 

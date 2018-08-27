@@ -1,7 +1,7 @@
 import * as Debug from 'debug';
-import { IMiddleware } from "koa-router";
-import { NotFound, HttpError } from "http-errors";
-import { NotFoundDBObjectError, DuplicatedDBObjectError, ForeignKeyDBError, BlockedResourceError } from "../errors";
+import { IMiddleware } from 'koa-router';
+import { NotFound, HttpError } from 'http-errors';
+import { NotFoundDBObjectError, DuplicatedDBObjectError, ForeignKeyDBError, BlockedResourceError } from '../errors';
 
 const debug = Debug('id:server');
 
@@ -10,7 +10,7 @@ const errorHandler: IMiddleware = async function (ctx, next) {
     await next();
     const status = ctx.status || 404;
     if (status === 404) {
-      ctx.throw(new NotFound)
+      ctx.throw(new NotFound);
     }
   } catch (err) {
     debug('Handling error', err);
@@ -35,6 +35,6 @@ const errorHandler: IMiddleware = async function (ctx, next) {
       ctx.body = { message: 'Internal Server Error', status: 500 };
     }
   }
-}
+};
 
 export { errorHandler };

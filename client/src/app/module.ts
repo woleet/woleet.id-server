@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,7 +12,8 @@ import {
   MatToolbarModule, MatButtonModule, MatSidenavModule,
   MatIconModule, MatListModule, MatInputModule, MatCardModule,
   MatSelectModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatRippleModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -35,7 +36,7 @@ import { AboutPageComponent } from '@pages/about';
 import { SettingsPageComponent } from '@pages/settings';
 import { UserCreatePageComponent } from '@pages/user.create';
 import { UserEditPageComponent } from '@pages/user.edit';
-import { UsersPageComponent } from '@pages/users';
+import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 
 // Services
@@ -46,12 +47,15 @@ import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
 import { APIKeyService } from '@services/api-key';
+import { PageDataService } from '@services/page-data';
 
 import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
 import { UnauthorizedInterceptorService } from '@interceptors/unauthorized';
 import { ForbiddenInterceptorService } from '@interceptors/forbidden';
 import { NeedConfigGuardService } from '@services/guards/config';
 import { ConfigService } from '@services/config';
+import { StopPropagationDirective } from '@directives/stop-propagation';
+import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagation';
 
 @NgModule({
   declarations: [
@@ -62,7 +66,7 @@ import { ConfigService } from '@services/config';
     SettingsPageComponent,
     APIKeysPageComponent,
     UserPageComponent,
-    UsersPageComponent,
+    UserListPageComponent,
     UserFormComponent,
     UserCreatePageComponent,
     UserEditPageComponent,
@@ -73,7 +77,9 @@ import { ConfigService } from '@services/config';
     KeyCardComponent,
     APIKeyCardComponent,
     APIKeyCreateCardComponent,
-    KeyCreateCardComponent
+    KeyCreateCardComponent,
+    StopPropagationDirective,
+    StopRipplePropagationDirective
   ],
   imports: [
     // angular
@@ -93,6 +99,7 @@ import { ConfigService } from '@services/config';
 
     // nav
     LayoutModule,
+    MatRippleModule,
     FlexLayoutModule,
     MatToolbarModule,
     MatButtonModule,
@@ -109,7 +116,7 @@ import { ConfigService } from '@services/config';
   ],
   providers: [
     AuthService, AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
-    KeyService, UserService, InfoService, ConfigService, APIKeyService,
+    KeyService, UserService, InfoService, ConfigService, APIKeyService, PageDataService,
     UnauthorizedInterceptorService, ForbiddenInterceptorService, AllowCredentialsInterceptorService
   ],
   bootstrap: [AppComponent]

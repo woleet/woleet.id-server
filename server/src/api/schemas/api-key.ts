@@ -10,4 +10,4 @@ const createApiKey = Joi.object().keys({
 
 const updateApiKey = createApiKey;
 
-export { createApiKey, updateApiKey }
+export { createApiKey, updateApiKey };

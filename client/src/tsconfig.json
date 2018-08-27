@@ -12,6 +12,7 @@
       "@services/*": ["app/services/*"],
       "@guards/*": ["app/services/guards/*"],
       "@interceptors/*": ["app/services/interceptors/*"],
+      "@directives/*": ["app/directives/*"],
       "@app/*": ["app/*"],
       "@env/*": ["environments/*"]
     }

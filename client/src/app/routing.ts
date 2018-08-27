@@ -12,22 +12,22 @@ import { APIKeysPageComponent } from '@pages/api-keys';
 import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
 import { SettingsPageComponent } from '@pages/settings';
-import { UsersPageComponent } from '@pages/users';
+import { UserListPageComponent } from '@pages/user.list';
 import { UserCreatePageComponent } from '@pages/user.create';
 import { UserEditPageComponent } from '@pages/user.edit';
 import { UserDetailPageComponent } from '@pages/user.detail';
 
 const routes: Routes = [
-  { path: 'login', component: LoginPageComponent, canActivate: [IsAnonymous] },
-  { path: 'setup', component: SetupPageComponent, canActivate: [NeedConfig] },
-  { path: 'user', component: UserPageComponent, canActivate: [IsUser] },
-  { path: 'user/create', component: UserCreatePageComponent, canActivate: [IsAdmin] },
-  { path: 'user/:id', component: UserDetailPageComponent, canActivate: [IsAdmin] },
-  { path: 'user/:id/edit', component: UserEditPageComponent, canActivate: [IsAdmin] },
-  { path: 'users', component: UsersPageComponent, canActivate: [IsAdmin] },
-  { path: 'settings', component: SettingsPageComponent, canActivate: [IsAdmin] },
-  { path: 'api-keys', component: APIKeysPageComponent, canActivate: [IsAdmin] },
-  { path: 'about', component: AboutPageComponent, canActivate: [IsUser] },
+  { path: 'login', data: { title: 'login' }, component: LoginPageComponent, canActivate: [IsAnonymous] },
+  { path: 'setup', data: { title: 'setup' }, component: SetupPageComponent, canActivate: [NeedConfig] },
+  { path: 'user', data: { title: 'my profile' }, component: UserPageComponent, canActivate: [IsUser] },
+  { path: 'user/create', data: { title: 'create an user' }, component: UserCreatePageComponent, canActivate: [IsAdmin] },
+  { path: 'user/:id', data: { title: 'user keys' }, component: UserDetailPageComponent, canActivate: [IsAdmin] },
+  { path: 'user/:id/edit', data: { title: 'edit user' }, component: UserEditPageComponent, canActivate: [IsAdmin] },
+  { path: 'users', data: { title: 'user list' }, component: UserListPageComponent, canActivate: [IsAdmin] },
+  { path: 'settings', data: { title: 'server settings' }, component: SettingsPageComponent, canActivate: [IsAdmin] },
+  { path: 'api-keys', data: { title: 'api keys' }, component: APIKeysPageComponent, canActivate: [IsAdmin] },
+  { path: 'about', data: { title: 'about' }, component: AboutPageComponent, canActivate: [IsUser] },
   {
     path: '**',
     redirectTo: 'user'

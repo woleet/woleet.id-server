@@ -40,4 +40,4 @@ const updateUser = Joi.object().keys({
   identity: updateIdentity
 });
 
-export { createUser, updateUser }
+export { createUser, updateUser };

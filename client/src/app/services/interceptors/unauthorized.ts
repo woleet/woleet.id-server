@@ -15,7 +15,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
           return of(false);
         }
         return next.handle(request);
-      }))
+      }));
   }
 }
 

@@ -1,10 +1,10 @@
-import { FormControl } from "@angular/forms";
+import { FormControl } from '@angular/forms';
 import * as traverse from 'traverse';
 
 export class TrackById {
 
   trackById(index: number, item: { id: string }) {
-    return item.id
+    return item.id;
   }
 
 }
@@ -16,21 +16,21 @@ export class ErrorMessageProvider {
 
     switch (errorName) {
       case 'required':
-        return 'You must enter a value'
+        return 'You must enter a value';
       case 'minlength':
-        return `'Must be at least ${error.requiredLength} character long`
+        return `'Must be at least ${error.requiredLength} character long`;
       case 'maxlength':
-        return `Must be at most ${error.requiredLength} character long`
+        return `Must be at most ${error.requiredLength} character long`;
       case 'email':
-        return 'Must be a valid email'
+        return 'Must be a valid email';
       case 'noSpace':
-        return 'Must not contain space'
+        return 'Must not contain space';
       case 'uppercaseOnly':
-        return 'Must only contain uppercase letters'
+        return 'Must only contain uppercase letters';
       case 'lettersOnly':
-        return 'Must only contain letters'
+        return 'Must only contain letters';
       default:
-        return ''
+        return '';
     }
   }
 }
@@ -38,19 +38,18 @@ export class ErrorMessageProvider {
 export function cleanupObject(obj) {
   return traverse(obj).map(function (e) {
     // if e is falsy, or is an empty object, we delete if, exept for zero
-    if ((!e || Object.keys(e).length === 0 && e.constructor === Object) && e != 0) {
-      return void this.delete(false)
+    if ((!e || Object.keys(e).length === 0 && e.constructor === Object) && e !== 0) {
+      return void this.delete(false);
     }
 
-    return e
-  })
+    return e;
+  });
 }
 
 export function replaceInObject(obj, target, repl) {
   return traverse(obj).map(function (e) {
-    if (e === target)
-      this.update(repl, false)
-  })
+    if (e === target) {
+      this.update(repl, false);
+    }
+  });
 }
-
-

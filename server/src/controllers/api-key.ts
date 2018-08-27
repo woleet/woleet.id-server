@@ -25,8 +25,9 @@ export async function getAPIKeyById(id: string): Promise<InternalAPIKeyObject> {
 
   const apiKey = await APIKey.getById(id);
 
-  if (!apiKey)
+  if (!apiKey) {
     throw new NotFoundAPIKeyError();
+  }
 
   debug('Got apiKey');
   return apiKey.toJSON();
@@ -41,8 +42,9 @@ export async function deleteAPIKey(id: string): Promise<InternalAPIKeyObject> {
 
   const apiKey = await APIKey.delete(id);
 
-  if (!apiKey)
+  if (!apiKey) {
     throw new NotFoundAPIKeyError();
+  }
 
   return apiKey.toJSON();
 }

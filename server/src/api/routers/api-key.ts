@@ -1,8 +1,8 @@
-import * as Router from "koa-router";
+import * as Router from 'koa-router';
 
 import { validate } from '../schemas';
 import { createAPIKey, updateAPIKey, getAPIKeyById, getAllAPIKeys, deleteAPIKey } from '../../controllers/api-key';
-import { serialiseApiKey } from "../serialize/api-key";
+import { serialiseApiKey } from '../serialize/api-key';
 
 const vid = validate.param('id', 'uuid');
 
@@ -31,7 +31,7 @@ router.post('/', validate.body('createApiKey'), async function (ctx) {
  *  operationId: getAPIKeyList
  */
 router.get('/list', async function (ctx) {
-  const full = (ctx.query.full || '').toLowerCase() == 'true';
+  const full = (ctx.query.full || '').toLowerCase() === 'true';
   const users = await getAllAPIKeys(full);
   ctx.body = users.map(serialiseApiKey);
 });

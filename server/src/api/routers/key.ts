@@ -1,10 +1,10 @@
-import { NotImplemented } from "http-errors";
+import { NotImplemented } from 'http-errors';
 import { validate } from '../schemas';
-import * as Router from "koa-router";
+import * as Router from 'koa-router';
 
 import * as Debug from 'debug';
-import { getKeyById, createKey, updateKey, getAllKeysOfUser, deleteKey, exportKey } from "../../controllers/key";
-import { serialiseKey } from "../serialize/key";
+import { getKeyById, createKey, updateKey, getAllKeysOfUser, deleteKey, exportKey } from '../../controllers/key';
+import { serialiseKey } from '../serialize/key';
 const debug = Debug('id:api:key');
 
 const vkid = validate.param('id', 'uuid');
@@ -38,7 +38,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
  */
 router.get('/user/:userId/key/list', vuid, async function (ctx) {
   const { userId } = ctx.params;
-  const full = (ctx.query.full || '').toLowerCase() == 'true';
+  const full = (ctx.query.full || '').toLowerCase() === 'true';
   const keys = await getAllKeysOfUser(userId, full);
   ctx.body = keys.map(serialiseKey);
 });

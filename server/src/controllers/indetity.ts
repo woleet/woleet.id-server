@@ -1,26 +1,28 @@
-import * as crypto from "crypto";
-import { Key, User } from "../database";
-import { NotFoundKeyError, BlockedKeyError } from "../errors";
+import * as crypto from 'crypto';
+import { Key, User } from '../database';
+import { NotFoundKeyError, BlockedKeyError } from '../errors';
 
 import * as message from 'bitcoinjs-message';
-import { serializeIdentity } from "../api/serialize/identity";
+import { serializeIdentity } from '../api/serialize/identity';
 
-const serverBase = 'http://localhost'
+const serverBase = 'http://localhost';
 
 export async function getIdentity(leftData: string, pubKey: string) {
 
   const key = await Key.getByPubKey(pubKey, undefined, true);
 
-  if (!key)
+  if (!key) {
     throw new NotFoundKeyError();
+  }
 
   // A blocked key cannot sign
-  if (key.getDataValue('status') === 'blocked')
+  if (key.getDataValue('status') === 'blocked') {
     throw new BlockedKeyError();
+  }
 
   const identity = key.getDataValue('user');
 
-  console.log('associated identity', { identity })
+  console.log('associated identity', { identity });
 
   const rightData = crypto.randomBytes(32).toString('hex');
 
@@ -30,5 +32,5 @@ export async function getIdentity(leftData: string, pubKey: string) {
     rightData,
     signature: sig.toString('base64'),
     identity: serializeIdentity(identity, true)
-  }
+  };
 }
