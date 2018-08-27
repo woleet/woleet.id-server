@@ -5,7 +5,7 @@
       <br>
     </div>
     <div *ngIf="formOpened">
-      <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="user.id"></key-card-create>
+      <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="userId"></key-card-create>
     </div>
     <div *ngFor="let key of keys; trackBy: trackById;">
       <br>
@@ -18,7 +18,7 @@
       <button mat-raised-button color="primary" (click)="formOpened=true">CREATE ONE</button>
     </mat-card>
     <div *ngIf="formOpened">
-      <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="user.id"></key-card-create>
+      <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="userId"></key-card-create>
     </div>
   </ng-template>
 </div>

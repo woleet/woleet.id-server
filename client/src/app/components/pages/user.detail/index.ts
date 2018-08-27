@@ -9,14 +9,15 @@ import { TrackById } from '../../util';
 })
 export class UserDetailPageComponent extends TrackById implements OnInit {
 
-  user$: Promise<ApiUserObject>;
+  userId = null;
 
   keys$: Promise<ApiKeyObject[]>;
 
   formOpened = false;
 
-  constructor(private keyService: KeyService, private route: ActivatedRoute, private router: Router) {
+  constructor(private keyService: KeyService, private route: ActivatedRoute) {
     super();
+    this.userId = this.route.snapshot.params.id;
   }
 
   ngOnInit() {
@@ -24,11 +25,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   }
 
   refreshKeyList() {
-    this.keys$ = this.keyService.getByUser(this.route.snapshot.params.id);
-  }
-
-  userDeleted(user) {
-    this.router.navigate(['users']);
+    this.keys$ = this.keyService.getByUser(this.userId);
   }
 
 }
