@@ -24,6 +24,10 @@ export class NavBarComponent {
     return this.router.url;
   }
 
+  commonName() {
+    return this.auth.isAuthenticated() && this.auth.getUser().identity.commonName;
+  }
+
   isAdmin() {
     return this.auth.isAdmin();
   }
