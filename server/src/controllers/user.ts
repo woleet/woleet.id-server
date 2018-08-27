@@ -13,7 +13,7 @@ async function serializeAndEncodePassword(password: string) {
     passwordHash: key.hash,
     passwordSalt: key.salt,
     passwordItrs: key.iterations
-  }
+  };
 }
 
 function serializeIdentity(identity: APIIdentityObject): InternalIdentityObject {
@@ -24,7 +24,7 @@ function serializeIdentity(identity: APIIdentityObject): InternalIdentityObject 
     x500Locality: identity.locality,
     x500Country: identity.country,
     x500UserId: identity.userId
-  }
+  };
 }
 
 export async function createUser(user: ApiPostUserObject): Promise<InternalUserObject> {
@@ -44,7 +44,7 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
   const userId: string = newUser.getDataValue('id');
   debug('Created user', newUser.toJSON());
 
-  const key = await createKey(userId, { name: 'default' })
+  const key = await createKey(userId, { name: 'default' });
 
   debug('Created user\'s default key', key);
   newUser.setDataValue('defaultKeyId', key.id);
@@ -81,8 +81,9 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
 
   const user = await User.update(id, update);
 
-  if (!user)
+  if (!user) {
     throw new NotFoundUserError();
+  }
 
   debug('Updated user');
   return user.toJSON();
@@ -93,8 +94,9 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
 
   const user = await User.getById(id);
 
-  if (!user)
+  if (!user) {
     throw new NotFoundUserError();
+  }
 
   debug('Got user');
   return user.toJSON();
@@ -110,8 +112,9 @@ export async function deleteUser(id: string): Promise<InternalUserObject> {
 
   const user = await User.delete(id);
 
-  if (!user)
+  if (!user) {
     throw new NotFoundUserError();
+  }
 
   debug('Deleted user');
   return user.toJSON();

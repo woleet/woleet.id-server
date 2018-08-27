@@ -1,5 +1,5 @@
-import * as Router from "koa-router";
-import { serialiseUserDTO } from "../serialize/userDTO";
+import * as Router from 'koa-router';
+import { serialiseUserDTO } from '../serialize/userDTO';
 
 
 /**
@@ -17,7 +17,7 @@ const router = new Router();
  *  operationId: getUserInfo
  */
 router.get('/info', async function (ctx) {
-  ctx.body = serialiseUserDTO(ctx.session.user.toJSON())
+  ctx.body = serialiseUserDTO(ctx.session.user.toJSON());
 });
 
 export { router };

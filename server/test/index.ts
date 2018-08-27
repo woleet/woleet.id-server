@@ -5,7 +5,7 @@
 import 'mocha';
 import 'chai-http';
 
-import * as chai from 'chai'
+import * as chai from 'chai';
 import { expect } from 'chai';
 
 chai.use(require('chai-http'));
@@ -18,18 +18,18 @@ const app = apps.values()[0];
 let server = null;
 
 before((done) => {
-  server = app.listen(3000, () => console.info('Opened server'));
+  server = app.listen(3000, () => console.log('Opened server'));
   setTimeout(done, 1000);
 });
 
 after((done) => {
   server.close((() => {
-    console.info('Closed server');
+    console.log('Closed server');
     done();
   }));
 });
 
-export const request = () => chai.request(server)
+export const request = () => chai.request(server);
 
 const user = 'test';
 const pass = 'pass';
@@ -45,14 +45,14 @@ export function assertError(done: () => any, status: number, message?: string) {
     res.body.should.have.property('status').that.equal(status);
     const messageTest = res.body.should.have.property('message');
     if (message) {
-      messageTest.that.equal(message)
+      messageTest.that.equal(message);
     }
     done();
-  }
+  };
 }
 
 export function exclisiveInclude(input: Object, expectedKeys: string[]) {
   for (const key of Object.keys(input)) {
-    expect(expectedKeys, `Unepected property "${key}"`).to.include(key)
+    expect(expectedKeys, `Unepected property "${key}"`).to.include(key);
   }
 }

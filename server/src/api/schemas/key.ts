@@ -10,4 +10,4 @@ const createKey = Joi.object().keys({
 
 const updateKey = createKey;
 
-export { createKey, updateKey }
+export { createKey, updateKey };

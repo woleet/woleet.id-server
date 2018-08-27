@@ -10,24 +10,27 @@ import * as traverse from 'traverse';
 
 function noSpaceValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
-  if (str && str.indexOf(' ') != -1)
-    return ({ noSpace: true })
+  if (str && str.indexOf(' ') !== -1) {
+    return ({ noSpace: true });
+  }
 
   return null;
 }
 
 function lettersOnlyValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
-  if (str && !/^[a-z]+$/i.test(str))
-    return ({ lettersOnly: true })
+  if (str && !/^[a-z]+$/i.test(str)) {
+    return ({ lettersOnly: true });
+  }
 
   return null;
 }
 
 function uppercaseOnlyValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
-  if (str && !/^[A-Z]$/.test(str))
-    return ({ uppercaseOnly: true })
+  if (str && !/^[A-Z]$/.test(str)) {
+    return ({ uppercaseOnly: true });
+  }
 
   return null;
 }
@@ -66,26 +69,26 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
         country: new FormControl(user.identity.country, [lettersOnlyValidator, Validators.minLength(2), Validators.maxLength(2)]),
         userId: new FormControl(user.identity.userId, [noSpaceValidator, Validators.minLength(3), Validators.maxLength(250)])
       }
-    }
+    };
   }
 
   private getFormObject() {
     // get "value" attribute of each form control attibutes recursively
     // deleting falsy ones
     const user = traverse(this.user).map(function (e) {
-      if (e instanceof FormControl)
-        return e.value === null ? this.delete(false) : e.value
+      if (e instanceof FormControl) {
+        return e.value === null ? this.delete(false) : e.value;
+      }
     });
 
     return user;
   }
 
   async ngOnInit() {
-    if (this.mode == 'edit') {
+    if (this.mode === 'edit') {
       this.originalUser = await this.service.getById(this.route.snapshot.params.id);
       this.user = this.setFormControl(copy<ApiUserObject>(this.originalUser));
     } else {
-      Number.isInteger
       this.user = this.setFormControl({ role: 'user', identity: {} });
     }
   }
@@ -96,12 +99,12 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
     this.helper = null;
 
-    const cleaned = replaceInObject(user, "", null);
+    const cleaned = replaceInObject(user, '', null);
 
-    console.log('CLERAND', user, cleaned)
+    console.log('CLERAND', user, cleaned);
 
     let promise;
-    if (this.mode == 'edit') {
+    if (this.mode === 'edit') {
       promise = this.service.update(this.originalUser.id, cleaned);
     } else {
       promise = this.service.create(cleaned);
@@ -112,7 +115,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
       .catch((err: HttpErrorResponse) => {
         console.error('err', err);
         this.helper = err.error.message;
-      })
+      });
 
   }
 

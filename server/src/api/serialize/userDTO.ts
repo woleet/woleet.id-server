@@ -1,4 +1,4 @@
-import { serializeIdentity } from "./identity";
+import { serializeIdentity } from './identity';
 
 export function serialiseUserDTO(user: InternalUserObject): ApiUserDTOObject {
   return {

@@ -1,15 +1,15 @@
-import { router as auth } from "./routers/authentication";
-import { router as apiKey } from "./routers/api-key";
-import { router as info } from "./routers/info";
-import { router as user } from "./routers/user";
-import { router as key } from "./routers/key";
+import { router as auth } from './routers/authentication';
+import { router as apiKey } from './routers/api-key';
+import { router as info } from './routers/info';
+import { router as user } from './routers/user';
+import { router as key } from './routers/key';
 
-import { router as sign } from "./routers/sign";
-import { router as identity } from "./routers/identity";
+import { router as sign } from './routers/sign';
+import { router as identity } from './routers/identity';
 
-import { user as userAuth, admin as adminAuth, session, apiKeyAuth } from "./authentication"
+import { user as userAuth, admin as adminAuth, session, apiKeyAuth } from './authentication';
 
-import * as Router from "koa-router";
+import * as Router from 'koa-router';
 
 import * as bodyParser from 'koa-bodyparser';
 

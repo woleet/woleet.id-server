@@ -1,6 +1,6 @@
-import { Key } from "../database";
-import { NotFoundKeyError } from "../errors";
-import { Mnemonic, HDPrivateKey, KeyRing } from "bcoin";
+import { Key } from '../database';
+import { NotFoundKeyError } from '../errors';
+import { Mnemonic, HDPrivateKey, KeyRing } from 'bcoin';
 
 /**
  * Key
@@ -21,7 +21,7 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
 
   // Create an HD private key
   const master = HDPrivateKey.fromMnemonic(mnemonic);
-  const xkey = master.derivePath("m/44'/0'/0'");
+  const xkey = master.derivePath('m/44\'/0\'/0\'');
 
   const ring = KeyRing.fromPrivate(xkey.privateKey, true);
 
@@ -45,8 +45,9 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
 export async function updateKey(id: string, attrs: ApiPutKeyObject) {
   const key = await Key.update(id, attrs);
 
-  if (!key)
+  if (!key) {
     throw new NotFoundKeyError();
+  }
 
   return key.toJSON();
 }
@@ -54,8 +55,9 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
 export async function getKeyById(id: string): Promise<InternalKeyObject> {
   const key = await Key.getById(id);
 
-  if (!key)
+  if (!key) {
     throw new NotFoundKeyError();
+  }
 
   return key.toJSON();
 }
@@ -63,13 +65,14 @@ export async function getKeyById(id: string): Promise<InternalKeyObject> {
 export async function exportKey(id: string): Promise<string> {
   const key = await Key.getById(id);
 
-  if (!key)
+  if (!key) {
     throw new NotFoundKeyError();
+  }
 
   // Get key phrase phrase
   const mnemonic = Mnemonic.fromEntropy(Buffer.from(key.getDataValue('mnemonicEntropy'), 'hex'));
 
-  return mnemonic.getPhrase()
+  return mnemonic.getPhrase();
 }
 
 export async function getAllKeys(): Promise<InternalKeyObject[]> {
@@ -86,8 +89,9 @@ export async function deleteKey(id: string): Promise<InternalKeyObject> {
 
   const key = await Key.delete(id);
 
-  if (!key)
+  if (!key) {
     throw new NotFoundKeyError();
+  }
 
   return key.toJSON();
 }

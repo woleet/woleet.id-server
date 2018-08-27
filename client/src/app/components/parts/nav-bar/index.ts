@@ -17,15 +17,15 @@ export class NavBarComponent {
   }
 
   logout() {
-    this.auth.logout()
+    this.auth.logout();
   }
 
   url() {
-    return this.router.url
+    return this.router.url;
   }
 
   isAdmin() {
-    return this.auth.isAdmin()
+    return this.auth.isAdmin();
   }
 
 }

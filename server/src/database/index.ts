@@ -10,7 +10,6 @@ User.model.hasMany(Key.model, { onDelete: 'cascade', hooks: true });
 
 User.model.belongsTo(Key.model, { as: 'defaultKey', constraints: false, hooks: true });
 
-User.model.removeAttribute
 Key.model.belongsTo(User.model, { foreignKey: { allowNull: false } });
 
 Key.model.beforeDelete(async (key) => {
@@ -20,15 +19,16 @@ Key.model.beforeDelete(async (key) => {
   const where = { defaultKeyId: keyId };
   const user = await User.model.findById(userId, { where });
 
-  if (!user)
+  if (!user) {
     return;
+  }
 
   user.setDataValue('defaultKeyId', null);
 
   debug('updated user', user.toJSON());
 
   await user.save();
-})
+});
 
 export { User, Key, APIKey };
 

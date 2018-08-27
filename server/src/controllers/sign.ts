@@ -1,9 +1,9 @@
-import { Key, User } from "../database";
-import { NotFoundUserError, NotFoundKeyError, BlockedUserError, BlockedKeyError } from "../errors";
+import { Key, User } from '../database';
+import { NotFoundUserError, NotFoundKeyError, BlockedUserError, BlockedKeyError } from '../errors';
 
 import * as message from 'bitcoinjs-message';
 
-const serverBase = 'http://localhost'
+const serverBase = 'http://localhost';
 
 export async function sign(hashToSign, pubKey, userId, customUserId) {
   let user: SequelizeUserObject;
@@ -15,26 +15,30 @@ export async function sign(hashToSign, pubKey, userId, customUserId) {
     throw new Error('Must provide either "userId" or "customUserId"');
   }
 
-  if (!user)
-    throw new NotFoundUserError()
+  if (!user) {
+    throw new NotFoundUserError();
+  }
 
   // A blocked user cannot sign
-  if (user.getDataValue('status') === 'blocked')
-    throw new BlockedUserError()
+  if (user.getDataValue('status') === 'blocked') {
+    throw new BlockedUserError();
+  }
 
   let key: SequelizeKeyObject;
   if (pubKey) {
     key = await Key.getByPubKey(pubKey, user.getDataValue('id'));
   } else if (user.getDataValue('defaultKeyId')) {
-    key = await Key.getById(user.getDataValue('defaultKeyId'))
+    key = await Key.getById(user.getDataValue('defaultKeyId'));
   }
 
-  if (!key)
-    throw new NotFoundKeyError()
+  if (!key) {
+    throw new NotFoundKeyError();
+  }
 
   // A blocked key cannot sign
-  if (key.getDataValue('status') === 'blocked')
-    throw new BlockedKeyError()
+  if (key.getDataValue('status') === 'blocked') {
+    throw new BlockedKeyError();
+  }
 
   const sig = message.sign(hashToSign, Buffer.from(key.getDataValue('privateKey'), 'hex'));
 

@@ -1,7 +1,7 @@
-import { request, assertError } from '.'
+import { request, assertError } from '.';
 
 describe('keys tests', () => {
-  const validKey = { "name": "key1" };
+  const validKey = { 'name': 'key1' };
 
   describe('/user/${userId}/key (post)', () => {
     it('should return 400 on invalid uuid', (done) => {

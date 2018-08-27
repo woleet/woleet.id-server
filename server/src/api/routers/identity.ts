@@ -1,6 +1,6 @@
-import * as Router from "koa-router";
+import * as Router from 'koa-router';
 import { BadRequest } from 'http-errors';
-import { getIdentity } from "../../controllers/indetity";
+import { getIdentity } from '../../controllers/indetity';
 
 
 /**
@@ -20,11 +20,13 @@ const router = new Router();
 router.get('/identity', async function (ctx) {
   const { pubKey, leftData } = ctx.query;
 
-  if (!pubKey)
-    throw new BadRequest('Missing mandatory "pubKey" parameter')
+  if (!pubKey) {
+    throw new BadRequest('Missing mandatory "pubKey" parameter');
+  }
 
-  if (!leftData)
-    throw new BadRequest('Missing mandatory "leftData" parameter')
+  if (!leftData) {
+    throw new BadRequest('Missing mandatory "leftData" parameter');
+  }
 
   ctx.body = await getIdentity(leftData, pubKey);
 });

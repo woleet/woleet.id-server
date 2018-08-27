@@ -6,5 +6,5 @@ export function serializeIdentity(user: InternalUserObject, hideUserId = false) 
     locality: user.x500Locality,
     country: user.x500Country,
     userId: hideUserId ? undefined : user.x500UserId
-  }
+  };
 }

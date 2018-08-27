@@ -9,11 +9,13 @@ let i = 100;
 export class UserGuardService implements CanActivate {
   constructor(public auth: AuthService, public router: Router) { }
   canActivate(): boolean {
-    if (this.auth.isAuthenticated())
+    if (this.auth.isAuthenticated()) {
       return true;
+    }
 
-    if (!i--)
+    if (!i--) {
       throw new Error('Redirect loop detected');
+    }
 
     this.router.navigate(['login']);
     return false;
@@ -24,11 +26,13 @@ export class UserGuardService implements CanActivate {
 export class AdminGuardService implements CanActivate {
   constructor(public auth: AuthService, public router: Router) { }
   canActivate(): boolean {
-    if (this.auth.isAuthenticated() && this.auth.isAdmin())
+    if (this.auth.isAuthenticated() && this.auth.isAdmin()) {
       return true;
+    }
 
-    if (!i--)
+    if (!i--) {
       throw new Error('Redirect loop detected');
+    }
 
     this.router.navigate([mainRoute]);
     return false;
@@ -40,11 +44,13 @@ export class AdminGuardService implements CanActivate {
 export class AnonymousGuardService implements CanActivate {
   constructor(public auth: AuthService, public router: Router) { }
   canActivate(): boolean {
-    if (!this.auth.isAuthenticated())
+    if (!this.auth.isAuthenticated()) {
       return true;
+    }
 
-    if (!i--)
+    if (!i--) {
       throw new Error('Redirect loop detected');
+    }
 
     this.router.navigate([mainRoute]);
     return false;

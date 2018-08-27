@@ -1,4 +1,4 @@
-import { request, token } from '.'
+import { request, token } from '.';
 
 describe('/info', () => {
 

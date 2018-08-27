@@ -1,4 +1,4 @@
-import { request, uuid, assertError, exclisiveInclude } from '.'
+import { request, uuid, assertError, exclisiveInclude } from '.';
 
 describe('/user', () => {
   describe('/user (get)', () => {
@@ -29,11 +29,11 @@ describe('/user', () => {
     const userProperties = ['id', 'type', 'status', 'lastLogin', 'firstName', 'lastName', 'username', 'email', 'updatedAt', 'createdAt'];
 
     const user = {
-      firstName: "tester",
-      lastName: "example",
-      username: "test",
-      password: "pass"
-    }
+      firstName: 'tester',
+      lastName: 'example',
+      username: 'test',
+      password: 'pass'
+    };
 
     const email = 'tester@example.com';
 
