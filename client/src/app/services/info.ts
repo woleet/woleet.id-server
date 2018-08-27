@@ -8,7 +8,7 @@ export class InfoService {
   constructor(private http: HttpClient) { }
 
   getInfo() {
-    return this.http.get<ApiUserDTOObject>(`${serverURL}/info/`).toPromise()
+    return this.http.get<ApiUserDTOObject>(`${serverURL}/info/`).toPromise();
   }
 
 }

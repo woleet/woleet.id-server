@@ -76,7 +76,7 @@
         <input matInput type="text" placeholder="userId" [formControl]="user.identity.userId" (focus)="user.identity.userId.focused = true"
           (focusout)="user.identity.userId.focused = false">
         <mat-error *ngIf="user.identity.userId.invalid">{{ getErrorMessage(user.identity.userId) }}</mat-error>
-        <mat-hint *ngIf="user.identity.userId.focused">An external user identifier, it can be used to select a user when esking for a signature, it must be unique.</mat-hint>
+        <mat-hint *ngIf="user.identity.userId.focused">An external user identifier, it can be used to select a user when asking for a signature, it must be unique.</mat-hint>
       </mat-form-field>
     </div>
     <br>

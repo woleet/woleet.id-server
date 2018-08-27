@@ -12,11 +12,11 @@ export class ForbiddenInterceptor implements HttpInterceptor {
       .pipe(catchError((err): Observable<any> => {
         console.log('Status', err.status);
         if (err instanceof HttpErrorResponse && err.status === 403) {
-          this.router.navigate(['main'])
+          this.router.navigate(['main']);
           return of(false);
         }
         return next.handle(request);
-      }))
+      }));
   }
 }
 

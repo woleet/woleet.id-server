@@ -40,7 +40,7 @@ export class APIKeyCardComponent {
 
   reveal() {
     this.displayApiKey = true;
-    setTimeout(() => this.displayApiKey = false, 5 * 1000)
+    setTimeout(() => this.displayApiKey = false, 5 * 1000);
   }
 
 }

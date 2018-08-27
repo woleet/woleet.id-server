@@ -1,4 +1,4 @@
-import { serializeIdentity } from "./identity";
+import { serializeIdentity } from './identity';
 
 export function serialiseUser(user: InternalUserObject): ApiUserObject {
   const dates = {

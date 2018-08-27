@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -35,7 +35,7 @@ import { AboutPageComponent } from '@pages/about';
 import { SettingsPageComponent } from '@pages/settings';
 import { UserCreatePageComponent } from '@pages/user.create';
 import { UserEditPageComponent } from '@pages/user.edit';
-import { UsersPageComponent } from '@pages/users';
+import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 
 // Services
@@ -62,7 +62,7 @@ import { ConfigService } from '@services/config';
     SettingsPageComponent,
     APIKeysPageComponent,
     UserPageComponent,
-    UsersPageComponent,
+    UserListPageComponent,
     UserFormComponent,
     UserCreatePageComponent,
     UserEditPageComponent,

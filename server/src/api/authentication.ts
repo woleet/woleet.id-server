@@ -8,7 +8,7 @@ export async function session(ctx: Context, next) {
   const sid = ctx.cookies.get('session');
   ctx.session = (sid && (await sessionStore.get(sid))) || null;
   return next();
-};
+}
 
 export async function apiKeyAuth(ctx: Context, next) {
 
@@ -29,21 +29,24 @@ export async function apiKeyAuth(ctx: Context, next) {
   }
 
   throw new Unauthorized('Invalid or missing API key');
-};
+}
 
 export async function user(ctx: Context, next) {
-  if (!ctx.session)
+  if (!ctx.session) {
     throw new Unauthorized;
+  }
 
   return next();
-};
+}
 
 export async function admin(ctx: Context, next) {
-  if (!ctx.session)
+  if (!ctx.session) {
     throw new Unauthorized;
+  }
 
-  if (ctx.session.user.getDataValue('username') != 'admin')
+  if (ctx.session.user.getDataValue('username') !== 'admin') {
     throw new Forbidden('Invalid user level');
+  }
 
   return next();
-};
+}

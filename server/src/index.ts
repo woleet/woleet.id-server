@@ -24,8 +24,9 @@ definitions.map(({ name, port, router }) => {
   const server = app.listen(port);
 
   server.on('error', (error: NodeJS.ErrnoException) => {
-    if (error.syscall !== 'listen')
+    if (error.syscall !== 'listen') {
       throw error;
+    }
     const bind = `[${name}] on port ${port}`;
     switch (error.code) {
       case 'EACCES':

@@ -10,13 +10,13 @@ const APIKeyModel = {
   name: { type: STRING, allowNull: false },
   value: { type: STRING, unique: true, allowNull: false },
   lastUsed: { type: DATE, defaultValue: null }
-}
+};
 
 class APIKeyAccess extends AbstractInstanceAccess<InternalAPIKeyObject, ApiFullPostAPIKeyObject> {
 
   constructor() {
-    super(sequelize)
-    this.define('apikKey', APIKeyModel, { paranoid: true })
+    super(sequelize);
+    this.define('apikKey', APIKeyModel, { paranoid: true });
   }
 
   handleError(err: any) { }

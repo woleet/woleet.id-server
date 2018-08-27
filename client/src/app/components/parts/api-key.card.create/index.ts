@@ -39,13 +39,13 @@ export class APIKeyCreateCardComponent {
 
     switch (err) {
       case 'required':
-        return 'You must enter a value'
+        return 'You must enter a value';
       case 'minlength':
-        return 'Must be 3 character min'
+        return 'Must be 3 character min';
       case 'maxlength':
-        return 'Must be 15 character max'
+        return 'Must be 15 character max';
       default:
-        return ''
+        return '';
     }
 
   }

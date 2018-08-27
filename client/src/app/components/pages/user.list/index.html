@@ -5,8 +5,8 @@
 <br>
 <div *ngIf="(users$ | async) as users; else loading">
   <div *ngIf="users.length; else noUser">
-    <div *ngFor="let user of users">
-      <app-user-card [user]="user" [modes]="['detail']"></app-user-card>
+    <div *ngFor="let user of users; trackBy: trackById;">
+      <app-user-card [user]="user" [modes]="['detail', 'delete', 'edit']" (delete)="refreshUserList()" ></app-user-card>
       <br>
     </div>
   </div>
