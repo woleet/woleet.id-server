@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 display_usage() {
   echo "usage: $0 [start|stop|build] [local|master|prop]"
 }
