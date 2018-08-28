@@ -1,12 +1,10 @@
 <mat-card fxLayout="row" fxLayoutAlign="space-between start">
   <div fxLayout="column">
     <div>
-      <span>Name</span>&nbsp;
-      <span>{{ apiToken.name }}</span>
+      <strong>{{ apiToken.name }}</strong>
     </div>
-    <div>
-      <span>Created&nbsp;at</span>&nbsp;&nbsp;
-      <span>{{ apiToken.createdAt | date }}</span>
+    <div class="text-gray text-slim">
+      <span>Created&nbsp;at</span>&nbsp;<span>{{ apiToken.createdAt | date }}</span>
     </div>
   </div>
   <div fxLayout="column">

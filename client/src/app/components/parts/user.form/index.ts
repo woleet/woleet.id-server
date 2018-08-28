@@ -101,8 +101,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
     const cleaned = replaceInObject(user, '', null);
 
-    console.log('CLERAND', user, cleaned);
-
     let promise;
     if (this.mode === 'edit') {
       promise = this.service.update(this.originalUser.id, cleaned);
@@ -113,7 +111,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
     promise
       .then(() => this.router.navigate(['/users']))
       .catch((err: HttpErrorResponse) => {
-        console.error('err', err);
+        console.error('Caught', err);
         this.helper = err.error.message;
       });
 

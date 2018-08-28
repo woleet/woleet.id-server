@@ -2,7 +2,7 @@
   <form role="form" autoComplete="off" (submit)="submit()" #f="ngForm">
     <div>
       <mat-form-field class="w-100">
-        <mat-select type="text" [(ngModel)]="user.role" name="role" placeholder="User role">
+        <mat-select type="text" [(ngModel)]="user.role" name="role" placeholder="Role">
           <mat-option value="user">user</mat-option>
           <mat-option value="admin">admin</mat-option>
         </mat-select>
@@ -51,7 +51,8 @@
         <input matInput type="text" placeholder="Organizational Unit" [formControl]="user.identity.organizationalUnit" (focus)="user.identity.organizationalUnit.focused = true"
           (focusout)="user.identity.organizationalUnit.focused = false">
         <mat-error *ngIf="user.identity.organizationalUnit.invalid">{{ getErrorMessage(user.identity.organizationalUnit)
-          }}</mat-error>
+          }}
+        </mat-error>
         <!-- <mat-hint *ngIf="user.identity.organizationalUnit.focused"></mat-hint> -->
       </mat-form-field>
     </div>
@@ -76,17 +77,19 @@
         <input matInput type="text" placeholder="userId" [formControl]="user.identity.userId" (focus)="user.identity.userId.focused = true"
           (focusout)="user.identity.userId.focused = false">
         <mat-error *ngIf="user.identity.userId.invalid">{{ getErrorMessage(user.identity.userId) }}</mat-error>
-        <mat-hint *ngIf="user.identity.userId.focused">An external user identifier, it can be used to select a user when asking for a signature, it must be unique.</mat-hint>
+        <mat-hint *ngIf="user.identity.userId.focused">An external user identifier, it can be used to select a user when
+          asking for a signature, it must be unique.</mat-hint>
       </mat-form-field>
     </div>
     <br>
     <div class="helper" *ngIf="helper">
-      <div>
+      <mat-card class="error-card">
         {{ helper }}
-      </div>
+      </mat-card>
       <br>
     </div>
-    <button mat-raised-button color="primary" class="w-100" type="submit" [disabled]="f.invalid || !isValid()"> {{ mode.toUpperCase() }}
+    <button mat-raised-button color="primary" class="w-100" type="submit" [disabled]="f.invalid || !isValid()"> {{ mode.toUpperCase()
+      }}
     </button>
   </form>
 </div>

@@ -9,15 +9,6 @@ body {
   background-color: #fafafa;
 }
 
-$primary-color-dark:   #1976D2;
-$primary-color:        #2196F3;
-$primary-color-light:  #BBDEFB;
-$primary-color-text:   #FFFFFF;
-$accent-color:         #448AFF;
-$primary-text-color:   #212121;
-$secondary-text-color: #757575;
-$divider-color:        #BDBDBD;
-
 $light-primary: mat-palette($mat-blue);
 $light-accent: mat-palette($mat-yellow, 400);
 
@@ -32,6 +23,19 @@ $light-theme: mat-light-theme($light-primary, $light-accent);
 .mw-500 {
   max-width: 500px;
   margin: auto;
+}
+
+.error-card {
+  @include mat-elevation(2);
+  color: mat-color($mat-red, 300);
+}
+
+.text-gray {
+  color: mat-color($mat-gray, 500);
+}
+
+.text-slim {
+  font-weight: lighter;
 }
 
 .clickable {
