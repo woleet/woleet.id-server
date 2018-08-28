@@ -1,4 +1,4 @@
-export function serialiseApiKey(key: InternalAPIKeyObject): ApiAPIKeyObject {
+export function serialiseapiToken(key: InternalAPITokenObject): ApiAPITokenObject {
   const dates = {
     createdAt: +key.createdAt,
     updatedAt: +key.updatedAt,

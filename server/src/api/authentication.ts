@@ -1,6 +1,6 @@
 import { Unauthorized, Forbidden } from 'http-errors';
 import { store as sessionStore } from '../controllers/store.session';
-import { store as apiKeyStore } from '../controllers/store.api-key';
+import { store as apiTokenStore } from '../controllers/store.api-token';
 import { Context } from 'koa';
 
 export async function session(ctx: Context, next) {
@@ -10,7 +10,7 @@ export async function session(ctx: Context, next) {
   return next();
 }
 
-export async function apiKeyAuth(ctx: Context, next) {
+export async function apiTokenAuth(ctx: Context, next) {
 
   const { header } = ctx.request;
 
@@ -18,17 +18,17 @@ export async function apiKeyAuth(ctx: Context, next) {
   if (header && header.authorization) {
     const parts = header.authorization.split(' ');
 
-    // Check if apiKey exists
+    // Check if apiToken exists
     if (parts.length === 2 && parts[0] === 'Bearer') {
-      const apiKey = await apiKeyStore.get(parts[1]);
+      const apiToken = await apiTokenStore.get(parts[1]);
 
-      if (apiKey && apiKey.status === 'active') {
+      if (apiToken && apiToken.status === 'active') {
         return next();
       }
     }
   }
 
-  throw new Unauthorized('Invalid or missing API key');
+  throw new Unauthorized('Invalid or missing API token');
 }
 
 export async function user(ctx: Context, next) {

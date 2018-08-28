@@ -15,7 +15,7 @@ export class KeyCreateCardComponent {
   reset = new EventEmitter;
 
   @Output()
-  create = new EventEmitter<ApiKeyObject>();
+  create = new EventEmitter<ApiTokenObject>();
 
   keyName = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
 
@@ -24,11 +24,11 @@ export class KeyCreateCardComponent {
   async createKey() {
     const name = this.keyName.value;
 
-    const newApiKey = await this.keyService.create(this.userId, { name });
+    const newapiToken = await this.keyService.create(this.userId, { name });
 
     this.keyName.reset();
     this.reset.emit();
-    this.create.emit(newApiKey);
+    this.create.emit(newapiToken);
   }
 
   cancelKey() {

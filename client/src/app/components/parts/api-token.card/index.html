@@ -1,0 +1,29 @@
+<mat-card fxLayout="row" fxLayoutAlign="space-between start">
+  <div fxLayout="column">
+    <div>
+      <span>Name</span>&nbsp;
+      <span>{{ apiToken.name }}</span>
+    </div>
+    <div>
+      <span>Created&nbsp;at</span>&nbsp;&nbsp;
+      <span>{{ apiToken.createdAt | date }}</span>
+    </div>
+  </div>
+  <div fxLayout="column">
+    <button mat-button color="warn" (click)="reveal()" *ngIf="!displayApiToken">REVEAL</button>
+    <pre *ngIf="displayApiToken" class="token-val"><code>{{ apiToken.value }}</code></pre>
+  </div>
+  <div fxLayout="column">
+    <div>
+      <button mat-icon-button color="warn">
+        <mat-icon matTooltip="Delete API token" aria-label="Delete token" (click)="deleteToken()">delete</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" *ngIf="apiToken.status !== 'blocked'">
+        <mat-icon matTooltip="Block API token" aria-label="Block token button" (click)="blockToken()">pause_circle_outline</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" *ngIf="apiToken.status === 'blocked'">
+        <mat-icon matTooltip="Unblock API token" aria-label="Unblock token button" (click)="unblockToken()">play_circle_outline</mat-icon>
+      </button>
+    </div>
+  </div>
+</mat-card>

@@ -4,7 +4,7 @@ import { STRING, ENUM, UUID, UUIDV4, DATE } from 'sequelize';
 import { AbstractInstanceAccess } from './abstract';
 import { sequelize } from '../sequelize';
 
-const APIKeyModel = {
+const APITokenModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   name: { type: STRING, allowNull: false },
@@ -12,15 +12,15 @@ const APIKeyModel = {
   lastUsed: { type: DATE, defaultValue: null }
 };
 
-class APIKeyAccess extends AbstractInstanceAccess<InternalAPIKeyObject, ApiFullPostAPIKeyObject> {
+class APITokenAccess extends AbstractInstanceAccess<InternalAPITokenObject, ApiFullPostAPITokenObject> {
 
   constructor() {
     super(sequelize);
-    this.define('apiKey', APIKeyModel, { paranoid: true });
+    this.define('apiToken', APITokenModel, { paranoid: true });
   }
 
   handleError(err: any) { }
 
 }
 
-export const APIKey = new APIKeyAccess();
+export const APIToken = new APITokenAccess();

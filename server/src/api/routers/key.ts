@@ -1,10 +1,10 @@
-import { NotImplemented } from 'http-errors';
-import { validate } from '../schemas';
+import {validate} from '../schemas';
 import * as Router from 'koa-router';
 
 import * as Debug from 'debug';
-import { getKeyById, createKey, updateKey, getAllKeysOfUser, deleteKey, exportKey } from '../../controllers/key';
-import { serialiseKey } from '../serialize/key';
+import {createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, updateKey} from '../../controllers/key';
+import {serialiseKey} from '../serialize/key';
+
 const debug = Debug('id:api:key');
 
 const vkid = validate.param('id', 'uuid');
@@ -27,7 +27,7 @@ const router = new Router();
 router.post('/user/:userId/key', vuid, validate.body('createKey'), async function (ctx) {
   const key: ApiPostKeyObject = ctx.request.body;
   debug('addkey', key);
-  const { userId } = ctx.params;
+  const {userId} = ctx.params;
   ctx.body = serialiseKey(await createKey(userId, key));
 });
 
@@ -37,7 +37,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
  *  operationId: getKeysOfUser
  */
 router.get('/user/:userId/key/list', vuid, async function (ctx) {
-  const { userId } = ctx.params;
+  const {userId} = ctx.params;
   const full = (ctx.query.full || '').toLowerCase() === 'true';
   const keys = await getAllKeysOfUser(userId, full);
   ctx.body = keys.map(serialiseKey);
@@ -49,9 +49,9 @@ router.get('/user/:userId/key/list', vuid, async function (ctx) {
  *  operationId: exportKey
  */
 router.get('/key/:id/export', vkid, async function (ctx) {
-  const { id } = ctx.params;
+  const {id} = ctx.params;
   const phrase = await exportKey(id);
-  ctx.body = { phrase };
+  ctx.body = {phrase};
 });
 
 /**
@@ -60,9 +60,9 @@ router.get('/key/:id/export', vkid, async function (ctx) {
  *  operationId: getKeyById
  */
 router.get('/key/:id', vkid, async function (ctx) {
-  const { id } = ctx.params;
-  const apiKey = await getKeyById(id);
-  ctx.body = serialiseKey(apiKey);
+  const {id} = ctx.params;
+  const apiToken = await getKeyById(id);
+  ctx.body = serialiseKey(apiToken);
 });
 
 /**
@@ -72,10 +72,10 @@ router.get('/key/:id', vkid, async function (ctx) {
  *  operationId: updateKey
  */
 router.put('/key/:id', vkid, validate.body('updateKey'), async function (ctx) {
-  const { id } = ctx.params;
+  const {id} = ctx.params;
   const update: ApiPutKeyObject = ctx.request.body;
-  const apiKey = await updateKey(id, update);
-  ctx.body = serialiseKey(apiKey);
+  const apiToken = await updateKey(id, update);
+  ctx.body = serialiseKey(apiToken);
 });
 
 /**
@@ -85,9 +85,9 @@ router.put('/key/:id', vkid, validate.body('updateKey'), async function (ctx) {
  *  operationId: deleteKey
  */
 router.delete('/key/:id', vkid, async function (ctx) {
-  const { id } = ctx.params;
+  const {id} = ctx.params;
   const key = await deleteKey(id);
   ctx.body = serialiseKey(key);
 });
 
-export { router };
+export {router};

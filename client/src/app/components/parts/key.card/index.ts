@@ -9,13 +9,13 @@ import { KeyService } from '@services/key';
 export class KeyCardComponent {
 
   @Input()
-  key: ApiKeyObject;
+  key: ApiTokenObject;
 
   @Output()
-  delete = new EventEmitter<ApiKeyObject>();
+  delete = new EventEmitter<ApiTokenObject>();
 
   @Output()
-  update = new EventEmitter<ApiKeyObject>();
+  update = new EventEmitter<ApiTokenObject>();
 
   constructor(private keyService: KeyService) { }
 

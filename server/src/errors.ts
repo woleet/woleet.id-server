@@ -20,9 +20,9 @@ export class NotFoundUserError extends NotFoundDBObjectError {
   name = 'NotFoundUserError';
 }
 
-export class NotFoundAPIKeyError extends NotFoundDBObjectError {
-  constructor() { super('API key not found'); }
-  name = 'NotFoundAPIKeyError';
+export class NotFoundAPITokenError extends NotFoundDBObjectError {
+  constructor() { super('API token not found'); }
+  name = 'NotFoundAPITokenError';
 }
 
 export class NotFoundKeyError extends NotFoundDBObjectError {
@@ -48,7 +48,7 @@ export class BlockedKeyError extends BlockedResourceError {
   name = 'BlockedKeyError';
 }
 
-export class BlockedAPIKeyError extends BlockedResourceError {
-  constructor() { super('API key is blocked'); }
-  name = 'BlockedAPIKeyError';
+export class BlockedAPITokenError extends BlockedResourceError {
+  constructor() { super('API token is blocked'); }
+  name = 'BlockedAPITokenError';
 }

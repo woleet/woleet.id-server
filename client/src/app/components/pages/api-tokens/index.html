@@ -1,0 +1,29 @@
+<div *ngIf="(apiTokens$ | async) as apiTokens; else loading">
+  <div *ngIf="apiTokens.length; else noApiKeys">
+
+    <div *ngIf="!formOpened">
+      <button mat-raised-button color="primary" (click)="formOpened=true">ADD API TOKEN</button>
+    </div>
+    <div *ngIf="formOpened">
+      <api-token-create-card (reset)="formOpened=false" (create)="refreshList()"></api-token-create-card>
+    </div>
+    <br>
+    <mat-divider></mat-divider>
+    <div *ngFor="let apiToken of apiTokens; trackBy: trackById;">
+      <br>
+      <app-api-token-card [apiToken]="apiToken" (delete)="refreshList()"></app-api-token-card>
+    </div>
+  </div>
+  <ng-template #noApiKeys>
+    <mat-card fxLayout="row" fxLayoutAlign="space-between start" *ngIf="!formOpened">
+      <span>There is no API token yet</span>
+      <button mat-raised-button color="primary" (click)="formOpened=true">ADD ONE</button>
+    </mat-card>
+    <div *ngIf="formOpened">
+      <api-token-create-card (reset)="formOpened=false" (create)="refreshList()"></api-token-create-card>
+    </div>
+  </ng-template>
+</div>
+<ng-template #loading>
+  <mat-card>Loading...</mat-card>
+</ng-template>

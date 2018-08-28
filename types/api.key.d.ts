@@ -5,7 +5,7 @@ type KeyStatusEnum = 'active' | 'blocked';
 
 interface KeyObject { }
 
-interface ApiKeyObject extends KeyObject {
+interface ApiTokenObject extends KeyObject {
   /** UUID */
   id: string;
   /** Key name */

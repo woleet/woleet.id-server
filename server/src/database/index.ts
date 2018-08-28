@@ -1,6 +1,6 @@
 import { sequelize } from './sequelize';
 import * as Debug from 'debug';
-import { APIKey } from './model/api-key';
+import { APIToken } from './model/api-token';
 import { User } from './model/user';
 import { Key } from './model/key';
 
@@ -30,7 +30,7 @@ Key.model.beforeDelete(async (key) => {
   await user.save();
 });
 
-export { User, Key, APIKey };
+export { User, Key, APIToken };
 
 // Connection
 (async () => {

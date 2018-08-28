@@ -1,0 +1,14 @@
+<mat-card>
+  <mat-card-content>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="API token name" [formControl]="apiTokenName" required>
+        <mat-error *ngIf="apiTokenName.invalid">{{ getErrorMessage() }}</mat-error>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="createAPIToken()" [disabled]="apiTokenName.invalid">CREATE</button>
+    <button mat-button (click)="cancelAPIToken()">CANCEL</button>
+  </mat-card-actions>
+</mat-card>

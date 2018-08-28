@@ -9,7 +9,7 @@ info:
     name: MIT
 tags:
   - name: Authentication
-  - name: API Key
+  - name: API Token
   - name: Key
   - name: User
   - name: Identity
@@ -88,14 +88,14 @@ paths:
         <br>Specify the user using either the `userId` or the `customUserId` parameter.
         <br>Optionally, specify the key to use using the `pubKey` parameter.
         <br>The signature produced is the signature of the hash using the referred key or using the user's default key.
-        <br>This endpoint is protected using an API key. It is recommended not to expose it publicly.
+        <br>This endpoint is protected using an API token. It is recommended not to expose it publicly.
       parameters:
         - $ref: '#/components/parameters/HashToSignQueryParameter'
         - $ref: '#/components/parameters/UserIdQueryParameter'
         - $ref: '#/components/parameters/CustomUserIdQueryParameter'
         - $ref: '#/components/parameters/PubKeyToSignQueryParameter'
       security:
-        - APIKeyAuth: []
+        - APITokenAuth: []
       responses:
         '200':
           description: Successful operation.
@@ -110,7 +110,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad API key.
+          description: Missing or bad API token.
           content:
             application/json:
               schema:
@@ -543,13 +543,13 @@ paths:
               schema:
                 $ref: '#/components/responses/UserArray'
 
-  /APIKey:
+  /APIToken:
     post:
       tags:
-        - API Key
-      summary: Create an API key suitable to call the /sign endpoint.
+        - API Token
+      summary: Create an API token suitable to call the /sign endpoint.
       description: This can only be done by an admin.
-      operationId: createAPIKey
+      operationId: createAPIToken
       security:
         - BearerAuth: []
       responses:
@@ -558,7 +558,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/APIKey'
+                $ref: '#/components/responses/APIToken'
         '400':
           description: Invalid object supplied.
           content:
@@ -572,20 +572,20 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
       requestBody:
-        description: Created API Key object.
+        description: Created API token object.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/APIKeyPost'
-  /APIKey/{APIKeyId}:
+              $ref: '#/components/schemas/APITokenPost'
+  /APIToken/{APITokenId}:
     get:
       tags:
-        - API Key
-      summary: Get an API key by its identifier.
-      operationId: getAPIKeyById
+        - API Token
+      summary: Get an API token by its identifier.
+      operationId: getAPITokenById
       parameters:
-        - $ref: '#/components/parameters/APIKeyIdParameter'
+        - $ref: '#/components/parameters/APITokenIdParameter'
       security:
         - BearerAuth: []
       responses:
@@ -594,9 +594,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/APIKey'
+                $ref: '#/components/responses/APIToken'
         '400':
-          description: Invalid API key identifier.
+          description: Invalid API token identifier.
           content:
             application/json:
               schema:
@@ -608,27 +608,27 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '404':
-          description: API key not found.
+          description: API token not found.
           content:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
     put:
       tags:
-        - API Key
-      summary: Update an API key.
+        - API Token
+      summary: Update an API token.
       description: This can only be done by an admin.
-      operationId: updateAPIKey
+      operationId: updateAPIToken
       parameters:
-        - $ref: '#/components/parameters/APIKeyIdParameter'
+        - $ref: '#/components/parameters/APITokenIdParameter'
       security:
         - BearerAuth: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/APIKeyPut'
-        description: Updated API key object.
+              $ref: '#/components/schemas/APITokenPut'
+        description: Updated API token object.
         required: true
       responses:
         '200':
@@ -636,9 +636,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/APIKey'
+                $ref: '#/components/responses/APIToken'
         '400':
-          description: Invalid object supplied / Invalid API key identifier.
+          description: Invalid object supplied / Invalid API token identifier.
           content:
             application/json:
               schema:
@@ -650,19 +650,19 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '404':
-          description: API key not found.
+          description: API token not found.
           content:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
     delete:
       tags:
-        - API Key
-      summary: Delete an API key.
+        - API Token
+      summary: Delete an API token.
       description: This can only be done by an admin.
-      operationId: deleteAPIKey
+      operationId: deleteAPIToken
       parameters:
-        - $ref: '#/components/parameters/APIKeyIdParameter'
+        - $ref: '#/components/parameters/APITokenIdParameter'
       security:
         - BearerAuth: []
       responses:
@@ -671,9 +671,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/APIKey'
+                $ref: '#/components/responses/APIToken'
         '400':
-          description: Invalid API key identifier.
+          description: Invalid API token identifier.
           content:
             application/json:
               schema:
@@ -685,17 +685,17 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '404':
-          description: API key not found.
+          description: API token not found.
           content:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
-  /APIKey/list:
+  /APIToken/list:
     get:
       tags:
-        - API Key
-      summary: List all API keys.
-      operationId: getAllAPIKeys
+        - API Token
+      summary: List all API tokens.
+      operationId: getAllAPITokens
       security:
         - BearerAuth: []
       parameters:
@@ -706,7 +706,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/APIKeyArray'
+                $ref: '#/components/responses/APITokenArray'
         '401':
           description: Missing or bad session token.
           content:
@@ -884,22 +884,22 @@ components:
        - bip39
       description: Key type.
       example: "bip39"
-    APIKeyBase:
+    APITokenBase:
       type: object
       properties:
         name:
           type: string
-          example: "My API key name"
+          example: "My API token name"
           description: Key name.
         status:
           type: string
           enum:
           - active
           - blocked
-          description: API key status.
+          description: API token status.
           default: "active"
           example: "active"
-    APIKey:
+    APIToken:
       allOf:
         - type: object
           required:
@@ -909,7 +909,7 @@ components:
               readOnly: true
               type: string
               format: uuid
-              description: API key identifier.
+              description: API token identifier.
               example: "a35c9fee-3893-4eb7-adde-205e1be03209"
             value:
               readOnly: true
@@ -924,16 +924,16 @@ components:
               $ref: '#/components/schemas/DeletedAt'
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
-        - $ref: '#/components/schemas/APIKeyBase'
-    APIKeyPost:
+        - $ref: '#/components/schemas/APITokenBase'
+    APITokenPost:
       allOf:
-        - $ref: '#/components/schemas/APIKeyBase'
+        - $ref: '#/components/schemas/APITokenBase'
         - type: object
           required:
           - name
-    APIKeyPut:
+    APITokenPut:
       allOf:
-        - $ref: '#/components/schemas/APIKeyBase'
+        - $ref: '#/components/schemas/APITokenBase'
     KeyBase:
       type: object
       properties:
@@ -1050,10 +1050,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Key'
-    APIKeyArray:
+    APITokenArray:
       type: array
       items:
-        $ref: '#/components/schemas/APIKey'
+        $ref: '#/components/schemas/APIToken'
   parameters:
     UserIdParameter:
       name: userId
@@ -1073,10 +1073,10 @@ components:
         type: string
         format: uuid
         example: "552aa3fd-3b5e-434f-bdd3-9b6c58c269c1"
-    APIKeyIdParameter:
-      name: APIKeyId
+    APITokenIdParameter:
+      name: APITokenId
       in: path
-      description: Identifier of the API key.
+      description: Identifier of the API token.
       required: true
       schema:
         type: string
@@ -1154,19 +1154,19 @@ components:
             $ref: '#/components/schemas/KeyPut'
       description: Replacement key object.
       required: true
-    APIKeyPost:
+    APITokenPost:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/APIKeyPost'
-      description: API Key object to add.
+            $ref: '#/components/schemas/APITokenPost'
+      description: API token object to add.
       required: true
-    APIKeyPut:
+    APITokenPut:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/APIKeyPut'
-      description: Replacement API key object.
+            $ref: '#/components/schemas/APITokenPut'
+      description: Replacement API token object.
       required: true
   responses:
     UserDetail:
@@ -1179,10 +1179,10 @@ components:
       $ref: '#/components/schemas/UserArray'
     KeyArray:
       $ref: '#/components/schemas/KeyArray'
-    APIKey:
-      $ref: '#/components/schemas/APIKey'
-    APIKeyArray:
-      $ref: '#/components/schemas/APIKeyArray'
+    APIToken:
+      $ref: '#/components/schemas/APIToken'
+    APITokenArray:
+      $ref: '#/components/schemas/APITokenArray'
   securitySchemes:
     BasicAuth:
       type: http
@@ -1192,7 +1192,7 @@ components:
       type: http
       scheme: bearer
       description: Use a session token to authentify (see /login).
-    APIKeyAuth:
+    APITokenAuth:
       type: http
       scheme: bearer
-      description: Use an API key to authentify (see /APIKey).
+      description: Use an API token to authentify (see /APIToken).

@@ -24,13 +24,13 @@ import { UserFormComponent } from '@parts/user.form';
 import { ServerSettingsComponent } from '@parts/server.settings';
 import { UserCardComponent } from '@parts/user.card';
 import { KeyCardComponent } from '@parts/key.card';
-import { APIKeyCreateCardComponent } from '@parts/api-key.card.create';
-import { APIKeyCardComponent } from '@parts/api-key.card';
+import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
+import { APITokenCardComponent } from '@parts/api-token.card';
 import { KeyCreateCardComponent } from '@parts/key.card.create';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
-import { APIKeysPageComponent } from '@pages/api-keys';
+import { APITokensPageComponent } from '@pages/api-tokens';
 import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
 import { SettingsPageComponent } from '@pages/settings';
@@ -46,7 +46,7 @@ import { AdminGuardService, UserGuardService, AnonymousGuardService } from '@gua
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
-import { APIKeyService } from '@services/api-key';
+import { APITokenService } from '@services/api-token';
 import { PageDataService } from '@services/page-data';
 
 import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
@@ -64,7 +64,7 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     LoginPageComponent,
     SetupPageComponent,
     SettingsPageComponent,
-    APIKeysPageComponent,
+    APITokensPageComponent,
     UserPageComponent,
     UserListPageComponent,
     UserFormComponent,
@@ -75,8 +75,8 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     ServerSettingsComponent,
     UserCardComponent,
     KeyCardComponent,
-    APIKeyCardComponent,
-    APIKeyCreateCardComponent,
+    APITokenCardComponent,
+    APITokenCreateCardComponent,
     KeyCreateCardComponent,
     StopPropagationDirective,
     StopRipplePropagationDirective
@@ -116,7 +116,7 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
   ],
   providers: [
     AuthService, AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
-    KeyService, UserService, InfoService, ConfigService, APIKeyService, PageDataService,
+    KeyService, UserService, InfoService, ConfigService, APITokenService, PageDataService,
     UnauthorizedInterceptorService, ForbiddenInterceptorService, AllowCredentialsInterceptorService
   ],
   bootstrap: [AppComponent]

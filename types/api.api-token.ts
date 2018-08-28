@@ -1,10 +1,10 @@
-/* Key */
+/* API Token */
 
-type APIKeyStatusEnum = 'active' | 'blocked';
+type APITokenStatusEnum = 'active' | 'blocked';
 
-interface APIKeyObject { }
+interface APITokenObject { }
 
-interface ApiAPIKeyObject extends APIKeyObject {
+interface ApiAPITokenObject extends APITokenObject {
   /** UUID */
   id: string;
   /** Key name */
@@ -20,15 +20,15 @@ interface ApiAPIKeyObject extends APIKeyObject {
   /** Unix timestamp (ms) */
   lastUsed: number;
 
-  status: APIKeyStatusEnum;
+  status: APITokenStatusEnum;
 }
 
-interface ApiPostAPIKeyObject extends APIKeyObject {
+interface ApiPostAPITokenObject extends APITokenObject {
   name: string;
-  status?: APIKeyStatusEnum;
+  status?: APITokenStatusEnum;
 }
 
-interface ApiPutAPIKeyObject extends APIKeyObject {
+interface ApiPutAPITokenObject extends APITokenObject {
   name?: string;
-  status?: APIKeyStatusEnum;
+  status?: APITokenStatusEnum;
 }

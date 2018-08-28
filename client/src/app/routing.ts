@@ -8,7 +8,7 @@ import { AnonymousGuardService as IsAnonymous } from '@guards/auth';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
-import { APIKeysPageComponent } from '@pages/api-keys';
+import { APITokensPageComponent } from '@pages/api-tokens';
 import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
 import { SettingsPageComponent } from '@pages/settings';
@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: 'user/:id/edit', data: { title: 'edit user' }, component: UserEditPageComponent, canActivate: [IsAdmin] },
   { path: 'users', data: { title: 'user list' }, component: UserListPageComponent, canActivate: [IsAdmin] },
   { path: 'settings', data: { title: 'server settings' }, component: SettingsPageComponent, canActivate: [IsAdmin] },
-  { path: 'api-keys', data: { title: 'api keys' }, component: APIKeysPageComponent, canActivate: [IsAdmin] },
+  { path: 'api-tokens', data: { title: 'API tokens' }, component: APITokensPageComponent, canActivate: [IsAdmin] },
   { path: 'about', data: { title: 'about' }, component: AboutPageComponent, canActivate: [IsUser] },
   {
     path: '**',

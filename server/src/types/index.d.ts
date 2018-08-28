@@ -2,7 +2,7 @@
 
 import { Instance } from "sequelize";
 import { SessionStore } from "../controllers/store.session";
-import '../../../types/api.api-key';
+import '../../../types/api.api-token';
 import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api';
@@ -97,19 +97,19 @@ declare global {
     userId: string;
   }
 
-  /* APIKey: server specific */
+  /* APIToken: server specific */
 
-  interface SequelizeAPIKeyObject extends Instance<InternalAPIKeyObject> { }
+  interface SequelizeAPITokenObject extends Instance<InternalAPITokenObject> { }
 
-  interface InternalAPIKeyObject extends APIKeyObject, CommonInternalProperties {
+  interface InternalAPITokenObject extends APITokenObject, CommonInternalProperties {
     lastUsed: Date;
 
     name: string;
-    status: APIKeyStatusEnum;
+    status: APITokenStatusEnum;
     value: string;
   }
 
-  interface ApiFullPostAPIKeyObject extends APIKeyObject {
+  interface ApiFullPostAPITokenObject extends APITokenObject {
     name: string;
     type?: KeyTypeEnum;
     status?: KeyStatusEnum;
