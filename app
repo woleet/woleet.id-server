@@ -3,7 +3,7 @@
 set -e
 
 display_usage() {
-  echo "usage: $0 [start|stop|build]"
+  echo "usage: $0 [start|stop|build|push]"
 }
 
 tmp_client_dir=./client/tmp/
