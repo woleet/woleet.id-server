@@ -30,6 +30,12 @@ postbuild () {
 }
 
 operation=$1
+
+if [ -z $operation ]; then
+  display_usage
+  exit -1
+fi
+
 shift
 
 if [ "$operation" == "start" ]; then

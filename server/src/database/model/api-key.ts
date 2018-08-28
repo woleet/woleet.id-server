@@ -16,7 +16,7 @@ class APIKeyAccess extends AbstractInstanceAccess<InternalAPIKeyObject, ApiFullP
 
   constructor() {
     super(sequelize);
-    this.define('apikKey', APIKeyModel, { paranoid: true });
+    this.define('apiKey', APIKeyModel, { paranoid: true });
   }
 
   handleError(err: any) { }
