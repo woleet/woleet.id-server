@@ -21,11 +21,10 @@ Finally, in both _client_ and _server_ directories, run: `npm run dev`.
 
 ## With docker 
 ### Build the project 
-    ./app build [local|master|prod]
+    ./app build
 
 ### Start up the project 
-    ./app start [local|master|prod]
+    ./app start
 
 ### Stop the project 
-    ./app stop [local|master|prod]
-
+    ./app stop

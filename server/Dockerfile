@@ -1,6 +1,6 @@
 FROM node:10.9.0-alpine
 
-RUN apk update && apk add python gcc g++ make bash
+RUN apk update && apk add python gcc g++ make bash --virtual .build-deps
 
 # Build
 
@@ -21,8 +21,12 @@ COPY . /usr/src/app
 
 RUN mv /usr/src/app/tmp/types /usr/src/types
 
-# Check app
-RUN npm run check
+# Build server
+RUN npm run build
+
+RUN mv /usr/src/app/dist/app /usr/src/app/dist/server
+
+RUN apk del .build-deps
 
 EXPOSE 3000
 

@@ -3,7 +3,7 @@
 set -e
 
 display_usage() {
-  echo "usage: $0 [start|stop|build] [local|master|prop]"
+  echo "usage: $0 [start|stop|build]"
 }
 
 tmp_client_dir=./client/tmp/
@@ -29,30 +29,17 @@ postbuild () {
 
 operation=$1
 shift
-target=$1
-shift
-
-if [ "$target" == "master" ]; then
-  compose="-f docker-compose.yml -f docker-compose.master.yml"
-elif [ "$target" == "local" ]; then
-  compose="-f docker-compose.yml -f docker-compose.local.yml"
-elif [ "$target" == "prod" ]; then
-  compose="-f docker-compose.yml -f docker-compose.prod.yml"
-else
-  display_usage
-  exit -1
-fi
 
 if [ "$operation" == "start" ]; then
-  docker-compose ${compose} up -d
+  docker-compose up -d
   #TODO: split start & log
   if [ "$1" != "--no-log" ]; then
-    docker-compose ${compose} logs -f --tail 50
+    docker-compose logs -f --tail 50
   fi
 elif [ "$operation" == "stop" ]; then
-  docker-compose ${compose} down
+  docker-compose down
 elif [ "$operation" == "push" ]; then
-  docker-compose ${compose} push
+  docker-compose push
 elif [ "$operation" == "build" ]; then
   echo "copying common resources"
   prebuild
@@ -60,7 +47,7 @@ elif [ "$operation" == "build" ]; then
   echo "building intermediate image (wid-client-builder)"
   cd client; docker build -f Dockerfile.builder -t wid-client-builder .; cd ..
 
-  docker-compose ${compose} build
+  docker-compose build $@
 
   echo "cleaning up"
   postbuild
