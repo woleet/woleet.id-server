@@ -16,7 +16,7 @@ services:
       POSTGRES_USER: pguser
       POSTGRES_PASSWORD: pass
   wid-client:
-    image: wid-client
+    image: ${WOLEET_ID_SERVER_REGISTRY}:client
     build: ./client
     ports:
       - 4220:80
@@ -26,7 +26,7 @@ services:
     networks:
       - client-server
   wid-server:
-    image: wid-server
+    image: ${WOLEET_ID_SERVER_REGISTRY}:server
     build: ./server
     restart: on-failure
     depends_on:
