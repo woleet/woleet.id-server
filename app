@@ -32,17 +32,6 @@ postbuild () {
 operation=$1
 shift
 
-if [ "$target" == "master" ]; then
-  compose="-f docker-compose.yml -f docker-compose.master.yml"
-elif [ "$target" == "local" ]; then
-  compose="-f docker-compose.yml -f docker-compose.local.yml"
-elif [ "$target" == "prod" ]; then
-  compose="-f docker-compose.yml -f docker-compose.prod.yml"
-else
-  display_usage
-  exit -1
-fi
-
 if [ "$operation" == "start" ]; then
   docker-compose ${compose} up -d
   #TODO: split start & log
