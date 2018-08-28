@@ -16,11 +16,11 @@ COPY package.json /usr/src/app/
 # RUN npm i --silent
 RUN npm i
 
-# Check app
-RUN npm run check
-
 ## Bundle app source
 COPY . /usr/src/app
+
+# Check app
+RUN npm run check
 
 RUN mv /usr/src/app/tmp/types /usr/src/types
 
