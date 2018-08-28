@@ -6,7 +6,7 @@
   "scripts": {
     "check": "npx tsc --noEmit",
     "transpile": "npx tsc",
-    "prestart": "npx tsc",
+    "build": "npx tsc",
     "start": "node dist/server/src",
     "dev": "DEBUG=id* npx ts-node-dev src/index.ts",
     "test": "npx mocha -r ts-node/register test/*.ts --exit"
