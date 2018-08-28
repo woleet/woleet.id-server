@@ -19,10 +19,11 @@ RUN npm i
 ## Bundle app source
 COPY . /usr/src/app
 
+RUN mv /usr/src/app/tmp/types /usr/src/types
+
 # Check app
 RUN npm run check
 
-RUN mv /usr/src/app/tmp/types /usr/src/types
+EXPOSE 3000
 
-EXPOSE 5432
 CMD [ "npm", "start" ]
