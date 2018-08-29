@@ -12,12 +12,16 @@ export async function session(ctx: Context, next) {
 
 export async function apiTokenAuth(ctx: Context, next) {
 
+  console.warn('HEADER');
   const { header } = ctx.request;
+
+  console.log('HEADER' ,{ header })
 
   // Check if "authorization" header is set
   if (header && header.authorization) {
     const parts = header.authorization.split(' ');
 
+    console.log({ parts })
     // Check if apiToken exists
     if (parts.length === 2 && parts[0] === 'Bearer') {
       const apiToken = await apiTokenStore.get(parts[1]);
@@ -33,7 +37,7 @@ export async function apiTokenAuth(ctx: Context, next) {
 
 export async function user(ctx: Context, next) {
   if (!ctx.session) {
-    throw new Unauthorized;
+    throw new Unauthorized('a');
   }
 
   return next();
@@ -41,7 +45,7 @@ export async function user(ctx: Context, next) {
 
 export async function admin(ctx: Context, next) {
   if (!ctx.session) {
-    throw new Unauthorized;
+    throw new Unauthorized('b');
   }
 
   if (ctx.session.user.getDataValue('username') !== 'admin') {

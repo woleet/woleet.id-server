@@ -21,6 +21,10 @@ class APITokenAccess extends AbstractInstanceAccess<InternalAPITokenObject, ApiF
 
   handleError(err: any) { }
 
+  getByValue(value: string) {
+    return this.model.findOne({ where: { value } });
+  }
+
 }
 
 export const APIToken = new APITokenAccess();

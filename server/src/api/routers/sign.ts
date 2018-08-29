@@ -4,6 +4,7 @@ import { sign } from '../../controllers/sign';
 import { validate } from '../schemas';
 
 const vuuid = validate.raw('uuid');
+const vaddr = validate.raw('address');
 
 /**
  * Signature
@@ -32,8 +33,12 @@ router.get('/sign', async function (ctx) {
     throw new BadRequest('Invalid "userId"');
   }
 
-  if (!(userId || customUserId)) {
-    throw new BadRequest('Missign mandatory "userId" or "customUserId" parameter');
+  if (pubKey && !(await vaddr(pubKey))) {
+    throw new BadRequest('Invalid "pubKey"');
+  }
+
+  if (!(userId || customUserId || pubKey)) {
+    throw new BadRequest('Missign mandatory "userId", "customUserId" or "pubKey" parameter');
   }
 
   ctx.body = await sign(hashToSign, pubKey, userId, customUserId);

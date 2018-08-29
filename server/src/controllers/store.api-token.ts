@@ -12,17 +12,17 @@ export class APITokenStore {
   /**
    * todo: ensure (test) that sequelize instances are updated
    */
-  async get(id: string): Promise<InternalAPITokenObject> {
-    let apiTokenInstance = this.lru.get(id);
+  async get(value: string): Promise<InternalAPITokenObject> {
+    let apiTokenInstance = this.lru.get(value);
 
     if (apiTokenInstance) {
       return apiTokenInstance.toJSON();
     }
 
-    apiTokenInstance = await APIToken.getById(id);
+    apiTokenInstance = await APIToken.getByValue(value);
 
     if (apiTokenInstance) {
-      this.lru.set(id, apiTokenInstance);
+      this.lru.set(value, apiTokenInstance);
       return apiTokenInstance.toJSON();
     }
 
