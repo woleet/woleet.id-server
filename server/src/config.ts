@@ -1,14 +1,16 @@
-const defaultPort = 3000;
+const env = process.env;
+
+const defaultPort = parseInt(env.WOLEET_ID_SERVER_DEFAULT_PORT) || 3000;
 
 export const ports = {
-  signature: defaultPort,
-  identity: 4000,
-  api: defaultPort
+  signature: parseInt(env.WOLEET_ID_SERVER_SIGNATURE_PORT) || defaultPort,
+  identity: parseInt(env.WOLEET_ID_SERVER_IDENTITY_PORT) || defaultPort,
+  api: parseInt(env.WOLEET_ID_SERVER_API_PORT) || defaultPort
 };
 
 export const db = {
-  host: process.env.POSTGRES_HOST || 'localhost',
-  database: process.env.POSTGRES_DB || 'wid',
-  username: process.env.POSTGRES_USER || 'pguser',
-  password: process.env.POSTGRES_PASSWORD || 'pass'
+  host: env.POSTGRES_HOST || 'localhost',
+  database: env.POSTGRES_DB || 'wid',
+  username: env.POSTGRES_USER || 'pguser',
+  password: env.POSTGRES_PASSWORD || 'pass'
 };

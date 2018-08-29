@@ -1,13 +1,17 @@
-<mat-card fxLayout="row" fxLayoutAlign="space-between start">
+<mat-card fxLayout="row" fxLayoutAlign="space-between start" class="key-card" [ngClass]="{'default': default}">
   <div fxLayout="column">
-    <div>{{ key.name }}</div>
-    <div>
-      <span>Public&nbsp;key</span>
-      <code>{{ key.publicKey }}</code>
-    </div>
-    <div>
-      <span>Created&nbsp;at</span>&nbsp;&nbsp;
-      <span>{{ key.createdAt | date }}</span>
+    <div fxLayout="row">
+      <div fxLayout="column" class="card-icon">
+        <mat-icon>vpn_key_outline</mat-icon>
+      </div>
+      <div fxLayout="column">
+        <strong>{{ key.name }}</strong>
+        <div>
+          <span>Public&nbsp;key</span><code>{{ key.publicKey }}</code></div>
+        <div class="text-gray text-slim">
+          <span>Created&nbsp;at</span>&nbsp;<span>{{ key.createdAt | date }}</span>
+        </div>
+      </div>
     </div>
   </div>
   <div fxLayout="column">

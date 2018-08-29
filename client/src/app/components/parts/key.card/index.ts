@@ -11,6 +11,9 @@ export class KeyCardComponent {
   @Input()
   key: ApiTokenObject;
 
+  @Input()
+  default: boolean = false;
+
   @Output()
   delete = new EventEmitter<ApiTokenObject>();
 

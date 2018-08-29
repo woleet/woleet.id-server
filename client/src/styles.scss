@@ -41,3 +41,19 @@ $light-theme: mat-light-theme($light-primary, $light-accent);
 .clickable {
   cursor: pointer;
 }
+
+.card-icon {
+  width: 60px;
+  margin-right: 14px;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  & > .mat-icon {
+    height: 48px;
+    width: 48px;
+    font-size: 48px;
+    color: mat-color($mat-gray, 500);
+  }
+  code {
+    @extend .text-slim, .text-gray;
+    padding: 0;
+  }
+}

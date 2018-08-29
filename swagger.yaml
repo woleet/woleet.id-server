@@ -85,8 +85,7 @@ paths:
       description: >
         Use this endpoint to sign some data using one of the keys of a given user.
         <br>Compute the SHA256 hash of the data to sign (client side) and provide it in the `hashToSign` parameter.
-        <br>Specify the user using either the `userId` or the `customUserId` parameter.
-        <br>Optionally, specify the key to use using the `pubKey` parameter.
+        <br>Specify the user using either the `userId`, `customUserId` or the `pubKey` parameter.
         <br>The signature produced is the signature of the hash using the referred key or using the user's default key.
         <br>This endpoint is protected using an API token. It is recommended not to expose it publicly.
       parameters:

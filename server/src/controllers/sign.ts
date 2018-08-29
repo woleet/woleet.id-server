@@ -7,12 +7,23 @@ const serverBase = 'http://localhost';
 
 export async function sign(hashToSign, pubKey, userId, customUserId) {
   let user: SequelizeUserObject;
+  let key: SequelizeKeyObject;
+
+  if (!(userId || pubKey || customUserId)) {
+    throw new Error('Must provide either "userId", "customUserId" or "pubKey"');
+  }
+
   if (userId) {
     user = await User.getById(userId);
   } else if (customUserId) {
     user = await User.getByCustomUserId(customUserId);
-  } else {
-    throw new Error('Must provide either "userId" or "customUserId"');
+  }
+
+  if (pubKey) {
+    key = await Key.getByPubKey(pubKey, user && user.get('id'), !user);
+    if (!user) {
+      user = key && key.get('user')
+    }
   }
 
   if (!user) {
@@ -24,10 +35,7 @@ export async function sign(hashToSign, pubKey, userId, customUserId) {
     throw new BlockedUserError();
   }
 
-  let key: SequelizeKeyObject;
-  if (pubKey) {
-    key = await Key.getByPubKey(pubKey, user.getDataValue('id'));
-  } else if (user.getDataValue('defaultKeyId')) {
+  if (!key && user.getDataValue('defaultKeyId')) {
     key = await Key.getById(user.getDataValue('defaultKeyId'));
   }
 
