@@ -1,4 +1,4 @@
-<mat-card mat-ripple fxLayout="row" fxLayoutAlign="space-between start" class="clickable" [routerLink]="['/user/', user.id]">
+<mat-card mat-ripple fxLayout="row" fxLayoutAlign="space-between start" [ngClass]="{'clickable': (!!user.id)}" [routerLink]="['/user/', user.id]">
   <div fxLayout="column">
     <a *ngIf="user.username">{{ user.username }}
       <!-- optional step 1 -->
@@ -19,10 +19,7 @@
     <div>
       <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')">
         <mat-icon matTooltip="Edit user" aria-label="Edit user button" [routerLink]="['/user/', user.id, 'edit']">edit</mat-icon>
-      </button><!--
-      <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('detail')">
-        <mat-icon matTooltip="Go to user detail" aria-label="Go to user detail button" [routerLink]="['/user/', user.id]">visibility</mat-icon>
-      </button> -->
+      </button>
       <button mat-icon-button color="warn" *ngIf="user.status !== 'blocked'">
         <mat-icon matTooltip="Block user" aria-label="Block user button" (click)="blockUser()">pause_circle_outline</mat-icon>
       </button>

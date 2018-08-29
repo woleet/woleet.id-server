@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {KeyService} from '@services/key';
-import {TrackById} from '../../util';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { KeyService } from '@services/key';
+import { TrackById } from '../../util';
+import { UserService } from '@services/user';
 
 @Component({
   templateUrl: './index.html',
@@ -13,11 +14,14 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
 
   keys$: Promise<ApiTokenObject[]>;
 
+  user$: Promise<ApiUserObject>;
+
   formOpened = false;
 
-  constructor(private keyService: KeyService, private route: ActivatedRoute) {
+  constructor(private keyService: KeyService, private userService: UserService, private route: ActivatedRoute) {
     super();
     this.userId = this.route.snapshot.params.id;
+    this.user$ = this.userService.getById(this.userId);
   }
 
   ngOnInit() {
