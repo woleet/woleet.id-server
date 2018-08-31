@@ -24,7 +24,6 @@ prebuild () {
 }
 
 postbuild () {
-  echo "Cleaning types..."
   rm -rf $tmp_client_dir
   rm -rf $tmp_server_dir
 }
@@ -50,12 +49,19 @@ elif [ "$operation" == "push" ]; then
   docker-compose push
 elif [ "$operation" == "build" ]; then
   prebuild
+
   echo "Building client builder image (wid-client-builder)..."
   cd client; docker build -f Dockerfile.builder -t wid-client-builder .; cd ..
+  echo "Done."
 
+  echo "Compiling client source (wid-client-build)..."
+  cd client; docker build -f Dockerfile.build -t wid-client-build .; cd ..
+  echo "Done."
+
+  echo "Copying client source to final image (wid-client)..."
   docker-compose ${compose} build
+  echo "Done."
 
-  echo "cleaning up"
   postbuild
 else
   display_usage

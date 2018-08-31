@@ -6,4 +6,6 @@ COPY . /tmp/build
 
 COPY tmp/types /tmp/types
 
-RUN cd /tmp/build && npm i && npm run build:prod && mv dist/client /tmp/client && rm -rf /tmp/build && rm -rf /tmp/types
+RUN cd /tmp/build && npm i
+
+WORKDIR /tmp/build
