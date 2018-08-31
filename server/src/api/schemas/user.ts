@@ -1,25 +1,25 @@
 import * as Joi from 'joi';
-import { RName, CountryCode, Word, Name } from './misc';
+import { RName, CountryCode, Word, DirectoryString } from './misc';
 
 const userRoleEnum = ['user', 'admin'];
 const userStatusEnum = ['active', 'blocked'];
 
 const createIdentity = Joi.object().keys({
   commonName: RName,
-  organization: Name,
-  organizationalUnit: Name,
-  locality: Name,
+  organization: DirectoryString,
+  organizationalUnit: DirectoryString,
+  locality: DirectoryString,
   country: CountryCode,
-  userId: Word
+  userId: Word.min(1).max(64)
 });
 
 const updateIdentity = Joi.object().keys({
-  commonName: Name,
-  organization: Name.allow(null),
-  organizationalUnit: Name.allow(null),
-  locality: Name.allow(null),
+  commonName: DirectoryString,
+  organization: DirectoryString.allow(null),
+  organizationalUnit: DirectoryString.allow(null),
+  locality: DirectoryString.allow(null),
   country: CountryCode.allow(null),
-  userId: Word.allow(null)
+  userId: Word.min(1).max(64).allow(null)
 });
 
 const createUser = Joi.object().keys({
