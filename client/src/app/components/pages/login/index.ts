@@ -11,6 +11,8 @@ export class LoginPageComponent {
 
   user: BasicAuthObject;
 
+  errorMsg: string = null;
+
   constructor(private service: AuthService, private router: Router) {
     this.user = { username: '', password: '' };
   }
@@ -19,12 +21,12 @@ export class LoginPageComponent {
     const user = await this.service.login(this.user);
     if (user) {
       if (user.role === 'admin') {
-        this.router.navigate(['users'])
+        this.router.navigate(['users']);
       } else {
-        this.router.navigate([mainRoute])
+        this.router.navigate([mainRoute]);
       }
     } else {
-      // this.errorMsg = 'Failed to login! try again ...';
+      this.errorMsg = 'Failed to login.';
     }
   }
 }
