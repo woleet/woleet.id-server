@@ -1,3 +1,5 @@
+// tslint:disable:radix
+
 const env = process.env;
 
 const defaultPort = parseInt(env.WOLEET_ID_SERVER_DEFAULT_PORT) || 3000;
