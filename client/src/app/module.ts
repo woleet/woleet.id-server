@@ -52,6 +52,8 @@ import { PageDataService } from '@services/page-data';
 import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
 import { UnauthorizedInterceptorService } from '@interceptors/unauthorized';
 import { ForbiddenInterceptorService } from '@interceptors/forbidden';
+import { NoRetryInterceptorService } from '@interceptors/no-retry';
+
 import { NeedConfigGuardService } from '@services/guards/config';
 import { ConfigService } from '@services/config';
 import { StopPropagationDirective } from '@directives/stop-propagation';
@@ -117,7 +119,8 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
   providers: [
     AuthService, AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
     KeyService, UserService, InfoService, ConfigService, APITokenService, PageDataService,
-    UnauthorizedInterceptorService, ForbiddenInterceptorService, AllowCredentialsInterceptorService
+    UnauthorizedInterceptorService, ForbiddenInterceptorService,
+    AllowCredentialsInterceptorService
   ],
   bootstrap: [AppComponent]
 })

@@ -21,27 +21,24 @@ export class AuthService {
     }
   }
 
-  async logout() {
+  async logout(request = true) {
     this.user = null;
     localStorage.removeItem('user');
-    await this.http.get(`${serverURL}/logout/`).toPromise().catch(() => null);
+    if (request) {
+      await this.http.get(`${serverURL}/logout/`).toPromise().catch(() => null);
+    }
     this.router.navigate(['login']);
   }
 
   async login(user: BasicAuthObject): Promise<ApiUserDTOObject | null> {
-    console.log('login', user, serverURL);
-
     const headers = (new HttpHeaders()).append('Authorization', 'Basic ' + btoa(`${user.username}:${user.password}`));
-    const auth: AuthResponseObject = await this.http
-      .get<AuthResponseObject>(`${serverURL}/login/`, { headers })
+    const auth: AuthResponseObject = await this.http.get<AuthResponseObject>(`${serverURL}/login/`, { headers })
       .toPromise()
-      .catch(() => null);
+      .catch((err) => null);
 
     if (!auth) {
       return null;
     }
-
-    console.log('Logged', auth);
 
     this.user = auth.user;
     localStorage.setItem('user', JSON.stringify(auth.user));

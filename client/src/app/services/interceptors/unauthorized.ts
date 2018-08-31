@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpInterceptor, HTTP_INTERCEPTORS, HttpErrorResponse, HttpEvent } from '@angular/common/http';
 import { AuthService } from '@services/auth';
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 
 @Injectable()
 export class UnauthorizedInterceptor implements HttpInterceptor {
@@ -10,11 +10,13 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request)
       .pipe(catchError((err): Observable<any> => {
+
+        // logout if unauthorized
         if (err instanceof HttpErrorResponse && err.status === 401) {
-          this.auth.logout();
-          return of(false);
+          this.auth.logout(false);
         }
-        return next.handle(request);
+
+        return throwError(err);
       }));
   }
 }
