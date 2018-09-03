@@ -7,7 +7,7 @@ import { router as key } from './routers/key';
 import { router as sign } from './routers/sign';
 import { router as identity } from './routers/identity';
 
-import { user as userAuth, admin as adminAuth, session, apiTokenAuth } from './authentication';
+import { user as userAuth, admin as adminAuth, session } from './authentication';
 
 import * as Router from 'koa-router';
 
@@ -34,7 +34,7 @@ identityRouter.use(identity.routes());
  * Signature
  */
 const signatureRouter = new Router();
-signatureRouter.use(apiTokenAuth, sign.routes());
+signatureRouter.use(sign.routes());
 
 export {
   apiRouter as api,

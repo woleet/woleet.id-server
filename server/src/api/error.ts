@@ -13,7 +13,7 @@ const errorHandler: IMiddleware = async function (ctx, next) {
       ctx.throw(new NotFound);
     }
   } catch (err) {
-    debug('Handling error', err);
+
     if (err instanceof HttpError) {
       ctx.status = err.status;
       ctx.body = { message: err.message, status: err.status };
