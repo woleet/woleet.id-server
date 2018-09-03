@@ -1,14 +1,21 @@
 <mat-card mat-ripple fxLayout="row" fxLayoutAlign="space-between start" [ngClass]="{'clickable': (!!user.id)}" [routerLink]="['/user/', user.id]">
   <div fxLayout="column">
-    <a *ngIf="user.username">{{ user.username }}
-      <!-- optional step 1 -->
-    </a>
-    <div *ngIf="user.email">{{ user.email }}
-      <!-- optional step 1 -->
-    </div>
-    <div>{{ user.identity.commonName }}</div>
-    <div>{{ user.identity.organization }}
-      <span *ngIf="user.identity.organizationalUnit">({{ user.identity.organizationalUnit }})</span>
+    <div fxLayout="row">
+      <div fxLayout="column" class="card-icon">
+        <mat-icon>account_box_outline</mat-icon>
+      </div>
+      <div fxLayout="column">
+        <a *ngIf="user.username">{{ user.username }}
+          <!-- optional step 1 -->
+        </a>
+        <div *ngIf="user.email">{{ user.email }}
+          <!-- optional step 1 -->
+        </div>
+        <div>{{ user.identity.commonName }}</div>
+        <div>{{ user.identity.organization }}
+          <span *ngIf="user.identity.organizationalUnit">({{ user.identity.organizationalUnit }})</span>
+        </div>
+      </div>
     </div>
   </div>
   <div fxLayout="column" fxHide fxShow.gt-xs>

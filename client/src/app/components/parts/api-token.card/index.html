@@ -1,10 +1,17 @@
 <mat-card fxLayout="row" fxLayoutAlign="space-between start">
   <div fxLayout="column">
-    <div>
-      <strong>{{ apiToken.name }}</strong>
-    </div>
-    <div class="text-gray text-slim">
-      <span>Created&nbsp;at</span>&nbsp;<span>{{ apiToken.createdAt | date }}</span>
+    <div fxLayout="row">
+      <div fxLayout="column" class="card-icon">
+        <mat-icon>lock_outline</mat-icon>
+      </div>
+      <div fxLayout="column">
+        <div>
+          <strong>{{ apiToken.name }}</strong>
+        </div>
+        <div class="text-gray text-slim">
+          <span>Created&nbsp;at</span>&nbsp;<span>{{ apiToken.createdAt | date }}</span>
+        </div>
+      </div>
     </div>
   </div>
   <div fxLayout="column">
