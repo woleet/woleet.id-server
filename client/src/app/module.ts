@@ -116,7 +116,7 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     AppRoutingModule
   ],
   providers: [
-    AuthService, AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
+    AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
     KeyService, UserService, InfoService, ConfigService, APITokenService, PageDataService,
     UnauthorizedInterceptorService, ForbiddenInterceptorService,
     AllowCredentialsInterceptorService
