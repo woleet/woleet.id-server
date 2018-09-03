@@ -1,19 +1,30 @@
-<mat-card mat-ripple fxLayout="row" fxLayoutAlign="space-between start" [ngClass]="{'clickable': (!!user.id)}" [routerLink]="['/user/', user.id]">
+<mat-card mat-ripple fxLayout="row" fxLayoutAlign="space-between start" [ngClass]="{'clickable': (!!user.id)}" [routerLink]="['/user/', user.id]"
+  *ngIf="user.identity as i">
   <div fxLayout="column">
-    <a *ngIf="user.username">{{ user.username }}
-      <!-- optional step 1 -->
-    </a>
-    <div *ngIf="user.email">{{ user.email }}
-      <!-- optional step 1 -->
+    <div fxLayout="row">
+      <div fxLayout="column" class="card-icon">
+        <mat-icon>account_box_outline</mat-icon>
+      </div>
+      <div fxLayout="column">
+        <a *ngIf="user.username">{{ user.username }}
+          <!-- optional step 1 -->
+        </a>
+        <div *ngIf="user.email">{{ user.email }}
+          <!-- optional step 1 -->
+        </div>
+        <div>{{ i.commonName }}</div>
+        <div *ngIf="i.organization || i.organizationalUnit">
+          <span *ngIf="i.organization as org">{{ org }}</span>
+          <span *ngIf="i.organization && i.organizationalUnit">&nbsp;-&nbsp;</span>
+          <span *ngIf="i.organizationalUnit as ou">{{ ou }}</span>
+        </div>
+        <div *ngIf="i.locality || i.country">
+          <span *ngIf="i.locality">{{ i.locality }}</span>
+          <span *ngIf="i.locality && i.country">&nbsp;-&nbsp;</span>
+          <span *ngIf="i.country">{{ i.country }}</span>
+        </div>
+      </div>
     </div>
-    <div>{{ user.identity.commonName }}</div>
-    <div>{{ user.identity.organization }}
-      <span *ngIf="user.identity.organizationalUnit">({{ user.identity.organizationalUnit }})</span>
-    </div>
-  </div>
-  <div fxLayout="column" fxHide fxShow.gt-xs>
-    <div>{{ user.identity.locality }}</div>
-    <div>{{ user.identity.country }}</div>
   </div>
   <div fxLayout="column" *ngIf="modes" no-prop no-ripple-prop>
     <div>

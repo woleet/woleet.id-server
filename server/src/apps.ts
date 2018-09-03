@@ -6,7 +6,7 @@ import * as Router from 'koa-router';
 import * as Debug from 'debug';
 const debug = Debug('id:factory');
 
-const names = [ 'api', 'identity', 'signature'];
+const names = [ 'signature', 'identity', 'api'];
 
 interface AppDefinition {
   name: string;

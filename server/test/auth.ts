@@ -17,7 +17,6 @@ describe('/login', () => {
         const { body, status } = res;
         assert.equal(status, 200);
 
-        console.log(body);
         assert(body.user);
         assert(body.user.username);
         assert.equal(body.user.username, 'admin');

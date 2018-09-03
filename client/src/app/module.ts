@@ -13,7 +13,8 @@ import {
   MatIconModule, MatListModule, MatInputModule, MatCardModule,
   MatSelectModule,
   MatTooltipModule,
-  MatRippleModule
+  MatRippleModule,
+  MatCheckboxModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -111,12 +112,13 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     MatSelectModule,
     MatCardModule,
     MatTooltipModule,
+    MatCheckboxModule,
 
     // app
     AppRoutingModule
   ],
   providers: [
-    AuthService, AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
+    AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
     KeyService, UserService, InfoService, ConfigService, APITokenService, PageDataService,
     UnauthorizedInterceptorService, ForbiddenInterceptorService,
     AllowCredentialsInterceptorService

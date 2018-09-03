@@ -12,7 +12,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
 
   userId = null;
 
-  keys$: Promise<ApiTokenObject[]>;
+  keys$: Promise<ApiKeyObject[]>;
 
   user$: Promise<ApiUserObject>;
 
@@ -30,6 +30,11 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
 
   refreshKeyList() {
     this.keys$ = this.keyService.getByUser(this.userId);
+    this.user$ = this.userService.getById(this.userId);
+  }
+
+  refreshUser() {
+    this.user$ = this.userService.getById(this.userId);
   }
 
 }

@@ -55,4 +55,5 @@ interface ApiPutUserObject extends UserObject {
   email?: string;
   password?: string;
   identity?: APIIdentityObject;
+  defaultKeyId?: string;
 }

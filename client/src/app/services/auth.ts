@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { serverURL } from './config';
 
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AuthService {
 
   private user: ApiUserDTOObject = null;
@@ -16,7 +16,6 @@ export class AuthService {
     if (user) {
       try {
         this.user = JSON.parse(user);
-        console.log('got', this.user, 'from local storage');
       } catch { }
     }
   }
@@ -27,14 +26,14 @@ export class AuthService {
     if (request) {
       await this.http.get(`${serverURL}/logout/`).toPromise().catch(() => null);
     }
-    this.router.navigate(['login']);
+    await this.router.navigate(['login']);
   }
 
   async login(user: BasicAuthObject): Promise<ApiUserDTOObject | null> {
     const headers = (new HttpHeaders()).append('Authorization', 'Basic ' + btoa(`${user.username}:${user.password}`));
     const auth: AuthResponseObject = await this.http.get<AuthResponseObject>(`${serverURL}/login/`, { headers })
       .toPromise()
-      .catch((err) => null);
+      .catch(() => null);
 
     if (!auth) {
       return null;

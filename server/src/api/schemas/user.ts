@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { RName, CountryCode, Word, DirectoryString } from './misc';
+import { RName, CountryCode, Word, DirectoryString, uuid } from './misc';
 
 const userRoleEnum = ['user', 'admin'];
 const userStatusEnum = ['active', 'blocked'];
@@ -37,7 +37,8 @@ const updateUser = Joi.object().keys({
   email: Joi.string().email().allow(null),
   username: Word.allow(null),
   password: Word.allow(null),
-  identity: updateIdentity
+  identity: updateIdentity,
+  defaultKeyId: uuid.allow(null)
 });
 
 export { createUser, updateUser };

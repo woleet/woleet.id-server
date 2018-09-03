@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { KeyService } from '@services/key';
+import { ErrorMessageProvider } from '@components/util';
+import { UserService } from '@services/user';
 
 @Component({
   selector: 'key-card-create',
   templateUrl: './index.html'
 })
-export class KeyCreateCardComponent {
+export class KeyCreateCardComponent extends ErrorMessageProvider {
 
   @Input()
   userId: string;
@@ -15,42 +17,33 @@ export class KeyCreateCardComponent {
   reset = new EventEmitter;
 
   @Output()
-  create = new EventEmitter<ApiTokenObject>();
+  create = new EventEmitter<ApiKeyObject>();
 
   keyName = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
 
-  constructor(private keyService: KeyService) { }
+  setAsDefault = false;
+
+  constructor(private keyService: KeyService, private userService: UserService) {
+    super();
+  }
 
   async createKey() {
     const name = this.keyName.value;
 
-    const newapiToken = await this.keyService.create(this.userId, { name });
+    const newKey = await this.keyService.create(this.userId, { name });
+
+    if (this.setAsDefault) {
+      await this.userService.update(this.userId, { defaultKeyId: newKey.id });
+    }
 
     this.keyName.reset();
     this.reset.emit();
-    this.create.emit(newapiToken);
+    this.create.emit(newKey);
   }
 
   cancelKey() {
     this.keyName.reset();
     this.reset.emit();
-  }
-
-  getErrorMessage() {
-
-    const err = Object.keys(this.keyName.errors)[0];
-
-    switch (err) {
-      case 'required':
-        return 'You must enter a value';
-      case 'minlength':
-        return 'Must be 3 character min';
-      case 'maxlength':
-        return 'Must be 15 character max';
-      default:
-        return '';
-    }
-
   }
 
 }

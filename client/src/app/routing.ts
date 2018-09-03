@@ -18,16 +18,16 @@ import { UserEditPageComponent } from '@pages/user.edit';
 import { UserDetailPageComponent } from '@pages/user.detail';
 
 const routes: Routes = [
-  { path: 'login', data: { title: 'login' }, component: LoginPageComponent, canActivate: [IsAnonymous] },
-  { path: 'setup', data: { title: 'setup' }, component: SetupPageComponent, canActivate: [NeedConfig] },
-  { path: 'user', data: { title: 'my profile' }, component: UserPageComponent, canActivate: [IsUser] },
-  { path: 'user/create', data: { title: 'create an user' }, component: UserCreatePageComponent, canActivate: [IsAdmin] },
-  { path: 'user/:id', data: { title: 'user keys' }, component: UserDetailPageComponent, canActivate: [IsAdmin] },
-  { path: 'user/:id/edit', data: { title: 'edit user' }, component: UserEditPageComponent, canActivate: [IsAdmin] },
-  { path: 'users', data: { title: 'user list' }, component: UserListPageComponent, canActivate: [IsAdmin] },
-  { path: 'settings', data: { title: 'server settings' }, component: SettingsPageComponent, canActivate: [IsAdmin] },
+  { path: 'login', data: { title: 'Login' }, component: LoginPageComponent, canActivate: [IsAnonymous] },
+  { path: 'setup', data: { title: 'Setup' }, component: SetupPageComponent, canActivate: [NeedConfig] },
+  { path: 'user', data: { title: 'My profile' }, component: UserPageComponent, canActivate: [IsUser] },
+  { path: 'user/create', data: { title: 'Create an user' }, component: UserCreatePageComponent, canActivate: [IsAdmin] },
+  { path: 'user/:id', data: { title: 'User keys' }, component: UserDetailPageComponent, canActivate: [IsAdmin] },
+  { path: 'user/:id/edit', data: { title: 'Edit user' }, component: UserEditPageComponent, canActivate: [IsAdmin] },
+  { path: 'users', data: { title: 'User list' }, component: UserListPageComponent, canActivate: [IsAdmin] },
+  { path: 'settings', data: { title: 'Server settings' }, component: SettingsPageComponent, canActivate: [IsAdmin] },
   { path: 'api-tokens', data: { title: 'API tokens' }, component: APITokensPageComponent, canActivate: [IsAdmin] },
-  { path: 'about', data: { title: 'about' }, component: AboutPageComponent, canActivate: [IsUser] },
+  { path: 'about', data: { title: 'About' }, component: AboutPageComponent, canActivate: [IsUser] },
   {
     path: '**',
     redirectTo: 'user'

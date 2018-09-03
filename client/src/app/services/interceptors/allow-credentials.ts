@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpInterceptor, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthService } from '@services/auth';
 
 // https://github.com/angular/angular/issues/5254
 
 @Injectable()
 export class AllowCredentialsInterceptor implements HttpInterceptor {
-  constructor(public auth: AuthService) { }
+  constructor() { }
   intercept(request: HttpRequest<any>, next: HttpHandler) {
     return next.handle(request.clone({ withCredentials: true }));
   }

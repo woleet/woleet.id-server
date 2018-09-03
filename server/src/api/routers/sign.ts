@@ -2,6 +2,7 @@ import * as Router from 'koa-router';
 import { BadRequest } from 'http-errors';
 import { sign } from '../../controllers/sign';
 import { validate } from '../schemas';
+import { apiTokenAuth } from '../authentication';
 
 const vuuid = validate.raw('uuid');
 const vaddr = validate.raw('address');
@@ -20,10 +21,8 @@ const router = new Router();
  * @swagger
  *  operationId: getSignature
  */
-router.get('/sign', async function (ctx) {
+router.get('/sign', apiTokenAuth, async function (ctx) {
   const { hashToSign, pubKey, userId, customUserId } = ctx.query;
-
-  console.log('query = ', { hashToSign, pubKey, userId, customUserId });
 
   if (!hashToSign) {
     throw new BadRequest('Missign mandatory "hashToSign" parameter');

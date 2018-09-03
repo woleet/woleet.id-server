@@ -9,9 +9,6 @@ export class APITokenStore {
     this.lru = new LRU();
   }
 
-  /**
-   * todo: ensure (test) that sequelize instances are updated
-   */
   async get(value: string): Promise<InternalAPITokenObject> {
     let apiTokenInstance = this.lru.get(value);
 
@@ -21,13 +18,18 @@ export class APITokenStore {
 
     apiTokenInstance = await APIToken.getByValue(value);
 
-    if (apiTokenInstance) {
-      this.lru.set(value, apiTokenInstance);
-      return apiTokenInstance.toJSON();
+    if (!apiTokenInstance) {
+      return null;
     }
 
-    return null;
+    this.lru.set(value, apiTokenInstance);
+    return apiTokenInstance.toJSON();
   }
+
+  async resetCache(value: string) {
+    this.lru.del(value);
+  }
+
 }
 
 export const store = new APITokenStore;

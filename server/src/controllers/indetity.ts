@@ -5,8 +5,6 @@ import { NotFoundKeyError, BlockedKeyError } from '../errors';
 import * as message from 'bitcoinjs-message';
 import { serializeIdentity } from '../api/serialize/identity';
 
-const serverBase = 'http://localhost';
-
 export async function getIdentity(leftData: string, pubKey: string) {
 
   const key = await Key.getByPubKey(pubKey, undefined, true);
@@ -21,8 +19,6 @@ export async function getIdentity(leftData: string, pubKey: string) {
   }
 
   const identity = key.getDataValue('user');
-
-  console.log('associated identity', { identity });
 
   const rightData = crypto.randomBytes(32).toString('hex');
 

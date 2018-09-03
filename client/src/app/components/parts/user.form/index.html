@@ -1,6 +1,9 @@
 <div *ngIf="user; else loading">
   <form role="form" autoComplete="off" (submit)="submit()" #f="ngForm">
     <div>
+      <mat-card-subtitle>General</mat-card-subtitle>
+    </div>
+    <div>
       <mat-form-field class="w-100">
         <mat-select type="text" [(ngModel)]="user.role" name="role" placeholder="Role">
           <mat-option value="user">user</mat-option>
@@ -29,6 +32,10 @@
           (focusout)="user.password.focused = false">
         <mat-error *ngIf="user.password.invalid">{{ getErrorMessage(user.password) }}</mat-error>
       </mat-form-field>
+    </div>
+    <div>
+      <br>
+      <mat-card-subtitle>Identity</mat-card-subtitle>
     </div>
     <div>
       <mat-form-field class="w-100">
@@ -69,7 +76,9 @@
         <input matInput type="text" placeholder="Country" [formControl]="user.identity.country" (focus)="user.identity.country.focused = true"
           (focusout)="user.identity.country.focused = false">
         <mat-error *ngIf="user.identity.country.invalid">{{ getErrorMessage(user.identity.country) }}</mat-error>
-        <mat-hint *ngIf="user.identity.country.focused">Attribute type that contains a two-letter ISO 3166 [ISO3166] country code.</mat-hint>
+        <mat-hint *ngIf="user.identity.country.focused">Attribute type that contains a two-letter ISO 3166 [ISO3166] country
+          code.
+        </mat-hint>
       </mat-form-field>
     </div>
     <div>
