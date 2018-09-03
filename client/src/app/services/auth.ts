@@ -16,7 +16,6 @@ export class AuthService {
     if (user) {
       try {
         this.user = JSON.parse(user);
-        console.log('got', this.user, 'from local storage');
       } catch { }
     }
   }

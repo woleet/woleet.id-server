@@ -23,8 +23,6 @@ const router = new Router();
 router.get('/sign', async function (ctx) {
   const { hashToSign, pubKey, userId, customUserId } = ctx.query;
 
-  console.log('query = ', { hashToSign, pubKey, userId, customUserId });
-
   if (!hashToSign) {
     throw new BadRequest('Missign mandatory "hashToSign" parameter');
   }
