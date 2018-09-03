@@ -1,10 +1,13 @@
 <mat-card>
   <mat-card-content>
     <div>
-      <mat-form-field class="w-100" hideRequiredMarker>
+      <mat-form-field class="w-100">
         <input matInput placeholder="Key name" [formControl]="keyName" required>
-        <mat-error *ngIf="keyName.invalid">{{ getErrorMessage() }}</mat-error>
+        <mat-error *ngIf="keyName.invalid">{{ getErrorMessage(keyName) }}</mat-error>
       </mat-form-field>
+    </div>
+    <div>
+      <mat-checkbox matInput placeholder="Set as default key" (checked)="setAsDefault" (change)="setAsDefault=!setAsDefault">Set as default</mat-checkbox>
     </div>
   </mat-card-content>
   <mat-card-actions>

@@ -10,7 +10,8 @@ body {
 }
 
 $light-primary: mat-palette($mat-blue);
-$light-accent: mat-palette($mat-yellow, 400);
+$light-warn:    mat-palette($mat-red);
+$light-accent:  mat-palette($mat-red, 400);
 
 $light-theme: mat-light-theme($light-primary, $light-accent);
 

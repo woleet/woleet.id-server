@@ -13,7 +13,8 @@ import {
   MatIconModule, MatListModule, MatInputModule, MatCardModule,
   MatSelectModule,
   MatTooltipModule,
-  MatRippleModule
+  MatRippleModule,
+  MatCheckboxModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -111,6 +112,7 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     MatSelectModule,
     MatCardModule,
     MatTooltipModule,
+    MatCheckboxModule,
 
     // app
     AppRoutingModule
