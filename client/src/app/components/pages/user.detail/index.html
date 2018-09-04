@@ -10,7 +10,7 @@
     <mat-divider></mat-divider>
     <div *ngFor="let key of keys; trackBy: trackById;">
       <br>
-      <app-key-card [key]="key" [default]="(user$ | async)?.defaultKeyId == key.id" (delete)="refreshKeyList()"></app-key-card>
+      <app-key-card [key]="key" [userId]="(user$ | async)?.id" [default]="(user$ | async)?.defaultKeyId == key.id" (update)="refreshKeyList()" (delete)="refreshKeyList()"></app-key-card>
     </div>
   </div>
   <ng-template #noKeys>
