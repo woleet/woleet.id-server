@@ -38,7 +38,6 @@ export class KeyCardComponent extends ErrorMessageProvider {
 
   setEditMode(active) {
     this.editMode = active;
-    console.log('totot', this);
     if (this.editMode) {
       this.keyName = new FormControl(this.key.name, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
       this.setAsDefault = this.default;
@@ -53,12 +52,17 @@ export class KeyCardComponent extends ErrorMessageProvider {
 
   async editKey() {
     const name = this.keyName.value;
-    const up = await this.keyService.update(this.key.id, { name });
+
+    if (name !== this.key.name) {
+      const up = await this.keyService.update(this.key.id, { name });
+      this.key = up;
+      this.update.emit(up);
+    }
+
     if (this.default !== this.setAsDefault) {
       await this.userService.update(this.userId, { defaultKeyId: this.setAsDefault ? this.key.id : null });
     }
-    this.key = up;
-    this.update.emit(up);
+
     this.setEditMode(false);
   }
 
