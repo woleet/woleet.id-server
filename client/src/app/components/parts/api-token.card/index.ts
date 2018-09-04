@@ -4,7 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider } from '@components/util';
 
 @Component({
-  selector: 'app-api-token-card',
+  selector: 'api-token-card',
   templateUrl: './index.html'
 })
 export class APITokenCardComponent extends ErrorMessageProvider {
