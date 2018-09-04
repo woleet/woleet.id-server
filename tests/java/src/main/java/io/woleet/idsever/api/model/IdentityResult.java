@@ -30,9 +30,53 @@ import java.io.IOException;
  */
 
 public class IdentityResult {
+  public static final String SERIALIZED_NAME_RIGHT_DATA = "rightData";
+  @SerializedName(SERIALIZED_NAME_RIGHT_DATA)
+  private String rightData = null;
+
+  public static final String SERIALIZED_NAME_SIGNATURE = "signature";
+  @SerializedName(SERIALIZED_NAME_SIGNATURE)
+  private String signature = null;
+
   public static final String SERIALIZED_NAME_IDENTITY = "identity";
   @SerializedName(SERIALIZED_NAME_IDENTITY)
   private Identity identity = null;
+
+  public IdentityResult rightData(String rightData) {
+    this.rightData = rightData;
+    return this;
+  }
+
+   /**
+   * The right part of the signed data (generated ramdomly).
+   * @return rightData
+  **/
+  @ApiModelProperty(value = "The right part of the signed data (generated ramdomly).")
+  public String getRightData() {
+    return rightData;
+  }
+
+  public void setRightData(String rightData) {
+    this.rightData = rightData;
+  }
+
+  public IdentityResult signature(String signature) {
+    this.signature = signature;
+    return this;
+  }
+
+   /**
+   * The signature of the concatenation of &#x60;leftData&#x60; and &#x60;rightData&#x60; using the public key &#x60;pubKey&#x60;.
+   * @return signature
+  **/
+  @ApiModelProperty(example = "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=", value = "The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.")
+  public String getSignature() {
+    return signature;
+  }
+
+  public void setSignature(String signature) {
+    this.signature = signature;
+  }
 
   public IdentityResult identity(Identity identity) {
     this.identity = identity;
@@ -62,12 +106,14 @@ public class IdentityResult {
       return false;
     }
     IdentityResult identityResult = (IdentityResult) o;
-    return Objects.equals(this.identity, identityResult.identity);
+    return Objects.equals(this.rightData, identityResult.rightData) &&
+        Objects.equals(this.signature, identityResult.signature) &&
+        Objects.equals(this.identity, identityResult.identity);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identity);
+    return Objects.hash(rightData, signature, identity);
   }
 
 
@@ -76,6 +122,8 @@ public class IdentityResult {
     StringBuilder sb = new StringBuilder();
     sb.append("class IdentityResult {\n");
     
+    sb.append("    rightData: ").append(toIndentedString(rightData)).append("\n");
+    sb.append("    signature: ").append(toIndentedString(signature)).append("\n");
     sb.append("    identity: ").append(toIndentedString(identity)).append("\n");
     sb.append("}");
     return sb.toString();

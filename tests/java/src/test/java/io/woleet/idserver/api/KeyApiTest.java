@@ -20,7 +20,7 @@ import io.woleet.idsever.api.model.KeyArray;
 import io.woleet.idsever.api.model.KeyBase;
 import io.woleet.idsever.api.model.KeyPost;
 import io.woleet.idsever.api.model.KeyPut;
-import io.woleet.idsever.api.model.Passphrase;
+import io.woleet.idsever.api.model.Mnemonics;
 import java.util.UUID;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -73,9 +73,9 @@ public class KeyApiTest {
     }
     
     /**
-     * Get the secret recoveryphrase associated to a key.
+     * Get the mnemonic words associated to a key.
      *
-     * Returns a passprase.
+     * Returns a list of mnemonic words used to recover or import a key.
      *
      * @throws ApiException
      *          if the Api call fails
@@ -83,7 +83,24 @@ public class KeyApiTest {
     @Test
     public void exportKeyTest() throws ApiException {
         UUID keyId = null;
-        Passphrase response = api.exportKey(keyId);
+        Mnemonics response = api.exportKey(keyId);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * List all keys of a user.
+     *
+     * Returns a key.
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getAllUserKeysTest() throws ApiException {
+        UUID userId = null;
+        Boolean full = null;
+        KeyArray response = api.getAllUserKeys(userId, full);
 
         // TODO: test validations
     }
@@ -100,23 +117,6 @@ public class KeyApiTest {
     public void getKeyByIdTest() throws ApiException {
         UUID keyId = null;
         Key response = api.getKeyById(keyId);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * List all keys of a user.
-     *
-     * Returns a key.
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getKeyById_0Test() throws ApiException {
-        UUID userId = null;
-        Boolean full = null;
-        KeyArray response = api.getKeyById_0(userId, full);
 
         // TODO: test validations
     }

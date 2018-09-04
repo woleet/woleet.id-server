@@ -25,24 +25,24 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * Passphrase
+ * Mnemonics
  */
 
-public class Passphrase {
+public class Mnemonics {
   public static final String SERIALIZED_NAME_PHRASE = "phrase";
   @SerializedName(SERIALIZED_NAME_PHRASE)
   private String phrase = null;
 
-  public Passphrase phrase(String phrase) {
+  public Mnemonics phrase(String phrase) {
     this.phrase = phrase;
     return this;
   }
 
    /**
-   * Passphrase used to recover or import a key.
+   * List of mnemonic words used to recover or import a key.
    * @return phrase
   **/
-  @ApiModelProperty(example = "abandon ability able about above absent", value = "Passphrase used to recover or import a key.")
+  @ApiModelProperty(example = "abandon ability able about above absent", value = "List of mnemonic words used to recover or import a key.")
   public String getPhrase() {
     return phrase;
   }
@@ -60,8 +60,8 @@ public class Passphrase {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Passphrase passphrase = (Passphrase) o;
-    return Objects.equals(this.phrase, passphrase.phrase);
+    Mnemonics mnemonics = (Mnemonics) o;
+    return Objects.equals(this.phrase, mnemonics.phrase);
   }
 
   @Override
@@ -73,7 +73,7 @@ public class Passphrase {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Passphrase {\n");
+    sb.append("class Mnemonics {\n");
     
     sb.append("    phrase: ").append(toIndentedString(phrase)).append("\n");
     sb.append("}");

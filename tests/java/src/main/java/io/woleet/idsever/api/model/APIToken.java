@@ -30,7 +30,7 @@ import java.util.UUID;
  * APIToken
  */
 
-public class APIToken {
+public class APIToken extends APITokenBase {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
   private UUID id = null;
@@ -56,10 +56,10 @@ public class APIToken {
   private Long lastUsed = null;
 
    /**
-   * API token identifier.
+   * API token identifier (allocated by the platform).
    * @return id
   **/
-  @ApiModelProperty(example = "a35c9fee-3893-4eb7-adde-205e1be03209", value = "API token identifier.")
+  @ApiModelProperty(example = "a35c9fee-3893-4eb7-adde-205e1be03209", value = "API token identifier (allocated by the platform).")
   public UUID getId() {
     return id;
   }
@@ -124,12 +124,13 @@ public class APIToken {
         Objects.equals(this.createdAt, apIToken.createdAt) &&
         Objects.equals(this.updatedAt, apIToken.updatedAt) &&
         Objects.equals(this.deletedAt, apIToken.deletedAt) &&
-        Objects.equals(this.lastUsed, apIToken.lastUsed);
+        Objects.equals(this.lastUsed, apIToken.lastUsed) &&
+        super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, value, createdAt, updatedAt, deletedAt, lastUsed);
+    return Objects.hash(id, value, createdAt, updatedAt, deletedAt, lastUsed, super.hashCode());
   }
 
 
@@ -137,7 +138,7 @@ public class APIToken {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class APIToken {\n");
-    
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    value: ").append(toIndentedString(value)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");

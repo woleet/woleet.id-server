@@ -53,10 +53,10 @@ public class UserBase {
   }
 
    /**
-   * User&#39;s email.
+   * User email (can be used for login).
    * @return email
   **/
-  @ApiModelProperty(example = "john.doe@acme.com", value = "User's email.")
+  @ApiModelProperty(example = "john.doe@acme.com", value = "User email (can be used for login).")
   public String getEmail() {
     return email;
   }
@@ -71,10 +71,10 @@ public class UserBase {
   }
 
    /**
-   * User&#39;s alias (for login).
+   * User name (can be used for login).
    * @return username
   **/
-  @ApiModelProperty(example = "johndoe", value = "User's alias (for login).")
+  @ApiModelProperty(example = "johndoe", value = "User name (can be used for login).")
   public String getUsername() {
     return username;
   }

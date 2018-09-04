@@ -30,10 +30,10 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
- * UserDetail
+ * User
  */
 
-public class UserDetail {
+public class User extends UserBase {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
   private UUID id = null;
@@ -63,15 +63,15 @@ public class UserDetail {
   private UUID defaultKeyId = null;
 
    /**
-   * Get id
+   * User identifier (allocated by the server).
    * @return id
   **/
-  @ApiModelProperty(example = "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3", value = "")
+  @ApiModelProperty(example = "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3", value = "User identifier (allocated by the server).")
   public UUID getId() {
     return id;
   }
 
-  public UserDetail status(UserStatusEnum status) {
+  public User status(UserStatusEnum status) {
     this.status = status;
     return this;
   }
@@ -125,7 +125,7 @@ public class UserDetail {
     return lastLogin;
   }
 
-  public UserDetail defaultKeyId(UUID defaultKeyId) {
+  public User defaultKeyId(UUID defaultKeyId) {
     this.defaultKeyId = defaultKeyId;
     return this;
   }
@@ -152,27 +152,28 @@ public class UserDetail {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserDetail userDetail = (UserDetail) o;
-    return Objects.equals(this.id, userDetail.id) &&
-        Objects.equals(this.status, userDetail.status) &&
-        Objects.equals(this.createdAt, userDetail.createdAt) &&
-        Objects.equals(this.updatedAt, userDetail.updatedAt) &&
-        Objects.equals(this.deletedAt, userDetail.deletedAt) &&
-        Objects.equals(this.lastLogin, userDetail.lastLogin) &&
-        Objects.equals(this.defaultKeyId, userDetail.defaultKeyId);
+    User user = (User) o;
+    return Objects.equals(this.id, user.id) &&
+        Objects.equals(this.status, user.status) &&
+        Objects.equals(this.createdAt, user.createdAt) &&
+        Objects.equals(this.updatedAt, user.updatedAt) &&
+        Objects.equals(this.deletedAt, user.deletedAt) &&
+        Objects.equals(this.lastLogin, user.lastLogin) &&
+        Objects.equals(this.defaultKeyId, user.defaultKeyId) &&
+        super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, status, createdAt, updatedAt, deletedAt, lastLogin, defaultKeyId);
+    return Objects.hash(id, status, createdAt, updatedAt, deletedAt, lastLogin, defaultKeyId, super.hashCode());
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserDetail {\n");
-    
+    sb.append("class User {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");

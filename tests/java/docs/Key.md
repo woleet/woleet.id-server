@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | [**UUID**](UUID.md) | Key identifier. |  [optional]
+**id** | [**UUID**](UUID.md) | Key identifier (allocated by the platform). |  [optional]
 **pubKey** | **String** | Public key (bitcoin address when using BIP39 keys). |  [optional]
 **type** | [**KeyTypeEnum**](KeyTypeEnum.md) |  |  [optional]
 **createdAt** | **Long** | Date of creation (Unix ms timestamp). |  [optional]

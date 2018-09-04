@@ -16,8 +16,8 @@ package io.woleet.idserver.api;
 import io.woleet.idserver.ApiException;
 import io.woleet.idsever.api.model.ApiError;
 import java.util.UUID;
+import io.woleet.idsever.api.model.User;
 import io.woleet.idsever.api.model.UserArray;
-import io.woleet.idsever.api.model.UserDetail;
 import io.woleet.idsever.api.model.UserPost;
 import io.woleet.idsever.api.model.UserPut;
 import org.junit.Test;
@@ -48,7 +48,7 @@ public class UserApiTest {
     @Test
     public void createUserTest() throws ApiException {
         UserPost userPost = null;
-        UserDetail response = api.createUser(userPost);
+        User response = api.createUser(userPost);
 
         // TODO: test validations
     }
@@ -64,7 +64,7 @@ public class UserApiTest {
     @Test
     public void deleteUserTest() throws ApiException {
         UUID userId = null;
-        UserDetail response = api.deleteUser(userId);
+        User response = api.deleteUser(userId);
 
         // TODO: test validations
     }
@@ -97,7 +97,7 @@ public class UserApiTest {
     @Test
     public void getUserByIdTest() throws ApiException {
         UUID userId = null;
-        UserDetail response = api.getUserById(userId);
+        User response = api.getUserById(userId);
 
         // TODO: test validations
     }
@@ -114,7 +114,7 @@ public class UserApiTest {
     public void updateUserTest() throws ApiException {
         UUID userId = null;
         UserPut userPut = null;
-        UserDetail response = api.updateUser(userId, userPut);
+        User response = api.updateUser(userId, userPut);
 
         // TODO: test validations
     }

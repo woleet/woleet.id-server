@@ -15,7 +15,7 @@ package io.woleet.idsever.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import io.woleet.idsever.api.model.UserDetail;
+import io.woleet.idsever.api.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ import java.util.List;
  * UserArray
  */
 
-public class UserArray extends ArrayList<UserDetail> {
+public class UserArray extends ArrayList<User> {
 
   @Override
   public boolean equals(java.lang.Object o) {

@@ -31,7 +31,7 @@ import java.util.UUID;
  * Key
  */
 
-public class Key {
+public class Key extends KeyBase {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
   private UUID id = null;
@@ -61,10 +61,10 @@ public class Key {
   private Long lastUsed = null;
 
    /**
-   * Key identifier.
+   * Key identifier (allocated by the platform).
    * @return id
   **/
-  @ApiModelProperty(example = "a35c9fee-3893-4eb7-adde-205e1be03209", value = "Key identifier.")
+  @ApiModelProperty(example = "a35c9fee-3893-4eb7-adde-205e1be03209", value = "Key identifier (allocated by the platform).")
   public UUID getId() {
     return id;
   }
@@ -157,12 +157,13 @@ public class Key {
         Objects.equals(this.createdAt, key.createdAt) &&
         Objects.equals(this.updatedAt, key.updatedAt) &&
         Objects.equals(this.deletedAt, key.deletedAt) &&
-        Objects.equals(this.lastUsed, key.lastUsed);
+        Objects.equals(this.lastUsed, key.lastUsed) &&
+        super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, pubKey, type, createdAt, updatedAt, deletedAt, lastUsed);
+    return Objects.hash(id, pubKey, type, createdAt, updatedAt, deletedAt, lastUsed, super.hashCode());
   }
 
 
@@ -170,7 +171,7 @@ public class Key {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Key {\n");
-    
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    pubKey: ").append(toIndentedString(pubKey)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");

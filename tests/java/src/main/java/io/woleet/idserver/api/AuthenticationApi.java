@@ -325,7 +325,7 @@ public class AuthenticationApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "BasicAuth", "BearerAuth" };
+        String[] localVarAuthNames = new String[] { "BearerAuth" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 

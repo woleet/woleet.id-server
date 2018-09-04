@@ -32,7 +32,7 @@ import java.io.IOException;
  * UserPut
  */
 
-public class UserPut {
+public class UserPut extends UserBase {
   public static final String SERIALIZED_NAME_STATUS = "status";
   @SerializedName(SERIALIZED_NAME_STATUS)
   private UserStatusEnum status = null;
@@ -65,10 +65,10 @@ public class UserPut {
   }
 
    /**
-   * User&#39;s password (optional for now).
+   * User password.
    * @return password
   **/
-  @ApiModelProperty(example = "nSBa+rV3%2/LpD", value = "User's password (optional for now).")
+  @ApiModelProperty(example = "nSBa+rV3%2/LpD", value = "User password.")
   public String getPassword() {
     return password;
   }
@@ -88,12 +88,13 @@ public class UserPut {
     }
     UserPut userPut = (UserPut) o;
     return Objects.equals(this.status, userPut.status) &&
-        Objects.equals(this.password, userPut.password);
+        Objects.equals(this.password, userPut.password) &&
+        super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, password);
+    return Objects.hash(status, password, super.hashCode());
   }
 
 
@@ -101,7 +102,7 @@ public class UserPut {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserPut {\n");
-    
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("}");

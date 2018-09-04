@@ -122,11 +122,6 @@ Log out from the system.
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
-// Configure HTTP basic authorization: BasicAuth
-HttpBasicAuth BasicAuth = (HttpBasicAuth) defaultClient.getAuthentication("BasicAuth");
-BasicAuth.setUsername("YOUR USERNAME");
-BasicAuth.setPassword("YOUR PASSWORD");
-
 // Configure HTTP basic authorization: BearerAuth
 HttpBasicAuth BearerAuth = (HttpBasicAuth) defaultClient.getAuthentication("BearerAuth");
 BearerAuth.setUsername("YOUR USERNAME");
@@ -150,7 +145,7 @@ null (empty response body)
 
 ### Authorization
 
-[BasicAuth](../README.md#BasicAuth), [BearerAuth](../README.md#BearerAuth)
+[BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 

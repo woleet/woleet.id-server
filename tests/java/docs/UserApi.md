@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 <a name="createUser"></a>
 # **createUser**
-> UserDetail createUser(userPost)
+> User createUser(userPost)
 
 Create a new user.
 
@@ -38,7 +38,7 @@ BearerAuth.setPassword("YOUR PASSWORD");
 UserApi apiInstance = new UserApi();
 UserPost userPost = new UserPost(); // UserPost | Created user object.
 try {
-    UserDetail result = apiInstance.createUser(userPost);
+    User result = apiInstance.createUser(userPost);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserApi#createUser");
@@ -54,7 +54,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**UserDetail**](UserDetail.md)
+[**User**](User.md)
 
 ### Authorization
 
@@ -67,7 +67,7 @@ Name | Type | Description  | Notes
 
 <a name="deleteUser"></a>
 # **deleteUser**
-> UserDetail deleteUser(userId)
+> User deleteUser(userId)
 
 Delete a user.
 
@@ -92,7 +92,7 @@ BearerAuth.setPassword("YOUR PASSWORD");
 UserApi apiInstance = new UserApi();
 UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
 try {
-    UserDetail result = apiInstance.deleteUser(userId);
+    User result = apiInstance.deleteUser(userId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserApi#deleteUser");
@@ -108,7 +108,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**UserDetail**](UserDetail.md)
+[**User**](User.md)
 
 ### Authorization
 
@@ -175,7 +175,7 @@ Name | Type | Description  | Notes
 
 <a name="getUserById"></a>
 # **getUserById**
-> UserDetail getUserById(userId)
+> User getUserById(userId)
 
 Get a user by his identifier.
 
@@ -198,7 +198,7 @@ BearerAuth.setPassword("YOUR PASSWORD");
 UserApi apiInstance = new UserApi();
 UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
 try {
-    UserDetail result = apiInstance.getUserById(userId);
+    User result = apiInstance.getUserById(userId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserApi#getUserById");
@@ -214,7 +214,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**UserDetail**](UserDetail.md)
+[**User**](User.md)
 
 ### Authorization
 
@@ -227,7 +227,7 @@ Name | Type | Description  | Notes
 
 <a name="updateUser"></a>
 # **updateUser**
-> UserDetail updateUser(userId, userPut)
+> User updateUser(userId, userPut)
 
 Update a user.
 
@@ -253,7 +253,7 @@ UserApi apiInstance = new UserApi();
 UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
 UserPut userPut = new UserPut(); // UserPut | Updated user object.
 try {
-    UserDetail result = apiInstance.updateUser(userId, userPut);
+    User result = apiInstance.updateUser(userId, userPut);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserApi#updateUser");
@@ -270,7 +270,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**UserDetail**](UserDetail.md)
+[**User**](User.md)
 
 ### Authorization
 

@@ -60,7 +60,7 @@ public class SignatureApi {
      * Build call for getSignature
      * @param hashToSign The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}). (required)
      * @param userId The user identifier. (optional)
-     * @param customUserId The custom user identifier (&#x60;userId&#x60; field of the user&#39;s identity). (optional)
+     * @param customUserId The custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign. When not provided, the default key of the user is used (if any). (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
@@ -135,7 +135,7 @@ public class SignatureApi {
      * Use this endpoint to sign some data using one of the keys of a given user. &lt;br&gt;Compute the SHA256 hash of the data to sign (client side) and provide it in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;Specify the user using either the &#x60;userId&#x60;, &#x60;customUserId&#x60; or the &#x60;pubKey&#x60; parameter. &lt;br&gt;The signature produced is the signature of the hash using the referred key or using the user&#39;s default key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
      * @param hashToSign The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}). (required)
      * @param userId The user identifier. (optional)
-     * @param customUserId The custom user identifier (&#x60;userId&#x60; field of the user&#39;s identity). (optional)
+     * @param customUserId The custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign. When not provided, the default key of the user is used (if any). (optional)
      * @return SignatureResult
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -150,7 +150,7 @@ public class SignatureApi {
      * Use this endpoint to sign some data using one of the keys of a given user. &lt;br&gt;Compute the SHA256 hash of the data to sign (client side) and provide it in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;Specify the user using either the &#x60;userId&#x60;, &#x60;customUserId&#x60; or the &#x60;pubKey&#x60; parameter. &lt;br&gt;The signature produced is the signature of the hash using the referred key or using the user&#39;s default key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
      * @param hashToSign The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}). (required)
      * @param userId The user identifier. (optional)
-     * @param customUserId The custom user identifier (&#x60;userId&#x60; field of the user&#39;s identity). (optional)
+     * @param customUserId The custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign. When not provided, the default key of the user is used (if any). (optional)
      * @return ApiResponse&lt;SignatureResult&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -166,7 +166,7 @@ public class SignatureApi {
      * Use this endpoint to sign some data using one of the keys of a given user. &lt;br&gt;Compute the SHA256 hash of the data to sign (client side) and provide it in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;Specify the user using either the &#x60;userId&#x60;, &#x60;customUserId&#x60; or the &#x60;pubKey&#x60; parameter. &lt;br&gt;The signature produced is the signature of the hash using the referred key or using the user&#39;s default key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
      * @param hashToSign The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}). (required)
      * @param userId The user identifier. (optional)
-     * @param customUserId The custom user identifier (&#x60;userId&#x60; field of the user&#39;s identity). (optional)
+     * @param customUserId The custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign. When not provided, the default key of the user is used (if any). (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
