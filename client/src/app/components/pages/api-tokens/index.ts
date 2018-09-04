@@ -12,7 +12,7 @@ export class APITokensPageComponent extends TrackById implements OnInit {
 
   apiTokens$: Promise<ApiAPITokenObject[]>;
 
-  constructor(private apiTokenService: APITokenService) { super() }
+  constructor(private apiTokenService: APITokenService) { super(); }
 
   ngOnInit() {
     this.refreshList();

@@ -1,6 +1,10 @@
 // tslint:disable:radix
 
+import * as log from 'loglevel';
+
 const env = process.env;
+
+log.setLevel(env.PROD === 'true' ? 'info' : 'debug');
 
 const defaultPort = parseInt(env.WOLEET_ID_SERVER_DEFAULT_PORT) || 3000;
 

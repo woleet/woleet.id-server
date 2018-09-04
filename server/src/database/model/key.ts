@@ -28,7 +28,7 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
   }
 
   async getAllKeysOfUser(userId: string, full = false): Promise<SequelizeKeyObject[]> {
-    return this.model.findAll({ where: { userId }, paranoid: !full });
+    return this.model.findAll({ where: { userId }, order: [['createdAt', 'DESC']], paranoid: !full });
   }
 
   /**

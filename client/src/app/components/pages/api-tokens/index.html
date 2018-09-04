@@ -11,7 +11,7 @@
     <mat-divider></mat-divider>
     <div *ngFor="let apiToken of apiTokens; trackBy: trackById;">
       <br>
-      <app-api-token-card [apiToken]="apiToken" (delete)="refreshList()"></app-api-token-card>
+      <api-token-card [apiToken]="apiToken" (delete)="refreshList()"></api-token-card>
     </div>
   </div>
   <ng-template #noApiKeys>

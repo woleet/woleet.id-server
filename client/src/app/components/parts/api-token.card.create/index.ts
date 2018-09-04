@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { APITokenService } from '@services/api-token';
+import { ErrorMessageProvider } from '@components/util';
 
 @Component({
   selector: 'api-token-create-card',
   templateUrl: './index.html'
 })
-export class APITokenCreateCardComponent {
+export class APITokenCreateCardComponent extends ErrorMessageProvider {
 
   @Output()
   reset = new EventEmitter;
@@ -16,7 +17,7 @@ export class APITokenCreateCardComponent {
 
   apiTokenName = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
 
-  constructor(private apiTokenService: APITokenService) { }
+  constructor(private apiTokenService: APITokenService) { super(); }
 
   async createAPIToken() {
     const name = this.apiTokenName.value;
@@ -31,23 +32,6 @@ export class APITokenCreateCardComponent {
   cancelAPIToken() {
     this.apiTokenName.reset();
     this.reset.emit();
-  }
-
-  getErrorMessage() {
-
-    const err = Object.keys(this.apiTokenName.errors)[0];
-
-    switch (err) {
-      case 'required':
-        return 'You must enter a value';
-      case 'minlength':
-        return 'Must be 3 character min';
-      case 'maxlength':
-        return 'Must be 15 character max';
-      default:
-        return '';
-    }
-
   }
 
 }
