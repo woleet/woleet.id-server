@@ -15,7 +15,6 @@ tags:
   - name: Identity
   - name: Signature
 security:
-  - BasicAuth: []
   - BearerAuth: []
 paths:
   /login:
@@ -60,8 +59,6 @@ paths:
         - Authentication
       summary: Return information about the current logged user.
       operationId: getUserInfo
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: Successful operation.
@@ -167,8 +164,6 @@ paths:
       operationId: getKeyById
       parameters:
         - $ref: '#/components/parameters/KeyIdParameter'
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: Successful operation.
@@ -228,8 +223,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
-      security:
-        - BearerAuth: []
     delete:
       tags:
         - Key
@@ -238,8 +231,6 @@ paths:
       operationId: deleteKey
       parameters:
         - $ref: '#/components/parameters/KeyIdParameter'
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: Successful operation.
@@ -269,20 +260,18 @@ paths:
     get:
       tags:
         - Key
-      summary: Get the secret recoveryphrase associated to a key.
-      description: Returns a passprase.
+      summary: Get the mnemonic words associated to a key.
+      description: Returns a list of mnemonic words used to recover or import a key.
       operationId: exportKey
       parameters:
         - $ref: '#/components/parameters/KeyIdParameter'
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Passphrase'
+                $ref: '#/components/schemas/Mnemonics'
         '400':
           description: Invalid key identifier.
           content:
@@ -311,15 +300,13 @@ paths:
         - $ref: '#/components/parameters/UserIdParameter'
       requestBody:
         $ref: '#/components/requestBodies/KeyPost'
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Key'
+                $ref: '#/components/responses/Key'
         '400':
           description: Invalid input.
           content:
@@ -344,12 +331,10 @@ paths:
         - Key
       summary: List all keys of a user.
       description: Returns a key.
-      operationId: getKeyById
+      operationId: getAllUserKeys
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
         - $ref: '#/components/parameters/FullListQueryParameter'
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: Successful operation.
@@ -383,8 +368,6 @@ paths:
       summary: Create a new user.
       description: This can only be done by the logged in user.
       operationId: createUser
-      security:
-        - BearerAuth: []
       requestBody:
         description: Created user object.
         required: true
@@ -398,7 +381,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/UserDetail'
+                $ref: '#/components/responses/User'
         '401':
           description: Missing or bad session token.
           content:
@@ -419,15 +402,13 @@ paths:
       operationId: getUserById
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/UserDetail'
+                $ref: '#/components/responses/User'
         '400':
           description: Invalid user identifier.
           content:
@@ -454,8 +435,6 @@ paths:
       operationId: updateUser
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
-      security:
-        - BearerAuth: []
       requestBody:
         content:
           application/json:
@@ -469,7 +448,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/UserDetail'
+                $ref: '#/components/responses/User'
         '400':
           description: Invalid object supplied / Invalid user identifier.
           content:
@@ -496,15 +475,13 @@ paths:
       operationId: deleteUser
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/UserDetail'
+                $ref: '#/components/responses/User'
         '400':
           description: Invalid user identifier.
           content:
@@ -532,8 +509,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
         - $ref: '#/components/parameters/FullListQueryParameter'
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: Arrau of users.
@@ -549,8 +524,13 @@ paths:
       summary: Create an API token suitable to call the /sign endpoint.
       description: This can only be done by an admin.
       operationId: createAPIToken
-      security:
-        - BearerAuth: []
+      requestBody:
+        description: Created API token object.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APITokenPost'
       responses:
         '200':
           description: Successful operation.
@@ -570,13 +550,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/ApiError'
-      requestBody:
-        description: Created API token object.
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/APITokenPost'
   /APIToken/{APITokenId}:
     get:
       tags:
@@ -585,8 +558,6 @@ paths:
       operationId: getAPITokenById
       parameters:
         - $ref: '#/components/parameters/APITokenIdParameter'
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: Successful operation.
@@ -620,8 +591,6 @@ paths:
       operationId: updateAPIToken
       parameters:
         - $ref: '#/components/parameters/APITokenIdParameter'
-      security:
-        - BearerAuth: []
       requestBody:
         content:
           application/json:
@@ -662,8 +631,6 @@ paths:
       operationId: deleteAPIToken
       parameters:
         - $ref: '#/components/parameters/APITokenIdParameter'
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: Successful operation.
@@ -695,8 +662,6 @@ paths:
         - API Token
       summary: List all API tokens.
       operationId: getAllAPITokens
-      security:
-        - BearerAuth: []
       parameters:
         - $ref: '#/components/parameters/FullListQueryParameter'
       responses:
@@ -741,27 +706,29 @@ components:
           example: "FR"
     FullIdentity:
       allOf:
-      - $ref: '#/components/schemas/Identity'
-      - type: object
-        properties:
-          userId:
-            type: string
-            description: >
-              userId (UID) (0.9.2342.19200300.100.1.1)
-              <br>The custom user identifier: it must be unique for each user.
-            example: "wol.jim-smith.01"
+        - $ref: '#/components/schemas/Identity'
+        - type: object
+          required:
+            - commonName
+          properties:
+            userId:
+              type: string
+              description: >
+                userId (UID) (0.9.2342.19200300.100.1.1)
+                <br>The custom user identifier: it must be unique for each user.
+              example: "wol.jim-smith.01"
     Password:
       type: string
       format: password
       default: null
-      description: User's password (optional for now).
+      description: User password.
       example: "nSBa+rV3%2/LpD"
-    Passphrase:
+    Mnemonics:
       type: object
       properties:
         phrase:
           type: string
-          description: Passphrase used to recover or import a key.
+          description: List of mnemonic words used to recover or import a key.
           example: "abandon ability able about above absent"
     PubKey:
       type: string
@@ -820,19 +787,20 @@ components:
           type: string
           format: email
           default: null
-          description: User's email.
+          description: User email (can be used for login).
           example: "john.doe@acme.com"
         username:
           type: string
           default: null
-          description: User's alias (for login).
+          description: User name (can be used for login).
           example: "johndoe"
         role:
           $ref: '#/components/schemas/UserRoleEnum'
         identity:
           $ref: '#/components/schemas/FullIdentity'
-    UserDetail:
+    User:
       allOf:
+        - $ref: '#/components/schemas/UserBase'
         - type: object
           properties:
             id:
@@ -856,28 +824,28 @@ components:
               format: uuid
               description: Identifier of the default key to use for this user.
               example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
-        - $ref: '#/components/schemas/UserBase'
-    UserPut:
-      allOf:
-        - type: object
-          properties:
-            status:
-              $ref: '#/components/schemas/UserStatusEnum'
-            password:
-              $ref: '#/components/schemas/Password'
-        - $ref: '#/components/schemas/UserBase'
     UserPost:
       allOf:
         - $ref: '#/components/schemas/UserPut'
         - type: object
           required:
-            # - username # step2 only
-            # - password # step2 only
             - identity
+    UserPut:
+      allOf:
+      - $ref: '#/components/schemas/UserBase'
+      - type: object
+        properties:
+          status:
+            $ref: '#/components/schemas/UserStatusEnum'
+          password:
+            $ref: '#/components/schemas/Password'
+    UserArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
     UserInfo:
       allOf:
         - $ref: '#/components/schemas/UserBase'
-        - type: object
     KeyTypeEnum:
       type: string
       enum:
@@ -901,9 +869,8 @@ components:
           example: "active"
     APIToken:
       allOf:
+        - $ref: '#/components/schemas/APITokenBase'
         - type: object
-          required:
-          - name
           properties:
             id:
               readOnly: true
@@ -924,16 +891,19 @@ components:
               $ref: '#/components/schemas/DeletedAt'
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
-        - $ref: '#/components/schemas/APITokenBase'
     APITokenPost:
       allOf:
         - $ref: '#/components/schemas/APITokenBase'
         - type: object
           required:
-          - name
+            - name
     APITokenPut:
       allOf:
         - $ref: '#/components/schemas/APITokenBase'
+    APITokenArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/APIToken'
     KeyBase:
       type: object
       properties:
@@ -951,9 +921,10 @@ components:
           example: "active"
     Key:
       allOf:
+        - $ref: '#/components/schemas/KeyBase'
         - type: object
           required:
-          - name
+            - name
           properties:
             id:
               readOnly: true
@@ -973,7 +944,6 @@ components:
               $ref: '#/components/schemas/DeletedAt'
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
-        - $ref: '#/components/schemas/KeyBase'
     KeyPost:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
@@ -983,10 +953,10 @@ components:
     KeyPut:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
-    SessionToken:
-      description: Session token.
-      type: string
-      example: "doy7GCOUR0uGz6ssPvF6wQ=="
+    KeyArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Key'
     SignatureResult:
       type: object
       properties:
@@ -1022,8 +992,6 @@ components:
               format: base64
               example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
               description: The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
-        - type: object
-          properties:
             identity:
               $ref: '#/components/schemas/Identity'
     ApiError:
@@ -1042,18 +1010,6 @@ components:
           required:
             - code
             - message
-    UserArray:
-      type: array
-      items:
-        $ref: '#/components/schemas/UserDetail'
-    KeyArray:
-      type: array
-      items:
-        $ref: '#/components/schemas/Key'
-    APITokenArray:
-      type: array
-      items:
-        $ref: '#/components/schemas/APIToken'
   parameters:
     UserIdParameter:
       name: userId
@@ -1169,14 +1125,16 @@ components:
       description: Replacement API token object.
       required: true
   responses:
-    UserDetail:
-      $ref: '#/components/schemas/UserDetail'
+    User:
+      $ref: '#/components/schemas/User'
+    UserArray:
+      $ref: '#/components/schemas/UserArray'
     UserInfo:
       $ref: '#/components/schemas/UserInfo'
     ApiError:
       $ref: '#/components/schemas/ApiError'
-    UserArray:
-      $ref: '#/components/schemas/UserArray'
+    Key:
+      $ref: '#/components/schemas/Key'
     KeyArray:
       $ref: '#/components/schemas/KeyArray'
     APIToken:
