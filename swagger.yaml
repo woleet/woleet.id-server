@@ -839,6 +839,7 @@ components:
               type: string
               format: uuid
               readOnly: true
+              description: User identifier (allocated by the server).
               example: "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3"
             status:
               $ref: '#/components/schemas/UserStatusEnum'
@@ -908,7 +909,7 @@ components:
               readOnly: true
               type: string
               format: uuid
-              description: API token identifier.
+              description: API token identifier (allocated by the platform).
               example: "a35c9fee-3893-4eb7-adde-205e1be03209"
             value:
               readOnly: true
@@ -958,7 +959,7 @@ components:
               readOnly: true
               type: string
               format: uuid
-              description: Key identifier.
+              description: Key identifier (allocated by the platform).
               example: "a35c9fee-3893-4eb7-adde-205e1be03209"
             pubKey:
               $ref: '#/components/schemas/PubKey'
@@ -1108,7 +1109,7 @@ components:
     CustomUserIdQueryParameter:
       name: customUserId
       in: query
-      description: The custom user identifier (`userId` field of the user's identity).
+      description: The custom user identifier (ie. `userId` field of the user's identity).
       required: false
       schema:
         type: string
