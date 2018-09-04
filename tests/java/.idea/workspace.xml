@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="5525a354-d6f4-4c6d-a578-6c978dd18bbf" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/java.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_8_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_squareup_okhttp_logging_interceptor_2_7_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_squareup_okhttp_okhttp_2_7_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_squareup_okio_okio_1_6_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_gsonfire_gson_fire_1_8_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_swagger_swagger_annotations_1_5_18.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.openapi-generator-ignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.openapi-generator/VERSION" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/APIToken.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/APITokenArray.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/APITokenBase.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/APITokenPost.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/APITokenPut.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/ApiError.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/ApiErrorError.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/ApiTokenApi.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/AuthenticationApi.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/FullIdentity.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/Identity.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/IdentityApi.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/IdentityResult.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/Key.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/KeyApi.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/KeyArray.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/KeyBase.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/KeyPost.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/KeyPut.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/KeyTypeEnum.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/Passphrase.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/SignatureApi.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/SignatureResult.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/UserApi.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/UserArray.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/UserBase.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/UserDetail.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/UserInfo.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/UserPost.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/UserPut.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/UserRoleEnum.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/UserStatusEnum.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/git_push.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ApiCallback.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ApiClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ApiException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/Configuration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/GzipRequestInterceptor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/JSON.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/Pair.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ProgressRequestBody.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ProgressResponseBody.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/StringUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/ApiTokenApi.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/AuthenticationApi.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/IdentityApi.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/KeyApi.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/SignatureApi.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/UserApi.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/auth/ApiKeyAuth.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/auth/Authentication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/auth/HttpBasicAuth.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/auth/OAuth.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/auth/OAuthFlow.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/APIToken.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/APITokenArray.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/APITokenBase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/APITokenPost.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/APITokenPut.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/ApiError.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/ApiErrorError.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/FullIdentity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/Identity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/IdentityResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/Key.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/KeyArray.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/KeyBase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/KeyPost.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/KeyPut.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/KeyTypeEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/Passphrase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/SignatureResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserArray.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserBase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserDetail.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserPost.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserPut.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserRoleEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserStatusEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/ApiTokenApiTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/AuthenticationApiTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/IdentityApiTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/KeyApiTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/SignatureApiTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/UserApiTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../swagger.yaml" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="323261568">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.0" value="2" />
+          <entry key="project.opened" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="VERSION" value="1" />
+          <entry key="gitignore" value="5" />
+          <entry key="gradle" value="2" />
+          <entry key="iml" value="1" />
+          <entry key="java" value="6" />
+          <entry key="openapi-generator-ignore" value="2" />
+          <entry key="pguser" value="2" />
+          <entry key="properties" value="1" />
+          <entry key="sql" value="1" />
+          <entry key="xml" value="4" />
+          <entry key="yml" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Git file" value="5" />
+          <entry key="Groovy" value="2" />
+          <entry key="IDEA_MODULE" value="1" />
+          <entry key="JAVA" value="6" />
+          <entry key="PLAIN_TEXT" value="3" />
+          <entry key="Properties" value="1" />
+          <entry key="SQL" value="2" />
+          <entry key="Scratch" value="1" />
+          <entry key="XML" value="4" />
+          <entry key="YAML" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="gitignore" value="44" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Git file" value="44" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/.gitignore" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="woleet-idserver-api-client" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="woleet-idserver-api-client" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+      </expand>
+      <select />
+    </treeState>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="51" />
+    <option name="y" value="23" />
+    <option name="width" value="1629" />
+    <option name="height" value="1027" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <autoscrollFromSource ProjectPane="true" />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="postgresql" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="add_unversioned_files" value="$PROJECT_DIR$/.gitignore" />
+    <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536064092477" />
+    <property name="go.gopath.indexing.explicitly.defined" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="$USER_HOME$/.nvm/versions/node/v7.10.0/bin/node" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.annotationProcessors" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="JUnit.All in woleet-idserver-api-client (1)">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in woleet-idserver-api-client (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="woleet-idserver-api-client" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in woleet-idserver-api-client" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="woleet-idserver-api-client" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="JUnit.All in woleet-idserver-api-client" />
+      <item itemvalue="JUnit.All in woleet-idserver-api-client (1)" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.All in woleet-idserver-api-client (1)" />
+        <item itemvalue="JUnit.All in woleet-idserver-api-client" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5525a354-d6f4-4c6d-a578-6c978dd18bbf" name="Default Changelist" comment="" />
+      <created>1536063409322</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1536063409322</updated>
+      <workItem from="1536063410535" duration="795000" />
+      <workItem from="1536064212862" duration="764000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="All_in_woleet-idserver-api-client - 2018.09.04 at 14h 17m 28s.xml">
+      <configuration name="All in woleet-idserver-api-client" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_in_woleet-idserver-api-client_(1) - 2018.09.04 at 14h 23m 02s.xml">
+      <configuration name="All in woleet-idserver-api-client (1)" configurationId="JUnit" />
+    </history-entry>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="1559000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="51" y="23" width="1629" height="1027" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Image Layers" order="0" />
+      <window_info id="Designer" order="1" />
+      <window_info id="UI Designer" order="2" />
+      <window_info id="Capture Tool" order="3" />
+      <window_info id="Favorites" order="4" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.2110901" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.43850267" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="8" visible="true" weight="0.542246" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" order="12" />
+      <window_info anchor="right" id="Palette" order="0" />
+      <window_info anchor="right" id="Theme Preview" order="1" />
+      <window_info anchor="right" id="Capture Analysis" order="2" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info anchor="right" id="Database" order="4" weight="0.22873347" />
+      <window_info anchor="right" id="Maven Projects" order="5" visible="true" weight="0.19218652" />
+      <window_info anchor="right" id="Commander" order="6" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="7" show_stripe_button="false" weight="0.24952741" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="8" weight="0.25" />
+      <window_info anchor="right" id="Structure" order="9" weight="0.24952741" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="true" />
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/AuthenticationApiTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/SignatureApiTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/UserApiTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="34" column="13" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/KeyApiTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="36" column="13" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/IdentityApiTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/ApiTokenApiTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="35" column="13" selection-start-line="35" selection-start-column="13" selection-end-line="35" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://a0945571-e7fa-4858-b40a-313a1c89404c/role/pguser">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/a0945571-e7fa-4858-b40a-313a1c89404c/console.sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gradle.properties">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/settings.gradle">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.openapi-generator/VERSION">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/woleet-idserver-api-client.iml" />
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/dataSources.xml" />
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml" />
+    <entry file="file://$PROJECT_DIR$/.idea/encodings.xml" />
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="16" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.openapi-generator-ignore">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>groovy-2.4.12</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>java</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: com.google.code.gson:gson:2.8.1</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
