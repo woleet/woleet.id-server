@@ -2,124 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5525a354-d6f4-4c6d-a578-6c978dd18bbf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/java.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_8_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_squareup_okhttp_logging_interceptor_2_7_5.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_squareup_okhttp_okhttp_2_7_5.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_squareup_okio_okio_1_6_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_gsonfire_gson_fire_1_8_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_swagger_swagger_annotations_1_5_18.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_12.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.openapi-generator-ignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.openapi-generator/VERSION" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/APIToken.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/APITokenArray.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/APITokenBase.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/APITokenPost.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/APITokenPut.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/ApiError.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/ApiErrorError.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/ApiTokenApi.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/AuthenticationApi.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/FullIdentity.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/Identity.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/IdentityApi.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/IdentityResult.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/Key.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/KeyApi.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/KeyArray.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/KeyBase.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/KeyPost.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/KeyPut.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/KeyTypeEnum.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/Passphrase.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/SignatureApi.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/SignatureResult.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/UserApi.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/UserArray.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/UserBase.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/UserDetail.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/UserInfo.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/UserPost.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/UserPut.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/UserRoleEnum.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/UserStatusEnum.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/git_push.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ApiCallback.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ApiClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ApiException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ApiResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/Configuration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/GzipRequestInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/JSON.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/Pair.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ProgressRequestBody.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/ProgressResponseBody.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/StringUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/ApiTokenApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/AuthenticationApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/IdentityApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/KeyApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/SignatureApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/api/UserApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/auth/ApiKeyAuth.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/auth/Authentication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/auth/HttpBasicAuth.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/auth/OAuth.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idserver/auth/OAuthFlow.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/APIToken.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/APITokenArray.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/APITokenBase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/APITokenPost.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/APITokenPut.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/ApiError.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/ApiErrorError.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/FullIdentity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/Identity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/IdentityResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/Key.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/KeyArray.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/KeyBase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/KeyPost.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/KeyPut.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/KeyTypeEnum.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/Passphrase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/SignatureResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserArray.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserBase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserDetail.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserPost.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserPut.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserRoleEnum.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/io/woleet/idsever/api/model/UserStatusEnum.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/ApiTokenApiTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/AuthenticationApiTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/IdentityApiTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/KeyApiTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/SignatureApiTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/io/woleet/idserver/api/UserApiTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../swagger.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -151,15 +35,15 @@
     <session id="323261568">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
-          <entry key="project.open.time.0" value="2" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.closed" value="3" />
+          <entry key="project.open.time.0" value="4" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="VERSION" value="1" />
-          <entry key="gitignore" value="5" />
+          <entry key="gitignore" value="7" />
           <entry key="gradle" value="2" />
           <entry key="iml" value="1" />
           <entry key="java" value="6" />
@@ -167,13 +51,13 @@
           <entry key="pguser" value="2" />
           <entry key="properties" value="1" />
           <entry key="sql" value="1" />
-          <entry key="xml" value="4" />
+          <entry key="xml" value="8" />
           <entry key="yml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Git file" value="5" />
+          <entry key="Git file" value="7" />
           <entry key="Groovy" value="2" />
           <entry key="IDEA_MODULE" value="1" />
           <entry key="JAVA" value="6" />
@@ -181,24 +65,55 @@
           <entry key="Properties" value="1" />
           <entry key="SQL" value="2" />
           <entry key="Scratch" value="1" />
-          <entry key="XML" value="4" />
+          <entry key="XML" value="8" />
           <entry key="YAML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="gitignore" value="44" />
+          <entry key="gitignore" value="50" />
+          <entry key="txt" value="21" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Git file" value="44" />
+          <entry key="Git file" value="50" />
+          <entry key="PLAIN_TEXT" value="21" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="760">
+              <caret line="160" column="14" selection-start-line="160" selection-start-column="14" selection-end-line="160" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="21" selection-start-line="21" selection-end-line="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.idea/compiler.xml">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
@@ -247,7 +162,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -255,27 +172,31 @@
               <item name="java" type="b2602c69:ProjectViewProjectNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name=".idea" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="postgresql" />
+    <property name="GO_FMT" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/.gitignore" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536064092477" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536065818315" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="$USER_HOME$/.nvm/versions/node/v7.10.0/bin/node" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.annotationProcessors" />
   </component>
@@ -291,7 +212,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.All in woleet-idserver-api-client (1)">
+  <component name="RunManager" selected="JUnit.All in java">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -300,6 +221,15 @@
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in java" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -348,9 +278,11 @@
     <list>
       <item itemvalue="JUnit.All in woleet-idserver-api-client" />
       <item itemvalue="JUnit.All in woleet-idserver-api-client (1)" />
+      <item itemvalue="JUnit.All in java" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.All in java" />
         <item itemvalue="JUnit.All in woleet-idserver-api-client (1)" />
         <item itemvalue="JUnit.All in woleet-idserver-api-client" />
       </list>
@@ -367,8 +299,25 @@
       <option name="presentableId" value="Default" />
       <updated>1536063409322</updated>
       <workItem from="1536063410535" duration="795000" />
-      <workItem from="1536064212862" duration="764000" />
+      <workItem from="1536064212862" duration="1143000" />
+      <workItem from="1536065715578" duration="39000" />
+      <workItem from="1536065757885" duration="61000" />
     </task>
+    <task id="LOCAL-00001" summary="Test code generated.">
+      <created>1536065377189</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1536065377189</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Test code generated.">
+      <created>1536065697944</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1536065697944</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -378,9 +327,12 @@
     <history-entry file="All_in_woleet-idserver-api-client_(1) - 2018.09.04 at 14h 23m 02s.xml">
       <configuration name="All in woleet-idserver-api-client (1)" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="All_in_java - 2018.09.04 at 14h 52m 50s.xml">
+      <configuration name="All in java" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1559000" />
+    <option name="totallyTimeSpent" value="2038000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="51" y="23" width="1629" height="1027" extended-state="6" />
@@ -391,7 +343,7 @@
       <window_info id="UI Designer" order="2" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Favorites" order="4" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.2110901" />
+      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.21613106" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.43850267" />
@@ -400,10 +352,10 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="8" visible="true" weight="0.542246" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="8" sideWeight="0.49968493" visible="true" weight="0.36363637" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="10" />
-      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50031507" side_tool="true" weight="0.6898396" />
       <window_info anchor="bottom" id="Messages" order="12" />
       <window_info anchor="right" id="Palette" order="0" />
       <window_info anchor="right" id="Theme Preview" order="1" />
@@ -450,7 +402,11 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="true" />
+    <MESSAGE value="Test code generated." />
+    <option name="LAST_COMMIT_MESSAGE" value="Test code generated." />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -525,17 +481,29 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/dataSources.xml" />
-    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml" />
     <entry file="file://$PROJECT_DIR$/.idea/encodings.xml" />
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/.openapi-generator-ignore">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="16" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
+        <state relative-caret-position="760">
+          <caret line="160" column="14" selection-start-line="160" selection-start-column="14" selection-end-line="160" selection-end-column="14" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.openapi-generator-ignore">
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/compiler.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
     </entry>
   </component>
   <component name="masterDetails">
