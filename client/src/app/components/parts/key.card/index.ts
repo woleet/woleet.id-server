@@ -31,6 +31,9 @@ export class KeyCardComponent extends ErrorMessageProvider {
   @Output()
   update = new EventEmitter<ApiKeyObject>();
 
+  @Output()
+  updateUser = new EventEmitter<ApiKeyObject>();
+
   constructor(private keyService: KeyService, private userService: UserService) {
     super();
     this.setAsDefault = this.default;
@@ -56,11 +59,12 @@ export class KeyCardComponent extends ErrorMessageProvider {
     if (name !== this.key.name) {
       const up = await this.keyService.update(this.key.id, { name });
       this.key = up;
-      this.update.emit(up);
+      this.update.emit();
     }
 
     if (this.default !== this.setAsDefault) {
       await this.userService.update(this.userId, { defaultKeyId: this.setAsDefault ? this.key.id : null });
+      this.updateUser.emit();
     }
 
     this.setEditMode(false);
@@ -69,13 +73,13 @@ export class KeyCardComponent extends ErrorMessageProvider {
   async blockKey() {
     const up = await this.keyService.update(this.key.id, { status: 'blocked' });
     this.key = up;
-    this.update.emit(up);
+    this.update.emit();
   }
 
   async unblockKey() {
     const up = await this.keyService.update(this.key.id, { status: 'active' });
     this.key = up;
-    this.update.emit(up);
+    this.update.emit();
   }
 
 }
