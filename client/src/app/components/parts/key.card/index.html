@@ -1,30 +1,54 @@
-<mat-card fxLayout="row" fxLayoutAlign="space-between start" class="key-card" [ngClass]="{'default': default}">
-  <div fxLayout="column">
-    <div fxLayout="row">
-      <div fxLayout="column" class="card-icon">
-        <mat-icon>vpn_key_outline</mat-icon>
-      </div>
-      <div fxLayout="column">
-        <strong>{{ key.name }}</strong>
-        <div>
-          <span>Public&nbsp;key</span><code>{{ key.publicKey }}</code></div>
-        <div class="text-gray text-slim">
-          <span>Created&nbsp;at</span>&nbsp;<span>{{ key.createdAt | date }}</span>
+<mat-card class="key-card" [ngClass]="{'default': default}">
+  <!-- Display mode -->
+  <mat-card-content *ngIf="!editMode" fxLayout="row" fxLayoutAlign="space-between start">
+    <div fxLayout="column">
+      <div fxLayout="row">
+        <div fxLayout="column" class="card-icon">
+          <mat-icon>vpn_key_outline</mat-icon>
+        </div>
+        <div fxLayout="column">
+          <strong>{{ key.name }}</strong>
+          <div>
+            <span>Public&nbsp;key</span><code>{{ key.publicKey }}</code></div>
+          <div class="text-gray text-slim">
+            <span>Created&nbsp;at</span>&nbsp;<span>{{ key.createdAt | date }}</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div fxLayout="column">
-    <div>
-      <button mat-icon-button color="warn">
-        <mat-icon matTooltip="Delete key" aria-label="Delete key button" (click)="deleteKey()">delete</mat-icon>
-      </button>
-      <button mat-icon-button color="warn" *ngIf="key.status !== 'blocked'">
-        <mat-icon matTooltip="Block key" aria-label="Block key button" (click)="blockKey()">pause_circle_outline</mat-icon>
-      </button>
-      <button mat-icon-button color="primary" *ngIf="key.status === 'blocked'">
-        <mat-icon matTooltip="Unblock key" aria-label="Unblock key button" (click)="unblockKey()">play_circle_outline</mat-icon>
-      </button>
+    <div fxLayout="column">
+      <div>
+        <button mat-icon-button color="primary">
+          <mat-icon matTooltip="Edit key" aria-label="Edit key button" (click)="setEditMode(true)">edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn">
+          <mat-icon matTooltip="Delete key" aria-label="Delete key button" (click)="deleteKey()">delete</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" *ngIf="key.status !== 'blocked'">
+          <mat-icon matTooltip="Block key" aria-label="Block key button" (click)="blockKey()">pause_circle_outline</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" *ngIf="key.status === 'blocked'">
+          <mat-icon matTooltip="Unblock key" aria-label="Unblock key button" (click)="unblockKey()">play_circle_outline</mat-icon>
+        </button>
+      </div>
     </div>
-  </div>
+  </mat-card-content>
+  <!-- Edit mode -->
+  <mat-card-content *ngIf="editMode">
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Key name" [formControl]="keyName" required>
+        <mat-error *ngIf="keyName.invalid">{{ getErrorMessage(keyName) }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-checkbox matInput placeholder="Set as default key" [checked]="setAsDefault" (change)="setAsDefault=!setAsDefault">Set
+        as default</mat-checkbox>
+    </div>
+  </mat-card-content>
+  <mat-card-actions *ngIf="editMode">
+    <button mat-raised-button color="primary" (click)="editKey()" [disabled]="keyName.invalid">EDIT</button>
+    <button mat-button (click)="setEditMode(false)">CANCEL</button>
+  </mat-card-actions>
+
 </mat-card>

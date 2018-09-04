@@ -7,12 +7,12 @@ import { InfoService } from '@services/info';
 })
 export class UserPageComponent implements OnInit {
 
-  info$: Promise<ApiUserDTOObject>
+  info$: Promise<ApiUserDTOObject>;
 
   constructor(private service: InfoService) { }
 
   ngOnInit() {
-    this.info$ = this.service.getInfo()
+    this.info$ = this.service.getInfo();
   }
 
 }

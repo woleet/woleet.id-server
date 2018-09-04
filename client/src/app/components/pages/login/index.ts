@@ -3,6 +3,8 @@ import { AuthService } from '@services/auth';
 import { Router } from '@angular/router';
 import { mainRoute } from '@app/config';
 
+import * as log from 'loglevel';
+
 @Component({
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
@@ -19,6 +21,9 @@ export class LoginPageComponent {
 
   async login() {
     const user = await this.service.login(this.user);
+
+    log.debug('Successfully logged in', user);
+
     if (user) {
       if (user.role === 'admin') {
         this.router.navigate(['users']);
