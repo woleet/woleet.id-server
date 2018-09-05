@@ -1,26 +1,42 @@
-import { Cache } from 'lru-cache';
 import * as uuid from 'uuid/v4';
-import * as LRU from 'lru-cache';
+import * as config from '../config';
+
+function exp() {
+  return config.session.expireAfter + (+new Date);
+}
 
 export class SessionStore {
-  lru: Cache<string, Session>;
+  map: Map<string, Session>;
 
   constructor() {
-    this.lru = new LRU;
+    this.map = new Map;
   }
 
-  async create(user: SequelizeUserObject, ttl: number = 60 * 60 * 1000): Promise<string> {
+  async create(user: SequelizeUserObject): Promise<string> {
     const id = uuid();
-    this.lru.set(id, { id, user });
+    this.map.set(id, { id, user, exp: exp() });
     return id;
   }
 
   async get(id: string): Promise<Session> {
-    return this.lru.get(id) || null;
+    const session = this.map.get(id);
+
+    if (!session) {
+      return null;
+    }
+
+    if (session.exp < +new Date) {
+      this.map.delete(id);
+      return null;
+    }
+
+    session.exp = exp();
+
+    return session;
   }
 
-  async del(id: string): Promise<void> {
-    return this.lru.del(id);
+  async del(id: string): Promise<boolean> {
+    return this.map.delete(id);
   }
 
 }

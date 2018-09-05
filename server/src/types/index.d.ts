@@ -120,6 +120,7 @@ declare global {
 
   interface Session {
     id: string;
+    exp: number;
     user: SequelizeUserObject;
   }
 
