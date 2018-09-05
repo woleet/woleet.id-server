@@ -2,10 +2,7 @@ package io.woleet.idserver;
 
 import io.woleet.idserver.api.AuthenticationApi;
 import io.woleet.idserver.api.UserApi;
-import io.woleet.idsever.api.model.FullIdentity;
-import io.woleet.idsever.api.model.User;
-import io.woleet.idsever.api.model.UserInfo;
-import io.woleet.idsever.api.model.UserPost;
+import io.woleet.idsever.api.model.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,9 +138,13 @@ public class Config {
         return DigestUtils.sha256Hex(data);
     }
 
-    public static void deleteAllTestUsers() {
+    public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminApiClient());
-userApi.getAllUsers();
+        UserArray users = userApi.getAllUsers(true);
+        for (User user : users) {
+            if (user.getIdentity().getCommonName().startsWith(TEST_USERS_PREFIX))
+                userApi.deleteUser(user.getId());
+        }
     }
 
     public static User createTestUser() throws ApiException {

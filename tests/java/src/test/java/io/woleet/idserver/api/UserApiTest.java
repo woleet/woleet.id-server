@@ -56,8 +56,6 @@ public class UserApiTest {
         assertNotNull(user.getDefaultKeyId());
         assertEquals(user.getStatus(), UserStatusEnum.ACTIVE);
         assertNull(user.getEmail());
-
-
     }
 
     @Test
@@ -74,7 +72,7 @@ public class UserApiTest {
     public void getAllUsersTest() throws ApiException {
         UUID userId = null;
         Boolean full = null;
-        UserArray response = api.getAllUsers(userId, full);
+        UserArray response = api.getAllUsers(true);
 
         // TODO: test validations
     }
@@ -97,5 +95,4 @@ public class UserApiTest {
 
         // TODO: test validations
     }
-
 }

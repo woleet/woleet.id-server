@@ -467,7 +467,6 @@ paths:
       tags:
         - User
       summary: Delete a user.
-      description: This can only be done by an admin.
       operationId: deleteUser
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
@@ -517,7 +516,7 @@ paths:
       tags:
         - API Token
       summary: Create an API token.
-      description: Create an API token suitable to call the /sign endpoint. This can only be done by an admin.
+      description: Create an API token suitable to call the /sign endpoint (this can only be done by an admin).
       operationId: createAPIToken
       requestBody:
         description: API token object to create.

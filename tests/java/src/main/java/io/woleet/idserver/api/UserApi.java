@@ -247,7 +247,7 @@ public class UserApi {
 
     /**
      * Delete a user.
-     * This can only be done by an admin.
+     * 
      * @param userId Identifier of the user. (required)
      * @return User
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -259,7 +259,7 @@ public class UserApi {
 
     /**
      * Delete a user.
-     * This can only be done by an admin.
+     * 
      * @param userId Identifier of the user. (required)
      * @return ApiResponse&lt;User&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -272,7 +272,7 @@ public class UserApi {
 
     /**
      * Delete a user. (asynchronously)
-     * This can only be done by an admin.
+     * 
      * @param userId Identifier of the user. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call

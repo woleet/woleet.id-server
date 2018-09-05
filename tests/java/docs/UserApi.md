@@ -70,8 +70,6 @@ Name | Type | Description  | Notes
 
 Delete a user.
 
-This can only be done by an admin.
-
 ### Example
 ```java
 // Import classes:
