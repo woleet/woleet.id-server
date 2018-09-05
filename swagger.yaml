@@ -15,7 +15,7 @@ tags:
   - name: Identity
   - name: Signature
 security:
-  - BearerAuth: []
+  - CookieAuth: []
 paths:
   /login:
     get:
@@ -67,7 +67,7 @@ paths:
               schema:
                 $ref: '#/components/responses/UserInfo'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -178,7 +178,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -212,7 +212,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -245,7 +245,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -279,7 +279,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -314,7 +314,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -349,7 +349,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -383,7 +383,7 @@ paths:
               schema:
                 $ref: '#/components/responses/User'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -416,7 +416,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -456,7 +456,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -489,7 +489,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -545,7 +545,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -572,7 +572,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -612,7 +612,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -645,7 +645,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ApiError'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -672,7 +672,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APITokenArray'
         '401':
-          description: Missing or bad session token.
+          description: Missing or bad session cookie.
           content:
             application/json:
               schema:
@@ -720,7 +720,6 @@ components:
     Password:
       type: string
       format: password
-      default: null
       description: User password.
       example: "nSBa+rV3%2/LpD"
     Mnemonics:
@@ -786,12 +785,10 @@ components:
         email:
           type: string
           format: email
-          default: null
           description: User email (can be used for login).
           example: "john.doe@acme.com"
         username:
           type: string
-          default: null
           description: User name (can be used for login).
           example: "johndoe"
         role:
@@ -1146,10 +1143,11 @@ components:
       type: http
       scheme: basic
       description: Use email/username and password to authenticate.
-    BearerAuth:
-      type: http
-      scheme: bearer
-      description: Use a session token to authentify (see /login).
+    CookieAuth:
+      type: apiKey
+      in: cookie
+      name: session
+      description: Use a session cookie to authentify (see /login).
     APITokenAuth:
       type: http
       scheme: bearer
