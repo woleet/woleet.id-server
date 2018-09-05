@@ -15,7 +15,7 @@ const UserModel = {
   x500OrganizationalUnit: { type: STRING, /* allowNull: false */ }, // step 1
   x500Locality: { type: STRING, /* allowNull: false */ }, // step 1
   x500Country: { type: STRING, /* allowNull: false */ }, // step 1
-  x500UserId: { type: STRING },
+  x500UserId: { type: STRING, unique: true, allowNull: true },
   passwordHash: { type: CHAR(1024), /* allowNull: false */ }, // step 1
   passwordSalt: { type: CHAR(256), /* allowNull: false */ }, // step 1
   passwordItrs: { type: DOUBLE, /* allowNull: false */ }, // step 1

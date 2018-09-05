@@ -7,7 +7,7 @@ import { router as key } from './routers/key';
 import { router as sign } from './routers/sign';
 import { router as identity } from './routers/identity';
 
-import { user as userAuth, admin as adminAuth, session } from './authentication';
+import { user as userAuth, admin as adminAuth, session, basicAuth } from './authentication';
 
 import * as Router from 'koa-router';
 
@@ -19,10 +19,10 @@ import * as bodyParser from 'koa-bodyparser';
 const apiRouter = new Router();
 apiRouter.use(bodyParser());
 apiRouter.use(auth.routes());
-apiRouter.use(session, userAuth, info.routes());
-apiRouter.use(session, adminAuth, user.routes());
-apiRouter.use(session, adminAuth, key.routes());
-apiRouter.use(session, adminAuth, apiToken.routes());
+apiRouter.use(basicAuth, session, userAuth, info.routes());
+apiRouter.use(basicAuth, session, adminAuth, user.routes());
+apiRouter.use(basicAuth, session, adminAuth, key.routes());
+apiRouter.use(basicAuth, session, adminAuth, apiToken.routes());
 
 /**
  * Identity
