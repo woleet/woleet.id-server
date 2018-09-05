@@ -27,7 +27,7 @@ paths:
         - BasicAuth: []
       responses:
         '200':
-          description: User successfully logged in.
+          description: User successfully logged in. A `session` cookie is returned.
           content:
             application/json:
               schema:

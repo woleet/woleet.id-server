@@ -91,7 +91,7 @@ public class ApiClient {
         authentications = new HashMap<String, Authentication>();
         authentications.put("APITokenAuth", new HttpBasicAuth());
         authentications.put("BasicAuth", new HttpBasicAuth());
-        authentications.put("BearerAuth", new HttpBasicAuth());
+        authentications.put("CookieAuth", new ApiKeyAuth("query", "session"));
         // Prevent the authentications from being modified.
         authentications = Collections.unmodifiableMap(authentications);
     }

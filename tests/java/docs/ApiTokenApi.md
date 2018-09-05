@@ -30,10 +30,11 @@ This can only be done by an admin.
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
-// Configure HTTP basic authorization: BearerAuth
-HttpBasicAuth BearerAuth = (HttpBasicAuth) defaultClient.getAuthentication("BearerAuth");
-BearerAuth.setUsername("YOUR USERNAME");
-BearerAuth.setPassword("YOUR PASSWORD");
+// Configure API key authorization: CookieAuth
+ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+CookieAuth.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//CookieAuth.setApiKeyPrefix("Token");
 
 ApiTokenApi apiInstance = new ApiTokenApi();
 APITokenPost apITokenPost = new APITokenPost(); // APITokenPost | Created API token object.
@@ -58,7 +59,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[BearerAuth](../README.md#BearerAuth)
+[CookieAuth](../README.md#CookieAuth)
 
 ### HTTP request headers
 
@@ -84,10 +85,11 @@ This can only be done by an admin.
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
-// Configure HTTP basic authorization: BearerAuth
-HttpBasicAuth BearerAuth = (HttpBasicAuth) defaultClient.getAuthentication("BearerAuth");
-BearerAuth.setUsername("YOUR USERNAME");
-BearerAuth.setPassword("YOUR PASSWORD");
+// Configure API key authorization: CookieAuth
+ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+CookieAuth.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//CookieAuth.setApiKeyPrefix("Token");
 
 ApiTokenApi apiInstance = new ApiTokenApi();
 UUID apITokenId = f34d92e3-4f71-49ab-862f-69443bd48266; // UUID | Identifier of the API token.
@@ -112,7 +114,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[BearerAuth](../README.md#BearerAuth)
+[CookieAuth](../README.md#CookieAuth)
 
 ### HTTP request headers
 
@@ -136,10 +138,11 @@ Get an API token by its identifier.
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
-// Configure HTTP basic authorization: BearerAuth
-HttpBasicAuth BearerAuth = (HttpBasicAuth) defaultClient.getAuthentication("BearerAuth");
-BearerAuth.setUsername("YOUR USERNAME");
-BearerAuth.setPassword("YOUR PASSWORD");
+// Configure API key authorization: CookieAuth
+ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+CookieAuth.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//CookieAuth.setApiKeyPrefix("Token");
 
 ApiTokenApi apiInstance = new ApiTokenApi();
 UUID apITokenId = f34d92e3-4f71-49ab-862f-69443bd48266; // UUID | Identifier of the API token.
@@ -164,7 +167,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[BearerAuth](../README.md#BearerAuth)
+[CookieAuth](../README.md#CookieAuth)
 
 ### HTTP request headers
 
@@ -188,10 +191,11 @@ List all API tokens.
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
-// Configure HTTP basic authorization: BearerAuth
-HttpBasicAuth BearerAuth = (HttpBasicAuth) defaultClient.getAuthentication("BearerAuth");
-BearerAuth.setUsername("YOUR USERNAME");
-BearerAuth.setPassword("YOUR PASSWORD");
+// Configure API key authorization: CookieAuth
+ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+CookieAuth.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//CookieAuth.setApiKeyPrefix("Token");
 
 ApiTokenApi apiInstance = new ApiTokenApi();
 Boolean full = true; // Boolean | Include deleted elements in the returned list.
@@ -216,7 +220,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[BearerAuth](../README.md#BearerAuth)
+[CookieAuth](../README.md#CookieAuth)
 
 ### HTTP request headers
 
@@ -242,10 +246,11 @@ This can only be done by an admin.
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
-// Configure HTTP basic authorization: BearerAuth
-HttpBasicAuth BearerAuth = (HttpBasicAuth) defaultClient.getAuthentication("BearerAuth");
-BearerAuth.setUsername("YOUR USERNAME");
-BearerAuth.setPassword("YOUR PASSWORD");
+// Configure API key authorization: CookieAuth
+ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+CookieAuth.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//CookieAuth.setApiKeyPrefix("Token");
 
 ApiTokenApi apiInstance = new ApiTokenApi();
 UUID apITokenId = f34d92e3-4f71-49ab-862f-69443bd48266; // UUID | Identifier of the API token.
@@ -272,7 +277,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[BearerAuth](../README.md#BearerAuth)
+[CookieAuth](../README.md#CookieAuth)
 
 ### HTTP request headers
 

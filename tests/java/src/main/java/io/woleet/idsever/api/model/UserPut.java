@@ -39,7 +39,7 @@ public class UserPut extends UserBase {
 
   public static final String SERIALIZED_NAME_PASSWORD = "password";
   @SerializedName(SERIALIZED_NAME_PASSWORD)
-  private String password = "null";
+  private String password = null;
 
   public UserPut status(UserStatusEnum status) {
     this.status = status;

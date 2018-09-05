@@ -99,7 +99,7 @@ public class AuthenticationApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "BearerAuth" };
+        String[] localVarAuthNames = new String[] { "CookieAuth" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -325,7 +325,7 @@ public class AuthenticationApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "BearerAuth" };
+        String[] localVarAuthNames = new String[] { "CookieAuth" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 

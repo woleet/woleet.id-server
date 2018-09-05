@@ -1,6 +1,7 @@
 package io.woleet.idserver;
 
 import io.woleet.idserver.api.UserApi;
+import io.woleet.idsever.api.model.FullIdentity;
 import io.woleet.idsever.api.model.User;
 import io.woleet.idsever.api.model.UserPost;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -22,10 +23,10 @@ public class Config {
     }
 
     // Current test mode
-    public static final TestMode testMode = TestMode.LOCAL;
+    public static final TestMode testMode = TestMode.DEV;
 
     // True if tests are to be debugged
-    private static final boolean debug = false;
+    private static final boolean debug = true;
 
     // Initialize data needed to test users
     public static final String TEST_USERS_PREFIX = "#tester#-";
@@ -40,18 +41,19 @@ public class Config {
      * @param pass The user password
      * @return a new API client for the given user
      */
-    public static ApiClient getUserApiClient(String user, String pass) {
+    public static ApiClient getUserApiClient(String user, String pass) throws ApiException {
         ApiClient apiClient = getNoAuthApiClient();
         apiClient.setUsername(user);
         apiClient.setPassword(pass);
-        apiClient.setVerifyingSsl(false);
+//        AuthenticationApi authenticationApi = new AuthenticationApi(apiClient);
+//        authenticationApi.login();
         return apiClient;
     }
 
     /**
      * Return a new API client with credentials set for the platform admin.
      */
-    public static ApiClient getAdminApiClient() {
+    public static ApiClient getAdminApiClient() throws ApiException {
         switch (testMode) {
             case LOCAL:
                 return getUserApiClient("admin", "pass");
@@ -70,7 +72,7 @@ public class Config {
     /**
      * Return a new API client with credentials set for the tester.
      */
-    public static ApiClient getTesterApiClient() {
+    public static ApiClient getTesterApiClient() throws ApiException {
         switch (testMode) {
             case LOCAL:
                 return getUserApiClient("tester", "pass");
@@ -87,26 +89,22 @@ public class Config {
     }
 
     /**
-     * Return a new non authenticated API client with base path set given the platform to hit.
+     * Return a new configured but non authenticated API client.
      */
     public static ApiClient getNoAuthApiClient() {
-
-        // Create new API client
         ApiClient apiClient = new ApiClient();
-
-        // Configure debugging
         apiClient.setDebugging(debug);
-
-        // Set the base path
-        return setBasePath(apiClient);
+        apiClient.setVerifyingSsl(false);
+        apiClient.setBasePath(getBasePath());
+        return apiClient;
     }
 
     private static String getBasePath() {
         switch (testMode) {
             case LOCAL:
-                return "http://localhost:4220/api/";
+                return "http://localhost:4220/api";
             case DEV:
-                return "http://dev2.woleet.io:4220/api/";
+                return "http://dev2.woleet.io:4220/api";
             case HA:
                 assert false;
             case PREPROD:
@@ -118,7 +116,6 @@ public class Config {
     }
 
     private static ApiClient setBasePath(ApiClient apiClient) {
-        apiClient.setBasePath(getBasePath());
         return apiClient;
     }
 
@@ -142,9 +139,12 @@ public class Config {
 
     public static User createTestUser() throws ApiException {
         UserApi userApi = new UserApi(getAdminApiClient());
-        UserPost user = new UserPost();
-        // TODO
-        return userApi.createUser(user);
+
+
+        UserPost userPost = new UserPost();
+        FullIdentity fullIdentity = new FullIdentity();
+        fullIdentity.commonName(TEST_USERS_PREFIX + UUID.randomUUID().toString());
+        return userApi.createUser((UserPost) userPost.identity(fullIdentity));
     }
 }
 

@@ -14,6 +14,7 @@
 package io.woleet.idserver.api;
 
 import io.woleet.idserver.ApiException;
+import io.woleet.idserver.Config;
 import io.woleet.idsever.api.model.ApiError;
 import java.util.UUID;
 import io.woleet.idsever.api.model.User;
@@ -31,7 +32,6 @@ import java.util.Map;
 /**
  * API tests for UserApi
  */
-@Ignore
 public class UserApiTest {
 
     private final UserApi api = new UserApi();
@@ -47,10 +47,7 @@ public class UserApiTest {
      */
     @Test
     public void createUserTest() throws ApiException {
-        UserPost userPost = null;
-        User response = api.createUser(userPost);
-
-        // TODO: test validations
+        Config.createTestUser();
     }
     
     /**
@@ -62,6 +59,7 @@ public class UserApiTest {
      *          if the Api call fails
      */
     @Test
+    @Ignore
     public void deleteUserTest() throws ApiException {
         UUID userId = null;
         User response = api.deleteUser(userId);
@@ -78,6 +76,7 @@ public class UserApiTest {
      *          if the Api call fails
      */
     @Test
+    @Ignore
     public void getAllUsersTest() throws ApiException {
         UUID userId = null;
         Boolean full = null;
@@ -95,6 +94,7 @@ public class UserApiTest {
      *          if the Api call fails
      */
     @Test
+    @Ignore
     public void getUserByIdTest() throws ApiException {
         UUID userId = null;
         User response = api.getUserById(userId);
@@ -111,6 +111,7 @@ public class UserApiTest {
      *          if the Api call fails
      */
     @Test
+    @Ignore
     public void updateUserTest() throws ApiException {
         UUID userId = null;
         UserPut userPut = null;

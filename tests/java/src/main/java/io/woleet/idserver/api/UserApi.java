@@ -104,7 +104,7 @@ public class UserApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "BearerAuth" };
+        String[] localVarAuthNames = new String[] { "CookieAuth" };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -227,7 +227,7 @@ public class UserApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "BearerAuth" };
+        String[] localVarAuthNames = new String[] { "CookieAuth" };
         return apiClient.buildCall(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -353,7 +353,7 @@ public class UserApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "BearerAuth" };
+        String[] localVarAuthNames = new String[] { "CookieAuth" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -479,7 +479,7 @@ public class UserApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "BearerAuth" };
+        String[] localVarAuthNames = new String[] { "CookieAuth" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -603,7 +603,7 @@ public class UserApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "BearerAuth" };
+        String[] localVarAuthNames = new String[] { "CookieAuth" };
         return apiClient.buildCall(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 

@@ -33,11 +33,11 @@ import java.io.IOException;
 public class UserBase {
   public static final String SERIALIZED_NAME_EMAIL = "email";
   @SerializedName(SERIALIZED_NAME_EMAIL)
-  private String email = "null";
+  private String email = null;
 
   public static final String SERIALIZED_NAME_USERNAME = "username";
   @SerializedName(SERIALIZED_NAME_USERNAME)
-  private String username = "null";
+  private String username = null;
 
   public static final String SERIALIZED_NAME_ROLE = "role";
   @SerializedName(SERIALIZED_NAME_ROLE)
