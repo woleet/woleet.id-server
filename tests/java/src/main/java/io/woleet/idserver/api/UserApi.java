@@ -549,7 +549,7 @@ public class UserApi {
     /**
      * Build call for updateUser
      * @param userId Identifier of the user. (required)
-     * @param userPut Updated user object. (required)
+     * @param userPut User object to update. (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -620,7 +620,7 @@ public class UserApi {
      * Update a user.
      * 
      * @param userId Identifier of the user. (required)
-     * @param userPut Updated user object. (required)
+     * @param userPut User object to update. (required)
      * @return User
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -633,7 +633,7 @@ public class UserApi {
      * Update a user.
      * 
      * @param userId Identifier of the user. (required)
-     * @param userPut Updated user object. (required)
+     * @param userPut User object to update. (required)
      * @return ApiResponse&lt;User&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -647,7 +647,7 @@ public class UserApi {
      * Update a user. (asynchronously)
      * 
      * @param userId Identifier of the user. (required)
-     * @param userPut Updated user object. (required)
+     * @param userPut User object to update. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object

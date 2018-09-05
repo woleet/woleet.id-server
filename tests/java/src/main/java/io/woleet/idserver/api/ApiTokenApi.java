@@ -550,7 +550,7 @@ public class ApiTokenApi {
     /**
      * Build call for updateAPIToken
      * @param apITokenId Identifier of the API token. (required)
-     * @param apITokenPut Updated API token object. (required)
+     * @param apITokenPut API token object to update. (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -621,7 +621,7 @@ public class ApiTokenApi {
      * Update an API token.
      * 
      * @param apITokenId Identifier of the API token. (required)
-     * @param apITokenPut Updated API token object. (required)
+     * @param apITokenPut API token object to update. (required)
      * @return APIToken
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -634,7 +634,7 @@ public class ApiTokenApi {
      * Update an API token.
      * 
      * @param apITokenId Identifier of the API token. (required)
-     * @param apITokenPut Updated API token object. (required)
+     * @param apITokenPut API token object to update. (required)
      * @return ApiResponse&lt;APIToken&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -648,7 +648,7 @@ public class ApiTokenApi {
      * Update an API token. (asynchronously)
      * 
      * @param apITokenId Identifier of the API token. (required)
-     * @param apITokenPut Updated API token object. (required)
+     * @param apITokenPut API token object to update. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object

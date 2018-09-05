@@ -15,14 +15,14 @@ package io.woleet.idserver.api;
 
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
-import io.woleet.idsever.api.model.User;
-import io.woleet.idsever.api.model.UserArray;
-import io.woleet.idsever.api.model.UserPut;
-import io.woleet.idsever.api.model.UserStatusEnum;
+import io.woleet.idsever.api.model.*;
+import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
@@ -32,6 +32,8 @@ import static org.junit.Assert.*;
  * API tests for UserApi
  */
 public class UserApiTest {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final UserApi api = new UserApi();
 
@@ -46,8 +48,41 @@ public class UserApiTest {
     }
 
     @Test
+    public void createUserBench() throws ApiException {
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 100; i++)
+            Config.createTestUser();
+        logger.info("100 users created in " + (System.currentTimeMillis() - start) + " ms");
+    }
+
+    @Test
     public void createUserTest() throws ApiException {
-        User user = Config.createTestUser();
+
+        // Try to create a user without admin rights
+        try {
+            UserApi userApi = new UserApi(Config.getTesterApiClient());
+            userApi.createUser(new UserPost());
+            fail("Should not be able to create a user without admin rights");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        UserApi userApi = new UserApi(Config.getAdminApiClient());
+        UserPost userPost = new UserPost();
+        FullIdentity fullIdentity = new FullIdentity();
+        User user;
+
+        // Try to create a user without minimal attributes
+        try {
+            userApi.createUser((UserPost) userPost.identity(fullIdentity));
+            fail("Should not be able to create a user without common name");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+        }
+
+        // Create a user with minimal attributes
+        fullIdentity.commonName(Config.TEST_USERS_PREFIX + Config.randomUUID());
+        user = userApi.createUser((UserPost) userPost.identity(fullIdentity));
         assertNotNull(user.getId());
         assertNotNull(user.getCreatedAt());
         assertTrue(user.getCreatedAt() <= user.getUpdatedAt());
@@ -56,6 +91,42 @@ public class UserApiTest {
         assertNotNull(user.getDefaultKeyId());
         assertEquals(user.getStatus(), UserStatusEnum.ACTIVE);
         assertNull(user.getEmail());
+
+        // Create a user with full attributes
+        String USERNAME = Config.randomUUID();
+        String EMAIL = USERNAME + "@woleet.com";
+        String PASSWORD = Config.randomHash();
+        userPost.password(PASSWORD).email(EMAIL).username(USERNAME);
+        String COMMON_NAME = Config.TEST_USERS_PREFIX + USERNAME;
+        String ORGANIZATION = "Woleet SAS";
+        String ORGANIZATIONAL_UNIT = "Dev";
+        String LOCALITY = "Rennes";
+        String COUNTRY = "FR";
+        String USER_ID = Config.randomUUID();
+        fullIdentity
+                .userId(USER_ID)
+                .commonName(COMMON_NAME)
+                .organizationalUnit(ORGANIZATIONAL_UNIT)
+                .locality(LOCALITY)
+                .organization(ORGANIZATION)
+                .country(COUNTRY);
+        user = userApi.createUser((UserPost) userPost.identity(fullIdentity));
+        assertNotNull(user.getCreatedAt());
+        assertTrue(user.getCreatedAt() <= user.getUpdatedAt());
+        //assertNull(user.getLastLogin());
+        //assertNull(user.getDeletedAt());
+        assertNotNull(user.getDefaultKeyId());
+        assertEquals(user.getStatus(), UserStatusEnum.ACTIVE);
+        assertEquals(EMAIL, user.getEmail());
+        assertEquals(USERNAME, user.getUsername());
+        assertEquals(USER_ID, user.getIdentity().getUserId());
+        assertEquals(COMMON_NAME, user.getIdentity().getCommonName());
+        assertEquals(ORGANIZATION, user.getIdentity().getOrganization());
+        assertEquals(ORGANIZATIONAL_UNIT, user.getIdentity().getOrganizationalUnit());
+        assertEquals(LOCALITY, user.getIdentity().getLocality());
+        assertEquals(COUNTRY, user.getIdentity().getCountry());
+
+        // TODO: test limits (bad values for username / email / password / and X500 attributes
     }
 
     @Test

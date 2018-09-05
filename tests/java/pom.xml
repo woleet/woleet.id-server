@@ -232,6 +232,12 @@
             <version>1.10</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.6</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <properties>
         <java.version>1.8</java.version>

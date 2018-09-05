@@ -59,7 +59,7 @@ public class Identity {
    * commonName (CN) (2.5.4.3)
    * @return commonName
   **/
-  @ApiModelProperty(example = "Jim Smith", value = "commonName (CN) (2.5.4.3)")
+  @ApiModelProperty(example = "Jim Smith", required = true, value = "commonName (CN) (2.5.4.3)")
   public String getCommonName() {
     return commonName;
   }

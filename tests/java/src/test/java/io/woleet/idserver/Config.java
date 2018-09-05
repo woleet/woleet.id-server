@@ -25,7 +25,7 @@ public class Config {
     public static final TestMode testMode = TestMode.DEV;
 
     // True if tests are to be debugged
-    private static final boolean debug = true;
+    private static final boolean debug = false;
 
     // Initialize data needed to test users
     public static final String TEST_USERS_PREFIX = "#tester#-";
@@ -126,7 +126,16 @@ public class Config {
      * @return a random SHA256 hash
      */
     public static String randomHash() {
-        return DigestUtils.sha256Hex(UUID.randomUUID().toString());
+        return DigestUtils.sha256Hex(randomUUID());
+    }
+
+    /**
+     * Create a new random UUID.
+     *
+     * @return a random UUID
+     */
+    public static String randomUUID() {
+        return UUID.randomUUID().toString();
     }
 
     /**

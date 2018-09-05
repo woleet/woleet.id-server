@@ -250,7 +250,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 
 ApiTokenApi apiInstance = new ApiTokenApi();
 UUID apITokenId = f34d92e3-4f71-49ab-862f-69443bd48266; // UUID | Identifier of the API token.
-APITokenPut apITokenPut = new APITokenPut(); // APITokenPut | Updated API token object.
+APITokenPut apITokenPut = new APITokenPut(); // APITokenPut | API token object to update.
 try {
     APIToken result = apiInstance.updateAPIToken(apITokenId, apITokenPut);
     System.out.println(result);
@@ -265,7 +265,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **apITokenId** | [**UUID**](.md)| Identifier of the API token. |
- **apITokenPut** | [**APITokenPut**](APITokenPut.md)| Updated API token object. |
+ **apITokenPut** | [**APITokenPut**](APITokenPut.md)| API token object to update. |
 
 ### Return type
 

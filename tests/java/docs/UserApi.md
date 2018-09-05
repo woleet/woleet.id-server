@@ -248,7 +248,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 
 UserApi apiInstance = new UserApi();
 UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
-UserPut userPut = new UserPut(); // UserPut | Updated user object.
+UserPut userPut = new UserPut(); // UserPut | User object to update.
 try {
     User result = apiInstance.updateUser(userId, userPut);
     System.out.println(result);
@@ -263,7 +263,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **userId** | [**UUID**](.md)| Identifier of the user. |
- **userPut** | [**UserPut**](UserPut.md)| Updated user object. |
+ **userPut** | [**UserPut**](UserPut.md)| User object to update. |
 
 ### Return type
 
