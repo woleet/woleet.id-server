@@ -17,8 +17,6 @@ Method | HTTP request | Description
 
 Create a new user.
 
-This can only be done by the logged in user.
-
 ### Example
 ```java
 // Import classes:
@@ -37,7 +35,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 //CookieAuth.setApiKeyPrefix("Token");
 
 UserApi apiInstance = new UserApi();
-UserPost userPost = new UserPost(); // UserPost | Created user object.
+UserPost userPost = new UserPost(); // UserPost | User object to create.
 try {
     User result = apiInstance.createUser(userPost);
     System.out.println(result);
@@ -51,7 +49,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userPost** | [**UserPost**](UserPost.md)| Created user object. |
+ **userPost** | [**UserPost**](UserPost.md)| User object to create. |
 
 ### Return type
 
@@ -123,7 +121,7 @@ Name | Type | Description  | Notes
 
 <a name="getAllUsers"></a>
 # **getAllUsers**
-> UserArray getAllUsers(userId, full)
+> UserArray getAllUsers(full)
 
 List all users.
 
@@ -145,10 +143,9 @@ CookieAuth.setApiKey("YOUR API KEY");
 //CookieAuth.setApiKeyPrefix("Token");
 
 UserApi apiInstance = new UserApi();
-UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
 Boolean full = true; // Boolean | Include deleted elements in the returned list.
 try {
-    UserArray result = apiInstance.getAllUsers(userId, full);
+    UserArray result = apiInstance.getAllUsers(full);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserApi#getAllUsers");
@@ -160,7 +157,6 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userId** | [**UUID**](.md)| Identifier of the user. |
  **full** | **Boolean**| Include deleted elements in the returned list. | [optional]
 
 ### Return type
@@ -234,8 +230,6 @@ Name | Type | Description  | Notes
 > User updateUser(userId, userPut)
 
 Update a user.
-
-This can only be done by the logged in user.
 
 ### Example
 ```java

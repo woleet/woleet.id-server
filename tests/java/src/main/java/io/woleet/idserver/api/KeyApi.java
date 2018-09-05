@@ -258,8 +258,8 @@ public class KeyApi {
     }
 
     /**
-     * Deletes a key
-     * This can only be done by an admin.
+     * Delete a key.
+     * 
      * @param keyId Identifier of the key. (required)
      * @return Key
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -270,8 +270,8 @@ public class KeyApi {
     }
 
     /**
-     * Deletes a key
-     * This can only be done by an admin.
+     * Delete a key.
+     * 
      * @param keyId Identifier of the key. (required)
      * @return ApiResponse&lt;Key&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -283,8 +283,8 @@ public class KeyApi {
     }
 
     /**
-     * Deletes a key (asynchronously)
-     * This can only be done by an admin.
+     * Delete a key. (asynchronously)
+     * 
      * @param keyId Identifier of the key. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
@@ -382,7 +382,7 @@ public class KeyApi {
 
     /**
      * Get the mnemonic words associated to a key.
-     * Returns a list of mnemonic words used to recover or import a key.
+     * Get the list of mnemonic words that can be used to backup and recover a key.
      * @param keyId Identifier of the key. (required)
      * @return Mnemonics
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -394,7 +394,7 @@ public class KeyApi {
 
     /**
      * Get the mnemonic words associated to a key.
-     * Returns a list of mnemonic words used to recover or import a key.
+     * Get the list of mnemonic words that can be used to backup and recover a key.
      * @param keyId Identifier of the key. (required)
      * @return ApiResponse&lt;Mnemonics&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -407,7 +407,7 @@ public class KeyApi {
 
     /**
      * Get the mnemonic words associated to a key. (asynchronously)
-     * Returns a list of mnemonic words used to recover or import a key.
+     * Get the list of mnemonic words that can be used to backup and recover a key.
      * @param keyId Identifier of the key. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
@@ -508,7 +508,7 @@ public class KeyApi {
 
     /**
      * List all keys of a user.
-     * Returns a key.
+     * 
      * @param userId Identifier of the user. (required)
      * @param full Include deleted elements in the returned list. (optional)
      * @return KeyArray
@@ -521,7 +521,7 @@ public class KeyApi {
 
     /**
      * List all keys of a user.
-     * Returns a key.
+     * 
      * @param userId Identifier of the user. (required)
      * @param full Include deleted elements in the returned list. (optional)
      * @return ApiResponse&lt;KeyArray&gt;
@@ -535,7 +535,7 @@ public class KeyApi {
 
     /**
      * List all keys of a user. (asynchronously)
-     * Returns a key.
+     * 
      * @param userId Identifier of the user. (required)
      * @param full Include deleted elements in the returned list. (optional)
      * @param callback The callback to be executed when the API call finishes
@@ -634,7 +634,7 @@ public class KeyApi {
 
     /**
      * Get a key by its identifier.
-     * Returns a key.
+     * 
      * @param keyId Identifier of the key. (required)
      * @return Key
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -646,7 +646,7 @@ public class KeyApi {
 
     /**
      * Get a key by its identifier.
-     * Returns a key.
+     * 
      * @param keyId Identifier of the key. (required)
      * @return ApiResponse&lt;Key&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -659,7 +659,7 @@ public class KeyApi {
 
     /**
      * Get a key by its identifier. (asynchronously)
-     * Returns a key.
+     * 
      * @param keyId Identifier of the key. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
@@ -762,7 +762,7 @@ public class KeyApi {
     }
 
     /**
-     * Update an existing key.
+     * Update a key.
      * 
      * @param keyId Identifier of the key. (required)
      * @param keyPut Replacement key object. (required)
@@ -775,7 +775,7 @@ public class KeyApi {
     }
 
     /**
-     * Update an existing key.
+     * Update a key.
      * 
      * @param keyId Identifier of the key. (required)
      * @param keyPut Replacement key object. (required)
@@ -789,7 +789,7 @@ public class KeyApi {
     }
 
     /**
-     * Update an existing key. (asynchronously)
+     * Update a key. (asynchronously)
      * 
      * @param keyId Identifier of the key. (required)
      * @param keyPut Replacement key object. (required)

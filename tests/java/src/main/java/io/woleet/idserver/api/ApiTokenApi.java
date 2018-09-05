@@ -62,7 +62,7 @@ public class ApiTokenApi {
 
     /**
      * Build call for createAPIToken
-     * @param apITokenPost Created API token object. (required)
+     * @param apITokenPost API token object to create. (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -124,9 +124,9 @@ public class ApiTokenApi {
     }
 
     /**
-     * Create an API token suitable to call the /sign endpoint.
-     * This can only be done by an admin.
-     * @param apITokenPost Created API token object. (required)
+     * Create an API token.
+     * Create an API token suitable to call the /sign endpoint. This can only be done by an admin.
+     * @param apITokenPost API token object to create. (required)
      * @return APIToken
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -136,9 +136,9 @@ public class ApiTokenApi {
     }
 
     /**
-     * Create an API token suitable to call the /sign endpoint.
-     * This can only be done by an admin.
-     * @param apITokenPost Created API token object. (required)
+     * Create an API token.
+     * Create an API token suitable to call the /sign endpoint. This can only be done by an admin.
+     * @param apITokenPost API token object to create. (required)
      * @return ApiResponse&lt;APIToken&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -149,9 +149,9 @@ public class ApiTokenApi {
     }
 
     /**
-     * Create an API token suitable to call the /sign endpoint. (asynchronously)
-     * This can only be done by an admin.
-     * @param apITokenPost Created API token object. (required)
+     * Create an API token. (asynchronously)
+     * Create an API token suitable to call the /sign endpoint. This can only be done by an admin.
+     * @param apITokenPost API token object to create. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -248,7 +248,7 @@ public class ApiTokenApi {
 
     /**
      * Delete an API token.
-     * This can only be done by an admin.
+     * 
      * @param apITokenId Identifier of the API token. (required)
      * @return APIToken
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -260,7 +260,7 @@ public class ApiTokenApi {
 
     /**
      * Delete an API token.
-     * This can only be done by an admin.
+     * 
      * @param apITokenId Identifier of the API token. (required)
      * @return ApiResponse&lt;APIToken&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -273,7 +273,7 @@ public class ApiTokenApi {
 
     /**
      * Delete an API token. (asynchronously)
-     * This can only be done by an admin.
+     * 
      * @param apITokenId Identifier of the API token. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
@@ -619,7 +619,7 @@ public class ApiTokenApi {
 
     /**
      * Update an API token.
-     * This can only be done by an admin.
+     * 
      * @param apITokenId Identifier of the API token. (required)
      * @param apITokenPut Updated API token object. (required)
      * @return APIToken
@@ -632,7 +632,7 @@ public class ApiTokenApi {
 
     /**
      * Update an API token.
-     * This can only be done by an admin.
+     * 
      * @param apITokenId Identifier of the API token. (required)
      * @param apITokenPut Updated API token object. (required)
      * @return ApiResponse&lt;APIToken&gt;
@@ -646,7 +646,7 @@ public class ApiTokenApi {
 
     /**
      * Update an API token. (asynchronously)
-     * This can only be done by an admin.
+     * 
      * @param apITokenId Identifier of the API token. (required)
      * @param apITokenPut Updated API token object. (required)
      * @param callback The callback to be executed when the API call finishes

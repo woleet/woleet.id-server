@@ -5,11 +5,11 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createKey**](KeyApi.md#createKey) | **POST** /user/{userId}/key | Create a new key for a user.
-[**deleteKey**](KeyApi.md#deleteKey) | **DELETE** /key/{keyId} | Deletes a key
+[**deleteKey**](KeyApi.md#deleteKey) | **DELETE** /key/{keyId} | Delete a key.
 [**exportKey**](KeyApi.md#exportKey) | **GET** /key/{keyId}/export | Get the mnemonic words associated to a key.
 [**getAllUserKeys**](KeyApi.md#getAllUserKeys) | **GET** /user/{userId}/key/list | List all keys of a user.
 [**getKeyById**](KeyApi.md#getKeyById) | **GET** /key/{keyId} | Get a key by its identifier.
-[**updateKey**](KeyApi.md#updateKey) | **PUT** /key/{keyId} | Update an existing key.
+[**updateKey**](KeyApi.md#updateKey) | **PUT** /key/{keyId} | Update a key.
 
 
 <a name="createKey"></a>
@@ -71,9 +71,7 @@ Name | Type | Description  | Notes
 # **deleteKey**
 > Key deleteKey(keyId)
 
-Deletes a key
-
-This can only be done by an admin.
+Delete a key.
 
 ### Example
 ```java
@@ -128,7 +126,7 @@ Name | Type | Description  | Notes
 
 Get the mnemonic words associated to a key.
 
-Returns a list of mnemonic words used to recover or import a key.
+Get the list of mnemonic words that can be used to backup and recover a key.
 
 ### Example
 ```java
@@ -182,8 +180,6 @@ Name | Type | Description  | Notes
 > KeyArray getAllUserKeys(userId, full)
 
 List all keys of a user.
-
-Returns a key.
 
 ### Example
 ```java
@@ -240,8 +236,6 @@ Name | Type | Description  | Notes
 
 Get a key by its identifier.
 
-Returns a key.
-
 ### Example
 ```java
 // Import classes:
@@ -293,7 +287,7 @@ Name | Type | Description  | Notes
 # **updateKey**
 > Key updateKey(keyId, keyPut)
 
-Update an existing key.
+Update a key.
 
 ### Example
 ```java

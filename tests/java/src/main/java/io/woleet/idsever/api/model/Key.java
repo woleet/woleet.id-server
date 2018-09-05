@@ -124,19 +124,19 @@ public class Key extends KeyBase {
   }
 
    /**
-   * Date of last modification (Unix ms timestamp) (&#x60;null&#x60; if not deleted).
+   * Date of deletion (Unix ms timestamp) (&#x60;null&#x60; if not deleted).
    * @return deletedAt
   **/
-  @ApiModelProperty(example = "1529052551419", value = "Date of last modification (Unix ms timestamp) (`null` if not deleted).")
+  @ApiModelProperty(example = "1529052551419", value = "Date of deletion (Unix ms timestamp) (`null` if not deleted).")
   public Long getDeletedAt() {
     return deletedAt;
   }
 
    /**
-   * Date of last utilisation (Unix ms timestamp).
+   * Date of last usage (Unix ms timestamp).
    * @return lastUsed
   **/
-  @ApiModelProperty(example = "1529059167339", value = "Date of last utilisation (Unix ms timestamp).")
+  @ApiModelProperty(example = "1529059167339", value = "Date of last usage (Unix ms timestamp).")
   public Long getLastUsed() {
     return lastUsed;
   }

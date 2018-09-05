@@ -4,7 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**createAPIToken**](ApiTokenApi.md#createAPIToken) | **POST** /APIToken | Create an API token suitable to call the /sign endpoint.
+[**createAPIToken**](ApiTokenApi.md#createAPIToken) | **POST** /APIToken | Create an API token.
 [**deleteAPIToken**](ApiTokenApi.md#deleteAPIToken) | **DELETE** /APIToken/{APITokenId} | Delete an API token.
 [**getAPITokenById**](ApiTokenApi.md#getAPITokenById) | **GET** /APIToken/{APITokenId} | Get an API token by its identifier.
 [**getAllAPITokens**](ApiTokenApi.md#getAllAPITokens) | **GET** /APIToken/list | List all API tokens.
@@ -15,9 +15,9 @@ Method | HTTP request | Description
 # **createAPIToken**
 > APIToken createAPIToken(apITokenPost)
 
-Create an API token suitable to call the /sign endpoint.
+Create an API token.
 
-This can only be done by an admin.
+Create an API token suitable to call the /sign endpoint. This can only be done by an admin.
 
 ### Example
 ```java
@@ -37,7 +37,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 //CookieAuth.setApiKeyPrefix("Token");
 
 ApiTokenApi apiInstance = new ApiTokenApi();
-APITokenPost apITokenPost = new APITokenPost(); // APITokenPost | Created API token object.
+APITokenPost apITokenPost = new APITokenPost(); // APITokenPost | API token object to create.
 try {
     APIToken result = apiInstance.createAPIToken(apITokenPost);
     System.out.println(result);
@@ -51,7 +51,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **apITokenPost** | [**APITokenPost**](APITokenPost.md)| Created API token object. |
+ **apITokenPost** | [**APITokenPost**](APITokenPost.md)| API token object to create. |
 
 ### Return type
 
@@ -71,8 +71,6 @@ Name | Type | Description  | Notes
 > APIToken deleteAPIToken(apITokenId)
 
 Delete an API token.
-
-This can only be done by an admin.
 
 ### Example
 ```java
@@ -232,8 +230,6 @@ Name | Type | Description  | Notes
 > APIToken updateAPIToken(apITokenId, apITokenPut)
 
 Update an API token.
-
-This can only be done by an admin.
 
 ### Example
 ```java

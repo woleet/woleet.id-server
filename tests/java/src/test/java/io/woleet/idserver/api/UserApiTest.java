@@ -15,19 +15,18 @@ package io.woleet.idserver.api;
 
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
-import io.woleet.idsever.api.model.ApiError;
-import java.util.UUID;
 import io.woleet.idsever.api.model.User;
 import io.woleet.idsever.api.model.UserArray;
-import io.woleet.idsever.api.model.UserPost;
 import io.woleet.idsever.api.model.UserPut;
-import org.junit.Test;
+import io.woleet.idsever.api.model.UserStatusEnum;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.UUID;
+
+import static org.junit.Assert.*;
 
 /**
  * API tests for UserApi
@@ -36,28 +35,31 @@ public class UserApiTest {
 
     private final UserApi api = new UserApi();
 
-    
-    /**
-     * Create a new user.
-     *
-     * This can only be done by the logged in user.
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
+    @Before
+    public void setUp() throws Exception {
+        tearDown();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        Config.deleteAllTestUsers();
+    }
+
     @Test
     public void createUserTest() throws ApiException {
-        Config.createTestUser();
+        User user = Config.createTestUser();
+        assertNotNull(user.getId());
+        assertNotNull(user.getCreatedAt());
+        assertTrue(user.getCreatedAt() <= user.getUpdatedAt());
+        //assertNull(user.getLastLogin());
+        //assertNull(user.getDeletedAt());
+        assertNotNull(user.getDefaultKeyId());
+        assertEquals(user.getStatus(), UserStatusEnum.ACTIVE);
+        assertNull(user.getEmail());
+
+
     }
-    
-    /**
-     * Delete a user.
-     *
-     * This can only be done by an admin.
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
+
     @Test
     @Ignore
     public void deleteUserTest() throws ApiException {
@@ -66,15 +68,7 @@ public class UserApiTest {
 
         // TODO: test validations
     }
-    
-    /**
-     * List all users.
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
+
     @Test
     @Ignore
     public void getAllUsersTest() throws ApiException {
@@ -84,15 +78,7 @@ public class UserApiTest {
 
         // TODO: test validations
     }
-    
-    /**
-     * Get a user by his identifier.
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
+
     @Test
     @Ignore
     public void getUserByIdTest() throws ApiException {
@@ -101,15 +87,7 @@ public class UserApiTest {
 
         // TODO: test validations
     }
-    
-    /**
-     * Update a user.
-     *
-     * This can only be done by the logged in user.
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
+
     @Test
     @Ignore
     public void updateUserTest() throws ApiException {
@@ -119,5 +97,5 @@ public class UserApiTest {
 
         // TODO: test validations
     }
-    
+
 }

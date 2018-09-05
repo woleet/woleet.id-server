@@ -160,7 +160,6 @@ paths:
       tags:
         - Key
       summary: Get a key by its identifier.
-      description: Returns a key.
       operationId: getKeyById
       parameters:
         - $ref: '#/components/parameters/KeyIdParameter'
@@ -192,7 +191,7 @@ paths:
     put:
       tags:
         - Key
-      summary: Update an existing key.
+      summary: Update a key.
       operationId: updateKey
       parameters:
         - $ref: '#/components/parameters/KeyIdParameter'
@@ -226,8 +225,7 @@ paths:
     delete:
       tags:
         - Key
-      summary: Deletes a key
-      description: This can only be done by an admin.
+      summary: Delete a key.
       operationId: deleteKey
       parameters:
         - $ref: '#/components/parameters/KeyIdParameter'
@@ -261,7 +259,7 @@ paths:
       tags:
         - Key
       summary: Get the mnemonic words associated to a key.
-      description: Returns a list of mnemonic words used to recover or import a key.
+      description: Get the list of mnemonic words that can be used to backup and recover a key.
       operationId: exportKey
       parameters:
         - $ref: '#/components/parameters/KeyIdParameter'
@@ -330,7 +328,6 @@ paths:
       tags:
         - Key
       summary: List all keys of a user.
-      description: Returns a key.
       operationId: getAllUserKeys
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
@@ -366,10 +363,9 @@ paths:
       tags:
         - User
       summary: Create a new user.
-      description: This can only be done by the logged in user.
       operationId: createUser
       requestBody:
-        description: Created user object.
+        description: User object to create.
         required: true
         content:
           application/json:
@@ -431,11 +427,11 @@ paths:
       tags:
         - User
       summary: Update a user.
-      description: This can only be done by the logged in user.
       operationId: updateUser
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
       requestBody:
+        description: User object to update.
         content:
           application/json:
             schema:
@@ -507,11 +503,10 @@ paths:
       summary: List all users.
       operationId: getAllUsers
       parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
         - $ref: '#/components/parameters/FullListQueryParameter'
       responses:
         '200':
-          description: Arrau of users.
+          description: Array of users.
           content:
             application/json:
               schema:
@@ -521,11 +516,11 @@ paths:
     post:
       tags:
         - API Token
-      summary: Create an API token suitable to call the /sign endpoint.
-      description: This can only be done by an admin.
+      summary: Create an API token.
+      description: Create an API token suitable to call the /sign endpoint. This can only be done by an admin.
       operationId: createAPIToken
       requestBody:
-        description: Created API token object.
+        description: API token object to create.
         required: true
         content:
           application/json:
@@ -587,11 +582,11 @@ paths:
       tags:
         - API Token
       summary: Update an API token.
-      description: This can only be done by an admin.
       operationId: updateAPIToken
       parameters:
         - $ref: '#/components/parameters/APITokenIdParameter'
       requestBody:
+        description: API token object to update.
         content:
           application/json:
             schema:
@@ -627,7 +622,6 @@ paths:
       tags:
         - API Token
       summary: Delete an API token.
-      description: This can only be done by an admin.
       operationId: deleteAPIToken
       parameters:
         - $ref: '#/components/parameters/APITokenIdParameter'
@@ -749,13 +743,13 @@ components:
       type: integer
       format: int64
       readOnly: true
-      description: Date of last modification (Unix ms timestamp) (`null` if not deleted).
+      description: Date of deletion (Unix ms timestamp) (`null` if not deleted).
       example: 1529052551419
     LastUsed:
       type: integer
       format: int64
       readOnly: true
-      description: Date of last utilisation (Unix ms timestamp).
+      description: Date of last usage (Unix ms timestamp).
       example: 1529059167339
     LastLogin:
       type: integer

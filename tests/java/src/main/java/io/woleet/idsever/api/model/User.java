@@ -108,10 +108,10 @@ public class User extends UserBase {
   }
 
    /**
-   * Date of last modification (Unix ms timestamp) (&#x60;null&#x60; if not deleted).
+   * Date of deletion (Unix ms timestamp) (&#x60;null&#x60; if not deleted).
    * @return deletedAt
   **/
-  @ApiModelProperty(example = "1529052551419", value = "Date of last modification (Unix ms timestamp) (`null` if not deleted).")
+  @ApiModelProperty(example = "1529052551419", value = "Date of deletion (Unix ms timestamp) (`null` if not deleted).")
   public Long getDeletedAt() {
     return deletedAt;
   }

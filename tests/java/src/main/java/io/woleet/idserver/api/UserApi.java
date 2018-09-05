@@ -61,7 +61,7 @@ public class UserApi {
 
     /**
      * Build call for createUser
-     * @param userPost Created user object. (required)
+     * @param userPost User object to create. (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -124,8 +124,8 @@ public class UserApi {
 
     /**
      * Create a new user.
-     * This can only be done by the logged in user.
-     * @param userPost Created user object. (required)
+     * 
+     * @param userPost User object to create. (required)
      * @return User
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -136,8 +136,8 @@ public class UserApi {
 
     /**
      * Create a new user.
-     * This can only be done by the logged in user.
-     * @param userPost Created user object. (required)
+     * 
+     * @param userPost User object to create. (required)
      * @return ApiResponse&lt;User&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -149,8 +149,8 @@ public class UserApi {
 
     /**
      * Create a new user. (asynchronously)
-     * This can only be done by the logged in user.
-     * @param userPost Created user object. (required)
+     * 
+     * @param userPost User object to create. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -306,19 +306,17 @@ public class UserApi {
     }
     /**
      * Build call for getAllUsers
-     * @param userId Identifier of the user. (required)
      * @param full Include deleted elements in the returned list. (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call getAllUsersCall(UUID userId, Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call getAllUsersCall(Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = new Object();
 
         // create path and map variables
-        String localVarPath = "/user/list"
-            .replaceAll("\\{" + "userId" + "\\}", apiClient.escapeString(userId.toString()));
+        String localVarPath = "/user/list";
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -358,15 +356,10 @@ public class UserApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call getAllUsersValidateBeforeCall(UUID userId, Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
-        
-        // verify the required parameter 'userId' is set
-        if (userId == null) {
-            throw new ApiException("Missing the required parameter 'userId' when calling getAllUsers(Async)");
-        }
+    private com.squareup.okhttp.Call getAllUsersValidateBeforeCall(Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
 
-        com.squareup.okhttp.Call call = getAllUsersCall(userId, full, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllUsersCall(full, progressListener, progressRequestListener);
         return call;
 
     }
@@ -374,26 +367,24 @@ public class UserApi {
     /**
      * List all users.
      * 
-     * @param userId Identifier of the user. (required)
      * @param full Include deleted elements in the returned list. (optional)
      * @return UserArray
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public UserArray getAllUsers(UUID userId, Boolean full) throws ApiException {
-        ApiResponse<UserArray> resp = getAllUsersWithHttpInfo(userId, full);
+    public UserArray getAllUsers(Boolean full) throws ApiException {
+        ApiResponse<UserArray> resp = getAllUsersWithHttpInfo(full);
         return resp.getData();
     }
 
     /**
      * List all users.
      * 
-     * @param userId Identifier of the user. (required)
      * @param full Include deleted elements in the returned list. (optional)
      * @return ApiResponse&lt;UserArray&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<UserArray> getAllUsersWithHttpInfo(UUID userId, Boolean full) throws ApiException {
-        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(userId, full, null, null);
+    public ApiResponse<UserArray> getAllUsersWithHttpInfo(Boolean full) throws ApiException {
+        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(full, null, null);
         Type localVarReturnType = new TypeToken<UserArray>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -401,13 +392,12 @@ public class UserApi {
     /**
      * List all users. (asynchronously)
      * 
-     * @param userId Identifier of the user. (required)
      * @param full Include deleted elements in the returned list. (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getAllUsersAsync(UUID userId, Boolean full, final ApiCallback<UserArray> callback) throws ApiException {
+    public com.squareup.okhttp.Call getAllUsersAsync(Boolean full, final ApiCallback<UserArray> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -428,7 +418,7 @@ public class UserApi {
             };
         }
 
-        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(userId, full, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(full, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<UserArray>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
@@ -628,7 +618,7 @@ public class UserApi {
 
     /**
      * Update a user.
-     * This can only be done by the logged in user.
+     * 
      * @param userId Identifier of the user. (required)
      * @param userPut Updated user object. (required)
      * @return User
@@ -641,7 +631,7 @@ public class UserApi {
 
     /**
      * Update a user.
-     * This can only be done by the logged in user.
+     * 
      * @param userId Identifier of the user. (required)
      * @param userPut Updated user object. (required)
      * @return ApiResponse&lt;User&gt;
@@ -655,7 +645,7 @@ public class UserApi {
 
     /**
      * Update a user. (asynchronously)
-     * This can only be done by the logged in user.
+     * 
      * @param userId Identifier of the user. (required)
      * @param userPut Updated user object. (required)
      * @param callback The callback to be executed when the API call finishes

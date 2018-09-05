@@ -1,8 +1,10 @@
 package io.woleet.idserver;
 
+import io.woleet.idserver.api.AuthenticationApi;
 import io.woleet.idserver.api.UserApi;
 import io.woleet.idsever.api.model.FullIdentity;
 import io.woleet.idsever.api.model.User;
+import io.woleet.idsever.api.model.UserInfo;
 import io.woleet.idsever.api.model.UserPost;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -45,8 +47,10 @@ public class Config {
         ApiClient apiClient = getNoAuthApiClient();
         apiClient.setUsername(user);
         apiClient.setPassword(pass);
-//        AuthenticationApi authenticationApi = new AuthenticationApi(apiClient);
-//        authenticationApi.login();
+        AuthenticationApi authenticationApi = new AuthenticationApi(apiClient);
+        ApiResponse<UserInfo> apiResponse = authenticationApi.loginWithHttpInfo();
+        String sessionCookie = apiResponse.getHeaders().get("Set-Cookie").get(0).split(";")[0];
+        apiClient.addDefaultHeader("Cookie", sessionCookie);
         return apiClient;
     }
 
@@ -137,10 +141,13 @@ public class Config {
         return DigestUtils.sha256Hex(data);
     }
 
+    public static void deleteAllTestUsers() {
+        UserApi userApi = new UserApi(getAdminApiClient());
+userApi.getAllUsers();
+    }
+
     public static User createTestUser() throws ApiException {
         UserApi userApi = new UserApi(getAdminApiClient());
-
-
         UserPost userPost = new UserPost();
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity.commonName(TEST_USERS_PREFIX + UUID.randomUUID().toString());
