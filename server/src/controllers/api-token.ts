@@ -41,11 +41,7 @@ export async function getAllAPITokens(full = false): Promise<InternalAPITokenObj
 }
 
 export async function deleteAPIToken(id: string): Promise<InternalAPITokenObject> {
-
   const apiToken = await APIToken.delete(id);
-
-  console.log('deleted', apiToken, apiToken.getDataValue('value'));
-
 
   store.resetCache(apiToken.getDataValue('value'));
 

@@ -8,6 +8,8 @@ import { UserService } from '@services/user';
 })
 export class UserCardComponent {
 
+  editMode = false;
+
   @Input()
   modes: ('edit' | 'detail' | 'delete')[];
 
@@ -21,6 +23,10 @@ export class UserCardComponent {
   update = new EventEmitter<ApiUserObject>();
 
   constructor(private userSerive: UserService) { }
+
+  setEditMode(active) {
+    this.editMode = active;
+  }
 
   async deleteUser() {
     const del = await this.userSerive.delete(this.user.id);

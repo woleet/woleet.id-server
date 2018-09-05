@@ -1,45 +1,49 @@
-<mat-card mat-ripple fxLayout="row" fxLayoutAlign="space-between start" [ngClass]="{'clickable': (!!user.id)}" [routerLink]="['/user/', user.id]"
-  *ngIf="user.identity as i">
-  <div fxLayout="column">
-    <div fxLayout="row">
-      <div fxLayout="column" class="card-icon">
-        <mat-icon>account_box_outline</mat-icon>
-      </div>
-      <div fxLayout="column">
-        <a *ngIf="user.username">{{ user.username }}
-          <!-- optional step 1 -->
-        </a>
-        <div *ngIf="user.email">{{ user.email }}
-          <!-- optional step 1 -->
+<div>
+  <mat-card mat-ripple fxLayout="row" fxLayoutAlign="space-between start" [ngClass]="{'clickable': (!!user.id)}" [routerLink]="['/user/', user.id]"
+    *ngIf="!editMode">
+    <div fxLayout="column" *ngIf="user.identity as i">
+      <div fxLayout="row">
+        <div fxLayout="column" class="card-icon">
+          <mat-icon>account_box_outline</mat-icon>
         </div>
-        <div>{{ i.commonName }}</div>
-        <div *ngIf="i.organization || i.organizationalUnit">
-          <span *ngIf="i.organization as org">{{ org }}</span>
-          <span *ngIf="i.organization && i.organizationalUnit">&nbsp;-&nbsp;</span>
-          <span *ngIf="i.organizationalUnit as ou">{{ ou }}</span>
-        </div>
-        <div *ngIf="i.locality || i.country">
-          <span *ngIf="i.locality">{{ i.locality }}</span>
-          <span *ngIf="i.locality && i.country">&nbsp;-&nbsp;</span>
-          <span *ngIf="i.country">{{ i.country }}</span>
+        <div fxLayout="column">
+          <a *ngIf="user.username">{{ user.username }}
+            <!-- optional step 1 --></a>
+          <div *ngIf="user.email">{{ user.email }}
+            <!-- optional step 1 -->
+          </div>
+          <div>{{ i.commonName }}</div>
+          <div *ngIf="i.organization || i.organizationalUnit">
+            <span *ngIf="i.organization as org">{{ org }}</span>
+            <span *ngIf="i.organization && i.organizationalUnit">&nbsp;-&nbsp;</span>
+            <span *ngIf="i.organizationalUnit as ou">{{ ou }}</span>
+          </div>
+          <div *ngIf="i.locality || i.country">
+            <span *ngIf="i.locality">{{ i.locality }}</span>
+            <span *ngIf="i.locality && i.country">&nbsp;-&nbsp;</span>
+            <span *ngIf="i.country">{{ i.country }}</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div fxLayout="column" *ngIf="modes" no-prop no-ripple-prop>
-    <div>
-      <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')">
-        <mat-icon matTooltip="Edit user" aria-label="Edit user button" [routerLink]="['/user/', user.id, 'edit']">edit</mat-icon>
-      </button>
-      <button mat-icon-button color="warn" *ngIf="user.status !== 'blocked'">
-        <mat-icon matTooltip="Block user" aria-label="Block user button" (click)="blockUser()">pause_circle_outline</mat-icon>
-      </button>
-      <button mat-icon-button color="primary" *ngIf="user.status === 'blocked'">
-        <mat-icon matTooltip="Unblock user" aria-label="Unblock user button" (click)="unblockUser()">play_circle_outline</mat-icon>
-      </button>
-      <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('delete')">
-        <mat-icon color="warn" matTooltip="Delete user" aria-label="Delete user button" (click)="deleteUser()">delete</mat-icon>
-      </button>
+    <div fxLayout="column" *ngIf="modes" no-prop no-ripple-prop>
+      <div>
+        <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')">
+          <mat-icon matTooltip="Edit user" aria-label="Edit user button" (click)="setEditMode(true)">edit</mat-icon>
+          <!-- <mat-icon matTooltip="Edit user" aria-label="Edit user button" [routerLink]="['/user/', user.id, 'edit']">edit</mat-icon> -->
+        </button>
+        <button mat-icon-button color="warn" *ngIf="user.status !== 'blocked'">
+          <mat-icon matTooltip="Block user" aria-label="Block user button" (click)="blockUser()">pause_circle_outline</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" *ngIf="user.status === 'blocked'">
+          <mat-icon matTooltip="Unblock user" aria-label="Unblock user button" (click)="unblockUser()">play_circle_outline</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('delete')">
+          <mat-icon color="warn" matTooltip="Delete user" aria-label="Delete user button" (click)="deleteUser()">delete</mat-icon>
+        </button>
+      </div>
     </div>
-  </div>
-</mat-card>
+  </mat-card>
+  <create-edit-user *ngIf="editMode" mode="edit" [user]="user" [cancellable]="true" (submitSucceed)="setEditMode(false); user = $event"
+    (cancel)="setEditMode(false)"></create-edit-user>
+</div>

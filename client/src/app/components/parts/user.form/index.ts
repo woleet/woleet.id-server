@@ -1,7 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UserService } from '@services/user';
-import { ActivatedRoute, Router } from '@angular/router';
-import { diff as diff } from 'deep-object-diff';
+import { Router } from '@angular/router';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
@@ -45,13 +44,27 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
   @Input()
   mode: 'create' | 'edit';
 
+  // Only set for edition
+  @Input()
+  user: ApiUserObject;
+
+  @Input()
+  cancellable = false;
+
+  @Output()
+  submitSucceed = new EventEmitter<ApiUserObject>();
+
+  @Output()
+  cancel = new EventEmitter<void>();
+
+  // @Output()
+  // submitFailed: () => any;
+
   helper;
 
-  user;
+  form;
 
-  originalUser;
-
-  constructor(private service: UserService, private route: ActivatedRoute, private router: Router) {
+  constructor(private service: UserService, private router: Router) {
     super();
   }
 
@@ -75,7 +88,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
   private getFormObject() {
     // get "value" attribute of each form control attibutes recursively
     // deleting falsy ones
-    const user = traverse(this.user).map(function (e) {
+    const user = traverse(this.form).map(function (e) {
       if (e instanceof FormControl) {
         return e.value === null ? this.delete(false) : e.value;
       }
@@ -84,12 +97,12 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
     return user;
   }
 
-  async ngOnInit() {
+  ngOnInit() {
+    console.log('init', this.user);
     if (this.mode === 'edit') {
-      this.originalUser = await this.service.getById(this.route.snapshot.params.id);
-      this.user = this.setFormControl(copy<ApiUserObject>(this.originalUser));
+      this.form = this.setFormControl(copy<ApiUserObject>(this.user));
     } else {
-      this.user = this.setFormControl({ role: 'user', identity: {} });
+      this.form = this.setFormControl({ role: 'user', identity: {} });
     }
   }
 
@@ -103,13 +116,15 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
     let promise;
     if (this.mode === 'edit') {
-      promise = this.service.update(this.originalUser.id, cleaned);
+      promise = this.service.update(this.user.id, cleaned)
+        .then((up) => this.submitSucceed.emit(up));
     } else {
-      promise = this.service.create(cleaned);
+      promise = this.service.create(cleaned)
+        .then((up) => this.submitSucceed.emit(up))
+        .then(() => this.router.navigate(['/users']));
     }
 
     promise
-      .then(() => this.router.navigate(['/users']))
       .catch((err: HttpErrorResponse) => {
         console.error('Caught', err);
         this.helper = err.error.message;
@@ -117,8 +132,12 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
   }
 
+  triggerCancel() {
+    this.cancel.emit();
+  }
+
   isValid() {
-    return traverse(this.user).reduce((acc: boolean, e) => acc && ((e instanceof FormControl) ? e.valid : true));
+    return traverse(this.form).reduce((acc: boolean, e) => acc && ((e instanceof FormControl) ? e.valid : true));
   }
 
 }
