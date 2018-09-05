@@ -69,7 +69,7 @@ export async function admin(ctx: Context, next) {
     throw new Unauthorized();
   }
 
-  if (ctx.session.user.getDataValue('username') !== 'admin') {
+  if (ctx.session.user.getDataValue('role') !== 'admin') {
     throw new Forbidden('Invalid user level');
   }
 
