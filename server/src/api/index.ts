@@ -19,10 +19,10 @@ import * as bodyParser from 'koa-bodyparser';
 const apiRouter = new Router();
 apiRouter.use(bodyParser());
 apiRouter.use(auth.routes());
-apiRouter.use(basicAuth, session, userAuth, info.routes());
-apiRouter.use(basicAuth, session, adminAuth, user.routes());
-apiRouter.use(basicAuth, session, adminAuth, key.routes());
-apiRouter.use(basicAuth, session, adminAuth, apiToken.routes());
+apiRouter.use(session, basicAuth, userAuth, info.routes());
+apiRouter.use(session, basicAuth, adminAuth, user.routes());
+apiRouter.use(session, basicAuth, adminAuth, key.routes());
+apiRouter.use(session, basicAuth, adminAuth, apiToken.routes());
 
 /**
  * Identity
