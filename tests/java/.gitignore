@@ -19,13 +19,3 @@ hs_err_pid*
 target
 .gradle
 build
-
-/.idea/
-/.idea/compiler.xml
-/.idea/java.iml
-/.idea/libraries/
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/vcs.xml
-/.idea/encodings.xml
-/.idea/workspace.xml
