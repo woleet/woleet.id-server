@@ -22,5 +22,6 @@ export const db = {
 };
 
 export const session = {
-  expireAfter: 30 * 60 * 1000
+  expireAfter: 30 * 60 * 1000,
+  maxAge: 24 * 60 * 60 * 1000
 };

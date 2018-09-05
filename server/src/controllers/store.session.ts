@@ -1,15 +1,18 @@
+import { Cache } from 'lru-cache';
+import * as LRU from 'lru-cache';
 import * as uuid from 'uuid/v4';
-import * as config from '../config';
+
+import { session as config } from '../config';
 
 function exp() {
-  return config.session.expireAfter + (+new Date);
+  return config.expireAfter + (+new Date);
 }
 
 export class SessionStore {
-  map: Map<string, Session>;
+  map: Cache<string, Session>;
 
   constructor() {
-    this.map = new Map;
+    this.map = new LRU({ maxAge: config.maxAge });
   }
 
   async create(user: SequelizeUserObject): Promise<string> {
@@ -26,7 +29,7 @@ export class SessionStore {
     }
 
     if (session.exp < +new Date) {
-      this.map.delete(id);
+      this.map.del(id);
       return null;
     }
 
@@ -35,8 +38,8 @@ export class SessionStore {
     return session;
   }
 
-  async del(id: string): Promise<boolean> {
-    return this.map.delete(id);
+  async del(id: string): Promise<void> {
+    return this.map.del(id);
   }
 
 }
