@@ -1,9 +1,9 @@
 export function serialiseKey(key: InternalKeyObject): ApiKeyObject {
   const dates = {
-    createdAt: +key.createdAt,
-    updatedAt: +key.updatedAt,
-    deletedAt: +key.deletedAt,
-    lastUsed: +key.lastUsed
+    createdAt: +key.createdAt || null,
+    updatedAt: +key.updatedAt || null,
+    deletedAt: +key.deletedAt || null,
+    lastUsed: +key.lastUsed || null
   };
 
   const { id, name, status, type, publicKey } = key;

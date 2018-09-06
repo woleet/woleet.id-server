@@ -2,10 +2,10 @@ import { serializeIdentity } from './identity';
 
 export function serialiseUser(user: InternalUserObject): ApiUserObject {
   const dates = {
-    createdAt: +user.createdAt,
-    updatedAt: +user.updatedAt,
-    deletedAt: +user.deletedAt,
-    lastLogin: +user.lastLogin
+    createdAt: +user.createdAt || null,
+    updatedAt: +user.updatedAt || null,
+    deletedAt: +user.deletedAt || null,
+    lastLogin: +user.lastLogin || null
   };
 
   const identity = serializeIdentity(user);
