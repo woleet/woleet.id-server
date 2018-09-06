@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { UserService } from '@services/user';
+import cc from '@components/cc';
 
 @Component({
   selector: 'app-user-card',
@@ -43,6 +44,11 @@ export class UserCardComponent {
     const up = await this.userSerive.update(this.user.id, { status: 'active' });
     this.user = up;
     this.update.emit(up);
+  }
+
+  getCountry(code) {
+    const country = cc.find(({ code: c }) => c === code);
+    return country && country.name;
   }
 
 }

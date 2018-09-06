@@ -74,11 +74,10 @@
         </div>
         <div>
           <mat-form-field class="w-100">
-            <input matInput type="text" placeholder="Country" [formControl]="form.identity.country" (focus)="form.identity.country.focused = true"
-              (focusout)="form.identity.country.focused = false">
-            <mat-error *ngIf="form.identity.country.invalid">{{ getErrorMessage(form.identity.country) }}</mat-error>
-            <mat-hint *ngIf="form.identity.country.focused">Attribute type that contains a two-letter ISO 3166 [ISO3166]
-              country code.</mat-hint>
+            <mat-select [(ngModel)]="form.identity.country" type="text" name="country" placeholder="Country">
+              <mat-option [value]="null">None</mat-option>
+              <mat-option [value]="c.code" *ngFor="let c of countryCodes">{{ c.name }}</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
         <div>

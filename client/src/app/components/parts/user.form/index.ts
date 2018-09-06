@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ErrorMessageProvider, cleanupObject, replaceInObject } from '@components/util';
 import * as traverse from 'traverse';
+import cc from '@components/cc';
 
 function noSpaceValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
@@ -73,6 +74,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
   form;
 
+  countryCodes: Array<{ name: string, code: string }> = cc;
+
   constructor(private service: UserService, private router: Router) {
     super();
   }
@@ -88,7 +91,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
         organization: new FormControl(user.identity.organization, [Validators.maxLength(64)]),
         organizationalUnit: new FormControl(user.identity.organizationalUnit, [Validators.maxLength(64)]),
         locality: new FormControl(user.identity.locality, [Validators.maxLength(64)]),
-        country: new FormControl(user.identity.country, [lettersOnlyValidator, Validators.minLength(2), Validators.maxLength(2)]),
+        country: user.identity.country || null,
         userId: new FormControl(user.identity.userId, [noSpaceValidator, Validators.maxLength(64)])
       }
     };
@@ -122,6 +125,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
     this.helper = null;
 
     const cleaned = replaceInObject(user, '', null);
+    console.log(cleaned, user);
 
     let promise;
     if (this.mode === 'edit') {
