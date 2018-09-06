@@ -8,6 +8,37 @@ import { ErrorMessageProvider, cleanupObject, replaceInObject } from '@component
 import * as traverse from 'traverse';
 import cc from '@components/cc';
 
+function asciiValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+  if (str && !/^[\x00-\x7F]*$/.test(str)) {
+    return ({ ascii: true });
+  }
+
+  return null;
+}
+
+function passwordValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+
+  if (str && !/.*[0-9].*/.test(str)) {
+    return ({ password: { missing: 'one number' } });
+  }
+
+  if (str && !/.*[a-z].*/.test(str)) {
+    return ({ password: { missing: 'one lowercase' } });
+  }
+
+  if (str && !/.*[A-Z].*/.test(str)) {
+    return ({ password: { missing: 'one uppercase' } });
+  }
+
+  if (str && /^(.{0,5}|[a-zA-Z0-9]*)$/i.test(str)) {
+    return ({ password: { missing: 'one special character' } });
+  }
+
+  return null;
+}
+
 function noSpaceValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
   if (str && str.indexOf(' ') !== -1) {
@@ -82,9 +113,9 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
   private setFormControl(user) {
     return {
-      username: new FormControl(user.username, [safeWordValidator, Validators.minLength(3), Validators.maxLength(30)]),
+      username: new FormControl(user.username, [safeWordValidator, Validators.minLength(1), Validators.maxLength(30)]),
       email: new FormControl(user.email, [Validators.email]),
-      password: new FormControl(undefined, [Validators.minLength(3), Validators.maxLength(250)]),
+      password: new FormControl(undefined, [Validators.minLength(6), Validators.maxLength(64), passwordValidator, asciiValidator]),
       role: user.role,
       identity: {
         commonName: new FormControl(user.identity.commonName, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
