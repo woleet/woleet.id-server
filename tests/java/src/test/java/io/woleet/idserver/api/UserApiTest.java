@@ -78,23 +78,23 @@ public class UserApiTest {
         }
 
         // Create a user with minimal attributes
-        fullIdentity.commonName(Config.TEST_USERS_PREFIX + Config.randomUUID());
+        fullIdentity.commonName(Config.TEST_USERS_COMMONNAME_PREFIX + Config.randomUUID());
         user = userApi.createUser((UserPost) userPost.identity(fullIdentity));
         assertNotNull(user.getId());
         assertNotNull(user.getCreatedAt());
         assertTrue(user.getCreatedAt() <= user.getUpdatedAt());
-        //assertNull(user.getLastLogin());
-        //assertNull(user.getDeletedAt());
+        assertNull(user.getLastLogin());
+        assertNull(user.getDeletedAt());
         assertNotNull(user.getDefaultKeyId());
         assertEquals(user.getStatus(), UserStatusEnum.ACTIVE);
         assertNull(user.getEmail());
 
         // Create a user with full attributes
-        String USERNAME = Config.randomUUID();
+        String USERNAME = Config.TEST_USERS_USERNAME_PREFIX + Config.randomHash().substring(0, 9);
         String EMAIL = USERNAME + "@woleet.com";
         String PASSWORD = Config.randomHash();
         userPost.password(PASSWORD).email(EMAIL).username(USERNAME);
-        String COMMON_NAME = Config.TEST_USERS_PREFIX + USERNAME;
+        String COMMON_NAME = Config.TEST_USERS_COMMONNAME_PREFIX + USERNAME;
         String ORGANIZATION = "Woleet SAS";
         String ORGANIZATIONAL_UNIT = "Dev";
         String LOCALITY = "Rennes";
@@ -110,8 +110,8 @@ public class UserApiTest {
         user = userApi.createUser((UserPost) userPost.identity(fullIdentity));
         assertNotNull(user.getCreatedAt());
         assertTrue(user.getCreatedAt() <= user.getUpdatedAt());
-        //assertNull(user.getLastLogin());
-        //assertNull(user.getDeletedAt());
+        assertNull(user.getLastLogin());
+        assertNull(user.getDeletedAt());
         assertNotNull(user.getDefaultKeyId());
         assertEquals(user.getStatus(), UserStatusEnum.ACTIVE);
         assertEquals(EMAIL, user.getEmail());

@@ -28,10 +28,11 @@ public class Config {
     public static final TestMode testMode = TestMode.DEV;
 
     // True if tests are to be debugged
-    private static final boolean debug = false;
+    private static final boolean debug = true;
 
     // Initialize data needed to test users
-    public static final String TEST_USERS_PREFIX = "#tester#-";
+    public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
+    public static final String TEST_USERS_USERNAME_PREFIX = "tester_";
 
     /**
      * Return a new API client with no credential.
@@ -161,7 +162,7 @@ public class Config {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
         UserArray users = userApi.getAllUsers(true);
         for (User user : users) {
-            if (user.getIdentity().getCommonName().startsWith(TEST_USERS_PREFIX))
+            if (user.getIdentity().getCommonName().startsWith(TEST_USERS_COMMONNAME_PREFIX))
                 userApi.deleteUser(user.getId());
         }
     }
@@ -169,7 +170,7 @@ public class Config {
     public static User createTestUser(UserApi userApi) throws ApiException {
         UserPost userPost = new UserPost();
         FullIdentity fullIdentity = new FullIdentity();
-        fullIdentity.commonName(TEST_USERS_PREFIX + UUID.randomUUID().toString());
+        fullIdentity.commonName(TEST_USERS_COMMONNAME_PREFIX + UUID.randomUUID().toString());
         return userApi.createUser((UserPost) userPost.identity(fullIdentity));
     }
 
