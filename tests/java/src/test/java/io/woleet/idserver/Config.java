@@ -13,6 +13,9 @@ public class Config {
 
     private static final Logger logger = LoggerFactory.getLogger(Config.class);
 
+    private static ApiClient adminAuthApiClient;
+    private static ApiClient testerAuthApiClient;
+
     // List of test mode
     public enum TestMode {
         LOCAL,  // Use the local platform (https://api.woleet.localhost/v1)
@@ -30,20 +33,32 @@ public class Config {
     // Initialize data needed to test users
     public static final String TEST_USERS_PREFIX = "#tester#-";
 
-    // Initialize data needed to test signatures
-    public static final String TEST_HASH = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+    /**
+     * Return a new API client with no credential.
+     */
+    public static ApiClient getNoAuthApiClient() {
+        ApiClient apiClient = new ApiClient();
+        apiClient.setDebugging(debug);
+        apiClient.setVerifyingSsl(false);
+        apiClient.setBasePath(getBasePath());
+        return apiClient;
+    }
 
     /**
-     * Return a new API client with credentials set for a given user.
+     * Return a new API client with credentials set for a specific user.
      *
      * @param user The user name/email for which to create an API client
      * @param pass The user password
      * @return a new API client for the given user
      */
-    public static ApiClient getUserApiClient(String user, String pass) throws ApiException {
+    public static ApiClient getAuthApiClient(String user, String pass) throws ApiException {
+
+        // Get a new authenticated API client
         ApiClient apiClient = getNoAuthApiClient();
         apiClient.setUsername(user);
         apiClient.setPassword(pass);
+
+        // Login and set the session cookie for future calls
         AuthenticationApi authenticationApi = new AuthenticationApi(apiClient);
         ApiResponse<UserInfo> apiResponse = authenticationApi.loginWithHttpInfo();
         String sessionCookie = apiResponse.getHeaders().get("Set-Cookie").get(0).split(";")[0];
@@ -52,52 +67,51 @@ public class Config {
     }
 
     /**
-     * Return a new API client with credentials set for the platform admin.
+     * Return a singleton API client with credentials set for the platform admin.
      */
-    public static ApiClient getAdminApiClient() throws ApiException {
-        switch (testMode) {
-            case LOCAL:
-                return getUserApiClient("admin", "pass");
-            case DEV:
-                return getUserApiClient("admin", "pass");
-            case HA:
-                assert false;
-            case PREPROD:
-                assert false;
-            default:
-                assert false;
-                return null;
+    public static ApiClient getAdminAuthApiClient() throws ApiException {
+        if (adminAuthApiClient == null) {
+            switch (testMode) {
+                case LOCAL:
+                    adminAuthApiClient = getAuthApiClient("admin", "pass");
+                    break;
+                case DEV:
+                    adminAuthApiClient = getAuthApiClient("admin", "pass");
+                    break;
+                case HA:
+                    assert false;
+                case PREPROD:
+                    assert false;
+                default:
+                    assert false;
+                    return null;
+            }
         }
+        return adminAuthApiClient;
     }
 
     /**
-     * Return a new API client with credentials set for the tester.
+     * Return a singleton API client with credentials set for the tester.
      */
-    public static ApiClient getTesterApiClient() throws ApiException {
-        switch (testMode) {
-            case LOCAL:
-                return getUserApiClient("tester", "pass");
-            case DEV:
-                return getUserApiClient("tester", "pass");
-            case HA:
-                assert false;
-            case PREPROD:
-                assert false;
-            default:
-                assert false;
-                return null;
+    public static ApiClient getTesterAuthApiClient() throws ApiException {
+        if (testerAuthApiClient == null) {
+            switch (testMode) {
+                case LOCAL:
+                    testerAuthApiClient = getAuthApiClient("tester", "pass");
+                    break;
+                case DEV:
+                    testerAuthApiClient = getAuthApiClient("tester", "pass");
+                    break;
+                case HA:
+                    assert false;
+                case PREPROD:
+                    assert false;
+                default:
+                    assert false;
+                    return null;
+            }
         }
-    }
-
-    /**
-     * Return a new configured but non authenticated API client.
-     */
-    public static ApiClient getNoAuthApiClient() {
-        ApiClient apiClient = new ApiClient();
-        apiClient.setDebugging(debug);
-        apiClient.setVerifyingSsl(false);
-        apiClient.setBasePath(getBasePath());
-        return apiClient;
+        return testerAuthApiClient;
     }
 
     private static String getBasePath() {
@@ -114,10 +128,6 @@ public class Config {
                 assert false;
                 return null;
         }
-    }
-
-    private static ApiClient setBasePath(ApiClient apiClient) {
-        return apiClient;
     }
 
     /**
@@ -148,7 +158,7 @@ public class Config {
     }
 
     public static void deleteAllTestUsers() throws ApiException {
-        UserApi userApi = new UserApi(getAdminApiClient());
+        UserApi userApi = new UserApi(getAdminAuthApiClient());
         UserArray users = userApi.getAllUsers(true);
         for (User user : users) {
             if (user.getIdentity().getCommonName().startsWith(TEST_USERS_PREFIX))
@@ -156,12 +166,15 @@ public class Config {
         }
     }
 
-    public static User createTestUser() throws ApiException {
-        UserApi userApi = new UserApi(getAdminApiClient());
+    public static User createTestUser(UserApi userApi) throws ApiException {
         UserPost userPost = new UserPost();
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity.commonName(TEST_USERS_PREFIX + UUID.randomUUID().toString());
         return userApi.createUser((UserPost) userPost.identity(fullIdentity));
+    }
+
+    public static User createTestUser() throws ApiException {
+        return createTestUser(new UserApi(getAdminAuthApiClient()));
     }
 }
 
