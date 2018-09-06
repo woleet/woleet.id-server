@@ -1,9 +1,11 @@
-import { User, Key } from '../database';
+import { User } from '../database';
 
 import * as Debug from 'debug';
 import { NotFoundUserError } from '../errors';
 import { encode } from './utils/password';
 import { createKey } from './key';
+import { store } from './store.session';
+
 const debug = Debug('id:ctr');
 
 async function serializeAndEncodePassword(password: string) {
@@ -42,21 +44,20 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
 
   const newUser = await User.create(Object.assign(identity, user, password));
   const userId: string = newUser.getDataValue('id');
+
   debug('Created user', newUser.toJSON());
 
   const key = await createKey(userId, { name: 'default' });
 
-  debug('Created user\'s default key', key);
   newUser.setDataValue('defaultKeyId', key.id);
 
-  const newUserWithDefaultKey = await newUser.save();
+  await newUser.save();
 
-  debug('Created user\'s with key', newUserWithDefaultKey.toJSON());
   return newUser.toJSON();
 }
 
 export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<InternalUserObject> {
-  debug('Update user', attrs);
+  debug('Updat user', attrs);
 
   const update = Object.assign({}, attrs);
 
@@ -77,7 +78,10 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
     Object.assign(update, identity);
   }
 
-  debug('Updating', update);
+  // flush session(s) associted to a user if there is a change on his role
+  if (attrs.role) {
+    await store.delSessionsWithUser(id);
+  }
 
   const user = await User.update(id, update);
 
@@ -108,14 +112,15 @@ export async function getAllUsers(): Promise<InternalUserObject[]> {
 }
 
 export async function deleteUser(id: string): Promise<InternalUserObject> {
-  debug('Del user' + id);
+  debug('Deleting user' + id);
 
   const user = await User.delete(id);
+
+  await store.delSessionsWithUser(id);
 
   if (!user) {
     throw new NotFoundUserError();
   }
 
-  debug('Deleted user');
   return user.toJSON();
 }
