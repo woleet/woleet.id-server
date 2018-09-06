@@ -29,6 +29,12 @@ export class ErrorMessageProvider {
         return 'Must only contain uppercase letters';
       case 'lettersOnly':
         return 'Must only contain letters';
+      case 'safeWord':
+        return 'Must only contain letters, numbers, and underscores';
+      case 'password':
+        return `Must contain at least ${error.missing}.`;
+      case 'ascii':
+        return `Must contain only ascii characters`;
       default:
         return '';
     }

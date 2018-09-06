@@ -21,7 +21,7 @@
           <div *ngIf="i.locality || i.country">
             <span *ngIf="i.locality">{{ i.locality }}</span>
             <span *ngIf="i.locality && i.country">&nbsp;-&nbsp;</span>
-            <span *ngIf="i.country">{{ i.country }}</span>
+            <span *ngIf="i.country">{{ getCountry(i.country) }}</span>
           </div>
         </div>
       </div>

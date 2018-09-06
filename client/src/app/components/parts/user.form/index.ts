@@ -6,6 +6,38 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ErrorMessageProvider, cleanupObject, replaceInObject } from '@components/util';
 import * as traverse from 'traverse';
+import cc from '@components/cc';
+
+function asciiValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+  if (str && !/^[\x00-\x7F]*$/.test(str)) {
+    return ({ ascii: true });
+  }
+
+  return null;
+}
+
+function passwordValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+
+  if (str && !/.*[0-9].*/.test(str)) {
+    return ({ password: { missing: 'one number' } });
+  }
+
+  if (str && !/.*[a-z].*/.test(str)) {
+    return ({ password: { missing: 'one lowercase' } });
+  }
+
+  if (str && !/.*[A-Z].*/.test(str)) {
+    return ({ password: { missing: 'one uppercase' } });
+  }
+
+  if (str && /^(.{0,5}|[a-zA-Z0-9]*)$/i.test(str)) {
+    return ({ password: { missing: 'one special character' } });
+  }
+
+  return null;
+}
 
 function noSpaceValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
@@ -20,6 +52,15 @@ function lettersOnlyValidator(control: AbstractControl): ValidationErrors | null
   const str: string = control.value;
   if (str && !/^[a-z]+$/i.test(str)) {
     return ({ lettersOnly: true });
+  }
+
+  return null;
+}
+
+function safeWordValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+  if (str && !/^[a-z][a-z0-9_]+$/i.test(str)) {
+    return ({ safeWord: true });
   }
 
   return null;
@@ -64,23 +105,25 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
   form;
 
+  countryCodes: Array<{ name: string, code: string }> = cc;
+
   constructor(private service: UserService, private router: Router) {
     super();
   }
 
   private setFormControl(user) {
     return {
-      username: new FormControl(user.username, [lettersOnlyValidator, Validators.minLength(3), Validators.maxLength(30)]),
+      username: new FormControl(user.username, [safeWordValidator, Validators.minLength(1), Validators.maxLength(30)]),
       email: new FormControl(user.email, [Validators.email]),
-      password: new FormControl(undefined, [Validators.minLength(3), Validators.maxLength(250)]),
+      password: new FormControl(undefined, [Validators.minLength(6), Validators.maxLength(64), passwordValidator, asciiValidator]),
       role: user.role,
       identity: {
         commonName: new FormControl(user.identity.commonName, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
-        organization: new FormControl(user.identity.organization, [Validators.minLength(3), Validators.maxLength(250)]),
-        organizationalUnit: new FormControl(user.identity.organizationalUnit, [Validators.minLength(3), Validators.maxLength(250)]),
-        locality: new FormControl(user.identity.locality, [Validators.minLength(3), Validators.maxLength(250)]),
-        country: new FormControl(user.identity.country, [lettersOnlyValidator, Validators.minLength(2), Validators.maxLength(2)]),
-        userId: new FormControl(user.identity.userId, [noSpaceValidator, Validators.minLength(3), Validators.maxLength(250)])
+        organization: new FormControl(user.identity.organization, [Validators.maxLength(64)]),
+        organizationalUnit: new FormControl(user.identity.organizationalUnit, [Validators.maxLength(64)]),
+        locality: new FormControl(user.identity.locality, [Validators.maxLength(64)]),
+        country: user.identity.country || null,
+        userId: new FormControl(user.identity.userId, [noSpaceValidator, Validators.maxLength(64)])
       }
     };
   }
@@ -113,6 +156,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
     this.helper = null;
 
     const cleaned = replaceInObject(user, '', null);
+    console.log(cleaned, user);
 
     let promise;
     if (this.mode === 'edit') {
