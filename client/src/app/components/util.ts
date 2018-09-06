@@ -29,6 +29,8 @@ export class ErrorMessageProvider {
         return 'Must only contain uppercase letters';
       case 'lettersOnly':
         return 'Must only contain letters';
+      case 'safeWord':
+        return 'Must only contain letters, numbers, and underscores';
       default:
         return '';
     }

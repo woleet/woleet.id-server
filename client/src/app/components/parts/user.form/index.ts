@@ -25,6 +25,15 @@ function lettersOnlyValidator(control: AbstractControl): ValidationErrors | null
   return null;
 }
 
+function safeWordValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+  if (str && !/^[a-z][a-z0-9_]+$/i.test(str)) {
+    return ({ safeWord: true });
+  }
+
+  return null;
+}
+
 function uppercaseOnlyValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
   if (str && !/^[A-Z]$/.test(str)) {
@@ -70,17 +79,17 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
   private setFormControl(user) {
     return {
-      username: new FormControl(user.username, [lettersOnlyValidator, Validators.minLength(3), Validators.maxLength(30)]),
+      username: new FormControl(user.username, [safeWordValidator, Validators.minLength(3), Validators.maxLength(30)]),
       email: new FormControl(user.email, [Validators.email]),
       password: new FormControl(undefined, [Validators.minLength(3), Validators.maxLength(250)]),
       role: user.role,
       identity: {
         commonName: new FormControl(user.identity.commonName, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
-        organization: new FormControl(user.identity.organization, [Validators.minLength(3), Validators.maxLength(250)]),
-        organizationalUnit: new FormControl(user.identity.organizationalUnit, [Validators.minLength(3), Validators.maxLength(250)]),
-        locality: new FormControl(user.identity.locality, [Validators.minLength(3), Validators.maxLength(250)]),
+        organization: new FormControl(user.identity.organization, [Validators.maxLength(64)]),
+        organizationalUnit: new FormControl(user.identity.organizationalUnit, [Validators.maxLength(64)]),
+        locality: new FormControl(user.identity.locality, [Validators.maxLength(64)]),
         country: new FormControl(user.identity.country, [lettersOnlyValidator, Validators.minLength(2), Validators.maxLength(2)]),
-        userId: new FormControl(user.identity.userId, [noSpaceValidator, Validators.minLength(3), Validators.maxLength(250)])
+        userId: new FormControl(user.identity.userId, [noSpaceValidator, Validators.maxLength(64)])
       }
     };
   }

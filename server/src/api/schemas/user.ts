@@ -1,11 +1,11 @@
 import * as Joi from 'joi';
-import { RName, CountryCode, Word, DirectoryString, uuid } from './misc';
+import { CountryCode, Word, DirectoryString, uuid, Name, SafeWord } from './misc';
 
 const userRoleEnum = ['user', 'admin'];
 const userStatusEnum = ['active', 'blocked'];
 
 const createIdentity = Joi.object().keys({
-  commonName: RName,
+  commonName: Name.required(),
   organization: DirectoryString,
   organizationalUnit: DirectoryString,
   locality: DirectoryString,
@@ -26,7 +26,7 @@ const createUser = Joi.object().keys({
   role: Joi.string().valid(userRoleEnum),
   status: Joi.string().valid(userStatusEnum),
   email: Joi.string().email().allow(null), // not required for step 1 (allowing null - but should be specified)
-  username: Word.allow(null), // not required for step 1 (allowing null - but should be specified)
+  username: SafeWord.min(1).max(64).allow(null), // not required for step 1 (allowing null - but should be specified)
   password: Word.allow(null), // not required for step 1 (allowing null - but should be specified)
   identity: createIdentity.required()
 });
@@ -35,7 +35,7 @@ const updateUser = Joi.object().keys({
   role: Joi.string().valid(userRoleEnum),
   status: Joi.string().valid(userStatusEnum),
   email: Joi.string().email().allow(null),
-  username: Word.allow(null),
+  username: SafeWord.min(1).max(64).allow(null),
   password: Word.allow(null),
   identity: updateIdentity,
   defaultKeyId: uuid.allow(null)

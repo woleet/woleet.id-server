@@ -1,9 +1,9 @@
 <mat-card fxFlex>
   <mat-card-title *ngIf="mode=='create'">Create user</mat-card-title>
   <form role="form" autoComplete="off" (submit)="submit()" #f="ngForm">
-    <div *ngIf="form; else loading" fxLayout="column" fxLayout.gt-sm="row">
+    <div *ngIf="form; else loading" fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="10px">
       <mat-card-content class="w-100">
-        <mat-card-subtitle>General</mat-card-subtitle>
+        <mat-card-subtitle>Login</mat-card-subtitle>
         <div>
           <mat-form-field class="w-100">
             <mat-select type="text" [(ngModel)]="form.role" name="role" placeholder="Role">
@@ -91,14 +91,16 @@
           </mat-form-field>
         </div>
       </mat-card-content>
-      <div *ngIf="helper">
-        <mat-card class="error-card">{{ helper }}</mat-card>
-      </div>
     </div>
   </form>
+  <div *ngIf="helper">
+    <mat-card class="error-card">{{ helper }}</mat-card>
+    <br>
+  </div>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="submit()" [disabled]="f.invalid || !isValid()">{{ mode.toUpperCase()
-      }}</button>
+      }}
+    </button>
     <button mat-button *ngIf="cancellable" (click)="triggerCancel()">CANCEL</button>
   </mat-card-actions>
   <ng-template #loading>
