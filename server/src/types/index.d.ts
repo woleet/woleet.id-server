@@ -22,6 +22,13 @@ declare global {
     deletedAt: Date;
   }
 
+
+  interface ListOptions {
+    offset?: number;
+    limit?: number;
+    full: boolean;
+  }
+
   /* User: server specific */
 
   interface SequelizeUserObject extends Instance<InternalUserObject> { }

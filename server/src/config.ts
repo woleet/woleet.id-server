@@ -31,4 +31,11 @@ export const server = {
   host: '127.0.0.1'
 };
 
-export default { ports, db, session, server };
+export const pagination = {
+  default: {
+    offset: undefined,
+    limit: undefined
+  }
+};
+
+export default { ports, db, session, server, pagination };

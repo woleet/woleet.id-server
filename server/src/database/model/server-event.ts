@@ -23,8 +23,14 @@ class ServerEventAccess extends AbstractInstanceAccess<InternalServerEventObject
     return this.model.bulkCreate(evts);
   }
 
-  async getByType(type, { offset = 0, limit = 100, full = false } = {}): Promise<Instance<InternalServerEventObject>[]> {
-    return this.model.findAll({ where: { type }, offset, limit, order: [['createdAt', 'DESC']], paranoid: !full });
+  async getByType(type, opt: ListOptions): Promise<Instance<InternalServerEventObject>[]> {
+    return this.model.findAll({
+      where: { type },
+      offset: opt.offset,
+      limit: opt.limit,
+      order: [['createdAt', 'DESC']],
+      paranoid: !opt.full
+    });
   }
 
 }
