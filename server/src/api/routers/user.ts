@@ -31,7 +31,8 @@ router.post('/', validate.body('createUser'), async function (ctx) {
  *  operationId: getUserList
  */
 router.get('/list', async function (ctx) {
-  const users = await getAllUsers();
+  const full = (ctx.query.full || '').toLowerCase() === 'true';
+  const users = await getAllUsers(full);
   ctx.body = users.map(serialiseUser);
 });
 

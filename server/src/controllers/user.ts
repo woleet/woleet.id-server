@@ -106,8 +106,8 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
   return user.toJSON();
 }
 
-export async function getAllUsers(): Promise<InternalUserObject[]> {
-  const users = await User.getAll();
+export async function getAllUsers(full = false): Promise<InternalUserObject[]> {
+  const users = await User.getAll({ full });
   return users.map((user) => user.toJSON());
 }
 
