@@ -28,7 +28,7 @@ public class Config {
     private static final TestMode testMode = TestMode.DEV;
 
     // True if tests are to be debugged
-    private static final boolean debug = false;
+    private static final boolean debug = true;
 
     // Initialize data needed to test users
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
@@ -52,7 +52,7 @@ public class Config {
      * @param pass The user password
      * @return a new API client for the given user
      */
-    private static ApiClient getAuthApiClient(String user, String pass) throws ApiException {
+    public static ApiClient getAuthApiClient(String user, String pass) throws ApiException {
 
         // Get a new authenticated API client
         ApiClient apiClient = getNoAuthApiClient();
@@ -89,30 +89,6 @@ public class Config {
             }
         }
         return adminAuthApiClient;
-    }
-
-    /**
-     * Return a singleton API client with credentials set for the tester.
-     */
-    public static ApiClient getTesterAuthApiClient() throws ApiException {
-        if (testerAuthApiClient == null) {
-            switch (testMode) {
-                case LOCAL:
-                    testerAuthApiClient = getAuthApiClient("tester", "pass");
-                    break;
-                case DEV:
-                    testerAuthApiClient = getAuthApiClient("tester", "pass");
-                    break;
-                case HA:
-                    assert false;
-                case PREPROD:
-                    assert false;
-                default:
-                    assert false;
-                    return null;
-            }
-        }
-        return testerAuthApiClient;
     }
 
     private static String getBasePath() {
@@ -160,6 +136,10 @@ public class Config {
 
     public static User createTestUser(UserApi userApi) throws ApiException {
         UserPost userPost = new UserPost();
+        String USERNAME = Config.TEST_USERS_USERNAME_PREFIX + Config.randomHash().substring(0, 9);
+        String EMAIL = USERNAME + "@woleet.com";
+        userPost.email(EMAIL).username(USERNAME).role(UserRoleEnum.USER);
+        userPost.password("pass").status(UserStatusEnum.ACTIVE);
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity.commonName(TEST_USERS_COMMONNAME_PREFIX + UUID.randomUUID().toString());
         return userApi.createUser((UserPost) userPost.identity(fullIdentity));

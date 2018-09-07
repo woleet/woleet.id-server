@@ -19,7 +19,7 @@ public class UserApiTest {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private UserApi adminAuthUserApi;
+    private UserApi adminAuthUserApi, userAuthUserApi, noAuthUserApi;
 
     private UserPost generateNewRandomUser() {
 
@@ -78,8 +78,15 @@ public class UserApiTest {
 
     @Before
     public void setUp() throws Exception {
-        adminAuthUserApi = new UserApi(Config.getAdminAuthApiClient());
+
+        // Start form a clean state
         tearDown();
+
+        // Create 3 helper user APIs: one with admin rights, one with user rights, one not authenticated
+        adminAuthUserApi = new UserApi(Config.getAdminAuthApiClient());
+        User user = Config.createTestUser(adminAuthUserApi);
+        userAuthUserApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
+        noAuthUserApi = new UserApi(Config.getNoAuthApiClient());
     }
 
     @After
@@ -100,8 +107,7 @@ public class UserApiTest {
 
         // Try to create a user with no credentials
         try {
-            UserApi userApi = new UserApi(Config.getNoAuthApiClient());
-            userApi.createUser(new UserPost());
+            noAuthUserApi.createUser(new UserPost());
             fail("Should not be able to create a user with no credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
@@ -109,8 +115,7 @@ public class UserApiTest {
 
         // Try to create a user with user credentials
         try {
-            UserApi userApi = new UserApi(Config.getTesterAuthApiClient());
-            userApi.createUser(new UserPost());
+            userAuthUserApi.createUser(new UserPost());
             fail("Should not be able to create a user with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -151,8 +156,7 @@ public class UserApiTest {
 
         // Try to delete a user with no credentials
         try {
-            UserApi userApi = new UserApi(Config.getNoAuthApiClient());
-            userApi.deleteUser(user.getId());
+            noAuthUserApi.deleteUser(user.getId());
             fail("Should not be able to delete a user with no credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
@@ -160,8 +164,7 @@ public class UserApiTest {
 
         // Try to delete a user with user credentials
         try {
-            UserApi userApi = new UserApi(Config.getTesterAuthApiClient());
-            userApi.deleteUser(user.getId());
+            userAuthUserApi.deleteUser(user.getId());
             fail("Should not be able to delete a user with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -195,8 +198,7 @@ public class UserApiTest {
 
         // Try to get all users with no credentials
         try {
-            UserApi userApi = new UserApi(Config.getNoAuthApiClient());
-            userApi.getAllUsers(false);
+            noAuthUserApi.getAllUsers(false);
             fail("Should not be able to get all users with no credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
@@ -204,8 +206,7 @@ public class UserApiTest {
 
         // Try to get all users with user credentials
         try {
-            UserApi userApi = new UserApi(Config.getTesterAuthApiClient());
-            userApi.getAllUsers(false);
+            userAuthUserApi.getAllUsers(false);
             fail("Should not be able to get all users with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -226,8 +227,7 @@ public class UserApiTest {
 
         // Try to get a user with no credentials
         try {
-            UserApi userApi = new UserApi(Config.getNoAuthApiClient());
-            userApi.getUserById(user.getId());
+            noAuthUserApi.getUserById(user.getId());
             fail("Should not be able to get a user with no credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
@@ -235,8 +235,7 @@ public class UserApiTest {
 
         // Try to get a user with user credentials
         try {
-            UserApi userApi = new UserApi(Config.getTesterAuthApiClient());
-            userApi.getUserById(user.getId());
+            userAuthUserApi.getUserById(user.getId());
             fail("Should not be able to get a user with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -269,8 +268,7 @@ public class UserApiTest {
 
         // Try to update a user with no credentials
         try {
-            UserApi userApi = new UserApi(Config.getNoAuthApiClient());
-            userApi.updateUser(user.getId(), userPut);
+            noAuthUserApi.updateUser(user.getId(), userPut);
             fail("Should not be able to get a user with no credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
@@ -278,8 +276,7 @@ public class UserApiTest {
 
         // Try to update a user with user credentials
         try {
-            UserApi userApi = new UserApi(Config.getTesterAuthApiClient());
-            userApi.updateUser(user.getId(), userPut);
+            userAuthUserApi.updateUser(user.getId(), userPut);
             fail("Should not be able to get a user with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
