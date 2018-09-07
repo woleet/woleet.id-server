@@ -25,7 +25,7 @@ public class Config {
     }
 
     // Current test mode
-    public static final TestMode testMode = TestMode.DEV;
+    private static final TestMode testMode = TestMode.DEV;
 
     // True if tests are to be debugged
     private static final boolean debug = true;
@@ -52,7 +52,7 @@ public class Config {
      * @param pass The user password
      * @return a new API client for the given user
      */
-    public static ApiClient getAuthApiClient(String user, String pass) throws ApiException {
+    private static ApiClient getAuthApiClient(String user, String pass) throws ApiException {
 
         // Get a new authenticated API client
         ApiClient apiClient = getNoAuthApiClient();
@@ -137,7 +137,7 @@ public class Config {
      * @return a random SHA256 hash
      */
     public static String randomHash() {
-        return DigestUtils.sha256Hex(randomUUID());
+        return DigestUtils.sha256Hex(randomUUID().toString());
     }
 
     /**
@@ -145,17 +145,8 @@ public class Config {
      *
      * @return a random UUID
      */
-    public static String randomUUID() {
-        return UUID.randomUUID().toString();
-    }
-
-    /**
-     * Hash some data.
-     *
-     * @return the SHA256 hash of the provide data
-     */
-    public static String hashData(String data) {
-        return DigestUtils.sha256Hex(data);
+    public static UUID randomUUID() {
+        return UUID.randomUUID();
     }
 
     public static void deleteAllTestUsers() throws ApiException {
