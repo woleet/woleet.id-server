@@ -75,8 +75,8 @@ export async function exportKey(id: string): Promise<string> {
   return mnemonic.getPhrase();
 }
 
-export async function getAllKeys(): Promise<InternalKeyObject[]> {
-  const keys = await Key.getAll();
+export async function getAllKeys(full = false): Promise<InternalKeyObject[]> {
+  const keys = await Key.getAll({ full });
   return keys.map((key) => key.toJSON());
 }
 
