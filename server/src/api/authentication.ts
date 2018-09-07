@@ -1,32 +1,7 @@
-import * as auth from 'basic-auth';
 import { Unauthorized, Forbidden } from 'http-errors';
 import { store as sessionStore } from '../controllers/store.session';
 import { store as apiTokenStore } from '../controllers/store.api-token';
-import { getUserIfValidCredentials } from '../controllers/authentication';
 import { Context } from 'koa';
-
-export async function basicAuth(ctx: Context, next) {
-
-  const basic = auth(ctx.req);
-
-  if (!basic) {
-    return next();
-  }
-
-  const { name, pass } = basic;
-
-  // tslint:disable-next-line:no-shadowed-variable
-  const user = await getUserIfValidCredentials(name, pass);
-
-  if (!user) {
-    throw new Unauthorized();
-  }
-
-  // Create a pseudo-session
-  ctx.session = { id: null, exp: 0, user };
-
-  return next();
-}
 
 export async function session(ctx: Context, next) {
   ctx.sessions = sessionStore;
