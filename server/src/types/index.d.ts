@@ -128,11 +128,12 @@ declare global {
   /* Events */
 
   interface InternalServerEventObject extends ServerEvent, CommonInternalProperties {
+    data: Object;
     occurredAt: Date;
     authorizedUserId: string;
     associatedTokenId: string;
     associatedUserId: string;
-    associatedkeyId: string;
+    associatedKeyId: string;
     authorizedUser?: InternalUserObject;
     associatedToken?: InternalAPITokenObject;
     associatedUser?: InternalUserObject;
@@ -140,12 +141,12 @@ declare global {
   }
 
   interface ServerEventCreate {
+    data: Object;
     type: ServerEventTypeEnum;
     authorizedUserId: string;
     associatedTokenId: string;
     associatedUserId: string;
-    associatedkeyId: string;
-    data: Object;
+    associatedKeyId: string;
     occurredAt?: Date;
   }
 

@@ -10,17 +10,17 @@ export function serialiseServerEvent(evt: InternalServerEventObject): ApiServerE
 
   debug('Serialize', evt);
 
-  const { id, type,
+  const { id, type, data,
     authorizedUserId,
     associatedTokenId,
     associatedUserId,
-    associatedkeyId } = evt;
+    associatedKeyId } = evt;
 
   return Object.assign({
-    id, type,
+    id, type, data,
     authorizedUserId,
     associatedTokenId,
     associatedUserId,
-    associatedkeyId
+    associatedKeyId
   }, dates);
 }

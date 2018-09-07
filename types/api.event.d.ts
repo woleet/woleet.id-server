@@ -11,6 +11,6 @@ interface ApiServerEventObject extends ServerEvent, ApiCommonProperties {
   authorizedUserId?: string;
   associatedTokenId?: string;
   associatedUserId?: string;
-  associatedkeyId?: string;
+  associatedKeyId?: string;
   data?: Object;
 }

@@ -54,7 +54,7 @@ router.get('/sign', apiTokenAuth, async function (ctx) {
     authorizedUserId: null,
     associatedTokenId: ctx.apiToken.id,
     associatedUserId: userId,
-    associatedkeyId: keyId,
+    associatedKeyId: keyId,
     data: { hash: signedHash }
   });
 
