@@ -6,7 +6,6 @@ import io.woleet.idsever.api.model.*;
 import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -253,8 +252,45 @@ public class UserApiTest {
     }
 
     @Test
-    @Ignore
     public void updateUserTest() throws ApiException {
-        //TODO
+
+        // Create a user to update
+        UserPost userPost = generateNewRandomUser();
+        User user = adminAuthUserApi.createUser(userPost);
+
+        // Update and verify a user with admin credentials
+        UserPut userPut = new UserPut();
+        String PASSWORD = Config.randomHash();
+        userPut.password(PASSWORD);
+        user = adminAuthUserApi.updateUser(user.getId(), userPut);
+        verifyUser(user);
+        userPost.password(PASSWORD);
+        verifyUsersEquals(userPost, user);
+
+        // Try to update a user with no credentials
+        try {
+            UserApi userApi = new UserApi(Config.getNoAuthApiClient());
+            userApi.updateUser(user.getId(), userPut);
+            fail("Should not be able to get a user with no credentials");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+        }
+
+        // Try to update a user with user credentials
+        try {
+            UserApi userApi = new UserApi(Config.getTesterAuthApiClient());
+            userApi.updateUser(user.getId(), userPut);
+            fail("Should not be able to get a user with user credentials");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        // Try to update a non existing user
+        try {
+            adminAuthUserApi.updateUser(Config.randomUUID(), userPut);
+            fail("Should not be able to get a non existing user");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+        }
     }
 }
