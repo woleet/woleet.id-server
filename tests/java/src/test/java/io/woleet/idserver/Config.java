@@ -25,13 +25,14 @@ public class Config {
     }
 
     // Current test mode
-    public static final TestMode testMode = TestMode.DEV;
+    private static final TestMode testMode = TestMode.DEV;
 
     // True if tests are to be debugged
-    private static final boolean debug = false;
+    private static final boolean debug = true;
 
     // Initialize data needed to test users
-    public static final String TEST_USERS_PREFIX = "#tester#-";
+    public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
+    public static final String TEST_USERS_USERNAME_PREFIX = "tester_";
 
     /**
      * Return a new API client with no credential.
@@ -51,7 +52,7 @@ public class Config {
      * @param pass The user password
      * @return a new API client for the given user
      */
-    public static ApiClient getAuthApiClient(String user, String pass) throws ApiException {
+    private static ApiClient getAuthApiClient(String user, String pass) throws ApiException {
 
         // Get a new authenticated API client
         ApiClient apiClient = getNoAuthApiClient();
@@ -136,7 +137,7 @@ public class Config {
      * @return a random SHA256 hash
      */
     public static String randomHash() {
-        return DigestUtils.sha256Hex(randomUUID());
+        return DigestUtils.sha256Hex(randomUUID().toString());
     }
 
     /**
@@ -144,24 +145,15 @@ public class Config {
      *
      * @return a random UUID
      */
-    public static String randomUUID() {
-        return UUID.randomUUID().toString();
-    }
-
-    /**
-     * Hash some data.
-     *
-     * @return the SHA256 hash of the provide data
-     */
-    public static String hashData(String data) {
-        return DigestUtils.sha256Hex(data);
+    public static UUID randomUUID() {
+        return UUID.randomUUID();
     }
 
     public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
         UserArray users = userApi.getAllUsers(true);
         for (User user : users) {
-            if (user.getIdentity().getCommonName().startsWith(TEST_USERS_PREFIX))
+            if (user.getIdentity().getCommonName().startsWith(TEST_USERS_COMMONNAME_PREFIX))
                 userApi.deleteUser(user.getId());
         }
     }
@@ -169,7 +161,7 @@ public class Config {
     public static User createTestUser(UserApi userApi) throws ApiException {
         UserPost userPost = new UserPost();
         FullIdentity fullIdentity = new FullIdentity();
-        fullIdentity.commonName(TEST_USERS_PREFIX + UUID.randomUUID().toString());
+        fullIdentity.commonName(TEST_USERS_COMMONNAME_PREFIX + UUID.randomUUID().toString());
         return userApi.createUser((UserPost) userPost.identity(fullIdentity));
     }
 
