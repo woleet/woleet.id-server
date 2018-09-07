@@ -47,6 +47,8 @@ export async function apiTokenAuth(ctx: Context, next) {
     if (parts.length === 2 && parts[0] === 'Bearer') {
       const apiToken = await apiTokenStore.get(parts[1]);
 
+      ctx.apiToken = apiToken;
+
       if (apiToken && apiToken.status === 'active') {
         return next();
       }

@@ -1,6 +1,7 @@
 import { sequelize } from './sequelize';
 import * as Debug from 'debug';
 import { APIToken } from './model/api-token';
+import { ServerEvent } from './model/server-event';
 import { User } from './model/user';
 import { Key } from './model/key';
 
@@ -30,7 +31,15 @@ Key.model.beforeDelete(async (key) => {
   await user.save();
 });
 
-export { User, Key, APIToken };
+ServerEvent.model.belongsTo(APIToken.model, { as: 'associatedToken' });
+
+ServerEvent.model.belongsTo(Key.model, { as: 'associatedKey' });
+
+ServerEvent.model.belongsTo(User.model, { as: 'associatedUser' });
+
+ServerEvent.model.belongsTo(User.model, { as: 'authorizedUser' });
+
+export { User, Key, APIToken, ServerEvent };
 
 // Connection
 (async () => {

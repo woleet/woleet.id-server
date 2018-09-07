@@ -1,4 +1,6 @@
 import { router as auth } from './routers/authentication';
+
+import { router as serverEvent } from './routers/server-event';
 import { router as apiToken } from './routers/api-token';
 import { router as info } from './routers/info';
 import { router as user } from './routers/user';
@@ -23,6 +25,7 @@ apiRouter.use(session, basicAuth, userAuth, info.routes());
 apiRouter.use(session, basicAuth, adminAuth, user.routes());
 apiRouter.use(session, basicAuth, adminAuth, key.routes());
 apiRouter.use(session, basicAuth, adminAuth, apiToken.routes());
+apiRouter.use(session, basicAuth, adminAuth, serverEvent.routes());
 
 /**
  * Identity

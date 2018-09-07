@@ -5,7 +5,6 @@ import { ForeignKeyConstraintError } from 'sequelize';
 import { InvalidUserTargetedKeyError } from '../../errors';
 
 import { AbstractInstanceAccess } from './abstract';
-import { sequelize } from '../sequelize';
 import { User } from '..';
 
 const KeyModel = {
@@ -23,7 +22,7 @@ const KeyModel = {
 class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKeyObject> {
 
   constructor() {
-    super(sequelize);
+    super();
     this.define('key', KeyModel, { paranoid: true });
   }
 

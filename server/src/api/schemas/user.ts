@@ -5,12 +5,12 @@ const userRoleEnum = ['user', 'admin'];
 const userStatusEnum = ['active', 'blocked'];
 
 const createIdentity = Joi.object().keys({
-  commonName: Name.required(),
-  organization: DirectoryString,
-  organizationalUnit: DirectoryString,
-  locality: DirectoryString,
-  country: CountryCode,
-  userId: Word.min(1).max(64)
+  commonName: DirectoryString.required(),
+  organization: DirectoryString.allow(null),
+  organizationalUnit: DirectoryString.allow(null),
+  locality: DirectoryString.allow(null),
+  country: CountryCode.allow(null),
+  userId: Word.min(1).max(64).allow(null)
 });
 
 const updateIdentity = Joi.object().keys({
@@ -23,8 +23,8 @@ const updateIdentity = Joi.object().keys({
 });
 
 const createUser = Joi.object().keys({
-  role: Joi.string().valid(userRoleEnum),
-  status: Joi.string().valid(userStatusEnum),
+  role: Joi.string().valid(userRoleEnum).allow(null),
+  status: Joi.string().valid(userStatusEnum).allow(null),
   email: Joi.string().email().allow(null), // not required for step 1 (allowing null - but should be specified)
   username: SafeWord.min(1).max(64).allow(null), // not required for step 1 (allowing null - but should be specified)
   password: Word.allow(null), // not required for step 1 (allowing null - but should be specified)
