@@ -1,13 +1,13 @@
 import * as Sequelize from 'sequelize';
-
+import { sequelize } from '../sequelize';
 import { Instance } from 'sequelize';
 
 export abstract class AbstractInstanceAccess<TInstance, TPost> {
   client: Sequelize.Sequelize;
   model: Sequelize.Model<Instance<TInstance>, TPost>;
 
-  constructor(client: Sequelize.Sequelize) {
-    this.client = client;
+  constructor() {
+    this.client = sequelize;
   }
 
   abstract handleError(error);
@@ -47,7 +47,7 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
   }
 
   async getAll({ offset = 0, limit = 100, full = false } = {}): Promise<Instance<TInstance>[]> {
-    return this.model.findAll({ offset, limit, order: [['id', 'ASC']], paranoid: !full });
+    return this.model.findAll({ offset, limit, order: [['createdAt', 'DESC']], paranoid: !full });
   }
 
   async getById(id: string): Promise<Instance<TInstance> | null> {

@@ -2,7 +2,7 @@ import { User } from '../database';
 import { store as sessionStore } from './store.session';
 import { validate } from './utils/password';
 
-export async function getUserIfValidCredentials(login: string, password: string): Promise<SequelizeUserObject> {
+export async function createSession(login: string, password: string): Promise<{ token: string, user: InternalUserObject }> {
   let user: SequelizeUserObject = null;
 
   if (login.search('@') !== -1) {
@@ -31,16 +31,6 @@ export async function getUserIfValidCredentials(login: string, password: string)
   });
 
   if (!success) {
-    return null;
-  } else {
-    return user;
-  }
-}
-
-export async function createSession(login: string, password: string): Promise<{ token: string, user: InternalUserObject }> {
-  const user = await getUserIfValidCredentials(login, password);
-
-  if (!user) {
     return null;
   }
 

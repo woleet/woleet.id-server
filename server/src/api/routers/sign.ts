@@ -3,6 +3,11 @@ import { BadRequest } from 'http-errors';
 import { sign } from '../../controllers/sign';
 import { validate } from '../schemas';
 import { apiTokenAuth } from '../authentication';
+import { store as event } from '../../controllers/events';
+
+import { server } from '../../config';
+
+const serverBase = server.protocol + '://' + server.host;
 
 const vuuid = validate.raw('uuid');
 const vaddr = validate.raw('address');
@@ -22,25 +27,39 @@ const router = new Router();
  *  operationId: getSignature
  */
 router.get('/sign', apiTokenAuth, async function (ctx) {
-  const { hashToSign, pubKey, userId, customUserId } = ctx.query;
+  const query = ctx.query;
 
-  if (!hashToSign) {
+  if (!query.hashToSign) {
     throw new BadRequest('Missign mandatory "hashToSign" parameter');
   }
 
-  if (userId && !(await vuuid(userId))) {
+  if (query.userId && !(await vuuid(query.userId))) {
     throw new BadRequest('Invalid "userId"');
   }
 
-  if (pubKey && !(await vaddr(pubKey))) {
+  if (query.pubKey && !(await vaddr(query.pubKey))) {
     throw new BadRequest('Invalid "pubKey"');
   }
 
-  if (!(userId || customUserId || pubKey)) {
+  if (!(query.userId || query.customUserId || query.pubKey)) {
     throw new BadRequest('Missign mandatory "userId", "customUserId" or "pubKey" parameter');
   }
 
-  ctx.body = await sign(hashToSign, pubKey, userId, customUserId);
+  const { signature, pubKey, userId, keyId, signedHash } = await sign(query);
+
+  const identityURL = `${serverBase}/identity?user=${userId}`;
+
+  event.register({
+    type: 'signature',
+    authorizedUserId: null,
+    associatedTokenId: ctx.apiToken.id,
+    associatedUserId: userId,
+    associatedKeyId: keyId,
+    data: { hash: signedHash }
+  });
+
+  ctx.body = { pubKey, signedHash, signature, identityURL };
+
 });
 
 export { router };

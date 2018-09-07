@@ -7,7 +7,7 @@ interface UserObject {
   username?: string // madatory for step 2
 }
 
-interface APIIdentityObject {
+interface ApiIdentityObject {
   commonName: string;
   organization?: string;
   organizationalUnit?: string;
@@ -16,15 +16,8 @@ interface APIIdentityObject {
   userId?: string;
 }
 
-interface ApiUserObject extends UserObject {
-  /** UUID */
-  id: string;
-  /** Unix timestamp (ms) */
-  createdAt: number;
-  /** Unix timestamp (ms) */
-  updatedAt: number;
-  /** Unix timestamp (ms) */
-  deletedAt: number;
+interface ApiUserObject extends UserObject, ApiCommonProperties, ApiParanoidProperties {
+
   /** Unix timestamp (ms) */
   lastLogin: number;
 
@@ -32,13 +25,13 @@ interface ApiUserObject extends UserObject {
   status: UserStatusEnum;
   email: string | null; // step 1: will be mandatory
   defaultKeyId: string | null;
-  identity: APIIdentityObject;
+  identity: ApiIdentityObject;
 }
 
 interface ApiUserDTOObject extends UserObject {
   email: string | null;
   role: UserRoleEnum;
-  identity: APIIdentityObject;
+  identity: ApiIdentityObject;
 }
 
 interface ApiPostUserObject extends UserObject {
@@ -46,7 +39,7 @@ interface ApiPostUserObject extends UserObject {
   status?: UserStatusEnum;
   email?: string;
   password: string;
-  identity: APIIdentityObject;
+  identity: ApiIdentityObject;
 }
 
 interface ApiPutUserObject extends UserObject {
@@ -54,6 +47,6 @@ interface ApiPutUserObject extends UserObject {
   status?: UserStatusEnum;
   email?: string;
   password?: string;
-  identity?: APIIdentityObject;
+  identity?: ApiIdentityObject;
   defaultKeyId?: string;
 }

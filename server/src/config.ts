@@ -25,3 +25,10 @@ export const session = {
   expireAfter: 30 * 60 * 1000,
   maxAge: 24 * 60 * 60 * 1000
 };
+
+export const server = {
+  protocol: 'http',
+  host: '127.0.0.1'
+};
+
+export default { ports, db, session, server };

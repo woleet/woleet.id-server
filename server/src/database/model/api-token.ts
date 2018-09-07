@@ -2,7 +2,6 @@
 import { STRING, ENUM, UUID, UUIDV4, DATE } from 'sequelize';
 
 import { AbstractInstanceAccess } from './abstract';
-import { sequelize } from '../sequelize';
 
 const APITokenModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
@@ -15,7 +14,7 @@ const APITokenModel = {
 class APITokenAccess extends AbstractInstanceAccess<InternalAPITokenObject, ApiFullPostAPITokenObject> {
 
   constructor() {
-    super(sequelize);
+    super();
     this.define('apiToken', APITokenModel, { paranoid: true });
   }
 

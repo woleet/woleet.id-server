@@ -5,21 +5,15 @@ type KeyStatusEnum = 'active' | 'blocked';
 
 interface KeyObject { }
 
-interface ApiKeyObject extends KeyObject {
-  /** UUID */
-  id: string;
+interface ApiKeyObject extends KeyObject, ApiCommonProperties, ApiParanoidProperties {
+
   /** Key name */
   name: string;
   /** Hexadecimal represention of the public key */
   publicKey: string;
 
   type: KeyTypeEnum;
-  /** Unix timestamp (ms) */
-  createdAt: number;
-  /** Unix timestamp (ms) */
-  updatedAt: number;
-  /** Unix timestamp (ms) */
-  deletedAt: number;
+
   /** Unix timestamp (ms) */
   lastUsed: number;
 

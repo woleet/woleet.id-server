@@ -1,11 +1,9 @@
-import { Key, User } from '../database';
 import { NotFoundUserError, NotFoundKeyError, BlockedUserError, BlockedKeyError } from '../errors';
+import { Key, User } from '../database';
 
 import * as message from 'bitcoinjs-message';
 
-const serverBase = 'http://localhost';
-
-export async function sign(hashToSign, pubKey, userId, customUserId) {
+export async function sign({ hashToSign, pubKey, userId, customUserId }) {
   let user: SequelizeUserObject;
   let key: SequelizeKeyObject;
 
@@ -22,7 +20,7 @@ export async function sign(hashToSign, pubKey, userId, customUserId) {
   if (pubKey) {
     key = await Key.getByPubKey(pubKey, user && user.get('id'), !user);
     if (!user) {
-      user = key && key.get('user')
+      user = key && key.get('user');
     }
   }
 
@@ -51,9 +49,10 @@ export async function sign(hashToSign, pubKey, userId, customUserId) {
   const sig = message.sign(hashToSign, Buffer.from(key.getDataValue('privateKey'), 'hex'));
 
   return {
-    pubKey: key.getDataValue('publicKey'),
+    userId: user.get('id'),
+    keyId: key.get('id'),
+    pubKey: key.get('publicKey'),
     signedHash: hashToSign,
-    signature: sig.toString('base64'),
-    identityURL: `${serverBase}/identity?user=${user.getDataValue('id')}`
+    signature: sig.toString('base64')
   };
 }

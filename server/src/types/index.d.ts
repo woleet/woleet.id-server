@@ -3,6 +3,7 @@
 import { Instance } from "sequelize";
 import { SessionStore } from "../controllers/store.session";
 import '../../../types/api.api-token';
+import '../../../types/api.event';
 import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api';
@@ -124,11 +125,37 @@ declare global {
     user: SequelizeUserObject;
   }
 
+  /* Events */
+
+  interface InternalServerEventObject extends ServerEvent, CommonInternalProperties {
+    data: Object;
+    occurredAt: Date;
+    authorizedUserId: string;
+    associatedTokenId: string;
+    associatedUserId: string;
+    associatedKeyId: string;
+    authorizedUser?: InternalUserObject;
+    associatedToken?: InternalAPITokenObject;
+    associatedUser?: InternalUserObject;
+    associatedkey?: InternalKeyObject;
+  }
+
+  interface ServerEventCreate {
+    data: Object;
+    type: ServerEventTypeEnum;
+    authorizedUserId: string;
+    associatedTokenId: string;
+    associatedUserId: string;
+    associatedKeyId: string;
+    occurredAt?: Date;
+  }
+
 }
 
 declare module 'koa' {
   interface Context {
     sessions: SessionStore;
     session: Session | null;
+    apiToken?: InternalAPITokenObject;
   }
 }
