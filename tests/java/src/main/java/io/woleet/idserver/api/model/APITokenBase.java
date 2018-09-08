@@ -11,7 +11,7 @@
  */
 
 
-package io.woleet.idsever.api.model;
+package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -22,55 +22,56 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.woleet.idserver.api.model.APITokenStatusEnum;
 import java.io.IOException;
 
 /**
- * ApiErrorError
+ * APITokenBase
  */
 
-public class ApiErrorError {
-  public static final String SERIALIZED_NAME_CODE = "code";
-  @SerializedName(SERIALIZED_NAME_CODE)
-  private Integer code = null;
+public class APITokenBase {
+  public static final String SERIALIZED_NAME_NAME = "name";
+  @SerializedName(SERIALIZED_NAME_NAME)
+  private String name = null;
 
-  public static final String SERIALIZED_NAME_MESSAGE = "message";
-  @SerializedName(SERIALIZED_NAME_MESSAGE)
-  private String message = null;
+  public static final String SERIALIZED_NAME_STATUS = "status";
+  @SerializedName(SERIALIZED_NAME_STATUS)
+  private APITokenStatusEnum status = null;
 
-  public ApiErrorError code(Integer code) {
-    this.code = code;
+  public APITokenBase name(String name) {
+    this.name = name;
     return this;
   }
 
    /**
-   * Get code
-   * @return code
+   * Key name.
+   * @return name
   **/
-  @ApiModelProperty(example = "418", value = "")
-  public Integer getCode() {
-    return code;
+  @ApiModelProperty(example = "My API token name", value = "Key name.")
+  public String getName() {
+    return name;
   }
 
-  public void setCode(Integer code) {
-    this.code = code;
+  public void setName(String name) {
+    this.name = name;
   }
 
-  public ApiErrorError message(String message) {
-    this.message = message;
+  public APITokenBase status(APITokenStatusEnum status) {
+    this.status = status;
     return this;
   }
 
    /**
-   * Get message
-   * @return message
+   * Get status
+   * @return status
   **/
-  @ApiModelProperty(example = "I'm a teapot", value = "")
-  public String getMessage() {
-    return message;
+  @ApiModelProperty(value = "")
+  public APITokenStatusEnum getStatus() {
+    return status;
   }
 
-  public void setMessage(String message) {
-    this.message = message;
+  public void setStatus(APITokenStatusEnum status) {
+    this.status = status;
   }
 
 
@@ -82,24 +83,24 @@ public class ApiErrorError {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ApiErrorError apiErrorError = (ApiErrorError) o;
-    return Objects.equals(this.code, apiErrorError.code) &&
-        Objects.equals(this.message, apiErrorError.message);
+    APITokenBase apITokenBase = (APITokenBase) o;
+    return Objects.equals(this.name, apITokenBase.name) &&
+        Objects.equals(this.status, apITokenBase.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, message);
+    return Objects.hash(name, status);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ApiErrorError {\n");
+    sb.append("class APITokenBase {\n");
     
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    message: ").append(toIndentedString(message)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
   }

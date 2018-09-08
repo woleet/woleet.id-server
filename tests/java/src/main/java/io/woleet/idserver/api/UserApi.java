@@ -27,12 +27,12 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import io.woleet.idsever.api.model.ApiError;
+import io.woleet.idserver.api.model.APIError;
 import java.util.UUID;
-import io.woleet.idsever.api.model.User;
-import io.woleet.idsever.api.model.UserArray;
-import io.woleet.idsever.api.model.UserPost;
-import io.woleet.idsever.api.model.UserPut;
+import io.woleet.idserver.api.model.User;
+import io.woleet.idserver.api.model.UserArray;
+import io.woleet.idserver.api.model.UserPost;
+import io.woleet.idserver.api.model.UserPut;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

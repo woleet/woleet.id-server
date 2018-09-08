@@ -11,17 +11,19 @@
  */
 
 
-package io.woleet.idsever.api.model;
+package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import io.woleet.idsever.api.model.KeyBase;
+import io.woleet.idserver.api.model.Key;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * KeyPut
+ * KeyArray
  */
 
-public class KeyPut extends KeyBase {
+public class KeyArray extends ArrayList<Key> {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -43,7 +45,7 @@ public class KeyPut extends KeyBase {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class KeyPut {\n");
+    sb.append("class KeyArray {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();

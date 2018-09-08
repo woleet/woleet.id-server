@@ -24,7 +24,7 @@ import com.google.gson.JsonElement;
 import io.gsonfire.GsonFireBuilder;
 import io.gsonfire.TypeSelector;
 
-import io.woleet.idsever.api.model.*;
+import io.woleet.idserver.api.model.*;
 import okio.ByteString;
 
 import java.io.IOException;

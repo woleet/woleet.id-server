@@ -11,17 +11,18 @@
  */
 
 
-package io.woleet.idsever.api.model;
+package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import io.woleet.idsever.api.model.KeyBase;
+import io.woleet.idserver.api.model.APITokenBase;
+import io.woleet.idserver.api.model.APITokenStatusEnum;
 
 /**
- * KeyPost
+ * APITokenPut
  */
 
-public class KeyPost extends KeyBase {
+public class APITokenPut extends APITokenBase {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -43,7 +44,7 @@ public class KeyPost extends KeyBase {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class KeyPost {\n");
+    sb.append("class APITokenPut {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();

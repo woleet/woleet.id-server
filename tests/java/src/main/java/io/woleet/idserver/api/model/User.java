@@ -11,7 +11,7 @@
  */
 
 
-package io.woleet.idsever.api.model;
+package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -22,10 +22,10 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.woleet.idsever.api.model.FullIdentity;
-import io.woleet.idsever.api.model.UserBase;
-import io.woleet.idsever.api.model.UserRoleEnum;
-import io.woleet.idsever.api.model.UserStatusEnum;
+import io.woleet.idserver.api.model.FullIdentity;
+import io.woleet.idserver.api.model.UserBase;
+import io.woleet.idserver.api.model.UserRoleEnum;
+import io.woleet.idserver.api.model.UserStatusEnum;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -37,10 +37,6 @@ public class User extends UserBase {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
   private UUID id = null;
-
-  public static final String SERIALIZED_NAME_STATUS = "status";
-  @SerializedName(SERIALIZED_NAME_STATUS)
-  private UserStatusEnum status = null;
 
   public static final String SERIALIZED_NAME_CREATED_AT = "createdAt";
   @SerializedName(SERIALIZED_NAME_CREATED_AT)
@@ -69,24 +65,6 @@ public class User extends UserBase {
   @ApiModelProperty(example = "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3", value = "User identifier (allocated by the server).")
   public UUID getId() {
     return id;
-  }
-
-  public User status(UserStatusEnum status) {
-    this.status = status;
-    return this;
-  }
-
-   /**
-   * Get status
-   * @return status
-  **/
-  @ApiModelProperty(value = "")
-  public UserStatusEnum getStatus() {
-    return status;
-  }
-
-  public void setStatus(UserStatusEnum status) {
-    this.status = status;
   }
 
    /**
@@ -154,7 +132,6 @@ public class User extends UserBase {
     }
     User user = (User) o;
     return Objects.equals(this.id, user.id) &&
-        Objects.equals(this.status, user.status) &&
         Objects.equals(this.createdAt, user.createdAt) &&
         Objects.equals(this.updatedAt, user.updatedAt) &&
         Objects.equals(this.deletedAt, user.deletedAt) &&
@@ -165,7 +142,7 @@ public class User extends UserBase {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, status, createdAt, updatedAt, deletedAt, lastLogin, defaultKeyId, super.hashCode());
+    return Objects.hash(id, createdAt, updatedAt, deletedAt, lastLogin, defaultKeyId, super.hashCode());
   }
 
 
@@ -175,7 +152,6 @@ public class User extends UserBase {
     sb.append("class User {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    deletedAt: ").append(toIndentedString(deletedAt)).append("\n");

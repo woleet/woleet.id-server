@@ -11,7 +11,7 @@
  */
 
 
-package io.woleet.idsever.api.model;
+package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -22,8 +22,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.woleet.idsever.api.model.KeyBase;
-import io.woleet.idsever.api.model.KeyTypeEnum;
+import io.woleet.idserver.api.model.KeyBase;
+import io.woleet.idserver.api.model.KeyStatusEnum;
+import io.woleet.idserver.api.model.KeyTypeEnum;
 import java.io.IOException;
 import java.util.UUID;
 

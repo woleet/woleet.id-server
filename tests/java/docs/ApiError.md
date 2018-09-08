@@ -1,10 +1,10 @@
 
-# ApiError
+# APIError
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**error** | [**ApiErrorError**](ApiErrorError.md) |  |  [optional]
+**error** | [**APIErrorError**](APIErrorError.md) |  |  [optional]
 
 
 

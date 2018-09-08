@@ -73,7 +73,7 @@ Please follow the [installation](#installation) instruction and execute the foll
 
 import io.woleet.idserver.*;
 import io.woleet.idserver.auth.*;
-import io.woleet.idsever.api.model.*;
+import io.woleet.idserver.api.model.*;
 import io.woleet.idserver.api.ApiTokenApi;
 
 import java.io.File;

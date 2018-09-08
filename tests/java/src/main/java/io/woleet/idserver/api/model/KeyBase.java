@@ -11,7 +11,7 @@
  */
 
 
-package io.woleet.idsever.api.model;
+package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -22,26 +22,41 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.woleet.idsever.api.model.FullIdentity;
-import io.woleet.idsever.api.model.UserBase;
-import io.woleet.idsever.api.model.UserRoleEnum;
-import io.woleet.idsever.api.model.UserStatusEnum;
+import io.woleet.idserver.api.model.KeyStatusEnum;
 import java.io.IOException;
 
 /**
- * UserPut
+ * KeyBase
  */
 
-public class UserPut extends UserBase {
+public class KeyBase {
+  public static final String SERIALIZED_NAME_NAME = "name";
+  @SerializedName(SERIALIZED_NAME_NAME)
+  private String name = null;
+
   public static final String SERIALIZED_NAME_STATUS = "status";
   @SerializedName(SERIALIZED_NAME_STATUS)
-  private UserStatusEnum status = null;
+  private KeyStatusEnum status = null;
 
-  public static final String SERIALIZED_NAME_PASSWORD = "password";
-  @SerializedName(SERIALIZED_NAME_PASSWORD)
-  private String password = null;
+  public KeyBase name(String name) {
+    this.name = name;
+    return this;
+  }
 
-  public UserPut status(UserStatusEnum status) {
+   /**
+   * Key name.
+   * @return name
+  **/
+  @ApiModelProperty(example = "My key name", value = "Key name.")
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public KeyBase status(KeyStatusEnum status) {
     this.status = status;
     return this;
   }
@@ -51,30 +66,12 @@ public class UserPut extends UserBase {
    * @return status
   **/
   @ApiModelProperty(value = "")
-  public UserStatusEnum getStatus() {
+  public KeyStatusEnum getStatus() {
     return status;
   }
 
-  public void setStatus(UserStatusEnum status) {
+  public void setStatus(KeyStatusEnum status) {
     this.status = status;
-  }
-
-  public UserPut password(String password) {
-    this.password = password;
-    return this;
-  }
-
-   /**
-   * User password.
-   * @return password
-  **/
-  @ApiModelProperty(example = "nSBa+rV3%2/LpD", value = "User password.")
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
   }
 
 
@@ -86,25 +83,24 @@ public class UserPut extends UserBase {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserPut userPut = (UserPut) o;
-    return Objects.equals(this.status, userPut.status) &&
-        Objects.equals(this.password, userPut.password) &&
-        super.equals(o);
+    KeyBase keyBase = (KeyBase) o;
+    return Objects.equals(this.name, keyBase.name) &&
+        Objects.equals(this.status, keyBase.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, password, super.hashCode());
+    return Objects.hash(name, status);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserPut {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("class KeyBase {\n");
+    
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("}");
     return sb.toString();
   }

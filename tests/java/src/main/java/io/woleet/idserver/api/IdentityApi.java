@@ -27,8 +27,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import io.woleet.idsever.api.model.ApiError;
-import io.woleet.idsever.api.model.IdentityResult;
+import io.woleet.idserver.api.model.APIError;
+import io.woleet.idserver.api.model.IdentityResult;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

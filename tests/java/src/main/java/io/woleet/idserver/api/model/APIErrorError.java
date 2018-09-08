@@ -11,7 +11,7 @@
  */
 
 
-package io.woleet.idsever.api.model;
+package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -22,34 +22,55 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.woleet.idsever.api.model.ApiErrorError;
 import java.io.IOException;
 
 /**
- * ApiError
+ * APIErrorError
  */
 
-public class ApiError {
-  public static final String SERIALIZED_NAME_ERROR = "error";
-  @SerializedName(SERIALIZED_NAME_ERROR)
-  private ApiErrorError error = null;
+public class APIErrorError {
+  public static final String SERIALIZED_NAME_CODE = "code";
+  @SerializedName(SERIALIZED_NAME_CODE)
+  private Integer code = null;
 
-  public ApiError error(ApiErrorError error) {
-    this.error = error;
+  public static final String SERIALIZED_NAME_MESSAGE = "message";
+  @SerializedName(SERIALIZED_NAME_MESSAGE)
+  private String message = null;
+
+  public APIErrorError code(Integer code) {
+    this.code = code;
     return this;
   }
 
    /**
-   * Get error
-   * @return error
+   * Get code
+   * @return code
   **/
-  @ApiModelProperty(value = "")
-  public ApiErrorError getError() {
-    return error;
+  @ApiModelProperty(example = "418", value = "")
+  public Integer getCode() {
+    return code;
   }
 
-  public void setError(ApiErrorError error) {
-    this.error = error;
+  public void setCode(Integer code) {
+    this.code = code;
+  }
+
+  public APIErrorError message(String message) {
+    this.message = message;
+    return this;
+  }
+
+   /**
+   * Get message
+   * @return message
+  **/
+  @ApiModelProperty(example = "I'm a teapot", value = "")
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
   }
 
 
@@ -61,22 +82,24 @@ public class ApiError {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ApiError apiError = (ApiError) o;
-    return Objects.equals(this.error, apiError.error);
+    APIErrorError apIErrorError = (APIErrorError) o;
+    return Objects.equals(this.code, apIErrorError.code) &&
+        Objects.equals(this.message, apIErrorError.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(error);
+    return Objects.hash(code, message);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ApiError {\n");
+    sb.append("class APIErrorError {\n");
     
-    sb.append("    error: ").append(toIndentedString(error)).append("\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,5 +1,5 @@
 
-# ApiErrorError
+# APIErrorError
 
 ## Properties
 Name | Type | Description | Notes

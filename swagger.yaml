@@ -37,13 +37,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Invalid email/username or password.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
   /logout:
     get:
       tags:
@@ -71,7 +71,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
 
   /sign:
     get:
@@ -104,25 +104,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad API token.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: The provided parameters did not match any key to sign with.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '409':
           description: The `pubKey` parameter was not provided and the user has no default key to fallback on.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
 
   /identity:
     get:
@@ -153,7 +153,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
 
   /key/{keyId}:
     get:
@@ -175,19 +175,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: Key not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
     put:
       tags:
         - Key
@@ -209,19 +209,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: Key not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
     delete:
       tags:
         - Key
@@ -241,19 +241,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: Key not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
   /key/{keyId}/export:
     get:
       tags:
@@ -275,19 +275,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: Key not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
   /user/{userId}/key:
     post:
       tags:
@@ -310,19 +310,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: User not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
   /user/{userId}/key/list:
     get:
       tags:
@@ -344,19 +344,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: User not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
 
   /user:
     post:
@@ -383,13 +383,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '400':
           description: Invalid object supplied.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
   /user/{userId}:
     get:
       tags:
@@ -410,19 +410,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: User not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
     put:
       tags:
         - User
@@ -449,19 +449,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: User not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
     delete:
       tags:
         - User
@@ -481,19 +481,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: User not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
   /user/list:
     get:
       tags:
@@ -510,7 +510,7 @@ paths:
               schema:
                 $ref: '#/components/responses/UserArray'
 
-  /APIToken:
+  /api-token:
     post:
       tags:
         - API Token
@@ -536,14 +536,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
-  /APIToken/{APITokenId}:
+                $ref: '#/components/responses/APIError'
+  /api-token/{APITokenId}:
     get:
       tags:
         - API Token
@@ -563,19 +563,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: API token not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
     put:
       tags:
         - API Token
@@ -602,19 +602,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: API token not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
     delete:
       tags:
         - API Token
@@ -634,20 +634,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
         '404':
           description: API token not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
-  /APIToken/list:
+                $ref: '#/components/responses/APIError'
+  /api-token/list:
     get:
       tags:
         - API Token
@@ -667,7 +667,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ApiError'
+                $ref: '#/components/responses/APIError'
 
 components:
   schemas:
@@ -765,10 +765,26 @@ components:
     UserStatusEnum:
       type: string
       enum:
-       - active
-       - blocked
+      - active
+      - blocked
       default: "active"
       description: User status (a `blocked` user cannot sign).
+      example: "active"
+    APITokenStatusEnum:
+      type: string
+      enum:
+      - active
+      - blocked
+      default: "active"
+      description: API token status (a `blocked` API token cannot be used).
+      example: "active"
+    KeyStatusEnum:
+      type: string
+      enum:
+      - active
+      - blocked
+      default: "active"
+      description: Key status (a `blocked` key cannot be used to sign).
       example: "active"
     UserBase:
       type: object
@@ -782,6 +798,8 @@ components:
           type: string
           description: User name (can be used for login).
           example: "johndoe"
+        status:
+          $ref: '#/components/schemas/UserStatusEnum'
         role:
           $ref: '#/components/schemas/UserRoleEnum'
         identity:
@@ -797,8 +815,6 @@ components:
               readOnly: true
               description: User identifier (allocated by the server).
               example: "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3"
-            status:
-              $ref: '#/components/schemas/UserStatusEnum'
             createdAt:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:
@@ -823,8 +839,6 @@ components:
       - $ref: '#/components/schemas/UserBase'
       - type: object
         properties:
-          status:
-            $ref: '#/components/schemas/UserStatusEnum'
           password:
             $ref: '#/components/schemas/Password'
     UserArray:
@@ -848,13 +862,7 @@ components:
           example: "My API token name"
           description: Key name.
         status:
-          type: string
-          enum:
-          - active
-          - blocked
-          description: API token status.
-          default: "active"
-          example: "active"
+          $ref: '#/components/schemas/APITokenStatusEnum'
     APIToken:
       allOf:
         - $ref: '#/components/schemas/APITokenBase'
@@ -900,13 +908,7 @@ components:
           example: "My key name"
           description: Key name.
         status:
-          type: string
-          enum:
-          - active
-          - blocked
-          description: Key status.
-          default: "active"
-          example: "active"
+          $ref: '#/components/schemas/KeyStatusEnum'
     Key:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
@@ -982,7 +984,7 @@ components:
               description: The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
             identity:
               $ref: '#/components/schemas/Identity'
-    ApiError:
+    APIError:
       type: object
       properties:
         error:
@@ -1119,8 +1121,8 @@ components:
       $ref: '#/components/schemas/UserArray'
     UserInfo:
       $ref: '#/components/schemas/UserInfo'
-    ApiError:
-      $ref: '#/components/schemas/ApiError'
+    APIError:
+      $ref: '#/components/schemas/APIError'
     Key:
       $ref: '#/components/schemas/Key'
     KeyArray:

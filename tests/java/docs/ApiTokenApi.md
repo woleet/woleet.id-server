@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**createAPIToken**](ApiTokenApi.md#createAPIToken) | **POST** /APIToken | Create an API token.
-[**deleteAPIToken**](ApiTokenApi.md#deleteAPIToken) | **DELETE** /APIToken/{APITokenId} | Delete an API token.
-[**getAPITokenById**](ApiTokenApi.md#getAPITokenById) | **GET** /APIToken/{APITokenId} | Get an API token by its identifier.
-[**getAllAPITokens**](ApiTokenApi.md#getAllAPITokens) | **GET** /APIToken/list | List all API tokens.
-[**updateAPIToken**](ApiTokenApi.md#updateAPIToken) | **PUT** /APIToken/{APITokenId} | Update an API token.
+[**createAPIToken**](ApiTokenApi.md#createAPIToken) | **POST** /api-token | Create an API token.
+[**deleteAPIToken**](ApiTokenApi.md#deleteAPIToken) | **DELETE** /api-token/{APITokenId} | Delete an API token.
+[**getAPITokenById**](ApiTokenApi.md#getAPITokenById) | **GET** /api-token/{APITokenId} | Get an API token by its identifier.
+[**getAllAPITokens**](ApiTokenApi.md#getAllAPITokens) | **GET** /api-token/list | List all API tokens.
+[**updateAPIToken**](ApiTokenApi.md#updateAPIToken) | **PUT** /api-token/{APITokenId} | Update an API token.
 
 
 <a name="createAPIToken"></a>

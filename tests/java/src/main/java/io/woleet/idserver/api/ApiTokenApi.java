@@ -27,12 +27,12 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
-import io.woleet.idsever.api.model.APIToken;
-import io.woleet.idsever.api.model.APITokenArray;
-import io.woleet.idsever.api.model.APITokenBase;
-import io.woleet.idsever.api.model.APITokenPost;
-import io.woleet.idsever.api.model.APITokenPut;
-import io.woleet.idsever.api.model.ApiError;
+import io.woleet.idserver.api.model.APIError;
+import io.woleet.idserver.api.model.APIToken;
+import io.woleet.idserver.api.model.APITokenArray;
+import io.woleet.idserver.api.model.APITokenBase;
+import io.woleet.idserver.api.model.APITokenPost;
+import io.woleet.idserver.api.model.APITokenPut;
 import java.util.UUID;
 
 import java.lang.reflect.Type;
@@ -72,7 +72,7 @@ public class ApiTokenApi {
         Object localVarPostBody = apITokenPost;
 
         // create path and map variables
-        String localVarPath = "/APIToken";
+        String localVarPath = "/api-token";
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -194,7 +194,7 @@ public class ApiTokenApi {
         Object localVarPostBody = new Object();
 
         // create path and map variables
-        String localVarPath = "/APIToken/{APITokenId}"
+        String localVarPath = "/api-token/{APITokenId}"
             .replaceAll("\\{" + "APITokenId" + "\\}", apiClient.escapeString(apITokenId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
@@ -317,7 +317,7 @@ public class ApiTokenApi {
         Object localVarPostBody = new Object();
 
         // create path and map variables
-        String localVarPath = "/APIToken/{APITokenId}"
+        String localVarPath = "/api-token/{APITokenId}"
             .replaceAll("\\{" + "APITokenId" + "\\}", apiClient.escapeString(apITokenId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
@@ -440,7 +440,7 @@ public class ApiTokenApi {
         Object localVarPostBody = new Object();
 
         // create path and map variables
-        String localVarPath = "/APIToken/list";
+        String localVarPath = "/api-token/list";
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
@@ -560,7 +560,7 @@ public class ApiTokenApi {
         Object localVarPostBody = apITokenPut;
 
         // create path and map variables
-        String localVarPath = "/APIToken/{APITokenId}"
+        String localVarPath = "/api-token/{APITokenId}"
             .replaceAll("\\{" + "APITokenId" + "\\}", apiClient.escapeString(apITokenId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();

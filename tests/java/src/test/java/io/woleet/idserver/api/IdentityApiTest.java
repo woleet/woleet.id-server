@@ -1,7 +1,7 @@
 package io.woleet.idserver.api;
 
 import io.woleet.idserver.ApiException;
-import io.woleet.idsever.api.model.IdentityResult;
+import io.woleet.idserver.api.model.IdentityResult;
 import org.junit.Ignore;
 import org.junit.Test;
 

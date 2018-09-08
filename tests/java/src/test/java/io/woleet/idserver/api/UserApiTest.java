@@ -2,7 +2,7 @@ package io.woleet.idserver.api;
 
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
-import io.woleet.idsever.api.model.*;
+import io.woleet.idserver.api.model.*;
 import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
@@ -12,9 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.*;
 
-/**
- * API tests for UserApi
- */
 public class UserApiTest {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -30,14 +27,14 @@ public class UserApiTest {
         user.setRole(UserRoleEnum.USER);
 
         // Set login information
-        String USERNAME = Config.TEST_USERS_USERNAME_PREFIX + Config.randomHash().substring(0, 9);
+        String USERNAME = Config.randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
         user.email(EMAIL).username(USERNAME);
         String PASSWORD = Config.randomHash();
         user.password(PASSWORD);
 
         // Set identity information
-        String COMMON_NAME = Config.TEST_USERS_COMMONNAME_PREFIX + USERNAME;
+        String COMMON_NAME = Config.randomCommonName();
         String ORGANIZATION = "Woleet SAS";
         String ORGANIZATIONAL_UNIT = "Dev";
         String LOCALITY = "Rennes";
@@ -84,7 +81,7 @@ public class UserApiTest {
 
         // Create 3 helper user APIs: one with admin rights, one with user rights, one not authenticated
         adminAuthUserApi = new UserApi(Config.getAdminAuthApiClient());
-        User user = Config.createTestUser(adminAuthUserApi);
+        User user = Config.createTestUser();
         userAuthUserApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
         noAuthUserApi = new UserApi(Config.getNoAuthApiClient());
     }
@@ -132,7 +129,7 @@ public class UserApiTest {
 
         // Create and verify a user with minimal attributes
         FullIdentity fullIdentity = new FullIdentity();
-        fullIdentity.commonName(Config.TEST_USERS_COMMONNAME_PREFIX + Config.randomUUID());
+        fullIdentity.commonName(Config.randomCommonName());
         User user = adminAuthUserApi.createUser((UserPost) userPost.identity(fullIdentity));
         verifyUser(user);
 

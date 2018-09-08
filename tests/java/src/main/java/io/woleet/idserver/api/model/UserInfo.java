@@ -11,17 +11,20 @@
  */
 
 
-package io.woleet.idsever.api.model;
+package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import io.woleet.idsever.api.model.APITokenBase;
+import io.woleet.idserver.api.model.FullIdentity;
+import io.woleet.idserver.api.model.UserBase;
+import io.woleet.idserver.api.model.UserRoleEnum;
+import io.woleet.idserver.api.model.UserStatusEnum;
 
 /**
- * APITokenPost
+ * UserInfo
  */
 
-public class APITokenPost extends APITokenBase {
+public class UserInfo extends UserBase {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -43,7 +46,7 @@ public class APITokenPost extends APITokenBase {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class APITokenPost {\n");
+    sb.append("class UserInfo {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();

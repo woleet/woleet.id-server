@@ -11,7 +11,7 @@
  */
 
 
-package io.woleet.idsever.api.model;
+package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -22,8 +22,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.woleet.idsever.api.model.FullIdentity;
-import io.woleet.idsever.api.model.UserRoleEnum;
+import io.woleet.idserver.api.model.FullIdentity;
+import io.woleet.idserver.api.model.UserRoleEnum;
+import io.woleet.idserver.api.model.UserStatusEnum;
 import java.io.IOException;
 
 /**
@@ -38,6 +39,10 @@ public class UserBase {
   public static final String SERIALIZED_NAME_USERNAME = "username";
   @SerializedName(SERIALIZED_NAME_USERNAME)
   private String username = null;
+
+  public static final String SERIALIZED_NAME_STATUS = "status";
+  @SerializedName(SERIALIZED_NAME_STATUS)
+  private UserStatusEnum status = null;
 
   public static final String SERIALIZED_NAME_ROLE = "role";
   @SerializedName(SERIALIZED_NAME_ROLE)
@@ -81,6 +86,24 @@ public class UserBase {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public UserBase status(UserStatusEnum status) {
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @ApiModelProperty(value = "")
+  public UserStatusEnum getStatus() {
+    return status;
+  }
+
+  public void setStatus(UserStatusEnum status) {
+    this.status = status;
   }
 
   public UserBase role(UserRoleEnum role) {
@@ -131,13 +154,14 @@ public class UserBase {
     UserBase userBase = (UserBase) o;
     return Objects.equals(this.email, userBase.email) &&
         Objects.equals(this.username, userBase.username) &&
+        Objects.equals(this.status, userBase.status) &&
         Objects.equals(this.role, userBase.role) &&
         Objects.equals(this.identity, userBase.identity);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, username, role, identity);
+    return Objects.hash(email, username, status, role, identity);
   }
 
 
@@ -148,6 +172,7 @@ public class UserBase {
     
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("    identity: ").append(toIndentedString(identity)).append("\n");
     sb.append("}");

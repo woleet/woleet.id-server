@@ -11,7 +11,7 @@
  */
 
 
-package io.woleet.idsever.api.model;
+package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -25,16 +25,18 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * Key type.
+ * User role.
  */
-@JsonAdapter(KeyTypeEnum.Adapter.class)
-public enum KeyTypeEnum {
+@JsonAdapter(UserRoleEnum.Adapter.class)
+public enum UserRoleEnum {
   
-  BIP39("bip39");
+  USER("user"),
+  
+  ADMIN("admin");
 
   private String value;
 
-  KeyTypeEnum(String value) {
+  UserRoleEnum(String value) {
     this.value = value;
   }
 
@@ -47,8 +49,8 @@ public enum KeyTypeEnum {
     return String.valueOf(value);
   }
 
-  public static KeyTypeEnum fromValue(String text) {
-    for (KeyTypeEnum b : KeyTypeEnum.values()) {
+  public static UserRoleEnum fromValue(String text) {
+    for (UserRoleEnum b : UserRoleEnum.values()) {
       if (String.valueOf(b.value).equals(text)) {
         return b;
       }
@@ -56,16 +58,16 @@ public enum KeyTypeEnum {
     throw new IllegalArgumentException("Unexpected value '" + text + "'");
   }
 
-  public static class Adapter extends TypeAdapter<KeyTypeEnum> {
+  public static class Adapter extends TypeAdapter<UserRoleEnum> {
     @Override
-    public void write(final JsonWriter jsonWriter, final KeyTypeEnum enumeration) throws IOException {
+    public void write(final JsonWriter jsonWriter, final UserRoleEnum enumeration) throws IOException {
       jsonWriter.value(enumeration.getValue());
     }
 
     @Override
-    public KeyTypeEnum read(final JsonReader jsonReader) throws IOException {
+    public UserRoleEnum read(final JsonReader jsonReader) throws IOException {
       String value = jsonReader.nextString();
-      return KeyTypeEnum.fromValue(String.valueOf(value));
+      return UserRoleEnum.fromValue(String.valueOf(value));
     }
   }
 }

@@ -11,7 +11,7 @@
  */
 
 
-package io.woleet.idsever.api.model;
+package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -25,18 +25,18 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * User role.
+ * API token status (a &#x60;blocked&#x60; API token cannot be used).
  */
-@JsonAdapter(UserRoleEnum.Adapter.class)
-public enum UserRoleEnum {
+@JsonAdapter(APITokenStatusEnum.Adapter.class)
+public enum APITokenStatusEnum {
   
-  USER("user"),
+  ACTIVE("active"),
   
-  ADMIN("admin");
+  BLOCKED("blocked");
 
   private String value;
 
-  UserRoleEnum(String value) {
+  APITokenStatusEnum(String value) {
     this.value = value;
   }
 
@@ -49,8 +49,8 @@ public enum UserRoleEnum {
     return String.valueOf(value);
   }
 
-  public static UserRoleEnum fromValue(String text) {
-    for (UserRoleEnum b : UserRoleEnum.values()) {
+  public static APITokenStatusEnum fromValue(String text) {
+    for (APITokenStatusEnum b : APITokenStatusEnum.values()) {
       if (String.valueOf(b.value).equals(text)) {
         return b;
       }
@@ -58,16 +58,16 @@ public enum UserRoleEnum {
     throw new IllegalArgumentException("Unexpected value '" + text + "'");
   }
 
-  public static class Adapter extends TypeAdapter<UserRoleEnum> {
+  public static class Adapter extends TypeAdapter<APITokenStatusEnum> {
     @Override
-    public void write(final JsonWriter jsonWriter, final UserRoleEnum enumeration) throws IOException {
+    public void write(final JsonWriter jsonWriter, final APITokenStatusEnum enumeration) throws IOException {
       jsonWriter.value(enumeration.getValue());
     }
 
     @Override
-    public UserRoleEnum read(final JsonReader jsonReader) throws IOException {
+    public APITokenStatusEnum read(final JsonReader jsonReader) throws IOException {
       String value = jsonReader.nextString();
-      return UserRoleEnum.fromValue(String.valueOf(value));
+      return APITokenStatusEnum.fromValue(String.valueOf(value));
     }
   }
 }
