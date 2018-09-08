@@ -62,14 +62,14 @@ export async function getServerEventById(id: string)
   return event.toJSON();
 }
 
-export async function getServerEventListByType(type: ServerEventTypeEnum, { offset = 0, limit = 100, full = false } = {})
+export async function getServerEventListByType(type: ServerEventTypeEnum, opts: ListOptions)
   : Promise<InternalServerEventObject[]> {
-  const events = await ServerEvent.getByType(type, { offset, limit, full });
+  const events = await ServerEvent.getByType(type, opts);
   return events.map((evt) => evt.toJSON());
 }
 
-export async function getAllServerEvents({ offset = 0, limit = 100, full = false } = {})
+export async function getAllServerEvents(opts: ListOptions)
   : Promise<InternalServerEventObject[]> {
-  const events = await ServerEvent.getAll({ offset, limit, full });
+  const events = await ServerEvent.getAll(opts);
   return events.map((evt) => evt.toJSON());
 }

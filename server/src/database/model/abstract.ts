@@ -46,8 +46,14 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
     }
   }
 
-  async getAll({ offset = 0, limit = 100, full = false } = {}): Promise<Instance<TInstance>[]> {
-    return this.model.findAll({ offset, limit, order: [['createdAt', 'DESC']], paranoid: !full });
+
+  async getAll(opt: ListOptions): Promise<Instance<TInstance>[]> {
+    return this.model.findAll({
+      offset: opt.offset,
+      limit: opt.limit,
+      order: [['createdAt', 'DESC']],
+      paranoid: !opt.full
+    });
   }
 
   async getById(id: string): Promise<Instance<TInstance> | null> {
