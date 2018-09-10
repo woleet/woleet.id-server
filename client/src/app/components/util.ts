@@ -35,6 +35,8 @@ export class ErrorMessageProvider {
         return `Must contain at least ${error.missing}.`;
       case 'ascii':
         return `Must contain only ascii characters`;
+      case 'startsWithALetter':
+        return `Must start with a letter`;
       default:
         return '';
     }

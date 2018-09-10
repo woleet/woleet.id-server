@@ -36,6 +36,10 @@ export async function createSession(login: string, password: string): Promise<{ 
 
   const token = await sessionStore.create(user);
 
+  user.set('lastLogin', new Date);
+
+  await user.save();
+
   return { token, user: user.toJSON() };
 }
 
