@@ -12,7 +12,7 @@ interface ServerEvent {
   type: ServerEventTypeEnum;
 }
 
-interface ApiServerEventObject extends ServerEvent, ApiCommonProperties {
+interface ApiServerEventObject extends ServerEvent {
   occurredAt: number;
   authorizedUserId?: string;
   authorizedTokenId?: string;

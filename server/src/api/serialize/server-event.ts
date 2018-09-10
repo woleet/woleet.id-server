@@ -1,11 +1,7 @@
 export function serialiseServerEvent(evt: InternalServerEventObject): ApiServerEventObject {
-  const dates = {
-    createdAt: +evt.createdAt || null,
-    updatedAt: +evt.updatedAt || null,
-    occurredAt: +evt.occurredAt || null
-  };
+  const dates = { occurredAt: +evt.occurredAt || null };
 
-  const { id, type, data,
+  const { type, data,
     authorizedUserId,
     authorizedTokenId,
     associatedTokenId,
@@ -13,11 +9,12 @@ export function serialiseServerEvent(evt: InternalServerEventObject): ApiServerE
     associatedKeyId } = evt;
 
   return Object.assign({
-    id, type, data,
-    authorizedUserId,
-    authorizedTokenId,
-    associatedTokenId,
-    associatedUserId,
-    associatedKeyId
+    type: evt.type,
+    data: evt.data || undefined,
+    authorizedUserId: evt.authorizedUserId || undefined,
+    authorizedTokenId: evt.authorizedTokenId || undefined,
+    associatedTokenId: evt.associatedTokenId || undefined,
+    associatedUserId: evt.associatedUserId || undefined,
+    associatedKeyId: evt.associatedKeyId || undefined
   }, dates);
 }
