@@ -20,23 +20,18 @@ public abstract class CRUDApiTest {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     interface Api {
-        abstract ObjectArray getAllObjects(boolean b) throws ApiException;
+        ObjectArray getAllObjects(boolean b) throws ApiException;
 
-        abstract ObjectGet deleteObject(UUID id) throws ApiException;
+        ObjectGet deleteObject(UUID id) throws ApiException;
 
-        abstract ObjectGet createObject(ObjectPost objectPost) throws ApiException;
+        ObjectGet createObject(ObjectPost objectPost) throws ApiException;
 
-        abstract ObjectGet getObjectById(UUID id) throws ApiException;
+        ObjectGet getObjectById(UUID id) throws ApiException;
 
-        abstract ObjectGet updateObject(UUID id, ObjectPut objectPut) throws ApiException;
+        ObjectGet updateObject(UUID id, ObjectPut objectPut) throws ApiException;
     }
 
-    enum ObjectStatusEnum {
-        ACTIVE,
-        BLOCKED
-    }
-
-    abstract class ObjectBase<T> {
+    class ObjectBase<T> {
 
         T objectBase;
 
@@ -60,7 +55,7 @@ public abstract class CRUDApiTest {
         abstract UUID getId();
     }
 
-    abstract class ObjectPut<T> extends ObjectPost {
+    abstract class ObjectPut<T> extends ObjectBase {
 
         ObjectPut(T objectPut) {
             super(objectPut);
@@ -74,8 +69,6 @@ public abstract class CRUDApiTest {
         ObjectPost(T objectPost) {
             super(objectPost);
         }
-
-        abstract ObjectPost name(String name);
 
         abstract ObjectPost setMinimalAttributes();
 
@@ -101,6 +94,7 @@ public abstract class CRUDApiTest {
     abstract void verifyObject(ObjectGet objectGet);
 
     abstract void verifyObjectsEquals(ObjectPost expected, ObjectGet actual);
+    abstract void verifyObjectUpdated(ObjectPut diff, ObjectPost expected, ObjectGet actual);
 
     private void deleteAllTestObjects() throws ApiException {
         Api api = newApi(Config.getAdminAuthApiClient());
@@ -113,8 +107,7 @@ public abstract class CRUDApiTest {
 
     private ObjectGet createTestObject(Api api) throws ApiException {
         ObjectPost objectPost = newObjectPost();
-        String NAME = Config.randomName();
-        objectPost.name(NAME);
+        objectPost.setMinimalAttributes();
         return api.createObject(objectPost);
     }
 
@@ -182,9 +175,7 @@ public abstract class CRUDApiTest {
 
         // Create and verify a new object with full attributes
         objectPost = newObjectPost();
-        objectPost.setFullAttributes();
-
-        objectGet = adminAuthApi.createObject(objectPost);
+        objectGet = adminAuthApi.createObject(objectPost.setFullAttributes());
         verifyObject(objectGet);
         verifyObjectsEquals(objectPost, objectGet);
     }
@@ -262,8 +253,8 @@ public abstract class CRUDApiTest {
 
         // Create a object to get
         ObjectPost objectPost = newObjectPost();
-        objectPost.setFullAttributes();
-        ObjectGet objectGet = adminAuthApi.createObject(objectPost);
+        ObjectGet objectGet = adminAuthApi.createObject(objectPost.setFullAttributes());
+        verifyObject(objectGet);
 
         // Get and verify a object with admin credentials
         objectGet = adminAuthApi.getObjectById(objectGet.getId());
@@ -300,15 +291,15 @@ public abstract class CRUDApiTest {
 
         // Create an object to update
         ObjectPost objectPost = newObjectPost();
-        objectPost.setFullAttributes();
-        ObjectGet objectGet = adminAuthApi.createObject(objectPost);
+        ObjectGet objectGet = adminAuthApi.createObject(objectPost.setFullAttributes());
+        verifyObject(objectGet);
 
         // Update and verify a object with admin credentials
         ObjectPut objectPut = newObjectPut();
         objectPut.update();
         objectGet = adminAuthApi.updateObject(objectGet.getId(), objectPut);
         verifyObject(objectGet);
-        verifyObjectsEquals(objectPost, objectGet);
+        verifyObjectUpdated(objectPut, objectPost, objectGet);
 
         // Try to update a object with no credentials
         try {

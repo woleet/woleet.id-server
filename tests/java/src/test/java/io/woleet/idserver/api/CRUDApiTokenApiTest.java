@@ -8,6 +8,8 @@ import io.woleet.idserver.api.model.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import static org.junit.Assert.*;
+
 public class CRUDApiTokenApiTest extends CRUDApiTest {
 
     class Api implements CRUDApiTest.Api {
@@ -68,11 +70,6 @@ public class CRUDApiTokenApiTest extends CRUDApiTest {
         }
 
         @Override
-        CRUDApiTest.ObjectPost name(String name) {
-            return new ObjectPost((APITokenPost) ((APITokenBase) objectBase).name(name));
-        }
-
-        @Override
         CRUDApiTest.ObjectPost setMinimalAttributes() {
             APITokenPost apiTokenPost = (APITokenPost) objectBase;
             apiTokenPost.name(Config.randomName());
@@ -81,7 +78,11 @@ public class CRUDApiTokenApiTest extends CRUDApiTest {
 
         @Override
         CRUDApiTest.ObjectPost setFullAttributes() {
-            // TODO
+
+            // Set status and name
+            APITokenPost apiTokenPost = (APITokenPost) objectBase;
+            apiTokenPost.setStatus(APITokenStatusEnum.ACTIVE);
+            apiTokenPost.setName(Config.randomName());
             return setMinimalAttributes();
         }
     }
@@ -97,21 +98,6 @@ public class CRUDApiTokenApiTest extends CRUDApiTest {
             APITokenPut apiTokenPut = (APITokenPut) objectBase;
             apiTokenPut.status(APITokenStatusEnum.BLOCKED);
             apiTokenPut.name(Config.randomName());
-        }
-
-        @Override
-        CRUDApiTest.ObjectPost name(String name) {
-            return ((ObjectPut) objectBase).name(name);
-        }
-
-        @Override
-        CRUDApiTest.ObjectPost setMinimalAttributes() {
-            return ((ObjectPut) objectBase).setMinimalAttributes();
-        }
-
-        @Override
-        CRUDApiTest.ObjectPost setFullAttributes() {
-            return ((ObjectPut) objectBase).setFullAttributes();
         }
     }
 
@@ -159,11 +145,27 @@ public class CRUDApiTokenApiTest extends CRUDApiTest {
 
     @Override
     void verifyObject(CRUDApiTest.ObjectGet objectGet) {
-        // TODO
+        APIToken apiToken = (APIToken) objectGet.get();
+        assertNotNull(apiToken.getId());
+        assertNotNull(apiToken.getCreatedAt());
+        assertTrue(apiToken.getCreatedAt() <= apiToken.getUpdatedAt());
+        assertNull(apiToken.getDeletedAt());
     }
 
     @Override
-    void verifyObjectsEquals(CRUDApiTest.ObjectPost expected, CRUDApiTest.ObjectGet actual) {
-        // TODO
+    void verifyObjectsEquals(CRUDApiTest.ObjectPost pExpected, CRUDApiTest.ObjectGet pAactual) {
+        APITokenPost expected = (APITokenPost) pExpected.get();
+        APIToken actual = (APIToken) pAactual.get();
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getName(), actual.getName());
+    }
+
+    @Override
+    void verifyObjectUpdated(CRUDApiTest.ObjectPut pDiff, CRUDApiTest.ObjectPost pExpected, CRUDApiTest.ObjectGet pActual) {
+        APITokenPut diff = (APITokenPut) pDiff.get();
+        APITokenPost expected = (APITokenPost) pExpected.get();
+        APIToken actual = (APIToken) pActual.get();
+        assertEquals(diff.getStatus() != null ? diff.getStatus() : expected.getStatus(), actual.getStatus());
+        assertEquals(diff.getName() != null ? diff.getName() : expected.getName(), actual.getName());
     }
 }
