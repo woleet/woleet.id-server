@@ -52,7 +52,8 @@ router.get('/sign', apiTokenAuth, async function (ctx) {
   event.register({
     type: 'signature',
     authorizedUserId: null,
-    associatedTokenId: ctx.apiToken.id,
+    authorizedTokenId: ctx.apiToken.id,
+    associatedTokenId: null,
     associatedUserId: userId,
     associatedKeyId: keyId,
     data: { hash: signedHash }

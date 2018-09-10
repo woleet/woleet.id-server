@@ -4,10 +4,11 @@ import * as Router from 'koa-router';
 import { validate } from '../schemas';
 import { getServerEventListByType, getAllServerEvents, getServerEventById } from '../../controllers/events';
 import { serialiseServerEvent } from '../serialize/server-event';
+import { events as eventsConfig } from '../../config';
 
 const vid = validate.param('id', 'uuid');
 
-const serverEventTypes = ['signature'];
+const serverEventTypes = eventsConfig.typesEnum;
 
 /**
  * ServerEvent
@@ -27,13 +28,13 @@ router.get('/list', async function (ctx) {
   const full = (ctx.query.full || '').toLowerCase() === 'true';
   const type = (ctx.query.type || '').toLowerCase() || null;
 
-  if (!serverEventTypes.includes(type)) {
+  if (type && !serverEventTypes.includes(type)) {
     throw new BadRequest(`Type must be one of ${serverEventTypes.join(', ')}`);
   }
 
   const ops = { full };
 
-  const events = await (type ? getAllServerEvents(ops) : getServerEventListByType(type, ops));
+  const events = await (type ? getServerEventListByType(type, ops) : getAllServerEvents(ops));
   ctx.body = events.map(serialiseServerEvent);
 });
 

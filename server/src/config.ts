@@ -38,4 +38,16 @@ export const pagination = {
   }
 };
 
+export const events = {
+  disable: env.DISABLE_EVENT_LOGGING === 'true' || false,
+  batchSize: 100,
+  flushAfter: 10 * 1000,
+  typesEnum: [
+    'signature', 'login',
+    'key.create', 'key.edit', 'key.delete',
+    'user.create', 'user.edit', 'user.delete',
+    'token.create', 'token.edit', 'token.delete'
+  ]
+};
+
 export default { ports, db, session, server, pagination };
