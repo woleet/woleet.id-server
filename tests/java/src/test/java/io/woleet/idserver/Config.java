@@ -25,7 +25,7 @@ public class Config {
     }
 
     // Current test mode
-    private static final TestMode testMode = TestMode.LOCAL;
+    private static final TestMode testMode = TestMode.DEV;
 
     // True if tests are to be debugged
     private static final boolean debug = true;
