@@ -42,12 +42,12 @@ public class UserApiTest {
         String USER_ID = Config.randomUUID().toString();
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity
-            .userId(USER_ID)
-            .commonName(COMMON_NAME)
-            .organizationalUnit(ORGANIZATIONAL_UNIT)
-            .locality(LOCALITY)
-            .organization(ORGANIZATION)
-            .country(COUNTRY);
+                .userId(USER_ID)
+                .commonName(COMMON_NAME)
+                .organizationalUnit(ORGANIZATIONAL_UNIT)
+                .locality(LOCALITY)
+                .organization(ORGANIZATION)
+                .country(COUNTRY);
         user.identity(fullIdentity);
 
         // Return user
@@ -189,7 +189,7 @@ public class UserApiTest {
 
         // Delete the user, get all users (including deleted ons)
         // and check that the user is still within the results
-        adminAuthUserApi.deleteUser(user.getId());
+        user = adminAuthUserApi.deleteUser(user.getId());
         users = adminAuthUserApi.getAllUsers(true);
         assertTrue(users.contains(user));
 

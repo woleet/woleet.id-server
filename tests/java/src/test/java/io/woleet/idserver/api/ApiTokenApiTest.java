@@ -159,7 +159,7 @@ public class ApiTokenApiTest {
 
         // Delete the API token, get all API tokens (including deleted ons)
         // and check that the API token is still within the results
-        adminAuthApiTokenApi.deleteAPIToken(apiToken.getId());
+        apiToken = adminAuthApiTokenApi.deleteAPIToken(apiToken.getId());
         apiTokens = adminAuthApiTokenApi.getAllAPITokens(true);
         assertTrue(apiTokens.contains(apiToken));
 
