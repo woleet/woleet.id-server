@@ -220,7 +220,7 @@ public class ApiTokenApiTest {
     @Test
     public void updateAPITokenTest() throws ApiException {
 
-        // Create an API token to update
+        // Create an API token to updateSomething
         APITokenPost APITokenPost = generateNewRandomAPIToken();
         APIToken apiToken = adminAuthApiTokenApi.createAPIToken(APITokenPost);
 
@@ -233,7 +233,7 @@ public class ApiTokenApiTest {
         APITokenPost.name(NAME);
         verifyAPITokensEquals(APITokenPost, apiToken);
 
-        // Try to update an API token with no credentials
+        // Try to updateSomething an API token with no credentials
         try {
             noAuthApiTokenApi.updateAPIToken(apiToken.getId(), apiTokenPut);
             fail("Should not be able to get an API token with no credentials");
@@ -241,7 +241,7 @@ public class ApiTokenApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to update an API token with user credentials
+        // Try to updateSomething an API token with user credentials
         try {
             userAuthApiTokenApi.updateAPIToken(apiToken.getId(), apiTokenPut);
             fail("Should not be able to get an API token with user credentials");
@@ -249,7 +249,7 @@ public class ApiTokenApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-        // Try to update a non existing user
+        // Try to updateSomething a non existing user
         try {
             adminAuthApiTokenApi.updateAPIToken(Config.randomUUID(), apiTokenPut);
             fail("Should not be able to get a non existing API token");

@@ -250,7 +250,7 @@ public class UserApiTest {
     @Test
     public void updateUserTest() throws ApiException {
 
-        // Create a user to update
+        // Create a user to updateSomething
         UserPost userPost = generateNewRandomUser();
         User user = adminAuthUserApi.createUser(userPost);
 
@@ -263,7 +263,7 @@ public class UserApiTest {
         userPost.password(PASSWORD);
         verifyUsersEquals(userPost, user);
 
-        // Try to update a user with no credentials
+        // Try to updateSomething a user with no credentials
         try {
             noAuthUserApi.updateUser(user.getId(), userPut);
             fail("Should not be able to get a user with no credentials");
@@ -271,7 +271,7 @@ public class UserApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to update a user with user credentials
+        // Try to updateSomething a user with user credentials
         try {
             userAuthUserApi.updateUser(user.getId(), userPut);
             fail("Should not be able to get a user with user credentials");
@@ -279,7 +279,7 @@ public class UserApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-        // Try to update a non existing user
+        // Try to updateSomething a non existing user
         try {
             adminAuthUserApi.updateUser(Config.randomUUID(), userPut);
             fail("Should not be able to get a non existing user");
