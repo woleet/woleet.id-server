@@ -41,7 +41,6 @@ import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 
 // Services
-import { AuthService } from '@services/auth';
 import { AdminGuardService, UserGuardService, AnonymousGuardService } from '@guards/auth';
 
 import { KeyService } from '@services/key';
