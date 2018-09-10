@@ -68,7 +68,7 @@ function startsWithALetterValidator(control: AbstractControl): ValidationErrors 
 
 function safeWordValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
-  if (str && !/^[a-z][a-z0-9_]+$/i.test(str)) {
+  if (str && !/^[a-z0-9_]+$/i.test(str)) {
     return ({ safeWord: true });
   }
 

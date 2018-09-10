@@ -3,6 +3,7 @@ import * as Router from 'koa-router';
 import { validate } from '../schemas';
 import { createAPIToken, updateAPIToken, getAPITokenById, getAllAPITokens, deleteAPIToken } from '../../controllers/api-token';
 import { serialiseapiToken } from '../serialize/api-token';
+import { store as event } from '../../controllers/events';
 
 const vid = validate.param('id', 'uuid');
 
@@ -22,7 +23,19 @@ const router = new Router({ prefix: '/api-token' });
  */
 router.post('/', validate.body('createApiToken'), async function (ctx) {
   const apiToken: ApiPostAPITokenObject = ctx.request.body;
-  ctx.body = serialiseapiToken(await createAPIToken(apiToken));
+
+  const created = await createAPIToken(apiToken);
+
+  event.register({
+    type: 'token.create',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: created.id,
+    associatedUserId: null,
+    associatedKeyId: null,
+    data: null
+  });
+
+  ctx.body = serialiseapiToken(created);
 });
 
 /**
@@ -56,7 +69,18 @@ router.get('/:id', vid, async function (ctx) {
 router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
   const { id } = ctx.params;
   const update: ApiPutAPITokenObject = ctx.request.body;
+
   const apiToken = await updateAPIToken(id, update);
+
+  event.register({
+    type: 'token.edit',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: apiToken.id,
+    associatedUserId: null,
+    associatedKeyId: null,
+    data: null
+  });
+
   ctx.body = serialiseapiToken(apiToken);
 });
 
@@ -69,6 +93,16 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
 router.delete('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const apiToken = await deleteAPIToken(id);
+
+  event.register({
+    type: 'token.delete',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: apiToken.id,
+    associatedUserId: null,
+    associatedKeyId: null,
+    data: null
+  });
+
   ctx.body = serialiseapiToken(apiToken);
 });
 
