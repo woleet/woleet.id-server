@@ -56,20 +56,17 @@ export class EventStore {
 
 export const store = new EventStore;
 
-export async function getServerEventById(id: string)
-  : Promise<InternalServerEventObject> {
+export async function getServerEventById(id: string): Promise<InternalServerEventObject> {
   const event = await ServerEvent.getById(id);
   return event.toJSON();
 }
 
-export async function getServerEventListByType(type: ServerEventTypeEnum, opts: ListOptions)
-  : Promise<InternalServerEventObject[]> {
+export async function getServerEventListByType(type: ServerEventTypeEnum, opts: ListOptions): Promise<InternalServerEventObject[]> {
   const events = await ServerEvent.getByType(type, opts);
   return events.map((evt) => evt.toJSON());
 }
 
-export async function getAllServerEvents(opts: ListOptions)
-  : Promise<InternalServerEventObject[]> {
+export async function getAllServerEvents(opts: ListOptions): Promise<InternalServerEventObject[]> {
   const events = await ServerEvent.getAll(opts);
   return events.map((evt) => evt.toJSON());
 }

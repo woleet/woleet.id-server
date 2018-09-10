@@ -5,6 +5,7 @@ import * as Router from 'koa-router';
 
 import { createSession, delSession } from '../../controllers/authentication';
 import { serialiseUserDTO } from '../serialize/userDTO';
+import { store as event } from '../../controllers/events';
 
 /**
  * Authentification
@@ -33,6 +34,15 @@ router.get('/login', async function (ctx) {
   if (!authorization) {
     throw new Unauthorized();
   }
+
+  event.register({
+    type: 'login',
+    authorizedUserId: authorization.user.id,
+    associatedTokenId: null,
+    associatedUserId: null,
+    associatedKeyId: null,
+    data: null
+  });
 
   ctx.cookies.set('session', authorization.token);
   ctx.body = { user: serialiseUserDTO(authorization.user) };

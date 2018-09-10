@@ -3,6 +3,7 @@ import * as Router from 'koa-router';
 import { validate } from '../schemas';
 import { createUser, getUserById, updateUser, getAllUsers, deleteUser } from '../../controllers/user';
 import { serialiseUser } from '../serialize/user';
+import { store as event } from '../../controllers/events';
 
 const vid = validate.param('id', 'uuid');
 
@@ -22,7 +23,19 @@ const router = new Router({ prefix: '/user' });
  */
 router.post('/', validate.body('createUser'), async function (ctx) {
   const user: ApiPostUserObject = ctx.request.body;
-  ctx.body = serialiseUser(await createUser(user));
+
+  const created = await createUser(user);
+
+  event.register({
+    type: 'user.create',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: created.id,
+    associatedKeyId: null,
+    data: null
+  });
+
+  ctx.body = serialiseUser(created);
 });
 
 /**
@@ -57,6 +70,16 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const { id } = ctx.params;
   const update = ctx.request.body;
   const user = await updateUser(id, update);
+
+  event.register({
+    type: 'user.edit',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: user.id,
+    associatedKeyId: null,
+    data: null
+  });
+
   ctx.body = serialiseUser(user);
 });
 
@@ -68,6 +91,16 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
 router.delete('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const user = await deleteUser(id);
+
+  event.register({
+    type: 'user.delete',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: user.id,
+    associatedKeyId: null,
+    data: null
+  });
+
   ctx.body = serialiseUser(user);
 });
 

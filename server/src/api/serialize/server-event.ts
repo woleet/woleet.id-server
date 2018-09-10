@@ -1,6 +1,3 @@
-import * as Debug from 'debug';
-const debug = Debug('id:serialize:event');
-
 export function serialiseServerEvent(evt: InternalServerEventObject): ApiServerEventObject {
   const dates = {
     createdAt: +evt.createdAt || null,
@@ -8,10 +5,9 @@ export function serialiseServerEvent(evt: InternalServerEventObject): ApiServerE
     occurredAt: +evt.occurredAt || null
   };
 
-  debug('Serialize', evt);
-
   const { id, type, data,
     authorizedUserId,
+    authorizedTokenId,
     associatedTokenId,
     associatedUserId,
     associatedKeyId } = evt;
@@ -19,6 +15,7 @@ export function serialiseServerEvent(evt: InternalServerEventObject): ApiServerE
   return Object.assign({
     id, type, data,
     authorizedUserId,
+    authorizedTokenId,
     associatedTokenId,
     associatedUserId,
     associatedKeyId

@@ -1,9 +1,10 @@
-import {validate} from '../schemas';
+import { validate } from '../schemas';
 import * as Router from 'koa-router';
 
 import * as Debug from 'debug';
-import {createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, updateKey} from '../../controllers/key';
-import {serialiseKey} from '../serialize/key';
+import { createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, updateKey } from '../../controllers/key';
+import { serialiseKey } from '../serialize/key';
+import { store as event } from '../../controllers/events';
 
 const debug = Debug('id:api:key');
 
@@ -27,8 +28,20 @@ const router = new Router();
 router.post('/user/:userId/key', vuid, validate.body('createKey'), async function (ctx) {
   const key: ApiPostKeyObject = ctx.request.body;
   debug('addkey', key);
-  const {userId} = ctx.params;
-  ctx.body = serialiseKey(await createKey(userId, key));
+  const { userId } = ctx.params;
+
+  const created = await createKey(userId, key);
+
+  event.register({
+    type: 'key.create',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: null,
+    associatedKeyId: created.id,
+    data: null
+  });
+
+  ctx.body = serialiseKey(created);
 });
 
 /**
@@ -37,7 +50,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
  *  operationId: getKeysOfUser
  */
 router.get('/user/:userId/key/list', vuid, async function (ctx) {
-  const {userId} = ctx.params;
+  const { userId } = ctx.params;
   const full = (ctx.query.full || '').toLowerCase() === 'true';
   const keys = await getAllKeysOfUser(userId, full);
   ctx.body = keys.map(serialiseKey);
@@ -49,9 +62,9 @@ router.get('/user/:userId/key/list', vuid, async function (ctx) {
  *  operationId: exportKey
  */
 router.get('/key/:id/export', vkid, async function (ctx) {
-  const {id} = ctx.params;
+  const { id } = ctx.params;
   const phrase = await exportKey(id);
-  ctx.body = {phrase};
+  ctx.body = { phrase };
 });
 
 /**
@@ -60,7 +73,7 @@ router.get('/key/:id/export', vkid, async function (ctx) {
  *  operationId: getKeyById
  */
 router.get('/key/:id', vkid, async function (ctx) {
-  const {id} = ctx.params;
+  const { id } = ctx.params;
   const apiToken = await getKeyById(id);
   ctx.body = serialiseKey(apiToken);
 });
@@ -72,10 +85,20 @@ router.get('/key/:id', vkid, async function (ctx) {
  *  operationId: updateKey
  */
 router.put('/key/:id', vkid, validate.body('updateKey'), async function (ctx) {
-  const {id} = ctx.params;
+  const { id } = ctx.params;
   const update: ApiPutKeyObject = ctx.request.body;
-  const apiToken = await updateKey(id, update);
-  ctx.body = serialiseKey(apiToken);
+  const key = await updateKey(id, update);
+
+  event.register({
+    type: 'key.edit',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: null,
+    associatedKeyId: key.id,
+    data: null
+  });
+
+  ctx.body = serialiseKey(key);
 });
 
 /**
@@ -85,9 +108,19 @@ router.put('/key/:id', vkid, validate.body('updateKey'), async function (ctx) {
  *  operationId: deleteKey
  */
 router.delete('/key/:id', vkid, async function (ctx) {
-  const {id} = ctx.params;
+  const { id } = ctx.params;
   const key = await deleteKey(id);
+
+  event.register({
+    type: 'key.delete',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: null,
+    associatedKeyId: key.id,
+    data: null
+  });
+
   ctx.body = serialiseKey(key);
 });
 
-export {router};
+export { router };
