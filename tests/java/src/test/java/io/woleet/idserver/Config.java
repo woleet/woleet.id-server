@@ -1,6 +1,5 @@
 package io.woleet.idserver;
 
-import io.woleet.idserver.api.ApiTokenApi;
 import io.woleet.idserver.api.AuthenticationApi;
 import io.woleet.idserver.api.UserApi;
 import io.woleet.idserver.api.model.*;
@@ -33,7 +32,6 @@ public class Config {
     // Initialize data needed to test users
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
     public static final String TEST_USERS_USERNAME_PREFIX = "tester_";
-    public static final String TEST_APITOKENS_NAME_PREFIX = "#tester#-";
 
     /**
      * Return a new API client with no credential.
@@ -182,24 +180,24 @@ public class Config {
      * Test API tokens
      */
 
-    public static void deleteAllTestAPITokens() throws ApiException {
-        ApiTokenApi apiTokenApi = new ApiTokenApi(getAdminAuthApiClient());
-        APITokenArray apiTokens = apiTokenApi.getAllAPITokens(false);
-        for (APITokenGet apiToken : apiTokens) {
-            if (apiToken.getName().startsWith(TEST_APITOKENS_NAME_PREFIX))
-                apiTokenApi.deleteAPIToken(apiToken.getId());
-        }
-    }
-
-    public static APITokenGet createTestAPIToken(ApiTokenApi apiTokenApi) throws ApiException {
-        APITokenPost apiTokenPost = new APITokenPost();
-        String NAME = randomName();
-        apiTokenPost.name(NAME).status(APITokenStatusEnum.ACTIVE);
-        return apiTokenApi.createAPIToken(apiTokenPost);
-    }
-
-    public static APITokenGet createTestAPIToken() throws ApiException {
-        return createTestAPIToken(new ApiTokenApi(getAdminAuthApiClient()));
-    }
+//    public static void deleteAllTestAPITokens() throws ApiException {
+//        ApiTokenApi apiTokenApi = new ApiTokenApi(getAdminAuthApiClient());
+//        APITokenArray apiTokens = apiTokenApi.getAllAPITokens(false);
+//        for (APITokenGet apiToken : apiTokens) {
+//            if (apiToken.getName().startsWith(TEST_APITOKENS_NAME_PREFIX))
+//                apiTokenApi.deleteAPIToken(apiToken.getId());
+//        }
+//    }
+//
+//    public static APITokenGet createTestAPIToken(ApiTokenApi apiTokenApi) throws ApiException {
+//        APITokenPost apiTokenPost = new APITokenPost();
+//        String NAME = randomName();
+//        apiTokenPost.name(NAME).status(APITokenStatusEnum.ACTIVE);
+//        return apiTokenApi.createAPIToken(apiTokenPost);
+//    }
+//
+//    public static APITokenGet createTestAPIToken() throws ApiException {
+//        return createTestAPIToken(new ApiTokenApi(getAdminAuthApiClient()));
+//    }
 }
 

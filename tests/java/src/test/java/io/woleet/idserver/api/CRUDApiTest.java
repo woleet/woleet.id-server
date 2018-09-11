@@ -83,7 +83,7 @@ public abstract class CRUDApiTest {
 
     private Api adminAuthApi, userAuthApi, noAuthApi;
 
-    abstract String TEST_OBJECTS_NAME_PREFIX();
+    abstract String getTestObjectsNamePrefix();
 
     abstract Api newApi(ApiClient apiClient);
 
@@ -101,7 +101,7 @@ public abstract class CRUDApiTest {
         Api api = newApi(Config.getAdminAuthApiClient());
         ObjectArray objects = api.getAllObjects(false);
         for (ObjectGet objectGet : objects.getArray()) {
-            if (objectGet.getName().startsWith(TEST_OBJECTS_NAME_PREFIX()))
+            if (objectGet.getName().startsWith(getTestObjectsNamePrefix()))
                 api.deleteObject(objectGet.getId());
         }
     }
@@ -132,6 +132,7 @@ public abstract class CRUDApiTest {
     @After
     public void tearDown() throws Exception {
         deleteAllTestObjects();
+        Config.deleteAllTestUsers();
     }
 
     @Test

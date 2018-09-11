@@ -125,8 +125,8 @@ public class ApiTokenApiTest extends CRUDApiTest {
     }
 
     @Override
-    String TEST_OBJECTS_NAME_PREFIX() {
-        return Config.TEST_APITOKENS_NAME_PREFIX;
+    String getTestObjectsNamePrefix() {
+        return "#tester#-";
     }
 
     @Override

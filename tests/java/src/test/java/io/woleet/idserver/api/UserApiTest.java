@@ -178,7 +178,7 @@ public class UserApiTest extends CRUDApiTest {
     }
 
     @Override
-    String TEST_OBJECTS_NAME_PREFIX() {
+    String getTestObjectsNamePrefix() {
         return Config.TEST_USERS_COMMONNAME_PREFIX;
     }
 
