@@ -1,5 +1,5 @@
 
-import { STRING, ENUM, UUID, UUIDV4, DATE, BOOLEAN, CHAR } from 'sequelize';
+import { STRING, ENUM, UUID, UUIDV4, DATE, BOOLEAN, CHAR, FindOptions } from 'sequelize';
 
 import { ForeignKeyConstraintError } from 'sequelize';
 import { InvalidUserTargetedKeyError } from '../../errors';
@@ -31,7 +31,7 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
   }
 
   /**
-   * @description Returns a keu by it's public key (bitcoin address)
+   * @description Returns a key by it's public key (bitcoin address)
    * @param publicKey: the requested public key
    * @param userId: optional parameter for extra check
    */
@@ -47,6 +47,13 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
     }
 
     return this.model.findOne(query);
+  }
+
+  /**
+   * @description Returns a key and the associated user by it's identifier
+   */
+  async getByIdAndPullUser(id: string): Promise<SequelizeKeyObject> {
+    return this.model.findById(id, { include: [{ model: User.model }] });
   }
 
   handleError(err: any) {

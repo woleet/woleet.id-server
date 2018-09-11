@@ -50,4 +50,11 @@ export const events = {
   ]
 };
 
+export const serverConfig = {
+  default: {
+    fallbackOnDefaultKey: true
+  },
+  CONFIG_ID: 'SERVER-CONFIG'
+};
+
 export default { ports, db, session, server, pagination };

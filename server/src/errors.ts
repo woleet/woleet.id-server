@@ -16,17 +16,17 @@ export class DuplicatedUserError extends DuplicatedDBObjectError {
 export abstract class NotFoundDBObjectError extends DBError { }
 
 export class NotFoundUserError extends NotFoundDBObjectError {
-  constructor() { super('User not found'); }
+  constructor(m = 'User not found') { super(m); }
   name = 'NotFoundUserError';
 }
 
 export class NotFoundAPITokenError extends NotFoundDBObjectError {
-  constructor() { super('API token not found'); }
+  constructor(m = 'API token not found') { super(m); }
   name = 'NotFoundAPITokenError';
 }
 
 export class NotFoundKeyError extends NotFoundDBObjectError {
-  constructor() { super('Key not found'); }
+  constructor(m = 'Key not found') { super(m); }
   name = 'NotFoundKeyError';
 }
 
@@ -39,16 +39,21 @@ export class ProtectedUserError extends DBError { name = 'ProtectedUserError'; }
 export abstract class BlockedResourceError extends Error { }
 
 export class BlockedUserError extends BlockedResourceError {
-  constructor() { super('User is blocked'); }
+  constructor(m = 'User is blocked') { super(m); }
   name = 'BlockedUserError';
 }
 
 export class BlockedKeyError extends BlockedResourceError {
-  constructor() { super('Key is blocked'); }
+  constructor(m = 'Key is blocked') { super(m); }
   name = 'BlockedKeyError';
 }
 
 export class BlockedAPITokenError extends BlockedResourceError {
-  constructor() { super('API token is blocked'); }
+  constructor(m = 'API token is blocked') { super(m); }
   name = 'BlockedAPITokenError';
+}
+
+export class NoDefaultKeyError extends BlockedResourceError {
+  constructor(m = 'No default key is set') { super(m); }
+  name = 'NoDefaultKeyError';
 }

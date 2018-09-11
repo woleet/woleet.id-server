@@ -1,4 +1,5 @@
 /* Client types */
+import '../../../types/api.server-config';
 import '../../../types/api.api-token';
 import '../../../types/api.user';
 import '../../../types/api.key';

@@ -11,6 +11,10 @@ export class KeyService {
     return this.http.get<ApiKeyObject>(`${serverURL}/key/${keyId}`).toPromise();
   }
 
+  getOwner(keyId: string) {
+    return this.http.get<ApiUserObject>(`${serverURL}/key/${keyId}/owner`).toPromise();
+  }
+
   getByUser(userId: string): Promise<ApiKeyObject[]> {
     return this.http.get<ApiKeyObject[]>(`${serverURL}/user/${userId}/key/list`).toPromise();
   }

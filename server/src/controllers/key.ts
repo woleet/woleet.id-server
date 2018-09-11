@@ -62,6 +62,16 @@ export async function getKeyById(id: string): Promise<InternalKeyObject> {
   return key.toJSON();
 }
 
+export async function getOwner(id): Promise<InternalUserObject> {
+  const key = await Key.getByIdAndPullUser(id);
+
+  if (!key) {
+    throw new NotFoundKeyError();
+  }
+
+  return key.get('user').toJSON();
+}
+
 export async function exportKey(id: string): Promise<string> {
   const key = await Key.getById(id);
 

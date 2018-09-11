@@ -3,10 +3,22 @@ import * as log from 'loglevel';
 
 import wait from './controllers/utils/wait';
 import { createUser } from './controllers/user';
+import { setServerConfig, loadServerConfig } from './controllers/server-config';
 
 const debug = Debug('id:startup');
 
 wait(1000)
+  .then(() => {
+    return loadServerConfig();
+  })
+  .then((config) => {
+    if (config) {
+      log.info(`Got server config: ${JSON.stringify(config, null, 2)}`);
+    } else {
+      log.warn('No configuration found in database');
+    }
+  })
+  .catch((err) => log.warn(`Failed to load server config: ${err.message}`))
   .then(() => {
     debug('Creating admin user');
     return createUser({
@@ -18,12 +30,17 @@ wait(1000)
         organization: 'UNDEFINED',
         organizationalUnit: 'UNDEFINED',
         locality: 'UNDEFINED',
-        country: 'UNDEFINED',
         userId: 'admin'
       }
     });
   })
-  .then(() => log.info('Created user "admin"'))
+  .then((admin) => {
+    log.info(`Created user "admin" with id ${admin.id}`);
+    return setServerConfig({ defaultKeyId: admin.defaultKeyId });
+  })
+  .then((config) => {
+    log.info(`Created new server configuration with settings: ${JSON.stringify(config, null, 2)}`);
+  })
   .catch((err) => log.warn(`Failed to create user "admin": ${err.message}`))
   .then(() => {
     debug('Creating tester user');

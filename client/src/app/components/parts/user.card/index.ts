@@ -12,7 +12,7 @@ export class UserCardComponent {
   editMode = false;
 
   @Input()
-  modes: ('edit' | 'detail' | 'delete')[];
+  modes: ('block' | 'edit' | 'detail' | 'delete')[];
 
   @Input()
   user: ApiUserObject;

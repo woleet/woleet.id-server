@@ -45,6 +45,7 @@ import { AdminGuardService, UserGuardService, AnonymousGuardService } from '@gua
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
+import { ServerConfigService } from '@services/server-config';
 import { APITokenService } from '@services/api-token';
 import { PageDataService } from '@services/page-data';
 
@@ -118,7 +119,7 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
   providers: [
     AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
     KeyService, UserService, InfoService, ConfigService, APITokenService, PageDataService,
-    UnauthorizedInterceptorService, ForbiddenInterceptorService,
+    ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     AllowCredentialsInterceptorService
   ],
   bootstrap: [AppComponent]

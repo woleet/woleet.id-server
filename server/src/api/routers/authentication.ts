@@ -5,7 +5,7 @@ import * as Router from 'koa-router';
 
 import { createSession, delSession } from '../../controllers/authentication';
 import { serialiseUserDTO } from '../serialize/userDTO';
-import { store as event } from '../../controllers/events';
+import { store as event } from '../../controllers/server-event';
 
 /**
  * Authentification

@@ -2,7 +2,7 @@ import { BadRequest } from 'http-errors';
 import * as Router from 'koa-router';
 
 import { validate } from '../schemas';
-import { getServerEventListByType, getAllServerEvents, getServerEventById } from '../../controllers/events';
+import { getServerEventListByType, getAllServerEvents, getServerEventById } from '../../controllers/server-event';
 import { serialiseServerEvent } from '../serialize/server-event';
 import { events as eventsConfig } from '../../config';
 
