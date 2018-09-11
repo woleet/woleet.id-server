@@ -20,7 +20,7 @@ public abstract class CRUDApiTest {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     interface Api {
-        ObjectArray getAllObjects(boolean b) throws ApiException;
+        ObjectArray getAllObjects(boolean full) throws ApiException;
 
         ObjectGet deleteObject(UUID id) throws ApiException;
 

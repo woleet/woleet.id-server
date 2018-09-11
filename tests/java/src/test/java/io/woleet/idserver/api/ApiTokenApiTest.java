@@ -78,12 +78,13 @@ public class ApiTokenApiTest extends CRUDApiTest {
 
         @Override
         CRUDApiTest.ObjectPost setFullAttributes() {
+            APITokenPost apiTokenPost = (APITokenPost) objectBase;
 
             // Set status and name
-            APITokenPost apiTokenPost = (APITokenPost) objectBase;
             apiTokenPost.setStatus(APITokenStatusEnum.ACTIVE);
             apiTokenPost.setName(Config.randomName());
-            return setMinimalAttributes();
+
+            return new ObjectPost(apiTokenPost);
         }
     }
 
@@ -153,9 +154,9 @@ public class ApiTokenApiTest extends CRUDApiTest {
     }
 
     @Override
-    void verifyObjectsEquals(CRUDApiTest.ObjectPost pExpected, CRUDApiTest.ObjectGet pAactual) {
+    void verifyObjectsEquals(CRUDApiTest.ObjectPost pExpected, CRUDApiTest.ObjectGet pActual) {
         APITokenPost expected = (APITokenPost) pExpected.get();
-        APITokenGet actual = (APITokenGet) pAactual.get();
+        APITokenGet actual = (APITokenGet) pActual.get();
         assertEquals(expected.getStatus(), actual.getStatus());
         assertEquals(expected.getName(), actual.getName());
     }
