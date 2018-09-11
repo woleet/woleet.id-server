@@ -28,9 +28,9 @@ import java.io.IOException;
 
 
 import io.woleet.idserver.api.model.APIError;
-import io.woleet.idserver.api.model.Key;
 import io.woleet.idserver.api.model.KeyArray;
 import io.woleet.idserver.api.model.KeyBase;
+import io.woleet.idserver.api.model.KeyGet;
 import io.woleet.idserver.api.model.KeyPost;
 import io.woleet.idserver.api.model.KeyPut;
 import io.woleet.idserver.api.model.Mnemonics;
@@ -136,11 +136,11 @@ public class KeyApi {
      * 
      * @param userId Identifier of the user. (required)
      * @param keyPost Key object to add. (required)
-     * @return Key
+     * @return KeyGet
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Key createKey(UUID userId, KeyPost keyPost) throws ApiException {
-        ApiResponse<Key> resp = createKeyWithHttpInfo(userId, keyPost);
+    public KeyGet createKey(UUID userId, KeyPost keyPost) throws ApiException {
+        ApiResponse<KeyGet> resp = createKeyWithHttpInfo(userId, keyPost);
         return resp.getData();
     }
 
@@ -149,12 +149,12 @@ public class KeyApi {
      * 
      * @param userId Identifier of the user. (required)
      * @param keyPost Key object to add. (required)
-     * @return ApiResponse&lt;Key&gt;
+     * @return ApiResponse&lt;KeyGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Key> createKeyWithHttpInfo(UUID userId, KeyPost keyPost) throws ApiException {
+    public ApiResponse<KeyGet> createKeyWithHttpInfo(UUID userId, KeyPost keyPost) throws ApiException {
         com.squareup.okhttp.Call call = createKeyValidateBeforeCall(userId, keyPost, null, null);
-        Type localVarReturnType = new TypeToken<Key>(){}.getType();
+        Type localVarReturnType = new TypeToken<KeyGet>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -167,7 +167,7 @@ public class KeyApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call createKeyAsync(UUID userId, KeyPost keyPost, final ApiCallback<Key> callback) throws ApiException {
+    public com.squareup.okhttp.Call createKeyAsync(UUID userId, KeyPost keyPost, final ApiCallback<KeyGet> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -189,7 +189,7 @@ public class KeyApi {
         }
 
         com.squareup.okhttp.Call call = createKeyValidateBeforeCall(userId, keyPost, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Key>(){}.getType();
+        Type localVarReturnType = new TypeToken<KeyGet>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
@@ -261,11 +261,11 @@ public class KeyApi {
      * Delete a key.
      * 
      * @param keyId Identifier of the key. (required)
-     * @return Key
+     * @return KeyGet
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Key deleteKey(UUID keyId) throws ApiException {
-        ApiResponse<Key> resp = deleteKeyWithHttpInfo(keyId);
+    public KeyGet deleteKey(UUID keyId) throws ApiException {
+        ApiResponse<KeyGet> resp = deleteKeyWithHttpInfo(keyId);
         return resp.getData();
     }
 
@@ -273,12 +273,12 @@ public class KeyApi {
      * Delete a key.
      * 
      * @param keyId Identifier of the key. (required)
-     * @return ApiResponse&lt;Key&gt;
+     * @return ApiResponse&lt;KeyGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Key> deleteKeyWithHttpInfo(UUID keyId) throws ApiException {
+    public ApiResponse<KeyGet> deleteKeyWithHttpInfo(UUID keyId) throws ApiException {
         com.squareup.okhttp.Call call = deleteKeyValidateBeforeCall(keyId, null, null);
-        Type localVarReturnType = new TypeToken<Key>(){}.getType();
+        Type localVarReturnType = new TypeToken<KeyGet>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -290,7 +290,7 @@ public class KeyApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call deleteKeyAsync(UUID keyId, final ApiCallback<Key> callback) throws ApiException {
+    public com.squareup.okhttp.Call deleteKeyAsync(UUID keyId, final ApiCallback<KeyGet> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -312,7 +312,7 @@ public class KeyApi {
         }
 
         com.squareup.okhttp.Call call = deleteKeyValidateBeforeCall(keyId, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Key>(){}.getType();
+        Type localVarReturnType = new TypeToken<KeyGet>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
@@ -636,11 +636,11 @@ public class KeyApi {
      * Get a key by its identifier.
      * 
      * @param keyId Identifier of the key. (required)
-     * @return Key
+     * @return KeyGet
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Key getKeyById(UUID keyId) throws ApiException {
-        ApiResponse<Key> resp = getKeyByIdWithHttpInfo(keyId);
+    public KeyGet getKeyById(UUID keyId) throws ApiException {
+        ApiResponse<KeyGet> resp = getKeyByIdWithHttpInfo(keyId);
         return resp.getData();
     }
 
@@ -648,12 +648,12 @@ public class KeyApi {
      * Get a key by its identifier.
      * 
      * @param keyId Identifier of the key. (required)
-     * @return ApiResponse&lt;Key&gt;
+     * @return ApiResponse&lt;KeyGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Key> getKeyByIdWithHttpInfo(UUID keyId) throws ApiException {
+    public ApiResponse<KeyGet> getKeyByIdWithHttpInfo(UUID keyId) throws ApiException {
         com.squareup.okhttp.Call call = getKeyByIdValidateBeforeCall(keyId, null, null);
-        Type localVarReturnType = new TypeToken<Key>(){}.getType();
+        Type localVarReturnType = new TypeToken<KeyGet>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -665,7 +665,7 @@ public class KeyApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getKeyByIdAsync(UUID keyId, final ApiCallback<Key> callback) throws ApiException {
+    public com.squareup.okhttp.Call getKeyByIdAsync(UUID keyId, final ApiCallback<KeyGet> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -687,7 +687,7 @@ public class KeyApi {
         }
 
         com.squareup.okhttp.Call call = getKeyByIdValidateBeforeCall(keyId, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Key>(){}.getType();
+        Type localVarReturnType = new TypeToken<KeyGet>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
@@ -766,11 +766,11 @@ public class KeyApi {
      * 
      * @param keyId Identifier of the key. (required)
      * @param keyPut Replacement key object. (required)
-     * @return Key
+     * @return KeyGet
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Key updateKey(UUID keyId, KeyPut keyPut) throws ApiException {
-        ApiResponse<Key> resp = updateKeyWithHttpInfo(keyId, keyPut);
+    public KeyGet updateKey(UUID keyId, KeyPut keyPut) throws ApiException {
+        ApiResponse<KeyGet> resp = updateKeyWithHttpInfo(keyId, keyPut);
         return resp.getData();
     }
 
@@ -779,12 +779,12 @@ public class KeyApi {
      * 
      * @param keyId Identifier of the key. (required)
      * @param keyPut Replacement key object. (required)
-     * @return ApiResponse&lt;Key&gt;
+     * @return ApiResponse&lt;KeyGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Key> updateKeyWithHttpInfo(UUID keyId, KeyPut keyPut) throws ApiException {
+    public ApiResponse<KeyGet> updateKeyWithHttpInfo(UUID keyId, KeyPut keyPut) throws ApiException {
         com.squareup.okhttp.Call call = updateKeyValidateBeforeCall(keyId, keyPut, null, null);
-        Type localVarReturnType = new TypeToken<Key>(){}.getType();
+        Type localVarReturnType = new TypeToken<KeyGet>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -797,7 +797,7 @@ public class KeyApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call updateKeyAsync(UUID keyId, KeyPut keyPut, final ApiCallback<Key> callback) throws ApiException {
+    public com.squareup.okhttp.Call updateKeyAsync(UUID keyId, KeyPut keyPut, final ApiCallback<KeyGet> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -819,7 +819,7 @@ public class KeyApi {
         }
 
         com.squareup.okhttp.Call call = updateKeyValidateBeforeCall(keyId, keyPut, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Key>(){}.getType();
+        Type localVarReturnType = new TypeToken<KeyGet>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

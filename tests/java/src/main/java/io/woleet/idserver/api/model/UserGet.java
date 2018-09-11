@@ -22,28 +22,21 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.woleet.idserver.api.model.KeyBase;
-import io.woleet.idserver.api.model.KeyStatusEnum;
-import io.woleet.idserver.api.model.KeyTypeEnum;
+import io.woleet.idserver.api.model.FullIdentity;
+import io.woleet.idserver.api.model.UserBase;
+import io.woleet.idserver.api.model.UserRoleEnum;
+import io.woleet.idserver.api.model.UserStatusEnum;
 import java.io.IOException;
 import java.util.UUID;
 
 /**
- * Key
+ * UserGet
  */
 
-public class Key extends KeyBase {
+public class UserGet extends UserBase {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
   private UUID id = null;
-
-  public static final String SERIALIZED_NAME_PUB_KEY = "pubKey";
-  @SerializedName(SERIALIZED_NAME_PUB_KEY)
-  private String pubKey = null;
-
-  public static final String SERIALIZED_NAME_TYPE = "type";
-  @SerializedName(SERIALIZED_NAME_TYPE)
-  private KeyTypeEnum type = null;
 
   public static final String SERIALIZED_NAME_CREATED_AT = "createdAt";
   @SerializedName(SERIALIZED_NAME_CREATED_AT)
@@ -57,53 +50,21 @@ public class Key extends KeyBase {
   @SerializedName(SERIALIZED_NAME_DELETED_AT)
   private Long deletedAt = null;
 
-  public static final String SERIALIZED_NAME_LAST_USED = "lastUsed";
-  @SerializedName(SERIALIZED_NAME_LAST_USED)
-  private Long lastUsed = null;
+  public static final String SERIALIZED_NAME_LAST_LOGIN = "lastLogin";
+  @SerializedName(SERIALIZED_NAME_LAST_LOGIN)
+  private Long lastLogin = null;
+
+  public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
+  @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
+  private UUID defaultKeyId = null;
 
    /**
-   * Key identifier (allocated by the platform).
+   * User identifier (allocated by the server).
    * @return id
   **/
-  @ApiModelProperty(example = "a35c9fee-3893-4eb7-adde-205e1be03209", value = "Key identifier (allocated by the platform).")
+  @ApiModelProperty(example = "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3", value = "User identifier (allocated by the server).")
   public UUID getId() {
     return id;
-  }
-
-  public Key pubKey(String pubKey) {
-    this.pubKey = pubKey;
-    return this;
-  }
-
-   /**
-   * Public key (bitcoin address when using BIP39 keys).
-   * @return pubKey
-  **/
-  @ApiModelProperty(example = "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh", value = "Public key (bitcoin address when using BIP39 keys).")
-  public String getPubKey() {
-    return pubKey;
-  }
-
-  public void setPubKey(String pubKey) {
-    this.pubKey = pubKey;
-  }
-
-  public Key type(KeyTypeEnum type) {
-    this.type = type;
-    return this;
-  }
-
-   /**
-   * Get type
-   * @return type
-  **/
-  @ApiModelProperty(value = "")
-  public KeyTypeEnum getType() {
-    return type;
-  }
-
-  public void setType(KeyTypeEnum type) {
-    this.type = type;
   }
 
    /**
@@ -134,12 +95,30 @@ public class Key extends KeyBase {
   }
 
    /**
-   * Date of last usage (Unix ms timestamp).
-   * @return lastUsed
+   * Date of last login (Unix ms timestamp).
+   * @return lastLogin
   **/
-  @ApiModelProperty(example = "1529059167339", value = "Date of last usage (Unix ms timestamp).")
-  public Long getLastUsed() {
-    return lastUsed;
+  @ApiModelProperty(example = "1529050155459", value = "Date of last login (Unix ms timestamp).")
+  public Long getLastLogin() {
+    return lastLogin;
+  }
+
+  public UserGet defaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
+    return this;
+  }
+
+   /**
+   * Identifier of the default key to use for this user.
+   * @return defaultKeyId
+  **/
+  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use for this user.")
+  public UUID getDefaultKeyId() {
+    return defaultKeyId;
+  }
+
+  public void setDefaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
   }
 
 
@@ -151,35 +130,33 @@ public class Key extends KeyBase {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Key key = (Key) o;
-    return Objects.equals(this.id, key.id) &&
-        Objects.equals(this.pubKey, key.pubKey) &&
-        Objects.equals(this.type, key.type) &&
-        Objects.equals(this.createdAt, key.createdAt) &&
-        Objects.equals(this.updatedAt, key.updatedAt) &&
-        Objects.equals(this.deletedAt, key.deletedAt) &&
-        Objects.equals(this.lastUsed, key.lastUsed) &&
+    UserGet userGet = (UserGet) o;
+    return Objects.equals(this.id, userGet.id) &&
+        Objects.equals(this.createdAt, userGet.createdAt) &&
+        Objects.equals(this.updatedAt, userGet.updatedAt) &&
+        Objects.equals(this.deletedAt, userGet.deletedAt) &&
+        Objects.equals(this.lastLogin, userGet.lastLogin) &&
+        Objects.equals(this.defaultKeyId, userGet.defaultKeyId) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, pubKey, type, createdAt, updatedAt, deletedAt, lastUsed, super.hashCode());
+    return Objects.hash(id, createdAt, updatedAt, deletedAt, lastLogin, defaultKeyId, super.hashCode());
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Key {\n");
+    sb.append("class UserGet {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    pubKey: ").append(toIndentedString(pubKey)).append("\n");
-    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    deletedAt: ").append(toIndentedString(deletedAt)).append("\n");
-    sb.append("    lastUsed: ").append(toIndentedString(lastUsed)).append("\n");
+    sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");
+    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

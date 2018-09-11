@@ -3,7 +3,7 @@ package io.woleet.idserver.api;
 import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
-import io.woleet.idserver.api.model.User;
+import io.woleet.idserver.api.model.UserGet;
 import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
@@ -94,6 +94,7 @@ public abstract class CRUDApiTest {
     abstract void verifyObject(ObjectGet objectGet);
 
     abstract void verifyObjectsEquals(ObjectPost expected, ObjectGet actual);
+
     abstract void verifyObjectUpdated(ObjectPut diff, ObjectPost expected, ObjectGet actual);
 
     private void deleteAllTestObjects() throws ApiException {
@@ -123,7 +124,7 @@ public abstract class CRUDApiTest {
 
         // Create 3 helper object APIs: one with admin rights, one with user rights, one not authenticated
         adminAuthApi = newApi(Config.getAdminAuthApiClient());
-        User user = Config.createTestUser();
+        UserGet user = Config.createTestUser();
         userAuthApi = newApi(Config.getAuthApiClient(user.getUsername(), "pass"));
         noAuthApi = newApi(Config.getNoAuthApiClient());
     }

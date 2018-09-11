@@ -28,10 +28,10 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
- * APIToken
+ * APITokenGet
  */
 
-public class APIToken extends APITokenBase {
+public class APITokenGet extends APITokenBase {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
   private UUID id = null;
@@ -119,13 +119,13 @@ public class APIToken extends APITokenBase {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    APIToken apIToken = (APIToken) o;
-    return Objects.equals(this.id, apIToken.id) &&
-        Objects.equals(this.value, apIToken.value) &&
-        Objects.equals(this.createdAt, apIToken.createdAt) &&
-        Objects.equals(this.updatedAt, apIToken.updatedAt) &&
-        Objects.equals(this.deletedAt, apIToken.deletedAt) &&
-        Objects.equals(this.lastUsed, apIToken.lastUsed) &&
+    APITokenGet apITokenGet = (APITokenGet) o;
+    return Objects.equals(this.id, apITokenGet.id) &&
+        Objects.equals(this.value, apITokenGet.value) &&
+        Objects.equals(this.createdAt, apITokenGet.createdAt) &&
+        Objects.equals(this.updatedAt, apITokenGet.updatedAt) &&
+        Objects.equals(this.deletedAt, apITokenGet.deletedAt) &&
+        Objects.equals(this.lastUsed, apITokenGet.lastUsed) &&
         super.equals(o);
   }
 
@@ -138,7 +138,7 @@ public class APIToken extends APITokenBase {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class APIToken {\n");
+    sb.append("class APITokenGet {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    value: ").append(toIndentedString(value)).append("\n");

@@ -15,7 +15,7 @@ package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import io.woleet.idserver.api.model.APIToken;
+import io.woleet.idserver.api.model.APITokenGet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ import java.util.List;
  * APITokenArray
  */
 
-public class APITokenArray extends ArrayList<APIToken> {
+public class APITokenArray extends ArrayList<APITokenGet> {
 
   @Override
   public boolean equals(java.lang.Object o) {

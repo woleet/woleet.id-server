@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 <a name="createKey"></a>
 # **createKey**
-> Key createKey(userId, keyPost)
+> KeyGet createKey(userId, keyPost)
 
 Create a new key for a user.
 
@@ -39,7 +39,7 @@ KeyApi apiInstance = new KeyApi();
 UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
 KeyPost keyPost = new KeyPost(); // KeyPost | Key object to add.
 try {
-    Key result = apiInstance.createKey(userId, keyPost);
+    KeyGet result = apiInstance.createKey(userId, keyPost);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling KeyApi#createKey");
@@ -56,7 +56,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Key**](Key.md)
+[**KeyGet**](KeyGet.md)
 
 ### Authorization
 
@@ -69,7 +69,7 @@ Name | Type | Description  | Notes
 
 <a name="deleteKey"></a>
 # **deleteKey**
-> Key deleteKey(keyId)
+> KeyGet deleteKey(keyId)
 
 Delete a key.
 
@@ -93,7 +93,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 KeyApi apiInstance = new KeyApi();
 UUID keyId = 552aa3fd-3b5e-434f-bdd3-9b6c58c269c1; // UUID | Identifier of the key.
 try {
-    Key result = apiInstance.deleteKey(keyId);
+    KeyGet result = apiInstance.deleteKey(keyId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling KeyApi#deleteKey");
@@ -109,7 +109,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Key**](Key.md)
+[**KeyGet**](KeyGet.md)
 
 ### Authorization
 
@@ -232,7 +232,7 @@ Name | Type | Description  | Notes
 
 <a name="getKeyById"></a>
 # **getKeyById**
-> Key getKeyById(keyId)
+> KeyGet getKeyById(keyId)
 
 Get a key by its identifier.
 
@@ -256,7 +256,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 KeyApi apiInstance = new KeyApi();
 UUID keyId = 552aa3fd-3b5e-434f-bdd3-9b6c58c269c1; // UUID | Identifier of the key.
 try {
-    Key result = apiInstance.getKeyById(keyId);
+    KeyGet result = apiInstance.getKeyById(keyId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling KeyApi#getKeyById");
@@ -272,7 +272,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Key**](Key.md)
+[**KeyGet**](KeyGet.md)
 
 ### Authorization
 
@@ -285,7 +285,7 @@ Name | Type | Description  | Notes
 
 <a name="updateKey"></a>
 # **updateKey**
-> Key updateKey(keyId, keyPut)
+> KeyGet updateKey(keyId, keyPut)
 
 Update a key.
 
@@ -310,7 +310,7 @@ KeyApi apiInstance = new KeyApi();
 UUID keyId = 552aa3fd-3b5e-434f-bdd3-9b6c58c269c1; // UUID | Identifier of the key.
 KeyPut keyPut = new KeyPut(); // KeyPut | Replacement key object.
 try {
-    Key result = apiInstance.updateKey(keyId, keyPut);
+    KeyGet result = apiInstance.updateKey(keyId, keyPut);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling KeyApi#updateKey");
@@ -327,7 +327,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Key**](Key.md)
+[**KeyGet**](KeyGet.md)
 
 ### Authorization
 

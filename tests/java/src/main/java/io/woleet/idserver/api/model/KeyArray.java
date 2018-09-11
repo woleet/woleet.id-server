@@ -15,7 +15,7 @@ package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import io.woleet.idserver.api.model.Key;
+import io.woleet.idserver.api.model.KeyGet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ import java.util.List;
  * KeyArray
  */
 
-public class KeyArray extends ArrayList<Key> {
+public class KeyArray extends ArrayList<KeyGet> {
 
   @Override
   public boolean equals(java.lang.Object o) {

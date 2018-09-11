@@ -169,7 +169,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Key'
+                $ref: '#/components/schemas/KeyGet'
         '400':
           description: Invalid key identifier.
           content:
@@ -203,7 +203,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Key'
+                $ref: '#/components/schemas/KeyGet'
         '400':
           description: Invalid key identifier.
           content:
@@ -235,7 +235,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Key'
+                $ref: '#/components/schemas/KeyGet'
         '400':
           description: Invalid key identifier.
           content:
@@ -304,7 +304,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/Key'
+                $ref: '#/components/responses/KeyGet'
         '400':
           description: Invalid input.
           content:
@@ -377,7 +377,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/User'
+                $ref: '#/components/responses/UserGet'
         '401':
           description: Missing or bad session cookie.
           content:
@@ -404,7 +404,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/User'
+                $ref: '#/components/responses/UserGet'
         '400':
           description: Invalid user identifier.
           content:
@@ -443,7 +443,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/User'
+                $ref: '#/components/responses/UserGet'
         '400':
           description: Invalid object supplied / Invalid user identifier.
           content:
@@ -475,7 +475,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/User'
+                $ref: '#/components/responses/UserGet'
         '400':
           description: Invalid user identifier.
           content:
@@ -530,7 +530,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/APIToken'
+                $ref: '#/components/responses/APITokenGet'
         '400':
           description: Invalid object supplied.
           content:
@@ -557,7 +557,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/APIToken'
+                $ref: '#/components/responses/APITokenGet'
         '400':
           description: Invalid API token identifier.
           content:
@@ -596,7 +596,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/APIToken'
+                $ref: '#/components/responses/APITokenGet'
         '400':
           description: Invalid object supplied / Invalid API token identifier.
           content:
@@ -628,7 +628,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/APIToken'
+                $ref: '#/components/responses/APITokenGet'
         '400':
           description: Invalid API token identifier.
           content:
@@ -804,7 +804,7 @@ components:
           $ref: '#/components/schemas/UserRoleEnum'
         identity:
           $ref: '#/components/schemas/FullIdentity'
-    User:
+    UserGet:
       allOf:
         - $ref: '#/components/schemas/UserBase'
         - type: object
@@ -844,7 +844,7 @@ components:
     UserArray:
       type: array
       items:
-        $ref: '#/components/schemas/User'
+        $ref: '#/components/schemas/UserGet'
     UserInfo:
       allOf:
         - $ref: '#/components/schemas/UserBase'
@@ -863,7 +863,7 @@ components:
           description: Key name.
         status:
           $ref: '#/components/schemas/APITokenStatusEnum'
-    APIToken:
+    APITokenGet:
       allOf:
         - $ref: '#/components/schemas/APITokenBase'
         - type: object
@@ -899,7 +899,7 @@ components:
     APITokenArray:
       type: array
       items:
-        $ref: '#/components/schemas/APIToken'
+        $ref: '#/components/schemas/APITokenGet'
     KeyBase:
       type: object
       properties:
@@ -909,7 +909,7 @@ components:
           description: Key name.
         status:
           $ref: '#/components/schemas/KeyStatusEnum'
-    Key:
+    KeyGet:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
         - type: object
@@ -946,7 +946,7 @@ components:
     KeyArray:
       type: array
       items:
-        $ref: '#/components/schemas/Key'
+        $ref: '#/components/schemas/KeyGet'
     SignatureResult:
       type: object
       properties:
@@ -1115,20 +1115,20 @@ components:
       description: Replacement API token object.
       required: true
   responses:
-    User:
-      $ref: '#/components/schemas/User'
+    UserGet:
+      $ref: '#/components/schemas/UserGet'
     UserArray:
       $ref: '#/components/schemas/UserArray'
     UserInfo:
       $ref: '#/components/schemas/UserInfo'
     APIError:
       $ref: '#/components/schemas/APIError'
-    Key:
-      $ref: '#/components/schemas/Key'
+    KeyGet:
+      $ref: '#/components/schemas/KeyGet'
     KeyArray:
       $ref: '#/components/schemas/KeyArray'
-    APIToken:
-      $ref: '#/components/schemas/APIToken'
+    APITokenGet:
+      $ref: '#/components/schemas/APITokenGet'
     APITokenArray:
       $ref: '#/components/schemas/APITokenArray'
   securitySchemes:
@@ -1144,4 +1144,4 @@ components:
     APITokenAuth:
       type: http
       scheme: bearer
-      description: Use an API token to authentify (see /APIToken).
+      description: Use an API token to authentify (see /api-token).

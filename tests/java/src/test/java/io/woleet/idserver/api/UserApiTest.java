@@ -54,7 +54,7 @@ public class UserApiTest {
         return user;
     }
 
-    private void verifyUser(User user) {
+    private void verifyUser(UserGet user) {
         assertNotNull(user.getId());
         assertNotNull(user.getCreatedAt());
         assertTrue(user.getCreatedAt() <= user.getUpdatedAt());
@@ -65,7 +65,7 @@ public class UserApiTest {
         assertEquals(user.getRole(), UserRoleEnum.USER);
     }
 
-    private void verifyUsersEquals(UserPost expected, User actual) {
+    private void verifyUsersEquals(UserPost expected, UserGet actual) {
         assertEquals(expected.getStatus(), actual.getStatus());
         assertEquals(expected.getRole(), actual.getRole());
         assertEquals(expected.getUsername(), actual.getUsername());
@@ -81,7 +81,7 @@ public class UserApiTest {
 
         // Create 3 helper user APIs: one with admin rights, one with user rights, one not authenticated
         adminAuthUserApi = new UserApi(Config.getAdminAuthApiClient());
-        User user = Config.createTestUser();
+        UserGet user = Config.createTestUser();
         userAuthUserApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
         noAuthUserApi = new UserApi(Config.getNoAuthApiClient());
     }
@@ -130,7 +130,7 @@ public class UserApiTest {
         // Create and verify a user with minimal attributes
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity.commonName(Config.randomCommonName());
-        User user = adminAuthUserApi.createUser((UserPost) userPost.identity(fullIdentity));
+        UserGet user = adminAuthUserApi.createUser((UserPost) userPost.identity(fullIdentity));
         verifyUser(user);
 
         // Create and verify a new user with full attributes
@@ -146,7 +146,7 @@ public class UserApiTest {
     public void deleteUserTest() throws ApiException {
 
         // Create a user to delete
-        User user = Config.createTestUser();
+        UserGet user = Config.createTestUser();
 
         // Delete the user with admin credentials
         adminAuthUserApi.deleteUser(user.getId());
@@ -180,7 +180,7 @@ public class UserApiTest {
     public void getAllUsersTest() throws ApiException {
 
         // Create a user to get
-        User user = Config.createTestUser();
+        UserGet user = Config.createTestUser();
 
         // Get all users with admin credentials
         // and check that the user is within the results
@@ -215,10 +215,10 @@ public class UserApiTest {
 
         // Create a user to get
         UserPost userPost = generateNewRandomUser();
-        User user = adminAuthUserApi.createUser(userPost);
+        UserGet user = adminAuthUserApi.createUser(userPost);
 
         // Get and verify a user with admin credentials
-        User userGet = adminAuthUserApi.getUserById(user.getId());
+        UserGet userGet = adminAuthUserApi.getUserById(user.getId());
         verifyUser(userGet);
         verifyUsersEquals(userPost, userGet);
 
@@ -252,7 +252,7 @@ public class UserApiTest {
 
         // Create a user to updateSomething
         UserPost userPost = generateNewRandomUser();
-        User user = adminAuthUserApi.createUser(userPost);
+        UserGet user = adminAuthUserApi.createUser(userPost);
 
         // Update and verify a user with admin credentials
         UserPut userPut = new UserPut();

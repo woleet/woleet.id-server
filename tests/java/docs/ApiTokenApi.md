@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 <a name="createAPIToken"></a>
 # **createAPIToken**
-> APIToken createAPIToken(apITokenPost)
+> APITokenGet createAPIToken(apITokenPost)
 
 Create an API token.
 
@@ -39,7 +39,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 ApiTokenApi apiInstance = new ApiTokenApi();
 APITokenPost apITokenPost = new APITokenPost(); // APITokenPost | API token object to create.
 try {
-    APIToken result = apiInstance.createAPIToken(apITokenPost);
+    APITokenGet result = apiInstance.createAPIToken(apITokenPost);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ApiTokenApi#createAPIToken");
@@ -55,7 +55,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**APIToken**](APIToken.md)
+[**APITokenGet**](APITokenGet.md)
 
 ### Authorization
 
@@ -68,7 +68,7 @@ Name | Type | Description  | Notes
 
 <a name="deleteAPIToken"></a>
 # **deleteAPIToken**
-> APIToken deleteAPIToken(apITokenId)
+> APITokenGet deleteAPIToken(apITokenId)
 
 Delete an API token.
 
@@ -92,7 +92,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 ApiTokenApi apiInstance = new ApiTokenApi();
 UUID apITokenId = f34d92e3-4f71-49ab-862f-69443bd48266; // UUID | Identifier of the API token.
 try {
-    APIToken result = apiInstance.deleteAPIToken(apITokenId);
+    APITokenGet result = apiInstance.deleteAPIToken(apITokenId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ApiTokenApi#deleteAPIToken");
@@ -108,7 +108,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**APIToken**](APIToken.md)
+[**APITokenGet**](APITokenGet.md)
 
 ### Authorization
 
@@ -121,7 +121,7 @@ Name | Type | Description  | Notes
 
 <a name="getAPITokenById"></a>
 # **getAPITokenById**
-> APIToken getAPITokenById(apITokenId)
+> APITokenGet getAPITokenById(apITokenId)
 
 Get an API token by its identifier.
 
@@ -145,7 +145,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 ApiTokenApi apiInstance = new ApiTokenApi();
 UUID apITokenId = f34d92e3-4f71-49ab-862f-69443bd48266; // UUID | Identifier of the API token.
 try {
-    APIToken result = apiInstance.getAPITokenById(apITokenId);
+    APITokenGet result = apiInstance.getAPITokenById(apITokenId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ApiTokenApi#getAPITokenById");
@@ -161,7 +161,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**APIToken**](APIToken.md)
+[**APITokenGet**](APITokenGet.md)
 
 ### Authorization
 
@@ -227,7 +227,7 @@ Name | Type | Description  | Notes
 
 <a name="updateAPIToken"></a>
 # **updateAPIToken**
-> APIToken updateAPIToken(apITokenId, apITokenPut)
+> APITokenGet updateAPIToken(apITokenId, apITokenPut)
 
 Update an API token.
 
@@ -252,7 +252,7 @@ ApiTokenApi apiInstance = new ApiTokenApi();
 UUID apITokenId = f34d92e3-4f71-49ab-862f-69443bd48266; // UUID | Identifier of the API token.
 APITokenPut apITokenPut = new APITokenPut(); // APITokenPut | API token object to update.
 try {
-    APIToken result = apiInstance.updateAPIToken(apITokenId, apITokenPut);
+    APITokenGet result = apiInstance.updateAPIToken(apITokenId, apITokenPut);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ApiTokenApi#updateAPIToken");
@@ -269,7 +269,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**APIToken**](APIToken.md)
+[**APITokenGet**](APITokenGet.md)
 
 ### Authorization
 

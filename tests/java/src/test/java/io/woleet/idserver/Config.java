@@ -157,13 +157,13 @@ public class Config {
     public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
         UserArray users = userApi.getAllUsers(false);
-        for (User user : users) {
+        for (UserGet user : users) {
             if (user.getIdentity().getCommonName().startsWith(TEST_USERS_COMMONNAME_PREFIX))
                 userApi.deleteUser(user.getId());
         }
     }
 
-    public static User createTestUser(UserApi userApi) throws ApiException {
+    public static UserGet createTestUser(UserApi userApi) throws ApiException {
         UserPost userPost = new UserPost();
         String USERNAME = randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
@@ -174,7 +174,7 @@ public class Config {
         return userApi.createUser((UserPost) userPost.identity(fullIdentity));
     }
 
-    public static User createTestUser() throws ApiException {
+    public static UserGet createTestUser() throws ApiException {
         return createTestUser(new UserApi(getAdminAuthApiClient()));
     }
 
@@ -185,20 +185,20 @@ public class Config {
     public static void deleteAllTestAPITokens() throws ApiException {
         ApiTokenApi apiTokenApi = new ApiTokenApi(getAdminAuthApiClient());
         APITokenArray apiTokens = apiTokenApi.getAllAPITokens(false);
-        for (APIToken apiToken : apiTokens) {
+        for (APITokenGet apiToken : apiTokens) {
             if (apiToken.getName().startsWith(TEST_APITOKENS_NAME_PREFIX))
                 apiTokenApi.deleteAPIToken(apiToken.getId());
         }
     }
 
-    public static APIToken createTestAPIToken(ApiTokenApi apiTokenApi) throws ApiException {
+    public static APITokenGet createTestAPIToken(ApiTokenApi apiTokenApi) throws ApiException {
         APITokenPost apiTokenPost = new APITokenPost();
         String NAME = randomName();
         apiTokenPost.name(NAME).status(APITokenStatusEnum.ACTIVE);
-        return apiTokenApi.createAPIToken((APITokenPost) apiTokenPost);
+        return apiTokenApi.createAPIToken(apiTokenPost);
     }
 
-    public static APIToken createTestAPIToken() throws ApiException {
+    public static APITokenGet createTestAPIToken() throws ApiException {
         return createTestAPIToken(new ApiTokenApi(getAdminAuthApiClient()));
     }
 }

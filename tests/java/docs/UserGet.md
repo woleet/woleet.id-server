@@ -1,5 +1,5 @@
 
-# User
+# UserGet
 
 ## Properties
 Name | Type | Description | Notes
