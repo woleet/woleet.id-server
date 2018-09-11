@@ -4,9 +4,11 @@ import { Router } from '@angular/router';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { ErrorMessageProvider, replaceInObject } from '@components/util';
+import { ErrorMessageProvider, replaceInObject, cleanupObject } from '@components/util';
 import * as traverse from 'traverse';
 import cc from '@components/cc';
+import { addedDiff, updatedDiff } from 'deep-object-diff';
+import * as log from 'loglevel';
 
 function asciiValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
@@ -107,9 +109,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
   @Output()
   cancel = new EventEmitter<void>();
 
-  // @Output()
-  // submitFailed: () => any;
-
   helper;
 
   form;
@@ -167,7 +166,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
   }
 
   ngOnInit() {
-    console.log('init', this.user);
+    log.debug('init', this.user);
     if (this.mode === 'edit') {
       this.form = this.setFormControl(copy<ApiUserObject>(this.user));
     } else {
@@ -181,14 +180,17 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
     this.helper = null;
 
-    const cleaned = replaceInObject(user, '', null);
-    console.log(cleaned, user);
-
     let promise;
     if (this.mode === 'edit') {
+      const cleaned = updatedDiff(Object.assign({ password: undefined }, this.user), replaceInObject(user, '', null));
+      log.debug(cleaned, user);
+
       promise = this.service.update(this.user.id, cleaned)
         .then((up) => this.submitSucceed.emit(up));
     } else {
+      const cleaned: any = addedDiff({}, cleanupObject(user));
+      log.debug(cleaned, user);
+
       promise = this.service.create(cleaned)
         .then((up) => this.submitSucceed.emit(up))
         .then(() => this.router.navigate(['/users']));

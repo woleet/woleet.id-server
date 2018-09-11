@@ -18,7 +18,7 @@ class ServerEventAccess extends AbstractInstanceAccess<InternalServerEventObject
 
   constructor() {
     super();
-    this.define('serverEvent', ServerEventModel, { paranoid: false });
+    this.define('serverEvent', ServerEventModel, { paranoid: false, indexes: [{ fields: ['occurredAt'] }] });
   }
 
   handleError(err: any) { }
@@ -28,12 +28,11 @@ class ServerEventAccess extends AbstractInstanceAccess<InternalServerEventObject
   }
 
   async getByType(type, opt: ListOptions): Promise<Instance<InternalServerEventObject>[]> {
-    console.log('TYPE', type, opt)
-;    return this.model.findAll({
+    return this.model.findAll({
       where: { type },
       offset: opt.offset,
       limit: opt.limit,
-      order: [['createdAt', 'DESC']],
+      order: [['occuredAt', 'DESC']],
       paranoid: !opt.full
     });
   }
