@@ -6,8 +6,6 @@ import { createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, updateKe
 import { serialiseKey } from '../serialize/key';
 import { store as event } from '../../controllers/events';
 
-const debug = Debug('id:api:key');
-
 const vkid = validate.param('id', 'uuid');
 const vuid = validate.param('userId', 'uuid');
 
@@ -26,9 +24,8 @@ const router = new Router();
  *  operationId: addKey
  */
 router.post('/user/:userId/key', vuid, validate.body('createKey'), async function (ctx) {
-  const key: ApiPostKeyObject = ctx.request.body;
-  debug('addkey', key);
   const { userId } = ctx.params;
+  const key: ApiPostKeyObject = ctx.request.body;
 
   const created = await createKey(userId, key);
 
@@ -38,7 +35,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
     associatedTokenId: null,
     associatedUserId: null,
     associatedKeyId: created.id,
-    data: null
+    data: key
   });
 
   ctx.body = serialiseKey(created);
@@ -95,7 +92,7 @@ router.put('/key/:id', vkid, validate.body('updateKey'), async function (ctx) {
     associatedTokenId: null,
     associatedUserId: null,
     associatedKeyId: key.id,
-    data: null
+    data: update
   });
 
   ctx.body = serialiseKey(key);

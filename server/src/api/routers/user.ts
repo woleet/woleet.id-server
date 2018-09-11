@@ -1,11 +1,21 @@
 import * as Router from 'koa-router';
 
+import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { createUser, getUserById, updateUser, getAllUsers, deleteUser } from '../../controllers/user';
 import { serialiseUser } from '../serialize/user';
 import { store as event } from '../../controllers/events';
 
 const vid = validate.param('id', 'uuid');
+
+function hidePassword(user) {
+  if (user.password) {
+    const u = copy(user);
+    u.password = '@obfuscated@';
+    return u;
+  }
+  return user;
+}
 
 /**
  * User
@@ -24,7 +34,7 @@ const router = new Router({ prefix: '/user' });
 router.post('/', validate.body('createUser'), async function (ctx) {
   const user: ApiPostUserObject = ctx.request.body;
 
-  const created = await createUser(user);
+  const created = await createUser(copy(user));
 
   event.register({
     type: 'user.create',
@@ -32,7 +42,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
     associatedTokenId: null,
     associatedUserId: created.id,
     associatedKeyId: null,
-    data: null
+    data: hidePassword(user)
   });
 
   ctx.body = serialiseUser(created);
@@ -69,7 +79,7 @@ router.get('/:id', vid, async function (ctx) {
 router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const { id } = ctx.params;
   const update = ctx.request.body;
-  const user = await updateUser(id, update);
+  const user = await updateUser(id, copy(update));
 
   event.register({
     type: 'user.edit',
@@ -77,7 +87,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
     associatedTokenId: null,
     associatedUserId: user.id,
     associatedKeyId: null,
-    data: null
+    data: hidePassword(update)
   });
 
   ctx.body = serialiseUser(user);

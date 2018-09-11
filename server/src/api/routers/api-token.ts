@@ -1,11 +1,21 @@
 import * as Router from 'koa-router';
 
+import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { createAPIToken, updateAPIToken, getAPITokenById, getAllAPITokens, deleteAPIToken } from '../../controllers/api-token';
 import { serialiseapiToken } from '../serialize/api-token';
 import { store as event } from '../../controllers/events';
 
 const vid = validate.param('id', 'uuid');
+
+function hideTokenValue(token) {
+  if (token.value) {
+    const t = copy(token);
+    delete t.value;
+    return t;
+  }
+  return token;
+}
 
 /**
  * APIToken
@@ -22,9 +32,9 @@ const router = new Router({ prefix: '/api-token' });
  *  operationId: createAPIToken
  */
 router.post('/', validate.body('createApiToken'), async function (ctx) {
-  const apiToken: ApiPostAPITokenObject = ctx.request.body;
+  const token: ApiPostAPITokenObject = ctx.request.body;
 
-  const created = await createAPIToken(apiToken);
+  const created = await createAPIToken(token);
 
   event.register({
     type: 'token.create',
@@ -32,7 +42,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
     associatedTokenId: created.id,
     associatedUserId: null,
     associatedKeyId: null,
-    data: null
+    data: hideTokenValue(token)
   });
 
   ctx.body = serialiseapiToken(created);
@@ -78,7 +88,7 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
     associatedTokenId: apiToken.id,
     associatedUserId: null,
     associatedKeyId: null,
-    data: null
+    data: update
   });
 
   ctx.body = serialiseapiToken(apiToken);

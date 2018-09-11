@@ -10,7 +10,7 @@ const debug = Debug('id:ctr');
 export async function createAPIToken(apiToken: ApiPostAPITokenObject): Promise<InternalAPITokenObject> {
   debug('Create apiToken');
   const value = crypto.randomBytes(32).toString('base64');
-  const newApiToken = await APIToken.create(Object.assign(apiToken, { value }));
+  const newApiToken = await APIToken.create(Object.assign({ value }, apiToken));
 
   return newApiToken.toJSON();
 }
