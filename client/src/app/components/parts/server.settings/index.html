@@ -18,20 +18,35 @@
       <p>There is no fallback key on this server</p>
     </ng-template>
   </div>
-  <ng-template #loading>
-    <mat-card>Loading... </mat-card>
-  </ng-template>
+  <ng-template #loading>Loading...<br><br></ng-template>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="editMode=true" *ngIf="loaded && defaultKey$">CHANGE</button>
-    <button mat-raised-button color="primary" (click)="editMode=true" *ngIf="!(loaded && defaultKey$)">SET ONE</button>
+    <button mat-raised-button color="primary" (click)="editMode=true; loadUserList()" *ngIf="loaded">
+      {{defaultKey$ ? 'CHANGE' : 'SET ONE'}}
+    </button>
   </mat-card-actions>
 </mat-card>
 <mat-card *ngIf="editMode">
-  <mat-card-title>Select a user</mat-card-title>
+  <mat-card-title>Set a new server default key</mat-card-title>
   <mat-divider></mat-divider>
   <br>
+  <br>
+  <div *ngIf="(userList$ | async) as users; else loading">
+    <mat-select type="text" (selectionChange)="newKeyId=null; loadUserKeys($event)" name="userId" placeholder="Select a user">
+      <mat-option *ngFor="let user of users" [value]="user.id">{{ user.identity.commonName }}</mat-option>
+    </mat-select>
+  </div>
+  <br>
+  <div *ngIf="!keyListLoading; else loading">
+    <div *ngIf="(keyList$ | async) as keys">
+      <mat-select type="text" name="keyId" [(ngModel)]="newKeyId" placeholder="Select a key">
+        <mat-option *ngFor="let key of keys" [value]="key.id">{{ key.name }}</mat-option>
+      </mat-select>
+    </div>
+  </div>
+  <br>
+  <ng-template #loading>Loading...<br></ng-template>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="submit()">CHANGE</button>
-    <button mat-button (click)="cancelEdit()">CANCEL</button>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="!newKeyId || formLocked">CHANGE</button>
+    <button mat-button (click)="cancelEdit()" [disabled]="formLocked">CANCEL</button>
   </mat-card-actions>
 </mat-card>

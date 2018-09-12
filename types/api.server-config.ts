@@ -6,6 +6,6 @@ interface ApiServerConfig {
 }
 
 interface ApiServerConfigUpdate {
-  defaultKeyId: string;
-  fallbackOnDefaultKey: boolean;
+  defaultKeyId?: string;
+  fallbackOnDefaultKey?: boolean;
 }
