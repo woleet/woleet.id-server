@@ -26,7 +26,7 @@ export class ServerConfigService {
     this.config$ = new BehaviorSubject(null);
     this.config$.subscribe((cfg) => {
       log.debug('SUSCRIBED CONFIG', cfg);
-      if (cfg && cfg.defaultKeyId) {
+      if (cfg) {
         this.setDefaultKey(cfg.defaultKeyId);
         this.setDefaultKeyOwner(cfg.defaultKeyId);
       }
@@ -64,6 +64,13 @@ export class ServerConfigService {
 
   private setDefaultKey(defaultKeyId) {
     if (defaultKeyId !== this.defaultKeyId) {
+
+      if (defaultKeyId === null) {
+        this.defaultKey$.next(null);
+        this.defaultKeyId = null;
+        return;
+      }
+
       this.incrLock();
       this.keyService.getById(defaultKeyId)
         .then((key) => {
@@ -80,6 +87,13 @@ export class ServerConfigService {
 
   private setDefaultKeyOwner(defaultKeyId) {
     if (defaultKeyId !== this.defaultKeyId) {
+
+      if (defaultKeyId === null) {
+        this.defaultKey$.next(null);
+        this.defaultKeyId = null;
+        return;
+      }
+
       this.incrLock();
       this.keyService.getOwner(defaultKeyId)
         .then((user) => {
