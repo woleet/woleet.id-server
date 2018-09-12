@@ -29,12 +29,11 @@ export class AuthService {
     this.user = null;
     localStorage.removeItem('user');
     if (request) {
-      await this.http.get(`${serverURL}/logout/`).toPromise().catch(() => null);
+      this.http.get(`${serverURL}/logout/`).toPromise().catch(() => null);
     }
 
+    this.router.navigate(['login']);
     this.bootService.restart();
-
-    await this.router.navigate(['login']);
   }
 
   async login(user: BasicAuthObject): Promise<ApiUserDTOObject | null> {

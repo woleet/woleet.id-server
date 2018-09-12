@@ -12,6 +12,7 @@ if (environment.production) {
 
 function init() {
   platformBrowserDynamic().bootstrapModule(AppModule)
+    .then(() => (<any>window).appBootstrap && (<any>window).appBootstrap())
     .catch(err => log.error(err));
 }
 
