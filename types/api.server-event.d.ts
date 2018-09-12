@@ -2,6 +2,7 @@
 
 type ServerEventTypeEnum =
   'signature'
+  | 'config.edit'
   | 'login'
   | 'key.create' | 'key.edit' | 'key.delete'
   | 'user.create' | 'user.edit' | 'user.delete'

@@ -43,7 +43,7 @@ export const events = {
   batchSize: 100,
   flushAfter: 10 * 1000,
   typesEnum: [
-    'signature', 'login',
+    'signature', 'login', 'config.edit',
     'key.create', 'key.edit', 'key.delete',
     'user.create', 'user.edit', 'user.delete',
     'token.create', 'token.edit', 'token.delete'

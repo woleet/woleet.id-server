@@ -2,6 +2,7 @@ import * as Router from 'koa-router';
 
 import { validate } from '../schemas';
 import { getServerConfig, setServerConfig } from '../../controllers/server-config';
+import { store as event } from '../../controllers/server-event';
 
 /**
  * ServerConfig
@@ -26,6 +27,16 @@ router.get('/', async function (ctx) {
  */
 router.put('/', validate.body('updateConfig'), async function (ctx) {
   const { fallbackOnDefaultKey, defaultKeyId } = await setServerConfig(ctx.request.body);
+
+  event.register({
+    type: 'config.edit',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: null,
+    associatedKeyId: null,
+    data: { fallbackOnDefaultKey, defaultKeyId }
+  });
+
   ctx.body = { fallbackOnDefaultKey, defaultKeyId };
 });
 
