@@ -4,7 +4,7 @@ import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { createUser, getUserById, updateUser, getAllUsers, deleteUser } from '../../controllers/user';
 import { serialiseUser } from '../serialize/user';
-import { store as event } from '../../controllers/events';
+import { store as event } from '../../controllers/server-event';
 
 const vid = validate.param('id', 'uuid');
 

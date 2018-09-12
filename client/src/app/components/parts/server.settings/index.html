@@ -1,3 +1,64 @@
-<div>
-
-</div>
+<mat-card *ngIf="!editMode">
+  <mat-card-title>Default server key</mat-card-title>
+  <mat-divider></mat-divider>
+  <br>
+  <div *ngIf="(config$ | async) as config; else loading">
+    <mat-checkbox matInput placeholder="Set as default key" [checked]="config.fallbackOnDefaultKey" (change)="updateFallbackOnDefaultKeyOption(!config.fallbackOnDefaultKey)"
+      [disabled]="formLocked">Use a default key to fallback on</mat-checkbox>
+    <br>
+  </div>
+  <div *ngIf="(config$ | async) as config">
+    <div *ngIf="config.fallbackOnDefaultKey">
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+      <div *ngIf="loaded; else loading">
+        <div *ngIf="loaded && defaultKey$; else noKey">
+          <mat-card-content>
+            <div *ngIf="(defaultKey$ | async) as key; else loading">
+              <div *ngIf="(defaultKeyOwner$ | async) as user; else loading">
+                <app-user-card [user]="user"></app-user-card>
+                <br>
+                <app-key-card [key]="key" [userId]="user.id" [default]="user.defaultKeyId == key.id"></app-key-card>
+              </div>
+            </div>
+          </mat-card-content>
+        </div>
+        <ng-template #noKey>
+          <p>There is no fallback key on this server</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <mat-card-actions *ngIf="((config$ | async) || {}).fallbackOnDefaultKey">
+    <button mat-raised-button color="primary" (click)="editMode=true; loadUserList()" [disabled]="formLocked" *ngIf="loaded">
+      {{defaultKey$ ? 'CHANGE' : 'SET ONE'}}
+    </button>
+  </mat-card-actions>
+  <ng-template #loading>Loading...<br></ng-template>
+</mat-card>
+<mat-card *ngIf="editMode">
+  <mat-card-title>Set a new server default key</mat-card-title>
+  <mat-divider></mat-divider>
+  <br>
+  <br>
+  <div *ngIf="(userList$ | async) as users; else loading">
+    <mat-select type="text" (selectionChange)="newKeyId=null; loadUserKeys($event)" name="userId" placeholder="Select a user">
+      <mat-option *ngFor="let user of users" [value]="user.id">{{ user.identity.commonName }}</mat-option>
+    </mat-select>
+  </div>
+  <br>
+  <div *ngIf="!keyListLoading; else loading">
+    <div *ngIf="(keyList$ | async) as keys">
+      <mat-select type="text" name="keyId" [(ngModel)]="newKeyId" placeholder="Select a key">
+        <mat-option *ngFor="let key of keys" [value]="key.id">{{ key.name }}</mat-option>
+      </mat-select>
+    </div>
+  </div>
+  <br>
+  <ng-template #loading>Loading...<br></ng-template>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="!newKeyId || formLocked">CHANGE</button>
+    <button mat-button (click)="cancelEdit()" [disabled]="formLocked">CANCEL</button>
+  </mat-card-actions>
+</mat-card>

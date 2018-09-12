@@ -17,6 +17,9 @@ export class KeyCardComponent extends ErrorMessageProvider {
   setAsDefault = false;
 
   @Input()
+  modes: ('block' | 'edit' | 'delete')[] = [];
+
+  @Input()
   userId: string;
 
   @Input()

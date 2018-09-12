@@ -2,8 +2,10 @@ import { sequelize } from './sequelize';
 import * as Debug from 'debug';
 import { APIToken } from './model/api-token';
 import { ServerEvent } from './model/server-event';
+import { ServerConfig } from './model/server-config';
 import { User } from './model/user';
 import { Key } from './model/key';
+import { getServerConfig, setServerConfig } from '../controllers/server-config';
 
 const debug = Debug('id:db');
 
@@ -19,6 +21,12 @@ Key.model.beforeDelete(async (key) => {
   const userId: string = key.getDataValue('userId');
   const where = { defaultKeyId: keyId };
   const user = await User.model.findById(userId, { where });
+
+  const config = getServerConfig();
+
+  if (config.defaultKeyId === keyId) {
+    await setServerConfig({ defaultKeyId: null });
+  }
 
   if (!user) {
     return;
@@ -39,7 +47,9 @@ ServerEvent.model.belongsTo(User.model, { as: 'associatedUser' });
 
 ServerEvent.model.belongsTo(User.model, { as: 'authorizedUser' });
 
-export { User, Key, APIToken, ServerEvent };
+ServerConfig.model.belongsTo(Key.model, { as: 'defaultKey' });
+
+export { User, Key, APIToken, ServerEvent, ServerConfig };
 
 // Connection
 (async () => {

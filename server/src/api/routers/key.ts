@@ -1,10 +1,10 @@
 import { validate } from '../schemas';
 import * as Router from 'koa-router';
 
-import * as Debug from 'debug';
-import { createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, updateKey } from '../../controllers/key';
+import { createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, updateKey, getOwner } from '../../controllers/key';
 import { serialiseKey } from '../serialize/key';
-import { store as event } from '../../controllers/events';
+import { store as event } from '../../controllers/server-event';
+import { serialiseUser } from '../serialize/user';
 
 const vkid = validate.param('id', 'uuid');
 const vuid = validate.param('userId', 'uuid');
@@ -62,6 +62,17 @@ router.get('/key/:id/export', vkid, async function (ctx) {
   const { id } = ctx.params;
   const phrase = await exportKey(id);
   ctx.body = { phrase };
+});
+
+/**
+ * @route: /key/{keyId}/owner
+ * @swagger
+ *  operationId: getKeyOwner
+ */
+router.get('/key/:id/owner', vkid, async function (ctx) {
+  const { id } = ctx.params;
+  const user = await getOwner(id);
+  ctx.body = serialiseUser(user);
 });
 
 /**

@@ -18,16 +18,16 @@
     </div>
     <div fxLayout="column">
       <div>
-        <button mat-icon-button color="primary">
+        <button mat-icon-button color="primary" *ngIf="modes.includes('edit')">
           <mat-icon matTooltip="Edit key" aria-label="Edit key button" (click)="setEditMode(true)">edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn">
+        <button mat-icon-button color="warn" *ngIf="modes.includes('delete')">
           <mat-icon matTooltip="Delete key" aria-label="Delete key button" (click)="deleteKey()">delete</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="key.status !== 'blocked'">
+        <button mat-icon-button color="warn" *ngIf="modes.includes('block') && key.status !== 'blocked'">
           <mat-icon matTooltip="Block key" aria-label="Block key button" (click)="blockKey()">pause_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="primary" *ngIf="key.status === 'blocked'">
+        <button mat-icon-button color="primary" *ngIf="modes.includes('block') && key.status === 'blocked'">
           <mat-icon matTooltip="Unblock key" aria-label="Unblock key button" (click)="unblockKey()">play_circle_outline</mat-icon>
         </button>
       </div>

@@ -32,7 +32,7 @@ class ServerEventAccess extends AbstractInstanceAccess<InternalServerEventObject
       where: { type },
       offset: opt.offset,
       limit: opt.limit,
-      order: [['occuredAt', 'DESC']],
+      order: [['occurredAt', 'DESC']],
       paranoid: !opt.full
     });
   }

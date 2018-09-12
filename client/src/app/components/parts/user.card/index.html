@@ -30,12 +30,11 @@
       <div>
         <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')">
           <mat-icon matTooltip="Edit user" aria-label="Edit user button" (click)="setEditMode(true)">edit</mat-icon>
-          <!-- <mat-icon matTooltip="Edit user" aria-label="Edit user button" [routerLink]="['/user/', user.id, 'edit']">edit</mat-icon> -->
         </button>
-        <button mat-icon-button color="warn" *ngIf="user.status !== 'blocked'">
+        <button mat-icon-button color="warn" *ngIf="modes.includes('block') && user.status !== 'blocked'">
           <mat-icon matTooltip="Block user" aria-label="Block user button" (click)="blockUser()">pause_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="primary" *ngIf="user.status === 'blocked'">
+        <button mat-icon-button color="primary" *ngIf="modes.includes('block') && user.status === 'blocked'">
           <mat-icon matTooltip="Unblock user" aria-label="Unblock user button" (click)="unblockUser()">play_circle_outline</mat-icon>
         </button>
         <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('delete')">

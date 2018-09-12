@@ -1,5 +1,6 @@
-import { NotFoundUserError, NotFoundKeyError, BlockedUserError, BlockedKeyError } from '../errors';
+import { NotFoundUserError, NotFoundKeyError, BlockedUserError, BlockedKeyError, NoDefaultKeyError } from '../errors';
 import { Key, User } from '../database';
+import { getServerConfig } from './server-config';
 
 import * as message from 'bitcoinjs-message';
 
@@ -8,7 +9,15 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
   let key: SequelizeKeyObject;
 
   if (!(userId || pubKey || customUserId)) {
-    throw new Error('Must provide either "userId", "customUserId" or "pubKey"');
+    const config = getServerConfig();
+    if (!config.fallbackOnDefaultKey) {
+      throw new NoDefaultKeyError();
+    }
+    key = await Key.getByIdAndPullUser(config.defaultKeyId);
+    if (!key) {
+      throw new Error(`Cannot find default key (${config.defaultKeyId})`);
+    }
+    user = key.get('user');
   }
 
   if (userId) {
