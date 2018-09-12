@@ -4,16 +4,14 @@
   <br>
   <div *ngIf="(config$ | async) as config; else loading">
     <mat-checkbox matInput placeholder="Set as default key" [checked]="config.fallbackOnDefaultKey" (change)="updateFallbackOnDefaultKeyOption(!config.fallbackOnDefaultKey)"
-      [disabled]="formLocked">Use a default key to fallback on</mat-checkbox>
+      [disabled]="(formLocked$ | async)">Use a default key to fallback on</mat-checkbox>
     <br>
-  </div>
-  <div *ngIf="(config$ | async) as config">
     <div *ngIf="config.fallbackOnDefaultKey">
       <br>
       <mat-divider></mat-divider>
       <br>
-      <div *ngIf="loaded; else loading">
-        <div *ngIf="loaded && defaultKey$; else noKey">
+      <div>
+        <div *ngIf="defaultKey$; else noKey">
           <mat-card-content>
             <div *ngIf="(defaultKey$ | async) as key; else loading">
               <div *ngIf="(defaultKeyOwner$ | async) as user; else loading">
@@ -31,7 +29,7 @@
     </div>
   </div>
   <mat-card-actions *ngIf="((config$ | async) || {}).fallbackOnDefaultKey">
-    <button mat-raised-button color="primary" (click)="editMode=true; loadUserList()" [disabled]="formLocked" *ngIf="loaded">
+    <button mat-raised-button color="primary" (click)="editMode=true; loadUserList()" [disabled]="(formLocked$ | async)" *ngIf="(defaultKeyOwner$ | async) && (defaultKey$ | async)">
       {{defaultKey$ ? 'CHANGE' : 'SET ONE'}}
     </button>
   </mat-card-actions>
@@ -58,7 +56,7 @@
   <br>
   <ng-template #loading>Loading...<br></ng-template>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="submit()" [disabled]="!newKeyId || formLocked">CHANGE</button>
-    <button mat-button (click)="cancelEdit()" [disabled]="formLocked">CANCEL</button>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="!newKeyId || (formLocked$ | async)">CHANGE</button>
+    <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
   </mat-card-actions>
 </mat-card>
