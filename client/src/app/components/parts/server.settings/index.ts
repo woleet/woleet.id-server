@@ -1,20 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ServerConfigService } from '@services/server-config';
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import * as log from 'loglevel';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-server-settings',
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class ServerSettingsComponent implements OnInit {
-
+export class ServerSettingsComponent implements OnInit, OnDestroy {
   loaded = false;
   editMode = false;
   formLocked = false;
 
+  private sub: Subscription;
+  config$: Observable<ApiServerConfig>;
   defaultKey$: Promise<ApiKeyObject>;
   defaultKeyOwner$: Promise<ApiUserObject>;
 
@@ -32,32 +34,41 @@ export class ServerSettingsComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    const config = await this.configService.getConfig();
-    await this.loadConfig(config);
+    const config$ = this.config$ = this.configService.getConfig();
+    this.sub = config$.subscribe((config) => {
+      log.debug('CONFIG', config);
+      this.loaded = false;
+
+      if (!config) {
+        return;
+      }
+
+      if (config.defaultKeyId) {
+        this.defaultKey$ = this.keyService.getById(config.defaultKeyId);
+        this.defaultKeyOwner$ = this.keyService.getOwner(config.defaultKeyId);
+        Promise.all([this.defaultKey$, this.defaultKeyOwner$]).then(() => this.loaded = true);
+      } else {
+        this.defaultKey$ = null;
+        this.defaultKeyOwner$ = null;
+      }
+
+      this.newKeyId = null;
+      this.editMode = false;
+      this.formLocked = false;
+    });
   }
 
-  private async loadConfig(config) {
-    this.loaded = false;
-    if (config.defaultKeyId) {
-      this.defaultKey$ = this.keyService.getById(config.defaultKeyId);
-      this.defaultKeyOwner$ = this.keyService.getOwner(config.defaultKeyId);
-      Promise.all([this.defaultKey$, this.defaultKeyOwner$]).then(() => this.loaded = true);
-    } else {
-      this.defaultKey$ = null;
-      this.defaultKeyOwner$ = null;
+  ngOnDestroy() {
+    log.debug('unsubscribing');
+    if (this.sub) {
+      this.sub.unsubscribe();
     }
   }
 
   async submit() {
     this.formLocked = true;
     log.debug('Set new default server key to', this.newKeyId);
-    const config = await this.configService.update({ defaultKeyId: this.newKeyId });
-
-    await this.loadConfig(config);
-
-    this.newKeyId = null;
-    this.editMode = false;
-    this.formLocked = false;
+    this.configService.update({ defaultKeyId: this.newKeyId });
   }
 
   loadUserList() {
@@ -75,6 +86,12 @@ export class ServerSettingsComponent implements OnInit {
         this.keyListLoading = false;
         return res;
       });
+  }
+
+  async updateFallbackOnDefaultKeyOption(fallbackOnDefaultKey) {
+    this.formLocked = true;
+    log.debug('Set fallback option to', fallbackOnDefaultKey);
+    this.configService.update({ fallbackOnDefaultKey });
   }
 
   cancelEdit() {

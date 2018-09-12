@@ -25,8 +25,8 @@ router.get('/', async function (ctx) {
  *  operationId: setServerConfig
  */
 router.put('/', validate.body('updateConfig'), async function (ctx) {
-  const { fallbackOnDefaultKey, defaultKeyId } = ctx.request.body;
-  ctx.body = await setServerConfig({ fallbackOnDefaultKey, defaultKeyId });
+  const { fallbackOnDefaultKey, defaultKeyId } = await setServerConfig(ctx.request.body);
+  ctx.body = { fallbackOnDefaultKey, defaultKeyId };
 });
 
 export { router };

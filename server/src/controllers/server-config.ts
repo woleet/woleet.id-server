@@ -1,5 +1,7 @@
 import { ServerConfig } from '../database';
 import { serverConfig as config } from '../config';
+import * as Debug from 'debug';
+const debug = Debug('id:api;config');
 
 const { CONFIG_ID } = config;
 
@@ -18,8 +20,10 @@ export function getServerConfig(): InternalServerConfigObject {
 export async function setServerConfig(up): Promise<InternalServerConfigObject> {
   let cfg = await ServerConfig.update(CONFIG_ID, up);
   if (!cfg) {
+    debug('No config to update, will set', up);
     cfg = await ServerConfig.create(up);
   }
+  debug('Updated', inMemoryConfig, 'to', cfg.toJSON(), 'with', up);
   inMemoryConfig = cfg.toJSON();
   return getServerConfig();
 }

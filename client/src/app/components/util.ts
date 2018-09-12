@@ -30,7 +30,7 @@ export class ErrorMessageProvider {
       case 'lettersOnly':
         return 'Must only contain letters';
       case 'safeWord':
-        return 'Must only contain letters, numbers, and underscores';
+        return 'Must only contain letters, numbers, hyphens and underscores';
       case 'password':
         return `Must contain at least ${error.missing}.`;
       case 'ascii':
