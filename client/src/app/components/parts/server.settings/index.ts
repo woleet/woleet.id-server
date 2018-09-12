@@ -2,9 +2,8 @@ import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { ServerConfigService } from '@services/server-config';
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
-import * as log from 'loglevel';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import * as log from 'loglevel';
 
 @Component({
   selector: 'app-server-settings',

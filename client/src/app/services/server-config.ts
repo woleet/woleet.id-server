@@ -8,8 +8,6 @@ import { KeyService } from '@services/key';
 @Injectable()
 export class ServerConfigService {
 
-  private isConfigSet = false;
-
   private _lock = 0;
   private isDoingSomething$: BehaviorSubject<boolean>;
 
@@ -51,17 +49,13 @@ export class ServerConfigService {
 
     log.debug('getConfig');
 
-    if (!this.isConfigSet) {
-      log.debug('getConfig fisrt time');
-      this.incrLock();
-      const init$ = this.http.get<ApiServerConfig>(`${serverURL}/server-config`);
-      init$.subscribe((up) => {
+    this.incrLock();
+    this.http.get<ApiServerConfig>(`${serverURL}/server-config`)
+      .subscribe((up) => {
         log.debug('initialised', up);
         this.decrLock();
         this.config$.next(up);
       });
-      this.isConfigSet = true;
-    }
 
     log.debug('getConfig is set');
 
@@ -71,7 +65,6 @@ export class ServerConfigService {
   private setDefaultKey(defaultKeyId) {
     if (defaultKeyId !== this.defaultKeyId) {
       this.incrLock();
-      this.defaultKey$.next(null);
       this.keyService.getById(defaultKeyId)
         .then((key) => {
           this.defaultKey$.next(key);
@@ -86,18 +79,19 @@ export class ServerConfigService {
   }
 
   private setDefaultKeyOwner(defaultKeyId) {
-    this.incrLock();
-    this.defaultKeyOwner$.next(null);
-    this.keyService.getOwner(defaultKeyId)
-      .then((user) => {
-        this.defaultKeyOwner$.next(user);
-        this.defaultKeyOwnerId = user.id;
-      })
-      .catch(() => {
-        this.defaultKey$.next(null);
-        this.defaultKeyId = null;
-      })
-      .then(() => this.decrLock());
+    if (defaultKeyId !== this.defaultKeyId) {
+      this.incrLock();
+      this.keyService.getOwner(defaultKeyId)
+        .then((user) => {
+          this.defaultKeyOwner$.next(user);
+          this.defaultKeyOwnerId = user.id;
+        })
+        .catch(() => {
+          this.defaultKeyOwner$.next(null);
+          this.defaultKeyOwnerId = null;
+        })
+        .then(() => this.decrLock());
+    }
   }
 
   update(config: ApiServerConfigUpdate): void {
