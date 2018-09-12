@@ -13,6 +13,7 @@ WORKDIR /usr/src/app
 
 ## Install app dependencies
 COPY package.json /usr/src/app/
+COPY package-lock.json /usr/src/app/
 # RUN npm i --silent
 RUN npm i
 
