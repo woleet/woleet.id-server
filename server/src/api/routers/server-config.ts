@@ -1,5 +1,6 @@
 import * as Router from 'koa-router';
 
+import { validate } from '../schemas';
 import { getServerConfig, setServerConfig } from '../../controllers/server-config';
 
 /**
@@ -23,7 +24,7 @@ router.get('/', async function (ctx) {
  * @swagger
  *  operationId: setServerConfig
  */
-router.put('/', async function (ctx) {
+router.put('/', validate.body('updateConfig'), async function (ctx) {
   const { fallbackOnDefaultKey, defaultKeyId } = ctx.request.body;
   ctx.body = await setServerConfig({ fallbackOnDefaultKey, defaultKeyId });
 });

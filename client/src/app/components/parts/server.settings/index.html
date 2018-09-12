@@ -1,5 +1,5 @@
 <mat-card *ngIf="!editMode">
-  <mat-card-title>Default key</mat-card-title>
+  <mat-card-title>Default server key</mat-card-title>
   <mat-divider></mat-divider>
   <br>
   <div *ngIf="loaded; else loading">
@@ -18,7 +18,7 @@
       <p>There is no fallback key on this server</p>
     </ng-template>
   </div>
-  <ng-template #loading>Loading...<br><br></ng-template>
+  <ng-template #loading>Loading...<br></ng-template>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="editMode=true; loadUserList()" *ngIf="loaded">
       {{defaultKey$ ? 'CHANGE' : 'SET ONE'}}

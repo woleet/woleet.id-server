@@ -1,11 +1,9 @@
 import { validate } from '../schemas';
 import * as Router from 'koa-router';
 
-import * as Debug from 'debug';
 import { createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, updateKey, getOwner } from '../../controllers/key';
 import { serialiseKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
-import { get } from 'http';
 import { serialiseUser } from '../serialize/user';
 
 const vkid = validate.param('id', 'uuid');
