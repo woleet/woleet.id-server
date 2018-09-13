@@ -3,6 +3,7 @@ import { KeyService } from '@services/key';
 import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider } from '@components/util';
 import { UserService } from '@services/user';
+import { confirm } from '../../util';
 
 @Component({
   selector: 'app-key-card',
@@ -51,6 +52,9 @@ export class KeyCardComponent extends ErrorMessageProvider {
   }
 
   async deleteKey() {
+    if (!confirm(`Delete key ${this.key.name} ?`)) {
+      return;
+    }
     const del = await this.keyService.delete(this.key.id);
     this.key = del;
     this.delete.emit(del);
@@ -74,6 +78,9 @@ export class KeyCardComponent extends ErrorMessageProvider {
   }
 
   async blockKey() {
+    if (!confirm(`Block key ${this.key.name} ?`)) {
+      return;
+    }
     const up = await this.keyService.update(this.key.id, { status: 'blocked' });
     this.key = up;
     this.update.emit();

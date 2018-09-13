@@ -43,6 +43,10 @@ export class ErrorMessageProvider {
   }
 }
 
+export function confirm(message) {
+  return window.confirm(message);
+}
+
 export function cleanupObject(obj) {
   return traverse(obj).map(function (e) {
     // if e is falsy, or is an empty object, we delete if, exept for zero
