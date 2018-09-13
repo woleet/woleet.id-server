@@ -89,7 +89,7 @@ paths:
         - $ref: '#/components/parameters/HashToSignQueryParameter'
         - $ref: '#/components/parameters/UserIdQueryParameter'
         - $ref: '#/components/parameters/CustomUserIdQueryParameter'
-        - $ref: '#/components/parameters/PubKeyQueryParameter'
+        - $ref: '#/components/parameters/PubKeyToUseQueryParameter'
       security:
         - APITokenAuth: []
       responses:
@@ -1028,7 +1028,7 @@ components:
         type: string
         format: uuid
         example: "f34d92e3-4f71-49ab-862f-69443bd48266"
-    PubKeyQueryParameter:
+    PubKeyToUseQueryParameter:
       name: pubKey
       in: query
       description: The public key to use to sign. When not provided, the default key of the user is used (if any).
