@@ -140,7 +140,7 @@ public abstract class CRUDApiTest {
         long start = System.currentTimeMillis();
         for (int i = 0; i < 10; i++)
             createTestObject(adminAuthApi);
-        logger.info("100 objects created in " + (System.currentTimeMillis() - start) + " ms");
+        logger.info("10 objects created in " + (System.currentTimeMillis() - start) + " ms");
     }
 
     @Test
