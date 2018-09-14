@@ -7,7 +7,7 @@ The **Woleet.ID Server** application facilitates the integration of Woleet's [si
  * sign data on behalf of your corporate users using their bitcoin addresses
  * expose the identity of your corporate users and prove the ownership of their bitcoin addresses 
  
-# Build and run without Docker
+# Build and run without Docker (development mode)
 
 ## Prerequisites
 
@@ -23,7 +23,16 @@ In the project's root directory, run the `start-pg-dev` script to start PostgreS
 
 Finally, in both _client_ and _server_ directories, run: `npm run dev`. 
 
-# Build and run using Docker
+# Build and run using Docker (production mode)
+
+## Prerequisites
+
+You must have a certificate for your server: (it can be [self signed](https://www.digitalocean.com/community/tutorials/how-to-create-an-ssl-certificate-on-nginx-for-ubuntu-14-04))
+
+```
+HTTP_TLS_CERTIFICATE=path/to/certificate.crt
+HTTP_TLS_KEY=path/to/certificate.key
+```
 
 ## Build the project:
 
