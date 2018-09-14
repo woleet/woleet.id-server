@@ -28,18 +28,17 @@
     </div>
     <div fxLayout="column" *ngIf="modes" no-prop no-ripple-prop>
       <div>
-        <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')">
-          <mat-icon matTooltip="Edit user" aria-label="Edit user button" (click)="setEditMode(true)">edit</mat-icon>
-          <!-- <mat-icon matTooltip="Edit user" aria-label="Edit user button" [routerLink]="['/user/', user.id, 'edit']">edit</mat-icon> -->
+        <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')" (click)="setEditMode(true)">
+          <mat-icon matTooltip="Edit user" aria-label="Edit user button">edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="user.status !== 'blocked'">
-          <mat-icon matTooltip="Block user" aria-label="Block user button" (click)="blockUser()">pause_circle_outline</mat-icon>
+        <button mat-icon-button color="warn" *ngIf="modes.includes('block') && user.status !== 'blocked'" (click)="blockUser()">
+          <mat-icon matTooltip="Block user" aria-label="Block user button">pause_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="primary" *ngIf="user.status === 'blocked'">
-          <mat-icon matTooltip="Unblock user" aria-label="Unblock user button" (click)="unblockUser()">play_circle_outline</mat-icon>
+        <button mat-icon-button color="primary" *ngIf="modes.includes('block') && user.status === 'blocked'" (click)="unblockUser()">
+          <mat-icon matTooltip="Unblock user" aria-label="Unblock user button">play_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('delete')">
-          <mat-icon color="warn" matTooltip="Delete user" aria-label="Delete user button" (click)="deleteUser()">delete</mat-icon>
+        <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('delete')" (click)="deleteUser()">
+          <mat-icon color="warn" matTooltip="Delete user" aria-label="Delete user button">delete</mat-icon>
         </button>
       </div>
     </div>

@@ -21,17 +21,17 @@
     </div>
     <div fxLayout="column">
       <div>
-        <button mat-icon-button color="primary">
-          <mat-icon matTooltip="Edit API token" aria-label="Edit token" (click)="setEditMode(true)">edit</mat-icon>
+        <button mat-icon-button color="primary" (click)="setEditMode(true)">
+          <mat-icon matTooltip="Edit API token" aria-label="Edit token">edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn">
-          <mat-icon matTooltip="Delete API token" aria-label="Delete token" (click)="deleteToken()">delete</mat-icon>
+        <button mat-icon-button color="warn" (click)="deleteToken()">
+          <mat-icon matTooltip="Delete API token" aria-label="Delete token">delete</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="apiToken.status !== 'blocked'">
-          <mat-icon matTooltip="Block API token" aria-label="Block token button" (click)="blockToken()">pause_circle_outline</mat-icon>
+        <button mat-icon-button color="warn" *ngIf="apiToken.status !== 'blocked'" (click)="blockToken()">
+          <mat-icon matTooltip="Block API token" aria-label="Block token button">pause_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="primary" *ngIf="apiToken.status === 'blocked'">
-          <mat-icon matTooltip="Unblock API token" aria-label="Unblock token button" (click)="unblockToken()">play_circle_outline</mat-icon>
+        <button mat-icon-button color="primary" *ngIf="apiToken.status === 'blocked'" (click)="unblockToken()">
+          <mat-icon matTooltip="Unblock API token" aria-label="Unblock token button">play_circle_outline</mat-icon>
         </button>
       </div>
     </div>

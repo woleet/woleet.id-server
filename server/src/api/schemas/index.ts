@@ -6,12 +6,14 @@ import * as keySchemas from './key';
 import * as userSchemas from './user';
 import * as miscSchemas from './misc';
 import * as apiTokenSchemas from './api-token';
+import * as serverConfigSchemas from './server-config';
 
 const schemas: { [id: string]: ObjectSchema } = (<any>Object).assign({},
   keySchemas,
   userSchemas,
   miscSchemas,
-  apiTokenSchemas
+  apiTokenSchemas,
+  serverConfigSchemas
 );
 
 function validateBody(schema: string): IMiddleware {

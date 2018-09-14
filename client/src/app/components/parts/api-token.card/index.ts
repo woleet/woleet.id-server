@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { APITokenService } from '@services/api-token';
 import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider } from '@components/util';
+import { confirm } from '../../util';
 
 @Component({
   selector: 'api-token-card',
@@ -48,12 +49,18 @@ export class APITokenCardComponent extends ErrorMessageProvider {
   }
 
   async deleteToken() {
+    if (!confirm(`Delete token ${this.apiToken.name} ?`)) {
+      return;
+    }
     const deleted = await this.apiTokenService.delete(this.apiToken.id);
     this.apiToken = deleted;
     this.delete.emit(deleted);
   }
 
   async blockToken() {
+    if (!confirm(`Block token ${this.apiToken.name} ?`)) {
+      return;
+    }
     const up = await this.apiTokenService.update(this.apiToken.id, { status: 'blocked' });
     this.apiToken = up;
     this.update.emit(up);

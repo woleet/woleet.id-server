@@ -4,7 +4,7 @@ import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { createAPIToken, updateAPIToken, getAPITokenById, getAllAPITokens, deleteAPIToken } from '../../controllers/api-token';
 import { serialiseapiToken } from '../serialize/api-token';
-import { store as event } from '../../controllers/events';
+import { store as event } from '../../controllers/server-event';
 
 const vid = validate.param('id', 'uuid');
 

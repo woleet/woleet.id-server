@@ -19,7 +19,10 @@ services:
     image: ${WOLEET_ID_SERVER_REGISTRY}:client
     build: ./client
     ports:
-      - 4220:80
+      - 4220:443
+    volumes:
+      - ${HTTP_TLS_CERTIFICATE}:/etc/nginx/ssl/certificate.crt:ro
+      - ${HTTP_TLS_KEY}:/etc/nginx/ssl/certificate.key:ro
     restart: on-failure
     depends_on:
       - wid-server

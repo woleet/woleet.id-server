@@ -1,17 +1,97 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { ServerConfigService } from '@services/server-config';
+import { KeyService } from '@services/key';
+import { UserService } from '@services/user';
+import { Observable } from 'rxjs';
+import * as log from 'loglevel';
 
 @Component({
   selector: 'app-server-settings',
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class ServerSettingsComponent {
+export class ServerSettingsComponent implements OnInit, OnDestroy {
 
-  constructor(private router: Router) { }
+  editMode = false;
+  formLocked$: Observable<boolean>;
+  config$: Observable<ApiServerConfig>;
+  defaultKey$: Observable<ApiKeyObject>;
+  defaultKeyOwner$: Observable<ApiUserObject>;
+
+  userList$: Promise<ApiUserObject[]>;
+
+  keyList$: Promise<ApiKeyObject[]>;
+  keyListLoading = false;
+
+  newKeyId = null;
+
+  private onDestroy: EventEmitter<void>;
+
+  constructor(
+    private configService: ServerConfigService,
+    private userService: UserService,
+    private keyService: KeyService,
+  ) {
+    this.onDestroy = new EventEmitter();
+  }
+
+  async ngOnInit() {
+    const config$ = this.config$ = this.configService.getConfig();
+
+    this.defaultKey$ = this.configService.getDefaultKey();
+
+    this.defaultKeyOwner$ = this.configService.getDefaultKeyOwner();
+
+    this.formLocked$ = this.configService.isDoingSomething();
+
+    const subscription = config$.subscribe((config) => {
+      log.debug('CONFIG', config);
+
+      if (!config) {
+        return;
+      }
+
+      this.newKeyId = null;
+      this.editMode = false;
+    });
+
+    this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+  }
+
+  ngOnDestroy() {
+    log.debug('unsubscribing');
+    this.onDestroy.emit();
+  }
 
   async submit() {
-    this.router.navigate(['main']);
+    log.debug('Set new default server key to', this.newKeyId);
+    this.configService.update({ defaultKeyId: this.newKeyId });
+  }
+
+  loadUserList() {
+    if (!this.userList$) {
+      this.userList$ = this.userService.getAll();
+    }
+  }
+
+  loadUserKeys(evt) {
+    log.debug('Selected user', evt.value);
+    this.keyListLoading = true;
+    this.keyList$ = this.keyService.getByUser(evt.value)
+      .then((res) => {
+        log.debug('Loaded key', res);
+        this.keyListLoading = false;
+        return res;
+      });
+  }
+
+  async updateFallbackOnDefaultKeyOption(fallbackOnDefaultKey) {
+    log.debug('Set fallback option to', fallbackOnDefaultKey);
+    this.configService.update({ fallbackOnDefaultKey });
+  }
+
+  cancelEdit() {
+    this.editMode = false;
   }
 
 }

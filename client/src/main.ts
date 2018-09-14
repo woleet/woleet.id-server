@@ -3,11 +3,19 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/module';
 import { environment } from './environments/environment';
+import { BootService } from '@services/boot';
 import * as log from 'loglevel';
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => log.error(err));
+function init() {
+  platformBrowserDynamic().bootstrapModule(AppModule)
+    .then(() => (<any>window).appBootstrap && (<any>window).appBootstrap())
+    .catch(err => log.error(err));
+}
+
+init();
+
+const boot = BootService.getBootControl().subscribe(() => init());

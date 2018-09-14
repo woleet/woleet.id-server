@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { UserService } from '@services/user';
+import { confirm } from '../../util';
 import cc from '@components/cc';
 
 @Component({
@@ -12,7 +13,7 @@ export class UserCardComponent {
   editMode = false;
 
   @Input()
-  modes: ('edit' | 'detail' | 'delete')[];
+  modes: ('block' | 'edit' | 'detail' | 'delete')[];
 
   @Input()
   user: ApiUserObject;
@@ -30,11 +31,17 @@ export class UserCardComponent {
   }
 
   async deleteUser() {
+    if (!confirm(`Delete user ${this.user.identity.commonName} ?`)) {
+      return;
+    }
     const del = await this.userSerive.delete(this.user.id);
     this.delete.emit(del);
   }
 
   async blockUser() {
+    if (!confirm(`Block user ${this.user.identity.commonName} ?`)) {
+      return;
+    }
     const up = await this.userSerive.update(this.user.id, { status: 'blocked' });
     this.user = up;
     this.update.emit(up);

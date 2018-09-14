@@ -23,7 +23,7 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
   const master = HDPrivateKey.fromMnemonic(mnemonic);
   const xkey = master.derivePath('m/44\'/0\'/0\'');
 
-  const ring = KeyRing.fromPrivate(xkey.privateKey, true);
+  const ring = KeyRing.fromPrivate(xkey.privateKey, false);
 
   const publicKey = ring.getAddress('base58');
   const privateKey = ring.getPrivateKey().toString('hex');
@@ -60,6 +60,16 @@ export async function getKeyById(id: string): Promise<InternalKeyObject> {
   }
 
   return key.toJSON();
+}
+
+export async function getOwner(id): Promise<InternalUserObject> {
+  const key = await Key.getByIdAndPullUser(id);
+
+  if (!key) {
+    throw new NotFoundKeyError();
+  }
+
+  return key.get('user').toJSON();
 }
 
 export async function exportKey(id: string): Promise<string> {

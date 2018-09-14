@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { serverURL } from './config';
+import { BootService } from '@services/boot';
 
 
 @Injectable({ providedIn: 'root' })
@@ -9,7 +10,11 @@ export class AuthService {
 
   private user: ApiUserDTOObject = null;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private bootService: BootService
+  ) {
 
     const user = localStorage.getItem('user');
 
@@ -24,9 +29,11 @@ export class AuthService {
     this.user = null;
     localStorage.removeItem('user');
     if (request) {
-      await this.http.get(`${serverURL}/logout/`).toPromise().catch(() => null);
+      this.http.get(`${serverURL}/logout/`).toPromise().catch(() => null);
     }
-    await this.router.navigate(['login']);
+
+    this.router.navigate(['login']);
+    this.bootService.restart();
   }
 
   async login(user: BasicAuthObject): Promise<ApiUserDTOObject | null> {

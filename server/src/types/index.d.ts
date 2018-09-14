@@ -3,7 +3,8 @@
 import { Instance } from "sequelize";
 import { SessionStore } from "../controllers/store.session";
 import '../../../types/api.api-token';
-import '../../../types/api.event';
+import '../../../types/api.server-config';
+import '../../../types/api.server-event';
 import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api';
@@ -158,6 +159,24 @@ declare global {
     associatedUserId?: string;
     associatedKeyId?: string;
     occurredAt?: Date;
+  }
+
+  /* Config */
+
+  interface InternalServerConfigObject extends ServerConfig, CommonInternalProperties {
+    defaultKeyId: string;
+    defaultKey?: InternalKeyObject;
+    fallbackOnDefaultKey: boolean;
+  }
+
+  interface ServerConfigUpdate extends ServerConfig {
+    defaultKeyId?: string;
+    fallbackOnDefaultKey?: boolean;
+  }
+
+  interface ServerConfigCreate extends ServerConfig {
+    defaultKeyId: string;
+    fallbackOnDefaultKey?: boolean;
   }
 
 }

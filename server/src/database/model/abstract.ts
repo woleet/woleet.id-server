@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { sequelize } from '../sequelize';
-import { Instance } from 'sequelize';
+import { Instance, FindOptions } from 'sequelize';
 
 export abstract class AbstractInstanceAccess<TInstance, TPost> {
   client: Sequelize.Sequelize;
@@ -47,11 +47,11 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
   }
 
 
-  async getAll(opt: ListOptions): Promise<Instance<TInstance>[]> {
+  async getAll(opt: FindOptions<TInstance> & { full: boolean }): Promise<Instance<TInstance>[]> {
     return this.model.findAll({
       offset: opt.offset,
       limit: opt.limit,
-      order: [['createdAt', 'DESC']],
+      order: opt.order || [['createdAt', 'DESC']],
       paranoid: !opt.full
     });
   }
