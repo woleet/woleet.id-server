@@ -4,9 +4,15 @@ import { Injectable } from '@angular/core';
 export class PageDataService {
 
   title = '';
+  _hideNav = false;
 
-  getTitle(): string { return this.title; }
+  getTitle() { return this.title; }
 
-  setTitle(title: string) { this.title = title; }
+  hideNav() { return this._hideNav; }
+
+  setData(data) {
+    this.title = data.title;
+    this._hideNav = data.hideNav || false;
+  }
 
 }

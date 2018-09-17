@@ -34,6 +34,7 @@ import { SetupPageComponent } from '@pages/setup';
 import { APITokensPageComponent } from '@pages/api-tokens';
 import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
+import { ErrorPageComponent } from '@pages/error';
 import { SettingsPageComponent } from '@pages/settings';
 import { UserCreatePageComponent } from '@pages/user.create';
 import { UserEditPageComponent } from '@pages/user.edit';
@@ -41,7 +42,7 @@ import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 
 // Services
-import { AdminGuardService, UserGuardService, AnonymousGuardService } from '@guards/auth';
+import { AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService } from '@guards/auth';
 
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
@@ -51,6 +52,7 @@ import { PageDataService } from '@services/page-data';
 import { ServerConfigService } from '@services/server-config';
 
 import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
+import { NetworkErrorInterceptorService } from '@interceptors/network-error';
 import { UnauthorizedInterceptorService } from '@interceptors/unauthorized';
 import { ForbiddenInterceptorService } from '@interceptors/forbidden';
 
@@ -82,7 +84,8 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     APITokenCreateCardComponent,
     KeyCreateCardComponent,
     StopPropagationDirective,
-    StopRipplePropagationDirective
+    StopRipplePropagationDirective,
+    ErrorPageComponent
   ],
   imports: [
     // angular
@@ -119,10 +122,10 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     AppRoutingModule
   ],
   providers: [
-    AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
-    KeyService, UserService, InfoService, ConfigService, APITokenService, PageDataService,
-    ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
-    AllowCredentialsInterceptorService
+    AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService,
+    NeedConfigGuardService, KeyService, UserService, InfoService, ConfigService, APITokenService,
+    PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
+    NetworkErrorInterceptorService, AllowCredentialsInterceptorService
   ],
   bootstrap: [AppComponent]
 })

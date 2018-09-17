@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { AuthService } from '@services/auth';
 import { mainRoute } from '@app/config';
+import { ErrorService } from '@services/error';
 
-let i = 100;
+let i = 1000;
 
 @Injectable()
 export class UserGuardService implements CanActivate {
-  constructor(public auth: AuthService, public router: Router) { }
+  constructor(private auth: AuthService, private router: Router) { }
   canActivate(): boolean {
     if (this.auth.isAuthenticated()) {
       return true;
@@ -24,7 +25,7 @@ export class UserGuardService implements CanActivate {
 
 @Injectable()
 export class AdminGuardService implements CanActivate {
-  constructor(public auth: AuthService, public router: Router) { }
+  constructor(private auth: AuthService, private router: Router) { }
   canActivate(): boolean {
     if (this.auth.isAuthenticated() && this.auth.isAdmin()) {
       return true;
@@ -39,10 +40,25 @@ export class AdminGuardService implements CanActivate {
   }
 }
 
+/**
+ * Return true if has error
+ */
+@Injectable()
+export class ErrorGuardService implements CanActivate {
+  constructor(private errorService: ErrorService, private router: Router) { }
+  canActivate(): boolean {
+    if (this.errorService.hasError()) {
+      return true;
+    }
+
+    this.router.navigate([mainRoute]);
+    return false;
+  }
+}
 
 @Injectable()
 export class AnonymousGuardService implements CanActivate {
-  constructor(public auth: AuthService, public router: Router) { }
+  constructor(private auth: AuthService, private router: Router) { }
   canActivate(): boolean {
     if (!this.auth.isAuthenticated()) {
       return true;

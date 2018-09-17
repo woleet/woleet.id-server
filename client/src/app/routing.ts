@@ -5,6 +5,7 @@ import { NeedConfigGuardService as NeedConfig } from '@guards/config';
 import { UserGuardService as IsUser } from '@guards/auth';
 import { AdminGuardService as IsAdmin } from '@guards/auth';
 import { AnonymousGuardService as IsAnonymous } from '@guards/auth';
+import { ErrorGuardService as HasError } from '@guards/auth';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -16,9 +17,13 @@ import { UserListPageComponent } from '@pages/user.list';
 import { UserCreatePageComponent } from '@pages/user.create';
 import { UserEditPageComponent } from '@pages/user.edit';
 import { UserDetailPageComponent } from '@pages/user.detail';
+import { ErrorPageComponent } from '@components/pages/error';
+
+
 
 const routes: Routes = [
-  { path: 'login', data: { title: 'Login' }, component: LoginPageComponent, canActivate: [IsAnonymous] },
+  { path: 'error', data: { title: 'Error', hideNav: true }, component: ErrorPageComponent, canActivate: [HasError] },
+  { path: 'login', data: { title: 'Login', hideNav: true }, component: LoginPageComponent, canActivate: [IsAnonymous] },
   { path: 'setup', data: { title: 'Setup' }, component: SetupPageComponent, canActivate: [NeedConfig] },
   { path: 'user', data: { title: 'My profile' }, component: UserPageComponent, canActivate: [IsUser] },
   { path: 'user/create', data: { title: 'Create a user' }, component: UserCreatePageComponent, canActivate: [IsAdmin] },

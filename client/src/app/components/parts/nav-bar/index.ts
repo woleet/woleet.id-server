@@ -13,7 +13,7 @@ export class NavBarComponent {
 
   production = false;
 
-  constructor(private router: Router, private auth: AuthService, private pageTitle: PageDataService) {
+  constructor(private router: Router, private auth: AuthService, private pageDataService: PageDataService) {
     this.production = environment.production;
   }
 
@@ -21,12 +21,12 @@ export class NavBarComponent {
     this.auth.logout();
   }
 
-  url() {
-    return this.router.url;
+  hide() {
+    return this.pageDataService.hideNav();
   }
 
   page() {
-    return this.pageTitle.getTitle();
+    return this.pageDataService.getTitle();
   }
 
   commonName() {

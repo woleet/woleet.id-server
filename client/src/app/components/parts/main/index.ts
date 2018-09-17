@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
       filter((route) => route.outlet === 'primary'),
       mergeMap((route) => route.data),
     ).subscribe((event) => {
-      this.pageDataService.setTitle(event['title']);
+      this.pageDataService.setData(event);
       this.titleService.setTitle(event['title']);
     });
   }
