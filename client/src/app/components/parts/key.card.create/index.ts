@@ -10,6 +10,8 @@ import { UserService } from '@services/user';
 })
 export class KeyCreateCardComponent extends ErrorMessageProvider {
 
+  formLocked = false;
+
   @Input()
   userId: string;
 
@@ -28,6 +30,7 @@ export class KeyCreateCardComponent extends ErrorMessageProvider {
   }
 
   async createKey() {
+    this.formLocked = true;
     const name = this.keyName.value;
 
     const newKey = await this.keyService.create(this.userId, { name });
@@ -36,6 +39,7 @@ export class KeyCreateCardComponent extends ErrorMessageProvider {
       await this.userService.update(this.userId, { defaultKeyId: newKey.id });
     }
 
+    this.formLocked = false;
     this.keyName.reset();
     this.reset.emit();
     this.create.emit(newKey);

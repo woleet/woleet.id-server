@@ -11,7 +11,7 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="createKey()" [disabled]="keyName.invalid">CREATE</button>
-    <button mat-button (click)="cancelKey()">CANCEL</button>
+    <button mat-raised-button color="primary" (click)="createKey()" [disabled]="formLocked || keyName.invalid">CREATE</button>
+    <button mat-button [disabled]="formLocked" (click)="cancelKey()">CANCEL</button>
   </mat-card-actions>
 </mat-card>

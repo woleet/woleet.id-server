@@ -10,6 +10,7 @@ import cc from '@components/cc';
 })
 export class UserCardComponent {
 
+  formLocked = false;
   editMode = false;
 
   @Input()
@@ -34,7 +35,9 @@ export class UserCardComponent {
     if (!confirm(`Delete user ${this.user.identity.commonName} ?`)) {
       return;
     }
+    this.formLocked = true;
     const del = await this.userSerive.delete(this.user.id);
+    this.formLocked = false;
     this.delete.emit(del);
   }
 
@@ -42,13 +45,17 @@ export class UserCardComponent {
     if (!confirm(`Block user ${this.user.identity.commonName} ?`)) {
       return;
     }
+    this.formLocked = true;
     const up = await this.userSerive.update(this.user.id, { status: 'blocked' });
+    this.formLocked = false;
     this.user = up;
     this.update.emit(up);
   }
 
   async unblockUser() {
+    this.formLocked = true;
     const up = await this.userSerive.update(this.user.id, { status: 'active' });
+    this.formLocked = false;
     this.user = up;
     this.update.emit(up);
   }

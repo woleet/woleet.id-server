@@ -13,6 +13,7 @@ import { confirm } from '../../util';
 export class KeyCardComponent extends ErrorMessageProvider {
 
   editMode = false;
+  formLocked = false;
 
   keyName: FormControl;
   setAsDefault = false;
@@ -55,12 +56,15 @@ export class KeyCardComponent extends ErrorMessageProvider {
     if (!confirm(`Delete key ${this.key.name} ?`)) {
       return;
     }
+    this.formLocked = true;
     const del = await this.keyService.delete(this.key.id);
     this.key = del;
+    this.formLocked = false;
     this.delete.emit(del);
   }
 
   async editKey() {
+    this.formLocked = true;
     const name = this.keyName.value;
 
     if (name !== this.key.name) {
@@ -74,6 +78,7 @@ export class KeyCardComponent extends ErrorMessageProvider {
       this.updateUser.emit();
     }
 
+    this.formLocked = false;
     this.setEditMode(false);
   }
 
@@ -81,14 +86,18 @@ export class KeyCardComponent extends ErrorMessageProvider {
     if (!confirm(`Block key ${this.key.name} ?`)) {
       return;
     }
+    this.formLocked = true;
     const up = await this.keyService.update(this.key.id, { status: 'blocked' });
     this.key = up;
+    this.formLocked = false;
     this.update.emit();
   }
 
   async unblockKey() {
+    this.formLocked = true;
     const up = await this.keyService.update(this.key.id, { status: 'active' });
     this.key = up;
+    this.formLocked = false;
     this.update.emit();
   }
 

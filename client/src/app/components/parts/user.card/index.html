@@ -1,5 +1,5 @@
 <div>
-  <mat-card mat-ripple fxLayout="row" fxLayoutAlign="space-between start" [ngClass]="{'clickable': (!!user.id)}" [routerLink]="['/user/', user.id]"
+  <mat-card matRipple="!formLocked" fxLayout="row" fxLayoutAlign="space-between start" [ngClass]="{'clickable': (!!user.id && !formLocked), 'locked': formLocked}" [routerLink]="formLocked ? null : ['/user/', user.id]"
     *ngIf="!editMode">
     <div fxLayout="column" *ngIf="user.identity as i">
       <div fxLayout="row">
@@ -28,17 +28,17 @@
     </div>
     <div fxLayout="column" *ngIf="modes" no-prop no-ripple-prop>
       <div>
-        <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')" (click)="setEditMode(true)">
+        <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')" [disabled]="formLocked" (click)="setEditMode(true)">
           <mat-icon matTooltip="Edit user" aria-label="Edit user button">edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="modes.includes('block') && user.status !== 'blocked'" (click)="blockUser()">
+        <button mat-icon-button color="warn" *ngIf="modes.includes('block') && user.status !== 'blocked'" [disabled]="formLocked" (click)="blockUser()">
           <mat-icon matTooltip="Block user" aria-label="Block user button">pause_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="primary" *ngIf="modes.includes('block') && user.status === 'blocked'" (click)="unblockUser()">
+        <button mat-icon-button color="primary" *ngIf="modes.includes('block') && user.status === 'blocked'" [disabled]="formLocked" (click)="unblockUser()">
           <mat-icon matTooltip="Unblock user" aria-label="Unblock user button">play_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('delete')" (click)="deleteUser()">
-          <mat-icon color="warn" matTooltip="Delete user" aria-label="Delete user button">delete</mat-icon>
+        <button mat-icon-button color="warn" *ngIf="modes.includes('delete')" [disabled]="formLocked" (click)="deleteUser()">
+          <mat-icon matTooltip="Delete user" aria-label="Delete user button">delete</mat-icon>
         </button>
       </div>
     </div>

@@ -93,6 +93,8 @@ function uppercaseOnlyValidator(control: AbstractControl): ValidationErrors | nu
 })
 export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
+  formLocked = false;
+
   @Input()
   mode: 'create' | 'edit';
 
@@ -176,6 +178,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
   async submit() {
 
+    this.formLocked = true;
     const user = this.getFormObject();
 
     this.helper = null;
@@ -196,12 +199,13 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
         .then(() => this.router.navigate(['/users']));
     }
 
-    promise
+    await promise
       .catch((err: HttpErrorResponse) => {
         console.error('Caught', err);
         this.helper = err.error.message;
       });
 
+    this.formLocked = false;
   }
 
   triggerCancel() {

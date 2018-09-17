@@ -97,10 +97,10 @@
     <br>
   </div>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="submit()" [disabled]="f.invalid || !isValid()">{{ mode.toUpperCase()
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="formLocked || f.invalid || !isValid()">{{ mode.toUpperCase()
       }}
     </button>
-    <button mat-button *ngIf="cancellable" (click)="triggerCancel()">CANCEL</button>
+    <button mat-button *ngIf="cancellable" [disabled]="formLocked" (click)="triggerCancel()">CANCEL</button>
   </mat-card-actions>
   <ng-template #loading>
     <mat-card>Loading...</mat-card>

@@ -18,16 +18,16 @@
     </div>
     <div fxLayout="column">
       <div>
-        <button mat-icon-button color="primary" *ngIf="modes.includes('edit')" (click)="setEditMode(true)">
+        <button mat-icon-button color="primary" *ngIf="modes.includes('edit')" [disabled]="formLocked" (click)="setEditMode(true)">
           <mat-icon matTooltip="Edit key" aria-label="Edit key button">edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="modes.includes('delete')" (click)="deleteKey()">
+        <button mat-icon-button color="warn" *ngIf="modes.includes('delete')" [disabled]="formLocked" (click)="deleteKey()">
           <mat-icon matTooltip="Delete key" aria-label="Delete key button">delete</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="modes.includes('block') && key.status !== 'blocked'" (click)="blockKey()">
+        <button mat-icon-button color="warn" *ngIf="modes.includes('block') && key.status !== 'blocked'" [disabled]="formLocked" (click)="blockKey()">
           <mat-icon matTooltip="Block key" aria-label="Block key button">pause_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="primary" *ngIf="modes.includes('block') && key.status === 'blocked'" (click)="unblockKey()">
+        <button mat-icon-button color="primary" *ngIf="modes.includes('block') && key.status === 'blocked'" [disabled]="formLocked" (click)="unblockKey()">
           <mat-icon matTooltip="Unblock key" aria-label="Unblock key button">play_circle_outline</mat-icon>
         </button>
       </div>
@@ -48,8 +48,8 @@
     </div>
   </mat-card-content>
   <mat-card-actions *ngIf="editMode">
-    <button mat-raised-button color="primary" (click)="editKey()" [disabled]="keyName.invalid">EDIT</button>
-    <button mat-button (click)="setEditMode(false)">CANCEL</button>
+    <button mat-raised-button color="primary" (click)="editKey()" [disabled]="formLocked || keyName.invalid">EDIT</button>
+    <button mat-button [disabled]="formLocked" (click)="setEditMode(false)">CANCEL</button>
   </mat-card-actions>
 
 </mat-card>
