@@ -21,7 +21,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { AppComponent } from '@parts/main';
 import { NavBarComponent } from '@parts/nav-bar';
 import { UserFormComponent } from '@parts/user.form';
-import { ServerSettingsComponent } from '@parts/server.settings';
+import { ConfigFallbackKeyComponent } from '@parts/config.fallback-key';
 import { UserCardComponent } from '@parts/user.card';
 import { KeyCardComponent } from '@parts/key.card';
 import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
@@ -45,7 +45,7 @@ import { AdminGuardService, UserGuardService, AnonymousGuardService } from '@gua
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
-import { ServerConfigService } from '@services/server-config';
+import { ConfigFallbackKeyService } from '@services/config.fallback-key';
 import { APITokenService } from '@services/api-token';
 import { PageDataService } from '@services/page-data';
 
@@ -73,7 +73,7 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     UserEditPageComponent,
     UserDetailPageComponent,
     AboutPageComponent,
-    ServerSettingsComponent,
+    ConfigFallbackKeyComponent,
     UserCardComponent,
     KeyCardComponent,
     APITokenCardComponent,
@@ -119,7 +119,7 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
   providers: [
     AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
     KeyService, UserService, InfoService, ConfigService, APITokenService, PageDataService,
-    ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
+    ConfigFallbackKeyService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     AllowCredentialsInterceptorService
   ],
   bootstrap: [AppComponent]

@@ -1,12 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { serverURL } from '@services/config';
+import { KeyService } from '@services/key';
 import { Observable, BehaviorSubject } from 'rxjs';
 import * as log from 'loglevel';
-import { KeyService } from '@services/key';
 
 @Injectable()
-export class ServerConfigService {
+export class ConfigFallbackKeyService {
 
   private _lock = 0;
   private isDoingSomething$: BehaviorSubject<boolean>;

@@ -12,7 +12,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts", "../client/src/app/components/cc.ts", "../client/src/app/services/server-config.ts", "../types/api.server-event.d.ts"
+    "test/**/*.ts"
   ],
   "exclude": [
     "node_modules"

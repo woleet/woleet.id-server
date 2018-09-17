@@ -1,16 +1,16 @@
 import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
-import { ServerConfigService } from '@services/server-config';
+import { ConfigFallbackKeyService as ConfigService } from '@services/config.fallback-key';
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { Observable } from 'rxjs';
 import * as log from 'loglevel';
 
 @Component({
-  selector: 'app-server-settings',
+  selector: 'config-fallback-key',
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class ServerSettingsComponent implements OnInit, OnDestroy {
+export class ConfigFallbackKeyComponent implements OnInit, OnDestroy {
 
   editMode = false;
   formLocked$: Observable<boolean>;
@@ -28,7 +28,7 @@ export class ServerSettingsComponent implements OnInit, OnDestroy {
   private onDestroy: EventEmitter<void>;
 
   constructor(
-    private configService: ServerConfigService,
+    private configService: ConfigService,
     private userService: UserService,
     private keyService: KeyService,
   ) {
