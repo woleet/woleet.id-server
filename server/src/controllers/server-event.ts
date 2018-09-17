@@ -76,6 +76,6 @@ export async function getServerEventListByType(type: ServerEventTypeEnum, opts: 
 }
 
 export async function getAllServerEvents(opts: ListOptions): Promise<InternalServerEventObject[]> {
-  const events = await ServerEvent.getAll(Object.assign({ order: [['createdAt', 'DESC']] }, opts));
+  const events = await ServerEvent.getAll(Object.assign({ order: [['occurredAt', 'DESC']] }, opts));
   return events.map((evt) => evt.toJSON());
 }
