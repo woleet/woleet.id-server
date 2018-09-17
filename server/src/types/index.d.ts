@@ -163,18 +163,21 @@ declare global {
 
   /* Config */
 
-  interface InternalServerConfigObject extends ServerConfig, CommonInternalProperties {
+  interface InternalServerConfigObject extends ServerConfig {
+    identityUrl: string;
     defaultKeyId: string;
     defaultKey?: InternalKeyObject;
     fallbackOnDefaultKey: boolean;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
+    identityUrl?: string;
     defaultKeyId?: string;
     fallbackOnDefaultKey?: boolean;
   }
 
   interface ServerConfigCreate extends ServerConfig {
+    identityUrl: string;
     defaultKeyId: string;
     fallbackOnDefaultKey?: boolean;
   }

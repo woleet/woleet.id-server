@@ -1,4 +1,5 @@
-import { FormControl } from '@angular/forms';
+import { FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
+import { parse } from 'url';
 import * as traverse from 'traverse';
 
 export class TrackById {
@@ -7,6 +8,40 @@ export class TrackById {
     return item.id;
   }
 
+}
+
+export function urlValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+
+  if (!str) {
+    return;
+  }
+
+  if (!/^https?.*/.test(str)) {
+    return ({ url: { message: 'invalid or missing protocol (http or https)' } });
+  }
+
+  if (!/^https?\:\/\/.*/.test(str)) {
+    return ({ url: { message: 'protocol must be followed by "://"' } });
+  }
+
+  return null;
+}
+
+export function endValidator(expectedEnd: string) {
+  return function (control: AbstractControl): ValidationErrors | null {
+    const str: string = control.value;
+
+    if (!str) {
+      return;
+    }
+
+    if (!str.endsWith(expectedEnd)) {
+      return ({ end: { expectedEnd } });
+    }
+
+    return null;
+  };
 }
 
 export class ErrorMessageProvider {
@@ -32,7 +67,11 @@ export class ErrorMessageProvider {
       case 'safeWord':
         return 'Must only contain letters, numbers, hyphens and underscores';
       case 'password':
-        return `Must contain at least ${error.missing}.`;
+        return `Must contain at least ${error.missing}`;
+      case 'url':
+        return `Invalid url: ${error.message}`;
+      case 'end':
+        return `Expect string to end with "${error.expectedEnd}"`;
       case 'ascii':
         return `Must contain only ascii characters`;
       case 'startsWithALetter':

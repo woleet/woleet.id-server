@@ -5,9 +5,7 @@ import { validate } from '../schemas';
 import { apiTokenAuth } from '../authentication';
 import { store as event } from '../../controllers/server-event';
 
-import { server } from '../../config';
-
-const serverBase = server.protocol + '://' + server.host;
+import { getServerConfig } from '../../controllers/server-config';
 
 const vuuid = validate.raw('uuid');
 const vaddr = validate.raw('address');
@@ -40,7 +38,7 @@ const signMiddleware: Router.IMiddleware[] = [
 
     const { signature, pubKey, userId, keyId, signedHash } = await sign(query);
 
-    const identityURL = `${serverBase}/identity`;
+    const identityURL = getServerConfig().identityUrl;
 
     event.register({
       type: 'signature',

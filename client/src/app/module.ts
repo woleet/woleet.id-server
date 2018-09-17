@@ -21,9 +21,10 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { AppComponent } from '@parts/main';
 import { NavBarComponent } from '@parts/nav-bar';
 import { UserFormComponent } from '@parts/user.form';
-import { ConfigFallbackKeyComponent } from '@parts/config.fallback-key';
 import { UserCardComponent } from '@parts/user.card';
 import { KeyCardComponent } from '@parts/key.card';
+import { ConfigFallbackKeyComponent } from '@parts/config.fallback-key';
+import { ConfigIdentityUrlComponent } from '@parts/config.identity-url';
 import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
 import { APITokenCardComponent } from '@parts/api-token.card';
 import { KeyCreateCardComponent } from '@parts/key.card.create';
@@ -45,9 +46,9 @@ import { AdminGuardService, UserGuardService, AnonymousGuardService } from '@gua
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
-import { ConfigFallbackKeyService } from '@services/config.fallback-key';
 import { APITokenService } from '@services/api-token';
 import { PageDataService } from '@services/page-data';
+import { ServerConfigService } from '@services/server-config';
 
 import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
 import { UnauthorizedInterceptorService } from '@interceptors/unauthorized';
@@ -74,6 +75,7 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     UserDetailPageComponent,
     AboutPageComponent,
     ConfigFallbackKeyComponent,
+    ConfigIdentityUrlComponent,
     UserCardComponent,
     KeyCardComponent,
     APITokenCardComponent,
@@ -119,7 +121,7 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
   providers: [
     AdminGuardService, UserGuardService, AnonymousGuardService, NeedConfigGuardService,
     KeyService, UserService, InfoService, ConfigService, APITokenService, PageDataService,
-    ConfigFallbackKeyService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
+    ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     AllowCredentialsInterceptorService
   ],
   bootstrap: [AppComponent]

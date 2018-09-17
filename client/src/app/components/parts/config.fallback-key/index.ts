@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
-import { ConfigFallbackKeyService as ConfigService } from '@services/config.fallback-key';
+import { ServerConfigService as ConfigService } from '@services/server-config';
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { Observable } from 'rxjs';
