@@ -5,5 +5,12 @@
 <br>
 <br>
 <mat-card class="error-card mw-500">
-  Error :(
+  <mat-card-content>
+    <mat-card-title>{{ message || 'Error :(' }}</mat-card-title>
+    <div *ngIf="tip">
+      <mat-divider></mat-divider>
+      <br>
+      <span>{{ tip }}</span>
+    </div>
+  </mat-card-content>
 </mat-card>

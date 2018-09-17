@@ -4,8 +4,9 @@ import { Injectable } from '@angular/core';
 export class ErrorService {
   private error: any;
 
-  setError(error) {
+  setError(type: string, error: Error) {
     this.error = error;
+    this.error.type = type;
   }
 
   getError(): any {
