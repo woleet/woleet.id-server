@@ -1,14 +1,15 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { serverURL } from '@services/config';
+import { KeyService } from '@services/key';
 import { Observable, BehaviorSubject } from 'rxjs';
 import * as log from 'loglevel';
-import { KeyService } from '@services/key';
 
 @Injectable()
 export class ServerConfigService {
 
   private _lock = 0;
+  private _lastChecked = 0;
   private isDoingSomething$: BehaviorSubject<boolean>;
 
   private config$: BehaviorSubject<ApiServerConfig> = null;
@@ -49,15 +50,17 @@ export class ServerConfigService {
 
     log.debug('getConfig');
 
-    this.incrLock();
-    this.http.get<ApiServerConfig>(`${serverURL}/server-config`)
-      .subscribe((up) => {
-        log.debug('initialised', up);
-        this.decrLock();
-        this.config$.next(up);
-      });
-
-    log.debug('getConfig is set');
+    if (this._lastChecked < (+new Date - 3 * 1000)) {
+      this.incrLock();
+      this._lastChecked = +new Date;
+      this.http.get<ApiServerConfig>(`${serverURL}/server-config`)
+        .subscribe((up) => {
+          log.debug('initialised', up);
+          this.decrLock();
+          this.config$.next(up);
+        });
+      log.debug('getConfig is set');
+    }
 
     return this.config$.asObservable();
   }
