@@ -18,6 +18,13 @@ export class ErrorPageComponent implements OnInit {
     const error = this.errorService.getError();
     const type = error.type || 'unknown';
     switch (type) {
+      case 'no-server':
+        this.message = 'Cannot reach the server';
+        this.tip = 'Try to reload this page later';
+        break;
+      case 'server-error':
+        this.message = `The server encountred an error (code=${error.code})`;
+        break;
       case 'network':
         this.message = 'Network error :(';
         this.tip = 'Please check your internet connection';
