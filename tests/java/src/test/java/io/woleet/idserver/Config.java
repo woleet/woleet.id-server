@@ -24,10 +24,10 @@ public class Config {
     }
 
     // Current test mode
-    private static final TestMode testMode = TestMode.LOCAL;
+    private static final TestMode testMode = TestMode.DEV;
 
     // True if tests are to be debugged
-    private static final boolean debug = true;
+    private static final boolean debug = false;
 
     // Initialize data needed to test users
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
@@ -95,7 +95,7 @@ public class Config {
             case LOCAL:
                 return "http://localhost:3000";
             case DEV:
-                return "http://dev2.woleet.io:4220/api";
+                return "https://dev2.woleet.io:4220/api";
             case HA:
                 assert false;
             case PREPROD:

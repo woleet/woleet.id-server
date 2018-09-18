@@ -7,13 +7,6 @@ info:
     email: contact@woleet.com
   license:
     name: MIT
-tags:
-  - name: Authentication
-  - name: API Token
-  - name: Key
-  - name: User
-  - name: Identity
-  - name: Signature
 security:
   - CookieAuth: []
 paths:
@@ -725,7 +718,7 @@ paths:
   /server-config:
     get:
       tags:
-        - Server Configuration
+        - Server Config
       summary: Get the current server configuration.
       operationId: getServerConfig
       responses:
@@ -734,7 +727,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ServerConfigGet'
+                $ref: '#/components/responses/ServerConfig'
         '400':
           description: Invalid API token identifier.
           content:
@@ -755,18 +748,18 @@ paths:
                 $ref: '#/components/responses/APIError'
     put:
       tags:
-        - Server Configuration
+        - Server Config
       summary: Update the server's configuration.
       operationId: updateServerConfig
       requestBody:
-        $ref: '#/components/requestBodies/ServerConfigPut'
+        $ref: '#/components/requestBodies/ServerConfig'
       responses:
         '200':
           description: Successful operation.
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ServerConfigGet'
+                $ref: '#/components/responses/ServerConfig'
         '400':
           description: Invalid object supplied / Invalid API token identifier.
           content:
@@ -892,14 +885,6 @@ components:
       default: "active"
       description: User status (a `blocked` user cannot sign).
       example: "active"
-    APITokenStatusEnum:
-      type: string
-      enum:
-      - active
-      - blocked
-      default: "active"
-      description: API token status (a `blocked` API token cannot be used).
-      example: "active"
     KeyStatusEnum:
       type: string
       enum:
@@ -970,12 +955,14 @@ components:
     UserInfo:
       allOf:
         - $ref: '#/components/schemas/UserBase'
-    KeyTypeEnum:
+    APITokenStatusEnum:
       type: string
       enum:
-       - bip39
-      description: Key type.
-      example: "bip39"
+      - active
+      - blocked
+      default: "active"
+      description: API token status (a `blocked` API token cannot be used).
+      example: "active"
     APITokenBase:
       type: object
       properties:
@@ -985,25 +972,6 @@ components:
           description: Key name.
         status:
           $ref: '#/components/schemas/APITokenStatusEnum'
-    ServerConfig:
-      type: object
-      properties:
-        identityUrl:
-          type: string
-          example: "https://identity.mydomain.com"
-          description: |
-            The identity url that the server must return with a signature.
-            Note that the server always expects to be called on the "/identity" endpoint,
-            if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain)
-            you must not forget it in your reverse proxy configuration.
-        defaultKeyId:
-          type: string
-          example: "7b8e5c49-18c6-4ef7-9dab-261a5e717b31"
-          description: The default key that the server should fallback on if none is specified to sign.
-        fallbackOnDefaultKey:
-          type: boolean
-          example: true
-          description: Enable
     APITokenGet:
       allOf:
         - $ref: '#/components/schemas/APITokenBase'
@@ -1028,64 +996,6 @@ components:
               $ref: '#/components/schemas/DeletedAt'
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
-    ServerEventTypeEnum:
-      type: string
-      enum:
-        - login
-        - signature
-        - config.edit
-        - key.create
-        - key.edit
-        - key.delete
-        - user.create
-        - user.edit
-        - user.delete
-        - token.create
-        - token.edit
-        - token.delete
-      description: Event type.
-      example: "user.edit"
-    ServerEventBase:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ServerEventTypeEnum'
-        occurredAt:
-          $ref: '#/components/schemas/OccurredAt'
-        authorizedUserId:
-          type: string
-          format: uuid
-          description: User at that triggered the event.
-          example: "2b5ced14-01c5-419d-a0ae-aa9622918ca6"
-        authorizedTokenId:
-          type: string
-          format: uuid
-          description:  Token used when the event was triggered.
-          example: "fd7cb389-91e6-41ba-a0a5-14a05bd2b5f7"
-        associatedTokenId:
-          type: string
-          format: uuid
-          description: API Token pointed by the event.
-          example: "e2611d40-166f-4d7e-9fc5-164972878646"
-        associatedUserId:
-          type: string
-          format: uuid
-          description: User pointed by the event.
-          example: "a84996d3-9a77-4e8c-947f-f00c4d64a167"
-        associatedKeyId:
-          type: string
-          format: uuid
-          description: Key pointed by the event.
-          example: "461816ca-5623-4417-a2d1-5ee960f0a7a9"
-    FullServerEvent:
-      allOf:
-        - $ref: '#/components/schemas/ServerEventBase'
-        - type: object
-          properties:
-            data:
-              type: object
-              description: Data associated with the event.
-              example: { "username": "foo", "identity" : {"countryName" : "FR"} }
     APITokenPost:
       allOf:
         - $ref: '#/components/schemas/APITokenBase'
@@ -1099,10 +1009,93 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/APITokenGet'
+    ServerConfig:
+      type: object
+      properties:
+        identityUrl:
+          type: string
+          example: "https://identity.mydomain.com/identity"
+          description: |
+            The identity URL that the server returns with a signature.
+            Note that the server always expects to be called on the "/identity" endpoint,
+            if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain)
+            you must not forget it in your reverse proxy configuration.
+        defaultKeyId:
+          type: string
+          example: "7b8e5c49-18c6-4ef7-9dab-261a5e717b31"
+          description: The default key to use when signing and no key is specified.
+        fallbackOnDefaultKey:
+          type: boolean
+          example: true
+          description: True is the server must fallback on the default key when signing and no key is specified
+    ServerEventTypeEnum:
+      type: string
+      enum:
+      - login
+      - signature
+      - config.edit
+      - key.create
+      - key.edit
+      - key.delete
+      - user.create
+      - user.edit
+      - user.delete
+      - token.create
+      - token.edit
+      - token.delete
+      description: Type of the event.
+      example: "user.edit"
+    ServerEventBase:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ServerEventTypeEnum'
+        occurredAt:
+          $ref: '#/components/schemas/OccurredAt'
+        authorizedUserId:
+          type: string
+          format: uuid
+          description: Identifier of the user that triggered the event.
+          example: "2b5ced14-01c5-419d-a0ae-aa9622918ca6"
+        authorizedTokenId:
+          type: string
+          format: uuid
+          description: Identifier of the API token used to authentify.
+          example: "fd7cb389-91e6-41ba-a0a5-14a05bd2b5f7"
+        associatedTokenId:
+          type: string
+          format: uuid
+          description: Identifier of the related API token.
+          example: "e2611d40-166f-4d7e-9fc5-164972878646"
+        associatedUserId:
+          type: string
+          format: uuid
+          description: Identifier of the related user.
+          example: "a84996d3-9a77-4e8c-947f-f00c4d64a167"
+        associatedKeyId:
+          type: string
+          format: uuid
+          description: Identifier of the related key.
+          example: "461816ca-5623-4417-a2d1-5ee960f0a7a9"
+    ServerEventGet:
+      allOf:
+      - $ref: '#/components/schemas/ServerEventBase'
+      - type: object
+        properties:
+          data:
+            type: object
+            description: Specific additional data associated with the event.
+            example: { "username": "foo", "identity" : {"countryName" : "FR"} }
     ServerEventArray:
       type: array
       items:
-        $ref: '#/components/schemas/FullServerEvent'
+        $ref: '#/components/schemas/ServerEventGet'
+    KeyTypeEnum:
+      type: string
+      enum:
+      - bip39
+      description: Key type.
+      example: "bip39"
     KeyBase:
       type: object
       properties:
@@ -1234,7 +1227,7 @@ components:
     ServerEventIdParameter:
       name: ServerEventId
       in: path
-      description: Identifier of the Server Event.
+      description: Identifier of the server event.
       required: true
       schema:
         type: string
@@ -1326,11 +1319,12 @@ components:
             $ref: '#/components/schemas/APITokenPut'
       description: Replacement API token object.
       required: true
-    ServerConfigPut:
+    ServerConfig:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ServerConfig'
+      description: Replacement server config object.
       required: true
   responses:
     UserGet:
@@ -1349,12 +1343,10 @@ components:
       $ref: '#/components/schemas/APITokenGet'
     APITokenArray:
       $ref: '#/components/schemas/APITokenArray'
-    ServerConfigGet:
-      $ref: '#/components/schemas/ServerConfig'
+    ServerEventGet:
+      $ref: '#/components/schemas/ServerEventGet'
     ServerEventArray:
       $ref: '#/components/schemas/ServerEventArray'
-    ServerEventGet:
-      $ref: '#/components/schemas/ServerEventBase'
   securitySchemes:
     BasicAuth:
       type: http
