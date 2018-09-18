@@ -1,7 +1,7 @@
 import * as Debug from 'debug';
 import { IMiddleware } from 'koa-router';
 import { NotFound, HttpError } from 'http-errors';
-import { NotFoundDBObjectError, DuplicatedDBObjectError, ForeignKeyDBError, BlockedResourceError } from '../errors';
+import { NotFoundDBObjectError, DuplicatedDBObjectError, ForeignKeyDBError, BlockedResourceError, ServerNotReadyError } from '../errors';
 
 const debug = Debug('id:server');
 
@@ -29,6 +29,9 @@ const errorHandler: IMiddleware = async function (ctx, next) {
     } else if (err instanceof ForeignKeyDBError) {
       ctx.status = 400;
       ctx.body = { message: err.message, status: 400 };
+    } else if (err instanceof ServerNotReadyError) {
+      ctx.status = 202;
+      ctx.body = { message: err.message, status: 202 };
     } else {
       debug('Unhandled error', err);
       ctx.status = 500;

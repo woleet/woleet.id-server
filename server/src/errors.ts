@@ -57,3 +57,8 @@ export class NoDefaultKeyError extends BlockedResourceError {
   constructor(m = 'No default key is set') { super(m); }
   name = 'NoDefaultKeyError';
 }
+
+export class ServerNotReadyError extends DBError {
+  constructor(m = 'Server not ready') { super(m); }
+  name = 'ServerNotReadyError';
+}

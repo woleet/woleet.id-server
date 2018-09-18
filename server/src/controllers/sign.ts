@@ -1,4 +1,4 @@
-import { NotFoundUserError, NotFoundKeyError, BlockedUserError, BlockedKeyError, NoDefaultKeyError } from '../errors';
+import { NotFoundUserError, NotFoundKeyError, BlockedUserError, BlockedKeyError, NoDefaultKeyError, ServerNotReadyError } from '../errors';
 import { Key, User } from '../database';
 import { getServerConfig } from './server-config';
 
@@ -10,6 +10,9 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
 
   if (!(userId || pubKey || customUserId)) {
     const config = getServerConfig();
+    if (!config) {
+      throw new ServerNotReadyError();
+    }
     if (!config.fallbackOnDefaultKey) {
       throw new NoDefaultKeyError();
     }
