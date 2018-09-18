@@ -24,7 +24,7 @@ public class Config {
     }
 
     // Current test mode
-    private static final TestMode testMode = TestMode.DEV;
+    private static final TestMode testMode = TestMode.LOCAL;
 
     // True if tests are to be debugged
     private static final boolean debug = false;
@@ -93,7 +93,7 @@ public class Config {
     private static String getBasePath() {
         switch (testMode) {
             case LOCAL:
-                return "http://localhost:3000";
+                return "https://localhost:4220/api";
             case DEV:
                 return "https://dev2.woleet.io:4220/api";
             case HA:

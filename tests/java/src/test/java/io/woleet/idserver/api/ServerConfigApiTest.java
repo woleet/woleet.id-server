@@ -14,15 +14,9 @@
 package io.woleet.idserver.api;
 
 import io.woleet.idserver.ApiException;
-import io.woleet.idserver.api.model.APIError;
 import io.woleet.idserver.api.model.ServerConfig;
-import org.junit.Test;
 import org.junit.Ignore;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.junit.Test;
 
 /**
  * API tests for ServerConfigApi
@@ -32,14 +26,11 @@ public class ServerConfigApiTest {
 
     private final ServerConfigApi api = new ServerConfigApi();
 
-    
+
     /**
      * Get the current server configuration.
      *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
+     * @throws ApiException if the Api call fails
      */
     @Test
     public void getServerConfigTest() throws ApiException {
@@ -47,14 +38,11 @@ public class ServerConfigApiTest {
 
         // TODO: test validations
     }
-    
+
     /**
      * Update the server&#39;s configuration.
      *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
+     * @throws ApiException if the Api call fails
      */
     @Test
     public void updateServerConfigTest() throws ApiException {
@@ -63,5 +51,5 @@ public class ServerConfigApiTest {
 
         // TODO: test validations
     }
-    
+
 }
