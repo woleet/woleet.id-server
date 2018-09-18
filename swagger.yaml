@@ -722,6 +722,69 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
+  /server-config:
+    get:
+      tags:
+        - Server Configuration
+      summary: Get the current server configuration.
+      operationId: getServerConfig
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ServerConfigGet'
+        '400':
+          description: Invalid API token identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '404':
+          description: API token not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+    put:
+      tags:
+        - Server Configuration
+      summary: Update the server's configuration.
+      operationId: updateServerConfig
+      requestBody:
+        $ref: '#/components/requestBodies/ServerConfigPut'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ServerConfigGet'
+        '400':
+          description: Invalid object supplied / Invalid API token identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '404':
+          description: API token not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
 components:
   schemas:
     Identity:
@@ -922,6 +985,25 @@ components:
           description: Key name.
         status:
           $ref: '#/components/schemas/APITokenStatusEnum'
+    ServerConfig:
+      type: object
+      properties:
+        identityUrl:
+          type: string
+          example: "https://identity.mydomain.com"
+          description: |
+            The identity url that the server must return with a signature.
+            Note that the server always expects to be called on the "/identity" endpoint,
+            if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain)
+            you must not forget it in your reverse proxy configuration.
+        defaultKeyId:
+          type: string
+          example: "7b8e5c49-18c6-4ef7-9dab-261a5e717b31"
+          description: The default key that the server should fallback on if none is specified to sign.
+        fallbackOnDefaultKey:
+          type: boolean
+          example: true
+          description: Enable
     APITokenGet:
       allOf:
         - $ref: '#/components/schemas/APITokenBase'
@@ -1244,6 +1326,12 @@ components:
             $ref: '#/components/schemas/APITokenPut'
       description: Replacement API token object.
       required: true
+    ServerConfigPut:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServerConfig'
+      required: true
   responses:
     UserGet:
       $ref: '#/components/schemas/UserGet'
@@ -1261,6 +1349,8 @@ components:
       $ref: '#/components/schemas/APITokenGet'
     APITokenArray:
       $ref: '#/components/schemas/APITokenArray'
+    ServerConfigGet:
+      $ref: '#/components/schemas/ServerConfig'
     ServerEventArray:
       $ref: '#/components/schemas/ServerEventArray'
     ServerEventGet:

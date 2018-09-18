@@ -23,7 +23,7 @@ router.get('/', async function (ctx) {
 /**
  * @route: /config
  * @swagger
- *  operationId: setServerConfig
+ *  operationId: updateServerConfig
  */
 router.put('/', validate.body('updateConfig'), async function (ctx) {
   const { fallbackOnDefaultKey, defaultKeyId, identityUrl } = await setServerConfig(ctx.request.body);
