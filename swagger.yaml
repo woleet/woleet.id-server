@@ -668,7 +668,60 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
-
+  /server-event/{ServerEventId}:
+    get:
+      tags:
+        - Server Event
+      summary: Get a server event by its identifier.
+      operationId: getServerEventById
+      parameters:
+        - $ref: '#/components/parameters/ServerEventIdParameter'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ServerEventGet'
+        '400':
+          description: Invalid Server Event identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '404':
+          description: Server Event not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+  /server-event/list:
+    get:
+      tags:
+        - Server Event
+      summary: List all Server Events.
+      operationId: getServerEventList
+      parameters:
+        - $ref: '#/components/parameters/FullListQueryParameter'
+      responses:
+        '200':
+          description: Succesful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ServerEventArray'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
 components:
   schemas:
     Identity:
@@ -754,6 +807,12 @@ components:
       readOnly: true
       description: Date of last login (Unix ms timestamp).
       example: 1529050155459
+    OccurredAt:
+      type: integer
+      format: int64
+      readOnly: true
+      description: Date on which an event occurred (Unix ms timestamp).
+      example: 1529052551419
     UserRoleEnum:
       type: string
       enum:
@@ -887,6 +946,64 @@ components:
               $ref: '#/components/schemas/DeletedAt'
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
+    ServerEventTypeEnum:
+      type: string
+      enum:
+        - login
+        - signature
+        - config.edit
+        - key.create
+        - key.edit
+        - key.delete
+        - user.create
+        - user.edit
+        - user.delete
+        - token.create
+        - token.edit
+        - token.delete
+      description: Event type.
+      example: "user.edit"
+    ServerEventBase:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ServerEventTypeEnum'
+        occurredAt:
+          $ref: '#/components/schemas/OccurredAt'
+        authorizedUserId:
+          type: string
+          format: uuid
+          description: User at that triggered the event.
+          example: "2b5ced14-01c5-419d-a0ae-aa9622918ca6"
+        authorizedTokenId:
+          type: string
+          format: uuid
+          description:  Token used when the event was triggered.
+          example: "fd7cb389-91e6-41ba-a0a5-14a05bd2b5f7"
+        associatedTokenId:
+          type: string
+          format: uuid
+          description: API Token pointed by the event.
+          example: "e2611d40-166f-4d7e-9fc5-164972878646"
+        associatedUserId:
+          type: string
+          format: uuid
+          description: User pointed by the event.
+          example: "a84996d3-9a77-4e8c-947f-f00c4d64a167"
+        associatedKeyId:
+          type: string
+          format: uuid
+          description: Key pointed by the event.
+          example: "461816ca-5623-4417-a2d1-5ee960f0a7a9"
+    FullServerEvent:
+      allOf:
+        - $ref: '#/components/schemas/ServerEventBase'
+        - type: object
+          properties:
+            data:
+              type: object
+              description: Data associated with the event.
+              example: { "username": "foo", "identity" : {"countryName" : "FR"} }
     APITokenPost:
       allOf:
         - $ref: '#/components/schemas/APITokenBase'
@@ -900,6 +1017,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/APITokenGet'
+    ServerEventArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/FullServerEvent'
     KeyBase:
       type: object
       properties:
@@ -1028,6 +1149,15 @@ components:
         type: string
         format: uuid
         example: "f34d92e3-4f71-49ab-862f-69443bd48266"
+    ServerEventIdParameter:
+      name: ServerEventId
+      in: path
+      description: Identifier of the Server Event.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: "813797c8-01e3-4a80-8068-bc2bda13df16"
     PubKeyToUseQueryParameter:
       name: pubKey
       in: query
@@ -1131,6 +1261,10 @@ components:
       $ref: '#/components/schemas/APITokenGet'
     APITokenArray:
       $ref: '#/components/schemas/APITokenArray'
+    ServerEventArray:
+      $ref: '#/components/schemas/ServerEventArray'
+    ServerEventGet:
+      $ref: '#/components/schemas/ServerEventBase'
   securitySchemes:
     BasicAuth:
       type: http
