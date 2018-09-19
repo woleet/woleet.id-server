@@ -1,5 +1,8 @@
 package io.woleet.idserver.api;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Slf4jReporter;
 import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
@@ -12,6 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -136,11 +143,72 @@ public abstract class CRUDApiTest {
     }
 
     @Test
-    public void createObjectBench() throws ApiException {
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < 10; i++)
-            createTestObject(adminAuthApi);
-        logger.info("10 objects created in " + (System.currentTimeMillis() - start) + " ms");
+    public void createObjectBench() throws ApiException, InterruptedException {
+
+        // Maximum number of concurrent requests
+        int MAX_CONCURRENT_REQUESTS = 1;
+
+        // Maximum number of threads to use
+        int MAX_THREADS = 1;
+
+        // Maximum duration of the benchmark (in ms)
+        long MAX_DURATION = 10000;
+
+
+        // Initialize metrics
+        final MetricRegistry metricsRegistry = new MetricRegistry();
+        final Meter createAnchorRate = metricsRegistry.meter("createAnchorRate");
+        final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricsRegistry)
+                .convertRatesTo(TimeUnit.SECONDS)
+                .convertDurationsTo(TimeUnit.MILLISECONDS)
+                .build();
+
+        // Start reporting metrics every second
+        reporter.start(1, TimeUnit.SECONDS);
+
+        // Configure concurrency
+        ApiClient apiClient = Config.getAdminAuthApiClient();
+        Api benchApi = newApi(apiClient);
+        apiClient.getHttpClient().getDispatcher().setMaxRequestsPerHost(MAX_CONCURRENT_REQUESTS);
+        apiClient.getHttpClient().getDispatcher().setMaxRequests(MAX_CONCURRENT_REQUESTS);
+        ExecutorService executor = new ThreadPoolExecutor(
+                MAX_THREADS, MAX_THREADS,
+                1000L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<>(MAX_THREADS),
+                new ThreadPoolExecutor.CallerRunsPolicy());
+
+        // Start benchmark
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < MAX_DURATION) {
+
+            // Effectively create the anchor using the executor
+            if (MAX_THREADS == 1) {
+                createTestObject(benchApi);
+                createAnchorRate.mark();
+            } else {
+                executor.execute(() -> {
+                    try {
+                        createTestObject(benchApi);
+                        Thread.sleep(1);
+                        createAnchorRate.mark();
+                    } catch (InterruptedException | ApiException e) {
+                        logger.error("Cannot create anchor", e);
+                    }
+                });
+            }
+        }
+
+        // Wait for all threads to end
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            Thread.sleep(100);
+        }
+
+        // Stop reporting metrics every second
+        reporter.stop();
+
+        // Report metrics
+        reporter.report();
     }
 
     @Test
