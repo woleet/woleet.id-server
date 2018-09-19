@@ -27,9 +27,6 @@ wait(1000)
       username: 'admin',
       identity: {
         commonName: 'Admin',
-        organization: 'UNDEFINED',
-        organizationalUnit: 'UNDEFINED',
-        locality: 'UNDEFINED',
         userId: 'admin'
       }
     });
