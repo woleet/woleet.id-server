@@ -24,14 +24,14 @@
         <button mat-icon-button color="primary" (click)="setEditMode(true)">
           <mat-icon matTooltip="Edit API token" aria-label="Edit token">edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" (click)="deleteToken()">
-          <mat-icon matTooltip="Delete API token" aria-label="Delete token">delete</mat-icon>
-        </button>
         <button mat-icon-button color="warn" *ngIf="apiToken.status !== 'blocked'" (click)="blockToken()">
           <mat-icon matTooltip="Block API token" aria-label="Block token button">pause_circle_outline</mat-icon>
         </button>
         <button mat-icon-button color="primary" *ngIf="apiToken.status === 'blocked'" (click)="unblockToken()">
           <mat-icon matTooltip="Unblock API token" aria-label="Unblock token button">play_circle_outline</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteToken()">
+          <mat-icon matTooltip="Delete API token" aria-label="Delete token">delete</mat-icon>
         </button>
       </div>
     </div>
