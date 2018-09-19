@@ -26,6 +26,7 @@ import io.woleet.idserver.api.model.FullIdentity;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * UserBase
@@ -51,6 +52,10 @@ public class UserBase {
   public static final String SERIALIZED_NAME_IDENTITY = "identity";
   @SerializedName(SERIALIZED_NAME_IDENTITY)
   private FullIdentity identity = null;
+
+  public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
+  @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
+  private UUID defaultKeyId = null;
 
   public UserBase email(String email) {
     this.email = email;
@@ -142,6 +147,24 @@ public class UserBase {
     this.identity = identity;
   }
 
+  public UserBase defaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
+    return this;
+  }
+
+   /**
+   * Identifier of the default key to use for this user.
+   * @return defaultKeyId
+  **/
+  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use for this user.")
+  public UUID getDefaultKeyId() {
+    return defaultKeyId;
+  }
+
+  public void setDefaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -156,12 +179,13 @@ public class UserBase {
         Objects.equals(this.username, userBase.username) &&
         Objects.equals(this.status, userBase.status) &&
         Objects.equals(this.role, userBase.role) &&
-        Objects.equals(this.identity, userBase.identity);
+        Objects.equals(this.identity, userBase.identity) &&
+        Objects.equals(this.defaultKeyId, userBase.defaultKeyId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, username, status, role, identity);
+    return Objects.hash(email, username, status, role, identity, defaultKeyId);
   }
 
 
@@ -175,6 +199,7 @@ public class UserBase {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("    identity: ").append(toIndentedString(identity)).append("\n");
+    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

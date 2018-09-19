@@ -27,6 +27,7 @@ import io.woleet.idserver.api.model.UserBase;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * UserPut

@@ -54,10 +54,6 @@ public class UserGet extends UserBase {
   @SerializedName(SERIALIZED_NAME_LAST_LOGIN)
   private Long lastLogin = null;
 
-  public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
-  @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
-  private UUID defaultKeyId = null;
-
    /**
    * User identifier (allocated by the server).
    * @return id
@@ -103,24 +99,6 @@ public class UserGet extends UserBase {
     return lastLogin;
   }
 
-  public UserGet defaultKeyId(UUID defaultKeyId) {
-    this.defaultKeyId = defaultKeyId;
-    return this;
-  }
-
-   /**
-   * Identifier of the default key to use for this user.
-   * @return defaultKeyId
-  **/
-  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use for this user.")
-  public UUID getDefaultKeyId() {
-    return defaultKeyId;
-  }
-
-  public void setDefaultKeyId(UUID defaultKeyId) {
-    this.defaultKeyId = defaultKeyId;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -136,13 +114,12 @@ public class UserGet extends UserBase {
         Objects.equals(this.updatedAt, userGet.updatedAt) &&
         Objects.equals(this.deletedAt, userGet.deletedAt) &&
         Objects.equals(this.lastLogin, userGet.lastLogin) &&
-        Objects.equals(this.defaultKeyId, userGet.defaultKeyId) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, createdAt, updatedAt, deletedAt, lastLogin, defaultKeyId, super.hashCode());
+    return Objects.hash(id, createdAt, updatedAt, deletedAt, lastLogin, super.hashCode());
   }
 
 
@@ -156,7 +133,6 @@ public class UserGet extends UserBase {
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    deletedAt: ").append(toIndentedString(deletedAt)).append("\n");
     sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");
-    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

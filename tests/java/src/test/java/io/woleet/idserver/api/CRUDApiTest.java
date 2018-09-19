@@ -152,7 +152,7 @@ public abstract class CRUDApiTest {
         int MAX_THREADS = 1;
 
         // Maximum duration of the benchmark (in ms)
-        long MAX_DURATION = 10000;
+        long MAX_DURATION = 5000;
 
 
         // Initialize metrics

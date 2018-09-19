@@ -19,6 +19,7 @@ import io.woleet.idserver.api.model.FullIdentity;
 import io.woleet.idserver.api.model.UserPut;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
+import java.util.UUID;
 
 /**
  * UserPost

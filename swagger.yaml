@@ -911,6 +911,11 @@ components:
           $ref: '#/components/schemas/UserRoleEnum'
         identity:
           $ref: '#/components/schemas/FullIdentity'
+        defaultKeyId:
+          type: string
+          format: uuid
+          description: Identifier of the default key to use for this user.
+          example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
     UserGet:
       allOf:
         - $ref: '#/components/schemas/UserBase'
@@ -930,11 +935,6 @@ components:
               $ref: '#/components/schemas/DeletedAt'
             lastLogin:
               $ref: '#/components/schemas/LastLogin'
-            defaultKeyId:
-              type: string
-              format: uuid
-              description: Identifier of the default key to use for this user.
-              example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
     UserPost:
       allOf:
         - $ref: '#/components/schemas/UserPut'

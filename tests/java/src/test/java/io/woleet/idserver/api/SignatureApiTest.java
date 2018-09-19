@@ -1,35 +1,113 @@
 package io.woleet.idserver.api;
 
+import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
-import io.woleet.idserver.api.model.SignatureResult;
+import io.woleet.idserver.Config;
+import io.woleet.idserver.api.model.*;
+import org.apache.http.HttpStatus;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.UUID;
+import static org.junit.Assert.*;
 
-/**
- * API tests for SignatureApi
- */
-@Ignore
 public class SignatureApiTest {
 
-    private final SignatureApi api = new SignatureApi();
+    private UserGet user;
 
-    /**
-     * Sign some data using a user key.
-     * <p>
-     * Use this endpoint to sign some data using one of the keys of a given user. &lt;br&gt;Compute the SHA256 hash of the data to sign (client side) and provide it in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;Specify the user using either the &#x60;userId&#x60;, &#x60;customUserId&#x60; or the &#x60;pubKey&#x60; parameter. &lt;br&gt;The signature produced is the signature of the hash using the referred key or using the user&#39;s default key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly.
-     *
-     * @throws ApiException if the Api call fails
-     */
+    private SignatureApi adminAuthApi, userAuthApi, noAuthApi, tokenAuthApi;
+
+    private ApiTokenApi apiTokenApi;
+    private APITokenGet apiTokenGet;
+
+    @Before
+    public void setUp() throws Exception {
+
+        // Start form a clean state
+        tearDown();
+
+        // Create 3 helper APIs: one with admin rights, one with user rights, one not authenticated
+        adminAuthApi = new SignatureApi(Config.getAdminAuthApiClient());
+        user = Config.createTestUser();
+        userAuthApi = new SignatureApi(Config.getAuthApiClient(user.getUsername(), "pass"));
+        noAuthApi = new SignatureApi(Config.getNoAuthApiClient());
+
+        // Create an helper API with API token authentication
+        apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
+        apiTokenGet = apiTokenApi.createAPIToken((APITokenPost) new APITokenPost().name("test"));
+        ApiClient apiClient = Config.getNoAuthApiClient();
+        apiClient.addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue());
+        tokenAuthApi = new SignatureApi(apiClient);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        Config.deleteAllTestUsers();
+
+        // This code is called before setUp() is called, so API token can be null
+        if (apiTokenGet != null)
+            apiTokenApi.deleteAPIToken(apiTokenGet.getId());
+    }
+
     @Test
     public void getSignatureTest() throws ApiException {
-        String hashToSign = null;
-        UUID userId = null;
-        String customUserId = null;
-        String pubKey = null;
-        SignatureResult response = api.getSignature(hashToSign, userId, customUserId, pubKey);
 
-        // TODO: test validations
+        // Try to sign with no credentials
+        try {
+            noAuthApi.getSignature(Config.randomHash(), null, null, null);
+            fail("Should not be able to get a signature with no credentials");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+        }
+
+        // Try to sign with user credentials
+        try {
+            userAuthApi.getSignature(Config.randomHash(), null, null, null);
+            fail("Should not be able to get a signature with user credentials");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+        }
+
+        // Try to sign with admin attributes
+        try {
+            adminAuthApi.getSignature(Config.randomHash(), null, null, null);
+            fail("Should not be able to get a signature with admin credentials");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+        }
+
+        // Sign using the server's default key
+        String hashToSign = Config.randomHash();
+        SignatureResult signatureResult = tokenAuthApi.getSignature(hashToSign, null, null, null);
+        assertNotNull(signatureResult.getIdentityURL());
+        assertNotNull(signatureResult.getPubKey());
+        assertNotNull(signatureResult.getSignature());
+        assertEquals(hashToSign, signatureResult.getSignedHash());
+
+        // Sign using user's default key
+        hashToSign = Config.randomHash();
+        signatureResult = tokenAuthApi.getSignature(hashToSign, user.getId(), null, null);
+        assertNotNull(signatureResult.getIdentityURL());
+        assertNotNull(signatureResult.getPubKey());
+        assertNotNull(signatureResult.getSignature());
+        assertEquals(hashToSign, signatureResult.getSignedHash());
+
+//        // FIXME: this cannot work because attributes cannot be unset
+//        // Unset user's default key
+//        UserApi userApi = new UserApi(Config.getAdminAuthApiClient());
+//        UserGet userGet = userApi.updateUser(user.getId(), (UserPut) new UserPut().defaultKeyId(null));
+//        assertNull(userGet.getDefaultKeyId());
+
+        // Delete user's default key
+        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
+        keyApi.deleteKey(user.getDefaultKeyId());
+
+        // Try to sign using a non existing user's default key
+        try {
+            tokenAuthApi.getSignature(hashToSign, user.getId(), null, null);
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+        }
     }
 }

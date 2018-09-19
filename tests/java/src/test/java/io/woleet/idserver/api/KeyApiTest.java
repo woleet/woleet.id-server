@@ -12,8 +12,6 @@ import static org.junit.Assert.*;
 
 public class KeyApiTest extends CRUDApiTest {
 
-    UserGet user;
-
     class Api implements CRUDApiTest.Api {
 
         KeyApi keyApi;
@@ -28,7 +26,7 @@ public class KeyApiTest extends CRUDApiTest {
             // This code is called before setUp() is called, so user can be null
             if (user == null)
                 return new ObjectArray(new KeyArray());
-            
+
             return new ObjectArray(keyApi.getAllUserKeys(user.getId(), full));
         }
 
@@ -130,6 +128,8 @@ public class KeyApiTest extends CRUDApiTest {
             return objectGetArray.toArray(new ObjectGet[0]);
         }
     }
+
+    private UserGet user;
 
     @Override
     public void setUp() throws Exception {
