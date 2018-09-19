@@ -1,65 +1,48 @@
-<nav role="navigation" *ngIf="!hide()">
+<!-- <nav role="navigation" *ngIf="!hide()"> -->
+<mat-toolbar>
+  <!-- <img src="/assets/logo.svg"> -->
+  <div>
+    <span>Woleet.ID Server</span>
+    <span class="text-gray">&nbsp;-&nbsp;</span>
+    <span class="text-gray text-slim">{{ page() }}</span>
+  </div>
 
-  <mat-toolbar>
-    <!-- <img src="/assets/logo.svg"> -->
-    <div>
-      <span>Woleet.ID Server</span><span class="text-gray">&nbsp;-&nbsp;</span><span class="text-gray text-slim">{{ page() }}</span>
-    </div>
-
-    <div fxLayout="row">
-      <h1 class="mat-title text-center" style="line-height: 40px; margin-right: 12px">{{ commonName() }}</h1>
-      <mat-divider vertical></mat-divider>
-      <button mat-icon-button matTooltip="Logout" (click)="logout()"><i class="material-icons">clear</i></button>
-    </div>
-  </mat-toolbar>
-
-  <mat-sidenav-container *ngIf="isAdmin()">
-    <mat-sidenav class="sidenav" fixedInViewport="true" role="navigation" mode="side" opened="true">
-      <mat-nav-list>
-        <!--
-        <mat-list-item routerLink="/setup">
-          <div mat-button>
-            <i class="material-icons">settings_power</i>
-            <span>Setup</span>
-          </div>
-        </mat-list-item>
-        <mat-list-item routerLink="/user">
-          <div mat-button>
-            <i class="material-icons">fingerprint</i>
-            <span>Identity</span>
-          </div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        -->
-        <mat-list-item routerLink="/users">
-          <div mat-button>
-            <i class="material-icons">perm_identity</i>
-            <span>Users</span>
-          </div>
-        </mat-list-item>
-        <mat-list-item routerLink="/api-tokens">
-          <div mat-button>
-            <i class="material-icons">lock_outline</i>
-            <span>API tokens</span>
-          </div>
-        </mat-list-item>
-        <mat-list-item routerLink="/settings">
-          <div mat-button>
-            <i class="material-icons">settings</i>
-            <span>Settings</span>
-          </div>
-        </mat-list-item>
-        <mat-list-item routerLink="/about">
-          <div mat-button>
-            <i class="material-icons">info_outline</i>
-            <span>About</span>
-          </div>
-        </mat-list-item>
-      </mat-nav-list>
-    </mat-sidenav>
-  </mat-sidenav-container>
-</nav>
-
-<div class='ml-100' [ngClass]="{ 'ml-100' : isAdmin() }">
-  <ng-content></ng-content>
-</div>
+  <div fxLayout="row">
+    <h1 class="mat-title text-center" style="line-height: 40px; margin-right: 12px">{{ commonName() }}</h1>
+    <mat-divider vertical></mat-divider>
+    <button mat-icon-button matTooltip="Logout" (click)="logout()"><i class="material-icons">clear</i></button>
+  </div>
+</mat-toolbar>
+<mat-sidenav-container *ngIf="isAdmin()">
+  <mat-sidenav class="sidenav dark-theme" ngClass.xs="collapse" fixedInViewport="true" role="navigation" mode="side" opened="true">
+    <mat-nav-list>
+      <mat-list-item routerLink="/users">
+        <div mat-button>
+          <i class="material-icons">perm_identity</i>
+          <span>Users</span>
+        </div>
+      </mat-list-item>
+      <mat-list-item routerLink="/api-tokens">
+        <div mat-button>
+          <i class="material-icons">lock_outline</i>
+          <span>API tokens</span>
+        </div>
+      </mat-list-item>
+      <mat-list-item routerLink="/settings">
+        <div mat-button>
+          <i class="material-icons">settings</i>
+          <span>Settings</span>
+        </div>
+      </mat-list-item>
+      <mat-list-item routerLink="/about">
+        <div mat-button>
+          <i class="material-icons">info_outline</i>
+          <span>About</span>
+        </div>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <div id="main-container">
+    <ng-content></ng-content>
+  </div>
+</mat-sidenav-container>

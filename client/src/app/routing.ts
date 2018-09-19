@@ -35,7 +35,8 @@ const routes: Routes = [
   { path: 'about', data: { title: 'About' }, component: AboutPageComponent, canActivate: [IsUser] },
   {
     path: '**',
-    redirectTo: 'user'
+    redirectTo: 'user',
+    canActivate: [IsUser]
   }
 ];
 

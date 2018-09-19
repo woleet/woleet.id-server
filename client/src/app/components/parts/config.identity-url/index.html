@@ -4,7 +4,7 @@
   <br>
   <div *ngIf="(config$ | async) as config; else loading">
     <div fxLayout="row" fxLayoutAlign="space-between start">
-      <div fxLayout="column" class="identity-url-text">
+      <div fxLayout="column" class="btn-h">
         <span>{{ config.identityUrl || 'unset' }}</span>
       </div>
       <div fxLayout="column">
