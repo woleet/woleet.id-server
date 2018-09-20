@@ -8,6 +8,7 @@ import { store as event } from '../../controllers/server-event';
 import { getServerConfig } from '../../controllers/server-config';
 
 const vuuid = validate.raw('uuid');
+const vhash = validate.raw('sha256');
 const vaddr = validate.raw('address');
 
 /**
@@ -25,15 +26,19 @@ const signMiddleware: Router.IMiddleware[] = [
     const query = ctx.query;
 
     if (!query.hashToSign) {
-      throw new BadRequest('Missign mandatory "hashToSign" parameter');
+      throw new BadRequest('Missign mandatory "hashToSign" query parameter');
+    }
+
+    if (!(await vhash(query.hashToSign))) {
+      throw new BadRequest('Query parameter "hashToSign" must be a SHA256 hash (in lowercase)');
     }
 
     if (query.userId && !(await vuuid(query.userId))) {
-      throw new BadRequest('Invalid "userId"');
+      throw new BadRequest('Invalid query parameter "userId"');
     }
 
     if (query.pubKey && !(await vaddr(query.pubKey))) {
-      throw new BadRequest('Invalid "pubKey"');
+      throw new BadRequest('Invalid query parameter "pubKey"');
     }
 
     const { signature, pubKey, userId, keyId, signedHash } = await sign(query);
