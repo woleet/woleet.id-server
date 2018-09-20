@@ -214,8 +214,10 @@ public class UserApiTest extends CRUDApiTest {
         assertNotNull(user.getId());
         assertNotNull(user.getCreatedAt());
         assertTrue(user.getCreatedAt() <= user.getUpdatedAt());
-        assertNull(user.getLastLogin());
         assertNull(user.getDeletedAt());
+
+        assertNull(user.getLastLogin());
+        assertNotNull(user.getIdentity().getCommonName());
         assertNotNull(user.getDefaultKeyId());
     }
 
@@ -231,18 +233,18 @@ public class UserApiTest extends CRUDApiTest {
     }
 
     @Override
-    void verifyObjectUpdated(CRUDApiTest.ObjectPut pDiff, CRUDApiTest.ObjectPost pExpected, CRUDApiTest.ObjectGet pActual) {
-        UserPut diff = (UserPut) pDiff.get();
-        UserPost expected = (UserPost) pExpected.get();
-        UserGet actual = (UserGet) pActual.get();
-        assertEquals(diff.getStatus() != null ? diff.getStatus() : expected.getStatus(), actual.getStatus());
-        assertEquals(diff.getRole() != null ? diff.getRole() : expected.getRole(), actual.getRole());
-        assertEquals(diff.getUsername() != null ? diff.getUsername() : expected.getUsername(), actual.getUsername());
-        assertEquals(diff.getEmail() != null ? diff.getEmail() : expected.getEmail(), actual.getEmail());
-        if (diff.getIdentity() != null) {
-            FullIdentity d = diff.getIdentity();
-            FullIdentity e = expected.getIdentity();
-            FullIdentity a = actual.getIdentity();
+    void verifyObjectUpdated(CRUDApiTest.ObjectPut pPut, CRUDApiTest.ObjectPost pPost, CRUDApiTest.ObjectGet pGet) {
+        UserPut put = (UserPut) pPut.get();
+        UserPost post = (UserPost) pPost.get();
+        UserGet get = (UserGet) pGet.get();
+        assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
+        assertEquals(put.getRole() != null ? put.getRole() : post.getRole(), get.getRole());
+        assertEquals(put.getUsername() != null ? put.getUsername() : post.getUsername(), get.getUsername());
+        assertEquals(put.getEmail() != null ? put.getEmail() : post.getEmail(), get.getEmail());
+        if (put.getIdentity() != null) {
+            FullIdentity d = put.getIdentity();
+            FullIdentity e = post.getIdentity();
+            FullIdentity a = get.getIdentity();
             assertEquals(d.getUserId() != null ? d.getUserId() : e.getUserId(), a.getUserId());
             assertEquals(d.getCommonName() != null ? d.getCommonName() : e.getCommonName(), a.getCommonName());
             assertEquals(d.getCountry() != null ? d.getCountry() : e.getCountry(), a.getCountry());
@@ -251,6 +253,6 @@ public class UserApiTest extends CRUDApiTest {
             assertEquals(d.getOrganizationalUnit() != null ? d.getOrganizationalUnit() : e.getOrganizationalUnit(),
                     a.getOrganizationalUnit());
         } else
-            assertEquals(expected.getIdentity(), actual.getIdentity());
+            assertEquals(post.getIdentity(), get.getIdentity());
     }
 }

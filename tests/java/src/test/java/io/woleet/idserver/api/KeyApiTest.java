@@ -166,6 +166,12 @@ public class KeyApiTest extends CRUDApiTest {
         assertNotNull(key.getCreatedAt());
         assertTrue(key.getCreatedAt() <= key.getUpdatedAt());
         assertNull(key.getDeletedAt());
+
+        assertNotNull(key.getName());
+        assertNull(key.getLastUsed());
+        assertNotNull(key.getPubKey());
+        assertNotNull(key.getType());
+        assertNotNull(key.getStatus());
     }
 
     @Override
@@ -181,7 +187,7 @@ public class KeyApiTest extends CRUDApiTest {
         KeyPut put = (KeyPut) pPut.get();
         KeyPost post = (KeyPost) pPost.get();
         KeyGet get = (KeyGet) pGet.get();
-        assertEquals(get.getStatus() != null ? get.getStatus() : post.getStatus(), get.getStatus());
-        assertEquals(get.getName() != null ? get.getName() : post.getName(), get.getName());
+        assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
+        assertEquals(put.getName() != null ? put.getName() : post.getName(), get.getName());
     }
 }

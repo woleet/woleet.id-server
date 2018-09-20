@@ -153,6 +153,11 @@ public class ApiTokenApiTest extends CRUDApiTest {
         assertNotNull(apiToken.getCreatedAt());
         assertTrue(apiToken.getCreatedAt() <= apiToken.getUpdatedAt());
         assertNull(apiToken.getDeletedAt());
+
+        assertNotNull(apiToken.getName());
+        assertNull(apiToken.getLastUsed());
+        assertNotNull(apiToken.getValue());
+        assertNotNull(apiToken.getStatus());
     }
 
     @Override
@@ -164,11 +169,11 @@ public class ApiTokenApiTest extends CRUDApiTest {
     }
 
     @Override
-    void verifyObjectUpdated(CRUDApiTest.ObjectPut pDiff, CRUDApiTest.ObjectPost pExpected, CRUDApiTest.ObjectGet pActual) {
-        APITokenPut diff = (APITokenPut) pDiff.get();
-        APITokenPost expected = (APITokenPost) pExpected.get();
-        APITokenGet actual = (APITokenGet) pActual.get();
-        assertEquals(diff.getStatus() != null ? diff.getStatus() : expected.getStatus(), actual.getStatus());
-        assertEquals(diff.getName() != null ? diff.getName() : expected.getName(), actual.getName());
+    void verifyObjectUpdated(CRUDApiTest.ObjectPut pPut, CRUDApiTest.ObjectPost pPost, CRUDApiTest.ObjectGet pGet) {
+        APITokenPut put = (APITokenPut) pPut.get();
+        APITokenPost post = (APITokenPost) pPost.get();
+        APITokenGet get = (APITokenGet) pGet.get();
+        assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
+        assertEquals(put.getName() != null ? put.getName() : post.getName(), get.getName());
     }
 }
