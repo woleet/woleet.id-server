@@ -1,6 +1,11 @@
-import { NotFoundUserError, NotFoundKeyError, BlockedUserError, BlockedKeyError, NoDefaultKeyError, ServerNotReadyError } from '../errors';
 import { Key, User } from '../database';
 import { getServerConfig } from './server-config';
+
+import {
+  NotFoundUserError, NotFoundKeyError, BlockedUserError,
+  BlockedKeyError, NoDefaultKeyError, ServerNotReadyError,
+  KeyOwnerMismatchError
+} from '../errors';
 
 import * as message from 'bitcoinjs-message';
 
@@ -29,10 +34,20 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     user = await User.getByCustomUserId(customUserId);
   }
 
+  // Key and user are specified, need to check that the user is the owner of a key.
+  if (key && user) {
+    if (key.get('userId') !== user.get('id')) {
+      throw new KeyOwnerMismatchError();
+    }
+  }
+
   if (pubKey) {
     key = await Key.getByPubKey(pubKey, user && user.get('id'), !user);
+    if (!key) {
+      throw new NotFoundKeyError();
+    }
     if (!user) {
-      user = key && key.get('user');
+      user = key.get('user');
     }
   }
 

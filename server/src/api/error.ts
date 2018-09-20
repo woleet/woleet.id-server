@@ -32,6 +32,9 @@ const errorHandler: IMiddleware = async function (ctx, next) {
     } else if (err instanceof errors.ForeignKeyDBError) {
       ctx.status = 400;
       ctx.body = { message: err.message, status: 400 };
+    } else if (err instanceof errors.KeyOwnerMismatchError) {
+      ctx.status = 400;
+      ctx.body = { message: err.message, status: 400 };
     } else if (err instanceof errors.ServerNotReadyError) {
       ctx.status = 202;
       ctx.body = { message: err.message, status: 202 };

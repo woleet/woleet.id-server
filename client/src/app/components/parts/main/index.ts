@@ -16,8 +16,7 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private pageDataService: PageDataService,
-    private titleService: Title
+    private pageDataService: PageDataService
   ) { }
 
   ngOnInit() {
@@ -32,10 +31,9 @@ export class AppComponent implements OnInit {
         return route;
       }),
       filter((route) => route.outlet === 'primary'),
-      mergeMap((route) => route.data),
+      mergeMap((route) => route.data)
     ).subscribe((event) => {
       this.pageDataService.setData(event);
-      this.titleService.setTitle(event['title']);
     });
   }
 
