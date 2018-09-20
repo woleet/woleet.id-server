@@ -1,6 +1,23 @@
+$mat-list-item-height: 36px;
 $nav-top-height: 48px;
+$side-nav-width: 200px;
 $nav-bg: #1d2939;
 $nav-border: 1px solid #e0e0e0;
+
+.logo {
+  background: url('/assets/logo.svg');
+  background-repeat: no-repeat;
+  background-attachment: initial;
+  background-position: center;
+  width: 120px;
+  height: 28px;
+  margin-right: 68px;
+  margin-top: 3px;
+}
+
+.sub-logo {
+  margin-left: 10px;
+}
 
 mat-toolbar {
     position: fixed;
@@ -28,8 +45,7 @@ mat-sidenav-container{
   // $nav-transition: width cubic-bezier(0.4, 0, 0.2, 1) .2s;
   // transition: $nav-transition;
 
-  $mat-list-item-height: 36px;
-  width: 200px;
+  width: $side-nav-width;
   padding-top: $nav-top-height;
   background-color: $nav-bg;
   height: 100%;

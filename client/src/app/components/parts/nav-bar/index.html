@@ -1,10 +1,12 @@
 <!-- <nav role="navigation"> -->
 <mat-toolbar *ngIf="!hide()">
-  <div>
-    <!-- <img src="/assets/logo.svg" alt="woleet logo" height="24"> -->
-    <span>Woleet.ID Server</span>
-    <span class="text-gray">&nbsp;-&nbsp;</span>
-    <span class="text-gray text-slim">{{ page() }}</span>
+  <div fxLayout="row">
+    <div class="logo"></div>
+    <div class="sub-logo">
+      <span>ID Server</span>
+      <span class="text-gray">&nbsp;-&nbsp;</span>
+      <span class="text-gray text-slim">{{ page() }}</span>
+    </div>
   </div>
 
   <div fxLayout="row">
