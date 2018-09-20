@@ -26,7 +26,6 @@ public class ServerConfigApiTest {
 
     private final ServerConfigApi api = new ServerConfigApi();
 
-
     /**
      * Get the current server configuration.
      *
@@ -51,5 +50,4 @@ public class ServerConfigApiTest {
 
         // TODO: test validations
     }
-
 }

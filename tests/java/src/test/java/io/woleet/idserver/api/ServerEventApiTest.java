@@ -29,7 +29,6 @@ public class ServerEventApiTest {
 
     private final ServerEventApi api = new ServerEventApi();
 
-
     /**
      * Get a server event by its identifier.
      *
