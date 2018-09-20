@@ -16,7 +16,7 @@
   </div>
   <ng-template #noApiKeys>
     <mat-card fxLayout="row" fxLayoutAlign="space-between start" *ngIf="!formOpened">
-      <span>There is no API token yet</span>
+      <span class="btn-h">There is no API token yet</span>
       <button mat-raised-button color="primary" (click)="formOpened=true">ADD ONE</button>
     </mat-card>
     <div *ngIf="formOpened">

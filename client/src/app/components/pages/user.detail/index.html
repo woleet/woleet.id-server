@@ -20,7 +20,7 @@
   </div>
   <ng-template #noKeys>
     <mat-card fxLayout="row" fxLayoutAlign="space-between start" *ngIf="!formOpened">
-      <span>This user does not have any key</span>
+      <span class="btn-h">This user does not have any key</span>
       <button mat-raised-button color="primary" (click)="formOpened=true">ADD ONE</button>
     </mat-card>
     <div *ngIf="formOpened">

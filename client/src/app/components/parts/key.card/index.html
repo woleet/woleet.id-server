@@ -21,14 +21,14 @@
         <button mat-icon-button color="primary" *ngIf="modes.includes('edit')" [disabled]="formLocked" (click)="setEditMode(true)">
           <mat-icon matTooltip="Edit key" aria-label="Edit key button">edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="modes.includes('delete')" [disabled]="formLocked" (click)="deleteKey()">
-          <mat-icon matTooltip="Delete key" aria-label="Delete key button">delete</mat-icon>
-        </button>
         <button mat-icon-button color="warn" *ngIf="modes.includes('block') && key.status !== 'blocked'" [disabled]="formLocked" (click)="blockKey()">
           <mat-icon matTooltip="Block key" aria-label="Block key button">pause_circle_outline</mat-icon>
         </button>
         <button mat-icon-button color="primary" *ngIf="modes.includes('block') && key.status === 'blocked'" [disabled]="formLocked" (click)="unblockKey()">
           <mat-icon matTooltip="Unblock key" aria-label="Unblock key button">play_circle_outline</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" *ngIf="modes.includes('delete')" [disabled]="formLocked" (click)="deleteKey()">
+          <mat-icon matTooltip="Delete key" aria-label="Delete key button">delete</mat-icon>
         </button>
       </div>
     </div>
