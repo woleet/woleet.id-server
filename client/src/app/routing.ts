@@ -19,8 +19,6 @@ import { UserEditPageComponent } from '@pages/user.edit';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ErrorPageComponent } from '@components/pages/error';
 
-
-
 const routes: Routes = [
   { path: 'error', data: { title: 'Error', hideNav: true }, component: ErrorPageComponent, canActivate: [HasError] },
   { path: 'login', data: { title: 'Login', hideNav: true }, component: LoginPageComponent, canActivate: [IsAnonymous] },
@@ -30,7 +28,7 @@ const routes: Routes = [
   { path: 'user/:id', data: { title: 'User keys' }, component: UserDetailPageComponent, canActivate: [IsAdmin] },
   { path: 'user/:id/edit', data: { title: 'Edit user' }, component: UserEditPageComponent, canActivate: [IsAdmin] },
   { path: 'users', data: { title: 'Users' }, component: UserListPageComponent, canActivate: [IsAdmin] },
-  { path: 'settings', data: { title: 'Server settings' }, component: SettingsPageComponent, canActivate: [IsAdmin] },
+  { path: 'settings', data: { title: 'Settings' }, component: SettingsPageComponent, canActivate: [IsAdmin] },
   { path: 'api-tokens', data: { title: 'API tokens' }, component: APITokensPageComponent, canActivate: [IsAdmin] },
   { path: 'about', data: { title: 'About' }, component: AboutPageComponent, canActivate: [IsUser] },
   {
