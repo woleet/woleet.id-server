@@ -31,8 +31,11 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
 
   if (pubKey) {
     key = await Key.getByPubKey(pubKey, user && user.get('id'), !user);
+    if (!key) {
+      throw new NotFoundKeyError();
+    }
     if (!user) {
-      user = key && key.get('user');
+      user = key.get('user');
     }
   }
 
