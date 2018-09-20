@@ -23,6 +23,7 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * ServerConfig
@@ -35,7 +36,7 @@ public class ServerConfig {
 
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
-  private String defaultKeyId = null;
+  private UUID defaultKeyId = null;
 
   public static final String SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY = "fallbackOnDefaultKey";
   @SerializedName(SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY)
@@ -59,7 +60,7 @@ public class ServerConfig {
     this.identityUrl = identityUrl;
   }
 
-  public ServerConfig defaultKeyId(String defaultKeyId) {
+  public ServerConfig defaultKeyId(UUID defaultKeyId) {
     this.defaultKeyId = defaultKeyId;
     return this;
   }
@@ -69,11 +70,11 @@ public class ServerConfig {
    * @return defaultKeyId
   **/
   @ApiModelProperty(example = "7b8e5c49-18c6-4ef7-9dab-261a5e717b31", value = "Identifier of the default key to use when signing with no user and no key specified.")
-  public String getDefaultKeyId() {
+  public UUID getDefaultKeyId() {
     return defaultKeyId;
   }
 
-  public void setDefaultKeyId(String defaultKeyId) {
+  public void setDefaultKeyId(UUID defaultKeyId) {
     this.defaultKeyId = defaultKeyId;
   }
 

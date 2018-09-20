@@ -48,10 +48,10 @@ public class IdentityResult {
   }
 
    /**
-   * The right part of the signed data (generated ramdomly).
+   * The right part of the signed data (generated ramdomly). &lt;br&gt;To prevent man-in-the-middle attacks, the data start with the server&#39;s identity URL and this should be verified by the caller. 
    * @return rightData
   **/
-  @ApiModelProperty(value = "The right part of the signed data (generated ramdomly).")
+  @ApiModelProperty(value = "The right part of the signed data (generated ramdomly). <br>To prevent man-in-the-middle attacks, the data start with the server's identity URL and this should be verified by the caller. ")
   public String getRightData() {
     return rightData;
   }

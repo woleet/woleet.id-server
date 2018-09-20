@@ -5,10 +5,6 @@ import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
 import org.apache.http.HttpStatus;
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.AddressFormatException;
-import org.bitcoinj.core.Base58;
-import org.bitcoinj.core.ECKey;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,44 +20,12 @@ public class SignatureApiTest {
     private ApiTokenApi apiTokenApi;
     private APITokenGet apiTokenGet;
 
-    /**
-     * Check if a signature is valid.
-     *
-     * @param address   bitcoin address
-     * @param signature Signature content
-     * @param message   Signed message
-     * @return true if the signature of the message by the address is correct.
-     */
-    private boolean isValidSignature(String address, String signature, String message) {
-        try {
-            return ECKey.signedMessageToKey(message, signature).toAddress(Address.fromBase58(null, address)
-                    .getParameters()).toString().equals(address);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    /**
-     * Check if a bitcoin address is valid.
-     *
-     * @param address bitcoin address
-     * @return true if the address is a valid bitcoin address.
-     */
-    private boolean isValidPubKey(String address) {
-        try {
-            Base58.decodeChecked(address);
-            return true;
-        } catch (AddressFormatException e) {
-            return false;
-        }
-    }
-
     private void verifySignatureValid(String hashToSign, SignatureResult signatureResult, ServerConfig serverConfig) {
         assertNotNull(signatureResult.getIdentityURL());
         assertEquals(serverConfig.getIdentityUrl(), signatureResult.getIdentityURL());
-        assertTrue(isValidPubKey(signatureResult.getPubKey()));
+        assertTrue(Config.isValidPubKey(signatureResult.getPubKey()));
         assertEquals(hashToSign, signatureResult.getSignedHash());
-        assertTrue(isValidSignature(signatureResult.getPubKey(), signatureResult.getSignature(),
+        assertTrue(Config.isValidSignature(signatureResult.getPubKey(), signatureResult.getSignature(),
                 signatureResult.getSignedHash()));
     }
 
@@ -169,9 +133,9 @@ public class SignatureApiTest {
         String hashToSign = Config.randomHash();
         SignatureResult signatureResult = tokenAuthApi.getSignature(hashToSign, null, null, null);
         assertNotNull(signatureResult.getIdentityURL());
-        assertTrue(isValidPubKey(signatureResult.getPubKey()));
+        assertTrue(Config.isValidPubKey(signatureResult.getPubKey()));
         assertEquals(hashToSign, signatureResult.getSignedHash());
-        assertTrue(isValidSignature(signatureResult.getPubKey(), signatureResult.getSignature(), signatureResult
+        assertTrue(Config.isValidSignature(signatureResult.getPubKey(), signatureResult.getSignature(), signatureResult
                 .getSignedHash()));
 
         // Change server config not to fallback on default key

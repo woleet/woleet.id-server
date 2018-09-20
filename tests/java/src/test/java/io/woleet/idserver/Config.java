@@ -4,15 +4,17 @@ import io.woleet.idserver.api.AuthenticationApi;
 import io.woleet.idserver.api.UserApi;
 import io.woleet.idserver.api.model.*;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.bitcoinj.core.Address;
+import org.bitcoinj.core.AddressFormatException;
+import org.bitcoinj.core.Base58;
+import org.bitcoinj.core.ECKey;
 
 import java.util.Random;
 import java.util.UUID;
 
 public class Config {
 
-    private static final Logger logger = LoggerFactory.getLogger(Config.class);
+    //private static final Logger logger = LoggerFactory.getLogger(Config.class);
 
     private static ApiClient adminAuthApiClient;
 
@@ -32,7 +34,7 @@ public class Config {
 
     // Initialize data needed to test users
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
-    public static final String TEST_USERS_USERNAME_PREFIX = "tester_";
+    private static final String TEST_USERS_USERNAME_PREFIX = "tester_";
 
     /**
      * Return a new API client with no credential.
@@ -157,10 +159,9 @@ public class Config {
         return Config.TEST_USERS_COMMONNAME_PREFIX + randomString(32);
     }
 
-    /*
-     * Test users
+    /**
+     * Delete all users created by the tests.
      */
-
     public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
         UserArray users = userApi.getAllUsers(false);
@@ -170,7 +171,13 @@ public class Config {
         }
     }
 
-    public static UserGet createTestUser(UserApi userApi) throws ApiException {
+    /**
+     * Create a user that can be used for testing.
+     *
+     * @param userApi User API to use to create the user
+     * @return a user
+     */
+    private static UserGet createTestUser(UserApi userApi) throws ApiException {
         UserPost userPost = new UserPost();
         String USERNAME = randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
@@ -185,28 +192,36 @@ public class Config {
         return createTestUser(new UserApi(getAdminAuthApiClient()));
     }
 
-    /*
-     * Test API tokens
+    /**
+     * Check if a signature is valid.
+     *
+     * @param address   bitcoin address
+     * @param signature Signature content
+     * @param message   Signed message
+     * @return true if the signature of the message by the address is correct.
      */
+    public static boolean isValidSignature(String address, String signature, String message) {
+        try {
+            return ECKey.signedMessageToKey(message, signature).toAddress(Address.fromBase58(null, address)
+                    .getParameters()).toString().equals(address);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-//    public static void deleteAllTestAPITokens() throws ApiException {
-//        ApiTokenApi apiTokenApi = new ApiTokenApi(getAdminAuthApiClient());
-//        APITokenArray apiTokens = apiTokenApi.getAllAPITokens(false);
-//        for (APITokenGet apiToken : apiTokens) {
-//            if (apiToken.getName().startsWith(TEST_APITOKENS_NAME_PREFIX))
-//                apiTokenApi.deleteAPIToken(apiToken.getId());
-//        }
-//    }
-//
-//    public static APITokenGet createTestAPIToken(ApiTokenApi apiTokenApi) throws ApiException {
-//        APITokenPost apiTokenPost = new APITokenPost();
-//        String NAME = randomName();
-//        apiTokenPost.name(NAME).status(APITokenStatusEnum.ACTIVE);
-//        return apiTokenApi.createAPIToken(apiTokenPost);
-//    }
-//
-//    public static APITokenGet createTestAPIToken() throws ApiException {
-//        return createTestAPIToken(new ApiTokenApi(getAdminAuthApiClient()));
-//    }
+    /**
+     * Check if a bitcoin address is valid.
+     *
+     * @param address bitcoin address
+     * @return true if the address is a valid bitcoin address.
+     */
+    public static boolean isValidPubKey(String address) {
+        try {
+            Base58.decodeChecked(address);
+            return true;
+        } catch (AddressFormatException e) {
+            return false;
+        }
+    }
 }
 
