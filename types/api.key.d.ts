@@ -9,8 +9,9 @@ interface ApiKeyObject extends KeyObject, ApiCommonProperties, ApiParanoidProper
 
   /** Key name */
   name: string;
-  /** Hexadecimal represention of the public key */
-  publicKey: string;
+
+  /** Base58 encoded public key */
+  pubKey: string;
 
   type: KeyTypeEnum;
 
