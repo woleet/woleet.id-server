@@ -1,7 +1,7 @@
-<!-- <nav role="navigation" *ngIf="!hide()"> -->
-<mat-toolbar>
-  <!-- <img src="/assets/logo.svg"> -->
+<!-- <nav role="navigation"> -->
+<mat-toolbar *ngIf="!hide()">
   <div>
+    <!-- <img src="/assets/logo.svg" alt="woleet logo" height="24"> -->
     <span>Woleet.ID Server</span>
     <span class="text-gray">&nbsp;-&nbsp;</span>
     <span class="text-gray text-slim">{{ page() }}</span>
@@ -13,8 +13,9 @@
     <button mat-icon-button matTooltip="Logout" (click)="logout()"><i class="material-icons">clear</i></button>
   </div>
 </mat-toolbar>
-<mat-sidenav-container *ngIf="isAdmin()">
-  <mat-sidenav class="sidenav dark-theme" ngClass.xs="collapse" fixedInViewport="true" role="navigation" mode="side" opened="true">
+<mat-sidenav-container>
+  <mat-sidenav *ngIf="isAdmin()" class="sidenav dark-theme" ngClass.xs="collapse" fixedInViewport="true" role="navigation"
+    mode="side" opened="true">
     <mat-nav-list>
       <mat-list-item routerLink="/users">
         <div mat-button>
