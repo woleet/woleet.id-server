@@ -53,12 +53,12 @@ export class BlockedAPITokenError extends BlockedResourceError {
   name = 'BlockedAPITokenError';
 }
 
-export class NoDefaultKeyError extends BlockedResourceError {
+export class NoDefaultKeyError extends Error {
   constructor(m = 'No default key is set') { super(m); }
   name = 'NoDefaultKeyError';
 }
 
-export class ServerNotReadyError extends DBError {
+export class ServerNotReadyError extends Error {
   constructor(m = 'Server not ready') { super(m); }
   name = 'ServerNotReadyError';
 }

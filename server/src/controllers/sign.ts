@@ -50,7 +50,7 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
   }
 
   if (!key) {
-    throw new NotFoundKeyError();
+    throw new NoDefaultKeyError();
   }
 
   // A blocked key cannot sign
