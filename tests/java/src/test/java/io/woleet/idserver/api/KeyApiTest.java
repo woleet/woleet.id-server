@@ -102,8 +102,10 @@ public class KeyApiTest extends CRUDApiTest {
         @Override
         public void update() {
             KeyPut keyPut = (KeyPut) objectBase;
-            keyPut.setStatus(KeyStatusEnum.BLOCKED);
-            keyPut.setName(Config.randomName());
+            if (Config.randomBoolean())
+                keyPut.setStatus(KeyStatusEnum.BLOCKED);
+            if (Config.randomBoolean())
+                keyPut.setName(Config.randomName());
         }
     }
 
@@ -158,7 +160,7 @@ public class KeyApiTest extends CRUDApiTest {
     }
 
     @Override
-    void verifyObject(CRUDApiTest.ObjectGet objectGet) {
+    void verifyObjectValid(CRUDApiTest.ObjectGet objectGet) {
         KeyGet key = (KeyGet) objectGet.get();
         assertNotNull(key.getId());
         assertNotNull(key.getCreatedAt());
@@ -175,11 +177,11 @@ public class KeyApiTest extends CRUDApiTest {
     }
 
     @Override
-    void verifyObjectUpdated(CRUDApiTest.ObjectPut pDiff, CRUDApiTest.ObjectPost pExpected, CRUDApiTest.ObjectGet pActual) {
-        KeyPut diff = (KeyPut) pDiff.get();
-        KeyPost expected = (KeyPost) pExpected.get();
-        KeyGet actual = (KeyGet) pActual.get();
-        assertEquals(diff.getStatus() != null ? diff.getStatus() : expected.getStatus(), actual.getStatus());
-        assertEquals(diff.getName() != null ? diff.getName() : expected.getName(), actual.getName());
+    void verifyObjectUpdated(CRUDApiTest.ObjectPut pPut, CRUDApiTest.ObjectPost pPost, CRUDApiTest.ObjectGet pGet) {
+        KeyPut put = (KeyPut) pPut.get();
+        KeyPost post = (KeyPost) pPost.get();
+        KeyGet get = (KeyGet) pGet.get();
+        assertEquals(get.getStatus() != null ? get.getStatus() : post.getStatus(), get.getStatus());
+        assertEquals(get.getName() != null ? get.getName() : post.getName(), get.getName());
     }
 }

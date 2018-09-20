@@ -69,14 +69,17 @@ paths:
   /sign:
     get:
       operationId: getSignature
-      summary: Sign some data using a user key.
+      summary: Sign some data using a key.
       tags:
         - Signature
       description: >
-        Use this endpoint to sign some data using one of the keys of a given user.
-        <br>Compute the SHA256 hash of the data to sign (client side) and provide it in the `hashToSign` parameter.
-        <br>Specify the user using either the `userId`, `customUserId` or the `pubKey` parameter.
-        <br>The signature produced is the signature of the hash using the referred key or using the user's default key.
+        Use this endpoint to sign some data using one of the keys managed by the server.
+        <br>Provide the SHA256 hash of the data to sign in the `hashToSign` parameter.
+        <br>The key to use can be specified using the `pubKey`, `userId` and `customUserId` parameters:
+        <br>- set the `pubKey` parameter only: the referred key is used
+        <br>- set the `userId` (or the `customUserId`) parameter only: the default key of the referred user is used (if any).
+        <br>- set none of the 3 parameters: the default key of the server is used (if any).
+        <br>The signature produced is the signature of the hash using the referred key.
         <br>This endpoint is protected using an API token. It is recommended not to expose it publicly.
       parameters:
         - $ref: '#/components/parameters/HashToSignQueryParameter'
@@ -105,13 +108,13 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '404':
-          description: The provided parameters did not match any key to sign with.
+          description: The provided parameters does not match any key to sign with.
           content:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
-        '409':
-          description: The `pubKey` parameter was not provided and the user has no default key to fallback on.
+        '403':
+          description: No `pubKey` parameter is provided and the server or the user has no default key to fallback on.
           content:
             application/json:
               schema:
@@ -1023,11 +1026,11 @@ components:
         defaultKeyId:
           type: string
           example: "7b8e5c49-18c6-4ef7-9dab-261a5e717b31"
-          description: The default key to use when signing and no key is specified.
+          description: Identifier of the default key to use when signing with no user and no key specified.
         fallbackOnDefaultKey:
           type: boolean
           example: true
-          description: True is the server must fallback on the default key when signing and no key is specified
+          description: True is the server must fallback on the default key (if any).
     ServerEventTypeEnum:
       type: string
       enum:
@@ -1236,7 +1239,10 @@ components:
     PubKeyToUseQueryParameter:
       name: pubKey
       in: query
-      description: The public key to use to sign. When not provided, the default key of the user is used (if any).
+      description: >
+        The public key to use to sign.
+        When not provided and a user is provided, the default key of the user is used (if any).
+        When not provided and no user is provided, the default key of the server is used (if any).
       required: false
       schema:
         type: string

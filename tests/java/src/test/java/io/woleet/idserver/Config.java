@@ -7,6 +7,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Random;
 import java.util.UUID;
 
 public class Config {
@@ -105,6 +106,13 @@ public class Config {
                 assert false;
                 return null;
         }
+    }
+
+    /**
+     * Create a new random boolean.
+     */
+    public static boolean randomBoolean() {
+        return new Random().nextBoolean();
     }
 
     /**

@@ -65,10 +65,10 @@ public class ServerConfig {
   }
 
    /**
-   * The default key to use when signing and no key is specified.
+   * Identifier of the default key to use when signing with no user and no key specified.
    * @return defaultKeyId
   **/
-  @ApiModelProperty(example = "7b8e5c49-18c6-4ef7-9dab-261a5e717b31", value = "The default key to use when signing and no key is specified.")
+  @ApiModelProperty(example = "7b8e5c49-18c6-4ef7-9dab-261a5e717b31", value = "Identifier of the default key to use when signing with no user and no key specified.")
   public String getDefaultKeyId() {
     return defaultKeyId;
   }
@@ -83,10 +83,10 @@ public class ServerConfig {
   }
 
    /**
-   * True is the server must fallback on the default key when signing and no key is specified
+   * True is the server must fallback on the default key (if any).
    * @return fallbackOnDefaultKey
   **/
-  @ApiModelProperty(value = "True is the server must fallback on the default key when signing and no key is specified")
+  @ApiModelProperty(value = "True is the server must fallback on the default key (if any).")
   public Boolean getFallbackOnDefaultKey() {
     return fallbackOnDefaultKey;
   }

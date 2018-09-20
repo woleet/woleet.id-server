@@ -97,8 +97,10 @@ public class ApiTokenApiTest extends CRUDApiTest {
         @Override
         public void update() {
             APITokenPut apiTokenPut = (APITokenPut) objectBase;
-            apiTokenPut.status(APITokenStatusEnum.BLOCKED);
-            apiTokenPut.name(Config.randomName());
+            if (Config.randomBoolean())
+                apiTokenPut.status(APITokenStatusEnum.BLOCKED);
+            if (Config.randomBoolean())
+                apiTokenPut.name(Config.randomName());
         }
     }
 
@@ -145,7 +147,7 @@ public class ApiTokenApiTest extends CRUDApiTest {
     }
 
     @Override
-    void verifyObject(CRUDApiTest.ObjectGet objectGet) {
+    void verifyObjectValid(CRUDApiTest.ObjectGet objectGet) {
         APITokenGet apiToken = (APITokenGet) objectGet.get();
         assertNotNull(apiToken.getId());
         assertNotNull(apiToken.getCreatedAt());

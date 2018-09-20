@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getSignature**](SignatureApi.md#getSignature) | **GET** /sign | Sign some data using a user key.
+[**getSignature**](SignatureApi.md#getSignature) | **GET** /sign | Sign some data using a key.
 
 
 <a name="getSignature"></a>
 # **getSignature**
 > SignatureResult getSignature(hashToSign, userId, customUserId, pubKey)
 
-Sign some data using a user key.
+Sign some data using a key.
 
-Use this endpoint to sign some data using one of the keys of a given user. &lt;br&gt;Compute the SHA256 hash of the data to sign (client side) and provide it in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;Specify the user using either the &#x60;userId&#x60;, &#x60;customUserId&#x60; or the &#x60;pubKey&#x60; parameter. &lt;br&gt;The signature produced is the signature of the hash using the referred key or using the user&#39;s default key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
+Use this endpoint to sign some data using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash of the data to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;The key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;The signature produced is the signature of the hash using the referred key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
 
 ### Example
 ```java
@@ -35,7 +35,7 @@ SignatureApi apiInstance = new SignatureApi();
 String hashToSign = d8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975; // String | The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}).
 UUID userId = 345a4513-0266-419a-8344-2daf645b78ed; // UUID | The user identifier.
 String customUserId = wol.jim-smith.01; // String | The custom user identifier (ie. `userId` field of the user's identity).
-String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | The public key to use to sign. When not provided, the default key of the user is used (if any).
+String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | The public key to use to sign. When not provided and a user is provided, the default key of the user is used (if any). When not provided and no user is provided, the default key of the server is used (if any). 
 try {
     SignatureResult result = apiInstance.getSignature(hashToSign, userId, customUserId, pubKey);
     System.out.println(result);
@@ -52,7 +52,7 @@ Name | Type | Description  | Notes
  **hashToSign** | **String**| The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}). |
  **userId** | [**UUID**](.md)| The user identifier. | [optional]
  **customUserId** | **String**| The custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). | [optional]
- **pubKey** | **String**| The public key to use to sign. When not provided, the default key of the user is used (if any). | [optional]
+ **pubKey** | **String**| The public key to use to sign. When not provided and a user is provided, the default key of the user is used (if any). When not provided and no user is provided, the default key of the server is used (if any).  | [optional]
 
 ### Return type
 

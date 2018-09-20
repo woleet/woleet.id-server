@@ -126,15 +126,21 @@ public class UserApiTest extends CRUDApiTest {
             UserPut userPut = (UserPut) objectBase;
 
             // Set status and role
-            userPut.setStatus(UserStatusEnum.BLOCKED);
-            userPut.setRole(UserRoleEnum.ADMIN);
+            if (Config.randomBoolean())
+                userPut.setStatus(UserStatusEnum.BLOCKED);
+            if (Config.randomBoolean())
+                userPut.setRole(UserRoleEnum.ADMIN);
 
             // Set login information
             String USERNAME = Config.randomUsername();
             String EMAIL = USERNAME + "@woleet.com";
-            userPut.email(EMAIL).username(USERNAME);
             String PASSWORD = Config.randomHash();
-            userPut.password(PASSWORD);
+            if (Config.randomBoolean())
+                userPut.username(USERNAME);
+            if (Config.randomBoolean())
+                userPut.email(EMAIL);
+            if (Config.randomBoolean())
+                userPut.password(PASSWORD);
 
             // Set identity information
             String COMMON_NAME = Config.randomCommonName();
@@ -144,13 +150,18 @@ public class UserApiTest extends CRUDApiTest {
             String COUNTRY = "US";
             String USER_ID = Config.randomUUID().toString();
             FullIdentity fullIdentity = new FullIdentity();
-            fullIdentity
-                    .userId(USER_ID)
-                    .commonName(COMMON_NAME)
-                    .organizationalUnit(ORGANIZATIONAL_UNIT)
-                    .locality(LOCALITY)
-                    .organization(ORGANIZATION)
-                    .country(COUNTRY);
+            if (Config.randomBoolean())
+                fullIdentity.userId(USER_ID);
+            if (Config.randomBoolean())
+                fullIdentity.commonName(COMMON_NAME);
+            if (Config.randomBoolean())
+                fullIdentity.organizationalUnit(ORGANIZATIONAL_UNIT);
+            if (Config.randomBoolean())
+                fullIdentity.locality(LOCALITY);
+            if (Config.randomBoolean())
+                fullIdentity.organization(ORGANIZATION);
+            if (Config.randomBoolean())
+                fullIdentity.country(COUNTRY);
             userPut.identity(fullIdentity);
         }
     }
@@ -198,7 +209,7 @@ public class UserApiTest extends CRUDApiTest {
     }
 
     @Override
-    void verifyObject(CRUDApiTest.ObjectGet objectGet) {
+    void verifyObjectValid(CRUDApiTest.ObjectGet objectGet) {
         UserGet user = (UserGet) objectGet.get();
         assertNotNull(user.getId());
         assertNotNull(user.getCreatedAt());

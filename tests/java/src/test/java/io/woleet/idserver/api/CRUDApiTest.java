@@ -98,11 +98,11 @@ public abstract class CRUDApiTest {
 
     abstract ObjectPut newObjectPut();
 
-    abstract void verifyObject(ObjectGet objectGet);
+    abstract void verifyObjectValid(ObjectGet object);
 
     abstract void verifyObjectsEquals(ObjectPost expected, ObjectGet actual);
 
-    abstract void verifyObjectUpdated(ObjectPut diff, ObjectPost expected, ObjectGet actual);
+    abstract void verifyObjectUpdated(ObjectPut put, ObjectPost post, ObjectGet get);
 
     private void deleteAllTestObjects() throws ApiException {
         Api api = newApi(Config.getAdminAuthApiClient());
@@ -241,12 +241,12 @@ public abstract class CRUDApiTest {
 
         // Create and verify a object with minimal attributes
         ObjectGet objectGet = adminAuthApi.createObject(objectPost.setMinimalAttributes());
-        verifyObject(objectGet);
+        verifyObjectValid(objectGet);
 
         // Create and verify a new object with full attributes
         objectPost = newObjectPost();
         objectGet = adminAuthApi.createObject(objectPost.setFullAttributes());
-        verifyObject(objectGet);
+        verifyObjectValid(objectGet);
         verifyObjectsEquals(objectPost, objectGet);
     }
 
@@ -324,11 +324,11 @@ public abstract class CRUDApiTest {
         // Create a object to get
         ObjectPost objectPost = newObjectPost();
         ObjectGet objectGet = adminAuthApi.createObject(objectPost.setFullAttributes());
-        verifyObject(objectGet);
+        verifyObjectValid(objectGet);
 
         // Get and verify a object with admin credentials
         objectGet = adminAuthApi.getObjectById(objectGet.getId());
-        verifyObject(objectGet);
+        verifyObjectValid(objectGet);
         verifyObjectsEquals(objectPost, objectGet);
 
         // Try to get a object with no credentials
@@ -362,13 +362,16 @@ public abstract class CRUDApiTest {
         // Create an object to update
         ObjectPost objectPost = newObjectPost();
         ObjectGet objectGet = adminAuthApi.createObject(objectPost.setFullAttributes());
-        verifyObject(objectGet);
+        verifyObjectValid(objectGet);
 
         // Update and verify a object with admin credentials
         ObjectPut objectPut = newObjectPut();
         objectPut.update();
         objectGet = adminAuthApi.updateObject(objectGet.getId(), objectPut);
-        verifyObject(objectGet);
+        verifyObjectValid(objectGet);
+        verifyObjectUpdated(objectPut, objectPost, objectGet);
+        objectGet = adminAuthApi.getObjectById(objectGet.getId());
+        verifyObjectValid(objectGet);
         verifyObjectUpdated(objectPut, objectPost, objectGet);
 
         // Try to update a object with no credentials

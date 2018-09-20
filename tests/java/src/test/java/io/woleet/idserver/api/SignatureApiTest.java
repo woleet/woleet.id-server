@@ -5,9 +5,12 @@ import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
 import org.apache.http.HttpStatus;
+import org.bitcoinj.core.Address;
+import org.bitcoinj.core.AddressFormatException;
+import org.bitcoinj.core.Base58;
+import org.bitcoinj.core.ECKey;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -20,6 +23,38 @@ public class SignatureApiTest {
 
     private ApiTokenApi apiTokenApi;
     private APITokenGet apiTokenGet;
+
+    /**
+     * Check if a signature is valid.
+     *
+     * @param address   bitcoin address
+     * @param signature Signature content
+     * @param message   Signed message
+     * @return true if the signature of the message by the address is correct.
+     */
+    private boolean isValidSignature(String address, String signature, String message) {
+        try {
+            return ECKey.signedMessageToKey(message, signature).toAddress(Address.fromBase58(null, address)
+                    .getParameters()).toString().equals(address);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Check if a bitcoin address is valid.
+     *
+     * @param address bitcoin address
+     * @return true if the address is a valid bitcoin address.
+     */
+    private boolean isValidPubKey(String address) {
+        try {
+            Base58.decodeChecked(address);
+            return true;
+        } catch (AddressFormatException e) {
+            return false;
+        }
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -64,7 +99,7 @@ public class SignatureApiTest {
         // Try to sign with user credentials
         try {
             userAuthApi.getSignature(Config.randomHash(), null, null, null);
-            fail("Should not be able to get a signature with user credentials");
+            fail("Should not be able to sign with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
@@ -72,26 +107,51 @@ public class SignatureApiTest {
         // Try to sign with admin attributes
         try {
             adminAuthApi.getSignature(Config.randomHash(), null, null, null);
-            fail("Should not be able to get a signature with admin credentials");
+            fail("Should not be able to sign with admin credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+        }
+
+        // Try to sign an invalid hash
+        try {
+            tokenAuthApi.getSignature("invalid hash", null, null, null);
+            fail("Should not be able to sign an invalid hash");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Sign using the server's default key
         String hashToSign = Config.randomHash();
         SignatureResult signatureResult = tokenAuthApi.getSignature(hashToSign, null, null, null);
         assertNotNull(signatureResult.getIdentityURL());
-        assertNotNull(signatureResult.getPubKey());
-        assertNotNull(signatureResult.getSignature());
+        assertTrue(isValidPubKey(signatureResult.getPubKey()));
         assertEquals(hashToSign, signatureResult.getSignedHash());
+        assertTrue(isValidSignature(signatureResult.getPubKey(), signatureResult.getSignature(), signatureResult
+                .getSignedHash()));
+
+        // Change server config not to fallback on default key
+        ServerConfigApi serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
+        ServerConfig serverConfig = serverConfigApi.getServerConfig();
+        serverConfigApi.updateServerConfig(new ServerConfig().fallbackOnDefaultKey(false));
+
+        // Try to sign using a non existing server's default key
+        try {
+            tokenAuthApi.getSignature(hashToSign, null, null, null);
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        // Reset server config
+        serverConfigApi.updateServerConfig(serverConfig);
 
         // Sign using user's default key
         hashToSign = Config.randomHash();
         signatureResult = tokenAuthApi.getSignature(hashToSign, user.getId(), null, null);
         assertNotNull(signatureResult.getIdentityURL());
-        assertNotNull(signatureResult.getPubKey());
-        assertNotNull(signatureResult.getSignature());
+        assertTrue(isValidPubKey(signatureResult.getPubKey()));
         assertEquals(hashToSign, signatureResult.getSignedHash());
+        assertTrue(isValidSignature(signatureResult.getPubKey(), signatureResult.getSignature(), signatureResult
+                .getSignedHash()));
 
 //        // FIXME: this cannot work because attributes cannot be unset
 //        // Unset user's default key
@@ -107,7 +167,7 @@ public class SignatureApiTest {
         try {
             tokenAuthApi.getSignature(hashToSign, user.getId(), null, null);
         } catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 }

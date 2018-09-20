@@ -61,7 +61,7 @@ public class SignatureApi {
      * @param hashToSign The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}). (required)
      * @param userId The user identifier. (optional)
      * @param customUserId The custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
-     * @param pubKey The public key to use to sign. When not provided, the default key of the user is used (if any). (optional)
+     * @param pubKey The public key to use to sign. When not provided and a user is provided, the default key of the user is used (if any). When not provided and no user is provided, the default key of the server is used (if any).  (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -131,12 +131,12 @@ public class SignatureApi {
     }
 
     /**
-     * Sign some data using a user key.
-     * Use this endpoint to sign some data using one of the keys of a given user. &lt;br&gt;Compute the SHA256 hash of the data to sign (client side) and provide it in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;Specify the user using either the &#x60;userId&#x60;, &#x60;customUserId&#x60; or the &#x60;pubKey&#x60; parameter. &lt;br&gt;The signature produced is the signature of the hash using the referred key or using the user&#39;s default key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
+     * Sign some data using a key.
+     * Use this endpoint to sign some data using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash of the data to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;The key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;The signature produced is the signature of the hash using the referred key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
      * @param hashToSign The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}). (required)
      * @param userId The user identifier. (optional)
      * @param customUserId The custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
-     * @param pubKey The public key to use to sign. When not provided, the default key of the user is used (if any). (optional)
+     * @param pubKey The public key to use to sign. When not provided and a user is provided, the default key of the user is used (if any). When not provided and no user is provided, the default key of the server is used (if any).  (optional)
      * @return SignatureResult
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -146,12 +146,12 @@ public class SignatureApi {
     }
 
     /**
-     * Sign some data using a user key.
-     * Use this endpoint to sign some data using one of the keys of a given user. &lt;br&gt;Compute the SHA256 hash of the data to sign (client side) and provide it in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;Specify the user using either the &#x60;userId&#x60;, &#x60;customUserId&#x60; or the &#x60;pubKey&#x60; parameter. &lt;br&gt;The signature produced is the signature of the hash using the referred key or using the user&#39;s default key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
+     * Sign some data using a key.
+     * Use this endpoint to sign some data using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash of the data to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;The key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;The signature produced is the signature of the hash using the referred key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
      * @param hashToSign The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}). (required)
      * @param userId The user identifier. (optional)
      * @param customUserId The custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
-     * @param pubKey The public key to use to sign. When not provided, the default key of the user is used (if any). (optional)
+     * @param pubKey The public key to use to sign. When not provided and a user is provided, the default key of the user is used (if any). When not provided and no user is provided, the default key of the server is used (if any).  (optional)
      * @return ApiResponse&lt;SignatureResult&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -162,12 +162,12 @@ public class SignatureApi {
     }
 
     /**
-     * Sign some data using a user key. (asynchronously)
-     * Use this endpoint to sign some data using one of the keys of a given user. &lt;br&gt;Compute the SHA256 hash of the data to sign (client side) and provide it in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;Specify the user using either the &#x60;userId&#x60;, &#x60;customUserId&#x60; or the &#x60;pubKey&#x60; parameter. &lt;br&gt;The signature produced is the signature of the hash using the referred key or using the user&#39;s default key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
+     * Sign some data using a key. (asynchronously)
+     * Use this endpoint to sign some data using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash of the data to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;The key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;The signature produced is the signature of the hash using the referred key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
      * @param hashToSign The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}). (required)
      * @param userId The user identifier. (optional)
      * @param customUserId The custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
-     * @param pubKey The public key to use to sign. When not provided, the default key of the user is used (if any). (optional)
+     * @param pubKey The public key to use to sign. When not provided and a user is provided, the default key of the user is used (if any). When not provided and no user is provided, the default key of the server is used (if any).  (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
