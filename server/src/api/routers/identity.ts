@@ -1,7 +1,9 @@
 import * as Router from 'koa-router';
 import { BadRequest } from 'http-errors';
 import { getIdentity } from '../../controllers/indetity';
+import { validate } from '../schemas';
 
+const vaddr = validate.raw('address');
 
 /**
  * Identity
@@ -22,6 +24,10 @@ router.get('/identity', async function (ctx) {
 
   if (!pubKey) {
     throw new BadRequest('Missing mandatory "pubKey" parameter');
+  }
+
+  if (!(await vaddr(pubKey))) {
+    throw new BadRequest('Invalid query parameter "pubKey"');
   }
 
   if (!leftData) {
