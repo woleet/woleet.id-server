@@ -58,6 +58,11 @@ export class NoDefaultKeyError extends Error {
   name = 'NoDefaultKeyError';
 }
 
+export class KeyOwnerMismatchError extends Error {
+  constructor(m = 'Specified user does not match specified key') { super(m); }
+  name = 'KeyOwnerMismatchError';
+}
+
 export class ServerNotReadyError extends Error {
   constructor(m = 'Server not ready') { super(m); }
   name = 'ServerNotReadyError';
