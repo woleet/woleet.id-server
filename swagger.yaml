@@ -1358,6 +1358,8 @@ components:
       $ref: '#/components/schemas/APITokenGet'
     APITokenArray:
       $ref: '#/components/schemas/APITokenArray'
+    ServerConfig:
+      $ref: '#/components/schemas/ServerConfig'
     ServerEventGet:
       $ref: '#/components/schemas/ServerEventGet'
     ServerEventArray:
