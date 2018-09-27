@@ -38,7 +38,7 @@ public class Config {
 
     private static TestMode getTestMode() {
         String value = System.getenv("TESTMODE");
-        switch (value) {
+        switch (value != null ? value : "default") {
             case "LOCAL":
                 return TestMode.LOCAL;
             case "DEV":
