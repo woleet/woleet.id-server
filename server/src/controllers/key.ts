@@ -12,7 +12,7 @@ import { Mnemonic, HDPrivateKey, KeyRing } from 'bcoin';
 
 /**
  * @swagger
- *  operationId: addKey
+ *  operationId: createKey
  */
 export async function createKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
 
