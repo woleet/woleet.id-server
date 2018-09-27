@@ -154,10 +154,9 @@ public abstract class CRUDApiTest {
         // Maximum duration of the benchmark (in ms)
         long MAX_DURATION = 5000;
 
-
         // Initialize metrics
         final MetricRegistry metricsRegistry = new MetricRegistry();
-        final Meter createAnchorRate = metricsRegistry.meter("createAnchorRate");
+        final Meter rate = metricsRegistry.meter("rate");
         final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricsRegistry)
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
@@ -181,18 +180,18 @@ public abstract class CRUDApiTest {
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() - startTime < MAX_DURATION) {
 
-            // Effectively create the anchor using the executor
+            // Effectively create the test object using the executor
             if (MAX_THREADS == 1) {
                 createTestObject(benchApi);
-                createAnchorRate.mark();
+                rate.mark();
             } else {
                 executor.execute(() -> {
                     try {
                         createTestObject(benchApi);
                         Thread.sleep(1);
-                        createAnchorRate.mark();
+                        rate.mark();
                     } catch (InterruptedException | ApiException e) {
-                        logger.error("Cannot create anchor", e);
+                        logger.error("Cannot create test object", e);
                     }
                 });
             }
