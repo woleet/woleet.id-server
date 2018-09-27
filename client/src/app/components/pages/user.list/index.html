@@ -4,7 +4,7 @@
       <button mat-raised-button color="primary" (click)="formOpened=true">ADD USER</button>
     </div>
     <div *ngIf="formOpened">
-      <create-edit-user mode="create" (create)="refreshUserList()" (cancel)="formOpened=false"></create-edit-user>
+      <create-edit-user mode="create" (create)="refreshUserList()" (submitSucceed)="formOpened=false; refreshUserList()" (cancel)="formOpened=false"></create-edit-user>
     </div>
     <br>
     <mat-divider></mat-divider>
@@ -20,7 +20,7 @@
       <button mat-raised-button color="primary" (click)="formOpened=true">ADD ONE</button>
     </mat-card>
     <div *ngIf="formOpened">
-      <create-edit-user mode="create" (create)="refreshUserList()" (cancel)="formOpened=false"></create-edit-user>
+      <create-edit-user mode="create" (create)="refreshUserList()" (submitSucceed)="refreshUserList()" (cancel)="formOpened=false"></create-edit-user>
     </div>
   </ng-template>
 </div>
