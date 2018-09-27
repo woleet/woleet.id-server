@@ -102,9 +102,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
   @Input()
   user: ApiUserObject;
 
-  @Input()
-  cancellable = false;
-
   @Output()
   submitSucceed = new EventEmitter<ApiUserObject>();
 
@@ -168,7 +165,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
   }
 
   ngOnInit() {
-    log.debug('init', this.user);
+    log.debug('init', this.mode, this.user);
     if (this.mode === 'edit') {
       this.form = this.setFormControl(copy<ApiUserObject>(this.user));
     } else {

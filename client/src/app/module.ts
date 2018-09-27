@@ -36,7 +36,6 @@ import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
 import { ErrorPageComponent } from '@pages/error';
 import { SettingsPageComponent } from '@pages/settings';
-import { UserCreatePageComponent } from '@pages/user.create';
 import { UserEditPageComponent } from '@pages/user.edit';
 import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
@@ -72,7 +71,6 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     UserPageComponent,
     UserListPageComponent,
     UserFormComponent,
-    UserCreatePageComponent,
     UserEditPageComponent,
     UserDetailPageComponent,
     AboutPageComponent,

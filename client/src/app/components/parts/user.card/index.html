@@ -43,6 +43,5 @@
       </div>
     </div>
   </mat-card>
-  <create-edit-user *ngIf="editMode" mode="edit" [user]="user" [cancellable]="true" (submitSucceed)="setEditMode(false); user = $event"
-    (cancel)="setEditMode(false)"></create-edit-user>
+  <create-edit-user *ngIf="editMode" mode="edit" [user]="user" (submitSucceed)="setEditMode(false); user = $event" (cancel)="setEditMode(false)"></create-edit-user>
 </div>

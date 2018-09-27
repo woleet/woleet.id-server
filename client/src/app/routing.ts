@@ -14,7 +14,6 @@ import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
 import { SettingsPageComponent } from '@pages/settings';
 import { UserListPageComponent } from '@pages/user.list';
-import { UserCreatePageComponent } from '@pages/user.create';
 import { UserEditPageComponent } from '@pages/user.edit';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ErrorPageComponent } from '@components/pages/error';
@@ -24,7 +23,6 @@ const routes: Routes = [
   { path: 'login', data: { title: 'Login', hideNav: true }, component: LoginPageComponent, canActivate: [IsAnonymous] },
   { path: 'setup', data: { title: 'Setup' }, component: SetupPageComponent, canActivate: [NeedConfig] },
   { path: 'user', data: { title: 'My profile' }, component: UserPageComponent, canActivate: [IsUser] },
-  { path: 'user/create', data: { title: 'Create a user' }, component: UserCreatePageComponent, canActivate: [IsAdmin] },
   { path: 'user/:id', data: { title: 'User keys' }, component: UserDetailPageComponent, canActivate: [IsAdmin] },
   { path: 'user/:id/edit', data: { title: 'Edit user' }, component: UserEditPageComponent, canActivate: [IsAdmin] },
   { path: 'users', data: { title: 'Users' }, component: UserListPageComponent, canActivate: [IsAdmin] },

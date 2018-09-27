@@ -8,9 +8,13 @@ import { TrackById } from '@components/util';
 })
 export class UserListPageComponent extends TrackById implements OnInit {
 
+  formOpened = false;
+
   users$: Promise<ApiUserObject[]>;
 
-  constructor(private service: UserService) { super() }
+  constructor(private service: UserService) {
+    super();
+  }
 
   ngOnInit() {
     this.refreshUserList();
