@@ -21,7 +21,7 @@ const router = new Router();
 /**
  * @route: /user/{userId}/key/
  * @swagger
- *  operationId: addKey
+ *  operationId: createKey
  */
 router.post('/user/:userId/key', vuid, validate.body('createKey'), async function (ctx) {
   const { userId } = ctx.params;

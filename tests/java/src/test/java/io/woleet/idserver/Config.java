@@ -27,7 +27,7 @@ public class Config {
     }
 
     // Current test mode
-    private static final TestMode testMode = TestMode.DEV;
+    private static final TestMode testMode = Config.getTestMode();
 
     // True if tests are to be debugged
     private static final boolean debug = false;
@@ -35,6 +35,17 @@ public class Config {
     // Initialize data needed to test users
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
     private static final String TEST_USERS_USERNAME_PREFIX = "tester_";
+
+    private static TestMode getTestMode() {
+        String value = System.getenv("TESTMODE");
+        switch (value) {
+            case "LOCAL":
+                return TestMode.LOCAL;
+            case "DEV":
+            default:
+                return TestMode.DEV;
+        }
+    }
 
     /**
      * Return a new API client with no credential.
