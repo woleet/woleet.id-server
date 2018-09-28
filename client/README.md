@@ -13,11 +13,12 @@ Run `npm run dev:prod` for a dev server with production preview.
 
 ### With SSL
 
-You can suffix `npm run dev[:prod]` with `:ssl` to run the app in SSL mode.
+You can suffix `npm run dev[:prod]` with `:ssl` to run the app in SSL mode (the `HTTP_TLS_CERTIFICATE` and `HTTP_TLS_KEY` variable descibed in the [main README](../README.md) must be defined).
+
 
 ## Production mode:
 ### Build
 
 Run `npm run build --prod` to build the project. 
 <br>The build artifacts will be stored in the `dist/` directory.
-<br>You can then serve these static file the way you want, in this repository this is done by an nginx server running in a docker container (see docker-).
+<br>You can then serve these static file the way you want, in this repository this is done by an nginx server running in a docker container (see [docker-compose.yml](../docker-compose.yml) and the [nginx](./nginx/) directory).
