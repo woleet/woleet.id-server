@@ -3,7 +3,6 @@ package io.woleet.idserver.api;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.IdentityResult;
-import io.woleet.idserver.api.model.KeyGet;
 import io.woleet.idserver.api.model.ServerConfig;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
@@ -33,7 +32,7 @@ public class IdentityApiTest {
 
         // Get server's default public key
         ServerConfig serverConfig = new ServerConfigApi(Config.getAdminAuthApiClient()).getServerConfig();
-        assertNotNull(serverConfig.getIdentityUrl());
+        assertNotNull(serverConfig.getIdentityURL());
         String pubKey = new KeyApi(Config.getAdminAuthApiClient()).getKeyById(serverConfig.getDefaultKeyId())
                 .getPubKey();
 
@@ -44,7 +43,7 @@ public class IdentityApiTest {
         assertNotNull(identityResult.getIdentity().getCommonName());
         assertNotNull(identityResult.getRightData());
         assertNotNull(identityResult.getSignature());
-        assertTrue(identityResult.getRightData().startsWith(serverConfig.getIdentityUrl()));
+        assertTrue(identityResult.getRightData().startsWith(serverConfig.getIdentityURL()));
         Config.isValidSignature(pubKey, identityResult.getSignature(), leftData + identityResult.getRightData());
     }
 }

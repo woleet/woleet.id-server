@@ -1021,7 +1021,7 @@ components:
     ServerConfig:
       type: object
       properties:
-        identityUrl:
+        identityURL:
           type: string
           example: "https://identity.mydomain.com/identity"
           description: |

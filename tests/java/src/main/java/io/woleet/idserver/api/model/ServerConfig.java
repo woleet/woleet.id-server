@@ -30,9 +30,9 @@ import java.util.UUID;
  */
 
 public class ServerConfig {
-  public static final String SERIALIZED_NAME_IDENTITY_URL = "identityUrl";
-  @SerializedName(SERIALIZED_NAME_IDENTITY_URL)
-  private String identityUrl = null;
+  public static final String SERIALIZED_NAME_IDENTITY_U_R_L = "identityURL";
+  @SerializedName(SERIALIZED_NAME_IDENTITY_U_R_L)
+  private String identityURL = null;
 
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
@@ -42,22 +42,22 @@ public class ServerConfig {
   @SerializedName(SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY)
   private Boolean fallbackOnDefaultKey = null;
 
-  public ServerConfig identityUrl(String identityUrl) {
-    this.identityUrl = identityUrl;
+  public ServerConfig identityURL(String identityURL) {
+    this.identityURL = identityURL;
     return this;
   }
 
    /**
    * The identity URL that the server returns with a signature. Note that the server always expects to be called on the \&quot;/identity\&quot; endpoint, if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain) you must not forget it in your reverse proxy configuration. 
-   * @return identityUrl
+   * @return identityURL
   **/
   @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "The identity URL that the server returns with a signature. Note that the server always expects to be called on the \"/identity\" endpoint, if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain) you must not forget it in your reverse proxy configuration. ")
-  public String getIdentityUrl() {
-    return identityUrl;
+  public String getIdentityURL() {
+    return identityURL;
   }
 
-  public void setIdentityUrl(String identityUrl) {
-    this.identityUrl = identityUrl;
+  public void setIdentityURL(String identityURL) {
+    this.identityURL = identityURL;
   }
 
   public ServerConfig defaultKeyId(UUID defaultKeyId) {
@@ -106,14 +106,14 @@ public class ServerConfig {
       return false;
     }
     ServerConfig serverConfig = (ServerConfig) o;
-    return Objects.equals(this.identityUrl, serverConfig.identityUrl) &&
+    return Objects.equals(this.identityURL, serverConfig.identityURL) &&
         Objects.equals(this.defaultKeyId, serverConfig.defaultKeyId) &&
         Objects.equals(this.fallbackOnDefaultKey, serverConfig.fallbackOnDefaultKey);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identityUrl, defaultKeyId, fallbackOnDefaultKey);
+    return Objects.hash(identityURL, defaultKeyId, fallbackOnDefaultKey);
   }
 
 
@@ -122,7 +122,7 @@ public class ServerConfig {
     StringBuilder sb = new StringBuilder();
     sb.append("class ServerConfig {\n");
     
-    sb.append("    identityUrl: ").append(toIndentedString(identityUrl)).append("\n");
+    sb.append("    identityURL: ").append(toIndentedString(identityURL)).append("\n");
     sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("    fallbackOnDefaultKey: ").append(toIndentedString(fallbackOnDefaultKey)).append("\n");
     sb.append("}");

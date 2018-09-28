@@ -22,7 +22,7 @@ public class SignatureApiTest {
 
     private void verifySignatureValid(String hashToSign, SignatureResult signatureResult, ServerConfig serverConfig) {
         assertNotNull(signatureResult.getIdentityURL());
-        assertEquals(serverConfig.getIdentityUrl(), signatureResult.getIdentityURL());
+        assertEquals(serverConfig.getIdentityURL(), signatureResult.getIdentityURL());
         assertTrue(Config.isValidPubKey(signatureResult.getPubKey()));
         assertEquals(hashToSign, signatureResult.getSignedHash());
         assertTrue(Config.isValidSignature(signatureResult.getPubKey(), signatureResult.getSignature(),
