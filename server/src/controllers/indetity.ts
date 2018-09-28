@@ -21,7 +21,7 @@ export async function getIdentity(leftData: string, pubKey: string) {
 
   const identity = key.getDataValue('user');
 
-  const rightData = getServerConfig().identityUrl + '.' + crypto.randomBytes(16).toString('hex');
+  const rightData = getServerConfig().identityURL + '.' + crypto.randomBytes(16).toString('hex');
 
   const sig = message.sign(leftData + rightData, Buffer.from(key.getDataValue('privateKey'), 'hex'));
 

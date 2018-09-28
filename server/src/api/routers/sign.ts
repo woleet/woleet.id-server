@@ -43,7 +43,7 @@ const signMiddleware: Router.IMiddleware[] = [
 
     const { signature, pubKey, userId, keyId, signedHash } = await sign(query);
 
-    const identityURL = getServerConfig().identityUrl;
+    const identityURL = getServerConfig().identityURL;
 
     event.register({
       type: 'signature',

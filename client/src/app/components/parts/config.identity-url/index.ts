@@ -42,7 +42,7 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
       }
 
       this.editMode = false;
-      this.form.setValue(config.identityUrl);
+      this.form.setValue(config.identityURL);
     });
 
     this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
@@ -54,9 +54,9 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
   }
 
   async submit() {
-    const identityUrl = this.form.value;
-    log.debug('Set idnetity URL to', identityUrl);
-    this.configService.update({ identityUrl });
+    const identityURL = this.form.value;
+    log.debug('Set idnetity URL to', identityURL);
+    this.configService.update({ identityURL });
   }
 
   cancelEdit() {

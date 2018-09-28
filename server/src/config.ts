@@ -52,7 +52,7 @@ export const events = {
 
 export const serverConfig = {
   default: {
-    identityUrl: `${server.protocol}://${server.host}:${ports.identity}/identity`,
+    identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true
   },
   CONFIG_ID: 'SERVER-CONFIG'

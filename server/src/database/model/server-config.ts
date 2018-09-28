@@ -5,7 +5,7 @@ import { serverConfig } from '../../config';
 
 const ServerConfigModel = {
   id: { type: STRING, defaultValue: serverConfig.CONFIG_ID, primaryKey: true },
-  identityUrl: { type: STRING, defaultValue: serverConfig.default.identityUrl },
+  identityURL: { type: STRING, defaultValue: serverConfig.default.identityURL },
   fallbackOnDefaultKey: { type: BOOLEAN, defaultValue: serverConfig.default.fallbackOnDefaultKey }
 };
 

@@ -4,6 +4,7 @@
   "description": "This is a repository to go with my article on creating an Express web application using TypeScript 2.",
   "main": "index.js",
   "scripts": {
+    "lint": "npx tslint src/**/*.ts",
     "check": "npx tsc --noEmit",
     "transpile": "npx tsc",
     "build": "npx tsc",
@@ -31,6 +32,7 @@
     "@types/secp256k1": "3.5.0",
     "@types/sequelize": "4.27.24",
     "@types/supertest": "^2.0.5",
+    "codelyzer": "^4.4.4",
     "mocha": "^5.2.0",
     "supertest": "^3.1.0",
     "ts-node": "^6.2.0",

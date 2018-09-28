@@ -1,13 +1,13 @@
 interface ServerConfig { }
 
 interface ApiServerConfig {
-  identityUrl: string;
+  identityURL: string;
   defaultKeyId: string;
   fallbackOnDefaultKey: boolean;
 }
 
 interface ApiServerConfigUpdate {
-  identityUrl?: string;
+  identityURL?: string;
   defaultKeyId?: string;
   fallbackOnDefaultKey?: boolean;
 }

@@ -43,7 +43,12 @@ public class IdentityApiTest {
         assertNotNull(identityResult.getIdentity().getCommonName());
         assertNotNull(identityResult.getRightData());
         assertNotNull(identityResult.getSignature());
-        assertTrue(identityResult.getRightData().startsWith(serverConfig.getIdentityURL()));
+        assertTrue(
+                "Expected " + identityResult.getRightData()
+                        + "to start with \"" + serverConfig.getIdentityURL()
+                        + "\" but got \"" + identityResult.getRightData() + "\"",
+                identityResult.getRightData().startsWith(serverConfig.getIdentityURL())
+        );
         Config.isValidSignature(pubKey, identityResult.getSignature(), leftData + identityResult.getRightData());
     }
 }

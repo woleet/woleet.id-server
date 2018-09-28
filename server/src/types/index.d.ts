@@ -1,7 +1,7 @@
 /* Server types */
 
-import { Instance } from "sequelize";
-import { SessionStore } from "../controllers/store.session";
+import { Instance } from 'sequelize';
+import { SessionStore } from '../controllers/store.session';
 import '../../../types/api.api-token';
 import '../../../types/api.server-config';
 import '../../../types/api.server-event';
@@ -164,20 +164,20 @@ declare global {
   /* Config */
 
   interface InternalServerConfigObject extends ServerConfig {
-    identityUrl: string;
+    identityURL: string;
     defaultKeyId: string;
     defaultKey?: InternalKeyObject;
     fallbackOnDefaultKey: boolean;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
-    identityUrl?: string;
+    identityURL?: string;
     defaultKeyId?: string;
     fallbackOnDefaultKey?: boolean;
   }
 
   interface ServerConfigCreate extends ServerConfig {
-    identityUrl: string;
+    identityURL: string;
     defaultKeyId: string;
     fallbackOnDefaultKey?: boolean;
   }

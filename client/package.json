@@ -11,6 +11,7 @@
     "start": "npx ng serve",
     "build": "npx ng build",
     "build:prod": "npx ng build --prod",
+    "build:prod:silent": "npx ng build --prod --no-progress",
     "test": "npx ng test",
     "lint": "npx ng lint"
   },

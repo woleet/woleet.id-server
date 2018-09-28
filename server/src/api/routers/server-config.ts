@@ -16,8 +16,8 @@ const router = new Router({ prefix: '/server-config' });
  *  operationId: getServerConfig
  */
 router.get('/', async function (ctx) {
-  const { fallbackOnDefaultKey, defaultKeyId, identityUrl } = getServerConfig();
-  ctx.body = { fallbackOnDefaultKey, defaultKeyId, identityUrl };
+  const { fallbackOnDefaultKey, defaultKeyId, identityURL } = getServerConfig();
+  ctx.body = { fallbackOnDefaultKey, defaultKeyId, identityURL };
 });
 
 /**
@@ -26,7 +26,7 @@ router.get('/', async function (ctx) {
  *  operationId: updateServerConfig
  */
 router.put('/', validate.body('updateConfig'), async function (ctx) {
-  const { fallbackOnDefaultKey, defaultKeyId, identityUrl } = await setServerConfig(ctx.request.body);
+  const { fallbackOnDefaultKey, defaultKeyId, identityURL } = await setServerConfig(ctx.request.body);
 
   event.register({
     type: 'config.edit',
@@ -34,10 +34,10 @@ router.put('/', validate.body('updateConfig'), async function (ctx) {
     associatedTokenId: null,
     associatedUserId: null,
     associatedKeyId: null,
-    data: { fallbackOnDefaultKey, defaultKeyId, identityUrl }
+    data: { fallbackOnDefaultKey, defaultKeyId, identityURL }
   });
 
-  ctx.body = { fallbackOnDefaultKey, defaultKeyId, identityUrl };
+  ctx.body = { fallbackOnDefaultKey, defaultKeyId, identityURL };
 });
 
 export { router };
