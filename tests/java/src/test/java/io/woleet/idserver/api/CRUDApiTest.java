@@ -320,28 +320,28 @@ public abstract class CRUDApiTest {
     @Test
     public void getObjectByIdTest() throws ApiException {
 
-        // Create an objectt to get
+        // Create an object to get
         ObjectPost objectPost = newObjectPost();
         ObjectGet objectGet = adminAuthApi.createObject(objectPost.setFullAttributes());
         verifyObjectValid(objectGet);
 
-        // Get and verify an objectt with admin credentials
+        // Get and verify an object with admin credentials
         objectGet = adminAuthApi.getObjectById(objectGet.getId());
         verifyObjectValid(objectGet);
         verifyObjectsEquals(objectPost, objectGet);
 
-        // Try to get an objectt with no credentials
+        // Try to get an object with no credentials
         try {
             noAuthApi.getObjectById(objectGet.getId());
-            fail("Should not be able to get an objectt with no credentials");
+            fail("Should not be able to get an object with no credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to get an objectt with user credentials
+        // Try to get an object with user credentials
         try {
             userAuthApi.getObjectById(objectGet.getId());
-            fail("Should not be able to get an objectt with user credentials");
+            fail("Should not be able to get an object with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
