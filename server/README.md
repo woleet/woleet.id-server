@@ -1,14 +1,30 @@
 # Koa server in typescript
 
-## Install
+## Development mode:
+### Install
+#### Install the node packages:
+    
+    $ npm install
 
-Install the node packages via:
+#### Then to start the server in development mode run:
 
-`$ npm install`
+    $ npm run dev
 
-Then to start the server in development mode run:
+## Production mode:
+### Install
+#### Install the node packages:
 
-`$ npm run dev`
+    $ npm install --production
+
+#### Build the server:
+
+    $ npm run build
+
+The build artifacts will be located in the `dist/` directory.
+
+#### Run the server:
+
+    $ npm start
 
 ## Configuration
 
@@ -23,4 +39,3 @@ To configure the targeted database you have to set the following environment var
  - POSTGRES_DB
  - POSTGRES_USER
  - POSTGRES_PASSWORD
- 
