@@ -213,32 +213,32 @@ public abstract class CRUDApiTest {
     @Test
     public void createObjectTest() throws ApiException {
 
-        // Try to create a object with no credentials
+        // Try to create an object with no credentials
         try {
             noAuthApi.createObject(newObjectPost());
-            fail("Should not be able to create a object with no credentials");
+            fail("Should not be able to create an object with no credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to create a object with user credentials
+        // Try to create an object with user credentials
         try {
             userAuthApi.createObject(newObjectPost());
-            fail("Should not be able to create a object with user credentials");
+            fail("Should not be able to create an object with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-        // Try to create a object without minimal attributes
+        // Try to create an object without minimal attributes
         ObjectPost objectPost = newObjectPost();
         try {
             adminAuthApi.createObject(objectPost);
-            fail("Should not be able to create a object without common name");
+            fail("Should not be able to create an object without common name");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
-        // Create and verify a object with minimal attributes
+        // Create and verify an object with minimal attributes
         ObjectGet objectGet = adminAuthApi.createObject(objectPost.setMinimalAttributes());
         verifyObjectValid(objectGet);
 
@@ -252,24 +252,24 @@ public abstract class CRUDApiTest {
     @Test
     public void deleteObjectTest() throws ApiException {
 
-        // Create a object to delete
+        // Create an object to delete
         ObjectGet objectGet = createTestObject();
 
         // Delete the object with admin credentials
         adminAuthApi.deleteObject(objectGet.getId());
 
-        // Try to delete a object with no credentials
+        // Try to delete an object with no credentials
         try {
             noAuthApi.deleteObject(objectGet.getId());
-            fail("Should not be able to delete a object with no credentials");
+            fail("Should not be able to delete an object with no credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to delete a object with user credentials
+        // Try to delete an object with user credentials
         try {
             userAuthApi.deleteObject(objectGet.getId());
-            fail("Should not be able to delete a object with user credentials");
+            fail("Should not be able to delete an object with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
@@ -286,7 +286,7 @@ public abstract class CRUDApiTest {
     @Test
     public void getAllObjectsTest() throws ApiException {
 
-        // Create a object to get
+        // Create an object to get
         ObjectGet objectGet = createTestObject();
 
         // Get all objects with admin credentials
@@ -320,28 +320,28 @@ public abstract class CRUDApiTest {
     @Test
     public void getObjectByIdTest() throws ApiException {
 
-        // Create a object to get
+        // Create an objectt to get
         ObjectPost objectPost = newObjectPost();
         ObjectGet objectGet = adminAuthApi.createObject(objectPost.setFullAttributes());
         verifyObjectValid(objectGet);
 
-        // Get and verify a object with admin credentials
+        // Get and verify an objectt with admin credentials
         objectGet = adminAuthApi.getObjectById(objectGet.getId());
         verifyObjectValid(objectGet);
         verifyObjectsEquals(objectPost, objectGet);
 
-        // Try to get a object with no credentials
+        // Try to get an objectt with no credentials
         try {
             noAuthApi.getObjectById(objectGet.getId());
-            fail("Should not be able to get a object with no credentials");
+            fail("Should not be able to get an objectt with no credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to get a object with user credentials
+        // Try to get an objectt with user credentials
         try {
             userAuthApi.getObjectById(objectGet.getId());
-            fail("Should not be able to get a object with user credentials");
+            fail("Should not be able to get an objectt with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
@@ -363,7 +363,7 @@ public abstract class CRUDApiTest {
         ObjectGet objectGet = adminAuthApi.createObject(objectPost.setFullAttributes());
         verifyObjectValid(objectGet);
 
-        // Update and verify a object with admin credentials
+        // Update and verify an object with admin credentials
         ObjectPut objectPut = newObjectPut();
         objectPut.update();
         objectGet = adminAuthApi.updateObject(objectGet.getId(), objectPut);
@@ -373,18 +373,18 @@ public abstract class CRUDApiTest {
         verifyObjectValid(objectGet);
         verifyObjectUpdated(objectPut, objectPost, objectGet);
 
-        // Try to update a object with no credentials
+        // Try to update an object with no credentials
         try {
             noAuthApi.updateObject(objectGet.getId(), objectPut);
-            fail("Should not be able to get a object with no credentials");
+            fail("Should not be able to get an object with no credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to update a object with user credentials
+        // Try to update an object with user credentials
         try {
             userAuthApi.updateObject(objectGet.getId(), objectPut);
-            fail("Should not be able to get a object with user credentials");
+            fail("Should not be able to get an object with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }

@@ -18,34 +18,12 @@ public class Config {
 
     private static ApiClient adminAuthApiClient;
 
-    // List of test mode
-    public enum TestMode {
-        LOCAL,  // Use the local platform (https://api.woleet.localhost/v1)
-        DEV,    // Use the dev platform (https://api-dev.woleet.io/v1/)
-        HA,     // Use the HA platform (https://api-ha.woleet.io/v1/)
-        PREPROD // Use the preprod platform (https://api-preprod.woleet.io/v1/)
-    }
-
-    // Current test mode
-    private static final TestMode testMode = Config.getTestMode();
-
     // True if tests are to be debugged
     private static final boolean debug = false;
 
     // Initialize data needed to test users
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
     private static final String TEST_USERS_USERNAME_PREFIX = "tester_";
-
-    private static TestMode getTestMode() {
-        String value = System.getenv("TESTMODE");
-        switch (value != null ? value : "default") {
-            case "LOCAL":
-                return TestMode.LOCAL;
-            case "DEV":
-            default:
-                return TestMode.DEV;
-        }
-    }
 
     /**
      * Return a new API client with no credential.
@@ -84,41 +62,14 @@ public class Config {
      * Return a singleton API client with credentials set for the platform admin.
      */
     public static ApiClient getAdminAuthApiClient() throws ApiException {
-        if (adminAuthApiClient == null) {
-            switch (testMode) {
-                case LOCAL:
-                    adminAuthApiClient = getAuthApiClient("admin", "pass");
-                    break;
-                case DEV:
-                    adminAuthApiClient = getAuthApiClient("admin", "pass");
-                    break;
-                case HA:
-                    assert false;
-                case PREPROD:
-                    assert false;
-                default:
-                    assert false;
-                    return null;
-            }
-        }
+        if (adminAuthApiClient == null)
+            adminAuthApiClient = getAuthApiClient(System.getenv("WOLEET_ID_SERVER_ADMIN_LOGIN"),
+                    System.getenv("WOLEET_ID_SERVER_ADMIN_PASSWORD"));
         return adminAuthApiClient;
     }
 
     private static String getBasePath() {
-        switch (testMode) {
-            case LOCAL:
-                //return "https://localhost:4220/api";
-                return "http://localhost:3000";
-            case DEV:
-                return "https://dev2.woleet.io:4220/api";
-            case HA:
-                assert false;
-            case PREPROD:
-                assert false;
-            default:
-                assert false;
-                return null;
-        }
+        return System.getenv("WOLEET_ID_SERVER_API_URL");
     }
 
     /**
