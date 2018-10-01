@@ -38,18 +38,4 @@ wait(1000)
   .then((config) => {
     log.info(`Created new server configuration with settings: ${JSON.stringify(config, null, 2)}`);
   })
-  .catch((err) => log.warn(`Failed to create user "admin": ${err.message}`))
-  .then(() => {
-    debug('Creating tester user');
-    return createUser({
-      password: 'pass',
-      role: 'user',
-      username: 'tester',
-      identity: {
-        commonName: 'Tester',
-        userId: 'tester'
-      }
-    });
-  })
-  .then(() => log.info('Created user "tester"'))
-  .catch((err) => log.warn(`Failed to create user "tester": ${err.message}`));
+  .catch((err) => log.warn(`Failed to create user "admin": ${err.message}`));

@@ -13,8 +13,10 @@ const KeyModel = {
   type: { type: ENUM(['bip39']), defaultValue: 'bip39' },
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   name: { type: STRING, allowNull: false },
-  mnemonicEntropy: { type: STRING, unique: true, allowNull: false },
-  privateKey: { type: CHAR(64), unique: true, allowNull: false },
+  // encrypted
+  mnemonicEntropy: { type: CHAR((16 + 16) * 2), unique: true, allowNull: false },
+  // encrypted
+  privateKey: { type: CHAR((32 + 16) * 2), unique: true, allowNull: false },
   publicKey: { type: STRING, unique: true, allowNull: false },
   lastUsed: { type: DATE, defaultValue: null }
 };

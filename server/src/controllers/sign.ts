@@ -8,6 +8,14 @@ import {
 } from '../errors';
 
 import * as message from 'bitcoinjs-message';
+import { decrypt } from './utils/encryption';
+
+/**
+ * TODO: move to secure module
+ */
+export async function signMessage(privkeyHex: string, hashToSign: string) {
+  return message.sign(hashToSign, decrypt(privkeyHex), false);
+}
 
 export async function sign({ hashToSign, pubKey, userId, customUserId }) {
   let user: SequelizeUserObject;
@@ -73,7 +81,7 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     throw new BlockedKeyError();
   }
 
-  const sig = message.sign(hashToSign, Buffer.from(key.getDataValue('privateKey'), 'hex'));
+  const sig = await signMessage(key.get('privateKey'), hashToSign);
 
   return {
     userId: user.get('id'),

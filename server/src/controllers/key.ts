@@ -1,6 +1,7 @@
 import { Key } from '../database';
 import { NotFoundKeyError } from '../errors';
 import { Mnemonic, HDPrivateKey, KeyRing } from 'bcoin';
+import { encrypt, decrypt } from './utils/encryption';
 
 /**
  * Key
@@ -13,6 +14,7 @@ import { Mnemonic, HDPrivateKey, KeyRing } from 'bcoin';
 /**
  * @swagger
  *  operationId: createKey
+ * TODO: move to secure module
  */
 export async function createKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
 
@@ -26,11 +28,22 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
   const ring = KeyRing.fromPrivate(xkey.privateKey, false);
 
   const publicKey = ring.getAddress('base58');
-  const privateKey = ring.getPrivateKey().toString('hex');
+  const privateKey = ring.getPrivateKey();
+
+  console.log('W', mnemonic.getPhrase());
+  console.log('M', master.toRaw().length, master.toRaw().toString('hex'));
+
+  console.log('E', mnemonic.getEntropy().length, mnemonic.getEntropy().toString('hex'));
+  const encryptedEntropy = encrypt(mnemonic.getEntropy());
+  console.log('EE', encryptedEntropy.length, encryptedEntropy.toString('hex'));
+
+  const encryptedPrivateKey = encrypt(privateKey);
+  console.log('P', privateKey.length, privateKey.toString('hex'));
+  console.log('EP', encryptedPrivateKey.length, encryptedPrivateKey.toString('hex'));
 
   const newKey = await Key.create(Object.assign({}, key, {
-    mnemonicEntropy: mnemonic.getEntropy().toString('hex'),
-    privateKey,
+    mnemonicEntropy: encryptedEntropy.toString('hex'),
+    privateKey: encryptedPrivateKey.toString('hex'),
     publicKey,
     userId
   }));
@@ -72,6 +85,9 @@ export async function getOwner(id): Promise<InternalUserObject> {
   return key.get('user').toJSON();
 }
 
+/**
+ * TODO: move to secure module
+ */
 export async function exportKey(id: string): Promise<string> {
   const key = await Key.getById(id);
 
@@ -79,9 +95,12 @@ export async function exportKey(id: string): Promise<string> {
     throw new NotFoundKeyError();
   }
 
-  // Get key phrase phrase
-  const mnemonic = Mnemonic.fromEntropy(Buffer.from(key.getDataValue('mnemonicEntropy'), 'hex'));
+  const entropy = decrypt(key.get('mnemonicEntropy'));
 
+  // Get key mnemonic
+  const mnemonic = Mnemonic.fromEntropy(entropy);
+
+  // Return phrase
   return mnemonic.getPhrase();
 }
 

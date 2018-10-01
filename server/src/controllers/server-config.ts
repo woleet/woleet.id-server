@@ -1,7 +1,8 @@
 import { ServerConfig } from '../database';
 import { serverConfig as config } from '../config';
 import * as Debug from 'debug';
-const debug = Debug('id:api;config');
+const debug = Debug('id:ctrl:config');
+import * as log from 'loglevel';
 
 const { CONFIG_ID } = config;
 
@@ -9,6 +10,10 @@ let inMemoryConfig = null;
 
 export async function loadServerConfig(): Promise<InternalServerConfigObject> {
   const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    log.warn('No config in database');
+    return;
+  }
   inMemoryConfig = cfg.toJSON();
   return getServerConfig();
 }

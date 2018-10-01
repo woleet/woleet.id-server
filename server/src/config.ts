@@ -1,10 +1,15 @@
 // tslint:disable:radix
 
 import * as log from 'loglevel';
+import * as path from 'path';
+import * as fs from 'fs';
+import * as assert from 'assert';
 
 const env = process.env;
 
-log.setLevel(env.PROD === 'true' ? 'info' : 'debug');
+const prod = env.PROD === 'true';
+
+log.setLevel(prod ? 'info' : 'debug');
 
 const defaultPort = parseInt(env.WOLEET_ID_SERVER_DEFAULT_PORT) || 3000;
 
@@ -58,4 +63,21 @@ export const serverConfig = {
   CONFIG_ID: 'SERVER-CONFIG'
 };
 
-export default { ports, db, session, server, pagination };
+
+
+// TODO: must not default
+const defaultSecret = 'secret';
+const ENCRYPTION_SECRET = env.ENCRYPTION_SECRET;
+if (!ENCRYPTION_SECRET) {
+  log.warn('No "ENCRYPTION_SECRET" environment set...');
+  if (prod) {
+    assert(ENCRYPTION_SECRET, '"ENCRYPTION_SECRET" is not set');
+  }
+  log.warn(`...defaulting to "${defaultSecret}"`);
+}
+
+export const encryption = {
+  secret: ENCRYPTION_SECRET,
+  // privkey: fs.readFileSync(path.join(__dirname, '../privkey.pem'), 'utf8'),
+  // pubkey: fs.readFileSync(path.join(__dirname, '../pubkey.pem'), 'utf8')
+};
