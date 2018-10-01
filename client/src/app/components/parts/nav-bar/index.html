@@ -14,7 +14,7 @@
   </div>
 </mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav *ngIf="isAdmin()" class="sidenav dark-theme" ngClass.xs="collapse" fixedInViewport="true" role="navigation"
+  <mat-sidenav *ngIf="isAdmin() && !hide()" class="sidenav dark-theme" ngClass.xs="collapse" fixedInViewport="true" role="navigation"
     mode="side" opened="true">
     <mat-nav-list>
       <mat-list-item routerLink="/users">

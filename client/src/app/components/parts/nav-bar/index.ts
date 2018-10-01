@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@services/auth';
 import { environment } from '@env/environment';
 import { PageDataService } from '@services/page-data';
+import { ErrorService } from '@services/error';
 
 @Component({
   selector: 'nav-bar',
@@ -13,7 +14,12 @@ export class NavBarComponent {
 
   production = false;
 
-  constructor(private router: Router, private auth: AuthService, private pageDataService: PageDataService) {
+  constructor(
+    private router: Router,
+    private auth: AuthService,
+    private pageDataService: PageDataService,
+    private errorService: ErrorService
+  ) {
     this.production = environment.production;
   }
 
@@ -22,7 +28,7 @@ export class NavBarComponent {
   }
 
   hide() {
-    return this.pageDataService.hideNav();
+    return this.pageDataService.hideNav() || this.errorService.hasError();
   }
 
   page() {
