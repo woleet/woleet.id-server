@@ -78,5 +78,5 @@ if (!ENCRYPTION_SECRET) {
 }
 
 export const encryption = {
-  secret: ENCRYPTION_SECRET
+  secret: ENCRYPTION_SECRET || defaultSecret
 };
