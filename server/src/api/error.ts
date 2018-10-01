@@ -2,6 +2,7 @@ import * as Debug from 'debug';
 import { IMiddleware } from 'koa-router';
 import { NotFound, HttpError } from 'http-errors';
 import * as errors from '../errors';
+import { store as event } from '../controllers/server-event';
 
 const debug = Debug('id:server');
 
@@ -40,6 +41,16 @@ const errorHandler: IMiddleware = async function (ctx, next) {
       ctx.body = { message: err.message, status: 202 };
     } else {
       debug('Unhandled error', err);
+
+      event.register({
+        type: 'error',
+        authorizedUserId: ctx.session && ctx.session.user && ctx.session.user.get('id'),
+        associatedTokenId: null,
+        associatedUserId: null,
+        associatedKeyId: null,
+        data: { message: err.message, stack: err.stack }
+      });
+
       ctx.status = 500;
       ctx.body = { message: 'Internal Server Error', status: 500 };
     }

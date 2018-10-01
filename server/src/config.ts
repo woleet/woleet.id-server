@@ -48,6 +48,7 @@ export const events = {
   batchSize: 100,
   flushAfter: 10 * 1000,
   typesEnum: [
+    'error',
     'signature', 'login', 'config.edit',
     'key.create', 'key.edit', 'key.delete',
     'user.create', 'user.edit', 'user.delete',
@@ -77,7 +78,5 @@ if (!ENCRYPTION_SECRET) {
 }
 
 export const encryption = {
-  secret: ENCRYPTION_SECRET,
-  // privkey: fs.readFileSync(path.join(__dirname, '../privkey.pem'), 'utf8'),
-  // pubkey: fs.readFileSync(path.join(__dirname, '../pubkey.pem'), 'utf8')
+  secret: ENCRYPTION_SECRET
 };

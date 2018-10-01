@@ -15,13 +15,3 @@ export function decrypt(data: string) {
   const decrypted = Buffer.concat([decipher.update(Buffer.from(data, 'hex')), decipher.final()]);
   return decrypted;
 }
-
-/*
-export function encrypt(data: Buffer) {
-  return crypto.publicEncrypt(config.pubkey, data);
-}
-
-export function decrypt(data: string) {
-  return crypto.privateDecrypt(config.privkey, Buffer.from(data));
-}
-*/
