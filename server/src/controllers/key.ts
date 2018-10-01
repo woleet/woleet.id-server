@@ -30,16 +30,8 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
   const publicKey = ring.getAddress('base58');
   const privateKey = ring.getPrivateKey();
 
-  console.log('W', mnemonic.getPhrase());
-  console.log('M', master.toRaw().length, master.toRaw().toString('hex'));
-
-  console.log('E', mnemonic.getEntropy().length, mnemonic.getEntropy().toString('hex'));
   const encryptedEntropy = encrypt(mnemonic.getEntropy());
-  console.log('EE', encryptedEntropy.length, encryptedEntropy.toString('hex'));
-
   const encryptedPrivateKey = encrypt(privateKey);
-  console.log('P', privateKey.length, privateKey.toString('hex'));
-  console.log('EP', encryptedPrivateKey.length, encryptedPrivateKey.toString('hex'));
 
   const newKey = await Key.create(Object.assign({}, key, {
     mnemonicEntropy: encryptedEntropy.toString('hex'),
