@@ -20,7 +20,7 @@ Run `npm run dev:prod` instead to start the web app in production preview mode.
 
 ### Enable SSL
 
-You can suffix `npm run dev[:prod]` with `:ssl` to run the app in SSL mode (the `HTTP_TLS_CERTIFICATE` and `HTTP_TLS_KEY` variable described in the [main README](../README.md) must be defined).
+You can suffix `npm run dev[:prod]` with `:ssl` to run the app in SSL mode (the `WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE` and `WOLEET_ID_SEEVER_HTTP_TLS_KEY` variables described in the [main README](../README.md) must be defined).
 
 ## Production mode
 
