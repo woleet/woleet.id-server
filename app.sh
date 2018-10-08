@@ -38,7 +38,7 @@ fi
 shift
 
 if [ "$operation" == "start" ]; then
-  docker-compose ${compose} up -d
+  docker-compose up -d
   #TODO: split start & log
   if [ "$1" != "--no-log" ]; then
     docker-compose logs -f --tail 50
@@ -65,7 +65,7 @@ elif [ "$operation" == "build" ]; then
   echo "Done."
 
   echo "Copying client source to final image (wid-client)..."
-  docker-compose ${compose} build
+  docker-compose build
   echo "Done."
 
   postbuild
