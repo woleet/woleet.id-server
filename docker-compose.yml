@@ -35,10 +35,10 @@ services:
     depends_on:
       - wid-postgres
     environment:
-      POSTGRES_DB: wid
-      POSTGRES_USER: pguser
-      POSTGRES_PASSWORD: pass
-      POSTGRES_HOST: wid-postgres
+      WOLEET_ID_SERVER_POSTGRES_DB: wid
+      WOLEET_ID_SERVER_POSTGRES_USER: pguser
+      WOLEET_ID_SERVER_POSTGRES_PASSWORD: pass
+      WOLEET_ID_SERVER_POSTGRES_HOST: wid-postgres
     networks:
       - client-server
       - postgres-server

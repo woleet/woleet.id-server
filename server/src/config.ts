@@ -1,29 +1,30 @@
 // tslint:disable:radix
 
 import * as log from 'loglevel';
-import * as path from 'path';
-import * as fs from 'fs';
 import * as assert from 'assert';
 
-const env = process.env;
+function getenv(name: string) {
+  const prefix = 'WOLEET_ID_SERVER_';
+  return process.env[prefix + name];
+}
 
-const prod = env.PROD === 'true';
+const prod = getenv('PROD') === 'true';
 
 log.setLevel(prod ? 'info' : 'debug');
 
-const defaultPort = parseInt(env.WOLEET_ID_SERVER_DEFAULT_PORT) || 3000;
+const defaultPort = parseInt(getenv('DEFAULT_PORT')) || 3000;
 
 export const ports = {
-  signature: parseInt(env.WOLEET_ID_SERVER_SIGNATURE_PORT) || defaultPort,
-  identity: parseInt(env.WOLEET_ID_SERVER_IDENTITY_PORT) || defaultPort,
-  api: parseInt(env.WOLEET_ID_SERVER_API_PORT) || defaultPort
+  signature: parseInt(getenv('SIGNATURE_PORT')) || defaultPort,
+  identity: parseInt(getenv('IDENTITY_PORT')) || defaultPort,
+  api: parseInt(getenv('API_PORT')) || defaultPort
 };
 
 export const db = {
-  host: env.POSTGRES_HOST || 'localhost',
-  database: env.POSTGRES_DB || 'wid',
-  username: env.POSTGRES_USER || 'pguser',
-  password: env.POSTGRES_PASSWORD || 'pass'
+  host: getenv('POSTGRES_HOST') || 'localhost',
+  database: getenv('POSTGRES_DB') || 'wid',
+  username: getenv('POSTGRES_USER') || 'pguser',
+  password: getenv('POSTGRES_PASSWORD') || 'pass'
 };
 
 export const session = {
@@ -44,7 +45,7 @@ export const pagination = {
 };
 
 export const events = {
-  disable: env.DISABLE_EVENT_LOGGING === 'true' || false,
+  disable: getenv('DISABLE_EVENT_LOGGING') === 'true' || false,
   batchSize: 100,
   flushAfter: 10 * 1000,
   typesEnum: [
@@ -68,11 +69,11 @@ export const serverConfig = {
 
 // TODO: must not default
 const defaultSecret = 'secret';
-const ENCRYPTION_SECRET = env.ENCRYPTION_SECRET;
+const ENCRYPTION_SECRET = getenv('ENCRYPTION_SECRET');
 if (!ENCRYPTION_SECRET) {
-  log.warn('No "ENCRYPTION_SECRET" environment set...');
+  log.warn('No "WOLEET_ID_SERVER_ENCRYPTION_SECRET" environment set...');
   if (prod) {
-    assert(ENCRYPTION_SECRET, '"ENCRYPTION_SECRET" is not set');
+    assert(ENCRYPTION_SECRET, '"WOLEET_ID_SERVER_ENCRYPTION_SECRET" is not set');
   }
   log.warn(`...defaulting to "${defaultSecret}"`);
 }
