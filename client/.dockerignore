@@ -1,1 +1,8 @@
-node_modules
+# Ignore everything
+**
+
+# Allow files and directories
+!/*.json
+!/nginx
+!/tmp
+!/src

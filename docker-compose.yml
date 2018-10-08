@@ -17,9 +17,9 @@ services:
       POSTGRES_PASSWORD: pass
   wid-client:
     image: ${WOLEET_ID_SERVER_REGISTRY}:client
-    build: ./client
     ports:
-      - 4220:443
+      - 80:80
+      - 443:443
     volumes:
       - ${HTTP_TLS_CERTIFICATE}:/etc/nginx/ssl/certificate.crt:ro
       - ${HTTP_TLS_KEY}:/etc/nginx/ssl/certificate.key:ro
@@ -30,8 +30,9 @@ services:
       - client-server
   wid-server:
     image: ${WOLEET_ID_SERVER_REGISTRY}:server
-    build: ./server
     restart: on-failure
+    stdin_open: true
+    tty: true
     depends_on:
       - wid-postgres
     environment:

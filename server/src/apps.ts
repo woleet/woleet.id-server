@@ -1,4 +1,3 @@
-import './startup';
 import * as routes from './api';
 import { ports } from './config';
 import * as Router from 'koa-router';

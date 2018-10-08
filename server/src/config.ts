@@ -1,9 +1,8 @@
 // tslint:disable:radix
 
+import { promisify } from 'util';
 import * as log from 'loglevel';
-import * as path from 'path';
-import * as fs from 'fs';
-import * as assert from 'assert';
+import * as read from 'read';
 
 const env = process.env;
 
@@ -64,19 +63,23 @@ export const serverConfig = {
   CONFIG_ID: 'SERVER-CONFIG'
 };
 
-
-
-// TODO: must not default
-const defaultSecret = 'secret';
 const ENCRYPTION_SECRET = env.ENCRYPTION_SECRET;
-if (!ENCRYPTION_SECRET) {
-  log.warn('No "ENCRYPTION_SECRET" environment set...');
-  if (prod) {
-    assert(ENCRYPTION_SECRET, '"ENCRYPTION_SECRET" is not set');
-  }
-  log.warn(`...defaulting to "${defaultSecret}"`);
-}
 
 export const encryption = {
-  secret: ENCRYPTION_SECRET || defaultSecret
+  secret: ENCRYPTION_SECRET,
+  init: async function (): Promise<void> {
+    if (!ENCRYPTION_SECRET) {
+      log.warn('No "ENCRYPTION_SECRET" environment set, please type encryption secret:');
+      const options = { silent: true };
+      const _read = promisify(read);
+      let secret = '';
+      while (!secret) {
+        secret = await _read(options);
+        if (!secret) {
+          log.warn('Encryption secret must not be empty, please type it:');
+        }
+        encryption.secret = secret;
+      }
+    }
+  }
 };

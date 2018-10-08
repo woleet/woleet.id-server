@@ -11,7 +11,7 @@ let inMemoryConfig = null;
 export async function loadServerConfig(): Promise<InternalServerConfigObject> {
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
-    log.warn('No config in database');
+    log.warn('No configuration found in database');
     return;
   }
   inMemoryConfig = cfg.toJSON();
