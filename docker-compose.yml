@@ -16,20 +16,20 @@ services:
       POSTGRES_USER: pguser
       POSTGRES_PASSWORD: pass
   wid-client:
-    image: ${WOLEET_ID_SERVER_REGISTRY}:client
+    image: ${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}:client
     build: ./client
     ports:
       - 4220:443
     volumes:
-      - ${HTTP_TLS_CERTIFICATE}:/etc/nginx/ssl/certificate.crt:ro
-      - ${HTTP_TLS_KEY}:/etc/nginx/ssl/certificate.key:ro
+      - ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}:/etc/nginx/ssl/certificate.crt:ro
+      - ${WOLEET_ID_SERVER_HTTP_TLS_KEY:?Undefined WOLEET_ID_SERVER_HTTP_TLS_KEY}:/etc/nginx/ssl/certificate.key:ro
     restart: on-failure
     depends_on:
       - wid-server
     networks:
       - client-server
   wid-server:
-    image: ${WOLEET_ID_SERVER_REGISTRY}:server
+    image: ${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}:server
     build: ./server
     restart: on-failure
     depends_on:
