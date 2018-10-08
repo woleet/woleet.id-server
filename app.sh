@@ -10,8 +10,7 @@ tmp_client_dir=./client/tmp/
 tmp_server_dir=./server/tmp/
 
 prebuild () {
-  # copy "types" folder into both server and client
-  # to make it accessible from each docker contexts
+  # Copy "types" folder into both server and client to make it accessible from each docker contexts
   echo "Copying types..."
   rm -rf $tmp_client_dir
   rm -rf $tmp_server_dir

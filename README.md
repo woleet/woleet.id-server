@@ -3,7 +3,7 @@
 Woleet.ID Server is a web application and server to be hosted inside your organization's IT.
  It allows you to **manage the identity of your users and the set of cryptographic keys** they can use to sign data.
  
-Woleet.ID Server identities are made of **X509 information** (like the common name, organization name, country code, etc.) 
+Woleet.ID Server identities are made of **X500 information** (like the common name, organization name, country code, etc.) 
  associated to one or several **bitcoin keys** (each being made of a public bitcoin address and of a private key securely stored inside Woleet.ID Server's DB).
  
 Woleet.ID Server provides a private API allowing you or your users to **sign data using their bitcoin addresses**,
@@ -42,7 +42,7 @@ From this specification, APIs client and test code (written in Java) is generate
 
 # Deployment
 
-Woleet.ID Server can be run using Docker (tested on Linux and  macOS), or directly on a Linux host.
+Woleet.ID Server can be built and run using Docker (tested on Linux and  macOS), or directly on a Linux host.
 
 > NOTE: Building and running the server and the web app using Docker is the simplest way to go and is recommended for production environments.
 
@@ -51,33 +51,28 @@ If you want to build or run without Docker, you can find detailed information ab
 
 ## Prerequisites
 
-You need a TLS certificate for your server. It can be [self signed](https://www.digitalocean.com/community/tutorials/how-to-create-an-ssl-certificate-on-nginx-for-ubuntu-14-04)
+You need a TLS certificate to run Woleet.ID Server. It can be [self signed](https://www.digitalocean.com/community/tutorials/how-to-create-an-ssl-certificate-on-nginx-for-ubuntu-14-04)
 but it is highly recommended to use a Organization Validation (OV) certificate, since your organization's identity information will be extracted from this certificate during the identity verification process).
 
 You need to set two environment variables pointing to the certificate and its associate key:
 ```
-export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE=path/to/certificate.crt
-export WOLEET_ID_SERVER_HTTP_TLS_KEY=path/to/certificate.key
+export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE={path to certificate .crt file}
+export WOLEET_ID_SERVER_HTTP_TLS_KEY={path to certificate .key file}
 ```
 
-## Install the database
+## Database
 
-The server requires a PostgreSQL database (version >=10).
+Woleet.ID Server requires a PostgreSQL database. When run using Docker, the database is automatically deployed as a Docker container using a local directory to store data.
 
-To configure the targeted database you need to set the following environment variables:
+> NOTE: If you want to use Docker to run Woleet.ID Server but don't want ot use Docker to run the database,
+you will have to modify the `docker-compose.yml` file and configure the database to use by setting the following environment variables:
 ```
-export WOLEET_ID_SERVER_POSTGRES_HOST=wid-postgres
-WOLEET_ID_SERVER_POSTGRES_DB
-WOLEET_ID_SERVER_POSTGRES_USER
-WOLEET_ID_SERVER_POSTGRES_PASSWORD
+export WOLEET_ID_SERVER_POSTGRES_HOST={PostgreSQL host, default: wid-postgres}
+export WOLEET_ID_SERVER_POSTGRES_DB={PostgreSQL database, default: wid}
+export WOLEET_ID_SERVER_POSTGRES_USER={PostgreSQL user, default: pg_user}
+export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pass}
 ```
 
-      WOLEET_ID_SERVER_POSTGRES_DB: wid
-      WOLEET_ID_SERVER_POSTGRES_USER: pguser
-      WOLEET_ID_SERVER_POSTGRES_PASSWORD: pass
-      WOLEET_ID_SERVER_POSTGRES_HOST: wid-postgres
-
- 
 ## Build the project
 
     ./app.sh build
@@ -86,11 +81,21 @@ WOLEET_ID_SERVER_POSTGRES_PASSWORD
 
 ## Configure the project
 
-WOLEET_ID_SERVER_ADMIN_LOGIN='admin'
-WOLEET_ID_SERVER_ADMIN_PASSWORD='pass'
-WOLEET_ID_SERVER_API_URL='https://dev2.woleet.io:4220/api'
-WOLEET_ID_SERVER_ENCRYPTION_SECRET
+## Administrator account
 
+When run for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
+> WARNING: don't forget to change the password of the `admin` user! You can do this using the web app.
+
+## Encryption secret
+Woleet.ID Server encrypt keys stored in the database using a encryption secret you need to define using the following environment variable:
+```
+export WOLEET_ID_SERVER_ENCRYPTION_SECRET={encryption secret, default: 'secret'}
+```
+> WARNING: don't forget to set your own the encryption secret before starting the server for the first time!
+
+## Server ports
+
+TODO
 You can define ports to listen by setting the following environment variables:
  - WOLEET_ID_SERVER_DEFAULT_PORT (default: 3000)
  - WOLEET_ID_SERVER_SIGNATURE_PORT
