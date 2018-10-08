@@ -1,4 +1,4 @@
-# Koa server in typescript
+# Node.js Server
 
 ## Development mode:
 ### Install

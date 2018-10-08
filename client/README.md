@@ -1,22 +1,23 @@
-# Client
+# Client Web app
 
-## Development mode:
+## Development mode
+
 ### Serve client app
 
 Run `npm run dev` to run the app in development mode.
-<br>The development app will be servet on `http://localhost:4220/`.
+<br>The development app will be served on `http://localhost:4220/`.
 <br>In development mode, live reload is enabled: the app will automatically reload if you change any of the source files.
 
 ### Production preview
 
 Run `npm run dev:prod` for a dev server with production preview.
 
-### With SSL
+### Enable SSL
 
-You can suffix `npm run dev[:prod]` with `:ssl` to run the app in SSL mode (the `HTTP_TLS_CERTIFICATE` and `HTTP_TLS_KEY` variable descibed in the [main README](../README.md) must be defined).
+You can suffix `npm run dev[:prod]` with `:ssl` to run the app in SSL mode (the `HTTP_TLS_CERTIFICATE` and `HTTP_TLS_KEY` variable described in the [main README](../README.md) must be defined).
 
+## Production mode
 
-## Production mode:
 ### Build
 
 Run `npm run build --prod` to build the project. 
