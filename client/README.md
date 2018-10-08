@@ -2,15 +2,21 @@
 
 ## Development mode
 
-### Serve client app
+Install node packages:
+    
+    $ npm install
 
-Run `npm run dev` to run the app in development mode.
-<br>The development app will be served on `http://localhost:4220/`.
-<br>In development mode, live reload is enabled: the app will automatically reload if you change any of the source files.
+Start the web app in development mode:
+
+    $ npm run dev
+    
+The web app will be served on `http://localhost:4220/`.
+
+In development mode, live reload is enabled: the app will automatically reload if you change any of the source files.
 
 ### Production preview
 
-Run `npm run dev:prod` for a dev server with production preview.
+Run `npm run dev:prod` instead to start the web app in production preview mode.
 
 ### Enable SSL
 
@@ -18,8 +24,17 @@ You can suffix `npm run dev[:prod]` with `:ssl` to run the app in SSL mode (the 
 
 ## Production mode
 
-### Build
+Install node packages:
+    
+    $ npm install --production
 
-Run `npm run build --prod` to build the project. 
-<br>The build artifacts will be stored in the `dist/` directory.
-<br>You can then serve these static file the way you want, in this repository this is done by an nginx server running in a docker container (see [docker-compose.yml](../docker-compose.yml) and the [nginx](./nginx/) directory).
+Build the web app:
+
+    $ npm run build --prod
+
+The build artifacts will be stored in the `dist/` directory.
+
+Serve the web app:
+
+You can then serve these static files the way you want.
+In this repository this is done by using an NGinX server running in a Docker container (see [docker-compose.yml](../docker-compose.yml) and the [nginx](./nginx/) directory).
