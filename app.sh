@@ -38,10 +38,6 @@ fi
 shift
 
 if [ "$operation" == "start" ]; then
-  if [ -z $WOLEET_ID_SERVER_DATA_DIR ]; then
-    echo '"WOLEET_ID_SERVER_DATA_DIR\" must be set.'
-    exit -1
-  fi
   docker-compose ${compose} up -d
   #TODO: split start & log
   if [ "$1" != "--no-log" ]; then
