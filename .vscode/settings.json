@@ -2,6 +2,6 @@
   "files.associations": {
     "app": "shellscript",
     "start-pg-dev": "shellscript",
-    "Dockerfile.*": "dockerfile",
+    "Dockerfile.*": "dockerfile"
   }
 }

@@ -19,11 +19,11 @@ In both _client_ and _server_ directories, run: `npm install`.
 
 ### Start up the project:
 
-In the project's root directory, run the `start-pg-dev` script to start PostgreSQL.
+In the project's root directory, run the `start-pb-dev.sh` script to start PostgreSQL.
 
 Finally, in both _client_ and _server_ directories, run: `npm run dev`.
 
-Detailed informations is available in [client's](client/README.md) and [server's](server/README.md) README files. 
+Detailed information is available in [client's](client/README.md) and [server's](server/README.md) README files. 
 
 ## Build and run using Docker (production mode)
 

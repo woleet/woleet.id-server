@@ -24,4 +24,3 @@ Thumbs.db
 
 # Log files
 *.log
-/tests/java/woleet-idserver-api-client.iml

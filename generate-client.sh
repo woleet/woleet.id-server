@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Use this script to generate client code from Woleet.ID Server OpenAPI documentation.
-# ====================================================================================
+# Use this script to generate Java test/client code from Woleet.ID Server OpenAPI documentation.
+# ==============================================================================================
 
 OPENAPI_CODEGEN='openapi-generator'
 
