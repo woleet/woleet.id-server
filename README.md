@@ -19,9 +19,9 @@ Using signature anchoring, new use cases like document authentication or multi s
 
 # Architecture
 
-Woleet.ID Server is made of a Node.js server and a Angular/Material web application.
+Woleet.ID Server is made of a Node.js server and a Angular/Material client web application.
 
-**Angular Web app**
+**Angular/Material client web app**
 
 The web app is intended for the server administrator only. It allows to configure the server and to manage users and their keys.
 The source code can be found in the `client/` directory.
@@ -44,47 +44,64 @@ From this specification, APIs client and test code (written in Java) is generate
 
 Woleet.ID Server can be run using Docker (tested on Linux and  macOS), or directly on a Linux host.
 
-## Build and run without Docker
+> NOTE: Building and running the server and the web app using Docker is the simplest way to go and is recommended for production environments.
 
-Running the server and the web app without Docker is useful for development purpose. 
+Here we only document building and running Woleet.ID Server using Docker.
+If you want to build or run without Docker, you can find detailed information about how to build and run Woleet.ID Server in [client's](client/README.md) and [server's](server/README.md) README files. 
 
-### Prerequisites
+## Prerequisites
 
-You need _gcc, g++, make, bash, python, docker_ and _node.js_ (with _npm_) to be installed on your system to build the project.
+You need a TLS certificate for your server. It can be [self signed](https://www.digitalocean.com/community/tutorials/how-to-create-an-ssl-certificate-on-nginx-for-ubuntu-14-04)
+but it is highly recommended to use a Organization Validation (OV) certificate, since your organization's identity information will be extracted from this certificate during the identity verification process).
 
-### Set up the project
+You need to set two environment variables pointing to the certificate and its associate key:
+```
+export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE=path/to/certificate.crt
+export WOLEET_ID_SERVER_HTTP_TLS_KEY=path/to/certificate.key
+```
 
-In both `client/` and `server/` directories, run: `npm install`.
+## Install the database
 
-### Start the project
+The server requires a PostgreSQL database (version >=10).
 
-In the project's root directory, run the `start-pg-dev.sh` script to start PostgreSQL in a Docker container.
+To configure the targeted database you need to set the following environment variables:
+```
+export WOLEET_ID_SERVER_POSTGRES_HOST=wid-postgres
+WOLEET_ID_SERVER_POSTGRES_DB
+WOLEET_ID_SERVER_POSTGRES_USER
+WOLEET_ID_SERVER_POSTGRES_PASSWORD
+```
 
-Finally, in both `client/` and `server/` directories, run: `npm run dev`.
+      WOLEET_ID_SERVER_POSTGRES_DB: wid
+      WOLEET_ID_SERVER_POSTGRES_USER: pguser
+      WOLEET_ID_SERVER_POSTGRES_PASSWORD: pass
+      WOLEET_ID_SERVER_POSTGRES_HOST: wid-postgres
 
-Detailed information is available in [client's](client/README.md) and [server's](server/README.md) README files. 
-
-## Build and run using Docker
-
-Running the server and the web app using Docker is recommended for production environment.
  
-### Prerequisites
+## Build the project
 
-You must have a certificate for your server: (it can be [self signed](https://www.digitalocean.com/community/tutorials/how-to-create-an-ssl-certificate-on-nginx-for-ubuntu-14-04))
+    ./app.sh build
 
-```
-HTTP_TLS_CERTIFICATE=path/to/certificate.crt
-HTTP_TLS_KEY=path/to/certificate.key
-```
+> NOTE: If you want Woleet.ID Server's Docker images to be stored on a specific Docker registry, you can set the WOLEET_ID_SERVER_REGISTRY environment variable.
 
-### Build the project
+## Configure the project
 
-    ./app build
+WOLEET_ID_SERVER_ADMIN_LOGIN='admin'
+WOLEET_ID_SERVER_ADMIN_PASSWORD='pass'
+WOLEET_ID_SERVER_API_URL='https://dev2.woleet.io:4220/api'
+WOLEET_ID_SERVER_ENCRYPTION_SECRET
+
+You can define ports to listen by setting the following environment variables:
+ - WOLEET_ID_SERVER_DEFAULT_PORT (default: 3000)
+ - WOLEET_ID_SERVER_SIGNATURE_PORT
+ - WOLEET_ID_SERVER_IDENTITY_PORT
+ - WOLEET_ID_SERVER_API_PORT
 
 ### Start the project
 
-    ./app start
+    ./app.sh start
 
 ### Stop the project:
 
-    ./app stop
+    ./app.sh stop
+
