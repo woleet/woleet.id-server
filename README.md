@@ -1,12 +1,12 @@
 # About
 
-Woleet.ID Server is a web application and server to be hosted inside your organization's IT.
+Woleet.ID Server is a server (and an associated client web application) to be hosted inside your organization's IT.
 It allows you to **manage the identity of your users and the set of cryptographic keys** they can use to sign data.
  
 Woleet.ID Server identities are made of **X500 information** (like the common name, organization name, country code, etc.) 
 associated to one or several **bitcoin keys** (each being made of a public bitcoin address and of a private key securely stored encrypted in the server's database).
  
-Woleet.ID Server provides a **private API** allowing your users (and yourself) to **sign data using their bitcoin addresses**,
+Woleet.ID Server provides a **private API** allowing your users to **sign data using their bitcoin addresses**,
 and a **public API** allowing third-parties to **get the identity of a signee** and **validate the ownership of the bitcoin adresses** by your organization.
 
 Basically, Woleet.ID Server enables you to integrate Woleet's [signature anchoring](https://doc.woleet.io/docs/signature-anchoring) into your organization workflow.
@@ -19,7 +19,7 @@ Using signature anchoring, new use cases like *document authentication* or *mult
 
 # Architecture
 
-Woleet.ID Server is made of a Node.js server and a Angular/Material client web application.
+Woleet.ID Server is made of a Node.js server and a Angular/Material client web app.
 
 **Angular/Material client web app**
 
@@ -29,23 +29,23 @@ The source code can be found in the `client/` directory.
 
 **Node.js server**
 
-The Node.js server exposes several APIs:
+The Node.js server exposes several endpoints:
 - a `/sign` endpoint exposed internally and allowing to sign using the organization's default key or one of the user's keys
 - an `/identity` endpoint exposed externally and allowing to retrieve and verify users' identity.
-- an API dedicated to the web application.
+- a set of API endpoints dedicated to the client web app.
 
 The source code can be found in the `server/` directory.
 
 **Documentation and tests**
 
-All APIs, including the API dedicated to the web application, are specified and documented using OpenAPI (see the `swagger.yaml` file).
-From this specification, APIs client and test code (written in Java) is generated inside the `test/java` directory.
+All endpoints, including those dedicated to the client web app, are specified and documented using OpenAPI (see the `swagger.yaml` file).
+From this specification, test code (written in Java) is generated inside the `test/java` directory using the OpenAPI client code generator.
 
 # Deployment
 
 Woleet.ID Server can be built and run using Docker (tested on Linux and  macOS), or directly on a Linux host.
 
-> NOTE: Building and running the server and the web app using Docker is the simplest way to go and is recommended for production environments.
+> NOTE: Building and running the server and the client web app using Docker is the simplest way to go and is recommended for production environments.
 
 Here we only document building and running Woleet.ID Server using Docker.
 If you want to build or run without Docker, you can find detailed information about how to build and run Woleet.ID Server in [client's](client/README.md) and [server's](server/README.md) README files. 
@@ -90,7 +90,7 @@ export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pa
 ## Administrator account
 
 When run for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
-> WARNING: don't forget to change the password of the `admin` user! You can do this using the web app.
+> WARNING: don't forget to change the password of the `admin` user! You can do this using the client web app.
 
 ## Encryption secret
 
@@ -105,12 +105,12 @@ export WOLEET_ID_SERVER_ENCRYPTION_SECRET={encryption secret, default: 'secret'}
 You can define the ports on which Woleet.ID Server listens by setting the following environment variables:
 ```
 export WOLEET_ID_SERVER_DEFAULT_PORT={default port to use when other ports are not defined, default: 3000}
-export WOLEET_ID_SERVER_SIGNATURE_PORT={port to use for the /sign endpoint, default 3000}
+export WOLEET_ID_SERVER_SIGN_PORT={port to use for the /sign endpoint, default 3000}
 export WOLEET_ID_SERVER_IDENTITY_PORT{port to use for the /identity endpoint, default: 3000}
 export WOLEET_ID_SERVER_API_PORT{port to use for all other API endpoints, default: 3000}
 ```
  
-> WARNING: the /sign endpoint (used to generate signature on behalf of users) and other API endpoints (used by the web app) should never be exposed outside your organization's network, while the /identity endpoint needs to be exposed.
+> WARNING: the /sign endpoint (used to generate signature on behalf of users) and other API endpoints (used by the client web app) should never be exposed outside your organization's network, while the /identity endpoint needs to be exposed.
 
 ### Start the project
 
