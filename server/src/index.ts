@@ -2,7 +2,6 @@ import * as Debug from 'debug';
 
 import * as Koa from 'koa';
 import * as morgan from 'koa-morgan';
-import * as cors from '@koa/cors';
 
 import { apps as definitions } from './apps';
 import { errorHandler } from './api/error';
@@ -18,7 +17,6 @@ definitions.map(({ name, port, router }) => {
 
   app.use(errorHandler);
   app.use(morgan('dev'));
-  app.use(cors({ credentials: true }));
   app.use(router.routes());
 
   const server = app.listen(port);
