@@ -114,22 +114,38 @@ export WOLEET_ID_SERVER_SIGN_PORT={port to use for the /sign endpoint, default 3
     
 [Client web app](https://localhost:3000/)
 
-[API endpoint](https://localhost:3000/api)
+You should see the sign in page.
 
 [Identity endpoint](https://localhost:3001/identity)
 
+You should get:
+
+    {"message":"Missing mandatory \"pubKey\" parameter","status":400}
+
 [Signature endpoint](https://localhost:3002/sign)
+
+You should get:
+
+    {"message":"Invalid or missing API token","status":401}
 
 ## Administrator account
 
-When run for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
+When run it for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
 > WARNING: don't forget to change the password of the `admin` user! You can do this using the client web app.
 
 ## Set the server's Identity URL
 
-TODO
+Open the client web app, sign in as admin.
 
+In the `Settings` menu, enter the identity URL as you expose it the the internet:
+for example, if your server domain is `idserver.acme.com`, the identity URL would be `https://idserver.acme.com:3001/identity`.
+
+> WARNING: It is preferable to serve the identity URL on the default HTTPS port 443. To do this, simply set WOLEET_ID_SERVER_IDENTITY_PORT to 443.
+
+### Display server logs
+
+     ./app.sh logs -f
+     
 ### Stop the server
 
     ./app.sh stop
-
