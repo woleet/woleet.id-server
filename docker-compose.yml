@@ -12,34 +12,36 @@ services:
     networks:
       - postgres-server
     environment:
-      POSTGRES_DB: wid
-      POSTGRES_USER: pguser
-      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: ${WOLEET_ID_SERVER_POSTGRES_DB:-wid}
+      POSTGRES_USER: ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser}
+      POSTGRES_PASSWORD: ${WOLEET_ID_SERVER_POSTGRES_PASSWORD:-pass}
+    volumes:
+      - ${WOLEET_ID_SERVER_DATA_DIR:-./tmp}:/var/lib/postgresql/data:rw
   wid-client:
-    image: ${WOLEET_ID_SERVER_REGISTRY}:client
+    image: ${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}:client
     ports:
       - 80:80
       - 443:443
     volumes:
-      - ${HTTP_TLS_CERTIFICATE}:/etc/nginx/ssl/certificate.crt:ro
-      - ${HTTP_TLS_KEY}:/etc/nginx/ssl/certificate.key:ro
+      - ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}:/etc/nginx/ssl/certificate.crt:ro
+      - ${WOLEET_ID_SERVER_HTTP_TLS_KEY:?Undefined WOLEET_ID_SERVER_HTTP_TLS_KEY}:/etc/nginx/ssl/certificate.key:ro
     restart: on-failure
     depends_on:
       - wid-server
     networks:
       - client-server
   wid-server:
-    image: ${WOLEET_ID_SERVER_REGISTRY}:server
+    image: ${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}:server
     restart: on-failure
     stdin_open: true
     tty: true
     depends_on:
       - wid-postgres
     environment:
-      POSTGRES_DB: wid
-      POSTGRES_USER: pguser
-      POSTGRES_PASSWORD: pass
-      POSTGRES_HOST: wid-postgres
+      WOLEET_ID_SERVER_POSTGRES_HOST: ${WOLEET_ID_SERVER_POSTGRES_HOST:-wid-postgres}
+      WOLEET_ID_SERVER_POSTGRES_DB: ${WOLEET_ID_SERVER_POSTGRES_DB:-wid}
+      WOLEET_ID_SERVER_POSTGRES_USER: ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser}
+      WOLEET_ID_SERVER_POSTGRES_PASSWORD: ${WOLEET_ID_SERVER_POSTGRES_PASSWORD:-pass}
     networks:
       - client-server
       - postgres-server
