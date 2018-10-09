@@ -31,8 +31,8 @@ start () {
   local old_server=`docker ps | grep woleetid-server_wid-server_1 | cut -d' ' -f 1`
   docker-compose up -d
 
-  # If ENCRYPTION_SECRET it not set, attaching to the server's container to enter it via CLI
-  if [ -z $ENCRYPTION_SECRET ]; then
+  # If WOLEET_ID_SERVER_ENCRYPTION_SECRET it not set, attaching to the server's container to enter it via CLI
+  if [ -z $WOLEET_ID_SERVER_ENCRYPTION_SECRET ]; then
     local server=`docker ps | grep woleetid-server_wid-server_1 | cut -d' ' -f 1`
 
     if [ "$server" == "$old_server" ]; then
@@ -40,7 +40,7 @@ start () {
       exit 0
     fi
 
-    echo "No \"ENCRYPTION_SECRET\" environment set, attaching to container ${server} to enter it"
+    echo "No \"WOLEET_ID_SERVER_ENCRYPTION_SECRET\" environment set, attaching to container ${server} to enter it"
     docker attach $server --detach-keys='ctrl-c'
   fi
 }

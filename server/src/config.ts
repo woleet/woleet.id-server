@@ -66,13 +66,13 @@ export const serverConfig = {
   CONFIG_ID: 'SERVER-CONFIG'
 };
 
-const ENCRYPTION_SECRET = env.ENCRYPTION_SECRET;
+const ENCRYPTION_SECRET = getenv('ENCRYPTION_SECRET');
 
 export const encryption = {
   secret: ENCRYPTION_SECRET,
   init: async function (): Promise<void> {
     if (!ENCRYPTION_SECRET) {
-      log.warn('No "ENCRYPTION_SECRET" environment set, please type encryption secret:');
+      log.warn('No "WOLEET_ID_SERVER_ENCRYPTION_SECRET" environment set, please type encryption secret:');
       const options = { silent: true };
       const _read = promisify(read);
       let secret = '';
