@@ -20,7 +20,7 @@ services:
   wid-client:
     image: ${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}:client
     ports:
-      - 4220:443
+      - 443:443
     volumes:
       - ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}:/etc/nginx/ssl/certificate.crt:ro
       - ${WOLEET_ID_SERVER_HTTP_TLS_KEY:?Undefined WOLEET_ID_SERVER_HTTP_TLS_KEY}:/etc/nginx/ssl/certificate.key:ro
