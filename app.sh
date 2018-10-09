@@ -3,7 +3,7 @@
 set -e
 
 display_usage() {
-  echo "usage: $0 [start|stop|build|push|check]"
+  echo "usage: $0 [start|stop|build|push|check|logs]"
 }
 
 tmp_client_dir=./client/tmp/
@@ -38,10 +38,8 @@ shift
 
 if [ "$operation" == "start" ]; then
   docker-compose up -d
-  #TODO: split start & log
-  if [ "$1" != "--no-log" ]; then
-    docker-compose logs -f --tail 50
-  fi
+elif [ "$operation" == "logs" ]; then
+  docker-compose logs $@
 elif [ "$operation" == "stop" ]; then
   docker-compose down
 elif [ "$operation" == "push" ]; then
@@ -64,10 +62,30 @@ elif [ "$operation" == "build" ]; then
   echo "Done."
 
   echo "Copying client source to final image (wid-client)..."
-  docker-compose build
+  cd client; docker build -f Dockerfile -t wid-client .; cd ..
+  echo "Done."
+
+  echo "Building server builder image (wid-server-builder)..."
+  cd server; docker build -f Dockerfile.builder -t wid-server-builder .; cd ..
+  echo "Done."
+
+  echo "Compiling server source (wid-server-build)..."
+  cd server; docker build -f Dockerfile.build -t wid-server-build .; cd ..
+  echo "Done."
+
+  echo "Copying server source to final image (wid-server)..."
+  cd server; docker build -f Dockerfile -t wid-server .; cd ..
   echo "Done."
 
   postbuild
+
+  echo "Successfully built all images, associating them to repository \"${WOLEET_ID_SERVER_REGISTRY}\""
+
+  docker tag wid-server ${WOLEET_ID_SERVER_REGISTRY}:server
+
+  docker tag wid-client ${WOLEET_ID_SERVER_REGISTRY}:client
+
+  echo "Done."
 else
   display_usage
   exit -1
