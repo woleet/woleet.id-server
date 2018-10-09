@@ -104,10 +104,9 @@ export WOLEET_ID_SERVER_ENCRYPTION_SECRET={encryption secret, default: 'secret'}
 
 You can define the ports on which Woleet.ID Server listens by setting the following environment variables:
 ```
-export WOLEET_ID_SERVER_DEFAULT_PORT={default port to use when other ports are not defined, default: 3000}
-export WOLEET_ID_SERVER_SIGNATURE_PORT={port to use for the /sign endpoint, default 3000}
-export WOLEET_ID_SERVER_IDENTITY_PORT{port to use for the /identity endpoint, default: 3000}
-export WOLEET_ID_SERVER_API_PORT{port to use for all other API endpoints, default: 3000}
+export WOLEET_ID_SERVER_SIGNATURE_PORT={port to use for the /sign endpoint, default 3001}
+export WOLEET_ID_SERVER_IDENTITY_PORT{port to use for the /identity endpoint, default: 3002}
+export WOLEET_ID_SERVER_API_PORT{port to use for all other API endpoints, default: 443}
 ```
  
 > WARNING: the /sign endpoint (used to generate signature on behalf of users) and other API endpoints (used by the web app) should never be exposed outside your organization's network, while the /identity endpoint needs to be exposed.
