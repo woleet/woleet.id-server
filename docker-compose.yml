@@ -22,7 +22,7 @@ services:
     ports:
       # Calls to the server goes through the client's NGINX reverse proxy
       - 80:80 # the client's NGINX reverse proxy redirects HTTP to HTTPS
-      - ${WOLEET_ID_SERVER_API_POSR:-3000}:3000 # client web app + proxy to server API endpoints dedicated to client web app (https://localhost:3000)
+      - ${WOLEET_ID_SERVER_API_PORT:-3000}:3000 # client web app + proxy to server API endpoints dedicated to client web app (https://localhost:3000)
       - ${WOLEET_ID_SERVER_IDENTITY_PORT:-3001}:3001 # /identity endpoint (https://localhost:3001/identity)
       - ${WOLEET_ID_SERVER_SIGNATURE_PORT:-3002}:3002 # /sign endpoint (https://localhost:3002/sign)
     volumes:
