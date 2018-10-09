@@ -97,11 +97,13 @@ elif [ "$operation" == "build" ]; then
 
   postbuild
 
-  echo "Successfully built all images, associating them to repository \"${WOLEET_ID_SERVER_REGISTRY}\""
+  registry=${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}
 
-  docker tag wid-server ${WOLEET_ID_SERVER_REGISTRY}:server
+  echo "Successfully built all images, associating them to repository \"${registry}\""
 
-  docker tag wid-client ${WOLEET_ID_SERVER_REGISTRY}:client
+  docker tag wid-server ${registry}:server
+
+  docker tag wid-client ${registry}:client
 
   echo "Done."
 else
