@@ -79,18 +79,13 @@ export WOLEET_ID_SERVER_POSTGRES_USER={PostgreSQL user, default: pg_user}
 export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pass}
 ```
 
-## Build the project
+## Build the server
 
     ./app.sh build
 
 > NOTE: If you want Woleet.ID Server's Docker images to be stored on a specific Docker registry, you can set the WOLEET_ID_SERVER_REGISTRY environment variable.
 
-## Configure the project
-
-## Administrator account
-
-When run for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
-> WARNING: don't forget to change the password of the `admin` user! You can do this using the client web app.
+## Configure the server
 
 ## Encryption secret
 
@@ -105,17 +100,36 @@ export WOLEET_ID_SERVER_ENCRYPTION_SECRET={encryption secret, default: 'secret'}
 You can define the ports on which Woleet.ID Server listens by setting the following environment variables:
 ```
 export WOLEET_ID_SERVER_API_PORT{port to use for the client web app and the server API endpoints dedicated to the client web app), default: 3000}
-export WOLEET_ID_SERVER_SIGN_PORT={port to use for the /sign endpoint, default 3001}
-export WOLEET_ID_SERVER_IDENTITY_PORT{port to use for the /identity endpoint, default: 3002}
+export WOLEET_ID_SERVER_IDENTITY_PORT{port to use for the /identity endpoint, default: 3001}
+export WOLEET_ID_SERVER_SIGN_PORT={port to use for the /sign endpoint, default 3002}
 ```
  
 > WARNING: the /sign endpoint (used to generate signature on behalf of users) and other API endpoints (used by the client web app) should never be exposed outside your organization's network, while the /identity endpoint needs to be exposed.
 
-### Start the project
+### Start the server
 
     ./app.sh start
+    
+### Test the server
+    
+[Client web app](https://localhost:3000/)
 
-### Stop the project:
+[API endpoint](https://localhost:3000/api)
+
+[Identity endpoint](https://localhost:3001/identity)
+
+[Signature endpoint](https://localhost:3002/sign)
+
+## Administrator account
+
+When run for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
+> WARNING: don't forget to change the password of the `admin` user! You can do this using the client web app.
+
+## Set the server's Identity URL
+
+TODO
+
+### Stop the server
 
     ./app.sh stop
 
