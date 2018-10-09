@@ -8,7 +8,7 @@ function getenv(name: string) {
   return process.env[prefix + name];
 }
 
-const prod = getenv('PROD') === 'true';
+const prod = getenv('PRODUCTION') === 'true';
 
 log.setLevel(prod ? 'info' : 'debug');
 
