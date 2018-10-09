@@ -15,7 +15,7 @@ log.setLevel(production ? 'info' : 'debug');
 const defaultPort = parseInt(getenv('DEFAULT_PORT')) || 3000;
 
 export const ports = {
-  signature: parseInt(getenv('SIGNATURE_PORT')) || defaultPort,
+  signature: parseInt(getenv('SIGN_PORT')) || defaultPort,
   identity: parseInt(getenv('IDENTITY_PORT')) || defaultPort,
   api: parseInt(getenv('API_PORT')) || defaultPort
 };
