@@ -8,9 +8,9 @@ function getenv(name: string) {
   return process.env[prefix + name];
 }
 
-const prod = getenv('PROD') === 'true';
+export const production = getenv('PRODUCTION') === 'true';
 
-log.setLevel(prod ? 'info' : 'debug');
+log.setLevel(production ? 'info' : 'debug');
 
 const defaultPort = parseInt(getenv('DEFAULT_PORT')) || 3000;
 
@@ -72,7 +72,7 @@ const defaultSecret = 'secret';
 const ENCRYPTION_SECRET = getenv('ENCRYPTION_SECRET');
 if (!ENCRYPTION_SECRET) {
   log.warn('No "WOLEET_ID_SERVER_ENCRYPTION_SECRET" environment set...');
-  if (prod) {
+  if (production) {
     assert(ENCRYPTION_SECRET, '"WOLEET_ID_SERVER_ENCRYPTION_SECRET" is not set');
   }
   log.warn(`...defaulting to "${defaultSecret}"`);

@@ -12,14 +12,19 @@ import { router as identity } from './routers/identity';
 
 import { user as userAuth, admin as adminAuth, session } from './authentication';
 
-import * as Router from 'koa-router';
+import { production } from '../config';
 
+import * as cors from '@koa/cors';
+import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 
 /**
  * API
  */
 const apiRouter = new Router();
+if (!production) {
+  apiRouter.use(cors({ credentials: true }));
+}
 apiRouter.use(bodyParser());
 apiRouter.use(auth.routes());
 apiRouter.use(session, userAuth, info.routes());
@@ -33,12 +38,16 @@ apiRouter.use(session, adminAuth, serverConfig.routes());
  * Identity
  */
 const identityRouter = new Router();
+identityRouter.use(cors());
 identityRouter.use(identity.routes());
 
 /**
  * Signature
  */
 const signatureRouter = new Router();
+if (!production) {
+  signatureRouter.use(cors({ credentials: true }));
+}
 signatureRouter.use(sign.routes());
 
 export {
