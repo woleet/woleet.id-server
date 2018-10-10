@@ -126,7 +126,7 @@ public class Config {
      */
     public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
-        UserArray users = userApi.getAllUsers(false);
+        UserArray users = userApi.getAllUsers();
         for (UserGet user : users) {
             if (user.getIdentity().getCommonName().startsWith(TEST_USERS_COMMONNAME_PREFIX))
                 userApi.deleteUser(user.getId());

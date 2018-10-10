@@ -119,7 +119,7 @@ Name | Type | Description  | Notes
 
 <a name="getAllUsers"></a>
 # **getAllUsers**
-> UserArray getAllUsers(full)
+> UserArray getAllUsers()
 
 List all users.
 
@@ -141,9 +141,8 @@ CookieAuth.setApiKey("YOUR API KEY");
 //CookieAuth.setApiKeyPrefix("Token");
 
 UserApi apiInstance = new UserApi();
-Boolean full = true; // Boolean | Include deleted elements in the returned list.
 try {
-    UserArray result = apiInstance.getAllUsers(full);
+    UserArray result = apiInstance.getAllUsers();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserApi#getAllUsers");
@@ -152,10 +151,7 @@ try {
 ```
 
 ### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **full** | **Boolean**| Include deleted elements in the returned list. | [optional]
+This endpoint does not need any parameter.
 
 ### Return type
 

@@ -27,7 +27,7 @@ public abstract class CRUDApiTest {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     interface Api {
-        ObjectArray getAllObjects(boolean full) throws ApiException;
+        ObjectArray getAllObjects() throws ApiException;
 
         ObjectGet deleteObject(UUID id) throws ApiException;
 
@@ -106,7 +106,7 @@ public abstract class CRUDApiTest {
 
     private void deleteAllTestObjects() throws ApiException {
         Api api = newApi(Config.getAdminAuthApiClient());
-        ObjectArray objects = api.getAllObjects(false);
+        ObjectArray objects = api.getAllObjects();
         for (ObjectGet objectGet : objects.getArray()) {
             if (objectGet.getName().startsWith(getTestObjectsNamePrefix()))
                 api.deleteObject(objectGet.getId());
@@ -291,18 +291,18 @@ public abstract class CRUDApiTest {
 
         // Get all objects with admin credentials
         // and check that the object is within the results
-        ObjectArray objects = adminAuthApi.getAllObjects(false);
+        ObjectArray objects = adminAuthApi.getAllObjects();
         assertTrue(objects.contains(objectGet));
 
-        // Delete the object, get all objects (including deleted ons)
-        // and check that the object is still within the results
+        // Delete the object, get all objects
+        // and check that the object is no longer within the results
         objectGet = adminAuthApi.deleteObject(objectGet.getId());
-        objects = adminAuthApi.getAllObjects(true);
-        assertTrue(objects.contains(objectGet));
+        objects = adminAuthApi.getAllObjects();
+        assertFalse(objects.contains(objectGet));
 
         // Try to get all objects with no credentials
         try {
-            noAuthApi.getAllObjects(false);
+            noAuthApi.getAllObjects();
             fail("Should not be able to get all objects with no credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
@@ -310,7 +310,7 @@ public abstract class CRUDApiTest {
 
         // Try to get all objects with user credentials
         try {
-            userAuthApi.getAllObjects(false);
+            userAuthApi.getAllObjects();
             fail("Should not be able to get all objects with user credentials");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
