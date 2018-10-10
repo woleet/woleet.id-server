@@ -12,11 +12,18 @@ import static org.junit.Assert.*;
 
 public class IdentityApiTest {
 
+    // Check that IDENTITY base path is defined in the environment
+    public static final String WOLEET_ID_SERVER_IDENTITY_BASEPATH = System.getenv("WOLEET_ID_SERVER_IDENTITY_BASEPATH");
+
+    static {
+        assertFalse("WOLEET_ID_SERVER_IDENTITY_BASEPATH must be defined", WOLEET_ID_SERVER_IDENTITY_BASEPATH.isEmpty());
+    }
+
     @Test
     public void getIdentityTest() throws ApiException {
 
         IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
-                .setBasePath(System.getenv("WOLEET_ID_SERVER_IDENTITY_BASEPATH")));
+                .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
 
         try {
             identityApi.getIdentity("invalid pubKey", Config.randomString(32));
