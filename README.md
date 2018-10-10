@@ -13,7 +13,7 @@ Basically, Woleet.ID Server enables you to integrate Woleet's [signature anchori
 
 Signature anchoring goes far beyond data anchoring: while data anchoring allows creating a timestamped proof of existence of data,
 signature anchoring allows creating a timestamped proof of signature of data, optionally embedding a proof of identity for the signee
-(in the form of an *identity URL* served by Woleet.ID Server).
+(in the form of an **identity URL** served by Woleet.ID Server).
 
 Using signature anchoring, new use cases like *document authentication* or *multi-signature workflow* are possible.
 
@@ -89,7 +89,7 @@ export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pa
 
 ## Encryption secret
 
-Woleet.ID Server encrypt keys stored in the database using a encryption secret you need to define using the following environment variable:
+Woleet.ID Server encrypts keys stored in the database using a encryption secret you need to define using the following environment variable:
 ```
 export WOLEET_ID_SERVER_ENCRYPTION_SECRET={encryption secret, default: 'secret'}
 ```
@@ -128,17 +128,25 @@ You should get:
 
     {"message":"Invalid or missing API token","status":401}
 
-## Administrator account
+## Change administrator account password
 
 When run it for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
-> WARNING: don't forget to change the password of the `admin` user! You can do this using the client web app.
+You need to change the password of the `admin` account.
+ 
+- Open the client web app
+- Sign in as admin
+- Edit the 'admin' user and change his password: there is currently no way to recover passwords, so be sure you will not forget it
 
-## Set the server's Identity URL
+> NOTE: You can give administrator rights to any user account.
 
-Open the client web app, sign in as admin.
+## Set server Identity URL
 
-In the `Settings` menu, enter the identity URL as you expose it the the internet:
-for example, if your server domain is `idserver.acme.com`, the identity URL would be `https://idserver.acme.com:3001/identity`.
+The identity URL is the public URL of the `/identity` endpoint.
+
+- Open the client web app
+- Sign in as admin
+- Select the `Settings` menu
+- Enter the identity URL as you expose it the the internet: as an example, if your server domain is `idserver.acme.com`, the identity URL would be `https://idserver.acme.com:3001/identity`.
 
 > WARNING: It is preferable to serve the identity URL on the default HTTPS port 443. To do this, simply set WOLEET_ID_SERVER_IDENTITY_PORT to 443.
 
