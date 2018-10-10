@@ -1,10 +1,12 @@
 import * as Debug from 'debug';
 
 import * as Koa from 'koa';
+import * as cors from '@koa/cors';
 import * as morgan from 'koa-morgan';
 
 import { apps as definitions } from './apps';
 import { errorHandler } from './api/error';
+import { production } from './config';
 import { Server } from 'http';
 
 const debug = Debug('id:server');
@@ -16,6 +18,15 @@ definitions.map(({ name, port, router }) => {
   const app = new Koa();
 
   app.use(errorHandler);
+
+  // We need to allow at least the OPTIONS methods
+  // to let the request go through the other routers
+  if (!production) {
+    app.use(cors({ credentials: true, allowMethods: ['OPTIONS'] }));
+  } else if (name.split('-').includes('identity')) {
+    app.use(cors({ allowMethods: ['OPTIONS'] }));
+  }
+
   app.use(morgan('dev'));
   app.use(router.routes());
 
