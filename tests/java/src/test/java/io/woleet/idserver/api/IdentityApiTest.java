@@ -16,7 +16,7 @@ public class IdentityApiTest {
     public void getIdentityTest() throws ApiException {
 
         IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
-                .setBasePath(System.getenv("WOLEET_ID_SERVER_IDENTITY_URL")));
+                .setBasePath(System.getenv("WOLEET_ID_SERVER_IDENTITY_BASEPATH")));
 
         try {
             identityApi.getIdentity("invalid pubKey", Config.randomString(32));

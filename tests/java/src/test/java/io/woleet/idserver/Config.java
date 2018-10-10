@@ -30,7 +30,7 @@ public class Config {
         ApiClient apiClient = new ApiClient();
         apiClient.setDebugging(debug);
         apiClient.setVerifyingSsl(false);
-        apiClient.setBasePath(System.getenv("WOLEET_ID_SERVER_API_URL"));
+        apiClient.setBasePath(System.getenv("WOLEET_ID_SERVER_API_BASEPATH"));
         return apiClient;
     }
 
