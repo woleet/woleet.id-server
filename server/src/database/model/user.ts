@@ -25,7 +25,7 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
 
   constructor() {
     super();
-    this.define('user', UserModel, { paranoid: true });
+    this.define('user', UserModel, { paranoid: false });
   }
 
   async getByUsername(username: string): Promise<SequelizeUserObject> {
