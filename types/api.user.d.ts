@@ -16,7 +16,7 @@ interface ApiIdentityObject {
   userId?: string;
 }
 
-interface ApiUserObject extends UserObject, ApiCommonProperties, ApiParanoidProperties {
+interface ApiUserObject extends UserObject, ApiCommonProperties {
 
   /** Unix timestamp (ms) */
   lastLogin: number;
