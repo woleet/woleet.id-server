@@ -47,7 +47,7 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
   }
 
 
-  async getAll(opt: FindOptions<TInstance> & { full: boolean }): Promise<Instance<TInstance>[]> {
+  async getAll(opt: FindOptions<TInstance> & { full?: boolean }): Promise<Instance<TInstance>[]> {
     return this.model.findAll({
       offset: opt.offset,
       limit: opt.limit,

@@ -27,7 +27,7 @@ declare global {
   interface ListOptions {
     offset?: number;
     limit?: number;
-    full: boolean;
+    full?: boolean;
   }
 
   /* User: server specific */

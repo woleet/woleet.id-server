@@ -101,7 +101,7 @@ export async function getAllKeys(full = false): Promise<InternalKeyObject[]> {
   return keys.map((key) => key.toJSON());
 }
 
-export async function getAllKeysOfUser(userId: string, full: boolean): Promise<InternalKeyObject[]> {
+export async function getAllKeysOfUser(userId: string, full = false): Promise<InternalKeyObject[]> {
   const keys = await Key.getAllKeysOfUser(userId, full);
   return keys.map((key) => key.toJSON());
 }

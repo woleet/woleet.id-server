@@ -25,14 +25,13 @@ const router = new Router({ prefix: '/server-event' });
  *  operationId: getServerEventList
  */
 router.get('/list', async function (ctx) {
-  const full = (ctx.query.full || '').toLowerCase() === 'true';
   const type = (ctx.query.type || '').toLowerCase() || null;
 
   if (type && !serverEventTypes.includes(type)) {
     throw new BadRequest(`Type must be one of ${serverEventTypes.join(', ')}`);
   }
 
-  const ops = { full };
+  const ops = { };
 
   const events = await (type ? getServerEventListByType(type, ops) : getAllServerEvents(ops));
   ctx.body = events.map(serialiseServerEvent);

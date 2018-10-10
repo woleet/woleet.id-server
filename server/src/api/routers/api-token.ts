@@ -54,8 +54,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
  *  operationId: getAPITokenList
  */
 router.get('/list', async function (ctx) {
-  const full = (ctx.query.full || '').toLowerCase() === 'true';
-  const users = await getAllAPITokens(full);
+  const users = await getAllAPITokens();
   ctx.body = users.map(serialiseapiToken);
 });
 
