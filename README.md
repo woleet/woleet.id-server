@@ -67,7 +67,7 @@ Woleet.ID Server requires a PostgreSQL database.
 When run using Docker, the database is automatically deployed as a Docker container using a local directory to store data.
 You can change the location of this directory by setting the following environment variable: 
 ```
-export WOLEET_ID_SERVER_DATA_DIR={path to the Docker volume where to store the database, default: ./tmp}
+export WOLEET_ID_SERVER_DATA_DIR={path to the Docker volume where to store the database, default: ./db}
 ```
 
 > NOTE: If you want to use Docker to run Woleet.ID Server but don't want ot use Docker to run the database,
