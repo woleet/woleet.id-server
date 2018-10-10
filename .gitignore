@@ -24,4 +24,6 @@ Thumbs.db
 
 # Log files
 *.log
-tmp
+
+# Databse
+db

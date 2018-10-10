@@ -1,5 +1,6 @@
 package io.woleet.idserver.api;
 
+import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.IdentityResult;
@@ -14,7 +15,8 @@ public class IdentityApiTest {
     @Test
     public void getIdentityTest() throws ApiException {
 
-        IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient());
+        IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
+                .setBasePath(System.getenv("WOLEET_ID_SERVER_IDENTITY_BASEPATH")));
 
         try {
             identityApi.getIdentity("invalid pubKey", Config.randomString(32));
@@ -45,8 +47,8 @@ public class IdentityApiTest {
         assertNotNull(identityResult.getSignature());
         assertTrue(
                 "Expected " + identityResult.getRightData()
-                        + "to start with \"" + serverConfig.getIdentityURL()
-                        + "\" but got \"" + identityResult.getRightData() + "\"",
+                + "to start with \"" + serverConfig.getIdentityURL()
+                + "\" but got \"" + identityResult.getRightData() + "\"",
                 identityResult.getRightData().startsWith(serverConfig.getIdentityURL())
         );
         Config.isValidSignature(pubKey, identityResult.getSignature(), leftData + identityResult.getRightData());
