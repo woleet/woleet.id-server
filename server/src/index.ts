@@ -22,7 +22,7 @@ definitions.map(({ name, port, router }) => {
   // We need to allow at least the OPTIONS methods
   // to let the request go through the other routers
   if (!production) {
-    app.use(cors({ credentials: true, allowMethods: ['OPTIONS'] }));
+    app.use(cors({ credentials: true }));
   } else if (name.split('-').includes('identity')) {
     app.use(cors({ allowMethods: ['OPTIONS'] }));
   }

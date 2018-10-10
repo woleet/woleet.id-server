@@ -4,8 +4,7 @@
 
 set -e
 
-docker run \
-  -d \
+docker run $@ \
   --name pg-dev \
   --rm \
   -p 5432:5432 \
