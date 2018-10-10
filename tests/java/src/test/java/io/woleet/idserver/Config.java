@@ -16,8 +16,6 @@ public class Config {
 
     //private static final Logger logger = LoggerFactory.getLogger(Config.class);
 
-    private static ApiClient adminAuthApiClient;
-
     // True if tests are to be debugged
     private static final boolean debug = false;
 
@@ -32,7 +30,7 @@ public class Config {
         ApiClient apiClient = new ApiClient();
         apiClient.setDebugging(debug);
         apiClient.setVerifyingSsl(false);
-        apiClient.setBasePath(getBasePath());
+        apiClient.setBasePath(System.getenv("WOLEET_ID_SERVER_API_URL"));
         return apiClient;
     }
 
@@ -62,14 +60,10 @@ public class Config {
      * Return a singleton API client with credentials set for the platform admin.
      */
     public static ApiClient getAdminAuthApiClient() throws ApiException {
-        if (adminAuthApiClient == null)
-            adminAuthApiClient = getAuthApiClient(System.getenv("WOLEET_ID_SERVER_ADMIN_LOGIN"),
-                    System.getenv("WOLEET_ID_SERVER_ADMIN_PASSWORD"));
-        return adminAuthApiClient;
-    }
-
-    private static String getBasePath() {
-        return System.getenv("WOLEET_ID_SERVER_API_URL");
+        return getAuthApiClient(
+                System.getenv("WOLEET_ID_SERVER_ADMIN_LOGIN"),
+                System.getenv("WOLEET_ID_SERVER_ADMIN_PASSWORD")
+        );
     }
 
     /**
