@@ -2,7 +2,8 @@ import * as Debug from 'debug';
 import * as log from 'loglevel';
 
 import { Server } from 'http';
-import wait from './controllers/utils/wait';
+import { randomBytes } from 'crypto';
+import { Key } from './database';
 import { createUser } from './controllers/user';
 import { setServerConfig, loadServerConfig } from './controllers/server-config';
 
@@ -22,6 +23,7 @@ export const apps: Dictionary<Server> = {};
 import { encryption } from './config';
 import { setSecret } from './controllers/utils/encryption';
 import { initPromise } from './database';
+import { signMessage } from './controllers/sign';
 
 function exit(msg) {
   log.error(msg);
@@ -39,6 +41,21 @@ initPromise
   .then(async (config) => {
     if (config) {
       log.info(`Server configuration successfully restored: \n${JSON.stringify(config, null, 2)}`);
+
+      const key = await Key.getAny();
+
+      if (!key) {
+        log.warn('Not any key in database, cannot check secret restoration');
+        return;
+      }
+
+      try {
+        await signMessage(key.get('privateKey'), randomBytes(32).toString('hex'), key.get('compressed'));
+      } catch (err) {
+        log.warn(err.message);
+        throw new Error('Secret is not the same that the previously set one');
+      }
+
     } else {
       log.warn('No configuration found in database, creating a new one along with a default admin user...');
       debug('Creating an admin user');

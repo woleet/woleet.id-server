@@ -34,6 +34,10 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
     return this.model.findAll({ where: { userId }, order: [['createdAt', 'DESC']], paranoid: !full });
   }
 
+  async getAny(): Promise<SequelizeKeyObject> {
+    return this.model.findOne();
+  }
+
   /**
    * @description Returns a key by it's public key (bitcoin address)
    * @param publicKey: the requested public key
