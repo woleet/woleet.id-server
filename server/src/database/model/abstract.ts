@@ -14,7 +14,7 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
 
   protected define(
     modelName: string,
-    attributes: Sequelize.DefineAttributes,
+    attributes: Sequelize.DefineModelAttributes<TPost>,
     options?: Sequelize.DefineOptions<Instance<TInstance>>
   ) {
     this.model = this.client.define<Instance<TInstance>, TPost>(modelName, attributes, options);

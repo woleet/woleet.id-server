@@ -18,7 +18,9 @@ const KeyModel = {
   // encrypted
   privateKey: { type: CHAR((32 + 16) * 2), unique: true, allowNull: false },
   publicKey: { type: STRING, unique: true, allowNull: false },
-  lastUsed: { type: DATE, defaultValue: null }
+  compressed: { type: BOOLEAN },
+  lastUsed: { type: DATE, defaultValue: null },
+  userId: { type: UUID }
 };
 
 class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKeyObject> {
