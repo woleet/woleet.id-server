@@ -25,7 +25,9 @@ export const db = {
   host: getenv('POSTGRES_HOST') || 'localhost',
   database: getenv('POSTGRES_DB') || 'wid',
   username: getenv('POSTGRES_USER') || 'pguser',
-  password: getenv('POSTGRES_PASSWORD') || 'pass'
+  password: getenv('POSTGRES_PASSWORD') || 'pass',
+  connectionAttempts: 6,
+  retryDelay: 5 * 1000
 };
 
 export const session = {

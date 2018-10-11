@@ -21,13 +21,14 @@ export const apps: Dictionary<Server> = {};
 // Config
 import { encryption } from './config';
 import { setSecret } from './controllers/utils/encryption';
+import { initPromise } from './database';
 
 function exit(msg) {
   log.error(msg);
   process.exit(1);
 }
 
-wait(1000)
+initPromise
   .then(() => encryption.init())
   .then(() => {
     setSecret(encryption.secret);
