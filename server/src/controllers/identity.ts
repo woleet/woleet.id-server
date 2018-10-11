@@ -23,7 +23,7 @@ export async function getIdentity(leftData: string, pubKey: string) {
 
   const rightData = getServerConfig().identityURL + '.' + crypto.randomBytes(16).toString('hex');
 
-  const sig = await signMessage(key.get('privateKey'), leftData + rightData);
+  const sig = await signMessage(key.get('privateKey'), leftData + rightData, key.get('compressed'));
 
   return {
     rightData,
