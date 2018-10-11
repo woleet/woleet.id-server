@@ -183,12 +183,6 @@ public class SignatureApiTest {
         signatureResult = tokenAuthApi.getSignature(hashToSign, null, null, pubKey);
         verifySignatureValid(hashToSign, signatureResult, serverConfig);
 
-//        // FIXME: this cannot work because attributes cannot be unset
-//        // Unset user's default key
-//        UserApi userApi = new UserApi(Config.getAdminAuthApiClient());
-//        UserGet userGet = userApi.updateUser(user.getId(), (UserPut) new UserPut().defaultKeyId(null));
-//        assertNull(userGet.getDefaultKeyId());
-
         // Delete user's default key
         keyApi.deleteKey(keyGet.getId());
 

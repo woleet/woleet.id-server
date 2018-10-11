@@ -42,7 +42,7 @@
             <input matInput type="text" placeholder="Common name" [formControl]="form.identity.commonName" required (focus)="form.identity.commonName.focused = true"
               (focusout)="form.identity.commonName.focused = false">
             <mat-error *ngIf="form.identity.commonName.invalid">{{ getErrorMessage(form.identity.commonName) }}</mat-error>
-            <mat-hint *ngIf="form.identity.commonName.focused">Full user's name (CN)</mat-hint>
+            <mat-hint *ngIf="form.identity.commonName.focused">Full user name (CN)</mat-hint>
           </mat-form-field>
         </div>
         <div>
@@ -84,8 +84,7 @@
             <input matInput type="text" placeholder="userId" [formControl]="form.identity.userId" (focus)="form.identity.userId.focused = true"
               (focusout)="form.identity.userId.focused = false">
             <mat-error *ngIf="form.identity.userId.invalid">{{ getErrorMessage(form.identity.userId) }}</mat-error>
-            <mat-hint *ngIf="form.identity.userId.focused">An external form identifier, it can be used to select a form when
-              asking for a signature, it must be unique.</mat-hint>
+            <mat-hint *ngIf="form.identity.userId.focused">A custom user identifier you can use to select the user (must be unique)</mat-hint>
           </mat-form-field>
         </div>
       </mat-card-content>
@@ -96,9 +95,7 @@
     <br>
   </div>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="submit()" [disabled]="formLocked || f.invalid || !isValid()">{{ mode.toUpperCase()
-      }}
-    </button>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="formLocked || f.invalid || !isValid()">{{ mode.toUpperCase() }}</button>
     <button mat-button [disabled]="formLocked" (click)="triggerCancel()">CANCEL</button>
   </mat-card-actions>
   <ng-template #loading>
