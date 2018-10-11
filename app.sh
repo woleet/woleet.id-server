@@ -3,7 +3,7 @@
 set -e
 
 display_usage() {
-  echo "usage: $0 [start|stop|restart|build|push|check|logs]"
+  echo "usage: $0 [start|stop|build|push|check|logs]"
 }
 
 tmp_client_dir=./client/tmp/
@@ -40,7 +40,7 @@ start () {
       exit 0
     fi
 
-    echo "No \"WOLEET_ID_SERVER_ENCRYPTION_SECRET\" environment set, attaching to container ${server} to enter it"
+    echo "No WOLEET_ID_SERVER_ENCRYPTION_SECRET environment set, attaching to container ${server}..."
     docker attach $server --detach-keys='ctrl-c'
   fi
 }
@@ -61,7 +61,8 @@ elif [ "$operation" == "logs" ]; then
 elif [ "$operation" == "stop" ]; then
   docker-compose down
 elif [ "$operation" == "restart" ]; then
-  docker-compose restart
+  docker-compose down
+  start
 elif [ "$operation" == "push" ]; then
   docker-compose push
 elif [ "$operation" == "check" ]; then

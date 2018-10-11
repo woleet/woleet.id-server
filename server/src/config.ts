@@ -74,8 +74,8 @@ export const encryption = {
   secret: ENCRYPTION_SECRET,
   init: async function (): Promise<void> {
     if (!ENCRYPTION_SECRET) {
-      log.warn('No "WOLEET_ID_SERVER_ENCRYPTION_SECRET" environment set, please type encryption secret:');
-      const options = { silent: true };
+      log.warn('No WOLEET_ID_SERVER_ENCRYPTION_SECRET environment set, please enter encryption secret:');
+      const options = { prompt: '>', silent: true };
       const _read = promisify(read);
       let secret = '';
       while (!secret) {
