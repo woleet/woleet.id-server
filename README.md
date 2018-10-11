@@ -75,7 +75,7 @@ you will have to modify the `docker-compose.yml` file and configure the database
 ```
 export WOLEET_ID_SERVER_POSTGRES_HOST={PostgreSQL host, default: wid-postgres}
 export WOLEET_ID_SERVER_POSTGRES_DB={PostgreSQL database, default: wid}
-export WOLEET_ID_SERVER_POSTGRES_USER={PostgreSQL user, default: pg_user}
+export WOLEET_ID_SERVER_POSTGRES_USER={PostgreSQL user, default: pguser}
 export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pass}
 ```
 
@@ -99,8 +99,8 @@ export WOLEET_ID_SERVER_ENCRYPTION_SECRET={encryption secret, default: 'secret'}
 
 You can define the ports on which Woleet.ID Server listens by setting the following environment variables:
 ```
-export WOLEET_ID_SERVER_API_PORT{port to use for the client web app and the server API endpoints dedicated to the client web app), default: 3000}
-export WOLEET_ID_SERVER_IDENTITY_PORT{port to use for the /identity endpoint, default: 3001}
+export WOLEET_ID_SERVER_API_PORT={port to use for the client web app and the server API endpoints dedicated to the client web app), default: 3000}
+export WOLEET_ID_SERVER_IDENTITY_PORT={port to use for the /identity endpoint, default: 3001}
 export WOLEET_ID_SERVER_SIGN_PORT={port to use for the /sign endpoint, default 3002}
 ```
 
@@ -109,9 +109,9 @@ export WOLEET_ID_SERVER_SIGN_PORT={port to use for the /sign endpoint, default 3
 ### Start the server
 
     ./app.sh start
-    
+
 ### Test the server
-    
+
 [Client web app](https://localhost:3000/)
 
 You should see the sign in page.
@@ -132,7 +132,7 @@ You should get:
 
 When run it for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
 You need to change the password of the `admin` account.
- 
+
 - Open the client web app
 - Sign in as admin
 - Edit the 'admin' user and change his password: there is currently no way to recover passwords, so be sure you will not forget it
@@ -153,7 +153,7 @@ The identity URL is the public URL of the `/identity` endpoint.
 ### Display server logs
 
      ./app.sh logs -f
-     
+
 ### Stop the server
 
     ./app.sh stop
