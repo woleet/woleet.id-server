@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import { BadRequest } from 'http-errors';
-import { getIdentity } from '../../controllers/indetity';
+import { getIdentity } from '../../controllers/identity';
 import { validate } from '../schemas';
 
 const vaddr = validate.raw('address');

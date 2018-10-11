@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: This is Woleet.ID Server API documentation.
-  version: 1.0.0
+  version: 1.0.4
   title: Woleet.ID Server
   contact:
     email: contact@woleet.com
@@ -333,7 +333,6 @@ paths:
       operationId: getAllUserKeys
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
-        - $ref: '#/components/parameters/FullListQueryParameter'
       responses:
         '200':
           description: Successful operation.
@@ -502,8 +501,6 @@ paths:
         - User
       summary: List all users.
       operationId: getAllUsers
-      parameters:
-        - $ref: '#/components/parameters/FullListQueryParameter'
       responses:
         '200':
           description: Array of users.
@@ -655,8 +652,6 @@ paths:
         - API Token
       summary: List all API tokens.
       operationId: getAllAPITokens
-      parameters:
-        - $ref: '#/components/parameters/FullListQueryParameter'
       responses:
         '200':
           description: Succesful operation.
@@ -709,8 +704,6 @@ paths:
         - Server Event
       summary: List all Server Events.
       operationId: getServerEventList
-      parameters:
-        - $ref: '#/components/parameters/FullListQueryParameter'
       responses:
         '200':
           description: Succesful operation.
@@ -1264,14 +1257,6 @@ components:
       schema:
         type: string
         example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
-    FullListQueryParameter:
-      name: full
-      in: query
-      description: Include deleted elements in the returned list.
-      required: false
-      schema:
-        type: boolean
-        example: true
     CustomUserIdQueryParameter:
       name: customUserId
       in: query

@@ -1,5 +1,6 @@
 package io.woleet.idserver.api;
 
+import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.IdentityResult;
@@ -11,10 +12,18 @@ import static org.junit.Assert.*;
 
 public class IdentityApiTest {
 
+    // Check that IDENTITY base path is defined in the environment
+    public static final String WOLEET_ID_SERVER_IDENTITY_BASEPATH = System.getenv("WOLEET_ID_SERVER_IDENTITY_BASEPATH");
+
+    static {
+        assertFalse("WOLEET_ID_SERVER_IDENTITY_BASEPATH must be defined", WOLEET_ID_SERVER_IDENTITY_BASEPATH.isEmpty());
+    }
+
     @Test
     public void getIdentityTest() throws ApiException {
 
-        IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient());
+        IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
+                .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
 
         try {
             identityApi.getIdentity("invalid pubKey", Config.randomString(32));
@@ -45,8 +54,8 @@ public class IdentityApiTest {
         assertNotNull(identityResult.getSignature());
         assertTrue(
                 "Expected " + identityResult.getRightData()
-                        + "to start with \"" + serverConfig.getIdentityURL()
-                        + "\" but got \"" + identityResult.getRightData() + "\"",
+                + "to start with \"" + serverConfig.getIdentityURL()
+                + "\" but got \"" + identityResult.getRightData() + "\"",
                 identityResult.getRightData().startsWith(serverConfig.getIdentityURL())
         );
         Config.isValidSignature(pubKey, identityResult.getSignature(), leftData + identityResult.getRightData());

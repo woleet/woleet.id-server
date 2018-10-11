@@ -14,7 +14,7 @@ Start the server in development mode:
 
 Install node packages:
 
-    $ npm install --production
+    $ npm install
 
 Build the server:
 

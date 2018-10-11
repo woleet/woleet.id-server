@@ -16,12 +16,15 @@ services:
       POSTGRES_USER: ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser}
       POSTGRES_PASSWORD: ${WOLEET_ID_SERVER_POSTGRES_PASSWORD:-pass}
     volumes:
-      - ${WOLEET_ID_SERVER_DATA_DIR:-./tmp}:/var/lib/postgresql/data:rw
+      - ${WOLEET_ID_SERVER_DATA_DIR:-./db}:/var/lib/postgresql/data:rw
   wid-client:
     image: ${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}:client
     ports:
-      - 80:80
-      - 443:443
+      # Calls to the server goes through the client's NGINX reverse proxy
+      - 80:80 # the client's NGINX reverse proxy redirects HTTP to HTTPS
+      - ${WOLEET_ID_SERVER_API_PORT:-3000}:3000 # client web app + proxy to server API endpoints dedicated to client web app (https://localhost:3000)
+      - ${WOLEET_ID_SERVER_IDENTITY_PORT:-3001}:3001 # /identity endpoint (https://localhost:3001/identity)
+      - ${WOLEET_ID_SERVER_SIGN_PORT:-3002}:3002 # /sign endpoint (https://localhost:3002/sign)
     volumes:
       - ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}:/etc/nginx/ssl/certificate.crt:ro
       - ${WOLEET_ID_SERVER_HTTP_TLS_KEY:?Undefined WOLEET_ID_SERVER_HTTP_TLS_KEY}:/etc/nginx/ssl/certificate.key:ro
@@ -38,6 +41,12 @@ services:
     depends_on:
       - wid-postgres
     environment:
+      DEBUG: ${WOLEET_ID_SERVER_DEBUG} # Set to "id*" to see debug traces
+      WOLEET_ID_SERVER_API_PORT: 3000
+      WOLEET_ID_SERVER_IDENTITY_PORT: 3001
+      WOLEET_ID_SERVER_SIGN_PORT: 3002
+      WOLEET_ID_SERVER_PRODUCTION: ${WOLEET_ID_SERVER_PRODUCTION:-true}
+      WOLEET_ID_SERVER_ENCRYPTION_SECRET: ${WOLEET_ID_SERVER_ENCRYPTION_SECRET:-secret}
       WOLEET_ID_SERVER_POSTGRES_HOST: ${WOLEET_ID_SERVER_POSTGRES_HOST:-wid-postgres}
       WOLEET_ID_SERVER_POSTGRES_DB: ${WOLEET_ID_SERVER_POSTGRES_DB:-wid}
       WOLEET_ID_SERVER_POSTGRES_USER: ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser}

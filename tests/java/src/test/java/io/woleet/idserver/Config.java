@@ -12,11 +12,11 @@ import org.bitcoinj.core.ECKey;
 import java.util.Random;
 import java.util.UUID;
 
+import static org.junit.Assert.assertFalse;
+
 public class Config {
 
     //private static final Logger logger = LoggerFactory.getLogger(Config.class);
-
-    private static ApiClient adminAuthApiClient;
 
     // True if tests are to be debugged
     private static final boolean debug = false;
@@ -25,6 +25,13 @@ public class Config {
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
     private static final String TEST_USERS_USERNAME_PREFIX = "tester_";
 
+    // Check that API base path is defined in the environment
+    public static final String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
+
+    static {
+        assertFalse("WOLEET_ID_SERVER_API_BASEPATH must be defined", WOLEET_ID_SERVER_API_BASEPATH.isEmpty());
+    }
+
     /**
      * Return a new API client with no credential.
      */
@@ -32,7 +39,7 @@ public class Config {
         ApiClient apiClient = new ApiClient();
         apiClient.setDebugging(debug);
         apiClient.setVerifyingSsl(false);
-        apiClient.setBasePath(getBasePath());
+        apiClient.setBasePath(WOLEET_ID_SERVER_API_BASEPATH);
         return apiClient;
     }
 
@@ -62,14 +69,10 @@ public class Config {
      * Return a singleton API client with credentials set for the platform admin.
      */
     public static ApiClient getAdminAuthApiClient() throws ApiException {
-        if (adminAuthApiClient == null)
-            adminAuthApiClient = getAuthApiClient(System.getenv("WOLEET_ID_SERVER_ADMIN_LOGIN"),
-                    System.getenv("WOLEET_ID_SERVER_ADMIN_PASSWORD"));
-        return adminAuthApiClient;
-    }
-
-    private static String getBasePath() {
-        return System.getenv("WOLEET_ID_SERVER_API_URL");
+        return getAuthApiClient(
+            System.getenv("WOLEET_ID_SERVER_ADMIN_LOGIN"),
+            System.getenv("WOLEET_ID_SERVER_ADMIN_PASSWORD")
+        );
     }
 
     /**
@@ -126,7 +129,7 @@ public class Config {
      */
     public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
-        UserArray users = userApi.getAllUsers(false);
+        UserArray users = userApi.getAllUsers();
         for (UserGet user : users) {
             if (user.getIdentity().getCommonName().startsWith(TEST_USERS_COMMONNAME_PREFIX))
                 userApi.deleteUser(user.getId());
@@ -165,7 +168,7 @@ public class Config {
     public static boolean isValidSignature(String address, String signature, String message) {
         try {
             return ECKey.signedMessageToKey(message, signature).toAddress(Address.fromBase58(null, address)
-                    .getParameters()).toString().equals(address);
+                .getParameters()).toString().equals(address);
         } catch (Exception e) {
             return false;
         }

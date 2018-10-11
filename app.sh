@@ -3,7 +3,7 @@
 set -e
 
 display_usage() {
-  echo "usage: $0 [start|stop|build|push|check|logs]"
+  echo "usage: $0 [start|stop|restart|build|push|check|logs]"
 }
 
 tmp_client_dir=./client/tmp/
@@ -60,6 +60,8 @@ elif [ "$operation" == "logs" ]; then
   docker-compose logs -f --tail 50
 elif [ "$operation" == "stop" ]; then
   docker-compose down
+elif [ "$operation" == "restart" ]; then
+  docker-compose restart
 elif [ "$operation" == "push" ]; then
   docker-compose push
 elif [ "$operation" == "check" ]; then

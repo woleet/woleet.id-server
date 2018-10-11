@@ -10,6 +10,11 @@ const ServerEventModel = {
     type: ENUM(...eventsConfig.typesEnum),
     allowNull: false
   },
+  associatedTokenId: { type: UUID },
+  authorizedTokenId: { type: UUID },
+  associatedUserId: { type: UUID },
+  authorizedUserId: { type: UUID },
+  associatedKeyId: { type: UUID },
   occurredAt: { type: DATE, allowNull: false },
   data: { type: JSON, defaultValue: null }
 };

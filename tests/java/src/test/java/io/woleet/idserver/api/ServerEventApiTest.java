@@ -36,8 +36,7 @@ public class ServerEventApiTest {
      */
     @Test
     public void getServerEventListTest() throws ApiException {
-        Boolean full = null;
-        ServerEventArray response = api.getServerEventList(full);
+        ServerEventArray response = api.getServerEventList();
 
         // TODO: test validations
     }

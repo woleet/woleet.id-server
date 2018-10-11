@@ -304,13 +304,12 @@ public class UserApi {
     }
     /**
      * Build call for getAllUsers
-     * @param full Include deleted elements in the returned list. (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call getAllUsersCall(Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call getAllUsersCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = new Object();
 
         // create path and map variables
@@ -318,10 +317,6 @@ public class UserApi {
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        if (full != null) {
-            localVarQueryParams.addAll(apiClient.parameterToPair("full", full));
-        }
-
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
         final String[] localVarAccepts = {
@@ -355,10 +350,10 @@ public class UserApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call getAllUsersValidateBeforeCall(Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call getAllUsersValidateBeforeCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
 
-        com.squareup.okhttp.Call call = getAllUsersCall(full, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllUsersCall(progressListener, progressRequestListener);
         return call;
 
     }
@@ -366,24 +361,22 @@ public class UserApi {
     /**
      * List all users.
      * 
-     * @param full Include deleted elements in the returned list. (optional)
      * @return UserArray
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public UserArray getAllUsers(Boolean full) throws ApiException {
-        ApiResponse<UserArray> resp = getAllUsersWithHttpInfo(full);
+    public UserArray getAllUsers() throws ApiException {
+        ApiResponse<UserArray> resp = getAllUsersWithHttpInfo();
         return resp.getData();
     }
 
     /**
      * List all users.
      * 
-     * @param full Include deleted elements in the returned list. (optional)
      * @return ApiResponse&lt;UserArray&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<UserArray> getAllUsersWithHttpInfo(Boolean full) throws ApiException {
-        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(full, null, null);
+    public ApiResponse<UserArray> getAllUsersWithHttpInfo() throws ApiException {
+        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(null, null);
         Type localVarReturnType = new TypeToken<UserArray>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -391,12 +384,11 @@ public class UserApi {
     /**
      * List all users. (asynchronously)
      * 
-     * @param full Include deleted elements in the returned list. (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getAllUsersAsync(Boolean full, final ApiCallback<UserArray> callback) throws ApiException {
+    public com.squareup.okhttp.Call getAllUsersAsync(final ApiCallback<UserArray> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -417,7 +409,7 @@ public class UserApi {
             };
         }
 
-        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(full, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<UserArray>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;

@@ -5,7 +5,7 @@ import * as Router from 'koa-router';
 import * as Debug from 'debug';
 const debug = Debug('id:factory');
 
-const names = [ 'signature', 'identity', 'api'];
+const names = ['signature', 'identity', 'api'];
 
 interface AppDefinition {
   name: string;
@@ -32,7 +32,7 @@ export const apps = Object.keys(defs).reduce<AppDefinition[]>((acc, port) => {
   const _apps: AppDefinition[] = defs[port];
 
   const app = _apps.reduce<AppDefinition>((_acc, _app) => ({
-    name: _acc.name ? (_acc.name + ', ' + _app.name) : _app.name,
+    name: _acc.name ? _acc.name + '-' + _app.name : _app.name,
     port: _acc.port || _app.port,
     router: _acc.router.use(_app.router.routes())
   }), { name: '', port: 0, router: new Router() });

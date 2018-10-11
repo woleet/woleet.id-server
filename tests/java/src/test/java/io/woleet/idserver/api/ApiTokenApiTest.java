@@ -21,8 +21,8 @@ public class ApiTokenApiTest extends CRUDApiTest {
         }
 
         @Override
-        public ObjectArray getAllObjects(boolean full) throws ApiException {
-            return new ObjectArray(apiTokenApi.getAllAPITokens(full));
+        public ObjectArray getAllObjects() throws ApiException {
+            return new ObjectArray(apiTokenApi.getAllAPITokens());
         }
 
         @Override

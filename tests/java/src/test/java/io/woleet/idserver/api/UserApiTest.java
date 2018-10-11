@@ -21,8 +21,8 @@ public class UserApiTest extends CRUDApiTest {
         }
 
         @Override
-        public ObjectArray getAllObjects(boolean full) throws ApiException {
-            return new ObjectArray(userApi.getAllUsers(full));
+        public ObjectArray getAllObjects() throws ApiException {
+            return new ObjectArray(userApi.getAllUsers());
         }
 
         @Override

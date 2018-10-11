@@ -39,14 +39,6 @@ Key.model.beforeDelete(async (key) => {
   await user.save();
 });
 
-ServerEvent.model.belongsTo(APIToken.model, { as: 'associatedToken' });
-
-ServerEvent.model.belongsTo(Key.model, { as: 'associatedKey' });
-
-ServerEvent.model.belongsTo(User.model, { as: 'associatedUser' });
-
-ServerEvent.model.belongsTo(User.model, { as: 'authorizedUser' });
-
 ServerConfig.model.belongsTo(Key.model, { as: 'defaultKey' });
 
 export { User, Key, APIToken, ServerEvent, ServerConfig };

@@ -21,13 +21,13 @@ public class KeyApiTest extends CRUDApiTest {
         }
 
         @Override
-        public ObjectArray getAllObjects(boolean full) throws ApiException {
+        public ObjectArray getAllObjects() throws ApiException {
 
             // This code is called before setUp() is called, so user can be null
             if (user == null)
                 return new ObjectArray(new KeyArray());
 
-            return new ObjectArray(keyApi.getAllUserKeys(user.getId(), full));
+            return new ObjectArray(keyApi.getAllUserKeys(user.getId()));
         }
 
         @Override

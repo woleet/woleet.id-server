@@ -9,14 +9,14 @@ function getenv(name: string) {
   return process.env[prefix + name];
 }
 
-const prod = getenv('PROD') === 'true';
+export const production = getenv('PRODUCTION') === 'true';
 
-log.setLevel(prod ? 'info' : 'debug');
+log.setLevel(production ? 'info' : 'debug');
 
 const defaultPort = parseInt(getenv('DEFAULT_PORT')) || 3000;
 
 export const ports = {
-  signature: parseInt(getenv('SIGNATURE_PORT')) || defaultPort,
+  signature: parseInt(getenv('SIGN_PORT')) || defaultPort,
   identity: parseInt(getenv('IDENTITY_PORT')) || defaultPort,
   api: parseInt(getenv('API_PORT')) || defaultPort
 };

@@ -13,6 +13,13 @@ import static org.junit.Assert.*;
 
 public class SignatureApiTest {
 
+    // Check that SIGN base path is defined in the environment
+    public static final String WOLEET_ID_SERVER_SIGN_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGN_BASEPATH");
+
+    static {
+        assertFalse("WOLEET_ID_SERVER_SIGN_BASEPATH must be defined", WOLEET_ID_SERVER_SIGN_BASEPATH.isEmpty());
+    }
+
     private UserGet user;
 
     private SignatureApi adminAuthApi, userAuthApi, noAuthApi, tokenAuthApi;
@@ -36,15 +43,19 @@ public class SignatureApiTest {
         tearDown();
 
         // Create 3 helper APIs: one with admin rights, one with user rights, one not authenticated
-        adminAuthApi = new SignatureApi(Config.getAdminAuthApiClient());
+        adminAuthApi = new SignatureApi(Config.getAdminAuthApiClient()
+                .setBasePath(WOLEET_ID_SERVER_SIGN_BASEPATH));
         user = Config.createTestUser();
-        userAuthApi = new SignatureApi(Config.getAuthApiClient(user.getUsername(), "pass"));
-        noAuthApi = new SignatureApi(Config.getNoAuthApiClient());
+        userAuthApi = new SignatureApi(Config.getAuthApiClient(user.getUsername(), "pass")
+                .setBasePath(WOLEET_ID_SERVER_SIGN_BASEPATH));
+        noAuthApi = new SignatureApi(Config.getNoAuthApiClient()
+                .setBasePath(WOLEET_ID_SERVER_SIGN_BASEPATH));
 
         // Create an helper API with API token authentication
         apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
         apiTokenGet = apiTokenApi.createAPIToken((APITokenPost) new APITokenPost().name("test"));
         ApiClient apiClient = Config.getNoAuthApiClient();
+        apiClient.setBasePath(WOLEET_ID_SERVER_SIGN_BASEPATH);
         apiClient.addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue());
         tokenAuthApi = new SignatureApi(apiClient);
     }

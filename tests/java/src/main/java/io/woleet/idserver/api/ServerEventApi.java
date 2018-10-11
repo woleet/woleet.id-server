@@ -181,13 +181,12 @@ public class ServerEventApi {
     }
     /**
      * Build call for getServerEventList
-     * @param full Include deleted elements in the returned list. (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call getServerEventListCall(Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call getServerEventListCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = new Object();
 
         // create path and map variables
@@ -195,10 +194,6 @@ public class ServerEventApi {
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        if (full != null) {
-            localVarQueryParams.addAll(apiClient.parameterToPair("full", full));
-        }
-
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
         final String[] localVarAccepts = {
@@ -232,10 +227,10 @@ public class ServerEventApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call getServerEventListValidateBeforeCall(Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call getServerEventListValidateBeforeCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
 
-        com.squareup.okhttp.Call call = getServerEventListCall(full, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getServerEventListCall(progressListener, progressRequestListener);
         return call;
 
     }
@@ -243,24 +238,22 @@ public class ServerEventApi {
     /**
      * List all Server Events.
      * 
-     * @param full Include deleted elements in the returned list. (optional)
      * @return ServerEventArray
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ServerEventArray getServerEventList(Boolean full) throws ApiException {
-        ApiResponse<ServerEventArray> resp = getServerEventListWithHttpInfo(full);
+    public ServerEventArray getServerEventList() throws ApiException {
+        ApiResponse<ServerEventArray> resp = getServerEventListWithHttpInfo();
         return resp.getData();
     }
 
     /**
      * List all Server Events.
      * 
-     * @param full Include deleted elements in the returned list. (optional)
      * @return ApiResponse&lt;ServerEventArray&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<ServerEventArray> getServerEventListWithHttpInfo(Boolean full) throws ApiException {
-        com.squareup.okhttp.Call call = getServerEventListValidateBeforeCall(full, null, null);
+    public ApiResponse<ServerEventArray> getServerEventListWithHttpInfo() throws ApiException {
+        com.squareup.okhttp.Call call = getServerEventListValidateBeforeCall(null, null);
         Type localVarReturnType = new TypeToken<ServerEventArray>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -268,12 +261,11 @@ public class ServerEventApi {
     /**
      * List all Server Events. (asynchronously)
      * 
-     * @param full Include deleted elements in the returned list. (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getServerEventListAsync(Boolean full, final ApiCallback<ServerEventArray> callback) throws ApiException {
+    public com.squareup.okhttp.Call getServerEventListAsync(final ApiCallback<ServerEventArray> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -294,7 +286,7 @@ public class ServerEventApi {
             };
         }
 
-        com.squareup.okhttp.Call call = getServerEventListValidateBeforeCall(full, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getServerEventListValidateBeforeCall(progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<ServerEventArray>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;

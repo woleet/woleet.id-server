@@ -439,13 +439,12 @@ public class KeyApi {
     /**
      * Build call for getAllUserKeys
      * @param userId Identifier of the user. (required)
-     * @param full Include deleted elements in the returned list. (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call getAllUserKeysCall(UUID userId, Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call getAllUserKeysCall(UUID userId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = new Object();
 
         // create path and map variables
@@ -454,10 +453,6 @@ public class KeyApi {
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        if (full != null) {
-            localVarQueryParams.addAll(apiClient.parameterToPair("full", full));
-        }
-
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
         final String[] localVarAccepts = {
@@ -491,7 +486,7 @@ public class KeyApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call getAllUserKeysValidateBeforeCall(UUID userId, Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call getAllUserKeysValidateBeforeCall(UUID userId, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
         // verify the required parameter 'userId' is set
         if (userId == null) {
@@ -499,7 +494,7 @@ public class KeyApi {
         }
         
 
-        com.squareup.okhttp.Call call = getAllUserKeysCall(userId, full, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllUserKeysCall(userId, progressListener, progressRequestListener);
         return call;
 
     }
@@ -508,12 +503,11 @@ public class KeyApi {
      * List all keys of a user.
      * 
      * @param userId Identifier of the user. (required)
-     * @param full Include deleted elements in the returned list. (optional)
      * @return KeyArray
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public KeyArray getAllUserKeys(UUID userId, Boolean full) throws ApiException {
-        ApiResponse<KeyArray> resp = getAllUserKeysWithHttpInfo(userId, full);
+    public KeyArray getAllUserKeys(UUID userId) throws ApiException {
+        ApiResponse<KeyArray> resp = getAllUserKeysWithHttpInfo(userId);
         return resp.getData();
     }
 
@@ -521,12 +515,11 @@ public class KeyApi {
      * List all keys of a user.
      * 
      * @param userId Identifier of the user. (required)
-     * @param full Include deleted elements in the returned list. (optional)
      * @return ApiResponse&lt;KeyArray&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<KeyArray> getAllUserKeysWithHttpInfo(UUID userId, Boolean full) throws ApiException {
-        com.squareup.okhttp.Call call = getAllUserKeysValidateBeforeCall(userId, full, null, null);
+    public ApiResponse<KeyArray> getAllUserKeysWithHttpInfo(UUID userId) throws ApiException {
+        com.squareup.okhttp.Call call = getAllUserKeysValidateBeforeCall(userId, null, null);
         Type localVarReturnType = new TypeToken<KeyArray>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -535,12 +528,11 @@ public class KeyApi {
      * List all keys of a user. (asynchronously)
      * 
      * @param userId Identifier of the user. (required)
-     * @param full Include deleted elements in the returned list. (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getAllUserKeysAsync(UUID userId, Boolean full, final ApiCallback<KeyArray> callback) throws ApiException {
+    public com.squareup.okhttp.Call getAllUserKeysAsync(UUID userId, final ApiCallback<KeyArray> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -561,7 +553,7 @@ public class KeyApi {
             };
         }
 
-        com.squareup.okhttp.Call call = getAllUserKeysValidateBeforeCall(userId, full, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllUserKeysValidateBeforeCall(userId, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<KeyArray>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;

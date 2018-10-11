@@ -427,13 +427,12 @@ public class ApiTokenApi {
     }
     /**
      * Build call for getAllAPITokens
-     * @param full Include deleted elements in the returned list. (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call getAllAPITokensCall(Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call getAllAPITokensCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = new Object();
 
         // create path and map variables
@@ -441,10 +440,6 @@ public class ApiTokenApi {
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        if (full != null) {
-            localVarQueryParams.addAll(apiClient.parameterToPair("full", full));
-        }
-
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
         final String[] localVarAccepts = {
@@ -478,10 +473,10 @@ public class ApiTokenApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call getAllAPITokensValidateBeforeCall(Boolean full, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call getAllAPITokensValidateBeforeCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
 
-        com.squareup.okhttp.Call call = getAllAPITokensCall(full, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllAPITokensCall(progressListener, progressRequestListener);
         return call;
 
     }
@@ -489,24 +484,22 @@ public class ApiTokenApi {
     /**
      * List all API tokens.
      * 
-     * @param full Include deleted elements in the returned list. (optional)
      * @return APITokenArray
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public APITokenArray getAllAPITokens(Boolean full) throws ApiException {
-        ApiResponse<APITokenArray> resp = getAllAPITokensWithHttpInfo(full);
+    public APITokenArray getAllAPITokens() throws ApiException {
+        ApiResponse<APITokenArray> resp = getAllAPITokensWithHttpInfo();
         return resp.getData();
     }
 
     /**
      * List all API tokens.
      * 
-     * @param full Include deleted elements in the returned list. (optional)
      * @return ApiResponse&lt;APITokenArray&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<APITokenArray> getAllAPITokensWithHttpInfo(Boolean full) throws ApiException {
-        com.squareup.okhttp.Call call = getAllAPITokensValidateBeforeCall(full, null, null);
+    public ApiResponse<APITokenArray> getAllAPITokensWithHttpInfo() throws ApiException {
+        com.squareup.okhttp.Call call = getAllAPITokensValidateBeforeCall(null, null);
         Type localVarReturnType = new TypeToken<APITokenArray>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -514,12 +507,11 @@ public class ApiTokenApi {
     /**
      * List all API tokens. (asynchronously)
      * 
-     * @param full Include deleted elements in the returned list. (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getAllAPITokensAsync(Boolean full, final ApiCallback<APITokenArray> callback) throws ApiException {
+    public com.squareup.okhttp.Call getAllAPITokensAsync(final ApiCallback<APITokenArray> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -540,7 +532,7 @@ public class ApiTokenApi {
             };
         }
 
-        com.squareup.okhttp.Call call = getAllAPITokensValidateBeforeCall(full, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllAPITokensValidateBeforeCall(progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<APITokenArray>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;

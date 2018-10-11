@@ -174,7 +174,7 @@ Name | Type | Description  | Notes
 
 <a name="getAllAPITokens"></a>
 # **getAllAPITokens**
-> APITokenArray getAllAPITokens(full)
+> APITokenArray getAllAPITokens()
 
 List all API tokens.
 
@@ -196,9 +196,8 @@ CookieAuth.setApiKey("YOUR API KEY");
 //CookieAuth.setApiKeyPrefix("Token");
 
 ApiTokenApi apiInstance = new ApiTokenApi();
-Boolean full = true; // Boolean | Include deleted elements in the returned list.
 try {
-    APITokenArray result = apiInstance.getAllAPITokens(full);
+    APITokenArray result = apiInstance.getAllAPITokens();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ApiTokenApi#getAllAPITokens");
@@ -207,10 +206,7 @@ try {
 ```
 
 ### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **full** | **Boolean**| Include deleted elements in the returned list. | [optional]
+This endpoint does not need any parameter.
 
 ### Return type
 
