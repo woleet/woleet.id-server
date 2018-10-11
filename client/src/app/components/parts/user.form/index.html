@@ -84,7 +84,7 @@
             <input matInput type="text" placeholder="userId" [formControl]="form.identity.userId" (focus)="form.identity.userId.focused = true"
               (focusout)="form.identity.userId.focused = false">
             <mat-error *ngIf="form.identity.userId.invalid">{{ getErrorMessage(form.identity.userId) }}</mat-error>
-            <mat-hint *ngIf="form.identity.userId.focused">A custom user identifier you can be used to select the user (must be unique)</mat-hint>
+            <mat-hint *ngIf="form.identity.userId.focused">A custom user identifier you can use to select the user (must be unique)</mat-hint>
           </mat-form-field>
         </div>
       </mat-card-content>
@@ -95,7 +95,7 @@
     <br>
   </div>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="submit()" [disabled]="formLocked || f.invalid || !isValid()">{{ mode.toUpperCase()}}</button>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="formLocked || f.invalid || !isValid()">{{ mode.toUpperCase() }}</button>
     <button mat-button [disabled]="formLocked" (click)="triggerCancel()">CANCEL</button>
   </mat-card-actions>
   <ng-template #loading>
