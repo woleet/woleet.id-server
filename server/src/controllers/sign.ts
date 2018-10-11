@@ -13,8 +13,8 @@ import { decrypt } from './utils/encryption';
 /**
  * TODO: move to secure module
  */
-export async function signMessage(privkeyHex: string, hashToSign: string) {
-  return message.sign(hashToSign, decrypt(privkeyHex), false);
+export async function signMessage(privkeyHex: string, hashToSign: string, compressed: boolean) {
+  return message.sign(hashToSign, decrypt(privkeyHex), compressed);
 }
 
 export async function sign({ hashToSign, pubKey, userId, customUserId }) {
@@ -81,7 +81,7 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     throw new BlockedKeyError();
   }
 
-  const sig = await signMessage(key.get('privateKey'), hashToSign);
+  const sig = await signMessage(key.get('privateKey'), hashToSign, key.get('compressed'));
 
   return {
     userId: user.get('id'),

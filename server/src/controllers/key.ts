@@ -25,7 +25,8 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
   const master = HDPrivateKey.fromMnemonic(mnemonic);
   const xkey = master.derivePath('m/44\'/0\'/0\'');
 
-  const ring = KeyRing.fromPrivate(xkey.privateKey, false);
+  const compressed = true;
+  const ring = KeyRing.fromPrivate(xkey.privateKey, compressed);
 
   const publicKey = ring.getAddress('base58');
   const privateKey = ring.getPrivateKey();
@@ -36,6 +37,7 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
   const newKey = await Key.create(Object.assign({}, key, {
     mnemonicEntropy: encryptedEntropy.toString('hex'),
     privateKey: encryptedPrivateKey.toString('hex'),
+    compressed,
     publicKey,
     userId
   }));

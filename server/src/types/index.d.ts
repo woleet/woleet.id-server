@@ -84,6 +84,8 @@ declare global {
     mnemonicEntropy: string;
     /** Hexadecimal represention of the private key */
     privateKey: string;
+    /** Boolean to indicate weither the privatekey is compresssed or not */
+    compressed: boolean;
     /** Base 58 represention of the public key */
     publicKey: string;
 
@@ -100,6 +102,8 @@ declare global {
     mnemonicEntropy: string;
     /** Hexadecimal represention of the private key */
     privateKey: string;
+    /** Boolean to indicate weither the privatekey is compresssed or not */
+    compressed: boolean;
     /** Base 58 represention of the public key */
     publicKey: string;
     /** Reference to the owner of the key */
