@@ -26,7 +26,7 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     if (!config) {
       throw new ServerNotReadyError();
     }
-    if (!config.fallbackOnDefaultKey) {
+    if (!config.fallbackOnDefaultKey || !config.defaultKeyId) {
       throw new NoDefaultKeyError();
     }
     key = await Key.getByIdAndPullUser(config.defaultKeyId);
