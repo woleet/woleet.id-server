@@ -13,6 +13,12 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
 
         // logout if unauthorized
         if (err instanceof HttpErrorResponse && err.status === 401) {
+          // if it was trying to login, prevent the app to reboot
+          const authorization = request.headers.get('authorization');
+          if (authorization && authorization.startsWith('Basic ')) {
+            return throwError(err);
+          }
+
           this.auth.logout(false);
         }
 

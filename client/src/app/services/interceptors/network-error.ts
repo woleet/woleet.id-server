@@ -29,8 +29,6 @@ export class NetworkErrorInterceptor implements HttpInterceptor {
           }
           this.router.navigate(['error']);
           return Observable.create(obs => obs.complete());
-        } else {
-          log.error('Unexpected error', err);
         }
 
         return throwError(err);
