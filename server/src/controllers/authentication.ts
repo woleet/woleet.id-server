@@ -2,14 +2,16 @@ import { User } from '../database';
 import { store as sessionStore } from './store.session';
 import { validate } from './utils/password';
 
-export async function createSession(login: string, password: string): Promise<{ token: string, user: InternalUserObject }> {
-  let user: SequelizeUserObject = null;
-
+export function lookForUser(login: string): Promise<SequelizeUserObject> {
   if (login.search('@') !== -1) {
-    user = await User.getByEmail(login);
+    return User.getByEmail(login);
   } else {
-    user = await User.getByUsername(login);
+    return User.getByUsername(login);
   }
+}
+
+export async function createSession(login: string, password: string): Promise<{ token: string, user: InternalUserObject }> {
+  const user = await lookForUser(login);
 
   if (!user) {
     return null;
@@ -31,6 +33,25 @@ export async function createSession(login: string, password: string): Promise<{ 
   });
 
   if (!success) {
+    return null;
+  }
+
+  const token = await sessionStore.create(user);
+
+  user.set('lastLogin', new Date);
+
+  await user.save();
+
+  return { token, user: user.toJSON() };
+}
+
+export async function createOAuthSession(user): Promise<{ token: string, user: InternalUserObject }> {
+  if (!user) {
+    return null;
+  }
+
+  // A blocked user cannot login
+  if (user.getDataValue('status') === 'blocked') {
     return null;
   }
 

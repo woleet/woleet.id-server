@@ -62,10 +62,9 @@ declare global {
     role?: UserRoleEnum;
     status?: UserStatusEnum;
     email?: string;
-    passwordHash: string;
-    passwordSalt: string;
-    passwordItrs: number;
-
+    passwordHash?: string;
+    passwordSalt?: string;
+    passwordItrs?: number;
     defaultKeyId?: string;
   }
 
@@ -135,6 +134,7 @@ declare global {
     id: string;
     exp: number;
     user: SequelizeUserObject;
+    oauth?: Object;
   }
 
   /* Events */

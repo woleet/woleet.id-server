@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, Params } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { serverURL } from './config';
 import { BootService } from '@services/boot';
@@ -62,6 +62,24 @@ export class AuthService {
 
   isAdmin(): boolean {
     return this.isAuthenticated() && this.user.role === 'admin';
+  }
+
+  async openid() {
+    document.location.href = `${serverURL}/oauth/login`;
+  }
+
+  async forwardOAuth(params: Params) {
+    const auth: AuthResponseObject = await this.http.get<AuthResponseObject>(`${serverURL}/oauth/callback`, { params })
+      .toPromise();
+
+    if (!auth) {
+      return null;
+    }
+
+    this.user = auth.user;
+    localStorage.setItem('user', JSON.stringify(auth.user));
+
+    return auth.user;
   }
 
 }

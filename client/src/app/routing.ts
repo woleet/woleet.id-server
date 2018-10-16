@@ -17,6 +17,7 @@ import { UserListPageComponent } from '@pages/user.list';
 import { UserEditPageComponent } from '@pages/user.edit';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ErrorPageComponent } from '@components/pages/error';
+import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
 
 const routes: Routes = [
   { path: 'error', data: { title: 'Error', hideNav: true }, component: ErrorPageComponent, canActivate: [HasError] },
@@ -24,6 +25,12 @@ const routes: Routes = [
   { path: 'setup', data: { title: 'Setup' }, component: SetupPageComponent, canActivate: [NeedConfig] },
   { path: 'user', data: { title: 'My profile' }, component: UserPageComponent, canActivate: [IsUser] },
   { path: 'user/:id', data: { title: 'User keys' }, component: UserDetailPageComponent, canActivate: [IsAdmin] },
+  {
+    path: 'oauth/callback',
+    data: { title: 'Please wait...', hideNav: true },
+    component: OAuthRedirectComponent,
+    canActivate: [IsAnonymous]
+  },
   { path: 'user/:id/edit', data: { title: 'Edit user' }, component: UserEditPageComponent, canActivate: [IsAdmin] },
   { path: 'users', data: { title: 'Users' }, component: UserListPageComponent, canActivate: [IsAdmin] },
   { path: 'settings', data: { title: 'Settings' }, component: SettingsPageComponent, canActivate: [IsAdmin] },

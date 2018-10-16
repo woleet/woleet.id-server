@@ -15,12 +15,12 @@ export class LoginPageComponent {
 
   errorMsg: string = null;
 
-  constructor(private service: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router) {
     this.user = { username: '', password: '' };
   }
 
   async login() {
-    const user = await this.service.login(this.user);
+    const user = await this.authService.login(this.user);
 
     log.debug('Successfully logged in', user);
 
@@ -33,5 +33,9 @@ export class LoginPageComponent {
     } else {
       this.errorMsg = 'Failed to login.';
     }
+  }
+
+  openid() {
+    return this.authService.openid();
   }
 }

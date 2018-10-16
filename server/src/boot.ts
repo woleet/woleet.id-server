@@ -24,6 +24,7 @@ import { encryption } from './config';
 import { setSecret } from './controllers/utils/encryption';
 import { initPromise } from './database';
 import { signMessage } from './controllers/sign';
+import { initOpenid } from './controllers/openid';
 
 function exit(msg) {
   log.error(msg);
@@ -81,6 +82,7 @@ initPromise
     }
   })
   .catch((err) => exit(`Failed to load server config: ${err.message}`))
+  .then(() => initOpenid())
   .then(() => {
     log.info(`Starting servers...`);
 

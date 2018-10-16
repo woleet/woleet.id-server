@@ -34,7 +34,7 @@ export async function apiTokenAuth(ctx: Context, next) {
 }
 
 export async function user(ctx: Context, next) {
-  if (!ctx.session) {
+  if (!(ctx.session && ctx.session.user)) {
     throw new Unauthorized();
   }
 
@@ -42,7 +42,7 @@ export async function user(ctx: Context, next) {
 }
 
 export async function admin(ctx: Context, next) {
-  if (!ctx.session) {
+  if (!(ctx.session && ctx.session.user)) {
     throw new Unauthorized();
   }
 

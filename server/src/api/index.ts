@@ -10,6 +10,8 @@ import { router as key } from './routers/key';
 import { router as sign } from './routers/sign';
 import { router as identity } from './routers/identity';
 
+import { router as openid } from './routers/openid';
+
 import { user as userAuth, admin as adminAuth, session } from './authentication';
 
 import { production } from '../config';
@@ -27,12 +29,16 @@ if (!production) {
 }
 apiRouter.use(bodyParser());
 apiRouter.use(auth.routes());
-apiRouter.use(session, userAuth, info.routes());
-apiRouter.use(session, adminAuth, user.routes());
-apiRouter.use(session, adminAuth, key.routes());
-apiRouter.use(session, adminAuth, apiToken.routes());
-apiRouter.use(session, adminAuth, serverEvent.routes());
-apiRouter.use(session, adminAuth, serverConfig.routes());
+apiRouter.use(session);
+apiRouter.use(openid.routes());
+apiRouter.use(userAuth);
+apiRouter.use(info.routes());
+apiRouter.use(adminAuth);
+apiRouter.use(user.routes());
+apiRouter.use(key.routes());
+apiRouter.use(apiToken.routes());
+apiRouter.use(serverEvent.routes());
+apiRouter.use(serverConfig.routes());
 
 /**
  * Identity

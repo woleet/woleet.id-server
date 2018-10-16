@@ -18,7 +18,7 @@ async function serializeAndEncodePassword(password: string) {
   };
 }
 
-function serializeIdentity(identity: ApiIdentityObject): InternalIdentityObject {
+export function serializeIdentity(identity: ApiIdentityObject): InternalIdentityObject {
   return {
     x500CommonName: identity.commonName,
     x500Organization: identity.organization,
