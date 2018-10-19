@@ -1,7 +1,6 @@
-import * as request from 'supertest';
 import agents from './agents';
 import { assertError } from './utils';
-import * as assert from 'assert';
+import './before';
 
 function servers() {
   return agents.api;

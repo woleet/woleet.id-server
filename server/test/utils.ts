@@ -6,6 +6,7 @@ import 'mocha';
 
 import { Response } from 'supertest';
 import * as assert from 'assert';
+import './before';
 
 export const basic = (user, pass) => Buffer.from(`${user}:${pass}`).toString('base64');
 

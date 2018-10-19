@@ -1,8 +1,9 @@
 import * as request from 'supertest';
 import agents from './agents';
 import * as assert from 'assert';
+import './before';
 
-import { uuid, assertError, exclisiveInclude } from './utils';
+import { assertError, exclisiveInclude } from './utils';
 
 function servers() {
   return agents.api;
