@@ -1,28 +1,33 @@
 import * as Router from 'koa-router';
 import { getClient, createOAuthUser, createOAuthSession } from '../../controllers/openid';
-import { store as event } from '../../controllers/server-event';
 
 const router = new Router({ prefix: '/oauth' });
 
 const CB_URL = 'https://localhost:4220/oauth/callback';
 
-import { BadRequest } from 'http-errors';
+import { BadRequest, ServiceUnavailable } from 'http-errors';
 import { Cache } from 'lru-cache';
 import * as LRU from 'lru-cache';
 import * as v4 from 'uuid/v4';
+import { randomBytes } from 'crypto';
 import { serialiseUserDTO } from '../serialize/userDTO';
+import * as log from 'loglevel';
 
-const lru: Cache<string, { state: string, nonce: string }> = new LRU({ maxAge: 10 * 1000, max: 1000 });
+const lru: Cache<string, { state: string, nonce: string }> = new LRU({ maxAge: 30 * 1000, max: 1000 });
 
 /**
  * @route: /oauth/login
  */
 router.get('/login', async function (ctx) {
-  console.log('OAUTH');
   const client = getClient();
+
+  if (!client) {
+    throw new ServiceUnavailable();
+  }
+
   const oauth = v4();
   const state = v4();
-  const nonce = v4();
+  const nonce = randomBytes(8).toString('hex');
   const url = client.authorizationUrl({
     redirect_uri: CB_URL,
     scope: 'openid profile email',
@@ -31,7 +36,6 @@ router.get('/login', async function (ctx) {
     response_type: 'code'
   });
   lru.set(oauth, { state, nonce });
-  console.log('url', url);
   ctx.cookies.set('oauth', oauth);
   ctx.redirect(url);
 });
@@ -40,8 +44,12 @@ router.get('/login', async function (ctx) {
  * @route: /oauth/callback
  */
 router.get('/callback', async function (ctx) {
-  console.log('OAUTH CALLBACK', ctx.query);
   const client = getClient();
+
+  if (!client) {
+    throw new ServiceUnavailable();
+  }
+
   const oauth = ctx.cookies.get('oauth');
 
   if (!oauth) {
@@ -55,16 +63,23 @@ router.get('/callback', async function (ctx) {
     throw new BadRequest('invalid oauth session');
   }
 
-  console.log(`got ${oauth}=`, oauthSession);
-
   const { state, nonce } = oauthSession;
 
-  const tokenSet = await client.authorizationCallback(CB_URL, ctx.query, { response_type: 'code', state, nonce }); // => Promise
-  console.log('received and validated tokens', tokenSet);
-  console.log('validated id_token claims', tokenSet.claims);
+  let tokenSet;
+  try {
+    tokenSet = await client.authorizationCallback(CB_URL, ctx.query, { response_type: 'code', state, nonce });
+  } catch (err) {
+    log.warn(err);
+    throw new BadRequest(err.message);
+  }
 
-  const info = await client.userinfo(tokenSet);
-  console.log('USER', info);
+  let info;
+  try {
+    info = await client.userinfo(tokenSet);
+  } catch (err) {
+    log.warn(err);
+    throw new BadRequest(err.message);
+  }
 
   if (!info.email) {
     throw new BadRequest('missing "email" response field');

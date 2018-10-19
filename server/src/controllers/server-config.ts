@@ -3,6 +3,7 @@ import { serverConfig as config } from '../config';
 import * as Debug from 'debug';
 const debug = Debug('id:ctrl:config');
 import * as log from 'loglevel';
+import { updateOIDCClient } from './openid';
 
 const { CONFIG_ID } = config;
 
@@ -30,5 +31,14 @@ export async function setServerConfig(up): Promise<InternalServerConfigObject> {
   }
   debug('Updated', inMemoryConfig, 'to', cfg.toJSON(), 'with', up);
   inMemoryConfig = cfg.toJSON();
+  if (up.useOpenIDConnect || up.openIDConnectClientId || up.openIDConnectClientSecret || up.openIDConnectURL) {
+    debug('Update OIDCClient with', { up });
+    try {
+      await updateOIDCClient();
+    } catch (err) {
+      log.error('Failed to initalize OPenID Connect, it will be automatically disabled !', err);
+      return setServerConfig({ useOpenIDConnect: false });
+    }
+  }
   return getServerConfig();
 }

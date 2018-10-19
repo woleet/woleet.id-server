@@ -1,4 +1,5 @@
 import { router as auth } from './routers/authentication';
+import { router as appConfig } from './routers/app-config';
 
 import { router as serverConfig } from './routers/server-config';
 import { router as serverEvent } from './routers/server-event';
@@ -29,6 +30,7 @@ if (!production) {
 }
 apiRouter.use(bodyParser());
 apiRouter.use(auth.routes());
+apiRouter.use(appConfig.routes());
 apiRouter.use(session);
 apiRouter.use(openid.routes());
 apiRouter.use(userAuth);

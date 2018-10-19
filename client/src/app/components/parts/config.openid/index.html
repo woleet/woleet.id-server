@@ -1,0 +1,46 @@
+<mat-card *ngIf="(config$ | async) as config; else loading">
+  <mat-card-title>OpenID Connect configuration</mat-card-title>
+  <mat-divider></mat-divider>
+  <br>
+    <mat-checkbox matInput placeholder="Set as default key"
+      [checked]="config.useOpenIDConnect"
+      (change)="updateUseOpenIDConnectOption(config.useOpenIDConnect = !config.useOpenIDConnect)"
+      [disabled]="(formLocked$ | async)">Use OpenID Connect</mat-checkbox>
+      <br>
+      <br>
+    <mat-divider></mat-divider>
+    <br>
+    <form [formGroup]="form">
+      <mat-form-field class="w-100" *ngIf="form.get('openIDConnectURL')  as f">
+        <input matInput placeholder="OpenID Connect URL"
+          formControlName="openIDConnectURL"
+          (input)="openIDConnectURLChanged()"
+          [required]="config.useOpenIdConnect">
+        <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100" *ngIf="form.get('openIDConnectClientId') as f">
+        <input matInput placeholder="Client ID"
+          formControlName="openIDConnectClientId"
+          (input)="openIDConnectURLChanged()"
+          [required]="config.useOpenIDConnect">
+        <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100" *ngIf="form.get('openIDConnectClientSecret') as f">
+        <input matInput placeholder="Client secret"
+          [type]="reveal ? 'text' : 'password'"
+          formControlName="openIDConnectClientSecret"
+          (input)="openIDConnectURLChanged()"
+          [required]="config.useOpenIDConnect">
+        <button mat-button *ngIf="f.value" matSuffix mat-icon-button aria-label="Clear" (click)="reveal=!reveal">
+          <mat-icon>remove_red_eye</mat-icon>
+        </button>
+        <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
+      </mat-form-field>
+    </form>
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
+      (click)="update()"
+      [disabled]="(!changed) || form.invalid || (formLocked$ | async)">CHANGE</button>
+    </mat-card-actions>
+  <ng-template #loading>Loading...<br></ng-template>
+</mat-card>

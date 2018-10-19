@@ -14,10 +14,8 @@ export class OAuthRedirectComponent {
   errorMsg: string = null;
 
   constructor(activatedRoute: ActivatedRoute, authService: AuthService, router: Router, errorService: ErrorService) {
-    console.log('PRX', authService.isAuthenticated());
     activatedRoute.queryParams.subscribe(async (params) => {
-      console.log('params', params);
-
+      log.debug('Forward oauth parameters', params);
       try {
         const user = await authService.forwardOAuth(params);
         log.debug('Successfully logged in', user);
@@ -32,7 +30,7 @@ export class OAuthRedirectComponent {
           this.errorMsg = `Failed to login`;
         }
       } catch (err) {
-        console.error(err);
+        log.error(err);
         this.errorMsg = `Failed to login: ${err.error.message}`;
       }
 

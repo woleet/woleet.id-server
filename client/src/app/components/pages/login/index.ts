@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { mainRoute } from '@app/config';
 
 import * as log from 'loglevel';
+import { Observable } from 'rxjs';
+import { AppConfigService } from '@services/boot';
 
 @Component({
   templateUrl: './index.html',
@@ -12,11 +14,15 @@ import * as log from 'loglevel';
 export class LoginPageComponent {
 
   user: BasicAuthObject;
+  lock$: Observable<boolean>;
 
   errorMsg: string = null;
+  useOIDC: boolean;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, appConfigService: AppConfigService) {
     this.user = { username: '', password: '' };
+    this.lock$ = authService.lock$;
+    this.useOIDC = appConfigService.getStartupConfig().useOpenIDConnect;
   }
 
   async login() {

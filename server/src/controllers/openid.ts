@@ -4,32 +4,48 @@ import { createKey } from './key';
 import { User } from '../database';
 import { store as sessionStore } from './store.session';
 import { lookForUser } from './authentication';
+import { getServerConfig } from './server-config';
+import * as Debug from 'debug';
+const debug = Debug('id:ctrl:openid');
+import * as log from 'loglevel';
 
-let _client = null;
+let client = null;
 
-export const getClient = () => _client;
+export const getClient = () => client;
 
-export function initOpenid() {
-  return Issuer.discover('https://keycloak.woleet.io:8443/auth/realms/sso-test')
-    .then((issuer) => {
-      console.log('Discovered issuer', issuer.issuer);
-      console.log('Issuer has', issuer.metadata);
-      return issuer;
-    })
-    .then((issuer) => {
-      console.log('Creating client...');
-      _client = new issuer.Client({
-        client_id: 'test-openid',
-        client_secret: '7451240a-a19e-4e00-b35f-4595bd55e327'
-      });
-      console.log('Created', _client);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+export async function configure() {
+  const config = getServerConfig();
+
+  if (!config.useOpenIDConnect) {
+    debug('useOpenIDConnect=false, skipping configuration');
+    client = null;
+    return Promise.resolve();
+  }
+
+  if (!config.openIDConnectURL) {
+    debug('no openIDConnectURL set, skipping configuration');
+    log.warn('No openIDConnectURL set while Open ID Connect is enabled, skipping configuration.');
+    return Promise.resolve();
+  }
+
+  const issuer = await Issuer.discover(config.openIDConnectURL);
+  debug('Discovered issuer', issuer.issuer);
+  debug('Issuer has', issuer.metadata);
+
+  client = new issuer.Client({ client_id: config.openIDConnectClientId, client_secret: config.openIDConnectClientSecret });
+
+  debug('Created', client);
+}
+
+export function updateOIDCClient() {
+  return configure();
 }
 
 export async function createOAuthUser(user: ApiPostUserObject): Promise<{ token: string, user: InternalUserObject }> {
+  const config = getServerConfig();
+  if (!config.useOpenIDConnect) {
+    throw new Error('createOAuthUser called while openID connect is disabled');
+  }
   const identity = serializeIdentity(user.identity);
   delete user.identity;
 
@@ -48,6 +64,10 @@ export async function createOAuthUser(user: ApiPostUserObject): Promise<{ token:
 }
 
 export async function createOAuthSession(email: string): Promise<{ token: string, user: InternalUserObject }> {
+  const config = getServerConfig();
+  if (!config.useOpenIDConnect) {
+    throw new Error('createOAuthUser called while openID connect is disabled');
+  }
   const user = await lookForUser(email);
 
   if (!user) {

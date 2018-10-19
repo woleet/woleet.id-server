@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpBackend } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './routing';
@@ -60,6 +60,13 @@ import { ConfigService } from '@services/config';
 import { StopPropagationDirective } from '@directives/stop-propagation';
 import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagation';
 import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
+import { AppConfigService } from '@services/boot';
+import { Http, HttpModule, ConnectionBackend } from '@angular/http';
+import { ConfigOpenIDComponent } from '@components/parts/config.openid';
+
+export function startupServiceFactory(startupService: AppConfigService): Function {
+  return () => startupService.load();
+}
 
 @NgModule({
   declarations: [
@@ -77,6 +84,7 @@ import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
     AboutPageComponent,
     ConfigFallbackKeyComponent,
     ConfigIdentityUrlComponent,
+    ConfigOpenIDComponent,
     UserCardComponent,
     KeyCardComponent,
     APITokenCardComponent,
@@ -102,6 +110,7 @@ import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
 
     // http
     HttpClientModule,
+    HttpModule,
 
     // nav
     LayoutModule,
@@ -122,6 +131,14 @@ import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
     AppRoutingModule
   ],
   providers: [
+    AppConfigService,
+    {
+      // Provider for APP_INITIALIZER
+      provide: APP_INITIALIZER,
+      useFactory: startupServiceFactory,
+      deps: [AppConfigService, Http],
+      multi: true
+    },
     AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService,
     NeedConfigGuardService, KeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,

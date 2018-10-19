@@ -7,7 +7,12 @@ const ServerConfigModel = {
   id: { type: STRING, defaultValue: serverConfig.CONFIG_ID, primaryKey: true },
   identityURL: { type: STRING, defaultValue: serverConfig.default.identityURL },
   fallbackOnDefaultKey: { type: BOOLEAN, defaultValue: serverConfig.default.fallbackOnDefaultKey },
-  defaultKeyId: { type: UUID }
+  defaultKeyId: { type: UUID },
+  useOpenIDConnect: { type: BOOLEAN, defaultValue: false },
+  openIDConnectURL: { type: STRING },
+  allowUserToSign: { type: BOOLEAN, defaultValue: false },
+  openIDConnectClientId: { type: STRING },
+  openIDConnectClientSecret: { type: STRING }
 };
 
 class ServerConfigAccess extends AbstractInstanceAccess<InternalServerConfigObject, ServerConfigCreate> {

@@ -2,6 +2,8 @@
 
 import { Instance } from 'sequelize';
 import { SessionStore } from '../controllers/store.session';
+import { AnySchema } from 'joi';
+
 import '../../../types/api.api-token';
 import '../../../types/api.server-config';
 import '../../../types/api.server-event';
@@ -14,6 +16,10 @@ declare global {
   interface Dictionary<T> {
     [Key: string]: T;
   }
+
+  type DefineJoiModelAttributes<T> = {
+    [P in keyof T]: AnySchema ;
+  };
 
   interface CommonInternalProperties {
     /** UUID */
@@ -172,18 +178,33 @@ declare global {
     defaultKeyId: string;
     defaultKey?: InternalKeyObject;
     fallbackOnDefaultKey: boolean;
+    allowUserToSign: boolean;
+    useOpenIDConnect: boolean;
+    openIDConnectURL?: string;
+    openIDConnectClientId?: string;
+    openIDConnectClientSecret?: string;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
     identityURL?: string;
     defaultKeyId?: string;
     fallbackOnDefaultKey?: boolean;
+    allowUserToSign?: boolean;
+    useOpenIDConnect?: boolean;
+    openIDConnectURL?: string;
+    openIDConnectClientId?: string;
+    openIDConnectClientSecret?: string;
   }
 
   interface ServerConfigCreate extends ServerConfig {
     identityURL: string;
     defaultKeyId: string;
     fallbackOnDefaultKey?: boolean;
+    allowUserToSign?: boolean;
+    useOpenIDConnect?: boolean;
+    openIDConnectURL?: string;
+    openIDConnectClientId?: string;
+    openIDConnectClientSecret?: string;
   }
 
 }

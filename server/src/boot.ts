@@ -24,7 +24,7 @@ import { encryption } from './config';
 import { setSecret } from './controllers/utils/encryption';
 import { initPromise } from './database';
 import { signMessage } from './controllers/sign';
-import { initOpenid } from './controllers/openid';
+import { configure as initOpenIDConnect } from './controllers/openid';
 
 function exit(msg) {
   log.error(msg);
@@ -82,7 +82,16 @@ initPromise
     }
   })
   .catch((err) => exit(`Failed to load server config: ${err.message}`))
-  .then(() => initOpenid())
+  .then(async () => {
+    try {
+      await initOpenIDConnect();
+      return;
+    } catch (err) {
+      log.error('Failed to initalize OPenID Connect, it will be automatically disabled !', err);
+    }
+    return setServerConfig({ useOpenIDConnect: false });
+  })
+  .catch((err) => exit(`Failed to update server config: ${err.message}`))
   .then(() => {
     log.info(`Starting servers...`);
 

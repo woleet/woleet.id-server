@@ -26,7 +26,6 @@ export class ServerConfigService {
   ) {
     this.config$ = new BehaviorSubject(null);
     this.config$.subscribe((cfg) => {
-      log.debug('SUSCRIBED CONFIG', cfg);
       if (cfg) {
         this.setDefaultKey(cfg.defaultKeyId);
         this.setDefaultKeyOwner(cfg.defaultKeyId);
@@ -34,22 +33,11 @@ export class ServerConfigService {
     });
 
     this.isDoingSomething$ = new BehaviorSubject(false);
-
     this.defaultKey$ = new BehaviorSubject(null);
-    this.defaultKey$.subscribe((e) => {
-      log.debug('SUSCRIBED DEFAULT KEY', e);
-    });
-
     this.defaultKeyOwner$ = new BehaviorSubject(null);
-    this.defaultKeyOwner$.subscribe((e) => {
-      log.debug('SUSCRIBED DEFAULT KEY OWNER', e);
-    });
   }
 
   getConfig(): Observable<ApiServerConfig> {
-
-    log.debug('getConfig');
-
     if (this._lastChecked < (+new Date - 3 * 1000)) {
       this.incrLock();
       this._lastChecked = +new Date;
@@ -59,9 +47,7 @@ export class ServerConfigService {
           this.decrLock();
           this.config$.next(up);
         });
-      log.debug('getConfig is set');
     }
-
     return this.config$.asObservable();
   }
 

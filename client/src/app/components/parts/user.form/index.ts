@@ -198,7 +198,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
     await promise
       .catch((err: HttpErrorResponse) => {
-        console.error('Caught', err);
         this.helper = err.error.message;
       });
 
