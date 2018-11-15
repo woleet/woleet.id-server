@@ -1,19 +1,18 @@
 import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-
-import * as log from 'loglevel';
 
 @Component({
   selector: 'config-openid',
-  templateUrl: './index.html',
-  styleUrls: ['./style.scss']
+  templateUrl: './index.html'
 })
 export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
 
   formLocked$: Observable<boolean>;
+  formValid$: BehaviorSubject<boolean>;
+  useOpenIDConnect$: BehaviorSubject<boolean>;
 
   config$: Observable<ApiServerConfig>;
 
@@ -31,23 +30,34 @@ export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnIni
 
   ngOnInit() {
     this.form = new FormGroup({
-      openIDConnectURL: new FormControl({ value: '', disabled: true }, [secureUrlValidator]),
-      openIDConnectClientId: new FormControl({ value: '', disabled: true }, [Validators.minLength(1)]),
-      openIDConnectClientSecret: new FormControl({ value: '', disabled: true }, [Validators.minLength(1)]),
+      openIDConnectURL: new FormControl({ value: '', }, [secureUrlValidator]),
+      openIDConnectClientId: new FormControl({ value: '' }, [Validators.minLength(1)]),
+      openIDConnectClientSecret: new FormControl({ value: '' }, [Validators.minLength(1)]),
+      openIDConnectClientRedirectURL: new FormControl({ value: '' }, [secureUrlValidator])
     });
 
     const config$ = this.config$ = this.configService.getConfig();
 
     this.formLocked$ = this.configService.isDoingSomething();
+    this.useOpenIDConnect$ = new BehaviorSubject(true);
+    this.formValid$ = new BehaviorSubject(false);
 
     this.registerSubscription(config$.subscribe((config) => {
       if (!config) {
         return;
       }
 
+      const url = `${window.location.origin}/oauth/callback`;
+
+      this.useOpenIDConnect$.next(config.useOpenIDConnect);
+
       this.form.get('openIDConnectURL').setValue(config.openIDConnectURL || '');
       this.form.get('openIDConnectClientId').setValue(config.openIDConnectClientId || '');
       this.form.get('openIDConnectClientSecret').setValue(config.openIDConnectClientSecret || '');
+      this.form.get('openIDConnectClientRedirectURL').setValue(config.openIDConnectClientRedirectURL || url);
+
+      this.changed = false;
+      this.formValid$.next(this.isFormValid());
     }));
 
 
@@ -69,26 +79,35 @@ export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnIni
     this.onDestroy.emit();
   }
 
-  async update() {
+  update() {
     const openIDConnectURL = this.form.get('openIDConnectURL').value || null;
     const openIDConnectClientId = this.form.get('openIDConnectClientId').value || null;
     const openIDConnectClientSecret = this.form.get('openIDConnectClientSecret').value || null;
+    const openIDConnectClientRedirectURL = this.form.get('openIDConnectClientRedirectURL').value || null;
     const useOpenIDConnect = this._useOpenIDConnect;
     this.configService.update({
       openIDConnectURL,
       useOpenIDConnect,
       openIDConnectClientId,
-      openIDConnectClientSecret
+      openIDConnectClientSecret,
+      openIDConnectClientRedirectURL
     });
   }
 
   updateUseOpenIDConnectOption(useOpenIDConnect) {
     this._useOpenIDConnect = useOpenIDConnect;
+    this.useOpenIDConnect$.next(useOpenIDConnect);
+    this.formValid$.next(this.isFormValid());
     this.changed = true;
   }
 
-  openIDConnectURLChanged() {
+  isFormValid() {
+    return this.form.valid && Object.values(this.form.value).every(e => !!e);
+  }
+
+  change() {
     this.changed = true;
+    this.formValid$.next(this.isFormValid());
   }
 
 }

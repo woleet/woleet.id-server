@@ -10,6 +10,9 @@ const debug = Debug('id:ctrl:openid');
 import * as log from 'loglevel';
 
 let client = null;
+let redirectURL = null;
+
+export const getClientRedirectURL = () => redirectURL;
 
 export const getClient = () => client;
 
@@ -19,14 +22,22 @@ export async function configure() {
   if (!config.useOpenIDConnect) {
     debug('useOpenIDConnect=false, skipping configuration');
     client = null;
-    return Promise.resolve();
+    return;
   }
 
   if (!config.openIDConnectURL) {
     debug('no openIDConnectURL set, skipping configuration');
     log.warn('No openIDConnectURL set while Open ID Connect is enabled, skipping configuration.');
-    return Promise.resolve();
+    return;
   }
+
+  if (!config.openIDConnectClientRedirectURL) {
+    debug('no openIDConnectClientRedirectURL set, skipping configuration');
+    log.warn('No openIDConnectClientRedirectURL set while Open ID Connect is enabled, skipping configuration.');
+    return;
+  }
+
+  redirectURL = config.openIDConnectClientRedirectURL;
 
   const issuer = await Issuer.discover(config.openIDConnectURL);
   debug('Discovered issuer', issuer.issuer);

@@ -1,4 +1,4 @@
-import { STRING, BOOLEAN, UUID } from 'sequelize';
+import { STRING, BOOLEAN, UUID, ARRAY, JSON } from 'sequelize';
 
 import { AbstractInstanceAccess } from './abstract';
 import { serverConfig } from '../../config';
@@ -12,7 +12,12 @@ const ServerConfigModel = {
   openIDConnectURL: { type: STRING },
   allowUserToSign: { type: BOOLEAN, defaultValue: false },
   openIDConnectClientId: { type: STRING },
-  openIDConnectClientSecret: { type: STRING }
+  openIDConnectClientSecret: { type: STRING },
+  openIDConnectClientRedirectURL: { type: STRING },
+  enableOIDCP: { type: BOOLEAN, defaultValue: false },
+  OIDCPInterfaceURL: { type: STRING },
+  OIDCPIssuerURL: { type: STRING },
+  OIDCPClients: { type: ARRAY(JSON) },
 };
 
 class ServerConfigAccess extends AbstractInstanceAccess<InternalServerConfigObject, ServerConfigCreate> {

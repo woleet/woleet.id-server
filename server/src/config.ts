@@ -1,31 +1,37 @@
 // tslint:disable:radix
 
 import { promisify } from 'util';
+import { SetOption } from 'cookies';
 import * as log from 'loglevel';
 import * as read from 'read';
+import * as crypto from 'crypto';
 
-function getenv(name: string) {
+function getenv(name: string, fallback = null) {
   const prefix = 'WOLEET_ID_SERVER_';
-  return process.env[prefix + name];
+  const value = process.env[prefix + name];
+  if (!value) {
+    log.warn(`No value found for "${prefix + name}"${fallback ? `, defaulting to "${fallback}"` : ' !'}`);
+  }
+  return value || fallback;
 }
 
-export const production = getenv('PRODUCTION') === 'true';
+export const production = getenv('PRODUCTION', 'false') === 'true';
 
 log.setLevel(production ? 'info' : 'debug');
 
-const defaultPort = parseInt(getenv('DEFAULT_PORT')) || 3000;
+const defaultPort = parseInt(getenv('DEFAULT_PORT', 3000));
 
 export const ports = {
-  signature: parseInt(getenv('SIGN_PORT')) || defaultPort,
-  identity: parseInt(getenv('IDENTITY_PORT')) || defaultPort,
-  api: parseInt(getenv('API_PORT')) || defaultPort
+  signature: parseInt(getenv('SIGN_PORT', defaultPort)),
+  identity: parseInt(getenv('IDENTITY_PORT', defaultPort)),
+  api: parseInt(getenv('API_PORT', defaultPort))
 };
 
 export const db = {
-  host: getenv('POSTGRES_HOST') || 'localhost',
-  database: getenv('POSTGRES_DB') || 'wid',
-  username: getenv('POSTGRES_USER') || 'pguser',
-  password: getenv('POSTGRES_PASSWORD') || 'pass',
+  host: getenv('POSTGRES_HOST', 'localhost'),
+  database: getenv('POSTGRES_DB', 'wid'),
+  username: getenv('POSTGRES_USER', 'pguser'),
+  password: getenv('POSTGRES_PASSWORD', 'pass'),
   connectionAttempts: 6,
   retryDelay: 5 * 1000
 };
@@ -48,7 +54,7 @@ export const pagination = {
 };
 
 export const events = {
-  disable: getenv('DISABLE_EVENT_LOGGING') === 'true' || false,
+  disable: getenv('DISABLE_EVENT_LOGGING', 'false') === 'true',
   batchSize: 100,
   flushAfter: 10 * 1000,
   typesEnum: [
@@ -66,6 +72,12 @@ export const serverConfig = {
     fallbackOnDefaultKey: true
   },
   CONFIG_ID: 'SERVER-CONFIG'
+};
+
+export const cookies: { keys: string[], options: SetOption } = {
+  keys: production ? [crypto.randomBytes(16).toString('base64')] : ['cookie-devel-secret'],
+  options: {} // TODO:
+  // options: { secure: true, signed: true }
 };
 
 const ENCRYPTION_SECRET = getenv('ENCRYPTION_SECRET');

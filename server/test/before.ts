@@ -8,4 +8,4 @@ import { setSecret } from '../../server/src/controllers/utils/encryption';
 before(() => {
   console.log('Initializing test secret...');
   setSecret('test');
-})
+});

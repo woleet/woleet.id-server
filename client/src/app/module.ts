@@ -1,7 +1,7 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HttpBackend } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './routing';
@@ -41,7 +41,7 @@ import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 
 // Services
-import { AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService } from '@guards/auth';
+import { AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService } from '@guards/auth';
 
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
@@ -59,10 +59,13 @@ import { NeedConfigGuardService } from '@services/guards/config';
 import { ConfigService } from '@services/config';
 import { StopPropagationDirective } from '@directives/stop-propagation';
 import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagation';
-import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
+import { OAuthRedirectComponent } from '@pages/oauth-redirect';
+import { OIDCProviderInteractionComponent } from '@pages/oidcp-interaction';
 import { AppConfigService } from '@services/boot';
-import { Http, HttpModule, ConnectionBackend } from '@angular/http';
+import { Http, HttpModule } from '@angular/http';
 import { ConfigOpenIDComponent } from '@components/parts/config.openid';
+import { ConfigOIDCPComponent } from '@components/parts/config.oidcp';
+import { ConfigOIDCPClientComponent } from '@components/parts/config.oidcp-client';
 
 export function startupServiceFactory(startupService: AppConfigService): Function {
   return () => startupService.load();
@@ -85,6 +88,8 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ConfigFallbackKeyComponent,
     ConfigIdentityUrlComponent,
     ConfigOpenIDComponent,
+    ConfigOIDCPComponent,
+    ConfigOIDCPClientComponent,
     UserCardComponent,
     KeyCardComponent,
     APITokenCardComponent,
@@ -93,7 +98,8 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     StopPropagationDirective,
     StopRipplePropagationDirective,
     ErrorPageComponent,
-    OAuthRedirectComponent
+    OAuthRedirectComponent,
+    OIDCProviderInteractionComponent
   ],
   imports: [
     // angular
@@ -139,7 +145,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
       deps: [AppConfigService, Http],
       multi: true
     },
-    AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService,
+    AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
     NeedConfigGuardService, KeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     NetworkErrorInterceptorService, AllowCredentialsInterceptorService

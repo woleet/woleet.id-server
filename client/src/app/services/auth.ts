@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router, Params } from '@angular/router';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { serverURL } from './config';
-import { BootService } from '@services/boot';
+import { BootService, AppConfigService } from '@services/boot';
 import { Lock } from '@components/util';
 import { Observable } from 'rxjs';
-
+import * as log from 'loglevel';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -13,16 +13,21 @@ export class AuthService {
   private lock: Lock;
   public lock$: Observable<boolean>;
   private user: ApiUserDTOObject = null;
+  private openIDConnectURL: string;
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private bootService: BootService
+    private bootService: BootService,
+    appConfigService: AppConfigService
   ) {
 
     const user = localStorage.getItem('user');
     this.lock = new Lock();
     this.lock$ = this.lock.asObservable();
+
+    const conf = appConfigService.getStartupConfig();
+    this.openIDConnectURL = conf && conf.openIDConnectURL;
 
     if (user) {
       try {
@@ -75,6 +80,13 @@ export class AuthService {
   async openid() {
     this.lock.incr();
     document.location.href = `${serverURL}/oauth/login`;
+  }
+
+  async redirectForOIDCProvider(path) {
+    this.lock.incr();
+    const url = this.openIDConnectURL; // Open ID Connect provider URL
+    log.info(`Redirect to ${url}${path}`);
+    document.location.href = `${url}${path}`;
   }
 
   async forwardOAuth(params: Params) {

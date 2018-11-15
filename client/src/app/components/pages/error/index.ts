@@ -29,6 +29,10 @@ export class ErrorPageComponent implements OnInit {
         this.message = 'Network error :(';
         this.tip = 'Please check your internet connection';
         break;
+      case 'redirect-parameter':
+        this.message = 'Failed to decode redirect parameter';
+        this.tip = 'Please report this error to this website owner with the following:\n' + error.message;
+        break;
       case 'unknown':
       default:
         this.message = 'Unknown error :(';

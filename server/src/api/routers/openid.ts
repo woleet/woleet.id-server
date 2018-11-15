@@ -1,17 +1,16 @@
 import * as Router from 'koa-router';
-import { getClient, createOAuthUser, createOAuthSession } from '../../controllers/openid';
+import { getClient, createOAuthUser, createOAuthSession, getClientRedirectURL } from '../../controllers/openid';
 
 const router = new Router({ prefix: '/oauth' });
-
-const CB_URL = 'https://localhost:4220/oauth/callback';
 
 import { BadRequest, ServiceUnavailable } from 'http-errors';
 import { Cache } from 'lru-cache';
 import * as LRU from 'lru-cache';
-import * as v4 from 'uuid/v4';
+import * as uuid from 'uuid/v4';
 import { randomBytes } from 'crypto';
 import { serialiseUserDTO } from '../serialize/userDTO';
 import * as log from 'loglevel';
+import { cookies } from '../../config';
 
 const lru: Cache<string, { state: string, nonce: string }> = new LRU({ maxAge: 30 * 1000, max: 1000 });
 
@@ -25,18 +24,18 @@ router.get('/login', async function (ctx) {
     throw new ServiceUnavailable();
   }
 
-  const oauth = v4();
-  const state = v4();
+  const oauth = uuid();
+  const state = uuid();
   const nonce = randomBytes(8).toString('hex');
   const url = client.authorizationUrl({
-    redirect_uri: CB_URL,
+    redirect_uri: getClientRedirectURL(), // TODO: check arg
     scope: 'openid profile email',
+    response_type: 'code',
     state,
-    nonce,
-    response_type: 'code'
+    nonce
   });
   lru.set(oauth, { state, nonce });
-  ctx.cookies.set('oauth', oauth);
+  ctx.cookies.set('oauth', oauth, cookies.options);
   ctx.redirect(url);
 });
 
@@ -67,7 +66,11 @@ router.get('/callback', async function (ctx) {
 
   let tokenSet;
   try {
-    tokenSet = await client.authorizationCallback(CB_URL, ctx.query, { response_type: 'code', state, nonce });
+    tokenSet = await client.authorizationCallback(
+      getClientRedirectURL() /* TODO: check arg */,
+      ctx.query,
+      { response_type: 'code', state, nonce }
+    );
   } catch (err) {
     log.warn(err);
     throw new BadRequest(err.message);
@@ -96,11 +99,11 @@ router.get('/callback', async function (ctx) {
   const session = await createOAuthSession(info.email);
 
   if (session) {
-    ctx.cookies.set('session', session.token);
+    ctx.cookies.set('session', session.token, cookies.options);
     return ctx.body = { user: serialiseUserDTO(session.user) };
   } else {
     const aio = await createOAuthUser({ email: info.email, identity: { commonName: info.name } });
-    ctx.cookies.set('session', aio.token);
+    ctx.cookies.set('session', aio.token, cookies.options);
     return ctx.body = { user: serialiseUserDTO(aio.user) };
   }
 });

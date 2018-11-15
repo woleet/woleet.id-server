@@ -52,6 +52,7 @@
     "koa-router": "7.4.0",
     "loglevel": "^1.6.1",
     "lru-cache": "4.1.3",
+    "oidc-provider": "^5.1.2",
     "openid-client": "^2.4.3",
     "pg": "7.4.3",
     "pg-hstore": "2.3.2",

@@ -5,13 +5,17 @@ import { map } from 'rxjs/operators';
 
 import * as log from 'loglevel';
 import { serverURL } from './config';
+import { HttpErrorResponse } from '@angular/common/http';
+import { switchNetworkError } from '@interceptors/network-error';
+import { ErrorService } from '@services/error';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AppConfigService {
 
   private _appConfig: { openIDConnectURL: string, useOpenIDConnect: boolean };
 
-  constructor(private http: Http) { }
+  constructor(private http: Http, private errorService: ErrorService) { }
 
   async load() {
 
@@ -21,7 +25,15 @@ export class AppConfigService {
       .pipe(map((res: Response) => res.json()))
       .toPromise()
       .then((data: any) => this._appConfig = data)
-      .catch((err: any) => Promise.resolve())
+      .catch((err: any) => {
+        if (err.status === 0 || err.status > 499) {
+          this.errorService.setError(switchNetworkError(err), err);
+          return Promise.resolve();
+        }
+
+        log.error('Failed to get initial configuration', err);
+        return Promise.reject();
+      })
       ;
   }
 

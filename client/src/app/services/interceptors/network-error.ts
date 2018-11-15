@@ -7,6 +7,17 @@ import * as log from 'loglevel';
 
 import { ErrorService } from '@services/error';
 
+export function switchNetworkError(err) {
+  switch (err.status) {
+    case 0:
+      return 'network';
+    case 502:
+      return 'no-server';
+    default:
+      return 'server-error';
+  }
+}
+
 @Injectable()
 export class NetworkErrorInterceptor implements HttpInterceptor {
   constructor(private router: Router, private errorService: ErrorService) { }
@@ -16,17 +27,7 @@ export class NetworkErrorInterceptor implements HttpInterceptor {
 
         if (err instanceof HttpErrorResponse && err.status === 0 || err.status > 499) {
           log.error('Network error', err);
-          switch (err.status) {
-            case 0:
-              this.errorService.setError('network', err);
-              break;
-            case 502:
-              this.errorService.setError('no-server', err);
-              break;
-            default:
-              this.errorService.setError('server-error', err);
-              break;
-          }
+          this.errorService.setError(switchNetworkError(err), err);
           this.router.navigate(['error']);
           return Observable.create(obs => obs.complete());
         }

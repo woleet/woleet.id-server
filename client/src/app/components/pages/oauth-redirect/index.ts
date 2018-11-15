@@ -13,7 +13,7 @@ export class OAuthRedirectComponent {
 
   errorMsg: string = null;
 
-  constructor(activatedRoute: ActivatedRoute, authService: AuthService, router: Router, errorService: ErrorService) {
+  constructor(activatedRoute: ActivatedRoute, authService: AuthService, router: Router) {
     activatedRoute.queryParams.subscribe(async (params) => {
       log.debug('Forward oauth parameters', params);
       try {

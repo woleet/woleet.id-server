@@ -1,6 +1,12 @@
 import * as Joi from 'joi';
 import { uuid } from './misc';
 
+const oidcpClient = Joi.object().keys(<DefineJoiModelAttributes<ApiOIDCPClient>>{
+  client_id: Joi.string().min(1),
+  client_secret: Joi.string().min(1),
+  redirect_uris: Joi.array().items(Joi.string().uri({ scheme: ['https'] }))
+});
+
 const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig>>{
   identityURL: Joi.string().uri({ scheme: ['http', 'https'] }),
   defaultKeyId: uuid,
@@ -9,7 +15,13 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   useOpenIDConnect: Joi.boolean(),
   openIDConnectURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   openIDConnectClientId: Joi.string().allow(null),
-  openIDConnectClientSecret: Joi.string().allow(null)
+  openIDConnectClientSecret: Joi.string().allow(null),
+  openIDConnectClientRedirectURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
+  // OIDCP config
+  enableOIDCP: Joi.boolean(),
+  OIDCPInterfaceURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
+  OIDCPIssuerURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
+  OIDCPClients: Joi.array().items(oidcpClient).allow(null)
 });
 
 export { updateConfig };

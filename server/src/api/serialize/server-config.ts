@@ -7,7 +7,12 @@ export function serialiseServerConfig(config: InternalServerConfigObject): ApiSe
     useOpenIDConnect,
     openIDConnectURL,
     openIDConnectClientId,
-    openIDConnectClientSecret
+    openIDConnectClientSecret,
+    openIDConnectClientRedirectURL,
+    enableOIDCP,
+    OIDCPInterfaceURL,
+    OIDCPIssuerURL,
+    OIDCPClients
   } = config;
 
   return {
@@ -18,6 +23,11 @@ export function serialiseServerConfig(config: InternalServerConfigObject): ApiSe
     useOpenIDConnect,
     openIDConnectURL,
     openIDConnectClientId,
-    openIDConnectClientSecret
+    openIDConnectClientSecret,
+    openIDConnectClientRedirectURL,
+    enableOIDCP,
+    OIDCPInterfaceURL,
+    OIDCPIssuerURL,
+    OIDCPClients
   };
 }
