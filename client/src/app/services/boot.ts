@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 @Injectable({ providedIn: 'root' })
 export class AppConfigService {
 
-  private _appConfig: { openIDConnectURL: string, useOpenIDConnect: boolean };
+  private _appConfig: { OIDCPProviderURL: string, useOpenIDConnect: boolean };
 
   constructor(private http: Http, private errorService: ErrorService) { }
 

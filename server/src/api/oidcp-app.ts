@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import * as Koa from 'koa';
-import * as url from 'url';
+import * as URL from 'url';
 import * as Router from 'koa-router';
 import * as querystring from 'querystring';
 import * as bodyParser from 'koa-bodyparser';
@@ -131,13 +131,13 @@ export function build(): Koa {
         throw new BadRequest('Missing referer');
       }
 
-      const { protocol, host, port } = url.parse(ctx.header.referer);
+      const referer = URL.parse(ctx.header.referer);
 
-      if (protocol !== 'https:') {
+      if (referer.protocol !== 'https:') {
         throw new BadRequest('Invalid referer protocol');
       }
 
-      if (!host) {
+      if (!referer.host) {
         throw new BadRequest('Invalid referer');
       }
 

@@ -13,7 +13,7 @@ export class AuthService {
   private lock: Lock;
   public lock$: Observable<boolean>;
   private user: ApiUserDTOObject = null;
-  private openIDConnectURL: string;
+  private OIDCPProviderURL: string;
 
   constructor(
     private http: HttpClient,
@@ -27,7 +27,7 @@ export class AuthService {
     this.lock$ = this.lock.asObservable();
 
     const conf = appConfigService.getStartupConfig();
-    this.openIDConnectURL = conf && conf.openIDConnectURL;
+    this.OIDCPProviderURL = conf && conf.OIDCPProviderURL;
 
     if (user) {
       try {
@@ -82,9 +82,10 @@ export class AuthService {
     document.location.href = `${serverURL}/oauth/login`;
   }
 
+  // Redirect from OIDCP interface to OIDCP server
   async redirectForOIDCProvider(path) {
     this.lock.incr();
-    const url = this.openIDConnectURL; // Open ID Connect provider URL
+    const url = this.OIDCPProviderURL; // Open ID Connect provider URL
     log.info(`Redirect to ${url}${path}`);
     document.location.href = `${url}${path}`;
   }

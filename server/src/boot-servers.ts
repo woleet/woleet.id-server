@@ -15,11 +15,30 @@ import { exit } from './exit';
 
 import { readFileSync } from 'fs';
 import { ServerOptions, createServer } from 'https';
-import { Server } from 'https';
+import { Server } from 'net';
 
 import { setServerConfig } from './controllers/server-config';
 
 const apps: Dictionary<Server> = {};
+
+function startServer(app, port): Server {
+  let server = null;
+  if (!production) {
+    log.info('Using TLS.');
+
+    const key = readFileSync(process.env.WOLEET_ID_SERVER_HTTP_TLS_KEY);
+    const cert = readFileSync(process.env.WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE);
+
+    const options: ServerOptions = { key, cert };
+
+    server = createServer(options, app.callback());
+
+    server.listen(port);
+  } else {
+    server = app.listen(port);
+  }
+  return server;
+}
 
 export function bootServers(): Promise<void> {
   log.info(`Starting servers...`);
@@ -38,27 +57,12 @@ export function bootServers(): Promise<void> {
       app.use(cors({ credentials: true })); // TODO:
       app.use(router.routes());
 
-      let server = null;
-      // use TLS in dev for OIDC
-      if (!production) { // TODO:
-        log.info('Using TLS. (TODO: disable it and support proxy)');
-
-        const key = readFileSync(process.env.WOLEET_ID_SERVER_HTTP_TLS_KEY);
-        const cert = readFileSync(process.env.WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE);
-
-        const options: ServerOptions = { key, cert };
-
-        server = createServer(options, app.callback());
-
-        server.listen(port);
-      } else {
-        server = app.listen(port);
-      }
+      const server = startServer(app, port);
 
       server.on('error', (err: NodeJS.ErrnoException) => exit(`Server ${name} encountered an error: ${err.message}`, err));
 
       server.on('listening', () => {
-        log.info(`[${name.split('-').join(', ')}] listening on ${port}`);
+        log.info(`[${name.split('-').join(', ')}] listening on port ${port}.`);
         resolve();
       });
 
@@ -88,18 +92,17 @@ export async function bootOIDCPServer(): Promise<void> {
     if (isOIDCPInitialized()) {
       let resolved = false;
       const app = oidcProviderAppFactory();
-      log.info('Using TLS.'); // TODO: REMOVE THIS
-      const key = readFileSync(process.env.WOLEET_ID_SERVER_HTTP_TLS_KEY);
-      const cert = readFileSync(process.env.WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE);
-      const options: ServerOptions = { key, cert };
-      const server = createServer(options, app.callback());
+
+      const server = startServer(app, port);
+
       setActiveServer(server);
-      server.listen(port);
+
       server.on('listening', () => {
-        log.info(`OIDCP server listening on ${port}`);
+        log.info(`OIDCP server listening on port ${port}.`);
         resolved = true;
         resolve();
       });
+
       server.on('error', (err: NodeJS.ErrnoException) => {
         log.error('OIDCP server encountered an error, it will be disabled as a precaution! Please check your configuration.');
         if (resolved) {

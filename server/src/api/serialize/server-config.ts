@@ -11,6 +11,7 @@ export function serialiseServerConfig(config: InternalServerConfigObject): ApiSe
     openIDConnectClientRedirectURL,
     enableOIDCP,
     OIDCPInterfaceURL,
+    OIDCPProviderURL,
     OIDCPIssuerURL,
     OIDCPClients
   } = config;
@@ -27,6 +28,7 @@ export function serialiseServerConfig(config: InternalServerConfigObject): ApiSe
     openIDConnectClientRedirectURL,
     enableOIDCP,
     OIDCPInterfaceURL,
+    OIDCPProviderURL,
     OIDCPIssuerURL,
     OIDCPClients
   };

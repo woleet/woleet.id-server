@@ -16,6 +16,7 @@ const ServerConfigModel = {
   openIDConnectClientRedirectURL: { type: STRING },
   enableOIDCP: { type: BOOLEAN, defaultValue: false },
   OIDCPInterfaceURL: { type: STRING },
+  OIDCPProviderURL: { type: STRING },
   OIDCPIssuerURL: { type: STRING },
   OIDCPClients: { type: ARRAY(JSON) },
 };

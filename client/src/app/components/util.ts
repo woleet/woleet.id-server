@@ -46,8 +46,11 @@ export function urlValidator(control: AbstractControl): ValidationErrors | null 
     return ({ url: { message: 'invalid or missing protocol (http or https)' } });
   }
 
-  if (!/^https?\:\/\/.*/.test(str)) {
-    return ({ url: { message: 'protocol must be followed by "://"' } });
+  try {
+    // tslint:disable-next-line:no-unused-expression
+    new window.URL(str);
+  } catch (err) {
+    return ({ url: { message: 'must be a valid uri' } });
   }
 
   return null;
@@ -64,8 +67,11 @@ export function secureUrlValidator(control: AbstractControl): ValidationErrors |
     return ({ url: { message: 'invalid or missing protocol (https)' } });
   }
 
-  if (!/^https\:\/\/.*/.test(str)) {
-    return ({ url: { message: 'protocol must be followed by "://"' } });
+  try {
+    // tslint:disable-next-line:no-unused-expression
+    new window.URL(str);
+  } catch (err) {
+    return ({ url: { message: 'must be a valid uri' } });
   }
 
   return null;

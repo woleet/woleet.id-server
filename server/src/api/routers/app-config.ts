@@ -8,8 +8,8 @@ import { getServerConfig } from '../../controllers/server-config';
 const router = new Router({ prefix: '/app-config' });
 
 router.get('/', async function (ctx) {
-  const { useOpenIDConnect, openIDConnectURL } = getServerConfig();
-  ctx.body = { useOpenIDConnect, openIDConnectURL };
+  const { useOpenIDConnect, OIDCPProviderURL } = getServerConfig();
+  ctx.body = { useOpenIDConnect, OIDCPProviderURL };
 });
 
 export { router };
