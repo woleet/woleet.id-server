@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 @Injectable({ providedIn: 'root' })
 export class AppConfigService {
 
-  private _appConfig: { OIDCPProviderURL: string, useOpenIDConnect: boolean };
+  private _appConfig: { OIDCPProviderURL: string, useOpenIDConnect: boolean, hasSession: boolean };
 
   constructor(private http: Http, private errorService: ErrorService) { }
 
@@ -21,10 +21,15 @@ export class AppConfigService {
 
     this._appConfig = null;
 
-    return this.http.get(`${serverURL}/app-config`)
+    return this.http.get(`${serverURL}/app-config`, { withCredentials: true })
       .pipe(map((res: Response) => res.json()))
       .toPromise()
-      .then((data: any) => this._appConfig = data)
+      .then((data: any) => {
+        this._appConfig = data;
+        if (!data.hasSession) {
+          localStorage.removeItem('user');
+        }
+      })
       .catch((err: any) => {
         if (err.status === 0 || err.status > 499) {
           this.errorService.setError(switchNetworkError(err), err);

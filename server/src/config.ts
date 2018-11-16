@@ -76,8 +76,7 @@ export const serverConfig = {
 
 export const cookies: { keys: string[], options: SetOption } = {
   keys: production ? [crypto.randomBytes(16).toString('base64')] : ['cookie-devel-secret'],
-  options: {} // TODO:
-  // options: { secure: true, signed: true }
+  options: { secure: true, signed: true }
 };
 
 const ENCRYPTION_SECRET = getenv('ENCRYPTION_SECRET');

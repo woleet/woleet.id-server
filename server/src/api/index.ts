@@ -30,8 +30,8 @@ if (!production) {
 }
 apiRouter.use(bodyParser());
 apiRouter.use(auth.routes());
-apiRouter.use(appConfig.routes());
 apiRouter.use(session);
+apiRouter.use(appConfig.routes());
 apiRouter.use(openid.routes());
 apiRouter.use(userAuth);
 apiRouter.use(info.routes());
