@@ -11,6 +11,7 @@ import { randomBytes } from 'crypto';
 import { serialiseUserDTO } from '../serialize/userDTO';
 import * as log from 'loglevel';
 import { cookies } from '../../config';
+import { updateUser } from '../../controllers/user';
 
 const lru: Cache<string, { state: string, nonce: string }> = new LRU({ maxAge: 90 * 1000, max: 1000 });
 
@@ -101,6 +102,14 @@ router.get('/callback', async function (ctx) {
 
   if (session) {
     ctx.cookies.set('session', session.token, cookies.options);
+
+    if (session.user.x500CommonName !== info.name) {
+      const user = session.user;
+      log.debug(`User name changed from "${user.x500CommonName}" to "${info.name}"`);
+      await updateUser(user.id, { identity: { commonName: info.name } });
+      user.x500CommonName = info.name;
+    }
+
     return ctx.body = { user: serialiseUserDTO(session.user) };
   } else {
     const aio = await createOAuthUser({ email: info.email, identity: { commonName: info.name } });
