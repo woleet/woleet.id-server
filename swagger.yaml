@@ -156,7 +156,105 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
-
+  /discover/users:
+    get:
+      operationId: getUsersByUserSearch
+      summary: Discover available users based on a search string.
+      security:
+        - APITokenAuth: []
+      tags:
+        - Discovery
+      description: >
+        Use this endpoint to discover users stored in the server. Based on a generic query string, the endpoint will search for a matching sub-string in the User's fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
+      parameters:
+        - $ref: '#/components/parameters/UserSearchQueryParameter'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserInfoArray'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '404':
+          description: No users matching the search query.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+  /discover/user/{pubKey}:
+    get:
+      operationId: getUserByKeyId
+      summary: Get the user to whom a key belongs.
+      security:
+        - APITokenAuth: []
+      tags:
+        - Discovery
+      description: >
+        Use this endpoint to get the user associated to the given public key.
+      parameters:
+        - $ref: '#/components/parameters/PubKeyParameter'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserInfo'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+  /discover/keys/{userId}:
+    get:
+      operationId: getKeysByUserId
+      summary: Get info of all the keys belonging to a user.
+      security:
+        - APITokenAuth: []
+      tags:
+        - Discovery
+      description: >
+        Use this endpoint to get info of all the keys belonging to a user.
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/KeyArray'
+        '400':
+          description: Invalid user identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
   /key/{keyId}:
     get:
       tags:
@@ -957,6 +1055,10 @@ components:
     UserInfo:
       allOf:
         - $ref: '#/components/schemas/UserBase'
+    UserInfoArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserInfo'
     APITokenStatusEnum:
       type: string
       enum:
@@ -1257,6 +1359,32 @@ components:
       schema:
         type: string
         example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
+    PubKeyParameter:
+      name: pubKey
+      in: path
+      description: Public key (bitcoin address when using BIP39 keys).
+      required: true
+      schema:
+        type: string
+        example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
+    UserSearchQueryParameter:
+      name: userSearch
+      in: query
+      description: A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
+      required: true
+      schema:
+        type: string
+        examples:
+          email:
+            value: "john.doe@acme.com"
+          username:
+            value: "johndoe"
+          x500CommonName:
+            value: "John Doe"
+          x500Organization:
+            value: "Acme corp"
+          x500OrganizationalUnit:
+            value: "Business unit"
     CustomUserIdQueryParameter:
       name: customUserId
       in: query
@@ -1333,6 +1461,8 @@ components:
       $ref: '#/components/schemas/UserArray'
     UserInfo:
       $ref: '#/components/schemas/UserInfo'
+    UserInfoArray:
+      $ref: '#/components/schemas/UserInfoArray'
     APIError:
       $ref: '#/components/schemas/APIError'
     KeyGet:
