@@ -1,6 +1,6 @@
 import * as log from 'loglevel';
 
-import { production, cookies } from './config';
+import { production, cookies, ports, server as config } from './config';
 
 // API servers dependencies
 import * as Koa from 'koa';
@@ -13,7 +13,6 @@ import { isInitialized as isOIDCPInitialized, getActiveServer, setActiveServer, 
 import { definitions } from './apps';
 import { exit } from './exit';
 
-import { readFileSync } from 'fs';
 import { ServerOptions, createServer } from 'https';
 import { Server } from 'net';
 
@@ -23,11 +22,16 @@ const apps: Dictionary<Server> = {};
 
 function startServer(app, port): Server {
   let server = null;
-  if (!production) {
+
+  if (config.proxy) {
+    log.info('Server configured to trust proxy');
+    app.proxy = true;
+  }
+
+  if (config.cert && config.key) {
     log.info('Using TLS.');
 
-    const key = readFileSync(process.env.WOLEET_ID_SERVER_HTTP_TLS_KEY);
-    const cert = readFileSync(process.env.WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE);
+    const { key, cert } = config;
 
     const options: ServerOptions = { key, cert };
 
@@ -37,6 +41,7 @@ function startServer(app, port): Server {
   } else {
     server = app.listen(port);
   }
+
   return server;
 }
 
@@ -51,6 +56,18 @@ export function bootServers(): Promise<void> {
 
       const app = new Koa();
 
+      app.use((ctx, next) => {
+        if (!ctx.secure) {
+          const forwardedProto = ctx.get('x-forwarded-proto');
+          if (!forwardedProto) {
+            log.warn(`x-forwarded-proto header not detected, please configure your proxy to do so.`);
+          } else if (forwardedProto !== 'https') {
+            log.warn(`x-forwarded-proto header is set to ${forwardedProto}, please configure your proxy to use SSL.`);
+          }
+        }
+        return next();
+      });
+
       app.keys = cookies.keys;
       app.use(errorHandler);
       app.use(morgan('dev'));
@@ -59,7 +76,7 @@ export function bootServers(): Promise<void> {
 
       const server = startServer(app, port);
 
-      server.on('error', (err: NodeJS.ErrnoException) => exit(`Server ${name} encountered an error: ${err.message}`, err));
+      server.on('error', (err) => exit(`Server ${name} encountered an error: ${err.message}`, err));
 
       server.on('listening', () => {
         log.info(`[${name.split('-').join(', ')}] listening on port ${port}.`);
@@ -78,7 +95,7 @@ export function bootServers(): Promise<void> {
 }
 
 export async function bootOIDCPServer(): Promise<void> {
-  const port = 3333;
+  const port = ports.oidcp;
 
   const activeServer: Server = getActiveServer();
 
@@ -86,10 +103,10 @@ export async function bootOIDCPServer(): Promise<void> {
     await stopActiveServer();
   }
 
-  log.info(`Starting OIDCP server on port ${port}...`);
-
-  await new Promise((resolve, reject) => {
+  await new Promise((resolve) => {
     if (isOIDCPInitialized()) {
+      log.info(`Starting OIDCP server on port ${port}...`);
+
       let resolved = false;
       const app = oidcProviderAppFactory();
 
@@ -103,7 +120,7 @@ export async function bootOIDCPServer(): Promise<void> {
         resolve();
       });
 
-      server.on('error', (err: NodeJS.ErrnoException) => {
+      server.on('error', (err) => {
         log.error('OIDCP server encountered an error, it will be disabled as a precaution! Please check your configuration.');
         if (resolved) {
           return exit(`Open ID Connect Provider's server encountered an error: ${err.message}`, err);

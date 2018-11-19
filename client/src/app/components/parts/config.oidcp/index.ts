@@ -51,7 +51,7 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
       }
 
       const guessInterface = `${window.location.origin} (default)`;
-      const guessProvider = `https://${window.location.hostname}:3333 (default)`;
+      const guessProvider = `https://${window.location.hostname}:3003 (default)`;
 
       this.enableOIDCP$.next(config.enableOIDCP);
 

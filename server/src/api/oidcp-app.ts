@@ -66,7 +66,6 @@ export function build(): Koa {
      * NOT USED, USE CLIENT
      */
     const details = await provider.interactionDetails(ctx.req);
-    console.log('GRANT0', details);
     const client = await provider.Client.find(details.params.client_id);
 
     if (details.interaction.error === 'login_required') {
@@ -140,6 +139,8 @@ export function build(): Koa {
       if (!referer.host) {
         throw new BadRequest('Invalid referer');
       }
+
+      debug(`Login redirect URL will be set to ${ctx.request.url}`);
 
       const redirect = Buffer.from(ctx.request.url).toString('base64');
       const origin = Buffer.from(ctx.header.referer).toString('base64');

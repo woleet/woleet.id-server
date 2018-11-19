@@ -41,11 +41,8 @@ export async function configure() {
 
   const issuer = await Issuer.discover(config.openIDConnectURL);
   debug('Discovered issuer', issuer.issuer);
-  debug('Issuer has', issuer.metadata);
 
   client = new issuer.Client({ client_id: config.openIDConnectClientId, client_secret: config.openIDConnectClientSecret });
-
-  debug('Created', client);
 }
 
 export function updateOIDCClient() {

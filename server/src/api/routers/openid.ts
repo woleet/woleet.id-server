@@ -12,7 +12,7 @@ import { serialiseUserDTO } from '../serialize/userDTO';
 import * as log from 'loglevel';
 import { cookies } from '../../config';
 
-const lru: Cache<string, { state: string, nonce: string }> = new LRU({ maxAge: 30 * 1000, max: 1000 });
+const lru: Cache<string, { state: string, nonce: string }> = new LRU({ maxAge: 90 * 1000, max: 1000 });
 
 /**
  * @route: /oauth/login
@@ -28,12 +28,13 @@ router.get('/login', async function (ctx) {
   const state = uuid();
   const nonce = randomBytes(8).toString('hex');
   const url = client.authorizationUrl({
-    redirect_uri: getClientRedirectURL(), // TODO: check arg
+    redirect_uri: getClientRedirectURL() /* TODO: check arg */,
     scope: 'openid profile email',
     response_type: 'code',
     state,
     nonce
   });
+
   lru.set(oauth, { state, nonce });
   ctx.cookies.set('oauth', oauth, cookies.options);
   ctx.redirect(url);
