@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize';
-// import { models, grantable } from './model/oidcp';
 import { models, grantable } from './model/oidcp';
 import { sequelize } from './sequelize';
 import { User } from './index';
@@ -81,9 +80,7 @@ export class SequelizeAdapter {
   }
 }
 
-
 const store = new Map();
-const logins = new Map();
 
 export class OIDCAccount {
 
@@ -98,11 +95,8 @@ export class OIDCAccount {
 
   static async findByLogin(login) {
     debug(`findByLogin ${login}`);
-    if (!logins.get(login)) { // TODO:
-      logins.set(login, new OIDCAccount());
-    }
-
-    return logins.get(login);
+    // login is used only for "Password Grant" authentication
+    throw new Error('Find by login should not be called');
   }
 
   static async findById(ctx, id, token) {
@@ -141,7 +135,7 @@ export class OIDCAccount {
       email_verified: true,
       name: user.get('x500CommonName'),
       nickname: user.get('x500UserId') || user.get('username'),
-      preferred_username:  user.get('x500UserId') || user.get('username'),
+      preferred_username: user.get('username'),
       updated_at: user.get('updatedAt'),
     };
   }

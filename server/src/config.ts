@@ -17,10 +17,10 @@ log.methodFactory = function (methodName, logLevel, loggerName) {
   const rawMethod = originalFactory(methodName, logLevel, loggerName);
   const colors = { trace: 'grey', debug: 'cyan', info: 'green', warn: 'yellow', error: 'red' };
 
-  return function (message) {
+  return function () {
     const level = chalk[colors[methodName]].bold(`[${methodName}]`);
     const date = new Date().toISOString();
-    rawMethod(`${date} ${level} ` + message);
+    rawMethod.apply(log, [`${date} ${level}`].concat(...arguments));
   };
 };
 

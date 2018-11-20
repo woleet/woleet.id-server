@@ -6,7 +6,7 @@ import * as log from 'loglevel';
 import { updateOIDCClient } from './openid';
 import { updateOIDCProvider, stopActiveServer } from './oidc-provider';
 import { exit } from '../exit';
-import { bootOIDCPServer } from '../boot-servers';
+import { bootOIDCPServer } from '../boot.servers';
 
 const { CONFIG_ID } = config;
 

@@ -5,7 +5,7 @@ import * as Debug from 'debug';
 
 const debug = Debug('id:oidcp');
 
-import { provider as providerConfiguration } from '../oidcp-config';
+import { provider as providerConfiguration } from '../config.oidcp';
 import { OIDCAccount as Account, SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
 import { getServerConfig } from './server-config';
 
@@ -48,7 +48,7 @@ export async function configure(): Promise<void> {
   const { enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL, OIDCPClients } = getServerConfig();
   const keystore = await keystorePromise;
 
-  debug('Init OIDCP with', { enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL });
+  debug('Init OIDCP with:\n' + JSON.stringify( { enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL }, null, 2));
 
   if (!enableOIDCP) {
     return abortInit('enableOIDCP=false, skipping configuration.');

@@ -34,8 +34,6 @@ export class LoginPageComponent {
     activatedRoute.queryParams.subscribe(async (params) => {
       log.debug('Forwarded login parameters', params);
       if (params.origin && params.origin.startsWith('oidcp') && params.redirect) {
-        const origin = params.origin.split('=');
-        console.warn(`TODO: ensure origin=${origin[1]} matches OIDCP orign in settings`);
         try {
           this.redirect = atob(params.redirect);
         } catch {

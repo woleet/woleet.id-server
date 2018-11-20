@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
+import copy from 'deep-copy';
 
 @Component({
   selector: 'config-oidcp',
@@ -59,7 +60,7 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
       this.form.get('providerURL').setValue(config.OIDCPProviderURL || guessProvider);
       this.form.get('interfaceURL').setValue(config.OIDCPInterfaceURL || guessInterface);
 
-      this.oidcpClients = config.OIDCPClients || []; // TODO: COPY
+      this.oidcpClients = copy(config.OIDCPClients) || [];
 
       this.changed = false;
       this.formValid$.next(this.isFormValid());

@@ -23,8 +23,10 @@ const apps: Dictionary<Server> = {};
 function startServer(app, port): Server {
   let server = null;
 
+  app.keys = cookies.keys;
+
   if (config.proxy) {
-    log.info('Server configured to trust proxy');
+    log.warn('Server configured to trust proxy');
     app.proxy = true;
   }
 
@@ -68,7 +70,6 @@ export function bootServers(): Promise<void> {
         return next();
       });
 
-      app.keys = cookies.keys;
       app.use(errorHandler);
       app.use(morgan('dev'));
       app.use(cors({ credentials: true })); // TODO:

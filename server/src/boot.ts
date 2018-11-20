@@ -15,7 +15,7 @@ import { initPromise } from './database';
 import { signMessage } from './controllers/sign';
 import { configure as initOpenIDConnect } from './controllers/openid';
 import { configure as initalizeOIDCProvider } from './controllers/oidc-provider';
-import { bootServers } from './boot-servers';
+import { bootServers } from './boot.servers';
 import { exit } from './exit';
 
 initPromise
@@ -28,7 +28,8 @@ initPromise
   .then(() => loadServerConfig())
   .then(async (config) => {
     if (config) {
-      log.info(`Server configuration successfully restored: \n${JSON.stringify(config, null, 2)}`);
+      log.info(`Server configuration successfully restored.`);
+      debug(JSON.stringify(config, null, 2));
 
       const key = await Key.getAny();
 
@@ -82,7 +83,6 @@ initPromise
     } catch (err) {
       log.error('Failed to initalize OPenID Connect Provider, it will be automatically disabled !', err);
     }
-    // return setServerConfig({ useOpenIDConnect: false }); // TODO:
   })
   .catch((err) => exit(`Failed to update server config: ${err.message}`, err))
   .then(() => bootServers())
