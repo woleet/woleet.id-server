@@ -808,6 +808,18 @@ components:
           example: "FR"
       required:
         - commonName
+    KeyInformation:
+      type: object
+      description: Key information returned under the "key" attribute of the identity endpoint.
+      properties:
+        name:
+          type: string
+          description: The key name.
+          example: "Jim Smith's key"
+        pubKey:
+          type: string
+          description: The public key used to sign.
+          example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
     FullIdentity:
       allOf:
         - $ref: '#/components/schemas/Identity'
@@ -1185,6 +1197,8 @@ components:
               description: The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
             identity:
               $ref: '#/components/schemas/Identity'
+            key:
+              $ref: '#/components/schemas/KeyInformation'
     APIError:
       type: object
       properties:

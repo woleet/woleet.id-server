@@ -15,11 +15,11 @@ export async function getIdentity(leftData: string, pubKey: string) {
   }
 
   // A blocked key cannot sign
-  if (key.getDataValue('status') === 'blocked') {
+  if (key.get('status') === 'blocked') {
     throw new BlockedKeyError();
   }
 
-  const identity = key.getDataValue('user');
+  const identity = key.get('user');
 
   const rightData = getServerConfig().identityURL + '.' + crypto.randomBytes(16).toString('hex');
 
@@ -28,6 +28,10 @@ export async function getIdentity(leftData: string, pubKey: string) {
   return {
     rightData,
     signature: sig.toString('base64'),
-    identity: serializeIdentity(identity, true)
+    identity: serializeIdentity(identity, true),
+    key: {
+      name: key.get('name'),
+      pubKey: key.get('publicKey')
+    }
   };
 }
