@@ -3,8 +3,7 @@ import { IMiddleware } from 'koa-router';
 import { NotFound, HttpError } from 'http-errors';
 import * as errors from '../errors';
 import { store as event } from '../controllers/server-event';
-
-const debug = Debug('id:server');
+import * as log from 'loglevel';
 
 const errorHandler: IMiddleware = async function (ctx, next) {
   try {
@@ -40,7 +39,8 @@ const errorHandler: IMiddleware = async function (ctx, next) {
       ctx.status = 202;
       ctx.body = { message: err.message, status: 202 };
     } else {
-      debug('Unhandled error', err);
+      log.error(`Unhandled error: ${err.message}.`);
+      log.error('Full stack is', err);
 
       event.register({
         type: 'error',
