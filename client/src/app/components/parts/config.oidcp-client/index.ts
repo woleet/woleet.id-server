@@ -9,10 +9,13 @@ import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 export class ConfigOIDCPClientComponent extends ErrorMessageProvider implements OnInit {
 
   @Input()
-  client: ApiOIDCPClient;
+  client: ApiOIDCPClient & { _valid: () => boolean };
 
   @Output()
   delete = new EventEmitter;
+
+  @Output()
+  change = new EventEmitter;
 
   clientForm: FormGroup;
 
@@ -24,29 +27,35 @@ export class ConfigOIDCPClientComponent extends ErrorMessageProvider implements 
         this.client.redirect_uris.map((value = '') => new FormControl(value, [secureUrlValidator]))
       )
     });
+    Object.defineProperty(this.client, '_valid', { enumerable: false, value: () => this.clientForm.valid });
   }
 
   addRedirectUri() {
     this.client.redirect_uris.push('');
     (<FormArray>this.clientForm.get('redirectUris')).push(new FormControl('', [secureUrlValidator]));
+    this.refreshTargetValue();
   }
 
   deleteRedirectUri(index) {
-    const controls = (<FormArray>this.clientForm.get('redirectUris')).controls;
-    if (index === 0 && controls.length === 1) {
-      controls[0].reset();
+    const array: FormArray = (<FormArray>this.clientForm.get('redirectUris'));
+    if (index === 0 && array.length === 1) {
+      array.controls[0].reset();
     } else {
-      controls.splice(index, 1);
+      array.removeAt(index);
     }
+    this.refreshTargetValue();
   }
 
   refreshTargetValue() {
+    const controls = (<FormArray>this.clientForm.get('redirectUris')).controls;
     const up = this.clientForm.value;
     Object.assign(this.client, <ApiOIDCPClient>{
       client_id: up.clientId,
       client_secret: up.clientSecret,
       redirect_uris: up.redirectUris
     });
+    console.log({ up, controls });
+    this.change.emit();
   }
 
   deleteClient() {

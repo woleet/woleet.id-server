@@ -29,7 +29,7 @@
   </mat-card-content>
   <ng-template #loading>Loading...<br></ng-template>
   <mat-card-actions *ngIf="(config$ | async) as config; else loading">
-    <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) || (config.identityUrl == form.value) || (form.invalid)">CHANGE</button>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) || (config.identityUrl == form.value) || (form.invalid)">SAVE</button>
     <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
   </mat-card-actions>
 </mat-card>

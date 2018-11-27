@@ -22,7 +22,7 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
   reveal = false;
   changed = false;
 
-  oidcpClients: ApiOIDCPClient[];
+  oidcpClients: (ApiOIDCPClient & { _valid?: () => boolean })[];
 
   private onDestroy: EventEmitter<void>;
 
@@ -51,8 +51,8 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
         return;
       }
 
-      const guessInterface = `${window.location.origin} (default)`;
-      const guessProvider = `https://${window.location.hostname}:3003 (default)`;
+      const guessInterface = `${window.location.origin}`;
+      const guessProvider = `https://${window.location.hostname}:3003`;
 
       this.enableOIDCP$.next(config.enableOIDCP);
 
@@ -60,7 +60,7 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
       this.form.get('providerURL').setValue(config.OIDCPProviderURL || guessProvider);
       this.form.get('interfaceURL').setValue(config.OIDCPInterfaceURL || guessInterface);
 
-      this.oidcpClients = copy(config.OIDCPClients) || [];
+      this.oidcpClients = copy(config.OIDCPClients || []);
 
       this.changed = false;
       this.formValid$.next(this.isFormValid());
@@ -90,6 +90,7 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
     const OIDCPProviderURL = this.form.get('providerURL').value || null;
     const OIDCPInterfaceURL = this.form.get('interfaceURL').value || null;
     const OIDCPClients = this.oidcpClients;
+    console.log({ OIDCPClients: this.oidcpClients });
     OIDCPClients.forEach((c) => c.redirect_uris = c.redirect_uris.filter(e => !!e));
     const enableOIDCP = this._enableOIDCP;
     this.configService.update({
@@ -109,7 +110,9 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
   }
 
   isFormValid() {
-    return this.form.valid && Object.values(this.form.value).every(e => !!e);
+    return this.form.valid
+      && this.oidcpClients.every((client) => client._valid && client._valid())
+      && Object.values(this.form.value).every(e => !!e);
   }
 
   change() {
@@ -121,7 +124,8 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
     this.oidcpClients.push({
       client_id: 'client-' + Math.random().toString(16).slice(-4),
       client_secret: 'secret-' + Math.random().toString(16).slice(-8),
-      redirect_uris: ['']
+      redirect_uris: [''],
+      _valid: null
     });
     this.change();
   }

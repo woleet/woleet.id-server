@@ -48,7 +48,7 @@
     </div>
   </mat-card-content>
   <mat-card-actions *ngIf="editMode">
-    <button mat-raised-button color="primary" (click)="editKey()" [disabled]="formLocked || keyName.invalid">EDIT</button>
+    <button mat-raised-button color="primary" (click)="editKey()" [disabled]="formLocked || keyName.invalid">SAVE</button>
     <button mat-button [disabled]="formLocked" (click)="setEditMode(false)">CANCEL</button>
   </mat-card-actions>
 

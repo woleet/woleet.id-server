@@ -4,7 +4,7 @@
       <input matInput
         placeholder="Client ID"
         formControlName="clientId"
-        (change)="refreshTargetValue()"
+        (input)="refreshTargetValue()"
         required="true">
       <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
     </mat-form-field>
@@ -12,7 +12,7 @@
       <input matInput
         placeholder="Client secret"
         formControlName="clientSecret"
-        (change)="refreshTargetValue()"
+        (input)="refreshTargetValue()"
         required="true">
       <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
     </mat-form-field>
@@ -22,7 +22,7 @@
             <input matInput
               [placeholder]="'Redirect uri #' + ( $index + 1 )"
               formControlName="{{ $index }}"
-              (change)="refreshTargetValue()"
+              (input)="refreshTargetValue()"
               [required]="$index === 0">
             <mat-error *ngIf="uri.invalid">{{ getErrorMessage(uri) }}</mat-error>
           </mat-form-field>

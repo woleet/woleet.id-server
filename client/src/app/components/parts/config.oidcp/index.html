@@ -34,13 +34,15 @@
       </mat-form-field>
     </form>
     <div fxLayout="row" fxLayoutAlign="space-between center">
-      <h3>Open ID connect Clients</h3>
-      <button mat-raised-button color="primary" (click)="addClient()">Add</button>
+      <h3>OpenID Connect Clients</h3>
+      <button mat-raised-button color="primary" (click)="addClient()">ADD</button>
     </div>
     <mat-divider></mat-divider>
     <div *ngFor="let client of oidcpClients; index as $index">
       <br>
-      <config-oidcp-client [client]="client" (delete)="deleteClient( $index )" (change)="change()"></config-oidcp-client>
+      <config-oidcp-client [client]="client"
+        (delete)="deleteClient( $index )"
+        (change)="change()"></config-oidcp-client>
     </div>
     <div *ngIf="oidcpClients.length == 0">
       <br>
@@ -50,7 +52,7 @@
     <mat-card-actions>
       <button mat-raised-button color="primary"
       (click)="update()"
-      [disabled]="(!changed) || (formLocked$ | async)|| ((enableOIDCP$ | async) && !(formValid$ | async))">CHANGE</button>
+      [disabled]="(!changed) || (formLocked$ | async) || !(formValid$ | async)">SAVE</button>
     </mat-card-actions>
 </mat-card>
 <ng-template #loading>Loading...<br></ng-template>
