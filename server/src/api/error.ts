@@ -39,7 +39,7 @@ const errorHandler: IMiddleware = async function (ctx, next) {
       ctx.status = 202;
       ctx.body = { message: err.message, status: 202 };
     } else {
-      log.error(`Unhandled error: ${err.message}.`);
+      log.error(`Unhandled error: ${err.message}`);
       log.error('Full stack is', err);
 
       event.register({
