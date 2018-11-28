@@ -108,7 +108,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '404':
-          description: The provided parameters does not match any key to sign with.
+          description: Key not found.
           content:
             application/json:
               schema:
@@ -874,26 +874,38 @@ components:
       properties:
         commonName:
           type: string
-          description: commonName (CN) (2.5.4.3)
+          description: Common name (CN) (2.5.4.3)
           example: "Jim Smith"
         organization:
           type: string
-          description: organizationName (O) (2.5.4.10)
+          description: Organization name (O) (2.5.4.10)
           example: "Woleet"
         organizationalUnit:
           type: string
-          description: organizationalUnitName (OU) (2.5.4.11)
+          description: Organizational unit name (OU) (2.5.4.11)
           example: "Sales"
         locality:
           type: string
-          description: localityName (L) (2.5.4.7)
+          description: Locality name (L) (2.5.4.7)
           example: "Rennes"
         country:
           type: string
-          description: countryName (C) (2.5.4.6)
+          description: Country code (C) (2.5.4.6)
           example: "FR"
       required:
         - commonName
+    Key:
+      type: object
+      description: Key information.
+      properties:
+        name:
+          type: string
+          description: Key name.
+          example: "Jim Smith's key"
+        pubKey:
+          type: string
+          description: Public part of the key (bitcoin address when using BIP39 keys).
+          example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
     FullIdentity:
       allOf:
         - $ref: '#/components/schemas/Identity'
@@ -901,9 +913,7 @@ components:
           properties:
             userId:
               type: string
-              description: >
-                userId (UID) (0.9.2342.19200300.100.1.1)
-                <br>The custom user identifier: it must be unique for each user.
+              description: Custom user identifier (UID) (0.9.2342.19200300.100.1.1) must be unique for each user.
               example: "wol.jim-smith.01"
     Password:
       type: string
@@ -1110,9 +1120,9 @@ components:
         identityURL:
           type: string
           example: "https://identity.mydomain.com/identity"
-          description: |
+          description: >
             The identity URL that the server returns with a signature.
-            Note that the server always expects to be called on the "/identity" endpoint,
+            <br>Note that the server always expects to be called on the "/identity" endpoint,
             if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain)
             you must not forget it in your reverse proxy configuration.
         defaultKeyId:
@@ -1246,22 +1256,22 @@ components:
           type: string
           format: base58
           example: "1KjQ8LgUgYVSqeK7JFhA9W8FVsHCzFrFi8"
-          description: The public key used to sign (must be the same as the `pubKey` parameter, if provided).
+          description: Public key used to sign (must be the same as the `pubKey` parameter if provided).
         signedHash:
           type: string
           format: hex
           example: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
-          description: The hash that is signed (same as the `hashToSign` parameter).
+          description: SHA256 hash that is signed (same as the `hashToSign` parameter).
         signature:
           type: string
           format: base64
           example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
-          description: The signature of `hashToSign` using the public key `pubKey`.
+          description: Signature of `hashToSign` using the public key `pubKey`.
         identityURL:
           type: string
           format: URL
           example: "https://woleetidserver.acme.com/v1/identity"
-          description: The public URL of the `/identity` endpoint (ie. a URL that anyone can use to prove and verify the identity associated with the public key).
+          description: Public URL of the `/identity` endpoint (ie. a URL that anyone can use to prove and verify the identity associated with the public key).
     IdentityResult:
       allOf:
         - type: object
@@ -1275,9 +1285,11 @@ components:
               type: string
               format: base64
               example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
-              description: The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
+              description: Signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
             identity:
               $ref: '#/components/schemas/Identity'
+            key:
+              $ref: '#/components/schemas/KeyInformation'
     APIError:
       type: object
       properties:
@@ -1336,8 +1348,8 @@ components:
       in: query
       description: >
         The public key to use to sign.
-        When not provided and a user is provided, the default key of the user is used (if any).
-        When not provided and no user is provided, the default key of the server is used (if any).
+        <br>When not provided and a user is provided, the default key of the user is used (if any).
+        <br>When not provided and no user is provided, the default key of the server is used (if any).
       required: false
       schema:
         type: string
@@ -1345,7 +1357,7 @@ components:
     PubKeyToVerifyQueryParameter:
       name: pubKey
       in: query
-      description: The public key to verify.
+      description: Public key to verify.
       required: true
       schema:
         type: string
@@ -1379,7 +1391,7 @@ components:
     CustomUserIdQueryParameter:
       name: customUserId
       in: query
-      description: The custom user identifier (ie. `userId` field of the user's identity).
+      description: Custom user identifier (ie. `userId` field of the user's identity).
       required: false
       schema:
         type: string
@@ -1387,7 +1399,7 @@ components:
     UserIdQueryParameter:
       name: userId
       in: query
-      description: The user identifier.
+      description: User identifier.
       required: false
       schema:
         type: string
@@ -1404,7 +1416,7 @@ components:
     HashToSignQueryParameter:
       name: hashToSign
       in: query
-      description: The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}).
+      description: SHA256 hash to be signed (a string formatted like [a-f0-9]{64}).
       required: true
       schema:
         type: string
