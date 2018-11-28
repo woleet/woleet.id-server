@@ -35,8 +35,6 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
     this.formLocked$ = this.configService.isDoingSomething();
 
     const subscription = config$.subscribe((config) => {
-      log.debug('CONFIG', config);
-
       if (!config) {
         return;
       }

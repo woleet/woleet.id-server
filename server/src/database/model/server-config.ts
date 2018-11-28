@@ -1,20 +1,22 @@
-import { STRING, BOOLEAN, UUID } from 'sequelize';
+import { STRING, JSON } from 'sequelize';
 
 import { AbstractInstanceAccess } from './abstract';
 import { serverConfig } from '../../config';
 
 const ServerConfigModel = {
   id: { type: STRING, defaultValue: serverConfig.CONFIG_ID, primaryKey: true },
-  identityURL: { type: STRING, defaultValue: serverConfig.default.identityURL },
-  fallbackOnDefaultKey: { type: BOOLEAN, defaultValue: serverConfig.default.fallbackOnDefaultKey },
-  defaultKeyId: { type: UUID }
+  config: { type: JSON }
 };
 
-class ServerConfigAccess extends AbstractInstanceAccess<InternalServerConfigObject, ServerConfigCreate> {
+class ServerConfigAccess
+  extends AbstractInstanceAccess<
+  { config: InternalServerConfigObject },
+  { config: ServerConfigCreate, createdAt?: Date, updatedAt?: Date }
+  > {
 
   constructor() {
     super();
-    this.define('ServerConfig', ServerConfigModel, { paranoid: false });
+    this.define('serverConfig', ServerConfigModel, { paranoid: false });
   }
 
   handleError(err: any) { }

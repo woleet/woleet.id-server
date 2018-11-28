@@ -1,31 +1,64 @@
 // tslint:disable:radix
 
 import { promisify } from 'util';
+import { SetOption } from 'cookies';
+import { readFileSync } from 'fs';
 import * as log from 'loglevel';
 import * as read from 'read';
+import * as crypto from 'crypto';
+import * as assert from 'assert';
+import * as chalk from 'chalk';
 
-function getenv(name: string) {
+// Logger setup
+
+const originalFactory = log.methodFactory;
+// @ts-ignore-next-line
+log.methodFactory = function (methodName, logLevel, loggerName) {
+  const rawMethod = originalFactory(methodName, logLevel, loggerName);
+  const colors = { trace: 'grey', debug: 'cyan', info: 'green', warn: 'yellow', error: 'red' };
+
+  return function () {
+    const level = chalk[colors[methodName]].bold(`[${methodName}]`);
+    const date = new Date().toISOString();
+    rawMethod.apply(log, [`${date} ${level}`].concat(...arguments));
+  };
+};
+
+function getenv<T = string>(name: string, fallback: T = null): T {
   const prefix = 'WOLEET_ID_SERVER_';
-  return process.env[prefix + name];
+  const value = process.env[prefix + name];
+  if (!value && fallback !== null) {
+    log.warn(`No value found for "${prefix + name}"${fallback !== null ? `, defaulting to '${JSON.stringify(fallback)}'` : ' !'}`);
+  }
+  if (fallback !== null) {
+    switch (typeof fallback) {
+      case 'boolean':
+        return <any>(value ? value === 'true' : fallback);
+      case 'number':
+        return <any>(parseInt(value) || fallback);
+    }
+  }
+  return <any>(value || fallback);
 }
 
-export const production = getenv('PRODUCTION') === 'true';
+export const production = getenv('PRODUCTION', false);
 
 log.setLevel(production ? 'info' : 'debug');
 
-const defaultPort = parseInt(getenv('DEFAULT_PORT')) || 3000;
+const defaultPort = getenv('DEFAULT_PORT', 3000);
 
 export const ports = {
-  signature: parseInt(getenv('SIGN_PORT')) || defaultPort,
-  identity: parseInt(getenv('IDENTITY_PORT')) || defaultPort,
-  api: parseInt(getenv('API_PORT')) || defaultPort
+  oidcp: (getenv('OIDCP_PORT', 3003)),
+  signature: (getenv('SIGN_PORT', defaultPort)),
+  identity: (getenv('IDENTITY_PORT', defaultPort)),
+  api: (getenv('API_PORT', defaultPort))
 };
 
 export const db = {
-  host: getenv('POSTGRES_HOST') || 'localhost',
-  database: getenv('POSTGRES_DB') || 'wid',
-  username: getenv('POSTGRES_USER') || 'pguser',
-  password: getenv('POSTGRES_PASSWORD') || 'pass',
+  host: getenv('POSTGRES_HOST', 'localhost'),
+  database: getenv('POSTGRES_DB', 'wid'),
+  username: getenv('POSTGRES_USER', 'pguser'),
+  password: getenv('POSTGRES_PASSWORD', 'pass'),
   connectionAttempts: 6,
   retryDelay: 5 * 1000
 };
@@ -35,9 +68,18 @@ export const session = {
   maxAge: 24 * 60 * 60 * 1000
 };
 
+const certPath = getenv('HTTP_TLS_CERTIFICATE');
+const keyPath = getenv('HTTP_TLS_KEY');
+
+// If certificate but no key OR key but no certificate
+assert((!!certPath) === (!!keyPath), '"HTTP_TLS_CERTIFICATE" cannot be provided without "HTTP_TLS_KEY" and vice versa');
+
 export const server = {
-  protocol: 'http',
-  host: '127.0.0.1'
+  protocol: 'https',
+  host: getenv('HOST', 'localhost'),
+  proxy: getenv('BEHIND_PROXY', false),
+  cert: certPath && readFileSync(certPath),
+  key: keyPath && readFileSync(keyPath)
 };
 
 export const pagination = {
@@ -48,7 +90,7 @@ export const pagination = {
 };
 
 export const events = {
-  disable: getenv('DISABLE_EVENT_LOGGING') === 'true' || false,
+  disable: getenv('DISABLE_EVENT_LOGGING', false),
   batchSize: 100,
   flushAfter: 10 * 1000,
   typesEnum: [
@@ -66,6 +108,11 @@ export const serverConfig = {
     fallbackOnDefaultKey: true
   },
   CONFIG_ID: 'SERVER-CONFIG'
+};
+
+export const cookies: { keys: string[], options: SetOption } = {
+  keys: production ? [crypto.randomBytes(16).toString('base64')] : ['cookie-devel-secret'],
+  options: { secure: true, signed: true }
 };
 
 const ENCRYPTION_SECRET = getenv('ENCRYPTION_SECRET');

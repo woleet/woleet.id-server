@@ -16,6 +16,6 @@ function init() {
     .catch(err => log.error(err));
 }
 
-init();
+BootService.getBootControl().subscribe(() => init());
 
-const boot = BootService.getBootControl().subscribe(() => init());
+BootService.start();

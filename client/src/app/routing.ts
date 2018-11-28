@@ -6,6 +6,7 @@ import { UserGuardService as IsUser } from '@guards/auth';
 import { AdminGuardService as IsAdmin } from '@guards/auth';
 import { AnonymousGuardService as IsAnonymous } from '@guards/auth';
 import { ErrorGuardService as HasError } from '@guards/auth';
+import { NoErrorGuardService as HasNoError } from '@guards/auth';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -17,13 +18,27 @@ import { UserListPageComponent } from '@pages/user.list';
 import { UserEditPageComponent } from '@pages/user.edit';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ErrorPageComponent } from '@components/pages/error';
+import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
+import { OIDCProviderInteractionComponent } from '@pages/oidcp-interaction';
 
 const routes: Routes = [
   { path: 'error', data: { title: 'Error', hideNav: true }, component: ErrorPageComponent, canActivate: [HasError] },
-  { path: 'login', data: { title: 'Login', hideNav: true }, component: LoginPageComponent, canActivate: [IsAnonymous] },
+  { path: 'login', data: { title: 'Login', hideNav: true }, component: LoginPageComponent, canActivate: [HasNoError, IsAnonymous] },
   { path: 'setup', data: { title: 'Setup' }, component: SetupPageComponent, canActivate: [NeedConfig] },
   { path: 'user', data: { title: 'My profile' }, component: UserPageComponent, canActivate: [IsUser] },
   { path: 'user/:id', data: { title: 'User keys' }, component: UserDetailPageComponent, canActivate: [IsAdmin] },
+  {
+    path: 'oauth/callback',
+    data: { title: 'Please wait...', hideNav: true },
+    component: OAuthRedirectComponent,
+    canActivate: [IsAnonymous]
+  },
+  {
+    path: 'oidcp-interaction/:action/:grant',
+    data: { title: 'OIDC Provider interaction', hideNav: true },
+    component: OIDCProviderInteractionComponent,
+    canActivate: [IsUser]
+  },
   { path: 'user/:id/edit', data: { title: 'Edit user' }, component: UserEditPageComponent, canActivate: [IsAdmin] },
   { path: 'users', data: { title: 'Users' }, component: UserListPageComponent, canActivate: [IsAdmin] },
   { path: 'settings', data: { title: 'Settings' }, component: SettingsPageComponent, canActivate: [IsAdmin] },
@@ -32,7 +47,7 @@ const routes: Routes = [
   {
     path: '**',
     redirectTo: 'user',
-    canActivate: [IsUser]
+    canActivate: [HasNoError, IsUser]
   }
 ];
 

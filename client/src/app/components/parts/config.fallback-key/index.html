@@ -30,7 +30,7 @@
     </div>
   </div>
   <mat-card-actions *ngIf="((config$ | async) || {}).fallbackOnDefaultKey">
-    <button mat-raised-button color="primary" (click)="editMode=true; loadUserList()" [disabled]="(formLocked$ | async)" *ngIf="(defaultKeyOwner$ | async) && (defaultKey$ | async)">CHANGE</button>
+    <button mat-raised-button color="primary" (click)="editMode=true; loadUserList()" [disabled]="(formLocked$ | async)" *ngIf="(defaultKeyOwner$ | async) && (defaultKey$ | async)">SAVE</button>
     <button mat-raised-button color="primary" (click)="editMode=true; loadUserList()" [disabled]="(formLocked$ | async)" *ngIf="!((config$ | async) || {}).defaultKeyId">SET
       ONE</button>
   </mat-card-actions>
@@ -60,7 +60,7 @@
   <br>
   <ng-template #loading>Loading...<br></ng-template>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="submit()" [disabled]="!newKeyId || (formLocked$ | async)">CHANGE</button>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="!newKeyId || (formLocked$ | async)">SAVE</button>
     <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
   </mat-card-actions>
 </mat-card>

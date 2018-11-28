@@ -2,20 +2,29 @@
   <form role="form" (submit)="login()" #f="ngForm">
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Username or email" [(ngModel)]="user.username" name="username" autocomplete="username">
+        <input matInput type="text" placeholder="Username or email" [disabled]="lock$ | async" [(ngModel)]="user.username"
+          name="username" autocomplete="username">
       </mat-form-field>
     </div>
     <br>
     <br>
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="password" placeholder="Password" [(ngModel)]="user.password" name="password" autocomplete="current-password">
+        <input matInput type="password" placeholder="Password" [disabled]="lock$ | async" [(ngModel)]="user.password"
+          name="password" autocomplete="current-password">
       </mat-form-field>
     </div>
     <br>
     <mat-card *ngIf="errorMsg" class="error-card">{{ errorMsg }}</mat-card>
-    <br>
-    <br>
-    <button mat-raised-button color="primary" class="w-100" type="submit">LOGIN</button>
   </form>
+  <br>
+  <br>
+  <button mat-raised-button color="primary" class="w-100" [disabled]="lock$ | async" (click)="login()">LOGIN</button>
+  <br>
+  <br>
+  <button mat-raised-button
+    color="primary"
+    class="w-100"
+    *ngIf="useOIDC"
+    [disabled]="lock$ | async" (click)="openid()">LOGIN WITH OPENID</button>
 </div>

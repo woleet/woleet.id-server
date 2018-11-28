@@ -4,7 +4,7 @@ import { CountryCode, Word, DirectoryString, uuid, Name, SafeWord } from './misc
 const userRoleEnum = ['user', 'admin'];
 const userStatusEnum = ['active', 'blocked'];
 
-const createIdentity = Joi.object().keys({
+const createIdentity = Joi.object().keys(<DefineJoiModelAttributes<ApiIdentityObject>>{
   commonName: DirectoryString.required(),
   organization: DirectoryString.allow(null),
   organizationalUnit: DirectoryString.allow(null),
@@ -13,7 +13,7 @@ const createIdentity = Joi.object().keys({
   userId: Word.min(1).max(64).allow(null)
 });
 
-const updateIdentity = Joi.object().keys({
+const updateIdentity = Joi.object().keys(<DefineJoiModelAttributes<ApiIdentityObject>>{
   commonName: DirectoryString,
   organization: DirectoryString.allow(null),
   organizationalUnit: DirectoryString.allow(null),
@@ -22,7 +22,7 @@ const updateIdentity = Joi.object().keys({
   userId: Word.min(1).max(64).allow(null)
 });
 
-const createUser = Joi.object().keys({
+const createUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPostUserObject>>{
   role: Joi.string().valid(userRoleEnum).allow(null),
   status: Joi.string().valid(userStatusEnum).allow(null),
   email: Joi.string().email().allow(null), // not required for step 1 (allowing null - but should be specified)
@@ -31,7 +31,7 @@ const createUser = Joi.object().keys({
   identity: createIdentity.required()
 });
 
-const updateUser = Joi.object().keys({
+const updateUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPostUserObject>>{
   role: Joi.string().valid(userRoleEnum),
   status: Joi.string().valid(userStatusEnum),
   email: Joi.string().email().allow(null),

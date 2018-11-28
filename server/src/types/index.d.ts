@@ -2,18 +2,28 @@
 
 import { Instance } from 'sequelize';
 import { SessionStore } from '../controllers/store.session';
+import { AnySchema } from 'joi';
+import * as Router from 'koa-router';
+
 import '../../../types/api.api-token';
 import '../../../types/api.server-config';
 import '../../../types/api.server-event';
 import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api';
+import './oidc-provider';
 
 declare global {
 
   interface Dictionary<T> {
     [Key: string]: T;
   }
+
+  type DefineJoiModelAttributes<T> = {
+    [P in keyof T]: AnySchema;
+  };
+
+  type uuid = string;
 
   interface CommonInternalProperties {
     /** UUID */
@@ -23,11 +33,16 @@ declare global {
     deletedAt: Date;
   }
 
-
   interface ListOptions {
     offset?: number;
     limit?: number;
     full?: boolean;
+  }
+
+  interface AppDefinition {
+    name: string;
+    port: number;
+    router: Router;
   }
 
   /* User: server specific */
@@ -62,10 +77,9 @@ declare global {
     role?: UserRoleEnum;
     status?: UserStatusEnum;
     email?: string;
-    passwordHash: string;
-    passwordSalt: string;
-    passwordItrs: number;
-
+    passwordHash?: string;
+    passwordSalt?: string;
+    passwordItrs?: number;
     defaultKeyId?: string;
   }
 
@@ -135,6 +149,7 @@ declare global {
     id: string;
     exp: number;
     user: SequelizeUserObject;
+    oauth?: Object;
   }
 
   /* Events */
@@ -172,18 +187,80 @@ declare global {
     defaultKeyId: string;
     defaultKey?: InternalKeyObject;
     fallbackOnDefaultKey: boolean;
+    allowUserToSign: boolean;
+    // Open ID Connect config
+    useOpenIDConnect: boolean;
+    openIDConnectURL?: string;
+    openIDConnectClientId?: string;
+    openIDConnectClientSecret?: string;
+    openIDConnectClientRedirectURL?: string;
+    // Open ID Connect Provider config
+    OIDCPInterfaceURL?: string;
+    OIDCPProviderURL?: string;
+    OIDCPIssuerURL?: string;
+    OIDCPClients?: ApiOIDCPClient[];
+    enableOIDCP?: boolean;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
     identityURL?: string;
     defaultKeyId?: string;
     fallbackOnDefaultKey?: boolean;
+    allowUserToSign?: boolean;
+    // Open ID Connect config
+    useOpenIDConnect?: boolean;
+    openIDConnectURL?: string;
+    openIDConnectClientId?: string;
+    openIDConnectClientSecret?: string;
+    openIDConnectClientRedirectURL?: string;
+    // Open ID Connect Provider config
+    OIDCPInterfaceURL?: string;
+    OIDCPProviderURL?: string;
+    OIDCPIssuerURL?: string;
+    OIDCPClients?: ApiOIDCPClient[];
+    enableOIDCP?: boolean;
   }
 
   interface ServerConfigCreate extends ServerConfig {
     identityURL: string;
     defaultKeyId: string;
     fallbackOnDefaultKey?: boolean;
+    allowUserToSign?: boolean;
+    // Open ID Connect config
+    useOpenIDConnect?: boolean;
+    openIDConnectURL?: string;
+    openIDConnectClientId?: string;
+    openIDConnectClientSecret?: string;
+    openIDConnectClientRedirectURL?: string;
+    // Open ID Connect Provider config
+    OIDCPInterfaceURL?: string;
+    OIDCPProviderURL?: string;
+    OIDCPIssuerURL?: string;
+    OIDCPClients?: ApiOIDCPClient[];
+    enableOIDCP?: boolean;
+  }
+
+  /* OIDC Provider */
+
+  type OIDCTokenEnum = 'Session' | 'AccessToken' | 'AuthorizationCode' | 'RefreshToken'
+    | 'DeviceCode' | 'ClientCredentials' | 'Client' | 'InitialAccessToken' | 'RegistrationAccessToken';
+
+  interface OIDCToken {
+    id: string;
+    grantId: uuid;
+    userCode: uuid;
+    data: Object;
+    expiresAt: Date;
+    consumedAt: Date;
+  }
+
+  type OIDCGrantTypesEnum = 'refresh_token' | 'authorization_code';
+
+  interface OIDCPClient {
+    client_id: string,
+    client_secret: string,
+    grant_types: OIDCGrantTypesEnum[],
+    redirect_uris: uri[],
   }
 
 }

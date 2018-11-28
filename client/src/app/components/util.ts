@@ -1,6 +1,6 @@
 import { FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
-import { parse } from 'url';
 import * as traverse from 'traverse';
+import { BehaviorSubject } from 'rxjs';
 
 export class TrackById {
 
@@ -8,6 +8,31 @@ export class TrackById {
     return item.id;
   }
 
+}
+
+export class Lock {
+  private _lock = 0;
+  private _lock$: BehaviorSubject<boolean>;
+
+  constructor() {
+    this._lock$ = new BehaviorSubject(false);
+  }
+
+  incr() {
+    this._lock$.next(!!++this._lock);
+  }
+
+  decr() {
+    this._lock$.next(!!--this._lock);
+  }
+
+  isLocked() {
+    return this._lock;
+  }
+
+  asObservable() {
+    return this._lock$.asObservable();
+  }
 }
 
 export function urlValidator(control: AbstractControl): ValidationErrors | null {
@@ -21,8 +46,32 @@ export function urlValidator(control: AbstractControl): ValidationErrors | null 
     return ({ url: { message: 'invalid or missing protocol (http or https)' } });
   }
 
-  if (!/^https?\:\/\/.*/.test(str)) {
-    return ({ url: { message: 'protocol must be followed by "://"' } });
+  try {
+    // tslint:disable-next-line:no-unused-expression
+    new window.URL(str);
+  } catch (err) {
+    return ({ url: { message: 'must be a valid uri' } });
+  }
+
+  return null;
+}
+
+export function secureUrlValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+
+  if (!str) {
+    return;
+  }
+
+  if (!/^https.*/.test(str)) {
+    return ({ url: { message: 'invalid or missing protocol (https)' } });
+  }
+
+  try {
+    // tslint:disable-next-line:no-unused-expression
+    new window.URL(str);
+  } catch (err) {
+    return ({ url: { message: 'must be a valid uri' } });
   }
 
   return null;

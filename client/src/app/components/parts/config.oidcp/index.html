@@ -1,0 +1,58 @@
+<mat-card *ngIf="(config$ | async) as config; else loading">
+  <mat-card-title>OpenID Connect Provider configuration</mat-card-title>
+  <mat-divider></mat-divider>
+  <br>
+    <mat-checkbox matInput placeholder="Set as default key"
+      [(ngModel)]="config.enableOIDCP"
+      (change)="updateEnableOIDCPOption(config.enableOIDCP)"
+      [disabled]="(formLocked$ | async)">Enable OpenID Connect Provider</mat-checkbox>
+      <br>
+      <br>
+    <mat-divider></mat-divider>
+    <br>
+    <form [formGroup]="form">
+      <mat-form-field class="w-100" *ngIf="form.get('issuerURL')  as f">
+        <input matInput placeholder="Issuer URL"
+          formControlName="issuerURL"
+          (input)="change()"
+          [required]="enableOIDCP$ | async">
+        <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100" *ngIf="form.get('providerURL')  as f">
+        <input matInput placeholder="Provider URL"
+          formControlName="providerURL"
+          (input)="change()"
+          [required]="enableOIDCP$ | async">
+        <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100" *ngIf="form.get('interfaceURL')  as f">
+        <input matInput placeholder="Interface URL"
+          formControlName="interfaceURL"
+          (input)="change()"
+          [required]="enableOIDCP$ | async">
+        <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
+      </mat-form-field>
+    </form>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <h3>OpenID Connect Clients</h3>
+      <button mat-raised-button color="primary" (click)="addClient()">ADD</button>
+    </div>
+    <mat-divider></mat-divider>
+    <div *ngFor="let client of oidcpClients; index as $index">
+      <br>
+      <config-oidcp-client [client]="client"
+        (delete)="deleteClient( $index )"
+        (change)="change()"></config-oidcp-client>
+    </div>
+    <div *ngIf="oidcpClients.length == 0">
+      <br>
+      No client set
+    </div>
+    <br>
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
+      (click)="update()"
+      [disabled]="(!changed) || (formLocked$ | async) || !(formValid$ | async)">SAVE</button>
+    </mat-card-actions>
+</mat-card>
+<ng-template #loading>Loading...<br></ng-template>

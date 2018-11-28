@@ -1,6 +1,20 @@
 <div>
-  <mat-card matRipple="!formLocked" fxLayout="row" fxLayoutAlign="space-between start" [ngClass]="{'clickable': (!!user.id && !formLocked), 'locked': formLocked}" [routerLink]="formLocked ? null : ['/user/', user.id]"
-    *ngIf="!editMode">
+  <mat-card *ngIf="!editMode && user.id"
+  matRipple="!formLocked"
+  fxLayout="row"
+  fxLayoutAlign="space-between start"
+  [ngClass]="{'clickable': (!formLocked), 'locked': formLocked}"
+  [routerLink]="formLocked ? null : ['/user/', user.id]">
+    <ng-container [ngTemplateOutlet]="userCardContent"></ng-container>
+  </mat-card>
+
+  <mat-card *ngIf="!editMode && !user.id"
+  fxLayout="row"
+  fxLayoutAlign="space-between start">
+    <ng-container [ngTemplateOutlet]="userCardContent"></ng-container>
+  </mat-card>
+
+  <ng-template #userCardContent>
     <div fxLayout="column" *ngIf="user.identity as i">
       <div fxLayout="row">
         <div fxLayout="column" class="card-icon">
@@ -42,6 +56,7 @@
         </button>
       </div>
     </div>
-  </mat-card>
+  </ng-template>
+
   <create-edit-user *ngIf="editMode" mode="edit" [user]="user" (submitSucceed)="setEditMode(false); user = $event" (cancel)="setEditMode(false)"></create-edit-user>
 </div>

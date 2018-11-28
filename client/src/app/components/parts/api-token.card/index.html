@@ -46,7 +46,7 @@
     </div>
   </mat-card-content>
   <mat-card-actions *ngIf="editMode">
-    <button mat-raised-button color="primary" (click)="editToken()" [disabled]="apiTokenName.invalid">EDIT</button>
+    <button mat-raised-button color="primary" (click)="editToken()" [disabled]="apiTokenName.invalid">SAVE</button>
     <button mat-button (click)="setEditMode(false)">CANCEL</button>
   </mat-card-actions>
 </mat-card>

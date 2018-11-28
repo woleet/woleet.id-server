@@ -38,7 +38,7 @@ interface ApiPostUserObject extends UserObject {
   role?: UserRoleEnum;
   status?: UserStatusEnum;
   email?: string;
-  password: string;
+  password?: string;
   identity: ApiIdentityObject;
 }
 

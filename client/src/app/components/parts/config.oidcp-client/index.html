@@ -1,0 +1,40 @@
+<mat-card>
+  <form [formGroup]="clientForm">
+    <mat-form-field class="w-100" *ngIf="clientForm.get('clientId')  as f">
+      <input matInput
+        placeholder="Client ID"
+        formControlName="clientId"
+        (input)="refreshTargetValue()"
+        required="true">
+      <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="w-100" *ngIf="clientForm.get('clientSecret')  as f">
+      <input matInput
+        placeholder="Client secret"
+        formControlName="clientSecret"
+        (input)="refreshTargetValue()"
+        required="true">
+      <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
+    </mat-form-field>
+    <div formArrayName="redirectUris" *ngIf="clientForm.get('redirectUris')['controls'] as controls">
+        <div *ngFor="let uri of controls; index as $index;" fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-form-field class="w-100">
+            <input matInput
+              [placeholder]="'Redirect uri #' + ( $index + 1 )"
+              formControlName="{{ $index }}"
+              (input)="refreshTargetValue()"
+              [required]="$index === 0">
+            <mat-error *ngIf="uri.invalid">{{ getErrorMessage(uri) }}</mat-error>
+          </mat-form-field>
+          <button mat-icon-button color="warn" (click)="deleteRedirectUri($index)" *ngIf="controls.length != 1 || (controls[0] || {}).value">
+            <mat-icon matTooltip="Delete redirect uri" aria-label="Delete user button">delete</mat-icon>
+          </button>
+        </div>
+    </div>
+    <br>
+  </form>
+  <mat-card-actions fxLayout="row" fxLayoutAlign="space-between">
+    <button mat-raised-button color="primary" (click)="addRedirectUri()">Add redirect uri</button>
+    <button mat-raised-button color="warn" (click)="deleteClient()">Delete client</button>
+  </mat-card-actions>
+</mat-card>

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@services/auth';
 import { environment } from '@env/environment';
 import { PageDataService } from '@services/page-data';
@@ -11,20 +10,20 @@ import { ErrorService } from '@services/error';
   styleUrls: ['./style.scss']
 })
 export class NavBarComponent {
-
   production = false;
+  lock$;
 
   constructor(
-    private router: Router,
-    private auth: AuthService,
+    private authService: AuthService,
     private pageDataService: PageDataService,
     private errorService: ErrorService
   ) {
     this.production = environment.production;
+    this.lock$ = authService.lock$;
   }
 
   logout() {
-    this.auth.logout();
+    this.authService.logout();
   }
 
   hide() {
@@ -36,11 +35,10 @@ export class NavBarComponent {
   }
 
   commonName() {
-    return this.auth.isAuthenticated() && this.auth.getUser().identity.commonName;
+    return this.authService.isAuthenticated() && this.authService.getUser().identity.commonName;
   }
 
   isAdmin() {
-    return this.auth.isAdmin();
+    return this.authService.isAdmin();
   }
-
 }

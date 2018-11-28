@@ -7,12 +7,6 @@ const debug = Debug('id:factory');
 
 const names = ['signature', 'identity', 'api'];
 
-interface AppDefinition {
-  name: string;
-  port: number;
-  router: Router;
-}
-
 const defs: Dictionary<AppDefinition[]> = {};
 
 for (const name of names) {
@@ -27,11 +21,11 @@ for (const name of names) {
   }
 }
 
-export const apps = Object.keys(defs).reduce<AppDefinition[]>((acc, port) => {
+export const definitions = Object.keys(defs).reduce<AppDefinition[]>((acc, port) => {
 
-  const _apps: AppDefinition[] = defs[port];
+  const apps: AppDefinition[] = defs[port];
 
-  const app = _apps.reduce<AppDefinition>((_acc, _app) => ({
+  const app = apps.reduce<AppDefinition>((_acc, _app) => ({
     name: _acc.name ? _acc.name + '-' + _app.name : _app.name,
     port: _acc.port || _app.port,
     router: _acc.router.use(_app.router.routes())
@@ -40,4 +34,4 @@ export const apps = Object.keys(defs).reduce<AppDefinition[]>((acc, port) => {
   return [...acc, app];
 }, []);
 
-apps.forEach(({ name, port }) => debug(`[${name}] will listen on port ${port}`));
+definitions.forEach(({ name, port }) => debug(`[${name}] will listen on port ${port}`));

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
@@ -41,7 +41,7 @@ import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 
 // Services
-import { AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService } from '@guards/auth';
+import { AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService } from '@guards/auth';
 
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
@@ -59,6 +59,17 @@ import { NeedConfigGuardService } from '@services/guards/config';
 import { ConfigService } from '@services/config';
 import { StopPropagationDirective } from '@directives/stop-propagation';
 import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagation';
+import { OAuthRedirectComponent } from '@pages/oauth-redirect';
+import { OIDCProviderInteractionComponent } from '@pages/oidcp-interaction';
+import { AppConfigService } from '@services/boot';
+import { Http, HttpModule } from '@angular/http';
+import { ConfigOpenIDComponent } from '@components/parts/config.openid';
+import { ConfigOIDCPComponent } from '@components/parts/config.oidcp';
+import { ConfigOIDCPClientComponent } from '@components/parts/config.oidcp-client';
+
+export function startupServiceFactory(startupService: AppConfigService): Function {
+  return () => startupService.load();
+}
 
 @NgModule({
   declarations: [
@@ -76,6 +87,9 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     AboutPageComponent,
     ConfigFallbackKeyComponent,
     ConfigIdentityUrlComponent,
+    ConfigOpenIDComponent,
+    ConfigOIDCPComponent,
+    ConfigOIDCPClientComponent,
     UserCardComponent,
     KeyCardComponent,
     APITokenCardComponent,
@@ -83,7 +97,9 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     KeyCreateCardComponent,
     StopPropagationDirective,
     StopRipplePropagationDirective,
-    ErrorPageComponent
+    ErrorPageComponent,
+    OAuthRedirectComponent,
+    OIDCProviderInteractionComponent
   ],
   imports: [
     // angular
@@ -100,6 +116,7 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
 
     // http
     HttpClientModule,
+    HttpModule,
 
     // nav
     LayoutModule,
@@ -120,7 +137,15 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
     AppRoutingModule
   ],
   providers: [
-    AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService,
+    AppConfigService,
+    {
+      // Provider for APP_INITIALIZER
+      provide: APP_INITIALIZER,
+      useFactory: startupServiceFactory,
+      deps: [AppConfigService, Http],
+      multi: true
+    },
+    AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
     NeedConfigGuardService, KeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     NetworkErrorInterceptorService, AllowCredentialsInterceptorService

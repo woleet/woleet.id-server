@@ -3,6 +3,7 @@ import * as Router from 'koa-router';
 import { validate } from '../schemas';
 import { getServerConfig, setServerConfig } from '../../controllers/server-config';
 import { store as event } from '../../controllers/server-event';
+import { serialiseServerConfig } from '../serialize/server-config';
 
 /**
  * ServerConfig
@@ -15,9 +16,8 @@ const router = new Router({ prefix: '/server-config' });
  * @swagger
  *  operationId: getServerConfig
  */
-router.get('/', async function (ctx) {
-  const { fallbackOnDefaultKey, defaultKeyId, identityURL } = getServerConfig();
-  ctx.body = { fallbackOnDefaultKey, defaultKeyId, identityURL };
+router.get('/', function (ctx) {
+  ctx.body = serialiseServerConfig(getServerConfig());
 });
 
 /**
@@ -26,7 +26,7 @@ router.get('/', async function (ctx) {
  *  operationId: updateServerConfig
  */
 router.put('/', validate.body('updateConfig'), async function (ctx) {
-  const { fallbackOnDefaultKey, defaultKeyId, identityURL } = await setServerConfig(ctx.request.body);
+  const config = await setServerConfig(ctx.request.body);
 
   event.register({
     type: 'config.edit',
@@ -34,10 +34,10 @@ router.put('/', validate.body('updateConfig'), async function (ctx) {
     associatedTokenId: null,
     associatedUserId: null,
     associatedKeyId: null,
-    data: { fallbackOnDefaultKey, defaultKeyId, identityURL }
+    data: ctx.request.body
   });
 
-  ctx.body = { fallbackOnDefaultKey, defaultKeyId, identityURL };
+  ctx.body = serialiseServerConfig(config);
 });
 
 export { router };
