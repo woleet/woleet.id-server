@@ -35,11 +35,11 @@ import java.util.UUID;
 public class UserBase {
   public static final String SERIALIZED_NAME_EMAIL = "email";
   @SerializedName(SERIALIZED_NAME_EMAIL)
-  private String email = null;
+  private String email;
 
   public static final String SERIALIZED_NAME_USERNAME = "username";
   @SerializedName(SERIALIZED_NAME_USERNAME)
-  private String username = null;
+  private String username;
 
   public static final String SERIALIZED_NAME_STATUS = "status";
   @SerializedName(SERIALIZED_NAME_STATUS)
@@ -55,7 +55,7 @@ public class UserBase {
 
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
-  private UUID defaultKeyId = null;
+  private UUID defaultKeyId;
 
   public UserBase email(String email) {
     this.email = email;

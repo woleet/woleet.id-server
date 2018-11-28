@@ -32,23 +32,23 @@ import java.io.IOException;
 public class Identity {
   public static final String SERIALIZED_NAME_COMMON_NAME = "commonName";
   @SerializedName(SERIALIZED_NAME_COMMON_NAME)
-  private String commonName = null;
+  private String commonName;
 
   public static final String SERIALIZED_NAME_ORGANIZATION = "organization";
   @SerializedName(SERIALIZED_NAME_ORGANIZATION)
-  private String organization = null;
+  private String organization;
 
   public static final String SERIALIZED_NAME_ORGANIZATIONAL_UNIT = "organizationalUnit";
   @SerializedName(SERIALIZED_NAME_ORGANIZATIONAL_UNIT)
-  private String organizationalUnit = null;
+  private String organizationalUnit;
 
   public static final String SERIALIZED_NAME_LOCALITY = "locality";
   @SerializedName(SERIALIZED_NAME_LOCALITY)
-  private String locality = null;
+  private String locality;
 
   public static final String SERIALIZED_NAME_COUNTRY = "country";
   @SerializedName(SERIALIZED_NAME_COUNTRY)
-  private String country = null;
+  private String country;
 
   public Identity commonName(String commonName) {
     this.commonName = commonName;
@@ -56,10 +56,10 @@ public class Identity {
   }
 
    /**
-   * commonName (CN) (2.5.4.3)
+   * Common name (CN) (2.5.4.3)
    * @return commonName
   **/
-  @ApiModelProperty(example = "Jim Smith", required = true, value = "commonName (CN) (2.5.4.3)")
+  @ApiModelProperty(example = "Jim Smith", required = true, value = "Common name (CN) (2.5.4.3)")
   public String getCommonName() {
     return commonName;
   }
@@ -74,10 +74,10 @@ public class Identity {
   }
 
    /**
-   * organizationName (O) (2.5.4.10)
+   * Organization name (O) (2.5.4.10)
    * @return organization
   **/
-  @ApiModelProperty(example = "Woleet", value = "organizationName (O) (2.5.4.10)")
+  @ApiModelProperty(example = "Woleet", value = "Organization name (O) (2.5.4.10)")
   public String getOrganization() {
     return organization;
   }
@@ -92,10 +92,10 @@ public class Identity {
   }
 
    /**
-   * organizationalUnitName (OU) (2.5.4.11)
+   * Organizational unit name (OU) (2.5.4.11)
    * @return organizationalUnit
   **/
-  @ApiModelProperty(example = "Sales", value = "organizationalUnitName (OU) (2.5.4.11)")
+  @ApiModelProperty(example = "Sales", value = "Organizational unit name (OU) (2.5.4.11)")
   public String getOrganizationalUnit() {
     return organizationalUnit;
   }
@@ -110,10 +110,10 @@ public class Identity {
   }
 
    /**
-   * localityName (L) (2.5.4.7)
+   * Locality name (L) (2.5.4.7)
    * @return locality
   **/
-  @ApiModelProperty(example = "Rennes", value = "localityName (L) (2.5.4.7)")
+  @ApiModelProperty(example = "Rennes", value = "Locality name (L) (2.5.4.7)")
   public String getLocality() {
     return locality;
   }
@@ -128,10 +128,10 @@ public class Identity {
   }
 
    /**
-   * countryName (C) (2.5.4.6)
+   * Country code (C) (2.5.4.6)
    * @return country
   **/
-  @ApiModelProperty(example = "FR", value = "countryName (C) (2.5.4.6)")
+  @ApiModelProperty(example = "FR", value = "Country code (C) (2.5.4.6)")
   public String getCountry() {
     return country;
   }

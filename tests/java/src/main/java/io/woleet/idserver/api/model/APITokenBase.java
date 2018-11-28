@@ -32,7 +32,7 @@ import java.io.IOException;
 public class APITokenBase {
   public static final String SERIALIZED_NAME_NAME = "name";
   @SerializedName(SERIALIZED_NAME_NAME)
-  private String name = null;
+  private String name;
 
   public static final String SERIALIZED_NAME_STATUS = "status";
   @SerializedName(SERIALIZED_NAME_STATUS)
@@ -44,10 +44,10 @@ public class APITokenBase {
   }
 
    /**
-   * Key name.
+   * API token name.
    * @return name
   **/
-  @ApiModelProperty(example = "My API token name", value = "Key name.")
+  @ApiModelProperty(example = "My API token name", value = "API token name.")
   public String getName() {
     return name;
   }

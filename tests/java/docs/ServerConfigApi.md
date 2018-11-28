@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getServerConfig**](ServerConfigApi.md#getServerConfig) | **GET** /server-config | Get the current server configuration.
-[**updateServerConfig**](ServerConfigApi.md#updateServerConfig) | **PUT** /server-config | Update the server&#39;s configuration.
+[**getServerConfig**](ServerConfigApi.md#getServerConfig) | **GET** /server-config | Get the server configuration.
+[**updateServerConfig**](ServerConfigApi.md#updateServerConfig) | **PUT** /server-config | Update the server configuration.
 
 
 <a name="getServerConfig"></a>
 # **getServerConfig**
 > ServerConfig getServerConfig()
 
-Get the current server configuration.
+Get the server configuration.
 
 ### Example
 ```java
@@ -61,7 +61,7 @@ This endpoint does not need any parameter.
 # **updateServerConfig**
 > ServerConfig updateServerConfig(serverConfig)
 
-Update the server&#39;s configuration.
+Update the server configuration.
 
 ### Example
 ```java

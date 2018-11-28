@@ -32,10 +32,10 @@ APITokenAuth.setUsername("YOUR USERNAME");
 APITokenAuth.setPassword("YOUR PASSWORD");
 
 SignatureApi apiInstance = new SignatureApi();
-String hashToSign = d8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975; // String | The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}).
-UUID userId = 345a4513-0266-419a-8344-2daf645b78ed; // UUID | The user identifier.
-String customUserId = wol.jim-smith.01; // String | The custom user identifier (ie. `userId` field of the user's identity).
-String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | The public key to use to sign. When not provided and a user is provided, the default key of the user is used (if any). When not provided and no user is provided, the default key of the server is used (if any). 
+String hashToSign = d8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975; // String | SHA256 hash to be signed (a string formatted like [a-f0-9]{64}).
+UUID userId = 345a4513-0266-419a-8344-2daf645b78ed; // UUID | User identifier.
+String customUserId = wol.jim-smith.01; // String | Custom user identifier (ie. `userId` field of the user's identity).
+String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | The public key to use to sign. <br>When not provided and a user is provided, the default key of the user is used (if any). <br>When not provided and no user is provided, the default key of the server is used (if any). 
 try {
     SignatureResult result = apiInstance.getSignature(hashToSign, userId, customUserId, pubKey);
     System.out.println(result);
@@ -49,10 +49,10 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **hashToSign** | **String**| The SHA256 hash that is to be signed (a string formatted like [a-f0-9]{64}). |
- **userId** | [**UUID**](.md)| The user identifier. | [optional]
- **customUserId** | **String**| The custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). | [optional]
- **pubKey** | **String**| The public key to use to sign. When not provided and a user is provided, the default key of the user is used (if any). When not provided and no user is provided, the default key of the server is used (if any).  | [optional]
+ **hashToSign** | **String**| SHA256 hash to be signed (a string formatted like [a-f0-9]{64}). |
+ **userId** | [**UUID**](.md)| User identifier. | [optional]
+ **customUserId** | **String**| Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). | [optional]
+ **pubKey** | **String**| The public key to use to sign. &lt;br&gt;When not provided and a user is provided, the default key of the user is used (if any). &lt;br&gt;When not provided and no user is provided, the default key of the server is used (if any).  | [optional]
 
 ### Return type
 

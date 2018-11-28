@@ -4,11 +4,11 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**commonName** | **String** | commonName (CN) (2.5.4.3) | 
-**organization** | **String** | organizationName (O) (2.5.4.10) |  [optional]
-**organizationalUnit** | **String** | organizationalUnitName (OU) (2.5.4.11) |  [optional]
-**locality** | **String** | localityName (L) (2.5.4.7) |  [optional]
-**country** | **String** | countryName (C) (2.5.4.6) |  [optional]
+**commonName** | **String** | Common name (CN) (2.5.4.3) | 
+**organization** | **String** | Organization name (O) (2.5.4.10) |  [optional]
+**organizationalUnit** | **String** | Organizational unit name (OU) (2.5.4.11) |  [optional]
+**locality** | **String** | Locality name (L) (2.5.4.7) |  [optional]
+**country** | **String** | Country code (C) (2.5.4.6) |  [optional]
 
 
 

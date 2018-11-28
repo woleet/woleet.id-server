@@ -31,19 +31,19 @@ import java.io.IOException;
 public class SignatureResult {
   public static final String SERIALIZED_NAME_PUB_KEY = "pubKey";
   @SerializedName(SERIALIZED_NAME_PUB_KEY)
-  private String pubKey = null;
+  private String pubKey;
 
   public static final String SERIALIZED_NAME_SIGNED_HASH = "signedHash";
   @SerializedName(SERIALIZED_NAME_SIGNED_HASH)
-  private String signedHash = null;
+  private String signedHash;
 
   public static final String SERIALIZED_NAME_SIGNATURE = "signature";
   @SerializedName(SERIALIZED_NAME_SIGNATURE)
-  private String signature = null;
+  private String signature;
 
   public static final String SERIALIZED_NAME_IDENTITY_U_R_L = "identityURL";
   @SerializedName(SERIALIZED_NAME_IDENTITY_U_R_L)
-  private String identityURL = null;
+  private String identityURL;
 
   public SignatureResult pubKey(String pubKey) {
     this.pubKey = pubKey;
@@ -51,10 +51,10 @@ public class SignatureResult {
   }
 
    /**
-   * The public key used to sign (must be the same as the &#x60;pubKey&#x60; parameter, if provided).
+   * Public key used to sign (must be the same as the &#x60;pubKey&#x60; parameter if provided).
    * @return pubKey
   **/
-  @ApiModelProperty(example = "1KjQ8LgUgYVSqeK7JFhA9W8FVsHCzFrFi8", value = "The public key used to sign (must be the same as the `pubKey` parameter, if provided).")
+  @ApiModelProperty(example = "1KjQ8LgUgYVSqeK7JFhA9W8FVsHCzFrFi8", value = "Public key used to sign (must be the same as the `pubKey` parameter if provided).")
   public String getPubKey() {
     return pubKey;
   }
@@ -69,10 +69,10 @@ public class SignatureResult {
   }
 
    /**
-   * The hash that is signed (same as the &#x60;hashToSign&#x60; parameter).
+   * SHA256 hash that is signed (same as the &#x60;hashToSign&#x60; parameter).
    * @return signedHash
   **/
-  @ApiModelProperty(example = "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b", value = "The hash that is signed (same as the `hashToSign` parameter).")
+  @ApiModelProperty(example = "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b", value = "SHA256 hash that is signed (same as the `hashToSign` parameter).")
   public String getSignedHash() {
     return signedHash;
   }
@@ -87,10 +87,10 @@ public class SignatureResult {
   }
 
    /**
-   * The signature of &#x60;hashToSign&#x60; using the public key &#x60;pubKey&#x60;.
+   * Signature of &#x60;hashToSign&#x60; using the public key &#x60;pubKey&#x60;.
    * @return signature
   **/
-  @ApiModelProperty(example = "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=", value = "The signature of `hashToSign` using the public key `pubKey`.")
+  @ApiModelProperty(example = "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=", value = "Signature of `hashToSign` using the public key `pubKey`.")
   public String getSignature() {
     return signature;
   }
@@ -105,10 +105,10 @@ public class SignatureResult {
   }
 
    /**
-   * The public URL of the &#x60;/identity&#x60; endpoint (ie. a URL that anyone can use to prove and verify the identity associated with the public key).
+   * Public URL of the &#x60;/identity&#x60; endpoint (ie. a URL that anyone can use to prove and verify the identity associated with the public key).
    * @return identityURL
   **/
-  @ApiModelProperty(example = "https://woleetidserver.acme.com/v1/identity", value = "The public URL of the `/identity` endpoint (ie. a URL that anyone can use to prove and verify the identity associated with the public key).")
+  @ApiModelProperty(example = "https://woleetidserver.acme.com/v1/identity", value = "Public URL of the `/identity` endpoint (ie. a URL that anyone can use to prove and verify the identity associated with the public key).")
   public String getIdentityURL() {
     return identityURL;
   }

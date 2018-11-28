@@ -65,7 +65,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
-
   /sign:
     get:
       operationId: getSignature
@@ -119,7 +118,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
-
   /identity:
     get:
       operationId: getIdentity
@@ -159,11 +157,11 @@ paths:
   /discover/users:
     get:
       operationId: discoverUsers
-      summary: Discover available users based on a search string.
+      summary: Get all users matching a search string.
       tags:
         - Discovery
       description: >
-        Use this endpoint to discover users stored in the server. Based on a generic query string, the endpoint will search for a matching sub-string in the User's fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
+        Use this endpoint to get all users whose `email`, `username`, `x500CommonName`, `x500Organization` or `x500OrganizationalUnit` contains the search string.
       parameters:
         - $ref: '#/components/parameters/UserSearchQueryParameter'
       responses:
@@ -182,11 +180,11 @@ paths:
   /discover/user/{pubKey}:
     get:
       operationId: discoverUserByPubKey
-      summary: Get the user to whom a key belongs.
+      summary: Get the user associated to a public key.
       tags:
         - Discovery
       description: >
-        Use this endpoint to get the user associated to the given public key.
+        Use this endpoint to get the user owning a given public key.
       parameters:
         - $ref: '#/components/parameters/PubKeyParameter'
       responses:
@@ -211,11 +209,11 @@ paths:
   /discover/keys/{userId}:
     get:
       operationId: discoverUserKeys
-      summary: Get info of all the keys belonging to a user.
+      summary: Get all public keys of a user.
       tags:
         - Discovery
       description: >
-        Use this endpoint to get info of all the keys belonging to a user.
+        Use this endpoint to get all public keys owned by a given user.
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
       responses:
@@ -224,7 +222,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/KeyArray'
+                $ref: '#/components/responses/KeyDiscoArray'
         '400':
           description: Invalid user identifier.
           content:
@@ -342,40 +340,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
-  /key/{keyId}/export:
-    get:
-      tags:
-        - Key
-      summary: Get the mnemonic words associated to a key.
-      description: Get the list of mnemonic words that can be used to backup and recover a key.
-      operationId: exportKey
-      parameters:
-        - $ref: '#/components/parameters/KeyIdParameter'
-      responses:
-        '200':
-          description: Successful operation.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Mnemonics'
-        '400':
-          description: Invalid key identifier.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/APIError'
-        '401':
-          description: Missing or bad session cookie.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/APIError'
-        '404':
-          description: Key not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/APIError'
   /user/{userId}/key:
     post:
       tags:
@@ -444,7 +408,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
-
   /user:
     post:
       tags:
@@ -594,7 +557,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/UserArray'
-
   /api-token:
     post:
       tags:
@@ -788,7 +750,7 @@ paths:
     get:
       tags:
         - Server Event
-      summary: List all Server Events.
+      summary: List all server events.
       operationId: getServerEventList
       responses:
         '200':
@@ -807,7 +769,7 @@ paths:
     get:
       tags:
         - Server Config
-      summary: Get the current server configuration.
+      summary: Get the server configuration.
       operationId: getServerConfig
       responses:
         '200':
@@ -837,7 +799,7 @@ paths:
     put:
       tags:
         - Server Config
-      summary: Update the server's configuration.
+      summary: Update the server configuration.
       operationId: updateServerConfig
       requestBody:
         $ref: '#/components/requestBodies/ServerConfig'
@@ -904,7 +866,7 @@ components:
           example: "Jim Smith's key"
         pubKey:
           type: string
-          description: Public part of the key (bitcoin address when using BIP39 keys).
+          description: Public key (bitcoin address when using BIP39 keys).
           example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
     FullIdentity:
       allOf:
@@ -1073,8 +1035,8 @@ components:
       properties:
         name:
           type: string
+          description: API token name.
           example: "My API token name"
-          description: Key name.
         status:
           $ref: '#/components/schemas/APITokenStatusEnum'
     APITokenGet:
@@ -1207,8 +1169,8 @@ components:
       properties:
         name:
           type: string
-          example: "My key name"
           description: Key name.
+          example: "Jim Smith's key"
         status:
           $ref: '#/components/schemas/KeyStatusEnum'
     KeyGet:
@@ -1249,6 +1211,13 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/KeyGet'
+    KeyDisco:
+      allOf:
+        - $ref: '#/components/schemas/Key'
+    KeyDiscoArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/KeyDisco'
     SignatureResult:
       type: object
       properties:
@@ -1289,7 +1258,7 @@ components:
             identity:
               $ref: '#/components/schemas/Identity'
             key:
-              $ref: '#/components/schemas/KeyInformation'
+              $ref: '#/components/schemas/Key'
     APIError:
       type: object
       properties:
@@ -1371,7 +1340,7 @@ components:
         type: string
         example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
     UserSearchQueryParameter:
-      name: userSearch
+      name: search
       in: query
       description: A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
       required: true

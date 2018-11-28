@@ -53,6 +53,7 @@ import io.woleet.idserver.auth.HttpBasicAuth;
 import io.woleet.idserver.auth.ApiKeyAuth;
 import io.woleet.idserver.auth.OAuth;
 import io.woleet.idserver.auth.RetryingOAuth;
+import io.woleet.idserver.auth.OAuthFlow;
 
 public class ApiClient {
 
@@ -78,7 +79,7 @@ public class ApiClient {
     private HttpLoggingInterceptor loggingInterceptor;
 
     /*
-     * Constructor for ApiClient
+     * Basic constructor for ApiClient
      */
     public ApiClient() {
         init();

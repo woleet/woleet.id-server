@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getServerEventById**](ServerEventApi.md#getServerEventById) | **GET** /server-event/{ServerEventId} | Get a server event by its identifier.
-[**getServerEventList**](ServerEventApi.md#getServerEventList) | **GET** /server-event/list | List all Server Events.
+[**getServerEventList**](ServerEventApi.md#getServerEventList) | **GET** /server-event/list | List all server events.
 
 
 <a name="getServerEventById"></a>
@@ -65,7 +65,7 @@ Name | Type | Description  | Notes
 # **getServerEventList**
 > ServerEventArray getServerEventList()
 
-List all Server Events.
+List all server events.
 
 ### Example
 ```java

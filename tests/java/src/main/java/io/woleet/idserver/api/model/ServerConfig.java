@@ -32,15 +32,15 @@ import java.util.UUID;
 public class ServerConfig {
   public static final String SERIALIZED_NAME_IDENTITY_U_R_L = "identityURL";
   @SerializedName(SERIALIZED_NAME_IDENTITY_U_R_L)
-  private String identityURL = null;
+  private String identityURL;
 
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
-  private UUID defaultKeyId = null;
+  private UUID defaultKeyId;
 
   public static final String SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY = "fallbackOnDefaultKey";
   @SerializedName(SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY)
-  private Boolean fallbackOnDefaultKey = null;
+  private Boolean fallbackOnDefaultKey;
 
   public ServerConfig identityURL(String identityURL) {
     this.identityURL = identityURL;
@@ -48,10 +48,10 @@ public class ServerConfig {
   }
 
    /**
-   * The identity URL that the server returns with a signature. Note that the server always expects to be called on the \&quot;/identity\&quot; endpoint, if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain) you must not forget it in your reverse proxy configuration. 
+   * The identity URL that the server returns with a signature. &lt;br&gt;Note that the server always expects to be called on the \&quot;/identity\&quot; endpoint, if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain) you must not forget it in your reverse proxy configuration. 
    * @return identityURL
   **/
-  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "The identity URL that the server returns with a signature. Note that the server always expects to be called on the \"/identity\" endpoint, if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain) you must not forget it in your reverse proxy configuration. ")
+  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "The identity URL that the server returns with a signature. <br>Note that the server always expects to be called on the \"/identity\" endpoint, if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain) you must not forget it in your reverse proxy configuration. ")
   public String getIdentityURL() {
     return identityURL;
   }

@@ -22,34 +22,56 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.woleet.idserver.api.model.Identity;
 import java.io.IOException;
 
 /**
- * FullIdentity
+ * Key information.
  */
+@ApiModel(description = "Key information.")
 
-public class FullIdentity extends Identity {
-  public static final String SERIALIZED_NAME_USER_ID = "userId";
-  @SerializedName(SERIALIZED_NAME_USER_ID)
-  private String userId;
+public class Key {
+  public static final String SERIALIZED_NAME_NAME = "name";
+  @SerializedName(SERIALIZED_NAME_NAME)
+  private String name;
 
-  public FullIdentity userId(String userId) {
-    this.userId = userId;
+  public static final String SERIALIZED_NAME_PUB_KEY = "pubKey";
+  @SerializedName(SERIALIZED_NAME_PUB_KEY)
+  private String pubKey;
+
+  public Key name(String name) {
+    this.name = name;
     return this;
   }
 
    /**
-   * Custom user identifier (UID) (0.9.2342.19200300.100.1.1) must be unique for each user.
-   * @return userId
+   * Key name.
+   * @return name
   **/
-  @ApiModelProperty(example = "wol.jim-smith.01", value = "Custom user identifier (UID) (0.9.2342.19200300.100.1.1) must be unique for each user.")
-  public String getUserId() {
-    return userId;
+  @ApiModelProperty(example = "Jim Smith's key", value = "Key name.")
+  public String getName() {
+    return name;
   }
 
-  public void setUserId(String userId) {
-    this.userId = userId;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public Key pubKey(String pubKey) {
+    this.pubKey = pubKey;
+    return this;
+  }
+
+   /**
+   * Public key (bitcoin address when using BIP39 keys).
+   * @return pubKey
+  **/
+  @ApiModelProperty(example = "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh", value = "Public key (bitcoin address when using BIP39 keys).")
+  public String getPubKey() {
+    return pubKey;
+  }
+
+  public void setPubKey(String pubKey) {
+    this.pubKey = pubKey;
   }
 
 
@@ -61,23 +83,24 @@ public class FullIdentity extends Identity {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    FullIdentity fullIdentity = (FullIdentity) o;
-    return Objects.equals(this.userId, fullIdentity.userId) &&
-        super.equals(o);
+    Key key = (Key) o;
+    return Objects.equals(this.name, key.name) &&
+        Objects.equals(this.pubKey, key.pubKey);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userId, super.hashCode());
+    return Objects.hash(name, pubKey);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class FullIdentity {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
+    sb.append("class Key {\n");
+    
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    pubKey: ").append(toIndentedString(pubKey)).append("\n");
     sb.append("}");
     return sb.toString();
   }

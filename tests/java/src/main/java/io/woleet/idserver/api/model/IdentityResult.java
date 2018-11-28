@@ -23,6 +23,7 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.Identity;
+import io.woleet.idserver.api.model.Key;
 import java.io.IOException;
 
 /**
@@ -32,15 +33,19 @@ import java.io.IOException;
 public class IdentityResult {
   public static final String SERIALIZED_NAME_RIGHT_DATA = "rightData";
   @SerializedName(SERIALIZED_NAME_RIGHT_DATA)
-  private String rightData = null;
+  private String rightData;
 
   public static final String SERIALIZED_NAME_SIGNATURE = "signature";
   @SerializedName(SERIALIZED_NAME_SIGNATURE)
-  private String signature = null;
+  private String signature;
 
   public static final String SERIALIZED_NAME_IDENTITY = "identity";
   @SerializedName(SERIALIZED_NAME_IDENTITY)
   private Identity identity = null;
+
+  public static final String SERIALIZED_NAME_KEY = "key";
+  @SerializedName(SERIALIZED_NAME_KEY)
+  private Key key = null;
 
   public IdentityResult rightData(String rightData) {
     this.rightData = rightData;
@@ -66,10 +71,10 @@ public class IdentityResult {
   }
 
    /**
-   * The signature of the concatenation of &#x60;leftData&#x60; and &#x60;rightData&#x60; using the public key &#x60;pubKey&#x60;.
+   * Signature of the concatenation of &#x60;leftData&#x60; and &#x60;rightData&#x60; using the public key &#x60;pubKey&#x60;.
    * @return signature
   **/
-  @ApiModelProperty(example = "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=", value = "The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.")
+  @ApiModelProperty(example = "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=", value = "Signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.")
   public String getSignature() {
     return signature;
   }
@@ -96,6 +101,24 @@ public class IdentityResult {
     this.identity = identity;
   }
 
+  public IdentityResult key(Key key) {
+    this.key = key;
+    return this;
+  }
+
+   /**
+   * Get key
+   * @return key
+  **/
+  @ApiModelProperty(value = "")
+  public Key getKey() {
+    return key;
+  }
+
+  public void setKey(Key key) {
+    this.key = key;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -108,12 +131,13 @@ public class IdentityResult {
     IdentityResult identityResult = (IdentityResult) o;
     return Objects.equals(this.rightData, identityResult.rightData) &&
         Objects.equals(this.signature, identityResult.signature) &&
-        Objects.equals(this.identity, identityResult.identity);
+        Objects.equals(this.identity, identityResult.identity) &&
+        Objects.equals(this.key, identityResult.key);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(rightData, signature, identity);
+    return Objects.hash(rightData, signature, identity, key);
   }
 
 
@@ -125,6 +149,7 @@ public class IdentityResult {
     sb.append("    rightData: ").append(toIndentedString(rightData)).append("\n");
     sb.append("    signature: ").append(toIndentedString(signature)).append("\n");
     sb.append("    identity: ").append(toIndentedString(identity)).append("\n");
+    sb.append("    key: ").append(toIndentedString(key)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -236,7 +236,7 @@ public class ServerEventApi {
     }
 
     /**
-     * List all Server Events.
+     * List all server events.
      * 
      * @return ServerEventArray
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -247,7 +247,7 @@ public class ServerEventApi {
     }
 
     /**
-     * List all Server Events.
+     * List all server events.
      * 
      * @return ApiResponse&lt;ServerEventArray&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -259,7 +259,7 @@ public class ServerEventApi {
     }
 
     /**
-     * List all Server Events. (asynchronously)
+     * List all server events. (asynchronously)
      * 
      * @param callback The callback to be executed when the API call finishes
      * @return The request call

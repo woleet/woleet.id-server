@@ -15,47 +15,17 @@ package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.FullIdentity;
 import io.woleet.idserver.api.model.UserBase;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
-import java.io.IOException;
 import java.util.UUID;
 
 /**
- * UserPut
+ * UserDisco
  */
 
-public class UserPut extends UserBase {
-  public static final String SERIALIZED_NAME_PASSWORD = "password";
-  @SerializedName(SERIALIZED_NAME_PASSWORD)
-  private String password;
-
-  public UserPut password(String password) {
-    this.password = password;
-    return this;
-  }
-
-   /**
-   * User password.
-   * @return password
-  **/
-  @ApiModelProperty(example = "nSBa+rV3%2/LpD", value = "User password.")
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
+public class UserDisco extends UserBase {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -65,23 +35,20 @@ public class UserPut extends UserBase {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserPut userPut = (UserPut) o;
-    return Objects.equals(this.password, userPut.password) &&
-        super.equals(o);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(password, super.hashCode());
+    return Objects.hash(super.hashCode());
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserPut {\n");
+    sb.append("class UserDisco {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("}");
     return sb.toString();
   }

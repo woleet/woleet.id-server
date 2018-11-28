@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **String** | Key name. |  [optional]
+**name** | **String** | API token name. |  [optional]
 **status** | [**APITokenStatusEnum**](APITokenStatusEnum.md) |  |  [optional]
 
 

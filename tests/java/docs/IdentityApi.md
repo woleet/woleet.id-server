@@ -23,7 +23,7 @@ Use this endpoint to verify that the server manages a given public key (ie. it o
 
 
 IdentityApi apiInstance = new IdentityApi();
-String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | The public key to verify.
+String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | Public key to verify.
 String leftData = 00c8a2b0c373050e7f2abbb2e4c631a42c10d402; // String | Left part of the random data to sign (should be generated randomly).
 try {
     IdentityResult result = apiInstance.getIdentity(pubKey, leftData);
@@ -38,7 +38,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **pubKey** | **String**| The public key to verify. |
+ **pubKey** | **String**| Public key to verify. |
  **leftData** | **String**| Left part of the random data to sign (should be generated randomly). |
 
 ### Return type

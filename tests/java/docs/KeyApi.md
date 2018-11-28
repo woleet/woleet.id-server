@@ -6,7 +6,6 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createKey**](KeyApi.md#createKey) | **POST** /user/{userId}/key | Create a new key for a user.
 [**deleteKey**](KeyApi.md#deleteKey) | **DELETE** /key/{keyId} | Delete a key.
-[**exportKey**](KeyApi.md#exportKey) | **GET** /key/{keyId}/export | Get the mnemonic words associated to a key.
 [**getAllUserKeys**](KeyApi.md#getAllUserKeys) | **GET** /user/{userId}/key/list | List all keys of a user.
 [**getKeyById**](KeyApi.md#getKeyById) | **GET** /key/{keyId} | Get a key by its identifier.
 [**updateKey**](KeyApi.md#updateKey) | **PUT** /key/{keyId} | Update a key.
@@ -110,61 +109,6 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**KeyGet**](KeyGet.md)
-
-### Authorization
-
-[CookieAuth](../README.md#CookieAuth)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-<a name="exportKey"></a>
-# **exportKey**
-> Mnemonics exportKey(keyId)
-
-Get the mnemonic words associated to a key.
-
-Get the list of mnemonic words that can be used to backup and recover a key.
-
-### Example
-```java
-// Import classes:
-//import io.woleet.idserver.ApiClient;
-//import io.woleet.idserver.ApiException;
-//import io.woleet.idserver.Configuration;
-//import io.woleet.idserver.auth.*;
-//import io.woleet.idserver.api.KeyApi;
-
-ApiClient defaultClient = Configuration.getDefaultApiClient();
-
-// Configure API key authorization: CookieAuth
-ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-CookieAuth.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//CookieAuth.setApiKeyPrefix("Token");
-
-KeyApi apiInstance = new KeyApi();
-UUID keyId = 552aa3fd-3b5e-434f-bdd3-9b6c58c269c1; // UUID | Identifier of the key.
-try {
-    Mnemonics result = apiInstance.exportKey(keyId);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling KeyApi#exportKey");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **keyId** | [**UUID**](.md)| Identifier of the key. |
-
-### Return type
-
-[**Mnemonics**](Mnemonics.md)
 
 ### Authorization
 

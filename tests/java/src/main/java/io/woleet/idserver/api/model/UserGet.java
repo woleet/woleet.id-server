@@ -36,23 +36,23 @@ import java.util.UUID;
 public class UserGet extends UserBase {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
-  private UUID id = null;
+  private UUID id;
 
   public static final String SERIALIZED_NAME_CREATED_AT = "createdAt";
   @SerializedName(SERIALIZED_NAME_CREATED_AT)
-  private Long createdAt = null;
+  private Long createdAt;
 
   public static final String SERIALIZED_NAME_UPDATED_AT = "updatedAt";
   @SerializedName(SERIALIZED_NAME_UPDATED_AT)
-  private Long updatedAt = null;
+  private Long updatedAt;
 
   public static final String SERIALIZED_NAME_DELETED_AT = "deletedAt";
   @SerializedName(SERIALIZED_NAME_DELETED_AT)
-  private Long deletedAt = null;
+  private Long deletedAt;
 
   public static final String SERIALIZED_NAME_LAST_LOGIN = "lastLogin";
   @SerializedName(SERIALIZED_NAME_LAST_LOGIN)
-  private Long lastLogin = null;
+  private Long lastLogin;
 
    /**
    * User identifier (allocated by the server).

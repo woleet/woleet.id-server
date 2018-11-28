@@ -32,7 +32,7 @@ import java.io.IOException;
 public class KeyBase {
   public static final String SERIALIZED_NAME_NAME = "name";
   @SerializedName(SERIALIZED_NAME_NAME)
-  private String name = null;
+  private String name;
 
   public static final String SERIALIZED_NAME_STATUS = "status";
   @SerializedName(SERIALIZED_NAME_STATUS)
@@ -47,7 +47,7 @@ public class KeyBase {
    * Key name.
    * @return name
   **/
-  @ApiModelProperty(example = "My key name", value = "Key name.")
+  @ApiModelProperty(example = "Jim Smith's key", value = "Key name.")
   public String getName() {
     return name;
   }

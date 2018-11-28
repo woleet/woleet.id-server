@@ -112,7 +112,7 @@ public class ServerConfigApi {
     }
 
     /**
-     * Get the current server configuration.
+     * Get the server configuration.
      * 
      * @return ServerConfig
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -123,7 +123,7 @@ public class ServerConfigApi {
     }
 
     /**
-     * Get the current server configuration.
+     * Get the server configuration.
      * 
      * @return ApiResponse&lt;ServerConfig&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -135,7 +135,7 @@ public class ServerConfigApi {
     }
 
     /**
-     * Get the current server configuration. (asynchronously)
+     * Get the server configuration. (asynchronously)
      * 
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
@@ -230,7 +230,7 @@ public class ServerConfigApi {
     }
 
     /**
-     * Update the server&#39;s configuration.
+     * Update the server configuration.
      * 
      * @param serverConfig Replacement server config object. (required)
      * @return ServerConfig
@@ -242,7 +242,7 @@ public class ServerConfigApi {
     }
 
     /**
-     * Update the server&#39;s configuration.
+     * Update the server configuration.
      * 
      * @param serverConfig Replacement server config object. (required)
      * @return ApiResponse&lt;ServerConfig&gt;
@@ -255,7 +255,7 @@ public class ServerConfigApi {
     }
 
     /**
-     * Update the server&#39;s configuration. (asynchronously)
+     * Update the server configuration. (asynchronously)
      * 
      * @param serverConfig Replacement server config object. (required)
      * @param callback The callback to be executed when the API call finishes
