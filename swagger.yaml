@@ -158,10 +158,8 @@ paths:
                 $ref: '#/components/responses/APIError'
   /discover/users:
     get:
-      operationId: getUsersByUserSearch
+      operationId: discoverUsers
       summary: Discover available users based on a search string.
-      security:
-        - APITokenAuth: []
       tags:
         - Discovery
       description: >
@@ -174,25 +172,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/UserInfoArray'
+                $ref: '#/components/responses/UserDiscoArray'
         '401':
           description: Missing or bad session cookie.
           content:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
-        '404':
-          description: No users matching the search query.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/APIError'
   /discover/user/{pubKey}:
     get:
-      operationId: getUserByKeyId
+      operationId: discoverUserByPubKey
       summary: Get the user to whom a key belongs.
-      security:
-        - APITokenAuth: []
       tags:
         - Discovery
       description: >
@@ -205,7 +195,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/UserInfo'
+                $ref: '#/components/responses/UserDisco'
         '401':
           description: Missing or bad session cookie.
           content:
@@ -220,10 +210,8 @@ paths:
                 $ref: '#/components/responses/APIError'
   /discover/keys/{userId}:
     get:
-      operationId: getKeysByUserId
+      operationId: discoverUserKeys
       summary: Get info of all the keys belonging to a user.
-      security:
-        - APITokenAuth: []
       tags:
         - Discovery
       description: >
@@ -1055,10 +1043,13 @@ components:
     UserInfo:
       allOf:
         - $ref: '#/components/schemas/UserBase'
-    UserInfoArray:
+    UserDisco:
+      allOf:
+        - $ref: '#/components/schemas/UserBase'
+    UserDiscoArray:
       type: array
       items:
-        $ref: '#/components/schemas/UserInfo'
+        $ref: '#/components/schemas/UserDisco'
     APITokenStatusEnum:
       type: string
       enum:
@@ -1374,7 +1365,7 @@ components:
       required: true
       schema:
         type: string
-        examples:
+        example:
           email:
             value: "john.doe@acme.com"
           username:
@@ -1461,8 +1452,10 @@ components:
       $ref: '#/components/schemas/UserArray'
     UserInfo:
       $ref: '#/components/schemas/UserInfo'
-    UserInfoArray:
-      $ref: '#/components/schemas/UserInfoArray'
+    UserDisco:
+      $ref: '#/components/schemas/UserDisco'
+    UserDiscoArray:
+      $ref: '#/components/schemas/UserDiscoArray'
     APIError:
       $ref: '#/components/schemas/APIError'
     KeyGet:
