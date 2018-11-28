@@ -56,7 +56,7 @@ export class EventStore {
         this.batch.splice(0, len);
       })
       .catch((err) => {
-        log.error('APIEven error:', err);
+        log.error(err);
       });
 
   }

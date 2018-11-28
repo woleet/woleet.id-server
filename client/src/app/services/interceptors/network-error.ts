@@ -15,7 +15,7 @@ export class NetworkErrorInterceptor implements HttpInterceptor {
       .pipe(catchError((err): Observable<any> => {
 
         if (err instanceof HttpErrorResponse && err.status === 0 || err.status > 499) {
-          log.error('Network error', err);
+          log.error(err);
           switch (err.status) {
             case 0:
               this.errorService.setError('network', err);
