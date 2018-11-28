@@ -7,6 +7,7 @@ import { ServerConfig } from './model/server-config';
 import { User } from './model/user';
 import { Key } from './model/key';
 import { getServerConfig, setServerConfig } from '../controllers/server-config';
+import { upgrade } from './upgrade';
 import { db } from '../config';
 
 const debug = Debug('id:db');
@@ -43,8 +44,6 @@ Key.model.beforeDelete(async (key) => {
   await user.save();
 });
 
-ServerConfig.model.belongsTo(Key.model, { as: 'defaultKey' });
-
 export { User, Key, APIToken, ServerEvent, ServerConfig };
 
 async function init() {
@@ -54,6 +53,9 @@ async function init() {
       debug('Connecting to database...');
       await sequelize.authenticate();
       debug('Connected to database.');
+
+      await upgrade(sequelize);
+
       debug('Synchronizing db model...');
       await sequelize.sync(/* { force: true } */);
       debug('Synchronized db model.');

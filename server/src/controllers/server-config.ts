@@ -1,5 +1,5 @@
 import { ServerConfig } from '../database';
-import { serverConfig as config } from '../config';
+import { serverConfig } from '../config';
 import * as Debug from 'debug';
 const debug = Debug('id:ctrl:config');
 import * as log from 'loglevel';
@@ -8,9 +8,9 @@ import { updateOIDCProvider, stopActiveServer } from './oidc-provider';
 import { exit } from '../exit';
 import { bootOIDCPServer } from '../boot.servers';
 
-const { CONFIG_ID } = config;
+const { CONFIG_ID } = serverConfig;
 
-let inMemoryConfig = null;
+let inMemoryConfig: InternalServerConfigObject = null;
 
 export async function loadServerConfig(): Promise<InternalServerConfigObject> {
   const cfg = await ServerConfig.getById(CONFIG_ID);
@@ -18,7 +18,7 @@ export async function loadServerConfig(): Promise<InternalServerConfigObject> {
     log.warn('No configuration found in database');
     return;
   }
-  inMemoryConfig = cfg.toJSON();
+  inMemoryConfig = cfg.toJSON().config;
   return getServerConfig();
 }
 
@@ -28,13 +28,15 @@ export function getServerConfig(): InternalServerConfigObject {
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   try {
-    let cfg = await ServerConfig.update(CONFIG_ID, up);
+    const config = Object.assign({}, inMemoryConfig, up);
+    console.log('UPDATE', { inMemoryConfig, up });
+    let cfg = await ServerConfig.update(CONFIG_ID, { config });
     if (!cfg) {
-      debug('No config to update, will set', up);
-      cfg = await ServerConfig.create(<ServerConfigCreate>up);
+      debug('No config to update, will set', config);
+      cfg = await ServerConfig.create({ config });
     }
     debug('Updated', inMemoryConfig, 'to', cfg.toJSON(), 'with', up);
-    inMemoryConfig = cfg.toJSON();
+    inMemoryConfig = cfg.toJSON().config;
     await checkOIDCConfigChange(up);
     await checkOIDCPConfigChange(up);
     return getServerConfig();

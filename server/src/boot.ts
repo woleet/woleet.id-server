@@ -9,7 +9,7 @@ import { setServerConfig, loadServerConfig } from './controllers/server-config';
 const debug = Debug('id:boot');
 
 // Config
-import { encryption } from './config';
+import { encryption, serverConfig } from './config';
 import { setSecret } from './controllers/utils/encryption';
 import { initPromise } from './database';
 import { signMessage } from './controllers/sign';
@@ -62,7 +62,7 @@ initPromise
 
       log.info(`Created user "admin" with id ${admin.id}`);
 
-      const conf = await setServerConfig({ defaultKeyId: admin.defaultKeyId });
+      const conf = await setServerConfig(Object.assign({}, serverConfig.default, { defaultKeyId: admin.defaultKeyId }));
       log.info(`Created new server configuration with defaults: ${JSON.stringify(conf, null, 2)}`);
     }
   })
