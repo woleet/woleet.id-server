@@ -80,6 +80,8 @@ paths:
         <br>- set none of the 3 parameters: the default key of the server is used (if any).
         <br>The signature produced is the signature of the hash using the referred key.
         <br>This endpoint is protected using an API token. It is recommended not to expose it publicly.
+
+        > <strong>Note</strong>: when accessed with an oauth token, only the user associated to the token can sign.
       parameters:
         - $ref: '#/components/parameters/HashToSignQueryParameter'
         - $ref: '#/components/parameters/UserIdQueryParameter'
