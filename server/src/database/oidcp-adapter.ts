@@ -36,20 +36,23 @@ export class SequelizeAdapter {
     });
   }
 
-  async find(id) {
+  find(id) {
     debug(`find ${id}`);
-    const res = this.model.findByPrimary(id).then((found) => {
-      if (!found) { return undefined; }
-      return {
-        ...found.data,
-        ...(found.consumedAt ? { consumed: true } : undefined),
-      };
-    });
-    debug(`found `, await res);
-    return res;
+    return this.model.findByPrimary(id)
+      .then((found) => {
+        if (!found) { return undefined; }
+        return {
+          ...found.data,
+          ...(found.consumedAt ? { consumed: true } : undefined),
+        };
+      })
+      .then((res) => {
+        debug(`found `, res);
+        return res;
+      });
   }
 
-  async findByUserCode(userCode) {
+  findByUserCode(userCode) {
     debug(`findByUserCode ${userCode}`);
     return this.model.findOne({ where: { userCode } }).then((found) => {
       if (!found) { return undefined; }

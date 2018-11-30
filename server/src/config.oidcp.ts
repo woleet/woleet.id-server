@@ -28,8 +28,7 @@ export const provider = {
     revocation: true,       // defaults to false
   },
   formats: {
-    default: 'opaque',
-    AccessToken: 'jwt',
+    default: 'opaque'
   },
   subjectTypes: ['public', 'pairwise'],
   interactionUrl: function interactionUrl(ctx, interaction: Interaction) {
