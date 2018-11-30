@@ -50,9 +50,12 @@ Woleet.ID Server can be built and run using Docker (tested on Linux and  macOS),
 Here we only document building and running Woleet.ID Server using Docker.
 If you want to build or run without Docker, you can find detailed information about how to build and run Woleet.ID Server in [client's](client/README.md) and [server's](server/README.md) README files. 
 
-## Prerequisites
+# Prerequisites and configuration
 
-You need a TLS certificate to run Woleet.ID Server. It can be [self signed](https://www.digitalocean.com/community/tutorials/how-to-create-an-ssl-certificate-on-nginx-for-ubuntu-14-04)
+## TLS certificate
+
+Woleet.ID Server requires a TLS certificate.
+It can be [self signed](https://www.digitalocean.com/community/tutorials/how-to-create-an-ssl-certificate-on-nginx-for-ubuntu-14-04)
 but it is highly recommended to use an Organization Validation (OV) certificate, since your organization's identity information will be extracted from this certificate during the identity verification process).
 
 You need to set two environment variables pointing to the certificate and its associate key:
@@ -79,14 +82,6 @@ export WOLEET_ID_SERVER_POSTGRES_USER={PostgreSQL user, default: pguser}
 export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pass}
 ```
 
-## Build the server
-
-    ./app.sh build
-
-> NOTE: If you want Woleet.ID Server's Docker images to be stored on a specific Docker registry, you can set the WOLEET_ID_SERVER_REGISTRY environment variable.
-
-## Configure the server
-
 ## Encryption secret
 
 Woleet.ID Server encrypts keys stored in the database using a encryption secret you need to define using the following environment variable:
@@ -106,11 +101,17 @@ export WOLEET_ID_SERVER_SIGN_PORT={port to use for the /sign endpoint, default 3
 
 > WARNING: the /sign endpoint (used to generate signature on behalf of users) and other API endpoints (used by the client web app) should never be exposed outside your organization's network, while the /identity endpoint needs to be exposed.
 
-### Start the server
+# Build the server
+
+    ./app.sh build
+
+> NOTE: If you want Woleet.ID Server's Docker images to be stored on a specific Docker registry, you can set the WOLEET_ID_SERVER_REGISTRY environment variable.
+
+# Start the server
 
     ./app.sh start
 
-### Test the server
+# Test the server
 
 [Client web app](https://localhost:3000/)
 
@@ -128,7 +129,7 @@ You should get:
 
     {"message":"Invalid or missing API token","status":401}
 
-## Change administrator account password
+# Change administrator account password
 
 When run it for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
 You need to change the password of the `admin` account.
@@ -139,7 +140,7 @@ You need to change the password of the `admin` account.
 
 > NOTE: You can give administrator rights to any user account.
 
-## Set server Identity URL
+# Set server's Identity URL
 
 The identity URL is the public URL of the `/identity` endpoint.
 
@@ -150,10 +151,10 @@ The identity URL is the public URL of the `/identity` endpoint.
 
 > WARNING: It is preferable to serve the identity URL on the default HTTPS port 443. To do this, simply set WOLEET_ID_SERVER_IDENTITY_PORT to 443.
 
-### Display server logs
+# Display server logs
 
      ./app.sh logs -f
 
-### Stop the server
+# Stop the server
 
     ./app.sh stop

@@ -31,8 +31,8 @@
           formControlName="openIDConnectClientSecret"
           (input)="change()"
           [required]="useOpenIDConnect$ | async">
-        <button mat-button *ngIf="f.value" matSuffix mat-icon-button aria-label="Clear" (click)="reveal=!reveal">
-          <mat-icon>remove_red_eye</mat-icon>
+        <button mat-button *ngIf="f.value" matSuffix mat-icon-button (click)="reveal=!reveal">
+          <mat-icon matTooltip="Show secret" aria-label="Show secret button" >remove_red_eye</mat-icon>
         </button>
         <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
       </mat-form-field>

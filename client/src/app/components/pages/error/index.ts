@@ -11,7 +11,6 @@ export class ErrorPageComponent implements OnInit {
   tip = null;
 
   constructor(private errorService: ErrorService) {
-
   }
 
   ngOnInit() {
@@ -26,7 +25,7 @@ export class ErrorPageComponent implements OnInit {
         this.message = `The server encountred an error (code=${error.code})`;
         break;
       case 'network':
-        this.message = 'Network error :(';
+        this.message = 'Network error';
         this.tip = 'Please check your internet connection';
         break;
       case 'redirect-parameter':
@@ -35,10 +34,9 @@ export class ErrorPageComponent implements OnInit {
         break;
       case 'unknown':
       default:
-        this.message = 'Unknown error :(';
+        this.message = 'Unknown error';
         this.tip = 'Try to reload this page or try later';
         break;
     }
   }
-
 }
