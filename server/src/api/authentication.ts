@@ -26,8 +26,11 @@ export async function bearerAuth(ctx: Context, next) {
       if (token) {
         ctx.token = token;
 
-
         if (token) {
+          if (!token.scope.includes('signature')) {
+            throw new Unauthorized('Missing signature scope');
+          }
+
           switch (token.status) {
             case 'active':
               return next();

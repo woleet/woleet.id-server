@@ -87,6 +87,7 @@ paths:
         - $ref: '#/components/parameters/PubKeyToUseQueryParameter'
       security:
         - APITokenAuth: []
+        - OAuthTokenAuth: []
       responses:
         '200':
           description: Successful operation.
@@ -1435,6 +1436,8 @@ components:
       $ref: '#/components/schemas/UserInfo'
     UserDisco:
       $ref: '#/components/schemas/UserDisco'
+    KeyDiscoArray:
+      $ref: '#/components/schemas/KeyDiscoArray'
     UserDiscoArray:
       $ref: '#/components/schemas/UserDiscoArray'
     APIError:
@@ -1467,3 +1470,7 @@ components:
       type: http
       scheme: bearer
       description: Use an API token to authentify (see /api-token).
+    OAuthTokenAuth:
+      type: http
+      scheme: bearer
+      description: Use a OAuth access token to authentify.

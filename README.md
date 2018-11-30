@@ -121,40 +121,67 @@ You should see the sign in page.
 
 You should get:
 
-    {"message":"Missing mandatory \"pubKey\" parameter","status":400}
+    { "message": "Missing mandatory \"pubKey\" parameter", "status": 400 }
 
 [Signature endpoint](https://localhost:3002/sign)
 
 You should get:
 
-    {"message":"Invalid or missing API token","status":401}
-
-# Change administrator account password
-
-When run it for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
+    { "message": "Invalid or missing API token", "status": 401 }
+ 
+### Display server logs
+ 
+     ./app.sh logs -f
+ 
+### Stop the server
+ 
+    ./app.sh stop
+ 
+## Configuration
+### Change administrator account password
+ 
+When you run it for the first time, Woleet.&#8203;ID Server creates an administrator account with login `admin` and password `pass`.
 You need to change the password of the `admin` account.
-
+ 
 - Open the client web app
 - Sign in as admin
 - Edit the 'admin' user and change his password: there is currently no way to recover passwords, so be sure you will not forget it
-
+ 
 > NOTE: You can give administrator rights to any user account.
-
-# Set server's Identity URL
-
+ 
+### Set server Identity URL
+ 
 The identity URL is the public URL of the `/identity` endpoint.
-
+ 
 - Open the client web app
 - Sign in as admin
 - Select the `Settings` menu
 - Enter the identity URL as you expose it the the internet: as an example, if your server domain is `idserver.acme.com`, the identity URL would be `https://idserver.acme.com:3001/identity`.
-
+ 
 > WARNING: It is preferable to serve the identity URL on the default HTTPS port 443. To do this, simply set WOLEET_ID_SERVER_IDENTITY_PORT to 443.
-
-# Display server logs
-
-     ./app.sh logs -f
-
-# Stop the server
-
-    ./app.sh stop
+ 
+### Use an Open ID Connect provider
+ 
+You can use an OpenID user provider with Woleet.&#8203;ID Server.
+In the "OpenID Connect configuration" panel: 
+- Check "Use OpenID Connect"
+- Set the `Open ID Connect URL` in order to match `<Open ID Connect URL>/.well-known/openid-configuration`.
+- Set the `Client id` and `Client secret` as defined by your provider.
+- Set the `Authorization callback URL` as `https://<Current web interface>/oauth/callback` (it should be automatically set).
+ 
+> NOTE: The "Use OpenID Connect" checkbox will be automatically unchecked if the server cannot reach the OpenID provider.
+ 
+### Use Woleet.&#8203;ID Server as an Open ID Connect provider
+ 
+You can be uses as an OpenID provider.
+In the "OpenID Connect Provider configuration" panel: 
+- Check "Enable OpenID Connect Provider"
+- Set the `Issuer URL` in order to match `<Open ID Connect Provider URL>/.well-known/openid-configuration`.
+  > Note: that is only if you want to conform to the Discovery specification, the `Issuer URL` value itself does not need to resolve to anything.
+- Set the `Provider URL` as `https://<OpenID Provider>` (it should be automatically set).
+- Set the `Interface URL` as `https://<Current web interface>` (it should be automatically set).
+- Define a client:
+  - Set the `ClientId` and `Client Secret` (it should be automatically set).
+  - Set a least one `Redirect URI`.
+ 
+> NOTE: The OpenID Connect Provider will not be effectively enabled without at least one specified client.

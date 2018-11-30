@@ -30,6 +30,8 @@ export const provider = {
   formats: {
     default: 'opaque'
   },
+  // https://github.com/panva/node-oidc-provider/blob/master/docs/configuration.md#scopes
+  scopes: ['openid', 'offline_access', 'signature'],
   subjectTypes: ['public', 'pairwise'],
   interactionUrl: function interactionUrl(ctx, interaction: Interaction) {
     // All interactions case should be either disabled or contextually avoided
