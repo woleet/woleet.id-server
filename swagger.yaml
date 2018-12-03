@@ -84,7 +84,7 @@ paths:
         - $ref: '#/components/parameters/HashToSignQueryParameter'
         - $ref: '#/components/parameters/UserIdQueryParameter'
         - $ref: '#/components/parameters/CustomUserIdQueryParameter'
-        - $ref: '#/components/parameters/PubKeyToUseQueryParameter'
+        - $ref: '#/components/parameters/PubKeyQueryParameter'
       security:
         - APITokenAuth: []
       responses:
@@ -1312,7 +1312,7 @@ components:
         type: string
         format: uuid
         example: "813797c8-01e3-4a80-8068-bc2bda13df16"
-    PubKeyToUseQueryParameter:
+    PubKeyQueryParameter:
       name: pubKey
       in: query
       description: >
