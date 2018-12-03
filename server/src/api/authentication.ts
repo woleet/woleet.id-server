@@ -1,6 +1,7 @@
 import { Unauthorized, Forbidden } from 'http-errors';
 import { store as sessionStore } from '../controllers/store.session';
 import { store as apiTokenStore } from '../controllers/store.api-token';
+import { store as oauthAccessTokenStore } from '../controllers/store.oauth-token';
 import { Context } from 'koa';
 
 export async function session(ctx: Context, next) {
@@ -10,7 +11,7 @@ export async function session(ctx: Context, next) {
   return next();
 }
 
-export async function apiTokenAuth(ctx: Context, next) {
+export async function bearerAuth(ctx: Context, next) {
 
   const { header } = ctx.request;
 
@@ -20,17 +21,32 @@ export async function apiTokenAuth(ctx: Context, next) {
 
     // Check if apiToken exists
     if (parts.length === 2 && parts[0] === 'Bearer') {
-      const apiToken = await apiTokenStore.get(parts[1]);
+      const token: InternalTokenObject = (await apiTokenStore.get(parts[1])) || (await oauthAccessTokenStore.get(parts[1]));
 
-      ctx.apiToken = apiToken;
+      if (token) {
+        ctx.token = token;
 
-      if (apiToken && apiToken.status === 'active') {
-        return next();
+        if (token) {
+          if (!token.scope.includes('signature')) {
+            throw new Unauthorized('Missing signature scope');
+          }
+
+          switch (token.status) {
+            case 'active':
+              return next();
+            case 'expired':
+              throw new Unauthorized('Token expired');
+            case 'blocked':
+              throw new Unauthorized('Token blocked');
+          }
+        }
       }
+
+      throw new Unauthorized('Invalid token');
     }
   }
 
-  throw new Unauthorized('Invalid or missing API token');
+  throw new Unauthorized('Missing token');
 }
 
 export async function user(ctx: Context, next) {

@@ -2,28 +2,43 @@ import { Cache } from 'lru-cache';
 import * as LRU from 'lru-cache';
 import { APIToken } from '../database';
 
+function serialize(token: SequelizeAPITokenObject): InternalTokenObject {
+  const t = token.toJSON();
+  return {
+    id: t.id,
+    exp: null,
+    status: t.status,
+    scope: ['signature'],
+    type: 'api',
+    role: 'admin',
+    userId: null
+  };
+}
+
 export class APITokenStore {
-  lru: Cache<string, SequelizeAPITokenObject>;
+  lru: Cache<string, InternalTokenObject>;
 
   constructor() {
     this.lru = new LRU();
   }
 
-  async get(value: string): Promise<InternalAPITokenObject> {
-    let apiTokenInstance = this.lru.get(value);
+  async get(value: string): Promise<InternalTokenObject> {
+    let token = this.lru.get(value);
 
-    if (apiTokenInstance) {
-      return apiTokenInstance.toJSON();
+    if (token) {
+      return token;
     }
 
-    apiTokenInstance = await APIToken.getByValue(value);
+    const apiToken = await APIToken.getByValue(value);
 
-    if (!apiTokenInstance) {
+    if (!apiToken) {
       return null;
     }
 
-    this.lru.set(value, apiTokenInstance);
-    return apiTokenInstance.toJSON();
+    token = serialize(apiToken);
+
+    this.lru.set(value, token);
+    return token;
   }
 
   async resetCache(value: string) {

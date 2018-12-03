@@ -124,6 +124,32 @@ declare global {
     userId: string;
   }
 
+  /* AbstractToken: server specific */
+  interface InternalTokenObject {
+    id: string,
+    scope: string[],
+    type: 'api' | 'oauth',
+    role: 'admin' | 'user',
+    status: 'active' | 'blocked' | 'expired',
+    exp: number,
+    userId?: string
+  }
+
+  /* OauthAccessToken: server specific */
+  interface InternalOauthTokenObject {
+    iat: number,
+    iss: uri,
+    exp: number,
+    clientId: string,
+    gty: string,
+    accountId: string,
+    claims: any,
+    grantId: string,
+    scope: string,
+    kind: string,
+    jti: string,
+  }
+
   /* APIToken: server specific */
 
   interface SequelizeAPITokenObject extends Instance<InternalAPITokenObject> { }
@@ -269,6 +295,7 @@ declare module 'koa' {
   interface Context {
     sessions: SessionStore;
     session: Session | null;
-    apiToken?: InternalAPITokenObject;
+    oidc?: any;
+    token?: InternalTokenObject;
   }
 }
