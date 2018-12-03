@@ -2,9 +2,11 @@ import * as Router from 'koa-router';
 import { BadRequest, Unauthorized } from 'http-errors';
 import { sign } from '../../controllers/sign';
 import { validate } from '../schemas';
+import { bearerAuth } from '../authentication';
 import { store as event } from '../../controllers/server-event';
 
 import { getServerConfig } from '../../controllers/server-config';
+import { Context } from 'koa';
 
 const vuuid = validate.raw('uuid');
 const vhash = validate.raw('sha256');
@@ -19,7 +21,7 @@ const vaddr = validate.raw('address');
 
 const router = new Router();
 
-async function getSignature(ctx) {
+async function getSignature(ctx: Context) {
   const query = ctx.query;
   const token = ctx.token;
 
@@ -35,15 +37,22 @@ async function getSignature(ctx) {
     throw new BadRequest('Invalid query parameter "userId"');
   }
 
-  if (token.role !== 'admin' && query.userId && token.userId !== query.userId) {
-    throw new Unauthorized(`Cannot sign for user ${query.userId} with these credentials`);
+  if (token.type === 'oauth' && query.userId && token.userId !== query.userId) {
+    throw new Unauthorized(`Cannot sign for an other user with an oauth token`);
   }
 
   if (query.pubKey && !(await vaddr(query.pubKey))) {
     throw new BadRequest('Invalid query parameter "pubKey"');
   }
 
-  const { signature, pubKey, userId, keyId, signedHash } = await sign(Object.assign({}, query, { userId: token.userId }));
+  let _userId = null;
+  if (token.type === 'oauth') {
+    _userId = token.userId;
+  } else if (query.userId) {
+    _userId = query.userId;
+  }
+
+  const { signature, pubKey, userId, keyId, signedHash } = await sign(Object.assign({}, query, { userId: _userId }));
 
   const identityURL = getServerConfig().identityURL;
 
@@ -65,7 +74,7 @@ async function getSignature(ctx) {
  * @swagger
  *  operationId: getSignature
  */
-router.get('/sign', getSignature);
+router.get('/sign', bearerAuth, getSignature);
 
 /**
  * Backward compatibility with woleet backend-kit
@@ -73,6 +82,6 @@ router.get('/sign', getSignature);
  * @swagger
  *  operationId: getSignature
  */
-router.get('/signature', getSignature);
+router.get('/signature', bearerAuth, getSignature);
 
 export { router };
