@@ -6,6 +6,7 @@ import { bearerAuth } from '../authentication';
 import { store as event } from '../../controllers/server-event';
 
 import { getServerConfig } from '../../controllers/server-config';
+import { Context } from 'koa';
 
 const vuuid = validate.raw('uuid');
 const vhash = validate.raw('sha256');
@@ -20,56 +21,60 @@ const vaddr = validate.raw('address');
 
 const router = new Router();
 
-const signMiddleware: Router.IMiddleware[] = [
-  bearerAuth,
-  async function (ctx) {
-    const query = ctx.query;
-    const token = ctx.token;
+async function getSignature(ctx: Context) {
+  const query = ctx.query;
+  const token = ctx.token;
 
-    if (!query.hashToSign) {
-      throw new BadRequest('Missign mandatory "hashToSign" query parameter');
-    }
-
-    if (!(await vhash(query.hashToSign))) {
-      throw new BadRequest('Query parameter "hashToSign" must be a SHA256 hash (in lowercase)');
-    }
-
-    if (query.userId && !(await vuuid(query.userId))) {
-      throw new BadRequest('Invalid query parameter "userId"');
-    }
-
-    if (token.role !== 'admin' && query.userId && token.userId !== query.userId) {
-      throw new Unauthorized(`Cannot sign for user ${query.userId} with these credentials`);
-    }
-
-    if (query.pubKey && !(await vaddr(query.pubKey))) {
-      throw new BadRequest('Invalid query parameter "pubKey"');
-    }
-
-    const { signature, pubKey, userId, keyId, signedHash } = await sign(Object.assign({}, query, { userId: token.userId }));
-
-    const identityURL = getServerConfig().identityURL;
-
-    event.register({
-      type: 'signature',
-      authorizedUserId: ctx.token.userId,
-      authorizedTokenId: ctx.token.type === 'api' ? ctx.token.id : null,
-      associatedTokenId: null,
-      associatedUserId: userId,
-      associatedKeyId: keyId,
-      data: { hash: signedHash, auth: ctx.token.type }
-    });
-
-    ctx.body = { pubKey, signedHash, signature, identityURL };
+  if (!query.hashToSign) {
+    throw new BadRequest('Missign mandatory "hashToSign" query parameter');
   }
-];
+
+  if (!(await vhash(query.hashToSign))) {
+    throw new BadRequest('Query parameter "hashToSign" must be a SHA256 hash (in lowercase)');
+  }
+
+  if (query.userId && !(await vuuid(query.userId))) {
+    throw new BadRequest('Invalid query parameter "userId"');
+  }
+
+  if (token.type === 'oauth' && query.userId && token.userId !== query.userId) {
+    throw new Unauthorized(`Cannot sign for an other user with an oauth token`);
+  }
+
+  if (query.pubKey && !(await vaddr(query.pubKey))) {
+    throw new BadRequest('Invalid query parameter "pubKey"');
+  }
+
+  let _userId = null;
+  if (token.type === 'oauth') {
+    _userId = token.userId;
+  } else if (query.userId) {
+    _userId = query.userId;
+  }
+
+  const { signature, pubKey, userId, keyId, signedHash } = await sign(Object.assign({}, query, { userId: _userId }));
+
+  const identityURL = getServerConfig().identityURL;
+
+  event.register({
+    type: 'signature',
+    authorizedUserId: ctx.token.userId,
+    authorizedTokenId: ctx.token.type === 'api' ? ctx.token.id : null,
+    associatedTokenId: null,
+    associatedUserId: userId,
+    associatedKeyId: keyId,
+    data: { hash: signedHash, auth: ctx.token.type }
+  });
+
+  ctx.body = { pubKey, signedHash, signature, identityURL };
+}
 
 /**
  * @route: /sign
  * @swagger
  *  operationId: getSignature
  */
-router.get('/sign', ...signMiddleware);
+router.get('/sign', bearerAuth, getSignature);
 
 /**
  * Backward compatibility with woleet backend-kit
@@ -77,6 +82,6 @@ router.get('/sign', ...signMiddleware);
  * @swagger
  *  operationId: getSignature
  */
-router.get('/signature', ...signMiddleware);
+router.get('/signature', bearerAuth, getSignature);
 
 export { router };
