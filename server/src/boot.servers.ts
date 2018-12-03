@@ -1,6 +1,6 @@
 import * as log from 'loglevel';
 
-import { production, cookies, ports, server as config } from './config';
+import { cookies, ports, server as config } from './config';
 
 // API servers dependencies
 import * as Koa from 'koa';

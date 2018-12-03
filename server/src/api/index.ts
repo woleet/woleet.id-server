@@ -10,10 +10,11 @@ import { router as key } from './routers/key';
 
 import { router as sign } from './routers/sign';
 import { router as identity } from './routers/identity';
+import { router as discovery } from './routers/discovery';
 
 import { router as openid } from './routers/openid';
 
-import { user as userAuth, admin as adminAuth, session } from './authentication';
+import { user as userAuth, admin as adminAuth, session, bearerAuth } from './authentication';
 
 import { production } from '../config';
 
@@ -57,6 +58,7 @@ if (!production) {
   signatureRouter.use(cors({ credentials: true }));
 }
 signatureRouter.use(sign.routes());
+signatureRouter.use(discovery.routes());
 
 export {
   apiRouter as api,

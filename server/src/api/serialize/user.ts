@@ -1,11 +1,14 @@
 import { serializeIdentity } from './identity';
 
-export function serialiseUser(user: InternalUserObject): ApiUserObject {
-  const dates = {
-    createdAt: +user.createdAt || null,
-    updatedAt: +user.updatedAt || null,
-    lastLogin: +user.lastLogin || null
-  };
+export function serialiseUser(user: InternalUserObject, withDates = true): ApiUserObject {
+  let dates = null;
+  if (withDates) {
+    dates = {
+      createdAt: +user.createdAt || null,
+      updatedAt: +user.updatedAt || null,
+      lastLogin: +user.lastLogin || null
+    };
+  }
 
   const identity = serializeIdentity(user);
 

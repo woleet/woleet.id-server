@@ -55,7 +55,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
  */
 router.get('/list', async function (ctx) {
   const users = await getAllUsers();
-  ctx.body = users.map(serialiseUser);
+  ctx.body = users.map((user) => serialiseUser(user));
 });
 
 /**

@@ -79,6 +79,16 @@ export async function getOwner(id): Promise<InternalUserObject> {
   return key.get('user').toJSON();
 }
 
+export async function getOwnerByPubKey(pubKey): Promise<InternalUserObject> {
+  const key = await Key.getByPubKey(pubKey, null, true);
+
+  if (!key) {
+    throw new NotFoundKeyError();
+  }
+
+  return key.get('user').toJSON();
+}
+
 /**
  * TODO: move to secure module
  */
