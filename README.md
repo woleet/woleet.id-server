@@ -159,29 +159,34 @@ The identity URL is the public URL of the `/identity` endpoint.
 
 > WARNING: It is preferable to serve the identity URL on the default HTTPS port 443. To do this, simply set WOLEET_ID_SERVER_IDENTITY_PORT to 443.
 
-# Use an OpenID Connect provider
+# Use Woleet.ID Server with an OpenID Connect provider
  
-You can use an OpenID Connect provider with Woleet.D Server.
-In the "OpenID Connect configuration" panel: 
+Woleet.ID Server can use an OpenID Connect provider to authenticate users.
+When a new user connects to Woleet.ID Server using OpenID Connect, a user account is automatically created and a default key is generated.
+
+- Select the `Settings` menu
+- Go to the "OpenID Connect configuration" panel 
 - Check "Use OpenID Connect"
-- Set the `OpenID Connect URL` in order to match `<OpenID Connect URL>/.well-known/openid-configuration`.
-- Set the `Client Id` and `Client secret` as defined by your provider.
-- Set the `Authorization callback URL` as `https://<current web interface>/oauth/callback` (it should be automatically set).
+- Set the `OpenID Connect URL` in order to match `<OpenID Connect URL>/.well-known/openid-configuration`
+- Set the `Client ID` and `Client secret` as defined by your provider
+- Set the `Authorization callback URL` as `https://<current web interface>/oauth/callback` (it should be automatically set)
  
-> NOTE: The "Use OpenID Connect" checkbox will be automatically unchecked if the server cannot reach the OpenID provider.
+> NOTE: The "Use OpenID Connect" checkbox will be automatically unchecked if the server cannot reach the OpenID Connect URL
  
 # Use Woleet.ID Server as an OpenID Connect provider
  
-You can be uses as an OpenID provider.
-In the "OpenID Connect Provider configuration" panel: 
+Woleet.ID Server can be used as an OpenID Connect provider by 3rd party applications.
+
+- Select the `Settings` menu
+- Go to the "OpenID Connect Provider configuration" panel 
 - Check "Enable OpenID Connect Provider"
-- Set the `Issuer URL` in order to match `<OpenID Connect Provider URL>/.well-known/openid-configuration`.
-  > Note: that is only if you want to conform to the Discovery specification, the `Issuer URL` value itself does not need to resolve to anything.
-- Set the `Provider URL` as `https://<OpenID Provider>` (it should be automatically set).
-- Set the `Interface URL` as `https://<Current web interface>` (it should be automatically set).
+- Set the `Issuer URL` as `https://<OpenID Issuer URL>`
+  > Note: that is only if you want to conform to the Discovery specification, the `Issuer URL` value itself does not need to resolve to anything
+- Set the `Provider URL` as `https://<OpenID Provider URL>` (it should be automatically set)
+- Set the `Interface URL` as `https://<Web interface URL>` (it should be automatically set)
 - Define a client:
-  - Set the `Client Id` and `Client Secret` (it should be automatically set).
-  - Set a least one `Redirect URI`.
+  - Set the `Client Id` and `Client Secret` (it should be automatically set)
+  - Set a least one `Redirect URI`
  
 > NOTE: The OpenID Connect Provider will not be effectively enabled without at least one specified OpenID client.
 
