@@ -35,11 +35,11 @@ import java.util.UUID;
 public class KeyGet extends KeyBase {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
-  private UUID id;
+  private UUID id = null;
 
   public static final String SERIALIZED_NAME_PUB_KEY = "pubKey";
   @SerializedName(SERIALIZED_NAME_PUB_KEY)
-  private String pubKey;
+  private String pubKey = null;
 
   public static final String SERIALIZED_NAME_TYPE = "type";
   @SerializedName(SERIALIZED_NAME_TYPE)
@@ -47,19 +47,19 @@ public class KeyGet extends KeyBase {
 
   public static final String SERIALIZED_NAME_CREATED_AT = "createdAt";
   @SerializedName(SERIALIZED_NAME_CREATED_AT)
-  private Long createdAt;
+  private Long createdAt = null;
 
   public static final String SERIALIZED_NAME_UPDATED_AT = "updatedAt";
   @SerializedName(SERIALIZED_NAME_UPDATED_AT)
-  private Long updatedAt;
+  private Long updatedAt = null;
 
   public static final String SERIALIZED_NAME_DELETED_AT = "deletedAt";
   @SerializedName(SERIALIZED_NAME_DELETED_AT)
-  private Long deletedAt;
+  private Long deletedAt = null;
 
   public static final String SERIALIZED_NAME_LAST_USED = "lastUsed";
   @SerializedName(SERIALIZED_NAME_LAST_USED)
-  private Long lastUsed;
+  private Long lastUsed = null;
 
    /**
    * Key identifier (allocated by the platform).

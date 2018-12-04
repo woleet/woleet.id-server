@@ -33,13 +33,17 @@ import java.util.UUID;
  */
 
 public class UserBase {
+  public static final String SERIALIZED_NAME_ID = "id";
+  @SerializedName(SERIALIZED_NAME_ID)
+  private UUID id = null;
+
   public static final String SERIALIZED_NAME_EMAIL = "email";
   @SerializedName(SERIALIZED_NAME_EMAIL)
-  private String email;
+  private String email = null;
 
   public static final String SERIALIZED_NAME_USERNAME = "username";
   @SerializedName(SERIALIZED_NAME_USERNAME)
-  private String username;
+  private String username = null;
 
   public static final String SERIALIZED_NAME_STATUS = "status";
   @SerializedName(SERIALIZED_NAME_STATUS)
@@ -55,7 +59,16 @@ public class UserBase {
 
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
-  private UUID defaultKeyId;
+  private UUID defaultKeyId = null;
+
+   /**
+   * User identifier (allocated by the server).
+   * @return id
+  **/
+  @ApiModelProperty(example = "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3", value = "User identifier (allocated by the server).")
+  public UUID getId() {
+    return id;
+  }
 
   public UserBase email(String email) {
     this.email = email;
@@ -175,7 +188,8 @@ public class UserBase {
       return false;
     }
     UserBase userBase = (UserBase) o;
-    return Objects.equals(this.email, userBase.email) &&
+    return Objects.equals(this.id, userBase.id) &&
+        Objects.equals(this.email, userBase.email) &&
         Objects.equals(this.username, userBase.username) &&
         Objects.equals(this.status, userBase.status) &&
         Objects.equals(this.role, userBase.role) &&
@@ -185,7 +199,7 @@ public class UserBase {
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, username, status, role, identity, defaultKeyId);
+    return Objects.hash(id, email, username, status, role, identity, defaultKeyId);
   }
 
 
@@ -194,6 +208,7 @@ public class UserBase {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserBase {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");

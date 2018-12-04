@@ -32,23 +32,23 @@ import java.io.IOException;
 public class Identity {
   public static final String SERIALIZED_NAME_COMMON_NAME = "commonName";
   @SerializedName(SERIALIZED_NAME_COMMON_NAME)
-  private String commonName;
+  private String commonName = null;
 
   public static final String SERIALIZED_NAME_ORGANIZATION = "organization";
   @SerializedName(SERIALIZED_NAME_ORGANIZATION)
-  private String organization;
+  private String organization = null;
 
   public static final String SERIALIZED_NAME_ORGANIZATIONAL_UNIT = "organizationalUnit";
   @SerializedName(SERIALIZED_NAME_ORGANIZATIONAL_UNIT)
-  private String organizationalUnit;
+  private String organizationalUnit = null;
 
   public static final String SERIALIZED_NAME_LOCALITY = "locality";
   @SerializedName(SERIALIZED_NAME_LOCALITY)
-  private String locality;
+  private String locality = null;
 
   public static final String SERIALIZED_NAME_COUNTRY = "country";
   @SerializedName(SERIALIZED_NAME_COUNTRY)
-  private String country;
+  private String country = null;
 
   public Identity commonName(String commonName) {
     this.commonName = commonName;

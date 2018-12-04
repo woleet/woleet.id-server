@@ -32,15 +32,15 @@ import java.util.UUID;
 public class ServerConfig {
   public static final String SERIALIZED_NAME_IDENTITY_U_R_L = "identityURL";
   @SerializedName(SERIALIZED_NAME_IDENTITY_U_R_L)
-  private String identityURL;
+  private String identityURL = null;
 
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
-  private UUID defaultKeyId;
+  private UUID defaultKeyId = null;
 
   public static final String SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY = "fallbackOnDefaultKey";
   @SerializedName(SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY)
-  private Boolean fallbackOnDefaultKey;
+  private Boolean fallbackOnDefaultKey = null;
 
   public ServerConfig identityURL(String identityURL) {
     this.identityURL = identityURL;

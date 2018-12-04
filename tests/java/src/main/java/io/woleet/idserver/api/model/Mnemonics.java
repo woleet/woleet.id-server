@@ -31,7 +31,7 @@ import java.io.IOException;
 public class Mnemonics {
   public static final String SERIALIZED_NAME_PHRASE = "phrase";
   @SerializedName(SERIALIZED_NAME_PHRASE)
-  private String phrase;
+  private String phrase = null;
 
   public Mnemonics phrase(String phrase) {
     this.phrase = phrase;

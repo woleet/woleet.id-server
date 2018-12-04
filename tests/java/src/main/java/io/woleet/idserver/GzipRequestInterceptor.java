@@ -27,8 +27,7 @@ import java.io.IOException;
  * Taken from https://github.com/square/okhttp/issues/350
  */
 class GzipRequestInterceptor implements Interceptor {
-    @Override
-    public Response intercept(Chain chain) throws IOException {
+    @Override public Response intercept(Chain chain) throws IOException {
         Request originalRequest = chain.request();
         if (originalRequest.body() == null || originalRequest.header("Content-Encoding") != null) {
             return chain.proceed(originalRequest);
@@ -64,18 +63,15 @@ class GzipRequestInterceptor implements Interceptor {
 
     private RequestBody gzip(final RequestBody body) {
         return new RequestBody() {
-            @Override
-            public MediaType contentType() {
+            @Override public MediaType contentType() {
                 return body.contentType();
             }
 
-            @Override
-            public long contentLength() {
+            @Override public long contentLength() {
                 return -1; // We don't know the compressed length in advance!
             }
 
-            @Override
-            public void writeTo(BufferedSink sink) throws IOException {
+            @Override public void writeTo(BufferedSink sink) throws IOException {
                 BufferedSink gzipSink = Okio.buffer(new GzipSink(sink));
                 body.writeTo(gzipSink);
                 gzipSink.close();

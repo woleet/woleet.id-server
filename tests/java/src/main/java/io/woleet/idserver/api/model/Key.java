@@ -32,11 +32,11 @@ import java.io.IOException;
 public class Key {
   public static final String SERIALIZED_NAME_NAME = "name";
   @SerializedName(SERIALIZED_NAME_NAME)
-  private String name;
+  private String name = null;
 
   public static final String SERIALIZED_NAME_PUB_KEY = "pubKey";
   @SerializedName(SERIALIZED_NAME_PUB_KEY)
-  private String pubKey;
+  private String pubKey = null;
 
   public Key name(String name) {
     this.name = name;

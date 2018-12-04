@@ -31,11 +31,11 @@ import java.io.IOException;
 public class APIErrorError {
   public static final String SERIALIZED_NAME_CODE = "code";
   @SerializedName(SERIALIZED_NAME_CODE)
-  private Integer code;
+  private Integer code = null;
 
   public static final String SERIALIZED_NAME_MESSAGE = "message";
   @SerializedName(SERIALIZED_NAME_MESSAGE)
-  private String message;
+  private String message = null;
 
   public APIErrorError code(Integer code) {
     this.code = code;
@@ -46,7 +46,7 @@ public class APIErrorError {
    * Get code
    * @return code
   **/
-  @ApiModelProperty(example = "418", required = true, value = "")
+  @ApiModelProperty(example = "418", value = "")
   public Integer getCode() {
     return code;
   }
@@ -64,7 +64,7 @@ public class APIErrorError {
    * Get message
    * @return message
   **/
-  @ApiModelProperty(example = "I'm a teapot", required = true, value = "")
+  @ApiModelProperty(example = "I'm a teapot", value = "")
   public String getMessage() {
     return message;
   }
