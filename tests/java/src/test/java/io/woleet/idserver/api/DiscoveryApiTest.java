@@ -13,75 +13,126 @@
 
 package io.woleet.idserver.api;
 
+import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
-import io.woleet.idserver.api.model.APIError;
-import io.woleet.idserver.api.model.KeyDiscoArray;
-import java.util.UUID;
-import io.woleet.idserver.api.model.UserDisco;
-import io.woleet.idserver.api.model.UserDiscoArray;
-import org.junit.Test;
-import org.junit.Ignore;
+import io.woleet.idserver.Config;
+import io.woleet.idserver.api.model.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * API tests for DiscoveryApi
  */
-@Ignore
+
 public class DiscoveryApiTest {
 
-    private final DiscoveryApi api = new DiscoveryApi();
+    // Check that SIGN base path is defined in the environment
+    public static final String WOLEET_ID_SERVER_SIGN_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGN_BASEPATH");
+    public static final String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
 
-    
+    static {
+        assertFalse("WOLEET_ID_SERVER_SIGN_BASEPATH must be defined", WOLEET_ID_SERVER_SIGN_BASEPATH.isEmpty());
+        assertFalse("WOLEET_ID_SERVER_API_BASEPATH must be defined", WOLEET_ID_SERVER_API_BASEPATH.isEmpty());
+    }
+
+    private UserGet user;
+
+    private DiscoveryApi discoverApi;
+
+    private ApiTokenApi apiTokenApi;
+    private APITokenGet apiTokenGet;
+
+    private KeyApi keyApi;
+
+    @Before
+    public void setUp() throws Exception {
+        // Start form a clean state
+        tearDown();
+
+        user = Config.createTestUser();
+        keyApi = new KeyApi(Config.getAdminAuthApiClient().setBasePath(WOLEET_ID_SERVER_API_BASEPATH));
+
+        // Create an helper API with API token authentication
+        apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
+        apiTokenGet = apiTokenApi.createAPIToken((APITokenPost) new APITokenPost().name("test"));
+
+        ApiClient apiClient = Config.getNoAuthApiClient();
+        apiClient.setBasePath(WOLEET_ID_SERVER_SIGN_BASEPATH);
+        apiClient.addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue());
+        discoverApi = new DiscoveryApi(apiClient);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        Config.deleteAllTestUsers();
+
+        // This code is called before setUp() is called, so API token can be null
+        if (apiTokenGet != null)
+            apiTokenApi.deleteAPIToken(apiTokenGet.getId());
+    }
+
     /**
      * Get the user associated to a public key.
+     * <p>
+     * Use this endpoint to get the user owning a given public key.
      *
-     * Use this endpoint to get the user owning a given public key. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
+     * @throws ApiException if the Api call fails
      */
     @Test
     public void discoverUserByPubKeyTest() throws ApiException {
-        String pubKey = null;
-        UserDisco response = api.discoverUserByPubKey(pubKey);
-
-        // TODO: test validations
+        String key = keyApi.getKeyById(user.getDefaultKeyId()).getPubKey();
+        UserDisco response = discoverApi.discoverUserByPubKey(key);
+        assertEquals(user.getId(), response.getId());
     }
-    
+
     /**
      * Get all public keys of a user.
+     * <p>
+     * Use this endpoint to get all public keys owned by a given user.
      *
-     * Use this endpoint to get all public keys owned by a given user. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
+     * @throws ApiException if the Api call fails
      */
     @Test
     public void discoverUserKeysTest() throws ApiException {
-        UUID userId = null;
-        KeyDiscoArray response = api.discoverUserKeys(userId);
+        String pubKey = keyApi.getKeyById(user.getDefaultKeyId()).getPubKey();
+        KeyDiscoArray response = discoverApi.discoverUserKeys(user.getId());
 
-        // TODO: test validations
+        for (KeyDisco key : response) {
+            if (key.getPubKey().equals(pubKey)) {
+                return;
+            }
+        }
+
+        assertTrue("Public key not found in key list", false);
     }
-    
+
     /**
      * Get all users matching a search string.
+     * <p>
+     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; or &#x60;x500OrganizationalUnit&#x60; contains the search string.
      *
-     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; or &#x60;x500OrganizationalUnit&#x60; contains the search string. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
+     * @throws ApiException if the Api call fails
      */
     @Test
     public void discoverUsersTest() throws ApiException {
-        String search = null;
-        UserDiscoArray response = api.discoverUsers(search);
+        String search = "test";
+        UserDiscoArray response = discoverApi.discoverUsers(search);
 
-        // TODO: test validations
+        System.out.println(response.toString());
+
+        for (UserDisco u : response) {
+            if (u.getId().equals(user.getId())) {
+                return;
+            }
+        }
+
+        assertTrue("User not found in user list", false);
     }
-    
+
 }

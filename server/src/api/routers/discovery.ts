@@ -1,10 +1,11 @@
 import { validate } from '../schemas';
 import * as Router from 'koa-router';
+import { BadRequest } from 'http-errors';
 
 import { getOwnerByPubKey, getAllKeysOfUser } from '../../controllers/key';
 import { serialiseKey } from '../serialize/key';
 import { serialiseUser } from '../serialize/user';
-import { getAllUsers } from '../../controllers/user';
+import { searchAllUsers } from '../../controllers/user';
 import { bearerAuth } from '../authentication';
 
 const vuid = validate.param('userId', 'uuid');
@@ -17,7 +18,7 @@ const vaddr = validate.param('pubKey', 'address');
  *  tags: [discovery]
  */
 
-const router = new Router({ prefix: '/discovery' });
+const router = new Router({ prefix: '/discover' });
 
 router.use(bearerAuth);
 
@@ -49,7 +50,13 @@ router.get('/user/:pubKey', vaddr, async function (ctx) {
  *  operationId: discoverUsers
  */
 router.get('/users', async function (ctx) {
-  const users = await getAllUsers();
+  const { search } = ctx.query;
+
+  if (!search) {
+    throw new BadRequest('Missing "search" query parameter');
+  }
+
+  const users = await searchAllUsers(search);
   ctx.body = users.map((user) => serialiseUser(user, false));
 });
 

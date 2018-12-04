@@ -214,8 +214,6 @@ public class UserApiTest extends CRUDApiTest {
         assertNotNull(user.getId());
         assertNotNull(user.getCreatedAt());
         assertTrue(user.getCreatedAt() <= user.getUpdatedAt());
-        assertNull(user.getDeletedAt());
-
         assertNull(user.getLastLogin());
         assertNotNull(user.getIdentity().getCommonName());
         assertNotNull(user.getDefaultKeyId());

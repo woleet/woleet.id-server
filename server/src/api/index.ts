@@ -14,7 +14,7 @@ import { router as discovery } from './routers/discovery';
 
 import { router as openid } from './routers/openid';
 
-import { user as userAuth, admin as adminAuth, session, bearerAuth } from './authentication';
+import { user as userAuth, admin as adminAuth, session } from './authentication';
 
 import { production } from '../config';
 

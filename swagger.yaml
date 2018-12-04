@@ -1211,7 +1211,7 @@ components:
         $ref: '#/components/schemas/KeyGet'
     KeyDisco:
       allOf:
-        - $ref: '#/components/schemas/Key'
+        - $ref: '#/components/schemas/KeyGet'
     KeyDiscoArray:
       type: array
       items:
