@@ -2,9 +2,9 @@ import { validate } from '../schemas';
 import * as Router from 'koa-router';
 
 import { createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, updateKey, getOwner } from '../../controllers/key';
-import { serialiseKey } from '../serialize/key';
+import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
-import { serialiseUser } from '../serialize/user';
+import { serializeUser } from '../serialize/user';
 
 const vkid = validate.param('id', 'uuid');
 const vuid = validate.param('userId', 'uuid');
@@ -38,7 +38,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
     data: key
   });
 
-  ctx.body = serialiseKey(created);
+  ctx.body = serializeKey(created);
 });
 
 /**
@@ -49,7 +49,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
 router.get('/user/:userId/key/list', vuid, async function (ctx) {
   const { userId } = ctx.params;
   const keys = await getAllKeysOfUser(userId);
-  ctx.body = keys.map(serialiseKey);
+  ctx.body = keys.map(serializeKey);
 });
 
 /**
@@ -71,7 +71,7 @@ router.get('/key/:id/export', vkid, async function (ctx) {
 router.get('/key/:id/owner', vkid, async function (ctx) {
   const { id } = ctx.params;
   const user = await getOwner(id);
-  ctx.body = serialiseUser(user);
+  ctx.body = serializeUser(user);
 });
 
 /**
@@ -82,7 +82,7 @@ router.get('/key/:id/owner', vkid, async function (ctx) {
 router.get('/key/:id', vkid, async function (ctx) {
   const { id } = ctx.params;
   const apiToken = await getKeyById(id);
-  ctx.body = serialiseKey(apiToken);
+  ctx.body = serializeKey(apiToken);
 });
 
 /**
@@ -105,7 +105,7 @@ router.put('/key/:id', vkid, validate.body('updateKey'), async function (ctx) {
     data: update
   });
 
-  ctx.body = serialiseKey(key);
+  ctx.body = serializeKey(key);
 });
 
 /**
@@ -127,7 +127,7 @@ router.delete('/key/:id', vkid, async function (ctx) {
     data: null
   });
 
-  ctx.body = serialiseKey(key);
+  ctx.body = serializeKey(key);
 });
 
 export { router };

@@ -39,7 +39,7 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
   }
 
   /**
-   * @description Returns a key by it's public key (bitcoin address)
+   * @description Returns a key by its public key (bitcoin address)
    * @param publicKey: the requested public key
    * @param userId: optional parameter for extra check
    */

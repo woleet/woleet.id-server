@@ -17,7 +17,6 @@ import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,11 +32,11 @@ import static org.junit.Assert.assertTrue;
 public class DiscoveryApiTest {
 
     // Check that SIGN base path is defined in the environment
-    public static final String WOLEET_ID_SERVER_SIGN_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGN_BASEPATH");
+    public static final String WOLEET_ID_SERVER_SIGNATURE_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGNATURE_BASEPATH");
     public static final String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
 
     static {
-        assertFalse("WOLEET_ID_SERVER_SIGN_BASEPATH must be defined", WOLEET_ID_SERVER_SIGN_BASEPATH.isEmpty());
+        assertFalse("WOLEET_ID_SERVER_SIGNATURE_BASEPATH must be defined", WOLEET_ID_SERVER_SIGNATURE_BASEPATH.isEmpty());
         assertFalse("WOLEET_ID_SERVER_API_BASEPATH must be defined", WOLEET_ID_SERVER_API_BASEPATH.isEmpty());
     }
 
@@ -63,7 +62,7 @@ public class DiscoveryApiTest {
         apiTokenGet = apiTokenApi.createAPIToken((APITokenPost) new APITokenPost().name("test"));
 
         ApiClient apiClient = Config.getNoAuthApiClient();
-        apiClient.setBasePath(WOLEET_ID_SERVER_SIGN_BASEPATH);
+        apiClient.setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
         apiClient.addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue());
         discoverApi = new DiscoveryApi(apiClient);
     }

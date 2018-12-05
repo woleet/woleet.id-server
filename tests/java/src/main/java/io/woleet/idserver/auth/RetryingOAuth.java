@@ -4,7 +4,6 @@ import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.request.OAuthBearerClientRequest;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
@@ -51,7 +50,7 @@ public class RetryingOAuth extends OAuth implements Interceptor {
     }
 
     public void setFlow(OAuthFlow flow) {
-        switch(flow) {
+        switch (flow) {
             case accessCode:
                 tokenRequestBuilder.setGrantType(GrantType.AUTHORIZATION_CODE);
                 break;
@@ -114,8 +113,8 @@ public class RetryingOAuth extends OAuth implements Interceptor {
             // 401/403 response codes most likely indicate an expired access token, unless it happens two times in a row
             if (
                     response != null &&
-                            (   response.code() == HttpURLConnection.HTTP_UNAUTHORIZED ||
-                                    response.code() == HttpURLConnection.HTTP_FORBIDDEN     ) &&
+                            (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED ||
+                                    response.code() == HttpURLConnection.HTTP_FORBIDDEN) &&
                             updateTokenAndRetryOnAuthorizationFailure
             ) {
                 try {
@@ -129,8 +128,7 @@ public class RetryingOAuth extends OAuth implements Interceptor {
                 }
             }
             return response;
-        }
-        else {
+        } else {
             return chain.proceed(chain.request());
         }
     }

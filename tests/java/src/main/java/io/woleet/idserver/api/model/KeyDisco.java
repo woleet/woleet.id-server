@@ -15,13 +15,16 @@ package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import io.woleet.idserver.api.model.Key;
+import io.woleet.idserver.api.model.KeyGet;
+import io.woleet.idserver.api.model.KeyStatusEnum;
+import io.woleet.idserver.api.model.KeyTypeEnum;
+import java.util.UUID;
 
 /**
  * KeyDisco
  */
 
-public class KeyDisco extends Key {
+public class KeyDisco extends KeyGet {
 
   @Override
   public boolean equals(java.lang.Object o) {

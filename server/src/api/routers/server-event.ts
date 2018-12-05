@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 
 import { validate } from '../schemas';
 import { getServerEventListByType, getAllServerEvents, getServerEventById } from '../../controllers/server-event';
-import { serialiseServerEvent } from '../serialize/server-event';
+import { serializeServerEvent } from '../serialize/server-event';
 import { events as eventsConfig } from '../../config';
 
 const vid = validate.param('id', 'uuid');
@@ -34,7 +34,7 @@ router.get('/list', async function (ctx) {
   const ops = { };
 
   const events = await (type ? getServerEventListByType(type, ops) : getAllServerEvents(ops));
-  ctx.body = events.map(serialiseServerEvent);
+  ctx.body = events.map(serializeServerEvent);
 });
 
 /**
@@ -45,7 +45,7 @@ router.get('/list', async function (ctx) {
 router.get('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const event = await getServerEventById(id);
-  ctx.body = serialiseServerEvent(event);
+  ctx.body = serializeServerEvent(event);
 });
 
 export { router };

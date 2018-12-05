@@ -8,7 +8,7 @@ import { Cache } from 'lru-cache';
 import * as LRU from 'lru-cache';
 import * as uuid from 'uuid/v4';
 import { randomBytes } from 'crypto';
-import { serialiseUserDTO } from '../serialize/userDTO';
+import { serializeUserDTO } from '../serialize/userDTO';
 import * as log from 'loglevel';
 import { cookies } from '../../config';
 import { updateUser } from '../../controllers/user';
@@ -110,11 +110,11 @@ router.get('/callback', async function (ctx) {
       user.x500CommonName = info.name;
     }
 
-    return ctx.body = { user: serialiseUserDTO(session.user) };
+    return ctx.body = { user: serializeUserDTO(session.user) };
   } else {
     const aio = await createOAuthUser({ email: info.email, identity: { commonName: info.name } });
     ctx.cookies.set('session', aio.token, cookies.options);
-    return ctx.body = { user: serialiseUserDTO(aio.user) };
+    return ctx.body = { user: serializeUserDTO(aio.user) };
   }
 });
 

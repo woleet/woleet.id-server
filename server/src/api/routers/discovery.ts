@@ -3,8 +3,8 @@ import * as Router from 'koa-router';
 import { BadRequest } from 'http-errors';
 
 import { getOwnerByPubKey, getAllKeysOfUser } from '../../controllers/key';
-import { serialiseKey } from '../serialize/key';
-import { serialiseUser } from '../serialize/user';
+import { serializeKey } from '../serialize/key';
+import { serializeUser } from '../serialize/user';
 import { searchAllUsers } from '../../controllers/user';
 import { bearerAuth } from '../authentication';
 
@@ -30,7 +30,7 @@ router.use(bearerAuth);
 router.get('/keys/:userId', vuid, async function (ctx) {
   const { userId } = ctx.params;
   const keys = await getAllKeysOfUser(userId);
-  ctx.body = keys.map(serialiseKey);
+  ctx.body = keys.map(serializeKey);
 });
 
 /**
@@ -41,7 +41,7 @@ router.get('/keys/:userId', vuid, async function (ctx) {
 router.get('/user/:pubKey', vaddr, async function (ctx) {
   const { pubKey } = ctx.params;
   const user = await getOwnerByPubKey(pubKey);
-  ctx.body = serialiseUser(user, false);
+  ctx.body = serializeUser(user, false);
 });
 
 /**
@@ -57,7 +57,7 @@ router.get('/users', async function (ctx) {
   }
 
   const users = await searchAllUsers(search);
-  ctx.body = users.map((user) => serialiseUser(user, false));
+  ctx.body = users.map((user) => serializeUser(user, false));
 });
 
 export { router };

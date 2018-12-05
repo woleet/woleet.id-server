@@ -4,7 +4,7 @@ import * as auth from 'basic-auth';
 import * as Router from 'koa-router';
 
 import { createSession, delSession } from '../../controllers/authentication';
-import { serialiseUserDTO } from '../serialize/userDTO';
+import { serializeUserDTO } from '../serialize/userDTO';
 import { store as event } from '../../controllers/server-event';
 import { cookies } from '../../config';
 
@@ -46,7 +46,7 @@ router.get('/login', async function (ctx) {
   });
 
   ctx.cookies.set('session', authorization.token, cookies.options);
-  ctx.body = { user: serialiseUserDTO(authorization.user) };
+  ctx.body = { user: serializeUserDTO(authorization.user) };
 });
 
 /**

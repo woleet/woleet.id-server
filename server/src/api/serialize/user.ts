@@ -1,6 +1,6 @@
 import { serializeIdentity } from './identity';
 
-export function serialiseUser(user: InternalUserObject, withDates = true): ApiUserObject {
+export function serializeUser(user: InternalUserObject, withDates = true): ApiUserObject {
   let dates = null;
   if (withDates) {
     dates = {
