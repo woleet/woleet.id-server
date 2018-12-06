@@ -1,6 +1,7 @@
 import { FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
 import * as traverse from 'traverse';
 import { BehaviorSubject } from 'rxjs';
+import * as timestring from 'timestring';
 
 export class TrackById {
 
@@ -33,6 +34,25 @@ export class Lock {
   asObservable() {
     return this._lock$.asObservable();
   }
+}
+
+export function timeStringValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+
+  if (!str) {
+    return;
+  }
+
+  try {
+    // tslint:disable-next-line:no-unused-expression
+    if (!timestring(str)) {
+      return ({ timestring: true });
+    }
+  } catch (err) {
+    return ({ timestring: true });
+  }
+
+  return null;
 }
 
 export function urlValidator(control: AbstractControl): ValidationErrors | null {
@@ -125,6 +145,8 @@ export class ErrorMessageProvider {
         return `Must contain only ascii characters`;
       case 'startsWithALetter':
         return `Must start with a letter`;
+      case 'timestring':
+        return `Must be a valid timestring (e.g. 3w 4d 12h)`;
       default:
         return '';
     }

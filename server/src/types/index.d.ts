@@ -228,6 +228,7 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+    keyExpirationOffset?: string;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -247,6 +248,7 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+    keyExpirationOffset?: string;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -266,6 +268,7 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+    keyExpirationOffset?: string;
   }
 
   /* OIDC Provider */

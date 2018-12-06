@@ -25,6 +25,7 @@ interface ApiServerConfig {
   OIDCPIssuerURL: string | null;
   OIDCPClients: ApiOIDCPClient[] | null;
   enableOIDCP: boolean;
+  keyExpirationOffset: string;
 }
 
 interface ApiServerConfigUpdate {
@@ -44,4 +45,5 @@ interface ApiServerConfigUpdate {
   OIDCPIssuerURL?: string;
   OIDCPClients?: ApiOIDCPClient[];
   enableOIDCP?: boolean;
+  keyExpirationOffset: string;
 }

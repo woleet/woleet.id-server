@@ -68,6 +68,7 @@ import { Http, HttpModule } from '@angular/http';
 import { ConfigOpenIDComponent } from '@components/parts/config.openid';
 import { ConfigOIDCPComponent } from '@components/parts/config.oidcp';
 import { ConfigOIDCPClientComponent } from '@components/parts/config.oidcp-client';
+import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 
 export function startupServiceFactory(startupService: AppConfigService): Function {
   return () => startupService.load();
@@ -92,6 +93,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ConfigOpenIDComponent,
     ConfigOIDCPComponent,
     ConfigOIDCPClientComponent,
+    ConfigKeyExpirationComponent,
     UserCardComponent,
     KeyCardComponent,
     APITokenCardComponent,
