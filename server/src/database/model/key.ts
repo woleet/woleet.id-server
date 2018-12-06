@@ -20,6 +20,7 @@ const KeyModel = {
   publicKey: { type: STRING, unique: true, allowNull: false },
   compressed: { type: BOOLEAN },
   lastUsed: { type: DATE, defaultValue: null },
+  expiration: { type: DATE },
   userId: { type: UUID }
 };
 

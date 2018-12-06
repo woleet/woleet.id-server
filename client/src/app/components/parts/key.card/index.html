@@ -13,6 +13,9 @@
           <div class="text-gray text-slim">
             <span>Created&nbsp;at</span>&nbsp;<span>{{ key.createdAt | date }}</span>
           </div>
+          <div class="text-gray text-slim" *ngIf="key.expiration">
+            <span>Expires&nbsp;on</span>&nbsp;<span>{{ key.expiration | date }}</span>
+          </div>
         </div>
       </div>
     </div>

@@ -93,6 +93,7 @@ declare global {
     name: string;
     type: KeyTypeEnum;
     status: KeyStatusEnum;
+    expiration: number;
 
     /** Hexadecimal represention of the mnemonic phrase */
     mnemonicEntropy: string;
@@ -111,6 +112,7 @@ declare global {
     name: string;
     type?: KeyTypeEnum;
     status?: KeyStatusEnum;
+    expiration?: number;
 
     /** Hexadecimal represention of the mnemonic phrase */
     mnemonicEntropy: string;

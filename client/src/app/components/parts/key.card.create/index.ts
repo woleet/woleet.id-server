@@ -4,6 +4,18 @@ import { KeyService } from '@services/key';
 import { ErrorMessageProvider } from '@components/util';
 import { UserService } from '@services/user';
 
+function nextYear() {
+  const d = new Date();
+  return new Date(d.getFullYear() + 1, d.getMonth(), d.getDate());
+}
+
+function emptyGMT(date) {
+  if (!date) {
+    return;
+  }
+  return new Date(date.valueOf() - date.getTimezoneOffset() * 60000);
+}
+
 @Component({
   selector: 'key-card-create',
   templateUrl: './index.html'
@@ -23,6 +35,10 @@ export class KeyCreateCardComponent extends ErrorMessageProvider {
 
   keyName = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
 
+  startDate = nextYear();
+
+  expiration = new FormControl(null, []);
+
   setAsDefault = false;
 
   constructor(private keyService: KeyService, private userService: UserService) {
@@ -32,8 +48,9 @@ export class KeyCreateCardComponent extends ErrorMessageProvider {
   async createKey() {
     this.formLocked = true;
     const name = this.keyName.value;
+    const expiration = +emptyGMT(this.expiration.value);
 
-    const newKey = await this.keyService.create(this.userId, { name });
+    const newKey = await this.keyService.create(this.userId, { name, expiration });
 
     if (this.setAsDefault) {
       await this.userService.update(this.userId, { defaultKeyId: newKey.id });
