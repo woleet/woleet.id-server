@@ -3,6 +3,9 @@ import { FormControl, Validators } from '@angular/forms';
 import { KeyService } from '@services/key';
 import { ErrorMessageProvider, nextYear } from '@components/util';
 import { UserService } from '@services/user';
+import { ServerConfigService } from '@services/server-config';
+import * as timestring from 'timestring';
+import * as log from 'loglevel';
 
 @Component({
   selector: 'key-card-create',
@@ -29,8 +32,19 @@ export class KeyCreateCardComponent extends ErrorMessageProvider {
 
   setAsDefault = false;
 
-  constructor(private keyService: KeyService, private userService: UserService) {
+  constructor(private keyService: KeyService, private userService: UserService, configService: ServerConfigService) {
     super();
+    configService.getConfig().subscribe((config) => {
+      if (!config || !config.keyExpirationOffset) {
+        return;
+      }
+
+      const now = +new Date;
+
+      log.debug({ now, offset: config.keyExpirationOffset });
+
+      this.expiration.setValue(new Date(timestring(config.keyExpirationOffset) * 1000 + now));
+    });
   }
 
   async createKey() {
