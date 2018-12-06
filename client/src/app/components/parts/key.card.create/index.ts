@@ -1,20 +1,8 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { KeyService } from '@services/key';
-import { ErrorMessageProvider } from '@components/util';
+import { ErrorMessageProvider, nextYear } from '@components/util';
 import { UserService } from '@services/user';
-
-function nextYear() {
-  const d = new Date();
-  return new Date(d.getFullYear() + 1, d.getMonth(), d.getDate());
-}
-
-function emptyGMT(date) {
-  if (!date) {
-    return;
-  }
-  return new Date(date.valueOf() - date.getTimezoneOffset() * 60000);
-}
 
 @Component({
   selector: 'key-card-create',
@@ -48,7 +36,7 @@ export class KeyCreateCardComponent extends ErrorMessageProvider {
   async createKey() {
     this.formLocked = true;
     const name = this.keyName.value;
-    const expiration = +emptyGMT(this.expiration.value);
+    const expiration = +this.expiration.value || undefined;
 
     const newKey = await this.keyService.create(this.userId, { name, expiration });
 

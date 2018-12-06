@@ -153,3 +153,8 @@ export function replaceInObject(obj, target, repl) {
     }
   });
 }
+
+export function nextYear() {
+  const d = new Date();
+  return new Date(d.getFullYear() + 1, d.getMonth(), d.getDate());
+}

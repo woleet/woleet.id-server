@@ -34,4 +34,5 @@ interface ApiPostKeyObject extends KeyObject {
 interface ApiPutKeyObject extends KeyObject {
   name?: string;
   status?: KeyStatusEnum;
+  expiration?: number;
 }

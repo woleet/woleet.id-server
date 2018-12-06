@@ -44,10 +44,21 @@
         <mat-error *ngIf="keyName.invalid">{{ getErrorMessage(keyName) }}</mat-error>
       </mat-form-field>
     </div>
-    <div>
-      <mat-checkbox matInput placeholder="Set as default key" [checked]="setAsDefault" (change)="setAsDefault=!setAsDefault">
-        Set as default
-      </mat-checkbox>
+    <div fxLayout="row" fxLayoutAlign="space-between start">
+      <div fxLayout="column">
+        <br>
+        <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="setAsDefault">
+          Set as default
+        </mat-checkbox>
+      </div>
+      <div fxLayout="column">
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" [formControl]="expiration" placeholder="Expiration date" disabled>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker startView="year" [startAt]="startDate" disabled="false"></mat-datepicker>
+          <mat-error *ngIf="expiration.invalid">{{ getErrorMessage(expiration) }}</mat-error>
+        </mat-form-field>
+      </div>
     </div>
   </mat-card-content>
   <mat-card-actions *ngIf="editMode">
