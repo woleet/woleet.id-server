@@ -41,7 +41,7 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
   }
 
   async find(search: string, opt: ListOptions = {}): Promise<SequelizeUserObject[]> {
-    const query = { [Op.iLike]: search + '%' };
+    const query = { [Op.iLike]: '%' + search + '%' };
     return this.model.findAll({
       where: {
         [Op.or]: [
