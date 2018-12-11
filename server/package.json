@@ -1,7 +1,7 @@
 {
   "name": "server",
-  "version": "0.1.0",
-  "description": "This is a repository to go with my article on creating an Express web application using TypeScript 2.",
+  "version": "0.3.0",
+  "description": "Woleet.ID Server Node.js server",
   "main": "index.js",
   "scripts": {
     "lint": "npx tslint src/**/*.ts",
