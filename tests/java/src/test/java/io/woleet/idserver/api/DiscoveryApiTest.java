@@ -21,6 +21,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.UUID;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -77,7 +79,7 @@ public class DiscoveryApiTest {
     }
 
     /**
-     * Get the user associated to a public key.
+     * Get the user associated to a unknown public key.
      * <p>
      * Use this endpoint to get the user owning a given public key.
      *
@@ -88,6 +90,20 @@ public class DiscoveryApiTest {
         String key = keyApi.getKeyById(user.getDefaultKeyId()).getPubKey();
         UserDisco response = discoverApi.discoverUserByPubKey(key);
         assertEquals(user.getId(), response.getId());
+    }
+
+    /**
+     * Get the user associated to an unknown public key must return 404.
+     */
+    @Test
+    public void discoverUnknownUserByPubKeyTest() {
+        try {
+            discoverApi.discoverUserByPubKey("3Beer3irc1vgs76ENA4coqsEQpGZeM5CTd");
+        } catch (ApiException e) {
+            assertEquals("API should throw a 404 exception", 404, e.getCode());
+            return;
+        }
+        assertTrue("API should throw an exception when an unknown user is requested", false);
     }
 
     /**
@@ -109,6 +125,20 @@ public class DiscoveryApiTest {
         }
 
         assertTrue("Public key not found in key list", false);
+    }
+
+    /**
+     * Get all public keys of an unknown user must return 404.
+     */
+    @Test
+    public void discoverUnknownUserKeysTest() {
+        try {
+            discoverApi.discoverUserKeys(UUID.randomUUID());
+        } catch (ApiException e) {
+            assertEquals("API should throw a 404 exception", 404, e.getCode());
+            return;
+        }
+        assertTrue("API should throw an exception when an unknown user is requested", false);
     }
 
     /**
