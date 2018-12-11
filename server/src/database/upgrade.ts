@@ -20,7 +20,7 @@ export async function upgrade(sequelize: Sequelize) {
     delete config.createdAt;
     delete config.updatedAt;
 
-    ServerConfig.model.sync();
+    await ServerConfig.model.sync();
 
     log.warn(`Copying old configuration to new table...`);
     const { createdAt, updatedAt } = old;
