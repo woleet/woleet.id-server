@@ -46,7 +46,7 @@ Key.model.beforeDelete(async (key) => {
 
 export { User, Key, APIToken, ServerEvent, ServerConfig };
 
-async function init() {
+export async function init() {
   let attempts = db.connectionAttempts;
   while (attempts--) {
     try {
@@ -71,10 +71,3 @@ async function init() {
     }
   }
 }
-
-// Connection
-export const initPromise = init()
-  .catch((err) => {
-    log.error(err);
-    process.exit(1);
-  });

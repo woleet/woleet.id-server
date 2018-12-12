@@ -1,75 +1,40 @@
-import * as Debug from 'debug';
 import * as log from 'loglevel';
 
-import { randomBytes } from 'crypto';
-import { Key } from './database';
-import { createUser } from './controllers/user';
-import { setServerConfig, loadServerConfig } from './controllers/server-config';
-
-const debug = Debug('id:boot');
+import { setServerConfig } from './controllers/server-config';
+import {
+  registerOIDCPStopFunction,
+  registerOIDCPBootFunction,
+  registerOIDCUpdateFunction,
+  registerOIDCPUpdateFunction
+} from './controllers/server-config';
 
 // Config
-import { encryption, serverConfig } from './config';
+import { encryption } from './config';
 import { setSecret } from './controllers/utils/encryption';
-import { initPromise } from './database';
-import { signMessage } from './controllers/sign';
-import { configure as initOpenIDConnect } from './controllers/openid';
-import { configure as initalizeOIDCProvider } from './controllers/oidc-provider';
-import { bootServers } from './boot.servers';
+import { init as initdb } from './database';
+import { initializeOIDC, updateOIDC } from './controllers/openid';
+import { initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider } from './controllers/oidc-provider';
+import { bootServers, bootOIDCProvider } from './boot.servers';
+import { initServerConfig } from './boot.server-config';
 import { exit } from './exit';
 
-initPromise
+initdb()
+  .catch((err) => exit(`Failed to init database: ${err.message}`, err))
   .then(() => encryption.init())
   .then(() => {
     setSecret(encryption.secret);
     log.info('Secret successfully initialized');
   })
   .catch((err) => exit(`Failed to init secret: ${err.message}`, err))
-  .then(() => loadServerConfig())
-  .then(async (config) => {
-    if (config) {
-      log.info(`Server configuration successfully restored`);
-      debug(JSON.stringify(config, null, 2));
-
-      const key = await Key.getAny();
-
-      if (!key) {
-        log.warn('Not any key in database, cannot check secret restoration');
-        return;
-      }
-
-      try {
-        await signMessage(key.get('privateKey'), randomBytes(32).toString('hex'), key.get('compressed'));
-      } catch (err) {
-        log.warn(err.message);
-        throw new Error('Secret is not the same that the previously set one');
-      }
-
-    } else {
-      log.warn('No configuration found in database, creating a new one along with a default admin user...');
-      debug('Creating an admin user');
-      let admin;
-      try {
-        admin = await createUser({
-          password: 'pass',
-          role: 'admin',
-          username: 'admin',
-          identity: { commonName: 'Admin' }
-        });
-      } catch (err) {
-        return exit(`Failed to create user "admin": ${err.message}`, err);
-      }
-
-      log.info(`Created user "admin" with id ${admin.id}`);
-
-      const conf = await setServerConfig(Object.assign({}, serverConfig.default, { defaultKeyId: admin.defaultKeyId }));
-      log.info(`Created new server configuration with defaults: ${JSON.stringify(conf, null, 2)}`);
-    }
-  })
-  .catch((err) => exit(`Failed to load server config: ${err.message}`, err))
+  .then(() => initServerConfig())
+  .catch((err) => exit(`Failed to init server config: ${err.message}`, err))
+  .then(() => registerOIDCUpdateFunction(updateOIDC))
+  .then(() => registerOIDCPBootFunction(bootOIDCProvider))
+  .then(() => registerOIDCPStopFunction(stopOIDCProvider))
+  .then(() => registerOIDCPUpdateFunction(updateOIDCProvider))
   .then(async () => {
     try {
-      await initOpenIDConnect();
+      await initializeOIDC();
       return;
     } catch (err) {
       log.error('Failed to initalize OPenID Connect, it will be automatically disabled !', err);
@@ -78,7 +43,7 @@ initPromise
   })
   .then(async () => {
     try {
-      await initalizeOIDCProvider();
+      await initializeOIDCProvider();
       return;
     } catch (err) {
       log.error('Failed to initalize OPenID Connect Provider, it will be automatically disabled !', err);

@@ -44,7 +44,7 @@ const keystorePromise = (async () => {
   return keystore;
 })();
 
-export async function configure(): Promise<void> {
+async function configure(): Promise<void> {
   const { enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL, OIDCPClients } = getServerConfig();
   const keystore = await keystorePromise;
 
@@ -74,6 +74,10 @@ export async function configure(): Promise<void> {
   initialized = true;
 }
 
+export function initializeOIDCProvider() {
+  return configure();
+}
+
 export function updateOIDCProvider() {
   return configure();
 }
@@ -89,11 +93,12 @@ export function getActiveServer() {
   return server;
 }
 
-export function stopActiveServer(): Promise<void> {
+export function stopOIDCProvider(): Promise<void> {
   return new Promise((resolve) => {
     if (server) {
       log.info(`Shutting down OIDCP server...`);
       server.close(() => {
+        log.info(`OIDCP server is now down`);
         setActiveServer(null);
         resolve();
       });

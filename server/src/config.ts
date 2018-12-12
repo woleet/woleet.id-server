@@ -41,9 +41,13 @@ function getenv<T = string>(name: string, fallback: T = null): T {
   return <any>(value || fallback);
 }
 
-export const production = getenv('PRODUCTION', false);
+export const production = getenv('PRODUCTION', true);
 
 log.setLevel(production ? 'info' : 'debug');
+
+log[production ? 'info' : 'warn'](
+  `Running server in ${chalk.bold(production ? chalk.green('PRODUCTION') : chalk.red('DEVELOPMENT'))} mode`
+);
 
 const defaultPort = getenv('DEFAULT_PORT', 3000);
 
@@ -111,8 +115,11 @@ export const serverConfig = {
 };
 
 export const cookies: { keys: string[], options: SetOption } = {
-  keys: production ? [crypto.randomBytes(16).toString('base64')] : ['cookie-devel-secret'],
-  options: { secure: true, signed: true }
+  keys: [crypto.randomBytes(16).toString('base64')],
+  options: {
+    secure: <boolean>production === true,
+    signed: <boolean>production === true
+  }
 };
 
 const ENCRYPTION_SECRET = getenv('ENCRYPTION_SECRET');
