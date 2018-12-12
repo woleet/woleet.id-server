@@ -3,7 +3,7 @@
 set -e
 
 display_usage() {
-  echo "usage: $0 [start|stop|restart|build|push|check|logs]"
+  echo "usage: $0 [start|stop|restart|build||check|logs]"
 }
 
 tmp_client_dir=./client/tmp/
@@ -63,8 +63,6 @@ elif [ "$operation" == "stop" ]; then
 elif [ "$operation" == "restart" ]; then
   docker-compose down
   start
-elif [ "$operation" == "push" ]; then
-  docker-compose push
 elif [ "$operation" == "check" ]; then
   cd server
   npm run lint

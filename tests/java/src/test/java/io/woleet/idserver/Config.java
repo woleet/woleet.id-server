@@ -12,8 +12,6 @@ import org.bitcoinj.core.ECKey;
 import java.util.Random;
 import java.util.UUID;
 
-import static org.junit.Assert.assertFalse;
-
 public class Config {
 
     //private static final Logger logger = LoggerFactory.getLogger(Config.class);
@@ -26,10 +24,11 @@ public class Config {
     private static final String TEST_USERS_USERNAME_PREFIX = "tester_";
 
     // Check that API base path is defined in the environment
-    public static final String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
+    public static String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
 
     static {
-        assertFalse("WOLEET_ID_SERVER_API_BASEPATH must be defined", WOLEET_ID_SERVER_API_BASEPATH.isEmpty());
+        if (WOLEET_ID_SERVER_API_BASEPATH == null)
+            WOLEET_ID_SERVER_API_BASEPATH = "https://localhost:3000/api";
     }
 
     /**
@@ -69,10 +68,13 @@ public class Config {
      * Return a singleton API client with credentials set for the platform admin.
      */
     public static ApiClient getAdminAuthApiClient() throws ApiException {
-        return getAuthApiClient(
-            System.getenv("WOLEET_ID_SERVER_ADMIN_LOGIN"),
-            System.getenv("WOLEET_ID_SERVER_ADMIN_PASSWORD")
-        );
+        String login = System.getenv("WOLEET_ID_SERVER_ADMIN_LOGIN");
+        if (login == null)
+            login = "admin";
+        String password = System.getenv("WOLEET_ID_SERVER_ADMIN_PASSWORD");
+        if (password == null)
+            password = "pass";
+        return getAuthApiClient(login, password);
     }
 
     /**
@@ -168,7 +170,7 @@ public class Config {
     public static boolean isValidSignature(String address, String signature, String message) {
         try {
             return ECKey.signedMessageToKey(message, signature).toAddress(Address.fromBase58(null, address)
-                .getParameters()).toString().equals(address);
+                    .getParameters()).toString().equals(address);
         } catch (Exception e) {
             return false;
         }

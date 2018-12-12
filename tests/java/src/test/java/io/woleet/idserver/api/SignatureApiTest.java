@@ -14,10 +14,11 @@ import static org.junit.Assert.*;
 public class SignatureApiTest {
 
     // Check that SIGN base path is defined in the environment
-    public static final String WOLEET_ID_SERVER_SIGNATURE_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGNATURE_BASEPATH");
+    public static String WOLEET_ID_SERVER_SIGNATURE_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGNATURE_BASEPATH");
 
     static {
-        assertFalse("WOLEET_ID_SERVER_SIGNATURE_BASEPATH must be defined", WOLEET_ID_SERVER_SIGNATURE_BASEPATH.isEmpty());
+        if (WOLEET_ID_SERVER_SIGNATURE_BASEPATH == null)
+            WOLEET_ID_SERVER_SIGNATURE_BASEPATH = "https://localhost:3002";
     }
 
     private UserGet user;
