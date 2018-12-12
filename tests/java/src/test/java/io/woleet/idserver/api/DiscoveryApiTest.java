@@ -24,7 +24,6 @@ import org.junit.Test;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -34,12 +33,11 @@ import static org.junit.Assert.assertTrue;
 public class DiscoveryApiTest {
 
     // Check that SIGN base path is defined in the environment
-    public static final String WOLEET_ID_SERVER_SIGNATURE_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGNATURE_BASEPATH");
-    public static final String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
+    public static String WOLEET_ID_SERVER_SIGNATURE_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGNATURE_BASEPATH");
 
     static {
-        assertFalse("WOLEET_ID_SERVER_SIGNATURE_BASEPATH must be defined", WOLEET_ID_SERVER_SIGNATURE_BASEPATH.isEmpty());
-        assertFalse("WOLEET_ID_SERVER_API_BASEPATH must be defined", WOLEET_ID_SERVER_API_BASEPATH.isEmpty());
+        if (WOLEET_ID_SERVER_SIGNATURE_BASEPATH == null)
+            WOLEET_ID_SERVER_SIGNATURE_BASEPATH = "https://localhost:3002";
     }
 
     private UserGet user;
@@ -57,7 +55,7 @@ public class DiscoveryApiTest {
         tearDown();
 
         user = Config.createTestUser();
-        keyApi = new KeyApi(Config.getAdminAuthApiClient().setBasePath(WOLEET_ID_SERVER_API_BASEPATH));
+        keyApi = new KeyApi(Config.getAdminAuthApiClient().setBasePath(Config.WOLEET_ID_SERVER_API_BASEPATH));
 
         // Create an helper API with API token authentication
         apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
