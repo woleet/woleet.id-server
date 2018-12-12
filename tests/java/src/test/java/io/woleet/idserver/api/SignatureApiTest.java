@@ -13,7 +13,6 @@ import static org.junit.Assert.*;
 
 public class SignatureApiTest {
 
-    // Check that SIGN base path is defined in the environment
     public static String WOLEET_ID_SERVER_SIGNATURE_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGNATURE_BASEPATH");
 
     static {

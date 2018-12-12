@@ -4,8 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **Integer** |  |  [optional]
-**message** | **String** |  |  [optional]
+**code** | **Integer** |  | 
+**message** | **String** |  | 
 
 
 

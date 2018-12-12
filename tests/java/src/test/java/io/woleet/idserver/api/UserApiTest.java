@@ -6,6 +6,7 @@ import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -21,12 +22,15 @@ public class UserApiTest extends CRUDApiTest {
         }
 
         @Override
-        public ObjectArray getAllObjects() throws ApiException {
-            return new ObjectArray(userApi.getAllUsers());
+        public List<CRUDApiTest.ObjectGet> getAllObjects() throws ApiException {
+            List<CRUDApiTest.ObjectGet> list = new ArrayList<>();
+            for (UserGet user : userApi.getAllUsers())
+                list.add(new UserApiTest.ObjectGet(user));
+            return list;
         }
 
         @Override
-        public CRUDApiTest.ObjectGet deleteObject(UUID id) throws ApiException {
+        public ObjectGet deleteObject(UUID id) throws ApiException {
             return new ObjectGet(userApi.deleteUser(id));
         }
 
@@ -163,28 +167,6 @@ public class UserApiTest extends CRUDApiTest {
             if (Config.randomBoolean())
                 fullIdentity.country(COUNTRY);
             userPut.identity(fullIdentity);
-        }
-    }
-
-    class ObjectArray extends CRUDApiTest.ObjectArray<UserArray> {
-
-        UserArray userArray;
-
-        ObjectArray(UserArray userArray) {
-            this.userArray = userArray;
-        }
-
-        @Override
-        public boolean contains(CRUDApiTest.ObjectGet object) {
-            return userArray.contains(object.get());
-        }
-
-        @Override
-        public CRUDApiTest.ObjectGet[] getArray() {
-            ArrayList<ObjectGet> objectGetArray = new ArrayList<>();
-            for (UserGet user : userArray)
-                objectGetArray.add(new ObjectGet(user));
-            return objectGetArray.toArray(new ObjectGet[0]);
         }
     }
 

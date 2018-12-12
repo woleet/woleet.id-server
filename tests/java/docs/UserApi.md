@@ -119,7 +119,7 @@ Name | Type | Description  | Notes
 
 <a name="getAllUsers"></a>
 # **getAllUsers**
-> UserArray getAllUsers()
+> List&lt;UserGet&gt; getAllUsers()
 
 List all users.
 
@@ -142,7 +142,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 
 UserApi apiInstance = new UserApi();
 try {
-    UserArray result = apiInstance.getAllUsers();
+    List<UserGet> result = apiInstance.getAllUsers();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserApi#getAllUsers");
@@ -155,7 +155,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**UserArray**](UserArray.md)
+[**List&lt;UserGet&gt;**](UserGet.md)
 
 ### Authorization
 

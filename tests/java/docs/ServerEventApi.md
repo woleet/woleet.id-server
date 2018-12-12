@@ -63,7 +63,7 @@ Name | Type | Description  | Notes
 
 <a name="getServerEventList"></a>
 # **getServerEventList**
-> ServerEventArray getServerEventList()
+> List&lt;ServerEventGet&gt; getServerEventList()
 
 List all server events.
 
@@ -86,7 +86,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 
 ServerEventApi apiInstance = new ServerEventApi();
 try {
-    ServerEventArray result = apiInstance.getServerEventList();
+    List<ServerEventGet> result = apiInstance.getServerEventList();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ServerEventApi#getServerEventList");
@@ -99,7 +99,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**ServerEventArray**](ServerEventArray.md)
+[**List&lt;ServerEventGet&gt;**](ServerEventGet.md)
 
 ### Authorization
 

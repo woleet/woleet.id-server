@@ -33,11 +33,11 @@ import java.io.IOException;
 public class IdentityResult {
   public static final String SERIALIZED_NAME_RIGHT_DATA = "rightData";
   @SerializedName(SERIALIZED_NAME_RIGHT_DATA)
-  private String rightData = null;
+  private String rightData;
 
   public static final String SERIALIZED_NAME_SIGNATURE = "signature";
   @SerializedName(SERIALIZED_NAME_SIGNATURE)
-  private String signature = null;
+  private String signature;
 
   public static final String SERIALIZED_NAME_IDENTITY = "identity";
   @SerializedName(SERIALIZED_NAME_IDENTITY)

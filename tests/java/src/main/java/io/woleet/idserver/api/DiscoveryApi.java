@@ -28,10 +28,9 @@ import java.io.IOException;
 
 
 import io.woleet.idserver.api.model.APIError;
-import io.woleet.idserver.api.model.KeyDiscoArray;
+import io.woleet.idserver.api.model.KeyDisco;
 import java.util.UUID;
 import io.woleet.idserver.api.model.UserDisco;
-import io.woleet.idserver.api.model.UserDiscoArray;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -75,16 +74,15 @@ public class DiscoveryApi {
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
         final String[] localVarAccepts = {
             "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
 
         final String[] localVarContentTypes = {
             
@@ -92,7 +90,7 @@ public class DiscoveryApi {
         final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        if(progressListener != null) {
+        if (progressListener != null) {
             apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
                 @Override
                 public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
@@ -198,16 +196,15 @@ public class DiscoveryApi {
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
         final String[] localVarAccepts = {
             "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
 
         final String[] localVarContentTypes = {
             
@@ -215,7 +212,7 @@ public class DiscoveryApi {
         final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        if(progressListener != null) {
+        if (progressListener != null) {
             apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
                 @Override
                 public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
@@ -249,11 +246,11 @@ public class DiscoveryApi {
      * Get all public keys of a user.
      * Use this endpoint to get all public keys owned by a given user. 
      * @param userId Identifier of the user. (required)
-     * @return KeyDiscoArray
+     * @return List&lt;KeyDisco&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public KeyDiscoArray discoverUserKeys(UUID userId) throws ApiException {
-        ApiResponse<KeyDiscoArray> resp = discoverUserKeysWithHttpInfo(userId);
+    public List<KeyDisco> discoverUserKeys(UUID userId) throws ApiException {
+        ApiResponse<List<KeyDisco>> resp = discoverUserKeysWithHttpInfo(userId);
         return resp.getData();
     }
 
@@ -261,12 +258,12 @@ public class DiscoveryApi {
      * Get all public keys of a user.
      * Use this endpoint to get all public keys owned by a given user. 
      * @param userId Identifier of the user. (required)
-     * @return ApiResponse&lt;KeyDiscoArray&gt;
+     * @return ApiResponse&lt;List&lt;KeyDisco&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<KeyDiscoArray> discoverUserKeysWithHttpInfo(UUID userId) throws ApiException {
+    public ApiResponse<List<KeyDisco>> discoverUserKeysWithHttpInfo(UUID userId) throws ApiException {
         com.squareup.okhttp.Call call = discoverUserKeysValidateBeforeCall(userId, null, null);
-        Type localVarReturnType = new TypeToken<KeyDiscoArray>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<KeyDisco>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -278,7 +275,7 @@ public class DiscoveryApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call discoverUserKeysAsync(UUID userId, final ApiCallback<KeyDiscoArray> callback) throws ApiException {
+    public com.squareup.okhttp.Call discoverUserKeysAsync(UUID userId, final ApiCallback<List<KeyDisco>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -300,7 +297,7 @@ public class DiscoveryApi {
         }
 
         com.squareup.okhttp.Call call = discoverUserKeysValidateBeforeCall(userId, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<KeyDiscoArray>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<KeyDisco>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
@@ -320,18 +317,19 @@ public class DiscoveryApi {
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        if (search != null)
-        localVarQueryParams.addAll(apiClient.parameterToPair("search", search));
+        if (search != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("search", search));
+        }
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
         final String[] localVarAccepts = {
             "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
 
         final String[] localVarContentTypes = {
             
@@ -339,7 +337,7 @@ public class DiscoveryApi {
         final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        if(progressListener != null) {
+        if (progressListener != null) {
             apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
                 @Override
                 public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
@@ -373,11 +371,11 @@ public class DiscoveryApi {
      * Get all users matching a search string.
      * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; or &#x60;x500OrganizationalUnit&#x60; contains the search string. 
      * @param search A string used to search users through the fields &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; and &#x60;x500OrganizationalUnit&#x60;. (required)
-     * @return UserDiscoArray
+     * @return List&lt;UserDisco&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public UserDiscoArray discoverUsers(String search) throws ApiException {
-        ApiResponse<UserDiscoArray> resp = discoverUsersWithHttpInfo(search);
+    public List<UserDisco> discoverUsers(String search) throws ApiException {
+        ApiResponse<List<UserDisco>> resp = discoverUsersWithHttpInfo(search);
         return resp.getData();
     }
 
@@ -385,12 +383,12 @@ public class DiscoveryApi {
      * Get all users matching a search string.
      * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; or &#x60;x500OrganizationalUnit&#x60; contains the search string. 
      * @param search A string used to search users through the fields &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; and &#x60;x500OrganizationalUnit&#x60;. (required)
-     * @return ApiResponse&lt;UserDiscoArray&gt;
+     * @return ApiResponse&lt;List&lt;UserDisco&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<UserDiscoArray> discoverUsersWithHttpInfo(String search) throws ApiException {
+    public ApiResponse<List<UserDisco>> discoverUsersWithHttpInfo(String search) throws ApiException {
         com.squareup.okhttp.Call call = discoverUsersValidateBeforeCall(search, null, null);
-        Type localVarReturnType = new TypeToken<UserDiscoArray>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<UserDisco>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -402,7 +400,7 @@ public class DiscoveryApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call discoverUsersAsync(String search, final ApiCallback<UserDiscoArray> callback) throws ApiException {
+    public com.squareup.okhttp.Call discoverUsersAsync(String search, final ApiCallback<List<UserDisco>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -424,7 +422,7 @@ public class DiscoveryApi {
         }
 
         com.squareup.okhttp.Call call = discoverUsersValidateBeforeCall(search, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<UserDiscoArray>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<UserDisco>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

@@ -66,7 +66,7 @@ Name | Type | Description  | Notes
 
 <a name="discoverUserKeys"></a>
 # **discoverUserKeys**
-> KeyDiscoArray discoverUserKeys(userId)
+> List&lt;KeyDisco&gt; discoverUserKeys(userId)
 
 Get all public keys of a user.
 
@@ -92,7 +92,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 DiscoveryApi apiInstance = new DiscoveryApi();
 UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
 try {
-    KeyDiscoArray result = apiInstance.discoverUserKeys(userId);
+    List<KeyDisco> result = apiInstance.discoverUserKeys(userId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DiscoveryApi#discoverUserKeys");
@@ -108,7 +108,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**KeyDiscoArray**](KeyDiscoArray.md)
+[**List&lt;KeyDisco&gt;**](KeyDisco.md)
 
 ### Authorization
 
@@ -121,7 +121,7 @@ Name | Type | Description  | Notes
 
 <a name="discoverUsers"></a>
 # **discoverUsers**
-> UserDiscoArray discoverUsers(search)
+> List&lt;UserDisco&gt; discoverUsers(search)
 
 Get all users matching a search string.
 
@@ -147,7 +147,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 DiscoveryApi apiInstance = new DiscoveryApi();
 String search = {"email":{"value":"john.doe@acme.com"},"username":{"value":"johndoe"},"x500CommonName":{"value":"John Doe"},"x500Organization":{"value":"Acme corp"},"x500OrganizationalUnit":{"value":"Business unit"}}; // String | A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
 try {
-    UserDiscoArray result = apiInstance.discoverUsers(search);
+    List<UserDisco> result = apiInstance.discoverUsers(search);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DiscoveryApi#discoverUsers");
@@ -163,7 +163,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**UserDiscoArray**](UserDiscoArray.md)
+[**List&lt;UserDisco&gt;**](UserDisco.md)
 
 ### Authorization
 

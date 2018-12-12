@@ -9,6 +9,7 @@ import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.ECKey;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ public class Config {
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
     private static final String TEST_USERS_USERNAME_PREFIX = "tester_";
 
-    // Check that API base path is defined in the environment
+    // Get API base path from the environment
     public static String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
 
     static {
@@ -131,7 +132,7 @@ public class Config {
      */
     public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
-        UserArray users = userApi.getAllUsers();
+        List<UserGet> users = userApi.getAllUsers();
         for (UserGet user : users) {
             if (user.getIdentity().getCommonName().startsWith(TEST_USERS_COMMONNAME_PREFIX))
                 userApi.deleteUser(user.getId());

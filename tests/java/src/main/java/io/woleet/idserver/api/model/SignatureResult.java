@@ -31,19 +31,19 @@ import java.io.IOException;
 public class SignatureResult {
   public static final String SERIALIZED_NAME_PUB_KEY = "pubKey";
   @SerializedName(SERIALIZED_NAME_PUB_KEY)
-  private String pubKey = null;
+  private String pubKey;
 
   public static final String SERIALIZED_NAME_SIGNED_HASH = "signedHash";
   @SerializedName(SERIALIZED_NAME_SIGNED_HASH)
-  private String signedHash = null;
+  private String signedHash;
 
   public static final String SERIALIZED_NAME_SIGNATURE = "signature";
   @SerializedName(SERIALIZED_NAME_SIGNATURE)
-  private String signature = null;
+  private String signature;
 
   public static final String SERIALIZED_NAME_IDENTITY_U_R_L = "identityURL";
   @SerializedName(SERIALIZED_NAME_IDENTITY_U_R_L)
-  private String identityURL = null;
+  private String identityURL;
 
   public SignatureResult pubKey(String pubKey) {
     this.pubKey = pubKey;

@@ -121,7 +121,7 @@ Name | Type | Description  | Notes
 
 <a name="getAllUserKeys"></a>
 # **getAllUserKeys**
-> KeyArray getAllUserKeys(userId)
+> List&lt;KeyGet&gt; getAllUserKeys(userId)
 
 List all keys of a user.
 
@@ -145,7 +145,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 KeyApi apiInstance = new KeyApi();
 UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
 try {
-    KeyArray result = apiInstance.getAllUserKeys(userId);
+    List<KeyGet> result = apiInstance.getAllUserKeys(userId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling KeyApi#getAllUserKeys");
@@ -161,7 +161,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**KeyArray**](KeyArray.md)
+[**List&lt;KeyGet&gt;**](KeyGet.md)
 
 ### Authorization
 

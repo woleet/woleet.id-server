@@ -75,24 +75,31 @@ public class SignatureApi {
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        if (hashToSign != null)
-        localVarQueryParams.addAll(apiClient.parameterToPair("hashToSign", hashToSign));
-        if (userId != null)
-        localVarQueryParams.addAll(apiClient.parameterToPair("userId", userId));
-        if (customUserId != null)
-        localVarQueryParams.addAll(apiClient.parameterToPair("customUserId", customUserId));
-        if (pubKey != null)
-        localVarQueryParams.addAll(apiClient.parameterToPair("pubKey", pubKey));
+        if (hashToSign != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("hashToSign", hashToSign));
+        }
+
+        if (userId != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("userId", userId));
+        }
+
+        if (customUserId != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("customUserId", customUserId));
+        }
+
+        if (pubKey != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("pubKey", pubKey));
+        }
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
         final String[] localVarAccepts = {
             "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
 
         final String[] localVarContentTypes = {
             
@@ -100,7 +107,7 @@ public class SignatureApi {
         final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        if(progressListener != null) {
+        if (progressListener != null) {
             apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
                 @Override
                 public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {

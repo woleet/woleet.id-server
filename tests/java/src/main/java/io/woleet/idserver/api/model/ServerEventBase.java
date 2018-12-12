@@ -37,27 +37,27 @@ public class ServerEventBase {
 
   public static final String SERIALIZED_NAME_OCCURRED_AT = "occurredAt";
   @SerializedName(SERIALIZED_NAME_OCCURRED_AT)
-  private Long occurredAt = null;
+  private Long occurredAt;
 
   public static final String SERIALIZED_NAME_AUTHORIZED_USER_ID = "authorizedUserId";
   @SerializedName(SERIALIZED_NAME_AUTHORIZED_USER_ID)
-  private UUID authorizedUserId = null;
+  private UUID authorizedUserId;
 
   public static final String SERIALIZED_NAME_AUTHORIZED_TOKEN_ID = "authorizedTokenId";
   @SerializedName(SERIALIZED_NAME_AUTHORIZED_TOKEN_ID)
-  private UUID authorizedTokenId = null;
+  private UUID authorizedTokenId;
 
   public static final String SERIALIZED_NAME_ASSOCIATED_TOKEN_ID = "associatedTokenId";
   @SerializedName(SERIALIZED_NAME_ASSOCIATED_TOKEN_ID)
-  private UUID associatedTokenId = null;
+  private UUID associatedTokenId;
 
   public static final String SERIALIZED_NAME_ASSOCIATED_USER_ID = "associatedUserId";
   @SerializedName(SERIALIZED_NAME_ASSOCIATED_USER_ID)
-  private UUID associatedUserId = null;
+  private UUID associatedUserId;
 
   public static final String SERIALIZED_NAME_ASSOCIATED_KEY_ID = "associatedKeyId";
   @SerializedName(SERIALIZED_NAME_ASSOCIATED_KEY_ID)
-  private UUID associatedKeyId = null;
+  private UUID associatedKeyId;
 
   public ServerEventBase type(ServerEventTypeEnum type) {
     this.type = type;

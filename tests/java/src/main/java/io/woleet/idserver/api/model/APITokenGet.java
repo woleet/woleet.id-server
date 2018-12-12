@@ -34,27 +34,27 @@ import java.util.UUID;
 public class APITokenGet extends APITokenBase {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
-  private UUID id = null;
+  private UUID id;
 
   public static final String SERIALIZED_NAME_VALUE = "value";
   @SerializedName(SERIALIZED_NAME_VALUE)
-  private String value = null;
+  private String value;
 
   public static final String SERIALIZED_NAME_CREATED_AT = "createdAt";
   @SerializedName(SERIALIZED_NAME_CREATED_AT)
-  private Long createdAt = null;
+  private Long createdAt;
 
   public static final String SERIALIZED_NAME_UPDATED_AT = "updatedAt";
   @SerializedName(SERIALIZED_NAME_UPDATED_AT)
-  private Long updatedAt = null;
+  private Long updatedAt;
 
   public static final String SERIALIZED_NAME_DELETED_AT = "deletedAt";
   @SerializedName(SERIALIZED_NAME_DELETED_AT)
-  private Long deletedAt = null;
+  private Long deletedAt;
 
   public static final String SERIALIZED_NAME_LAST_USED = "lastUsed";
   @SerializedName(SERIALIZED_NAME_LAST_USED)
-  private Long lastUsed = null;
+  private Long lastUsed;
 
    /**
    * API token identifier (allocated by the platform).

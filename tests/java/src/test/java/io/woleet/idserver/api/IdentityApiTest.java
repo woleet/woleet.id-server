@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
 
 public class IdentityApiTest {
 
-    // Check that IDENTITY base path is defined in the environment
     public static String WOLEET_ID_SERVER_IDENTITY_BASEPATH = System.getenv("WOLEET_ID_SERVER_IDENTITY_BASEPATH");
 
     static {

@@ -32,7 +32,7 @@ import java.io.IOException;
 public class FullIdentity extends Identity {
   public static final String SERIALIZED_NAME_USER_ID = "userId";
   @SerializedName(SERIALIZED_NAME_USER_ID)
-  private String userId = null;
+  private String userId;
 
   public FullIdentity userId(String userId) {
     this.userId = userId;
