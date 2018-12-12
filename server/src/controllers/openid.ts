@@ -4,7 +4,7 @@ import { createKey } from './key';
 import { User } from '../database';
 import { store as sessionStore } from './store.session';
 import { lookForUser } from './authentication';
-import { getServerConfig } from './server-config';
+import { getServerConfig, registerOIDCUpdateFunction } from './server-config';
 import * as Debug from 'debug';
 const debug = Debug('id:ctrl:openid');
 import * as log from 'loglevel';
@@ -16,7 +16,7 @@ export const getClientRedirectURL = () => redirectURL;
 
 export const getClient = () => client;
 
-export async function configure() {
+async function configure() {
   const config = getServerConfig();
 
   if (!config.useOpenIDConnect) {
@@ -45,7 +45,11 @@ export async function configure() {
   client = new issuer.Client({ client_id: config.openIDConnectClientId, client_secret: config.openIDConnectClientSecret });
 }
 
-export function updateOIDCClient() {
+export function initializeOIDC() {
+  return configure();
+}
+
+export function updateOIDC() {
   return configure();
 }
 

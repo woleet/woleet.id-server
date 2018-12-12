@@ -5,6 +5,12 @@ import { randomBytes } from 'crypto';
 import { Key } from './database';
 import { createUser } from './controllers/user';
 import { setServerConfig, loadServerConfig } from './controllers/server-config';
+import {
+  registerOIDCPStopFunction,
+  registerOIDCPBootFunction,
+  registerOIDCUpdateFunction,
+  registerOIDCPUpdateFunction
+} from './controllers/server-config';
 
 const debug = Debug('id:boot');
 
@@ -13,9 +19,9 @@ import { encryption, serverConfig } from './config';
 import { setSecret } from './controllers/utils/encryption';
 import { initPromise } from './database';
 import { signMessage } from './controllers/sign';
-import { configure as initOpenIDConnect } from './controllers/openid';
-import { configure as initalizeOIDCProvider } from './controllers/oidc-provider';
-import { bootServers } from './boot.servers';
+import { initializeOIDC, updateOIDC } from './controllers/openid';
+import { initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider } from './controllers/oidc-provider';
+import { bootServers, bootOIDCProvider } from './boot.servers';
 import { exit } from './exit';
 
 initPromise
@@ -67,9 +73,13 @@ initPromise
     }
   })
   .catch((err) => exit(`Failed to load server config: ${err.message}`, err))
+  .then(() => registerOIDCUpdateFunction(updateOIDC))
+  .then(() => registerOIDCPBootFunction(bootOIDCProvider))
+  .then(() => registerOIDCPStopFunction(stopOIDCProvider))
+  .then(() => registerOIDCPUpdateFunction(updateOIDCProvider))
   .then(async () => {
     try {
-      await initOpenIDConnect();
+      await initializeOIDC();
       return;
     } catch (err) {
       log.error('Failed to initalize OPenID Connect, it will be automatically disabled !', err);
@@ -78,7 +88,7 @@ initPromise
   })
   .then(async () => {
     try {
-      await initalizeOIDCProvider();
+      await initializeOIDCProvider();
       return;
     } catch (err) {
       log.error('Failed to initalize OPenID Connect Provider, it will be automatically disabled !', err);

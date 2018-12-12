@@ -9,7 +9,7 @@ import * as cors from '@koa/cors';
 import { errorHandler } from './api/error';
 
 import { build as oidcProviderAppFactory } from './api/oidcp-app';
-import { isInitialized as isOIDCPInitialized, getActiveServer, setActiveServer, stopActiveServer } from './controllers/oidc-provider';
+import { isInitialized as isOIDCPInitialized, getActiveServer, setActiveServer, stopOIDCProvider } from './controllers/oidc-provider';
 import { definitions } from './apps';
 import { exit } from './exit';
 
@@ -90,18 +90,18 @@ export function bootServers(): Promise<void> {
 
   });
 
-  const oidc = bootOIDCPServer();
+  const oidc = bootOIDCProvider();
 
   return Promise.all(promises.concat(oidc)).then(() => { });
 }
 
-export async function bootOIDCPServer(): Promise<void> {
+export async function bootOIDCProvider(): Promise<void> {
   const port = ports.oidcp;
 
   const activeServer: Server = getActiveServer();
 
   if (activeServer) {
-    await stopActiveServer();
+    await stopOIDCProvider();
   }
 
   await new Promise((resolve) => {
