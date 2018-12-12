@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 
 public class SignatureApiTest {
 
-    public static String WOLEET_ID_SERVER_SIGNATURE_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGNATURE_BASEPATH");
+    private static String WOLEET_ID_SERVER_SIGNATURE_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGNATURE_BASEPATH");
 
     static {
         if (WOLEET_ID_SERVER_SIGNATURE_BASEPATH == null)

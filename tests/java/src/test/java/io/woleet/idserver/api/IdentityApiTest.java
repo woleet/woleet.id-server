@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class IdentityApiTest {
 
-    public static String WOLEET_ID_SERVER_IDENTITY_BASEPATH = System.getenv("WOLEET_ID_SERVER_IDENTITY_BASEPATH");
+    private static String WOLEET_ID_SERVER_IDENTITY_BASEPATH = System.getenv("WOLEET_ID_SERVER_IDENTITY_BASEPATH");
 
     static {
         if (WOLEET_ID_SERVER_IDENTITY_BASEPATH == null)

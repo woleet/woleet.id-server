@@ -11,12 +11,11 @@ import org.junit.Test;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class DiscoveryApiTest {
 
-    public static String WOLEET_ID_SERVER_SIGNATURE_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGNATURE_BASEPATH");
+    private static String WOLEET_ID_SERVER_SIGNATURE_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGNATURE_BASEPATH");
 
     static {
         if (WOLEET_ID_SERVER_SIGNATURE_BASEPATH == null)
@@ -85,7 +84,7 @@ public class DiscoveryApiTest {
             assertEquals("API should throw a 404 exception", 404, e.getCode());
             return;
         }
-        assertTrue("API should throw an exception when an unknown user is requested", false);
+        fail("API should throw an exception when an unknown user is requested");
     }
 
     /**
@@ -102,7 +101,7 @@ public class DiscoveryApiTest {
         for (KeyDisco key : response)
             if (key.getPubKey().equals(pubKey))
                 return;
-        assertTrue("Public key not found in key list", false);
+        fail("Public key not found in key list");
     }
 
     /**
@@ -116,7 +115,7 @@ public class DiscoveryApiTest {
             assertEquals("API should throw a 404 exception", 404, e.getCode());
             return;
         }
-        assertTrue("API should throw an exception when an unknown user is requested", false);
+        fail("API should throw an exception when an unknown user is requested");
     }
 
     /**
@@ -133,6 +132,6 @@ public class DiscoveryApiTest {
         for (UserDisco u : response)
             if (u.getId().equals(user.getId()))
                 return;
-        assertTrue("User not found in user list", false);
+        fail("User not found in user list");
     }
 }
