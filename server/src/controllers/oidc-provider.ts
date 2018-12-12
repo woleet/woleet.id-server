@@ -98,6 +98,7 @@ export function stopOIDCProvider(): Promise<void> {
     if (server) {
       log.info(`Shutting down OIDCP server...`);
       server.close(() => {
+        log.info(`OIDCP server is now down`);
         setActiveServer(null);
         resolve();
       });
