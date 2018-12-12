@@ -9,8 +9,8 @@
     "transpile": "npx tsc",
     "build": "npx tsc",
     "start": "node dist/server/src",
-    "dev": "DEBUG=id* npx ts-node-dev src/index.ts",
-    "test": "npx mocha -r ts-node/register test/*.ts --exit"
+    "dev": "WOLEET_ID_SERVER_PRODUCTION=false DEBUG=id* npx ts-node-dev src/index.ts",
+    "test": "WOLEET_ID_SERVER_PRODUCTION=false npx mocha --require ts-node/register test/*.ts --exit --timeout 10000"
   },
   "keywords": [],
   "author": "",
