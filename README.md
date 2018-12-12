@@ -84,7 +84,7 @@ export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pa
 
 ## Docker
 
-Woleet.ID Server requires a recent docker version:
+Woleet.ID Server requires a recent Docker version:
  - docker 18.09+
  - docker-compose 1.22+
 
