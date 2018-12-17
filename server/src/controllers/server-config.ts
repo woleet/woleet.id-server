@@ -26,7 +26,6 @@ export function getServerConfig(): InternalServerConfigObject {
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   try {
     const config = Object.assign({}, inMemoryConfig, up);
-    console.log('UPDATE', { inMemoryConfig, up });
     let cfg = await ServerConfig.update(CONFIG_ID, { config });
     if (!cfg) {
       debug('No config to update, will set', config);

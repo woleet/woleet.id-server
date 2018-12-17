@@ -130,7 +130,7 @@ export async function bootOIDCProvider(): Promise<void> {
           log.warn('OIDCP server encountered an error before listening, it will be softly disabled');
           log.warn('Full trace is:', err);
           setActiveServer(null);
-          setServerConfig({ enableOIDCP: false });
+          setServerConfig({ enableOIDCP: false }).then(resolve);
         }
       });
     } else {
