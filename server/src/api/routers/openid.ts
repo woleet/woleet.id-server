@@ -10,7 +10,7 @@ import * as uuid from 'uuid/v4';
 import { randomBytes } from 'crypto';
 import { serializeUserDTO } from '../serialize/userDTO';
 import * as log from 'loglevel';
-import { cookies } from '../../config';
+import { cookies, sessionSuffix } from '../../config';
 import { updateUser } from '../../controllers/user';
 
 const lru: Cache<string, { state: string, nonce: string }> = new LRU({ maxAge: 90 * 1000, max: 1000 });
@@ -37,7 +37,7 @@ router.get('/login', async function (ctx) {
   });
 
   lru.set(oauth, { state, nonce });
-  ctx.cookies.set('oauth', oauth, cookies.options);
+  ctx.cookies.set('oauth' + sessionSuffix, oauth, cookies.options);
   ctx.redirect(url);
 });
 
@@ -51,13 +51,13 @@ router.get('/callback', async function (ctx) {
     throw new ServiceUnavailable();
   }
 
-  const oauth = ctx.cookies.get('oauth');
+  const oauth = ctx.cookies.get('oauth' + sessionSuffix);
 
   if (!oauth) {
     throw new BadRequest('missing oauth session');
   }
 
-  ctx.cookies.set('oauth', null);
+  ctx.cookies.set('oauth' + sessionSuffix, null);
   const oauthSession = lru.get(oauth);
 
   if (!oauthSession) {
@@ -101,7 +101,7 @@ router.get('/callback', async function (ctx) {
   const session = await createOAuthSession(info.email);
 
   if (session) {
-    ctx.cookies.set('session', session.token, cookies.options);
+    ctx.cookies.set('session' + sessionSuffix, session.token, cookies.options);
 
     if (session.user.x500CommonName !== info.name) {
       const user = session.user;
@@ -113,7 +113,7 @@ router.get('/callback', async function (ctx) {
     return ctx.body = { user: serializeUserDTO(session.user) };
   } else {
     const aio = await createOAuthUser({ email: info.email, identity: { commonName: info.name } });
-    ctx.cookies.set('session', aio.token, cookies.options);
+    ctx.cookies.set('session' + sessionSuffix, aio.token, cookies.options);
     return ctx.body = { user: serializeUserDTO(aio.user) };
   }
 });

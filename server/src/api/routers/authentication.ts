@@ -6,7 +6,7 @@ import * as Router from 'koa-router';
 import { createSession, delSession } from '../../controllers/authentication';
 import { serializeUserDTO } from '../serialize/userDTO';
 import { store as event } from '../../controllers/server-event';
-import { cookies } from '../../config';
+import { cookies, sessionSuffix } from '../../config';
 
 /**
  * Authentification
@@ -45,7 +45,7 @@ router.get('/login', async function (ctx) {
     data: null
   });
 
-  ctx.cookies.set('session', authorization.token, cookies.options);
+  ctx.cookies.set('session' + sessionSuffix, authorization.token, cookies.options);
   ctx.body = { user: serializeUserDTO(authorization.user) };
 });
 
@@ -58,7 +58,7 @@ router.all('/logout', async function (ctx) {
   if (ctx.session) {
     await delSession(ctx.session.id);
   }
-  ctx.cookies.set('session', null);
+  ctx.cookies.set('session' + sessionSuffix, null);
   ctx.body = '';
 });
 

@@ -6,6 +6,11 @@ import { BootService, AppConfigService } from '@services/boot';
 import { Lock } from '@components/util';
 import { Observable } from 'rxjs';
 import * as log from 'loglevel';
+import { LocalStorageService } from './local-storage';
+
+import { keys } from '@app/config';
+
+const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -13,21 +18,16 @@ export class AuthService {
   private lock: Lock;
   public lock$: Observable<boolean>;
   private user: ApiUserDTOObject = null;
-  private OIDCPProviderURL: string;
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private bootService: BootService,
-    appConfigService: AppConfigService
+    private store: LocalStorageService
   ) {
-
-    const user = localStorage.getItem('user');
+    const user = store.get('user');
     this.lock = new Lock();
     this.lock$ = this.lock.asObservable();
-
-    const conf = appConfigService.getStartupConfig();
-    this.OIDCPProviderURL = conf && conf.OIDCPProviderURL;
 
     if (user) {
       try {
@@ -39,7 +39,7 @@ export class AuthService {
   async logout(request = true) {
     this.lock.incr();
     this.user = null;
-    localStorage.removeItem('user');
+    this.store.del('user');
     if (request) {
       this.http.get(`${serverURL}/logout/`).toPromise().catch(() => null);
     }
@@ -60,7 +60,7 @@ export class AuthService {
     }
 
     this.user = auth.user;
-    localStorage.setItem('user', JSON.stringify(auth.user));
+    this.store.set('user', JSON.stringify(auth.user));
 
     return this.user;
   }
@@ -82,14 +82,6 @@ export class AuthService {
     document.location.href = `${serverURL}/oauth/login`;
   }
 
-  // Redirect from OIDCP interface to OIDCP server
-  async redirectForOIDCProvider(path) {
-    this.lock.incr();
-    const url = this.OIDCPProviderURL; // Open ID Connect provider URL
-    log.info(`Redirect to ${url}${path}`);
-    document.location.href = `${url}${path}`;
-  }
-
   async forwardOAuth(params: Params) {
     this.lock.incr();
     const auth: AuthResponseObject = await this.http.get<AuthResponseObject>(`${serverURL}/oauth/callback`, { params }).toPromise();
@@ -100,7 +92,7 @@ export class AuthService {
     }
 
     this.user = auth.user;
-    localStorage.setItem('user', JSON.stringify(auth.user));
+    this.store.set('user', JSON.stringify(auth.user));
 
     return auth.user;
   }

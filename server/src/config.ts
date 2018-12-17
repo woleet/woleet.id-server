@@ -46,6 +46,7 @@ export const production = getenv('PRODUCTION', true);
 log.setLevel(production ? 'info' : 'debug');
 
 log[production ? 'info' : 'warn'](
+  // @ts-ignore
   `Running server in ${chalk.bold(production ? chalk.green('PRODUCTION') : chalk.red('DEVELOPMENT'))} mode`
 );
 
@@ -66,6 +67,8 @@ export const db = {
   connectionAttempts: 6,
   retryDelay: 5 * 1000
 };
+
+export const sessionSuffix = production ? '' : '-' + crypto.randomBytes(4).toString('hex');
 
 export const session = {
   expireAfter: 30 * 60 * 1000,

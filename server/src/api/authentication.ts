@@ -4,10 +4,11 @@ import { store as apiTokenStore } from '../controllers/store.api-token';
 import { store as oauthAccessTokenStore } from '../controllers/store.oauth-token';
 import { isInitialized } from '../controllers/oidc-provider';
 import { Context } from 'koa';
+import { sessionSuffix } from '../config';
 
 export async function session(ctx: Context, next) {
   ctx.sessions = sessionStore;
-  const sid = ctx.cookies.get('session');
+  const sid = ctx.cookies.get('session' + sessionSuffix);
   ctx.session = (sid && (await sessionStore.get(sid))) || null;
   return next();
 }
