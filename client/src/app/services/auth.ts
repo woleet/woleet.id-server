@@ -5,10 +5,11 @@ import { serverURL } from './config';
 import { BootService, AppConfigService } from '@services/boot';
 import { Lock } from '@components/util';
 import { Observable } from 'rxjs';
-import * as log from 'loglevel';
 import { LocalStorageService } from './local-storage';
 
 import { keys } from '@app/config';
+import { redirectForOIDC, redirectForOIDCProvider } from '@services/util';
+import * as log from 'loglevel';
 
 const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 
@@ -23,7 +24,8 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private bootService: BootService,
-    private store: LocalStorageService
+    private store: LocalStorageService,
+    private appConfigService: AppConfigService
   ) {
     const user = store.get('user');
     this.lock = new Lock();
@@ -62,6 +64,12 @@ export class AuthService {
     this.user = auth.user;
     this.store.set('user', JSON.stringify(auth.user));
 
+    const redirect = this.store.get(LOGIN_REDIRECT_KEY);
+    if (redirect) {
+      const config = this.appConfigService.getStartupConfig();
+      redirectForOIDCProvider(this.store, config, redirect);
+    }
+
     return this.user;
   }
 
@@ -77,9 +85,8 @@ export class AuthService {
     return this.isAuthenticated() && this.user.role === 'admin';
   }
 
-  async openid() {
-    this.lock.incr();
-    document.location.href = `${serverURL}/oauth/login`;
+  openid() {
+    redirectForOIDC();
   }
 
   async forwardOAuth(params: Params) {

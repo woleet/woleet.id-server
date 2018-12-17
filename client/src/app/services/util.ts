@@ -2,6 +2,8 @@ import * as log from 'loglevel';
 
 import { keys } from '@app/config';
 
+import { environment } from '@env/environment';
+
 const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 
 export function redirectForOIDCProvider(store, config, redirect) {
@@ -13,4 +15,8 @@ export function redirectForOIDCProvider(store, config, redirect) {
   } else {
     log.warn(`Redirect found but OIDC is disabled`);
   }
+}
+
+export function redirectForOIDC() {
+  document.location.href = `${environment.serverURL}/oauth/login`;
 }

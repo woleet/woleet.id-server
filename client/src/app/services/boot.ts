@@ -10,7 +10,7 @@ import { ErrorService } from '@services/error';
 import { LocalStorageService } from './local-storage';
 import { keys } from '@app/config';
 import { parse } from 'qs';
-import { redirectForOIDCProvider } from '@services/util';
+import { redirectForOIDCProvider, redirectForOIDC } from '@services/util';
 
 const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 
@@ -25,9 +25,7 @@ export class AppConfigService {
     private errorService: ErrorService,
     private store: LocalStorageService) {
 
-    const location = window.location;
     const params = parse(location.search.substring(1));
-
     log.debug(`Boot on ${location.href}`);
 
     if (this.bootOnLogin = location.pathname === '/login') {
@@ -54,12 +52,16 @@ export class AppConfigService {
       .toPromise()
       .then(async (config: any) => {
         this._appConfig = config;
+        const redirect = this.store.get(LOGIN_REDIRECT_KEY);
         if (!config.hasSession) {
           log.debug(`User has no session, clear localstorage`);
           this.store.del('user');
+          if (this.bootOnLogin && redirect && config.useOpenIDConnect) {
+            log.info(`Automatic use of OIDCP`);
+            redirectForOIDC();
+          }
         } else {
           log.debug(`User has a session, checking for redirect request...`);
-          const redirect = this.store.get(LOGIN_REDIRECT_KEY);
           if (this.bootOnLogin && redirect) {
             redirectForOIDCProvider(this.store, config, redirect);
           }
