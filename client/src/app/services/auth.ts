@@ -2,16 +2,12 @@ import { Injectable } from '@angular/core';
 import { Router, Params } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { serverURL } from './config';
-import { BootService, AppConfigService } from '@services/boot';
+import { BootService } from '@services/boot';
 import { Lock } from '@components/util';
 import { Observable } from 'rxjs';
 import { LocalStorageService } from './local-storage';
 
-import { keys } from '@app/config';
 import { redirectForOIDC, redirectForOIDCProvider } from '@services/util';
-import * as log from 'loglevel';
-
-const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -24,8 +20,7 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private bootService: BootService,
-    private store: LocalStorageService,
-    private appConfigService: AppConfigService
+    private store: LocalStorageService
   ) {
     const user = store.get('user');
     this.lock = new Lock();
@@ -63,12 +58,6 @@ export class AuthService {
 
     this.user = auth.user;
     this.store.set('user', JSON.stringify(auth.user));
-
-    const redirect = this.store.get(LOGIN_REDIRECT_KEY);
-    if (redirect) {
-      const config = this.appConfigService.getStartupConfig();
-      redirectForOIDCProvider(this.store, config, redirect);
-    }
 
     return this.user;
   }

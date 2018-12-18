@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Subject, from } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Http, Response } from '@angular/http';
 import { map } from 'rxjs/operators';
 
