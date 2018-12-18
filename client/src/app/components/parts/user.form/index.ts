@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UserService } from '@services/user';
 import { Router } from '@angular/router';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { ErrorMessageProvider, replaceInObject, cleanupObject } from '@components/util';
+import { AbstractControl, FormControl, ValidationErrors, Validators } from '@angular/forms';
+import { cleanupObject, ErrorMessageProvider, replaceInObject } from '@components/util';
 import * as traverse from 'traverse';
 import cc from '@components/cc';
 import { addedDiff, updatedDiff } from 'deep-object-diff';
@@ -124,7 +124,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
         startsWithALetterValidator,
         safeWordValidator,
         Validators.minLength(1),
-        Validators.maxLength(30)
+        Validators.maxLength(32)
       ]),
       email: new FormControl(user.email, [Validators.email]),
       password: new FormControl(undefined, [
@@ -138,7 +138,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
         commonName: new FormControl(user.identity.commonName, [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(30)
+          Validators.maxLength(64)
         ]),
         organization: new FormControl(user.identity.organization, [Validators.maxLength(64)]),
         organizationalUnit: new FormControl(user.identity.organizationalUnit, [Validators.maxLength(64)]),
