@@ -1,13 +1,12 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { mainRoute } from '@app/config';
+import {Component} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {keys, mainRoute} from '@app/config';
 
 import * as log from 'loglevel';
-import { LocalStorageService } from '@services/local-storage';
-import { AppConfigService } from '@services/boot';
-import { AuthService } from '@services/auth';
-import { keys } from '@app/config';
-import { redirectForOIDCProvider } from '@services/util';
+import {LocalStorageService} from '@services/local-storage';
+import {AppConfigService} from '@services/boot';
+import {AuthService} from '@services/auth';
+import {redirectForOIDCProvider} from '@services/util';
 
 const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 
@@ -44,7 +43,7 @@ export class OAuthRedirectComponent {
             router.navigate([mainRoute]);
           }
         } else {
-          this.errorMsg = `Failed to login`;
+          this.errorMsg = 'Failed to login';
         }
       } catch (err) {
         log.error(err);

@@ -1,18 +1,17 @@
 import * as Router from 'koa-router';
-import { getClient, createOAuthUser, createOAuthSession, getClientRedirectURL } from '../../controllers/openid';
+import {createOAuthSession, createOAuthUser, getClient, getClientRedirectURL} from '../../controllers/openid';
+import {BadRequest, ServiceUnavailable} from 'http-errors';
+import * as LRU from 'lru-cache';
+import {Cache} from 'lru-cache';
+import * as uuid from 'uuid/v4';
+import {randomBytes} from 'crypto';
+import {serializeUserDTO} from '../serialize/userDTO';
+import * as log from 'loglevel';
+import {cookies, sessionSuffix} from '../../config';
+import {updateUser} from '../../controllers/user';
+import {setProviderSession} from '../../controllers/oidc-provider';
 
 const router = new Router({ prefix: '/oauth' });
-
-import { BadRequest, ServiceUnavailable } from 'http-errors';
-import { Cache } from 'lru-cache';
-import * as LRU from 'lru-cache';
-import * as uuid from 'uuid/v4';
-import { randomBytes } from 'crypto';
-import { serializeUserDTO } from '../serialize/userDTO';
-import * as log from 'loglevel';
-import { cookies, sessionSuffix } from '../../config';
-import { updateUser } from '../../controllers/user';
-import { setProviderSession } from '../../controllers/oidc-provider';
 
 const lru: Cache<string, { state: string, nonce: string }> = new LRU({ maxAge: 90 * 1000, max: 1000 });
 
@@ -55,14 +54,14 @@ router.get('/callback', async function (ctx) {
   const oauth = ctx.cookies.get('oauth' + sessionSuffix);
 
   if (!oauth) {
-    throw new BadRequest('missing oauth session');
+    throw new BadRequest('Missing OAuth session');
   }
 
   ctx.cookies.set('oauth' + sessionSuffix, null);
   const oauthSession = lru.get(oauth);
 
   if (!oauthSession) {
-    throw new BadRequest('invalid oauth session');
+    throw new BadRequest('Invalid OAuth session');
   }
 
   const { state, nonce } = oauthSession;
@@ -88,15 +87,15 @@ router.get('/callback', async function (ctx) {
   }
 
   if (!info.email) {
-    throw new BadRequest('missing "email" response field');
+    throw new BadRequest('Missing "email" response field');
   }
 
   if (!info.email_verified) {
-    throw new BadRequest(info.email_verified === false ? 'Email must be validated' : 'Missing "email_verified" response field');
+    throw new BadRequest(info.email_verified === false ? 'Email must be verified' : 'Missing "email_verified" response field');
   }
 
   if (!info.name) {
-    throw new BadRequest('missing "name" response field');
+    throw new BadRequest('Missing "name" response field');
   }
 
   let session = await createOAuthSession(info.email);

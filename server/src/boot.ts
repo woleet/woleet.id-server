@@ -1,22 +1,21 @@
 import * as log from 'loglevel';
 
-import { setServerConfig } from './controllers/server-config';
 import {
-  registerOIDCPStopFunction,
   registerOIDCPBootFunction,
+  registerOIDCPStopFunction,
+  registerOIDCPUpdateFunction,
   registerOIDCUpdateFunction,
-  registerOIDCPUpdateFunction
+  setServerConfig
 } from './controllers/server-config';
-
 // Config
-import { encryption } from './config';
-import { setSecret } from './controllers/utils/encryption';
-import { init as initdb } from './database';
-import { initializeOIDC, updateOIDC } from './controllers/openid';
-import { initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider } from './controllers/oidc-provider';
-import { bootServers, bootOIDCProvider } from './boot.servers';
-import { initServerConfig } from './boot.server-config';
-import { exit } from './exit';
+import {encryption} from './config';
+import {setSecret} from './controllers/utils/encryption';
+import {init as initdb} from './database';
+import {initializeOIDC, updateOIDC} from './controllers/openid';
+import {initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider} from './controllers/oidc-provider';
+import {bootOIDCProvider, bootServers} from './boot.servers';
+import {initServerConfig} from './boot.server-config';
+import {exit} from './exit';
 
 initdb()
   .catch((err) => exit(`Failed to init database: ${err.message}`, err))
@@ -37,7 +36,7 @@ initdb()
       await initializeOIDC();
       return;
     } catch (err) {
-      log.error('Failed to initalize OPenID Connect, it will be automatically disabled !', err);
+      log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
     }
     return setServerConfig({ useOpenIDConnect: false });
   })
@@ -46,7 +45,7 @@ initdb()
       await initializeOIDCProvider();
       return;
     } catch (err) {
-      log.error('Failed to initalize OPenID Connect Provider, it will be automatically disabled !', err);
+      log.error('Failed to initialize OpenID Connect Provider, it will be automatically disabled!', err);
     }
   })
   .catch((err) => exit(`Failed to update server config: ${err.message}`, err))

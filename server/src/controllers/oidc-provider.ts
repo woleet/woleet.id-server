@@ -2,14 +2,13 @@
 
 import * as OIDCProvider from 'oidc-provider';
 import * as Debug from 'debug';
-
-const debug = Debug('id:oidcp');
-
-import { provider as providerConfiguration } from '../config.oidcp';
-import { OIDCAccount as Account, SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
-import { getServerConfig } from './server-config';
+import {provider as providerConfiguration} from '../config.oidcp';
+import {OIDCAccount as Account, SequelizeAdapter as Adapter} from '../database/oidcp-adapter';
+import {getServerConfig} from './server-config';
 
 import * as log from 'loglevel';
+
+const debug = Debug('id:oidcp');
 
 let server = null;
 let provider = null;
@@ -17,7 +16,7 @@ let initialized = false;
 
 export function getProvider() {
   if (!initialized) {
-    throw new Error('Provider not initialized !');
+    throw new Error('Provider not initialized!');
   }
   return provider;
 }
@@ -96,14 +95,14 @@ export function getActiveServer() {
 export function stopOIDCProvider(): Promise<void> {
   return new Promise((resolve) => {
     if (server) {
-      log.info(`Shutting down OIDCP server...`);
+      log.info('Shutting down OIDCP server...');
       server.close(() => {
-        log.info(`OIDCP server is now down`);
+        log.info('OIDCP server is now down');
         setActiveServer(null);
         resolve();
       });
     } else {
-      log.info(`Nothing to do, OIDCP server is already down.`);
+      log.info('Nothing to do, OIDCP server is already down');
       resolve();
     }
   });

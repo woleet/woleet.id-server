@@ -1,16 +1,16 @@
-import { Injectable, NgZone } from '@angular/core';
-import { Subject, from } from 'rxjs';
-import { Http, Response } from '@angular/http';
-import { map } from 'rxjs/operators';
+import {Injectable, NgZone} from '@angular/core';
+import {Subject} from 'rxjs';
+import {Http, Response} from '@angular/http';
+import {map} from 'rxjs/operators';
 
 import * as log from 'loglevel';
-import { serverURL } from './config';
-import { switchNetworkError } from '@interceptors/network-error';
-import { ErrorService } from '@services/error';
-import { LocalStorageService } from './local-storage';
-import { keys } from '@app/config';
-import { parse } from 'qs';
-import { redirectForOIDCProvider, redirectForOIDC } from '@services/util';
+import {serverURL} from './config';
+import {switchNetworkError} from '@interceptors/network-error';
+import {ErrorService} from '@services/error';
+import {LocalStorageService} from './local-storage';
+import {keys} from '@app/config';
+import {parse} from 'qs';
+import {redirectForOIDC, redirectForOIDCProvider} from '@services/util';
 
 const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 
@@ -61,7 +61,7 @@ export class AppConfigService {
             redirectForOIDC();
           }
         } else {
-          log.debug(`User has a session, checking for redirect request...`);
+          log.debug('User has a session, checking for redirect request...');
           if (this.bootOnLogin && redirect) {
             redirectForOIDCProvider(this.store, config, redirect);
           }

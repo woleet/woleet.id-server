@@ -1,9 +1,10 @@
-import { ServerConfig } from '../database';
-import { serverConfig } from '../config';
+import {ServerConfig} from '../database';
+import {serverConfig} from '../config';
 import * as Debug from 'debug';
-const debug = Debug('id:ctrl:config');
 import * as log from 'loglevel';
-import { exit } from '../exit';
+import {exit} from '../exit';
+
+const debug = Debug('id:ctrl:config');
 
 const { CONFIG_ID } = serverConfig;
 
@@ -79,7 +80,7 @@ async function checkOIDCConfigChange(up: ServerConfigUpdate) {
     try {
       await fns.updateOIDCClient();
     } catch (err) {
-      log.error('Failed to initalize OPenID Connect, it will be automatically disabled !', err);
+      log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
       return setServerConfig({ useOpenIDConnect: false });
     }
   }
@@ -89,7 +90,7 @@ function OIDCPSafeReboot() {
   debug('Reboot OIDCP');
   return fns.bootOIDCProvider()
     .catch((err) => {
-      log.error('Failed to reboot OPenID Connect, it will be automatically disabled !');
+      log.error('Failed to reboot OpenID Connect, it will be automatically disabled!');
       setServerConfig({ enableOIDCP: false });
       exit('FATAL: This error should have been handled.', err);
     });
@@ -111,7 +112,7 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
       await fns.updateOIDCProvider();
       await OIDCPSafeReboot();
     } catch (err) {
-      log.error('Failed to initalize OPenID Connect, it will be automatically disabled !', err);
+      log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
       return setServerConfig({ useOpenIDConnect: false });
     }
   }

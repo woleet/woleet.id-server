@@ -1,8 +1,8 @@
 // tslint:disable:radix
 
-import { promisify } from 'util';
-import { SetOption } from 'cookies';
-import { readFileSync } from 'fs';
+import {promisify} from 'util';
+import {SetOption} from 'cookies';
+import {readFileSync} from 'fs';
 import * as log from 'loglevel';
 import * as read from 'read';
 import * as crypto from 'crypto';
@@ -28,7 +28,7 @@ function getenv<T = string>(name: string, fallback: T = null): T {
   const prefix = 'WOLEET_ID_SERVER_';
   const value = process.env[prefix + name];
   if (!value && fallback !== null) {
-    log.warn(`No value found for "${prefix + name}"${fallback !== null ? `, defaulting to '${JSON.stringify(fallback)}'` : ' !'}`);
+    log.warn(`No value found for "${prefix + name}"${fallback !== null ? `, defaulting to '${JSON.stringify(fallback)}'` : '!'}`);
   }
   if (fallback !== null) {
     switch (typeof fallback) {
