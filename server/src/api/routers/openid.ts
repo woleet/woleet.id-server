@@ -12,6 +12,7 @@ import { serializeUserDTO } from '../serialize/userDTO';
 import * as log from 'loglevel';
 import { cookies, sessionSuffix } from '../../config';
 import { updateUser } from '../../controllers/user';
+import { setProviderSession } from '../../controllers/oidc-provider';
 
 const lru: Cache<string, { state: string, nonce: string }> = new LRU({ maxAge: 90 * 1000, max: 1000 });
 
@@ -98,7 +99,7 @@ router.get('/callback', async function (ctx) {
     throw new BadRequest('missing "name" response field');
   }
 
-  const session = await createOAuthSession(info.email);
+  let session = await createOAuthSession(info.email);
 
   if (session) {
     ctx.cookies.set('session' + sessionSuffix, session.token, cookies.options);
@@ -109,13 +110,14 @@ router.get('/callback', async function (ctx) {
       await updateUser(user.id, { identity: { commonName: info.name } });
       user.x500CommonName = info.name;
     }
-
-    return ctx.body = { user: serializeUserDTO(session.user) };
   } else {
-    const aio = await createOAuthUser({ email: info.email, identity: { commonName: info.name } });
-    ctx.cookies.set('session' + sessionSuffix, aio.token, cookies.options);
-    return ctx.body = { user: serializeUserDTO(aio.user) };
+    session = await createOAuthUser({ email: info.email, identity: { commonName: info.name } });
+    ctx.cookies.set('session' + sessionSuffix, session.token, cookies.options);
   }
+
+  await setProviderSession(ctx, session.user.id);
+
+  return ctx.body = { user: serializeUserDTO(session.user) };
 });
 
 export { router };

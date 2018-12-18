@@ -4,7 +4,9 @@ import * as Router from 'koa-router';
 import * as querystring from 'querystring';
 import { BadRequest } from 'http-errors';
 
+import * as log from 'loglevel';
 import * as Debug from 'debug';
+
 const debug = Debug('id:oidc:app');
 
 import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
@@ -54,9 +56,7 @@ export function build(): Koa {
 
     debug('pre auth', ctx['oidc'], `session=${ctx.session && ctx.session.id}`, `user=${ctx.session && ctx.session.user.get('id')}`);
 
-    if (ctx.session) {
-      await provider.setProviderSession(ctx.req, ctx.res, { account: ctx.session && ctx.session.user.get('id') });
-    } else {
+    if (!ctx.session) {
       // #login-precondition
       if (!ctx.header.referer) {
         throw new BadRequest('Missing referer');
@@ -81,6 +81,7 @@ export function build(): Koa {
         origin: `oidcp=${origin}`,
         redirect
       }));
+
       return;
     }
 

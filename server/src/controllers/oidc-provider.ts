@@ -48,7 +48,7 @@ async function configure(): Promise<void> {
   const { enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL, OIDCPClients } = getServerConfig();
   const keystore = await keystorePromise;
 
-  debug('Init OIDCP with:\n' + JSON.stringify( { enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL }, null, 2));
+  debug('Init OIDCP with:\n' + JSON.stringify({ enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL }, null, 2));
 
   if (!enableOIDCP) {
     return abortInit('enableOIDCP=false, skipping configuration');
@@ -107,4 +107,10 @@ export function stopOIDCProvider(): Promise<void> {
       resolve();
     }
   });
+}
+
+export function setProviderSession(ctx, userId) {
+  if (initialized && provider) {
+    return provider.setProviderSession(ctx.req, ctx.res, { account: userId });
+  }
 }

@@ -52,7 +52,6 @@ export class EventStore {
 
     ServerEvent.createMany(this.batch)
       .then((e) => {
-        debug('Registered', e.map(ev => ev.toJSON()));
         this.batch.splice(0, len);
       })
       .catch((err) => {
