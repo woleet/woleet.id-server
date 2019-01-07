@@ -206,6 +206,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
+  /discover/user:
+    get:
+      operationId: discoverUser
+      summary: Get information about the current user.
+      tags:
+        - Discovery
+      description: >
+        Use this endpoint to get information about the current user.
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserDisco'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
   /discover/keys/{userId}:
     get:
       operationId: discoverUserKeys
