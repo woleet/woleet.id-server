@@ -211,6 +211,7 @@ declare global {
   /* Config */
 
   interface InternalServerConfigObject extends ServerConfig {
+    version: number;
     identityURL: string;
     defaultKeyId: string;
     defaultKey?: InternalKeyObject;
