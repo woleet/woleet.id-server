@@ -34,7 +34,7 @@ public class DiscoveryApiTest {
     @Before
     public void setUp() throws Exception {
 
-        // Start form a clean state
+        // Start from a clean state
         tearDown();
 
         user = Config.createTestUser();
@@ -133,5 +133,16 @@ public class DiscoveryApiTest {
             if (u.getId().equals(user.getId()))
                 return;
         fail("User not found in user list");
+    }
+
+    /**
+     * Get the user associated with the authorization token.
+     *
+     * @throws ApiException if the Api call fails
+     */
+    @Test
+    public void discoverUserTest() throws ApiException {
+        UserDisco response = discoverApi.discoverUser();
+        assertEquals(user.getId(), response.getId());
     }
 }
