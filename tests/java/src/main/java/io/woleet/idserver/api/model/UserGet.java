@@ -34,10 +34,6 @@ import java.util.UUID;
  */
 
 public class UserGet extends UserBase {
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
-  private UUID id;
-
   public static final String SERIALIZED_NAME_CREATED_AT = "createdAt";
   @SerializedName(SERIALIZED_NAME_CREATED_AT)
   private Long createdAt;
@@ -46,22 +42,9 @@ public class UserGet extends UserBase {
   @SerializedName(SERIALIZED_NAME_UPDATED_AT)
   private Long updatedAt;
 
-  public static final String SERIALIZED_NAME_DELETED_AT = "deletedAt";
-  @SerializedName(SERIALIZED_NAME_DELETED_AT)
-  private Long deletedAt;
-
   public static final String SERIALIZED_NAME_LAST_LOGIN = "lastLogin";
   @SerializedName(SERIALIZED_NAME_LAST_LOGIN)
   private Long lastLogin;
-
-   /**
-   * User identifier (allocated by the server).
-   * @return id
-  **/
-  @ApiModelProperty(example = "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3", value = "User identifier (allocated by the server).")
-  public UUID getId() {
-    return id;
-  }
 
    /**
    * Date of creation (Unix ms timestamp).
@@ -79,15 +62,6 @@ public class UserGet extends UserBase {
   @ApiModelProperty(example = "1529052551419", value = "Date of last modification (Unix ms timestamp).")
   public Long getUpdatedAt() {
     return updatedAt;
-  }
-
-   /**
-   * Date of deletion (Unix ms timestamp) (&#x60;null&#x60; if not deleted).
-   * @return deletedAt
-  **/
-  @ApiModelProperty(example = "1529052551419", value = "Date of deletion (Unix ms timestamp) (`null` if not deleted).")
-  public Long getDeletedAt() {
-    return deletedAt;
   }
 
    /**
@@ -109,17 +83,15 @@ public class UserGet extends UserBase {
       return false;
     }
     UserGet userGet = (UserGet) o;
-    return Objects.equals(this.id, userGet.id) &&
-        Objects.equals(this.createdAt, userGet.createdAt) &&
+    return Objects.equals(this.createdAt, userGet.createdAt) &&
         Objects.equals(this.updatedAt, userGet.updatedAt) &&
-        Objects.equals(this.deletedAt, userGet.deletedAt) &&
         Objects.equals(this.lastLogin, userGet.lastLogin) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, createdAt, updatedAt, deletedAt, lastLogin, super.hashCode());
+    return Objects.hash(createdAt, updatedAt, lastLogin, super.hashCode());
   }
 
 
@@ -128,10 +100,8 @@ public class UserGet extends UserBase {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserGet {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
-    sb.append("    deletedAt: ").append(toIndentedString(deletedAt)).append("\n");
     sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");
     sb.append("}");
     return sb.toString();

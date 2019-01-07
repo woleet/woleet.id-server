@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 Sign some data using a key.
 
-Use this endpoint to sign some data using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash of the data to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;The key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;The signature produced is the signature of the hash using the referred key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
+Use this endpoint to sign a SHA256 hash using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;When authenticated using an API token, the key to use is specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60;. If not specified, the authenticated user&#39;s default key is used (if any). 
 
 ### Example
 ```java
@@ -30,6 +30,11 @@ ApiClient defaultClient = Configuration.getDefaultApiClient();
 HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
 APITokenAuth.setUsername("YOUR USERNAME");
 APITokenAuth.setPassword("YOUR PASSWORD");
+
+// Configure HTTP basic authorization: OAuthTokenAuth
+HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+OAuthTokenAuth.setUsername("YOUR USERNAME");
+OAuthTokenAuth.setPassword("YOUR PASSWORD");
 
 SignatureApi apiInstance = new SignatureApi();
 String hashToSign = d8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975; // String | SHA256 hash to be signed (a string formatted like [a-f0-9]{64}).
@@ -60,7 +65,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[APITokenAuth](../README.md#APITokenAuth)
+[APITokenAuth](../README.md#APITokenAuth), [OAuthTokenAuth](../README.md#OAuthTokenAuth)
 
 ### HTTP request headers
 

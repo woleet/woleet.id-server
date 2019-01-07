@@ -2,8 +2,10 @@ import * as log from 'loglevel';
 
 import { environment } from '@env/environment';
 
-const mainRoute = '/user';
+export const mainRoute = '/user';
 
 log.setLevel(environment.production ? 'warn' : 'debug');
 
-export { mainRoute };
+export const keys = {
+  LOGIN_REDIRECT: 'login-redirect'
+};

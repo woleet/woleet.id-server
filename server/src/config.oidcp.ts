@@ -1,14 +1,14 @@
-import { cookies } from './config';
+import { cookies, sessionSuffix } from './config';
 
 // https://github.com/panva/node-oidc-provider/blob/master/docs/configuration.md
 export const provider = {
   acrValues: ['urn:mace:incommon:iap:bronze'],
   cookies: {
     names: {
-      session: 'oidc-session',
-      interaction: 'oidc-grant',
-      resume: 'oidc-grant',
-      state: 'oidc-state'
+      session: 'oidc-session' + sessionSuffix,
+      interaction: 'oidc-grant' + sessionSuffix,
+      resume: 'oidc-grant' + sessionSuffix,
+      state: 'oidc-state' + sessionSuffix
     },
     long: { signed: true, secure: true, maxAge: (1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
     short: { signed: true, secure: true },

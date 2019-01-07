@@ -6,6 +6,7 @@ import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -21,12 +22,15 @@ public class ApiTokenApiTest extends CRUDApiTest {
         }
 
         @Override
-        public ObjectArray getAllObjects() throws ApiException {
-            return new ObjectArray(apiTokenApi.getAllAPITokens());
+        public List<CRUDApiTest.ObjectGet> getAllObjects() throws ApiException {
+            List<CRUDApiTest.ObjectGet> list = new ArrayList<>();
+            for (APITokenGet apiTokenGet : apiTokenApi.getAllAPITokens())
+                list.add(new ObjectGet(apiTokenGet));
+            return list;
         }
 
         @Override
-        public CRUDApiTest.ObjectGet deleteObject(UUID id) throws ApiException {
+        public ObjectGet deleteObject(UUID id) throws ApiException {
             return new ObjectGet(apiTokenApi.deleteAPIToken(id));
         }
 
@@ -101,28 +105,6 @@ public class ApiTokenApiTest extends CRUDApiTest {
                 apiTokenPut.status(APITokenStatusEnum.BLOCKED);
             if (Config.randomBoolean())
                 apiTokenPut.name(Config.randomName());
-        }
-    }
-
-    class ObjectArray extends CRUDApiTest.ObjectArray<APITokenArray> {
-
-        APITokenArray apiTokenArray;
-
-        ObjectArray(APITokenArray apiTokenArray) {
-            this.apiTokenArray = apiTokenArray;
-        }
-
-        @Override
-        public boolean contains(CRUDApiTest.ObjectGet object) {
-            return apiTokenArray.contains(object.get());
-        }
-
-        @Override
-        public CRUDApiTest.ObjectGet[] getArray() {
-            ArrayList<ObjectGet> objectGetArray = new ArrayList<>();
-            for (APITokenGet apiToken : apiTokenArray)
-                objectGetArray.add(new ObjectGet(apiToken));
-            return objectGetArray.toArray(new ObjectGet[0]);
         }
     }
 

@@ -1,10 +1,11 @@
 import * as Sequelize from 'sequelize';
-import { models, grantable } from './model/oidcp';
-import { sequelize } from './sequelize';
-import { User } from './index';
+import {grantable, models} from './model/oidcp';
+import {sequelize} from './sequelize';
+import {User} from './index';
 
 import * as assert from 'assert';
 import * as Debug from 'debug';
+
 const debug = Debug('id:oidc:adapter');
 
 type OptionalAttributesOf<T> = {
@@ -47,7 +48,7 @@ export class SequelizeAdapter {
         };
       })
       .then((res) => {
-        debug(`found `, res);
+        debug('found ', res);
         return res;
       });
   }

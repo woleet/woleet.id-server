@@ -1,4 +1,4 @@
-import { FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
+import {AbstractControl, FormControl, ValidationErrors} from '@angular/forms';
 import * as traverse from 'traverse';
 import { BehaviorSubject } from 'rxjs';
 import * as timestring from 'timestring';
@@ -142,7 +142,7 @@ export class ErrorMessageProvider {
       case 'end':
         return `Expect string to end with "${error.expectedEnd}"`;
       case 'ascii':
-        return `Must contain only ascii characters`;
+        return 'Must contain only ASCII characters';
       case 'startsWithALetter':
         return `Must start with a letter`;
       case 'timestring':

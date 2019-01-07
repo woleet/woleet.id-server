@@ -88,6 +88,7 @@ public class ApiClient {
         authentications.put("APITokenAuth", new HttpBasicAuth());
         authentications.put("BasicAuth", new HttpBasicAuth());
         authentications.put("CookieAuth", new ApiKeyAuth("query", "session"));
+        authentications.put("OAuthTokenAuth", new HttpBasicAuth());
         // Prevent the authentications from being modified.
         authentications = Collections.unmodifiableMap(authentications);
     }
@@ -109,7 +110,7 @@ public class ApiClient {
     /**
      * Get base path
      *
-     * @return Baes path
+     * @return Base path
      */
     public String getBasePath() {
         return basePath;

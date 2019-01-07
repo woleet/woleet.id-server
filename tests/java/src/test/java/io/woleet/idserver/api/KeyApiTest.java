@@ -6,6 +6,7 @@ import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -21,17 +22,20 @@ public class KeyApiTest extends CRUDApiTest {
         }
 
         @Override
-        public ObjectArray getAllObjects() throws ApiException {
+        public List<CRUDApiTest.ObjectGet> getAllObjects() throws ApiException {
 
             // This code is called before setUp() is called, so user can be null
             if (user == null)
-                return new ObjectArray(new KeyArray());
+                return new ArrayList<>();
 
-            return new ObjectArray(keyApi.getAllUserKeys(user.getId()));
+            List<CRUDApiTest.ObjectGet> list = new ArrayList<>();
+            for (KeyGet keyGet : keyApi.getAllUserKeys(user.getId()))
+                list.add(new KeyApiTest.ObjectGet(keyGet));
+            return list;
         }
 
         @Override
-        public CRUDApiTest.ObjectGet deleteObject(UUID id) throws ApiException {
+        public ObjectGet deleteObject(UUID id) throws ApiException {
             return new ObjectGet(keyApi.deleteKey(id));
         }
 
@@ -106,28 +110,6 @@ public class KeyApiTest extends CRUDApiTest {
                 keyPut.setStatus(KeyStatusEnum.BLOCKED);
             if (Config.randomBoolean())
                 keyPut.setName(Config.randomName());
-        }
-    }
-
-    class ObjectArray extends CRUDApiTest.ObjectArray<KeyArray> {
-
-        KeyArray keyArray;
-
-        ObjectArray(KeyArray keyArray) {
-            this.keyArray = keyArray;
-        }
-
-        @Override
-        public boolean contains(CRUDApiTest.ObjectGet object) {
-            return keyArray.contains(object.get());
-        }
-
-        @Override
-        public CRUDApiTest.ObjectGet[] getArray() {
-            ArrayList<ObjectGet> objectGetArray = new ArrayList<>();
-            for (KeyGet key : keyArray)
-                objectGetArray.add(new ObjectGet(key));
-            return objectGetArray.toArray(new ObjectGet[0]);
         }
     }
 

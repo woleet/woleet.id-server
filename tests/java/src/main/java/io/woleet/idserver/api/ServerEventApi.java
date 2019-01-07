@@ -28,7 +28,6 @@ import java.io.IOException;
 
 
 import io.woleet.idserver.api.model.APIError;
-import io.woleet.idserver.api.model.ServerEventArray;
 import io.woleet.idserver.api.model.ServerEventGet;
 import java.util.UUID;
 
@@ -238,23 +237,23 @@ public class ServerEventApi {
     /**
      * List all server events.
      * 
-     * @return ServerEventArray
+     * @return List&lt;ServerEventGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ServerEventArray getServerEventList() throws ApiException {
-        ApiResponse<ServerEventArray> resp = getServerEventListWithHttpInfo();
+    public List<ServerEventGet> getServerEventList() throws ApiException {
+        ApiResponse<List<ServerEventGet>> resp = getServerEventListWithHttpInfo();
         return resp.getData();
     }
 
     /**
      * List all server events.
      * 
-     * @return ApiResponse&lt;ServerEventArray&gt;
+     * @return ApiResponse&lt;List&lt;ServerEventGet&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<ServerEventArray> getServerEventListWithHttpInfo() throws ApiException {
+    public ApiResponse<List<ServerEventGet>> getServerEventListWithHttpInfo() throws ApiException {
         com.squareup.okhttp.Call call = getServerEventListValidateBeforeCall(null, null);
-        Type localVarReturnType = new TypeToken<ServerEventArray>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<ServerEventGet>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -265,7 +264,7 @@ public class ServerEventApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getServerEventListAsync(final ApiCallback<ServerEventArray> callback) throws ApiException {
+    public com.squareup.okhttp.Call getServerEventListAsync(final ApiCallback<List<ServerEventGet>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -287,7 +286,7 @@ public class ServerEventApi {
         }
 
         com.squareup.okhttp.Call call = getServerEventListValidateBeforeCall(progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<ServerEventArray>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<ServerEventGet>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

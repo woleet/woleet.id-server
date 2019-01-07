@@ -1,22 +1,26 @@
 import * as log from 'loglevel';
 
-import { production, cookies, ports, server as config } from './config';
-
+import {cookies, ports, server as config} from './config';
 // API servers dependencies
 import * as Koa from 'koa';
 import * as morgan from 'koa-morgan';
 import * as cors from '@koa/cors';
-import { errorHandler } from './api/error';
+import {errorHandler} from './api/error';
 
-import { build as oidcProviderAppFactory } from './api/oidcp-app';
-import { isInitialized as isOIDCPInitialized, getActiveServer, setActiveServer, stopActiveServer } from './controllers/oidc-provider';
-import { definitions } from './apps';
-import { exit } from './exit';
+import {build as oidcProviderAppFactory} from './api/oidcp-app';
+import {
+  getActiveServer,
+  isInitialized as isOIDCPInitialized,
+  setActiveServer,
+  stopOIDCProvider
+} from './controllers/oidc-provider';
+import {definitions} from './apps';
+import {exit} from './exit';
 
-import { ServerOptions, createServer } from 'https';
-import { Server } from 'net';
+import {createServer, ServerOptions} from 'https';
+import {Server} from 'net';
 
-import { setServerConfig } from './controllers/server-config';
+import {setServerConfig} from './controllers/server-config';
 
 const apps: Dictionary<Server> = {};
 
@@ -48,7 +52,7 @@ function startServer(app, port): Server {
 }
 
 export function bootServers(): Promise<void> {
-  log.info(`Starting servers...`);
+  log.info('Starting servers...');
 
   const promises = definitions.map(({ name, port, router }) => {
 
@@ -90,18 +94,18 @@ export function bootServers(): Promise<void> {
 
   });
 
-  const oidc = bootOIDCPServer();
+  const oidc = bootOIDCProvider();
 
   return Promise.all(promises.concat(oidc)).then(() => { });
 }
 
-export async function bootOIDCPServer(): Promise<void> {
+export async function bootOIDCProvider(): Promise<void> {
   const port = ports.oidcp;
 
   const activeServer: Server = getActiveServer();
 
   if (activeServer) {
-    await stopActiveServer();
+    await stopOIDCProvider();
   }
 
   await new Promise((resolve) => {
@@ -130,7 +134,7 @@ export async function bootOIDCPServer(): Promise<void> {
           log.warn('OIDCP server encountered an error before listening, it will be softly disabled');
           log.warn('Full trace is:', err);
           setActiveServer(null);
-          setServerConfig({ enableOIDCP: false });
+          setServerConfig({ enableOIDCP: false }).then(resolve);
         }
       });
     } else {

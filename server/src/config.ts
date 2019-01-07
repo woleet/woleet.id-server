@@ -1,8 +1,8 @@
 // tslint:disable:radix
 
-import { promisify } from 'util';
-import { SetOption } from 'cookies';
-import { readFileSync } from 'fs';
+import {promisify} from 'util';
+import {SetOption} from 'cookies';
+import {readFileSync} from 'fs';
 import * as log from 'loglevel';
 import * as read from 'read';
 import * as crypto from 'crypto';
@@ -28,7 +28,7 @@ function getenv<T = string>(name: string, fallback: T = null): T {
   const prefix = 'WOLEET_ID_SERVER_';
   const value = process.env[prefix + name];
   if (!value && fallback !== null) {
-    log.warn(`No value found for "${prefix + name}"${fallback !== null ? `, defaulting to '${JSON.stringify(fallback)}'` : ' !'}`);
+    log.warn(`No value found for "${prefix + name}"${fallback !== null ? `, defaulting to '${JSON.stringify(fallback)}'` : '!'}`);
   }
   if (fallback !== null) {
     switch (typeof fallback) {
@@ -41,9 +41,14 @@ function getenv<T = string>(name: string, fallback: T = null): T {
   return <any>(value || fallback);
 }
 
-export const production = getenv('PRODUCTION', false);
+export const production = getenv('PRODUCTION', true);
 
 log.setLevel(production ? 'info' : 'debug');
+
+log[production ? 'info' : 'warn'](
+  // @ts-ignore
+  `Running server in ${chalk.bold(production ? chalk.green('PRODUCTION') : chalk.red('DEVELOPMENT'))} mode`
+);
 
 const defaultPort = getenv('DEFAULT_PORT', 3000);
 
@@ -62,6 +67,8 @@ export const db = {
   connectionAttempts: 6,
   retryDelay: 5 * 1000
 };
+
+export const sessionSuffix = production ? '' : '-' + crypto.randomBytes(4).toString('hex');
 
 export const session = {
   expireAfter: 30 * 60 * 1000,
@@ -111,8 +118,11 @@ export const serverConfig = {
 };
 
 export const cookies: { keys: string[], options: SetOption } = {
-  keys: production ? [crypto.randomBytes(16).toString('base64')] : ['cookie-devel-secret'],
-  options: { secure: true, signed: true }
+  keys: [crypto.randomBytes(16).toString('base64')],
+  options: {
+    secure: <boolean>production === true,
+    signed: <boolean>production === true
+  }
 };
 
 const ENCRYPTION_SECRET = getenv('ENCRYPTION_SECRET');

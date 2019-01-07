@@ -119,7 +119,7 @@ public class SignatureApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "APITokenAuth" };
+        String[] localVarAuthNames = new String[] { "APITokenAuth", "OAuthTokenAuth" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -139,7 +139,7 @@ public class SignatureApi {
 
     /**
      * Sign some data using a key.
-     * Use this endpoint to sign some data using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash of the data to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;The key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;The signature produced is the signature of the hash using the referred key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
+     * Use this endpoint to sign a SHA256 hash using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;When authenticated using an API token, the key to use is specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60;. If not specified, the authenticated user&#39;s default key is used (if any). 
      * @param hashToSign SHA256 hash to be signed (a string formatted like [a-f0-9]{64}). (required)
      * @param userId User identifier. (optional)
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
@@ -154,7 +154,7 @@ public class SignatureApi {
 
     /**
      * Sign some data using a key.
-     * Use this endpoint to sign some data using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash of the data to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;The key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;The signature produced is the signature of the hash using the referred key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
+     * Use this endpoint to sign a SHA256 hash using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;When authenticated using an API token, the key to use is specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60;. If not specified, the authenticated user&#39;s default key is used (if any). 
      * @param hashToSign SHA256 hash to be signed (a string formatted like [a-f0-9]{64}). (required)
      * @param userId User identifier. (optional)
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
@@ -170,7 +170,7 @@ public class SignatureApi {
 
     /**
      * Sign some data using a key. (asynchronously)
-     * Use this endpoint to sign some data using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash of the data to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;The key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;The signature produced is the signature of the hash using the referred key. &lt;br&gt;This endpoint is protected using an API token. It is recommended not to expose it publicly. 
+     * Use this endpoint to sign a SHA256 hash using one of the keys managed by the server. &lt;br&gt;Provide the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;When authenticated using an API token, the key to use is specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60;. If not specified, the authenticated user&#39;s default key is used (if any). 
      * @param hashToSign SHA256 hash to be signed (a string formatted like [a-f0-9]{64}). (required)
      * @param userId User identifier. (optional)
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)

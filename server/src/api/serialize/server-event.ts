@@ -1,12 +1,5 @@
-export function serialiseServerEvent(evt: InternalServerEventObject): ApiServerEventObject {
+export function serializeServerEvent(evt: InternalServerEventObject): ApiServerEventObject {
   const dates = { occurredAt: +evt.occurredAt || null };
-
-  const { type, data,
-    authorizedUserId,
-    authorizedTokenId,
-    associatedTokenId,
-    associatedUserId,
-    associatedKeyId } = evt;
 
   return Object.assign({
     type: evt.type,

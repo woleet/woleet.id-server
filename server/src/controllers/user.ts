@@ -59,7 +59,7 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
 }
 
 export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<InternalUserObject> {
-  debug('Updat user', attrs);
+  debug('Update user', attrs);
 
   const update = Object.assign({}, attrs);
 
@@ -110,6 +110,11 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
 
 export async function getAllUsers(): Promise<InternalUserObject[]> {
   const users = await User.getAll();
+  return users.map((user) => user.toJSON());
+}
+
+export async function searchAllUsers(search): Promise<InternalUserObject[]> {
+  const users = await User.find(search);
   return users.map((user) => user.toJSON());
 }
 

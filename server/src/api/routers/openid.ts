@@ -1,17 +1,17 @@
 import * as Router from 'koa-router';
-import { getClient, createOAuthUser, createOAuthSession, getClientRedirectURL } from '../../controllers/openid';
+import {createOAuthSession, createOAuthUser, getClient, getClientRedirectURL} from '../../controllers/openid';
+import {BadRequest, ServiceUnavailable} from 'http-errors';
+import * as LRU from 'lru-cache';
+import {Cache} from 'lru-cache';
+import * as uuid from 'uuid/v4';
+import {randomBytes} from 'crypto';
+import {serializeUserDTO} from '../serialize/userDTO';
+import * as log from 'loglevel';
+import {cookies, sessionSuffix} from '../../config';
+import {updateUser} from '../../controllers/user';
+import {setProviderSession} from '../../controllers/oidc-provider';
 
 const router = new Router({ prefix: '/oauth' });
-
-import { BadRequest, ServiceUnavailable } from 'http-errors';
-import { Cache } from 'lru-cache';
-import * as LRU from 'lru-cache';
-import * as uuid from 'uuid/v4';
-import { randomBytes } from 'crypto';
-import { serialiseUserDTO } from '../serialize/userDTO';
-import * as log from 'loglevel';
-import { cookies } from '../../config';
-import { updateUser } from '../../controllers/user';
 
 const lru: Cache<string, { state: string, nonce: string }> = new LRU({ maxAge: 90 * 1000, max: 1000 });
 
@@ -37,7 +37,7 @@ router.get('/login', async function (ctx) {
   });
 
   lru.set(oauth, { state, nonce });
-  ctx.cookies.set('oauth', oauth, cookies.options);
+  ctx.cookies.set('oauth' + sessionSuffix, oauth, cookies.options);
   ctx.redirect(url);
 });
 
@@ -51,17 +51,17 @@ router.get('/callback', async function (ctx) {
     throw new ServiceUnavailable();
   }
 
-  const oauth = ctx.cookies.get('oauth');
+  const oauth = ctx.cookies.get('oauth' + sessionSuffix);
 
   if (!oauth) {
-    throw new BadRequest('missing oauth session');
+    throw new BadRequest('Missing OAuth session');
   }
 
-  ctx.cookies.set('oauth', null);
+  ctx.cookies.set('oauth' + sessionSuffix, null);
   const oauthSession = lru.get(oauth);
 
   if (!oauthSession) {
-    throw new BadRequest('invalid oauth session');
+    throw new BadRequest('Invalid OAuth session');
   }
 
   const { state, nonce } = oauthSession;
@@ -87,21 +87,21 @@ router.get('/callback', async function (ctx) {
   }
 
   if (!info.email) {
-    throw new BadRequest('missing "email" response field');
+    throw new BadRequest('Missing "email" response field');
   }
 
   if (!info.email_verified) {
-    throw new BadRequest(info.email_verified === false ? 'Email must be validated' : 'Missing "email_verified" response field');
+    throw new BadRequest(info.email_verified === false ? 'Email must be verified' : 'Missing "email_verified" response field');
   }
 
   if (!info.name) {
-    throw new BadRequest('missing "name" response field');
+    throw new BadRequest('Missing "name" response field');
   }
 
-  const session = await createOAuthSession(info.email);
+  let session = await createOAuthSession(info.email);
 
   if (session) {
-    ctx.cookies.set('session', session.token, cookies.options);
+    ctx.cookies.set('session' + sessionSuffix, session.token, cookies.options);
 
     if (session.user.x500CommonName !== info.name) {
       const user = session.user;
@@ -109,13 +109,14 @@ router.get('/callback', async function (ctx) {
       await updateUser(user.id, { identity: { commonName: info.name } });
       user.x500CommonName = info.name;
     }
-
-    return ctx.body = { user: serialiseUserDTO(session.user) };
   } else {
-    const aio = await createOAuthUser({ email: info.email, identity: { commonName: info.name } });
-    ctx.cookies.set('session', aio.token, cookies.options);
-    return ctx.body = { user: serialiseUserDTO(aio.user) };
+    session = await createOAuthUser({ email: info.email, identity: { commonName: info.name } });
+    ctx.cookies.set('session' + sessionSuffix, session.token, cookies.options);
   }
+
+  await setProviderSession(ctx, session.user.id);
+
+  return ctx.body = { user: serializeUserDTO(session.user) };
 });
 
 export { router };

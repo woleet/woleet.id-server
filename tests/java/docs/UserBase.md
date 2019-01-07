@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**id** | [**UUID**](UUID.md) | User identifier (allocated by the server). |  [optional]
 **email** | **String** | User email (can be used for login). |  [optional]
 **username** | **String** | User name (can be used for login). |  [optional]
 **status** | [**UserStatusEnum**](UserStatusEnum.md) |  |  [optional]

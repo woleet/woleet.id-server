@@ -1,6 +1,5 @@
 package io.woleet.idserver.api;
 
-import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.IdentityResult;
@@ -12,11 +11,11 @@ import static org.junit.Assert.*;
 
 public class IdentityApiTest {
 
-    // Check that IDENTITY base path is defined in the environment
-    public static final String WOLEET_ID_SERVER_IDENTITY_BASEPATH = System.getenv("WOLEET_ID_SERVER_IDENTITY_BASEPATH");
+    private static String WOLEET_ID_SERVER_IDENTITY_BASEPATH = System.getenv("WOLEET_ID_SERVER_IDENTITY_BASEPATH");
 
     static {
-        assertFalse("WOLEET_ID_SERVER_IDENTITY_BASEPATH must be defined", WOLEET_ID_SERVER_IDENTITY_BASEPATH.isEmpty());
+        if (WOLEET_ID_SERVER_IDENTITY_BASEPATH == null)
+            WOLEET_ID_SERVER_IDENTITY_BASEPATH = "https://localhost:3001";
     }
 
     @Test

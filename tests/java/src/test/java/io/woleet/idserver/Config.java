@@ -9,10 +9,9 @@ import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.ECKey;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-
-import static org.junit.Assert.assertFalse;
 
 public class Config {
 
@@ -25,11 +24,12 @@ public class Config {
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
     private static final String TEST_USERS_USERNAME_PREFIX = "tester_";
 
-    // Check that API base path is defined in the environment
-    public static final String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
+    // Get API base path from the environment
+    public static String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
 
     static {
-        assertFalse("WOLEET_ID_SERVER_API_BASEPATH must be defined", WOLEET_ID_SERVER_API_BASEPATH.isEmpty());
+        if (WOLEET_ID_SERVER_API_BASEPATH == null)
+            WOLEET_ID_SERVER_API_BASEPATH = "https://localhost:3000/api";
     }
 
     /**
@@ -60,8 +60,9 @@ public class Config {
         // Login and set the session cookie for future calls
         AuthenticationApi authenticationApi = new AuthenticationApi(apiClient);
         ApiResponse<UserInfo> apiResponse = authenticationApi.loginWithHttpInfo();
-        String sessionCookie = apiResponse.getHeaders().get("Set-Cookie").get(0).split(";")[0];
-        apiClient.addDefaultHeader("Cookie", sessionCookie);
+        for (String cookie : apiResponse.getHeaders().get("Set-Cookie"))
+            if (cookie.startsWith("session="))
+                apiClient.addDefaultHeader("Cookie", cookie.split(";")[0]);
         return apiClient;
     }
 
@@ -69,10 +70,13 @@ public class Config {
      * Return a singleton API client with credentials set for the platform admin.
      */
     public static ApiClient getAdminAuthApiClient() throws ApiException {
-        return getAuthApiClient(
-            System.getenv("WOLEET_ID_SERVER_ADMIN_LOGIN"),
-            System.getenv("WOLEET_ID_SERVER_ADMIN_PASSWORD")
-        );
+        String login = System.getenv("WOLEET_ID_SERVER_ADMIN_LOGIN");
+        if (login == null)
+            login = "admin";
+        String password = System.getenv("WOLEET_ID_SERVER_ADMIN_PASSWORD");
+        if (password == null)
+            password = "pass";
+        return getAuthApiClient(login, password);
     }
 
     /**
@@ -129,7 +133,7 @@ public class Config {
      */
     public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
-        UserArray users = userApi.getAllUsers();
+        List<UserGet> users = userApi.getAllUsers();
         for (UserGet user : users) {
             if (user.getIdentity().getCommonName().startsWith(TEST_USERS_COMMONNAME_PREFIX))
                 userApi.deleteUser(user.getId());
@@ -168,7 +172,7 @@ public class Config {
     public static boolean isValidSignature(String address, String signature, String message) {
         try {
             return ECKey.signedMessageToKey(message, signature).toAddress(Address.fromBase58(null, address)
-                .getParameters()).toString().equals(address);
+                    .getParameters()).toString().equals(address);
         } catch (Exception e) {
             return false;
         }

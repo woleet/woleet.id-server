@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -27,7 +28,7 @@ public abstract class CRUDApiTest {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     interface Api {
-        ObjectArray getAllObjects() throws ApiException;
+        List<ObjectGet> getAllObjects() throws ApiException;
 
         ObjectGet deleteObject(UUID id) throws ApiException;
 
@@ -48,6 +49,11 @@ public abstract class CRUDApiTest {
 
         T get() {
             return objectBase;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return objectBase.equals(((ObjectBase<T>) obj).objectBase);
         }
     }
 
@@ -82,12 +88,6 @@ public abstract class CRUDApiTest {
         abstract ObjectPost setFullAttributes();
     }
 
-    abstract class ObjectArray<T> {
-        abstract boolean contains(ObjectGet<T> object);
-
-        abstract ObjectGet<T>[] getArray();
-    }
-
     private Api adminAuthApi, userAuthApi, noAuthApi;
 
     abstract String getTestObjectsNamePrefix();
@@ -106,8 +106,8 @@ public abstract class CRUDApiTest {
 
     private void deleteAllTestObjects() throws ApiException {
         Api api = newApi(Config.getAdminAuthApiClient());
-        ObjectArray objects = api.getAllObjects();
-        for (ObjectGet objectGet : objects.getArray()) {
+        List<ObjectGet> objects = api.getAllObjects();
+        for (ObjectGet objectGet : objects) {
             if (objectGet.getName().startsWith(getTestObjectsNamePrefix()))
                 api.deleteObject(objectGet.getId());
         }
@@ -291,7 +291,7 @@ public abstract class CRUDApiTest {
 
         // Get all objects with admin credentials
         // and check that the object is within the results
-        ObjectArray objects = adminAuthApi.getAllObjects();
+        List<ObjectGet> objects = adminAuthApi.getAllObjects();
         assertTrue(objects.contains(objectGet));
 
         // Delete the object, get all objects

@@ -68,6 +68,7 @@ import { Http, HttpModule } from '@angular/http';
 import { ConfigOpenIDComponent } from '@components/parts/config.openid';
 import { ConfigOIDCPComponent } from '@components/parts/config.oidcp';
 import { ConfigOIDCPClientComponent } from '@components/parts/config.oidcp-client';
+import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 
 export function startupServiceFactory(startupService: AppConfigService): Function {
@@ -154,7 +155,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
     NeedConfigGuardService, KeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
-    NetworkErrorInterceptorService, AllowCredentialsInterceptorService
+    NetworkErrorInterceptorService, AllowCredentialsInterceptorService, LocalStorageService
   ],
   bootstrap: [AppComponent]
 })

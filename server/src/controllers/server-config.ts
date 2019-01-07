@@ -1,12 +1,10 @@
-import { ServerConfig } from '../database';
-import { serverConfig } from '../config';
+import {ServerConfig} from '../database';
+import {serverConfig} from '../config';
 import * as Debug from 'debug';
-const debug = Debug('id:ctrl:config');
 import * as log from 'loglevel';
-import { updateOIDCClient } from './openid';
-import { updateOIDCProvider, stopActiveServer } from './oidc-provider';
-import { exit } from '../exit';
-import { bootOIDCPServer } from '../boot.servers';
+import {exit} from '../exit';
+
+const debug = Debug('id:ctrl:config');
 
 const { CONFIG_ID } = serverConfig;
 
@@ -29,7 +27,6 @@ export function getServerConfig(): InternalServerConfigObject {
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   try {
     const config = Object.assign({}, inMemoryConfig, up);
-    console.log('UPDATE', { inMemoryConfig, up });
     let cfg = await ServerConfig.update(CONFIG_ID, { config });
     if (!cfg) {
       debug('No config to update, will set', config);
@@ -45,6 +42,33 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
   }
 }
 
+// We have to set these functions with from a setter (and not a "import") to avoid circular dependencies
+const fns: {
+  updateOIDCClient: () => Promise<any>,
+  stopOIDCProvider: () => Promise<any>,
+  bootOIDCProvider: () => Promise<any>,
+  updateOIDCProvider: () => Promise<any>
+} = {
+  updateOIDCClient: null,
+  bootOIDCProvider: null,
+  stopOIDCProvider: null,
+  updateOIDCProvider: null
+};
+
+export const registerOIDCUpdateFunction = registrationFunctionFactory('updateOIDCClient');
+export const registerOIDCPStopFunction = registrationFunctionFactory('stopOIDCProvider');
+export const registerOIDCPBootFunction = registrationFunctionFactory('bootOIDCProvider');
+export const registerOIDCPUpdateFunction = registrationFunctionFactory('updateOIDCProvider');
+
+function registrationFunctionFactory(name) {
+  return function (fn: () => Promise<any>) {
+    if (fns[name]) {
+      throw new Error(`The "${name}" function is alleady registered`);
+    }
+    fns[name] = fn;
+  };
+}
+
 async function checkOIDCConfigChange(up: ServerConfigUpdate) {
   if (up.useOpenIDConnect !== undefined
     || up.openIDConnectURL
@@ -54,45 +78,42 @@ async function checkOIDCConfigChange(up: ServerConfigUpdate) {
   ) {
     debug('Update OIDCClient with', { up });
     try {
-      await updateOIDCClient();
+      await fns.updateOIDCClient();
     } catch (err) {
-      log.error('Failed to initalize OPenID Connect, it will be automatically disabled !', err);
+      log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
       return setServerConfig({ useOpenIDConnect: false });
     }
   }
 }
 
 function OIDCPSafeReboot() {
-  return bootOIDCPServer()
+  debug('Reboot OIDCP');
+  return fns.bootOIDCProvider()
     .catch((err) => {
-      log.error('Failed to reboot OPenID Connect, it will be automatically disabled !');
+      log.error('Failed to reboot OpenID Connect, it will be automatically disabled!');
       setServerConfig({ enableOIDCP: false });
       exit('FATAL: This error should have been handled.', err);
     });
 }
 
 async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
-  if (up.OIDCPIssuerURL || up.OIDCPClients) {
-    debug('Update OIDC Provider with', { up });
+  if (up.enableOIDCP === false) {
     try {
-      await updateOIDCProvider();
-      await OIDCPSafeReboot();
+      debug('Stop OIDCP');
+      await fns.stopOIDCProvider();
     } catch (err) {
-      log.error('Failed to initalize OPenID Connect, it will be automatically disabled !', err);
-      return setServerConfig({ useOpenIDConnect: false });
+      exit('FATAL: Failed to stop the OIDCP server.', err);
     }
   }
 
-  if (up.enableOIDCP !== undefined) {
-    debug('Update enableOIDCP with', up.enableOIDCP);
-    if (up.enableOIDCP === false) {
-      try {
-        await stopActiveServer();
-      } catch (err) {
-        exit('FATAL: Failed to stop the OIDCP server.', err);
-      }
-    } else {
+  if (up.OIDCPIssuerURL || up.OIDCPClients || up.enableOIDCP) {
+    debug('Update OIDC Provider with', { up });
+    try {
+      await fns.updateOIDCProvider();
       await OIDCPSafeReboot();
+    } catch (err) {
+      log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
+      return setServerConfig({ useOpenIDConnect: false });
     }
   }
 }

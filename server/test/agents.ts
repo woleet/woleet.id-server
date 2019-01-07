@@ -7,6 +7,7 @@ import 'mocha';
 import { agent, SuperTest, Test } from 'supertest';
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
+
 import { api, identity, signature } from '../src/api';
 import { errorHandler } from '../src/api/error';
 import { createServer } from 'http';

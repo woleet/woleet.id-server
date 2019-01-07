@@ -1,4 +1,4 @@
-export function serialiseKey(key: InternalKeyObject): ApiKeyObject {
+export function serializeKey(key: InternalKeyObject): ApiKeyObject {
   const dates = {
     expiration: +key.expiration || null,
     createdAt: +key.createdAt || null,

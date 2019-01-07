@@ -1,5 +1,5 @@
 import { STRING, ENUM, UUID, UUIDV4, DATE, DOUBLE, CHAR } from 'sequelize';
-import { UniqueConstraintError } from 'sequelize';
+import { UniqueConstraintError, Op } from 'sequelize';
 import { DuplicatedUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 
@@ -38,6 +38,25 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
 
   async getByEmail(email: string): Promise<SequelizeUserObject> {
     return this.model.findOne({ where: { email } });
+  }
+
+  async find(search: string, opt: ListOptions = {}): Promise<SequelizeUserObject[]> {
+    const query = { [Op.iLike]: '%' + search + '%' };
+    return this.model.findAll({
+      where: {
+        [Op.or]: [
+          { email: query },
+          { username: query },
+          { x500CommonName: query },
+          { x500Organization: query },
+          { x500OrganizationalUnit: query },
+        ]
+      },
+      offset: opt.offset,
+      limit: opt.limit,
+      order: [['createdAt', 'DESC']],
+      paranoid: !opt.full
+    });
   }
 
   handleError(err: any) {

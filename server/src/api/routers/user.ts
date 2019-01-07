@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { createUser, getUserById, updateUser, getAllUsers, deleteUser } from '../../controllers/user';
-import { serialiseUser } from '../serialize/user';
+import { serializeUser } from '../serialize/user';
 import { store as event } from '../../controllers/server-event';
 
 const vid = validate.param('id', 'uuid');
@@ -45,7 +45,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
     data: hidePassword(user)
   });
 
-  ctx.body = serialiseUser(created);
+  ctx.body = serializeUser(created);
 });
 
 /**
@@ -55,7 +55,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
  */
 router.get('/list', async function (ctx) {
   const users = await getAllUsers();
-  ctx.body = users.map(serialiseUser);
+  ctx.body = users.map((user) => serializeUser(user));
 });
 
 /**
@@ -66,7 +66,7 @@ router.get('/list', async function (ctx) {
 router.get('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const user = await getUserById(id);
-  ctx.body = serialiseUser(user);
+  ctx.body = serializeUser(user);
 });
 
 /**
@@ -89,7 +89,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
     data: hidePassword(update)
   });
 
-  ctx.body = serialiseUser(user);
+  ctx.body = serializeUser(user);
 });
 
 /**
@@ -110,7 +110,7 @@ router.delete('/:id', vid, async function (ctx) {
     data: null
   });
 
-  ctx.body = serialiseUser(user);
+  ctx.body = serializeUser(user);
 });
 
 export { router };

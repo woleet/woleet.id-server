@@ -174,7 +174,7 @@ Name | Type | Description  | Notes
 
 <a name="getAllAPITokens"></a>
 # **getAllAPITokens**
-> APITokenArray getAllAPITokens()
+> List&lt;APITokenGet&gt; getAllAPITokens()
 
 List all API tokens.
 
@@ -197,7 +197,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 
 ApiTokenApi apiInstance = new ApiTokenApi();
 try {
-    APITokenArray result = apiInstance.getAllAPITokens();
+    List<APITokenGet> result = apiInstance.getAllAPITokens();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ApiTokenApi#getAllAPITokens");
@@ -210,7 +210,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**APITokenArray**](APITokenArray.md)
+[**List&lt;APITokenGet&gt;**](APITokenGet.md)
 
 ### Authorization
 

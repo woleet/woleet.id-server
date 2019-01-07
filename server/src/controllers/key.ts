@@ -1,5 +1,5 @@
-import { Key } from '../database';
-import { NotFoundKeyError } from '../errors';
+import { Key, User } from '../database';
+import { NotFoundKeyError, NotFoundUserError } from '../errors';
 import { Mnemonic, HDPrivateKey, KeyRing } from 'bcoin';
 import { encrypt, decrypt } from './utils/encryption';
 
@@ -79,6 +79,16 @@ export async function getOwner(id): Promise<InternalUserObject> {
   return key.get('user').toJSON();
 }
 
+export async function getOwnerByPubKey(pubKey): Promise<InternalUserObject> {
+  const key = await Key.getByPubKey(pubKey, null, true);
+
+  if (!key) {
+    throw new NotFoundKeyError();
+  }
+
+  return key.get('user').toJSON();
+}
+
 /**
  * TODO: move to secure module
  */
@@ -104,7 +114,15 @@ export async function getAllKeys(full = false): Promise<InternalKeyObject[]> {
 }
 
 export async function getAllKeysOfUser(userId: string, full = false): Promise<InternalKeyObject[]> {
+
+  const user = await User.getById(userId);
+
+  if (!user) {
+    throw new NotFoundUserError();
+  }
+
   const keys = await Key.getAllKeysOfUser(userId, full);
+
   return keys.map((key) => key.toJSON());
 }
 

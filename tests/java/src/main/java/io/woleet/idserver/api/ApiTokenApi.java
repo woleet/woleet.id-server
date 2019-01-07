@@ -28,7 +28,6 @@ import java.io.IOException;
 
 
 import io.woleet.idserver.api.model.APIError;
-import io.woleet.idserver.api.model.APITokenArray;
 import io.woleet.idserver.api.model.APITokenBase;
 import io.woleet.idserver.api.model.APITokenGet;
 import io.woleet.idserver.api.model.APITokenPost;
@@ -484,23 +483,23 @@ public class ApiTokenApi {
     /**
      * List all API tokens.
      * 
-     * @return APITokenArray
+     * @return List&lt;APITokenGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public APITokenArray getAllAPITokens() throws ApiException {
-        ApiResponse<APITokenArray> resp = getAllAPITokensWithHttpInfo();
+    public List<APITokenGet> getAllAPITokens() throws ApiException {
+        ApiResponse<List<APITokenGet>> resp = getAllAPITokensWithHttpInfo();
         return resp.getData();
     }
 
     /**
      * List all API tokens.
      * 
-     * @return ApiResponse&lt;APITokenArray&gt;
+     * @return ApiResponse&lt;List&lt;APITokenGet&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<APITokenArray> getAllAPITokensWithHttpInfo() throws ApiException {
+    public ApiResponse<List<APITokenGet>> getAllAPITokensWithHttpInfo() throws ApiException {
         com.squareup.okhttp.Call call = getAllAPITokensValidateBeforeCall(null, null);
-        Type localVarReturnType = new TypeToken<APITokenArray>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<APITokenGet>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -511,7 +510,7 @@ public class ApiTokenApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getAllAPITokensAsync(final ApiCallback<APITokenArray> callback) throws ApiException {
+    public com.squareup.okhttp.Call getAllAPITokensAsync(final ApiCallback<List<APITokenGet>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -533,7 +532,7 @@ public class ApiTokenApi {
         }
 
         com.squareup.okhttp.Call call = getAllAPITokensValidateBeforeCall(progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<APITokenArray>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<APITokenGet>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

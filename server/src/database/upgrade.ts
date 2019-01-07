@@ -1,7 +1,7 @@
-import { Sequelize } from 'sequelize';
+import {Sequelize} from 'sequelize';
 import * as log from 'loglevel';
-import { ServerConfig } from '.';
-import { serverConfig } from '../config';
+import {ServerConfig} from '.';
+import {serverConfig} from '../config';
 
 export async function upgrade(sequelize: Sequelize) {
   let old;
@@ -13,24 +13,22 @@ export async function upgrade(sequelize: Sequelize) {
   }
 
   if (old) {
-    log.warn(`Need to upgrade configuration model...`);
-    log.warn(`Old model value is`, JSON.stringify(old, null, 2));
+    log.warn('Need to upgrade configuration model...');
+    log.warn('Old model value is', JSON.stringify(old, null, 2));
     const config = Object.assign({}, old);
     delete config.id;
     delete config.createdAt;
     delete config.updatedAt;
 
-    ServerConfig.model.sync();
+    await ServerConfig.model.sync();
 
-    log.warn(`Copying old configuration to new table...`);
+    log.warn('Copying old configuration to new table...');
     const { createdAt, updatedAt } = old;
     await ServerConfig.create({ config, createdAt, updatedAt });
 
-    log.warn(`Drop old configuration table...`);
-    const [drop] = await sequelize.query(`Drop TABLE "ServerConfigs";`);
-
-    log.warn(`Drop succeed!`, drop);
+    log.warn('Dropping old configuration table...');
+    const [drop] = await sequelize.query('Drop TABLE "ServerConfigs";');
   } else {
-    log.info(`Database model is up to date!`);
+    log.info('Database model is up to date!');
   }
 }

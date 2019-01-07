@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { createAPIToken, updateAPIToken, getAPITokenById, getAllAPITokens, deleteAPIToken } from '../../controllers/api-token';
-import { serialiseapiToken } from '../serialize/api-token';
+import { serializeapiToken } from '../serialize/api-token';
 import { store as event } from '../../controllers/server-event';
 
 const vid = validate.param('id', 'uuid');
@@ -45,7 +45,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
     data: hideTokenValue(token)
   });
 
-  ctx.body = serialiseapiToken(created);
+  ctx.body = serializeapiToken(created);
 });
 
 /**
@@ -55,7 +55,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
  */
 router.get('/list', async function (ctx) {
   const users = await getAllAPITokens();
-  ctx.body = users.map(serialiseapiToken);
+  ctx.body = users.map(serializeapiToken);
 });
 
 /**
@@ -66,7 +66,7 @@ router.get('/list', async function (ctx) {
 router.get('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const apiToken = await getAPITokenById(id);
-  ctx.body = serialiseapiToken(apiToken);
+  ctx.body = serializeapiToken(apiToken);
 });
 
 /**
@@ -90,7 +90,7 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
     data: update
   });
 
-  ctx.body = serialiseapiToken(apiToken);
+  ctx.body = serializeapiToken(apiToken);
 });
 
 /**
@@ -112,7 +112,7 @@ router.delete('/:id', vid, async function (ctx) {
     data: null
   });
 
-  ctx.body = serialiseapiToken(apiToken);
+  ctx.body = serializeapiToken(apiToken);
 });
 
 export { router };

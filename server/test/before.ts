@@ -4,8 +4,21 @@
 
 import 'mocha';
 import { setSecret } from '../../server/src/controllers/utils/encryption';
+import { init as initdb } from '../../server/src/database';
+import { initServerConfig } from '../../server/src/boot.server-config';
 
-before(() => {
-  console.log('Initializing test secret...');
-  setSecret('test');
+before((done) => {
+  (async () => {
+    console.log('Initializing test secret...');
+    setSecret('test');
+
+    try {
+      await initdb();
+      await initServerConfig();
+    } catch (err) {
+      done(err);
+    }
+
+    done();
+  })();
 });

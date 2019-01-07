@@ -82,6 +82,14 @@ export WOLEET_ID_SERVER_POSTGRES_USER={PostgreSQL user, default: pguser}
 export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pass}
 ```
 
+## Docker
+
+Woleet.ID Server requires a recent Docker version:
+ - docker 18.09+
+ - docker-compose 1.22+
+
+ To check your docker and docker-compose versions use `docker -v` and `docker-compose -v`.
+
 ## Encryption secret
 
 Woleet.ID Server encrypts keys stored in the database using a encryption secret you need to define using the following environment variable:

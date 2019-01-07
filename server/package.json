@@ -1,7 +1,7 @@
 {
   "name": "server",
-  "version": "0.1.0",
-  "description": "This is a repository to go with my article on creating an Express web application using TypeScript 2.",
+  "version": "0.3.1",
+  "description": "Woleet.ID Server Node.js server",
   "main": "index.js",
   "scripts": {
     "lint": "npx tslint src/**/*.ts",
@@ -9,8 +9,8 @@
     "transpile": "npx tsc",
     "build": "npx tsc",
     "start": "node dist/server/src",
-    "dev": "DEBUG=id* npx ts-node-dev src/index.ts",
-    "test": "npx mocha -r ts-node/register test/*.ts --exit"
+    "dev": "WOLEET_ID_SERVER_PRODUCTION=false DEBUG=id* npx ts-node-dev src/index.ts",
+    "test": "WOLEET_ID_SERVER_PRODUCTION=false npx mocha --require ts-node/register test/*.ts --exit --timeout 10000"
   },
   "keywords": [],
   "author": "",

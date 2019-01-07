@@ -1,36 +1,39 @@
 import { Component } from '@angular/core';
 import { AuthService } from '@services/auth';
-import { Router, ActivatedRoute } from '@angular/router';
 import { mainRoute } from '@app/config';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import * as log from 'loglevel';
 import { Observable } from 'rxjs';
 import { AppConfigService } from '@services/boot';
+import { LocalStorageService } from '@services/local-storage';
 import { ErrorService } from '@services/error';
+import { redirectForOIDCProvider } from '@services/util';
 
 @Component({
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
 export class LoginPageComponent {
-
   user: BasicAuthObject;
   lock$: Observable<boolean>;
 
   errorMsg: string = null;
-  redirect: string;
   useOIDC: boolean;
+  redirect: string;
+  config: { OIDCPProviderURL: string; useOpenIDConnect: boolean; hasSession: boolean; };
 
   constructor(
-    activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
+    activatedRoute: ActivatedRoute,
+    private store: LocalStorageService,
     errorService: ErrorService,
     appConfigService: AppConfigService) {
     this.user = { username: '', password: '' };
     this.lock$ = authService.lock$;
-    const conf = appConfigService.getStartupConfig();
-    this.useOIDC = conf && conf.useOpenIDConnect;
+    this.config = appConfigService.getStartupConfig();
+    this.useOIDC = this.config.useOpenIDConnect;
     activatedRoute.queryParams.subscribe(async (params) => {
       log.debug('Forwarded login parameters', params);
       if (params.origin && params.origin.startsWith('oidcp') && params.redirect) {
@@ -43,16 +46,16 @@ export class LoginPageComponent {
         }
       }
     });
+    const config = appConfigService.getStartupConfig();
+    this.useOIDC = config && config.useOpenIDConnect;
   }
 
   async login() {
     const user = await this.authService.login(this.user);
-
     log.debug('Successfully logged in', user);
-
     if (user) {
       if (this.redirect) {
-        return this.authService.redirectForOIDCProvider(this.redirect);
+        redirectForOIDCProvider(this.store, this.config, this.redirect);
       }
       if (user.role === 'admin') {
         this.router.navigate(['users']);

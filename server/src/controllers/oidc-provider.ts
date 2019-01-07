@@ -2,14 +2,13 @@
 
 import * as OIDCProvider from 'oidc-provider';
 import * as Debug from 'debug';
-
-const debug = Debug('id:oidcp');
-
-import { provider as providerConfiguration } from '../config.oidcp';
-import { OIDCAccount as Account, SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
-import { getServerConfig } from './server-config';
+import {provider as providerConfiguration} from '../config.oidcp';
+import {OIDCAccount as Account, SequelizeAdapter as Adapter} from '../database/oidcp-adapter';
+import {getServerConfig} from './server-config';
 
 import * as log from 'loglevel';
+
+const debug = Debug('id:oidcp');
 
 let server = null;
 let provider = null;
@@ -17,7 +16,7 @@ let initialized = false;
 
 export function getProvider() {
   if (!initialized) {
-    throw new Error('Provider not initialized !');
+    throw new Error('Provider not initialized!');
   }
   return provider;
 }
@@ -44,11 +43,11 @@ const keystorePromise = (async () => {
   return keystore;
 })();
 
-export async function configure(): Promise<void> {
+async function configure(): Promise<void> {
   const { enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL, OIDCPClients } = getServerConfig();
   const keystore = await keystorePromise;
 
-  debug('Init OIDCP with:\n' + JSON.stringify( { enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL }, null, 2));
+  debug('Init OIDCP with:\n' + JSON.stringify({ enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL }, null, 2));
 
   if (!enableOIDCP) {
     return abortInit('enableOIDCP=false, skipping configuration');
@@ -74,6 +73,10 @@ export async function configure(): Promise<void> {
   initialized = true;
 }
 
+export function initializeOIDCProvider() {
+  return configure();
+}
+
 export function updateOIDCProvider() {
   return configure();
 }
@@ -89,17 +92,24 @@ export function getActiveServer() {
   return server;
 }
 
-export function stopActiveServer(): Promise<void> {
+export function stopOIDCProvider(): Promise<void> {
   return new Promise((resolve) => {
     if (server) {
-      log.info(`Shutting down OIDCP server...`);
+      log.info('Shutting down OIDCP server...');
       server.close(() => {
+        log.info('OIDCP server is now down');
         setActiveServer(null);
         resolve();
       });
     } else {
-      log.info(`Nothing to do, OIDCP server is already down.`);
+      log.info('Nothing to do, OIDCP server is already down');
       resolve();
     }
   });
+}
+
+export function setProviderSession(ctx, userId) {
+  if (initialized && provider) {
+    return provider.setProviderSession(ctx.req, ctx.res, { account: userId });
+  }
 }

@@ -10,6 +10,7 @@ import { router as key } from './routers/key';
 
 import { router as sign } from './routers/sign';
 import { router as identity } from './routers/identity';
+import { router as discovery } from './routers/discovery';
 
 import { router as openid } from './routers/openid';
 
@@ -57,6 +58,7 @@ if (!production) {
   signatureRouter.use(cors({ credentials: true }));
 }
 signatureRouter.use(sign.routes());
+signatureRouter.use(discovery.routes());
 
 export {
   apiRouter as api,

@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 import { validate } from '../schemas';
 import { getServerConfig, setServerConfig } from '../../controllers/server-config';
 import { store as event } from '../../controllers/server-event';
-import { serialiseServerConfig } from '../serialize/server-config';
+import { serializeServerConfig } from '../serialize/server-config';
 
 /**
  * ServerConfig
@@ -17,7 +17,7 @@ const router = new Router({ prefix: '/server-config' });
  *  operationId: getServerConfig
  */
 router.get('/', function (ctx) {
-  ctx.body = serialiseServerConfig(getServerConfig());
+  ctx.body = serializeServerConfig(getServerConfig());
 });
 
 /**
@@ -37,7 +37,7 @@ router.put('/', validate.body('updateConfig'), async function (ctx) {
     data: ctx.request.body
   });
 
-  ctx.body = serialiseServerConfig(config);
+  ctx.body = serializeServerConfig(config);
 });
 
 export { router };

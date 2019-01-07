@@ -1,4 +1,4 @@
-export function serialiseServerConfig(config: InternalServerConfigObject): ApiServerConfig {
+export function serializeServerConfig(config: InternalServerConfigObject): ApiServerConfig {
   const {
     fallbackOnDefaultKey,
     defaultKeyId,
