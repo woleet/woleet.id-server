@@ -16,10 +16,10 @@
     </div>
     <br>
     <mat-card *ngIf="errorMsg" class="error-card">{{ errorMsg }}</mat-card>
+    <br>
+    <br>
+    <button mat-raised-button color="primary" class="w-100" [disabled]="lock$ | async" (click)="login()">LOGIN</button>
   </form>
-  <br>
-  <br>
-  <button mat-raised-button color="primary" class="w-100" [disabled]="lock$ | async" (click)="login()">LOGIN</button>
   <br>
   <br>
   <button mat-raised-button
