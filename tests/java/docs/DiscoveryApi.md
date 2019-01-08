@@ -4,10 +4,62 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**discoverUser**](DiscoveryApi.md#discoverUser) | **GET** /discover/user | Get information about the current user.
 [**discoverUserByPubKey**](DiscoveryApi.md#discoverUserByPubKey) | **GET** /discover/user/{pubKey} | Get the user associated to a public key.
 [**discoverUserKeys**](DiscoveryApi.md#discoverUserKeys) | **GET** /discover/keys/{userId} | Get all public keys of a user.
 [**discoverUsers**](DiscoveryApi.md#discoverUsers) | **GET** /discover/users | Get all users matching a search string.
 
+
+<a name="discoverUser"></a>
+# **discoverUser**
+> UserDisco discoverUser()
+
+Get information about the current user.
+
+Use this endpoint to get information about the current user. 
+
+### Example
+```java
+// Import classes:
+//import io.woleet.idserver.ApiClient;
+//import io.woleet.idserver.ApiException;
+//import io.woleet.idserver.Configuration;
+//import io.woleet.idserver.auth.*;
+//import io.woleet.idserver.api.DiscoveryApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: CookieAuth
+ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+CookieAuth.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//CookieAuth.setApiKeyPrefix("Token");
+
+DiscoveryApi apiInstance = new DiscoveryApi();
+try {
+    UserDisco result = apiInstance.discoverUser();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DiscoveryApi#discoverUser");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**UserDisco**](UserDisco.md)
+
+### Authorization
+
+[CookieAuth](../README.md#CookieAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 <a name="discoverUserByPubKey"></a>
 # **discoverUserByPubKey**
