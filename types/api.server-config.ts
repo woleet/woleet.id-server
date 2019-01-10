@@ -13,12 +13,14 @@ interface ApiServerConfig {
   defaultKeyId: string;
   fallbackOnDefaultKey: boolean;
   allowUserToSign: boolean;
+
   // Open ID Connect config
   useOpenIDConnect: boolean;
   openIDConnectURL: string | null;
   openIDConnectClientId: string | null;
   openIDConnectClientSecret: string | null;
   openIDConnectClientRedirectURL: string | null;
+
   // Open ID Connect Provider config
   OIDCPInterfaceURL: string | null;
   OIDCPProviderURL: string | null;
@@ -33,12 +35,14 @@ interface ApiServerConfigUpdate {
   defaultKeyId?: string;
   fallbackOnDefaultKey?: boolean;
   allowUserToSign?: boolean;
+
   // Open ID Connect config
   useOpenIDConnect?: boolean;
   openIDConnectURL?: string;
   openIDConnectClientId?: string;
   openIDConnectClientSecret?: string;
   openIDConnectClientRedirectURL?: string;
+
   // Open ID Connect Provider config
   OIDCPInterfaceURL?: string;
   OIDCPProviderURL?: string;

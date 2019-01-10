@@ -45,7 +45,7 @@ async function upgrade2(sequelize) {
   const { config } = cfg.toJSON();
   if (!config.version) {
     log.warn('Need to add "expiration" column to the "keys" table');
-    const res = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN expiration DATE;`);
+    const res = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN expiration TIMESTAMP WITH TIME ZONE;`);
     log.info(res);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign({ version: 1 }, config) });
   }
