@@ -93,6 +93,7 @@ declare global {
     name: string;
     type: KeyTypeEnum;
     status: KeyStatusEnum;
+    expiration: number;
 
     /** Hexadecimal represention of the mnemonic phrase */
     mnemonicEntropy: string;
@@ -111,6 +112,7 @@ declare global {
     name: string;
     type?: KeyTypeEnum;
     status?: KeyStatusEnum;
+    expiration?: number;
 
     /** Hexadecimal represention of the mnemonic phrase */
     mnemonicEntropy: string;
@@ -209,6 +211,7 @@ declare global {
   /* Config */
 
   interface InternalServerConfigObject extends ServerConfig {
+    version: number;
     identityURL: string;
     defaultKeyId: string;
     defaultKey?: InternalKeyObject;
@@ -226,6 +229,7 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+    keyExpirationOffset?: string;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -245,6 +249,7 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+    keyExpirationOffset?: string;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -264,6 +269,7 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+    keyExpirationOffset?: string;
   }
 
   /* OIDC Provider */

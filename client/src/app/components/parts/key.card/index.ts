@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { KeyService } from '@services/key';
 import { FormControl, Validators } from '@angular/forms';
-import { ErrorMessageProvider } from '@components/util';
+import { ErrorMessageProvider, nextYear } from '@components/util';
 import { UserService } from '@services/user';
 import { confirm } from '../../util';
 
@@ -39,6 +39,10 @@ export class KeyCardComponent extends ErrorMessageProvider {
   @Output()
   updateUser = new EventEmitter<ApiKeyObject>();
 
+  startDate = nextYear();
+
+  expiration = new FormControl(null, []);
+
   constructor(private keyService: KeyService, private userService: UserService) {
     super();
     this.setAsDefault = this.default;
@@ -49,6 +53,8 @@ export class KeyCardComponent extends ErrorMessageProvider {
     if (this.editMode) {
       this.keyName = new FormControl(this.key.name, [Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
       this.setAsDefault = this.default;
+      const exp = this.key.expiration;
+      this.expiration.setValue(exp ? new Date(exp) : null);
     }
   }
 
@@ -66,9 +72,9 @@ export class KeyCardComponent extends ErrorMessageProvider {
   async editKey() {
     this.formLocked = true;
     const name = this.keyName.value;
-
-    if (name !== this.key.name) {
-      const up = await this.keyService.update(this.key.id, { name });
+    const expiration = +this.expiration.value || null;
+    if (name !== this.key.name || expiration !== this.key.expiration) {
+      const up = await this.keyService.update(this.key.id, { name, expiration });
       this.key = up;
       this.update.emit();
     }

@@ -48,6 +48,11 @@ export class BlockedKeyError extends BlockedResourceError {
   name = 'BlockedKeyError';
 }
 
+export class ExpiredKeyError extends BlockedResourceError {
+  constructor(m = 'Key expired') { super(m); }
+  name = 'ExpiredKeyError';
+}
+
 export class BlockedAPITokenError extends BlockedResourceError {
   constructor(m = 'API token is blocked') { super(m); }
   name = 'BlockedAPITokenError';

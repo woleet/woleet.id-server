@@ -13,7 +13,9 @@ import {
   MatSelectModule,
   MatTooltipModule,
   MatRippleModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -67,6 +69,7 @@ import { ConfigOpenIDComponent } from '@components/parts/config.openid';
 import { ConfigOIDCPComponent } from '@components/parts/config.oidcp';
 import { ConfigOIDCPClientComponent } from '@components/parts/config.oidcp-client';
 import { LocalStorageService } from '@services/local-storage';
+import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 
 export function startupServiceFactory(startupService: AppConfigService): Function {
   return () => startupService.load();
@@ -91,6 +94,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ConfigOpenIDComponent,
     ConfigOIDCPComponent,
     ConfigOIDCPClientComponent,
+    ConfigKeyExpirationComponent,
     UserCardComponent,
     KeyCardComponent,
     APITokenCardComponent,
@@ -133,6 +137,8 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     MatCardModule,
     MatTooltipModule,
     MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
 
     // app
     AppRoutingModule
