@@ -19,15 +19,20 @@ interface ApiKeyObject extends KeyObject, ApiCommonProperties, ApiParanoidProper
   lastUsed: number;
 
   status: KeyStatusEnum;
+
+  expiration: number;
+  expired: boolean;
 }
 
 interface ApiPostKeyObject extends KeyObject {
   name: string;
   type?: KeyTypeEnum;
   status?: KeyStatusEnum;
+  expiration?: number;
 }
 
 interface ApiPutKeyObject extends KeyObject {
-  name?: string,
-  status?: KeyStatusEnum
+  name?: string;
+  status?: KeyStatusEnum;
+  expiration?: number;
 }

@@ -3,7 +3,7 @@
     <div>
       <mat-form-field class="w-100">
         <input matInput type="text" placeholder="Username or email" [disabled]="lock$ | async" [(ngModel)]="user.username"
-          name="username" autocomplete="username">
+          name="username" autocomplete="username" autofocus>
       </mat-form-field>
     </div>
     <br>

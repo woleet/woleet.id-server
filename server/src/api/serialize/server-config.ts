@@ -13,7 +13,8 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     OIDCPInterfaceURL,
     OIDCPProviderURL,
     OIDCPIssuerURL,
-    OIDCPClients
+    OIDCPClients,
+    keyExpirationOffset
   } = config;
 
   return {
@@ -30,6 +31,7 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     OIDCPInterfaceURL,
     OIDCPProviderURL,
     OIDCPIssuerURL,
-    OIDCPClients
+    OIDCPClients,
+    keyExpirationOffset
   };
 }

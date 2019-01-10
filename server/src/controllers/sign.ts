@@ -4,7 +4,7 @@ import { getServerConfig } from './server-config';
 import {
   NotFoundUserError, NotFoundKeyError, BlockedUserError,
   BlockedKeyError, NoDefaultKeyError, ServerNotReadyError,
-  KeyOwnerMismatchError
+  KeyOwnerMismatchError, ExpiredKeyError
 } from '../errors';
 
 import * as message from 'bitcoinjs-message';
@@ -79,6 +79,12 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
   // A blocked key cannot sign
   if (key.getDataValue('status') === 'blocked') {
     throw new BlockedKeyError();
+  }
+
+  // A expired key cannot sign
+  const exp = key.getDataValue('expiration');
+  if (exp && exp < +Date.now()) {
+    throw new ExpiredKeyError();
   }
 
   const sig = await signMessage(key.get('privateKey'), hashToSign, key.get('compressed'));

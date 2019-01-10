@@ -1,6 +1,7 @@
 import {AbstractControl, FormControl, ValidationErrors} from '@angular/forms';
 import * as traverse from 'traverse';
-import {BehaviorSubject} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import * as timestring from 'timestring';
 
 export class TrackById {
 
@@ -33,6 +34,25 @@ export class Lock {
   asObservable() {
     return this._lock$.asObservable();
   }
+}
+
+export function timeStringValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+
+  if (!str) {
+    return;
+  }
+
+  try {
+    // tslint:disable-next-line:no-unused-expression
+    if (!timestring(str)) {
+      return ({ timestring: true });
+    }
+  } catch (err) {
+    return ({ timestring: true });
+  }
+
+  return null;
 }
 
 export function urlValidator(control: AbstractControl): ValidationErrors | null {
@@ -124,7 +144,9 @@ export class ErrorMessageProvider {
       case 'ascii':
         return 'Must contain only ASCII characters';
       case 'startsWithALetter':
-        return 'Must start with a letter';
+        return `Must start with a letter`;
+      case 'timestring':
+        return `Must be a valid timestring (e.g. 3w 4d 12h)`;
       default:
         return '';
     }
@@ -152,4 +174,9 @@ export function replaceInObject(obj, target, repl) {
       this.update(repl, false);
     }
   });
+}
+
+export function nextYear() {
+  const d = new Date();
+  return new Date(d.getFullYear() + 1, d.getMonth(), d.getDate());
 }

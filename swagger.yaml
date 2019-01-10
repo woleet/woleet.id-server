@@ -1209,6 +1209,19 @@ components:
               $ref: '#/components/schemas/PubKey'
             type:
               $ref: '#/components/schemas/KeyTypeEnum'
+            expiration:
+              type: integer
+              format: int64
+              example: 1569542400000
+              description: >
+                Key expiration date (Unix ms timestamp).
+                <br>Note that the field is not returned if the key has no expiration date.
+            expired:
+              type: boolean
+              example: false
+              description: >
+                Indicates whether the key has expired or not.
+                <br>Note that the field is not returned if the key has no expiration date.
             createdAt:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:
@@ -1273,7 +1286,20 @@ components:
               type: string
               format: base64
               example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
-              description: Signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
+              description: The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
+            expiration:
+              type: integer
+              format: int64
+              example: 1569542400000
+              description: >
+                Key expiration date (Unix ms timestamp).
+                <br>Note that the field is not returned if the key has no expiration date.
+            expired:
+              type: boolean
+              example: false
+              description: >
+                Indicates whether the key has expired or not.
+                <br>Note that the field is not returned if the key has no expiration date.
             identity:
               $ref: '#/components/schemas/Identity'
             key:
