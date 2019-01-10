@@ -65,7 +65,7 @@ async function configure(): Promise<void> {
     return abortInit('No OIDCPInterfaceURL set while Open ID Connect is enabled, skipping configuration');
   }
 
-  const clients = OIDCPClients.map((client) => Object.assign({}, client, { grant_types: ['refresh_token', 'authorization_code'] }));
+  let clients = OIDCPClients.map((client) => Object.assign({}, client, { response_types: ['id_token token', 'code'], grant_types: ['refresh_token', 'authorization_code', 'implicit'] }));
 
   initialized = false;
   provider = new OIDCProvider(OIDCPIssuerURL, Object.assign({}, providerConfiguration, { findById: Account.findById }));
