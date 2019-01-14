@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -25,7 +24,7 @@ public class DiscoveryApiTest {
 
     private UserGet user;
 
-    private DiscoveryApi discoverApi;
+    private DiscoveryApi tokenAuthApi;
 
     private ApiTokenApi apiTokenApi;
     private APITokenGet apiTokenGet;
@@ -38,17 +37,19 @@ public class DiscoveryApiTest {
         // Start from a clean state
         tearDown();
 
+        // Create test user
         user = Config.createTestUser();
+
+        // Create kep API
         keyApi = new KeyApi(Config.getAdminAuthApiClient().setBasePath(Config.WOLEET_ID_SERVER_API_BASEPATH));
 
         // Create an helper API with API token authentication
         apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
         apiTokenGet = apiTokenApi.createAPIToken((APITokenPost) new APITokenPost().name("test"));
-
         ApiClient apiClient = Config.getNoAuthApiClient();
         apiClient.setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
         apiClient.addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue());
-        discoverApi = new DiscoveryApi(apiClient);
+        tokenAuthApi = new DiscoveryApi(apiClient);
     }
 
     @After
@@ -60,80 +61,61 @@ public class DiscoveryApiTest {
             apiTokenApi.deleteAPIToken(apiTokenGet.getId());
     }
 
-    /**
-     * Get the user associated to a unknown public key.
-     * <p>
-     * Use this endpoint to get the user owning a given public key.
-     *
-     * @throws ApiException if the Api call fails
-     */
     @Test
     public void discoverUserByPubKeyTest() throws ApiException {
+
+        // Try to discover a user using an invalid key
+        try {
+            tokenAuthApi.discoverUserByPubKey("invalid pubKey");
+            fail("Should not be able to discover a user using an invalid key");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", 400, e.getCode());
+            return;
+        }
+
+        // Try to discover a user using an unknown key
+        try {
+            tokenAuthApi.discoverUserByPubKey("3Beer3irc1vgs76ENA4coqsEQpGZeM5CTd");
+            fail("Should not be able to discover a user using an unknown key");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", 404, e.getCode());
+            return;
+        }
+
+        // Discover test user from his public key
         String key = keyApi.getKeyById(user.getDefaultKeyId()).getPubKey();
-        UserDisco response = discoverApi.discoverUserByPubKey(key);
+        UserDisco response = tokenAuthApi.discoverUserByPubKey(key);
         assertEquals(user.getId(), response.getId());
     }
 
-    /**
-     * Get the user associated to an unknown public key must return 404.
-     */
-    @Test
-    public void discoverUnknownUserByPubKeyTest() {
-        try {
-            discoverApi.discoverUserByPubKey("3Beer3irc1vgs76ENA4coqsEQpGZeM5CTd");
-        } catch (ApiException e) {
-            assertEquals("API should throw a 404 exception", 404, e.getCode());
-            return;
-        }
-        fail("API should throw an exception when an unknown user is requested");
-    }
-
-    /**
-     * Get all public keys of a user.
-     * <p>
-     * Use this endpoint to get all public keys owned by a given user.
-     *
-     * @throws ApiException if the Api call fails
-     */
     @Test
     public void discoverUserKeysTest() throws ApiException {
+
+        // Try to discover user's keys using an unknown identifier
+        try {
+            tokenAuthApi.discoverUserKeys(Config.randomUUID());
+            fail("Should not be able to discover user's key using an unknown identifier");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", 404, e.getCode());
+            return;
+        }
+
+        // Discover test user's keys
         String pubKey = keyApi.getKeyById(user.getDefaultKeyId()).getPubKey();
-        List<KeyDisco> response = discoverApi.discoverUserKeys(user.getId());
+        List<KeyDisco> response = tokenAuthApi.discoverUserKeys(user.getId());
         for (KeyDisco key : response)
             if (key.getPubKey().equals(pubKey))
                 return;
-        fail("Public key not found in key list");
+        fail("Test user's public key not found in key list");
     }
 
-    /**
-     * Get all public keys of an unknown user must return 404.
-     */
-    @Test
-    public void discoverUnknownUserKeysTest() {
-        try {
-            discoverApi.discoverUserKeys(UUID.randomUUID());
-        } catch (ApiException e) {
-            assertEquals("API should throw a 404 exception", 404, e.getCode());
-            return;
-        }
-        fail("API should throw an exception when an unknown user is requested");
-    }
-
-    /**
-     * Get all users matching a search string.
-     * <p>
-     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; or &#x60;x500OrganizationalUnit&#x60; contains the search string.
-     *
-     * @throws ApiException if the Api call fails
-     */
     @Test
     public void discoverUsersTest() throws ApiException {
-        String search = "test";
-        List<UserDisco> response = discoverApi.discoverUsers(search);
+        List<UserDisco> response = tokenAuthApi.discoverUsers("test");
         for (UserDisco u : response)
             if (u.getId().equals(user.getId()))
                 return;
-        fail("User not found in user list");
+        fail("Test user not found in user list");
     }
 
     /**

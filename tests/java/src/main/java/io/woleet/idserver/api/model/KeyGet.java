@@ -45,6 +45,14 @@ public class KeyGet extends KeyBase {
   @SerializedName(SERIALIZED_NAME_TYPE)
   private KeyTypeEnum type = null;
 
+  public static final String SERIALIZED_NAME_EXPIRATION = "expiration";
+  @SerializedName(SERIALIZED_NAME_EXPIRATION)
+  private Long expiration;
+
+  public static final String SERIALIZED_NAME_EXPIRED = "expired";
+  @SerializedName(SERIALIZED_NAME_EXPIRED)
+  private Boolean expired;
+
   public static final String SERIALIZED_NAME_CREATED_AT = "createdAt";
   @SerializedName(SERIALIZED_NAME_CREATED_AT)
   private Long createdAt;
@@ -106,6 +114,42 @@ public class KeyGet extends KeyBase {
     this.type = type;
   }
 
+  public KeyGet expiration(Long expiration) {
+    this.expiration = expiration;
+    return this;
+  }
+
+   /**
+   * Key expiration date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no expiration date. 
+   * @return expiration
+  **/
+  @ApiModelProperty(example = "1569542400000", value = "Key expiration date (Unix ms timestamp). <br>Note that the field is not returned if the key has no expiration date. ")
+  public Long getExpiration() {
+    return expiration;
+  }
+
+  public void setExpiration(Long expiration) {
+    this.expiration = expiration;
+  }
+
+  public KeyGet expired(Boolean expired) {
+    this.expired = expired;
+    return this;
+  }
+
+   /**
+   * Indicates whether the key has expired or not. &lt;br&gt;Note that the field is not returned if the key has no expiration date. 
+   * @return expired
+  **/
+  @ApiModelProperty(value = "Indicates whether the key has expired or not. <br>Note that the field is not returned if the key has no expiration date. ")
+  public Boolean getExpired() {
+    return expired;
+  }
+
+  public void setExpired(Boolean expired) {
+    this.expired = expired;
+  }
+
    /**
    * Date of creation (Unix ms timestamp).
    * @return createdAt
@@ -155,6 +199,8 @@ public class KeyGet extends KeyBase {
     return Objects.equals(this.id, keyGet.id) &&
         Objects.equals(this.pubKey, keyGet.pubKey) &&
         Objects.equals(this.type, keyGet.type) &&
+        Objects.equals(this.expiration, keyGet.expiration) &&
+        Objects.equals(this.expired, keyGet.expired) &&
         Objects.equals(this.createdAt, keyGet.createdAt) &&
         Objects.equals(this.updatedAt, keyGet.updatedAt) &&
         Objects.equals(this.deletedAt, keyGet.deletedAt) &&
@@ -164,7 +210,7 @@ public class KeyGet extends KeyBase {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, pubKey, type, createdAt, updatedAt, deletedAt, lastUsed, super.hashCode());
+    return Objects.hash(id, pubKey, type, expiration, expired, createdAt, updatedAt, deletedAt, lastUsed, super.hashCode());
   }
 
 
@@ -176,6 +222,8 @@ public class KeyGet extends KeyBase {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    pubKey: ").append(toIndentedString(pubKey)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");
+    sb.append("    expired: ").append(toIndentedString(expired)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    deletedAt: ").append(toIndentedString(deletedAt)).append("\n");

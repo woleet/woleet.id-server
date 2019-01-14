@@ -1,8 +1,8 @@
 // tslint:disable:radix
 
-import {promisify} from 'util';
-import {SetOption} from 'cookies';
-import {readFileSync} from 'fs';
+import { promisify } from 'util';
+import { SetOption } from 'cookies';
+import { readFileSync } from 'fs';
 import * as log from 'loglevel';
 import * as read from 'read';
 import * as crypto from 'crypto';
@@ -54,7 +54,7 @@ const defaultPort = getenv('DEFAULT_PORT', 3000);
 
 export const ports = {
   oidcp: (getenv('OIDCP_PORT', 3003)),
-  signature: (getenv('SIGN_PORT', defaultPort)),
+  signature: (getenv('SIGNATURE_PORT', defaultPort)),
   identity: (getenv('IDENTITY_PORT', defaultPort)),
   api: (getenv('API_PORT', defaultPort))
 };
