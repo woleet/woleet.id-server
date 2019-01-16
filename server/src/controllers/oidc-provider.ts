@@ -2,9 +2,9 @@
 
 import * as OIDCProvider from 'oidc-provider';
 import * as Debug from 'debug';
-import {provider as providerConfiguration} from '../config.oidcp';
-import {OIDCAccount as Account, SequelizeAdapter as Adapter} from '../database/oidcp-adapter';
-import {getServerConfig} from './server-config';
+import { provider as providerConfiguration } from '../config.oidcp';
+import { OIDCAccount as Account, SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
+import { getServerConfig } from './server-config';
 
 import * as log from 'loglevel';
 
@@ -65,7 +65,12 @@ async function configure(): Promise<void> {
     return abortInit('No OIDCPInterfaceURL set while Open ID Connect is enabled, skipping configuration');
   }
 
-  let clients = OIDCPClients.map((client) => Object.assign({}, client, { response_types: ['id_token token', 'code'], grant_types: ['refresh_token', 'authorization_code', 'implicit'] }));
+  let clients = OIDCPClients.map((client) => Object.assign({}, client, {
+    // TODO: Isn't it unsafe ? Can we setup only one auth method on the token endpoint for a client ?
+    token_endpoint_auth_method: 'none',
+    response_types: ['code'],
+    grant_types: ['refresh_token', 'authorization_code']
+  }));
 
   initialized = false;
   provider = new OIDCProvider(OIDCPIssuerURL, Object.assign({}, providerConfiguration, { findById: Account.findById }));

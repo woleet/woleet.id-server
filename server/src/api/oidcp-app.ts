@@ -1,4 +1,5 @@
 import * as Koa from 'koa';
+import * as cors from '@koa/cors';
 import * as URL from 'url';
 import * as Router from 'koa-router';
 import * as querystring from 'querystring';
@@ -91,6 +92,6 @@ export function build(): Koa {
   const app = <Koa>provider.app;
 
   provider.use(router.routes());
-
+  provider.use(cors());
   return app;
 }

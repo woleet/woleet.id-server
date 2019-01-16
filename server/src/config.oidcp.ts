@@ -26,6 +26,7 @@ export const provider = {
     encryption: true,       // defaults to false
     introspection: true,    // defaults to false
     revocation: true,       // defaults to false
+    sessionManagement: true // defaults to false
   },
   formats: {
     default: 'opaque'
