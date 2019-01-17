@@ -33,7 +33,7 @@ router.get('/login', async function (ctx) {
     scope: 'openid profile email',
     response_type: 'code',
     state,
-    nonce,
+    nonce
   });
 
   lru.set(oauth, { state, nonce });

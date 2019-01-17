@@ -286,7 +286,7 @@ declare global {
     consumedAt: Date;
   }
 
-  type OIDCGrantTypesEnum = 'refresh_token' | 'authorization_code' | 'implicit';
+  type OIDCGrantTypesEnum = 'refresh_token' | 'authorization_code';
 
   interface OIDCPClient {
     client_id: string,

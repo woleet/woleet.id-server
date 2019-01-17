@@ -1,8 +1,8 @@
 <mat-card>
   <form [formGroup]="clientForm">
-    <mat-checkbox class="w-100" matInput *ngIf="clientForm.get('public')  as f" 
-      placeholder="Set as public"
-      formControlName="public"
+    <mat-checkbox class="w-100" matInput *ngIf="clientForm.get('noAuth')  as f" 
+      placeholder="No authentication required"
+      formControlName="noAuth"
       (input)="refreshTargetValue()">Public client</mat-checkbox>
     <br>
     <br>

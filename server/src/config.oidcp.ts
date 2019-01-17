@@ -45,7 +45,7 @@ export const provider = {
 
     throw new Error('Interaction should not be asked: ' + JSON.stringify(ctx.oidc, null, 2));
   },
-  responseTypes: ['code', 'id_token token'],
+  responseTypes: ['code'],
   clientCacheDuration: 1 * 24 * 60 * 60, // 1 day in seconds,
   ttl: {
     AccessToken: 1 * 60 * 60, // 1 hour in seconds

@@ -21,7 +21,7 @@ export class ConfigOIDCPClientComponent extends ErrorMessageProvider implements 
 
   ngOnInit() {
     this.clientForm = new FormGroup({
-      public: new FormControl(this.client.token_endpoint_auth_method == "none"),
+      noAuth: new FormControl(this.client.token_endpoint_auth_method == "none"),
       clientId: new FormControl(this.client.client_id, [Validators.minLength(1)]),
       clientSecret: new FormControl(this.client.client_secret, [Validators.minLength(1)]),
       redirectUris: new FormArray(
@@ -51,7 +51,7 @@ export class ConfigOIDCPClientComponent extends ErrorMessageProvider implements 
     const controls = (<FormArray>this.clientForm.get('redirectUris')).controls;
     const up = this.clientForm.value;
     Object.assign(this.client, <ApiOIDCPClient>{
-      token_endpoint_auth_method: up.public ? "none" : "client_secret_basic",
+      token_endpoint_auth_method: up.noAuth ? "none" : "client_secret_basic",
       client_id: up.clientId,
       client_secret: up.clientSecret,
       redirect_uris: up.redirectUris
