@@ -1,5 +1,13 @@
 <mat-card>
   <form [formGroup]="clientForm">
+    <mat-checkbox class="w-100" matInput *ngIf="clientForm.get('public')  as f" 
+      placeholder="Set as public"
+      formControlName="public"
+      (input)="refreshTargetValue()">Public client</mat-checkbox>
+    <br>
+    <br>
+    <mat-divider></mat-divider>
+    <br>
     <mat-form-field class="w-100" *ngIf="clientForm.get('clientId')  as f">
       <input matInput
         placeholder="Client ID"

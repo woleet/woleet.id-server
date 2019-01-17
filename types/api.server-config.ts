@@ -3,6 +3,7 @@ interface ServerConfig { }
 type uri = string;
 
 interface ApiOIDCPClient {
+  token_endpoint_auth_method: string,
   client_id: string,
   client_secret: string,
   redirect_uris: uri[],
