@@ -9,6 +9,8 @@ const UserModel = {
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   email: { type: STRING, unique: true },
   username: { type: STRING, unique: true, allowNull: true /* allowNull: false */ }, // step 1
+  countryCallingCode: {type: STRING, unique: false, allowNull: true},
+  phone: {type: STRING, unique: false, allowNull: true},
   x500CommonName: { type: STRING, allowNull: false },
   x500Organization: { type: STRING, /* allowNull: false */ }, // step 1
   x500OrganizationalUnit: { type: STRING, /* allowNull: false */ }, // step 1

@@ -992,12 +992,12 @@ components:
           type: string
           description: User name (can be used for login).
           example: "johndoe"
-        countryNumber:
-          type: integer
-          description: User phone country number
+        countryCallingCode:
+          type: string
+          description: User country calling code
           example: "33"
         phone:
-          type: integer
+          type: string
           description: User phone number
           example: "123456789"
         status:

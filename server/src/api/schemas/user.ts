@@ -25,6 +25,8 @@ const updateIdentity = Joi.object().keys(<DefineJoiModelAttributes<ApiIdentityOb
 const createUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPostUserObject>>{
   role: Joi.string().valid(userRoleEnum).allow(null),
   status: Joi.string().valid(userStatusEnum).allow(null),
+  countryCallingCode: Joi.string().allow(null),
+  phone: Joi.string().allow(null),
   email: Joi.string().email().allow(null), // not required for step 1 (allowing null - but should be specified)
   username: SafeWord.min(1).max(64).allow(null), // not required for step 1 (allowing null - but should be specified)
   password: Word.allow(null), // not required for step 1 (allowing null - but should be specified)
@@ -34,6 +36,8 @@ const createUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPostUserObject
 const updateUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPostUserObject>>{
   role: Joi.string().valid(userRoleEnum),
   status: Joi.string().valid(userStatusEnum),
+  countryCallingCode: Joi.string().allow(null),
+  phone: Joi.string().allow(null),
   email: Joi.string().email().allow(null),
   username: SafeWord.min(1).max(64).allow(null),
   password: Word.allow(null),
