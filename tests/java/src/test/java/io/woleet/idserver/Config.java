@@ -60,9 +60,10 @@ public class Config {
         // Login and set the session cookie for future calls
         AuthenticationApi authenticationApi = new AuthenticationApi(apiClient);
         ApiResponse<UserInfo> apiResponse = authenticationApi.loginWithHttpInfo();
+        String cookies = new String();
         for (String cookie : apiResponse.getHeaders().get("Set-Cookie"))
-            if (cookie.startsWith("session="))
-                apiClient.addDefaultHeader("Cookie", cookie.split(";")[0]);
+            cookies += cookie;
+        apiClient.addDefaultHeader("Cookie", cookies);
         return apiClient;
     }
 
