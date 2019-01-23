@@ -62,7 +62,7 @@ public class Config {
         ApiResponse<UserInfo> apiResponse = authenticationApi.loginWithHttpInfo();
         String cookies = new String();
         for (String cookie : apiResponse.getHeaders().get("Set-Cookie"))
-            cookies += cookie;
+            cookies += cookie + ";";
         apiClient.addDefaultHeader("Cookie", cookies);
         return apiClient;
     }
