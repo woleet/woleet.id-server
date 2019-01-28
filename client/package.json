@@ -31,6 +31,7 @@
     "core-js": "2.5.7",
     "deep-copy": "1.4.2",
     "deep-object-diff": "1.1.0",
+    "libphonenumber-js": "^1.7.8",
     "loglevel": "^1.6.1",
     "rxjs": "6.3.3",
     "timestring": "^5.0.1",
