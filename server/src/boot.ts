@@ -8,8 +8,7 @@ import {
   setServerConfig
 } from './controllers/server-config';
 // Config
-import { encryption } from './config';
-import { setSecret } from './controllers/utils/encryption';
+import { secureModule } from './config';
 import { init as initdb } from './database';
 import { initializeOIDC, updateOIDC } from './controllers/openid';
 import { initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider } from './controllers/oidc-provider';
@@ -19,9 +18,8 @@ import { exit } from './exit';
 
 initdb()
   .catch((err) => exit(`Failed to init database: ${err.message}`, err))
-  .then(() => encryption.init())
+  .then(() => secureModule.init())
   .then(() => {
-    setSecret(encryption.secret);
     log.info('Secret successfully initialized');
   })
   .catch((err) => exit(`Failed to init secret: ${err.message}`, err))
