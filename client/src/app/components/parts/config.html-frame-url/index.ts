@@ -6,11 +6,11 @@ import * as log from 'loglevel';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'config-identity-url',
+  selector: 'config-html-frame-url',
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
+export class ConfigHTMLFrameUrlComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
 
   editMode = false;
 
@@ -40,7 +40,7 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
       }
 
       this.editMode = false;
-      this.form.setValue(config.identityURL);
+      this.form.setValue(config.HTMLFrameURL);
     });
 
     this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
@@ -52,9 +52,9 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
   }
 
   async submit() {
-    const identityURL = this.form.value;
-    log.debug('Set identity URL to', identityURL);
-    this.configService.update({ identityURL });
+    const HTMLFrameURL = this.form.value || null;
+    log.debug('Set HTML frame URL to', HTMLFrameURL);
+    this.configService.update({ HTMLFrameURL });
   }
 
   cancelEdit() {

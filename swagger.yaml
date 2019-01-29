@@ -1115,6 +1115,16 @@ components:
           type: boolean
           example: true
           description: True is the server must fallback on the default key (if any).
+        logoURL:
+          type: string
+          example: "https://mydomain.com/logo.svg"
+          description: >
+            The URL of the logo that will be displayed in the sign in page.
+        HTMLFrameURL:
+          type: string
+          example: "https://mydomain.com/frame.htm"
+          description: >
+            The URL of the HTML frame that will be displayed in the sign in page.
     ServerEventTypeEnum:
       type: string
       enum:

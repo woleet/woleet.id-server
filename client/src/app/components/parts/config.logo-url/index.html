@@ -1,0 +1,36 @@
+<mat-card *ngIf="!editMode">
+    <mat-card-title>Logo URL</mat-card-title>
+    <mat-divider></mat-divider>
+    <br>
+    <div *ngIf="(config$ | async) as config; else loading">
+      <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div fxLayout="column" class="btn-h">
+          <span>{{ config.logoURL || 'unset' }}</span>
+        </div>
+        <div fxLayout="column">
+          <button mat-icon-button color="primary" [disabled]="(formLocked$ | async)" (click)="editMode=true">
+            <mat-icon matTooltip="Edit logo URL" aria-label="Edit logo URL button">edit</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <ng-template #loading>Loading...<br></ng-template>
+  </mat-card>
+  <mat-card *ngIf="editMode">
+    <mat-card-title>Set logo URL</mat-card-title>
+    <mat-divider></mat-divider>
+    <br>
+    <br>
+    <mat-card-content>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="logo URL" [formControl]="form">
+        <mat-error *ngIf="form.invalid">{{ getErrorMessage(form) }}</mat-error>
+      </mat-form-field>
+    </mat-card-content>
+    <ng-template #loading>Loading...<br></ng-template>
+    <mat-card-actions *ngIf="(config$ | async) as config; else loading">
+      <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) || (config.logoURL == form.value) || (form.invalid)">SAVE</button>
+      <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
+    </mat-card-actions>
+  </mat-card>
+  

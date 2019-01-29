@@ -27,6 +27,8 @@ import { UserCardComponent } from '@parts/user.card';
 import { KeyCardComponent } from '@parts/key.card';
 import { ConfigFallbackKeyComponent } from '@parts/config.fallback-key';
 import { ConfigIdentityUrlComponent } from '@parts/config.identity-url';
+import { ConfigLogoUrlComponent } from '@parts/config.logo-url';
+import { ConfigHTMLFrameUrlComponent } from '@parts/config.html-frame-url';
 import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
 import { APITokenCardComponent } from '@parts/api-token.card';
 import { KeyCreateCardComponent } from '@parts/key.card.create';
@@ -91,6 +93,8 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     AboutPageComponent,
     ConfigFallbackKeyComponent,
     ConfigIdentityUrlComponent,
+    ConfigLogoUrlComponent,
+    ConfigHTMLFrameUrlComponent,
     ConfigOpenIDComponent,
     ConfigOIDCPComponent,
     ConfigOIDCPClientComponent,

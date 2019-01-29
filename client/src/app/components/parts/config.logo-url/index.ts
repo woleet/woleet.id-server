@@ -6,11 +6,11 @@ import * as log from 'loglevel';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'config-identity-url',
+  selector: 'config-logo-url',
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
+export class ConfigLogoUrlComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
 
   editMode = false;
 
@@ -40,7 +40,7 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
       }
 
       this.editMode = false;
-      this.form.setValue(config.identityURL);
+      this.form.setValue(config.logoURL);
     });
 
     this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
@@ -52,9 +52,9 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
   }
 
   async submit() {
-    const identityURL = this.form.value;
-    log.debug('Set identity URL to', identityURL);
-    this.configService.update({ identityURL });
+    const logoURL = this.form.value || null;
+    log.debug('Set logo URL to', logoURL);
+    this.configService.update({ logoURL });
   }
 
   cancelEdit() {
