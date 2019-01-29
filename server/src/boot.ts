@@ -8,14 +8,14 @@ import {
   setServerConfig
 } from './controllers/server-config';
 // Config
-import {encryption} from './config';
-import {setSecret} from './controllers/utils/encryption';
-import {init as initdb} from './database';
-import {initializeOIDC, updateOIDC} from './controllers/openid';
-import {initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider} from './controllers/oidc-provider';
-import {bootOIDCProvider, bootServers} from './boot.servers';
-import {initServerConfig} from './boot.server-config';
-import {exit} from './exit';
+import { encryption } from './config';
+import { setSecret } from './controllers/utils/encryption';
+import { init as initdb } from './database';
+import { initializeOIDC, updateOIDC } from './controllers/openid';
+import { initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider } from './controllers/oidc-provider';
+import { bootOIDCProvider, bootServers } from './boot.servers';
+import { initServerConfig } from './boot.server-config';
+import { exit } from './exit';
 
 initdb()
   .catch((err) => exit(`Failed to init database: ${err.message}`, err))
