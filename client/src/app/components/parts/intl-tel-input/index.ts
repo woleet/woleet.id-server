@@ -47,7 +47,6 @@ function phoneNumberValidator(control: AbstractControl): ValidationErrors | null
 
     onInputChange(phoneInput: string) {
       this.AYTPhone = new AsYouType().input(phoneInput);
-      this.phoneNumber = this.AYTPhone;
       if (phoneInput) {
         if (parsePhoneNumberFromString(this.AYTPhone)) {
           if (parsePhoneNumberFromString(this.AYTPhone).isValid()) {
@@ -61,5 +60,9 @@ function phoneNumberValidator(control: AbstractControl): ValidationErrors | null
       } else {
         this.inputUnfocus.emit(null);
       }
+    }
+
+    onFocusOut() {
+      this.phoneNumber = this.AYTPhone;
     }
   }
