@@ -13,8 +13,10 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   defaultKeyId: uuid,
   fallbackOnDefaultKey: Joi.boolean(),
   allowUserToSign: Joi.boolean(),
-  logoURL: Joi.string().uri({ scheme: ['http', 'https'] }).allow(null),
-  HTMLFrameURL: Joi.string().uri({ scheme: ['http', 'https'] }).allow(null),
+  publicInfo: Joi.object({
+    logoURL: Joi.string().uri({ scheme: ['http', 'https'] }).allow(null),
+    HTMLFrame: Joi.string().allow(null),
+  }),
   useOpenIDConnect: Joi.boolean(),
   openIDConnectURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   openIDConnectClientId: Joi.string().allow(null),

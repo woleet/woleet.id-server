@@ -14,9 +14,10 @@ interface ApiServerConfig {
   defaultKeyId: string;
   fallbackOnDefaultKey: boolean;
   allowUserToSign: boolean;
-  logoURL: string | null;
-  HTMLFrameURL: string | null;
-
+  publicInfo: {
+    logoURL?: string | null;
+    HTMLFrame?: string | null;
+  }
   // Open ID Connect config
   useOpenIDConnect: boolean;
   openIDConnectURL: string | null;
@@ -36,8 +37,10 @@ interface ApiServerConfig {
 interface ApiServerConfigUpdate {
   identityURL?: string;
   defaultKeyId?: string;
-  logoURL?: string;
-  HTMLFrameURL?: string;
+  publicInfo?: {
+    logoURL?: string;
+    HTMLFrame?: string;
+  }
   fallbackOnDefaultKey?: boolean;
   allowUserToSign?: boolean;
 

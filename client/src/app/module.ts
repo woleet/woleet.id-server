@@ -28,10 +28,12 @@ import { KeyCardComponent } from '@parts/key.card';
 import { ConfigFallbackKeyComponent } from '@parts/config.fallback-key';
 import { ConfigIdentityUrlComponent } from '@parts/config.identity-url';
 import { ConfigLogoUrlComponent } from '@parts/config.logo-url';
-import { ConfigHTMLFrameUrlComponent } from '@parts/config.html-frame-url';
+import { ConfigHTMLFrameUrlComponent } from '@parts/config.html-frame';
 import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
 import { APITokenCardComponent } from '@parts/api-token.card';
 import { KeyCreateCardComponent } from '@parts/key.card.create';
+import { LogoComponent } from '@parts/logo';
+import { HtmlFrameComponent } from '@parts/html-frame';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -108,7 +110,9 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     StopRipplePropagationDirective,
     ErrorPageComponent,
     OAuthRedirectComponent,
-    OIDCProviderInteractionComponent
+    OIDCProviderInteractionComponent,
+    LogoComponent,
+    HtmlFrameComponent
   ],
   imports: [
     // angular

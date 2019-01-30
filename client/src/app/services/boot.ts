@@ -17,7 +17,7 @@ const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 @Injectable({ providedIn: 'root' })
 export class AppConfigService {
 
-  private _appConfig: { OIDCPProviderURL: string, useOpenIDConnect: boolean, hasSession: boolean };
+  private _appConfig: { OIDCPProviderURL: string, useOpenIDConnect: boolean, hasSession: boolean, publicInfo: object };
   bootOnLogin = false;
 
   constructor(

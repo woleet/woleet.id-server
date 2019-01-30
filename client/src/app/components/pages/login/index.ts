@@ -20,8 +20,9 @@ export class LoginPageComponent {
 
   errorMsg: string = null;
   useOIDC: boolean;
+  serverPublicInfo: ApiServerConfig['publicInfo'];
   redirect: string;
-  config: { OIDCPProviderURL: string; useOpenIDConnect: boolean; hasSession: boolean; };
+  config: { OIDCPProviderURL: string; useOpenIDConnect: boolean; hasSession: boolean; publicInfo: object};
 
   constructor(
     private authService: AuthService,
@@ -34,6 +35,7 @@ export class LoginPageComponent {
     this.lock$ = authService.lock$;
     this.config = appConfigService.getStartupConfig();
     this.useOIDC = this.config.useOpenIDConnect;
+    this.serverPublicInfo = this.config.publicInfo;
     activatedRoute.queryParams.subscribe(async (params) => {
       log.debug('Forwarded login parameters', params);
       if (params.origin && params.origin.startsWith('oidcp') && params.redirect) {
@@ -48,6 +50,7 @@ export class LoginPageComponent {
     });
     const config = appConfigService.getStartupConfig();
     this.useOIDC = config && config.useOpenIDConnect;
+    this.serverPublicInfo = config.publicInfo || null;
   }
 
   async login() {

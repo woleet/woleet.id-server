@@ -1,3 +1,5 @@
+<logo [logoURL]="serverPublicInfo.logoURL || null"></logo>
+<html-frame [HtmlFrame]="serverPublicInfo.HTMLFrame"></html-frame>
 <div class="form-container">
   <form role="form" (submit)="login()" #f="ngForm">
     <div>
