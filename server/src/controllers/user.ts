@@ -5,6 +5,9 @@ import { NotFoundUserError } from '../errors';
 import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
+import { uuid } from 'test/utils';
+import * as uuidV4 from 'uuid/v4';
+import { serializeUser } from 'src/api/serialize/user';
 
 const debug = Debug('id:ctr');
 
@@ -131,3 +134,35 @@ export async function deleteUser(id: string): Promise<InternalUserObject> {
 
   return user.toJSON();
 }
+
+export async function checkTokenValidity(updatePassword: ApiResetPasswordObject): Promise<InternalUserObject> {
+  let user = await User.getByEmail(updatePassword.email);
+
+  const key = await serializeAndEncodePassword(updatePassword.password);
+  const update = Object.assign({}, {tokenResetPassword: null, key});
+
+  user = await User.update(user.getDataValue('id'), update);
+
+  if (!user) {
+    throw new NotFoundUserError();
+  }
+
+  return user.toJSON();
+}
+
+export async function sendEmail(email: string): Promise<InternalUserObject> {
+  let user = await User.getByEmail(email);
+
+  if (!user) {
+    throw new NotFoundUserError();
+  }
+
+  const token = uuidV4();
+
+  const update = Object.assign({}, {tokenResetPassword: token});
+
+  user = await User.update(user.getDataValue('id'), update);
+
+  return user.toJSON();
+}
+

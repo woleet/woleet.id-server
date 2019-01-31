@@ -578,6 +578,62 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/UserArray'
+  /password-reset:
+    post:
+      tags:
+        - UserPasswordReset
+        summary: Send a link to the user via his email address.
+        operationId: passwordResetLink
+        requestBody:
+          description: User's email to send the link to.
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordReset'
+        responses:
+          '200':
+            description: Successful operation.
+          '400':
+            description: Invalid object supplied.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/responses/APIError'
+  /password-reset/validate:
+    post:
+      tags:
+        - UserPasswordReset
+        summary: Change the user password.
+        operationId: updatePassword
+        requestBody:
+          description: User's email to send the link to.
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updatePassword'
+        responses:
+          '200':
+            description: Successful operation.
+          '400':
+            description: Invalid object supplied.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/responses/APIError'
+          '401':
+            description: Missing or bad session cookie.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/responses/APIError'
+          '404':
+            description: User not found.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/responses/APIError'
   /api-token:
     post:
       tags:
@@ -1041,6 +1097,29 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/UserDisco'
+    PasswordReset:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email (can be used for login).
+          example: "john.doe@acme.com"
+    UpdatePassword:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email (can be used for login).
+          example: "john.doe@acme.com"
+        token:
+          type: string
+          format: uuid
+          description: Identifier of the related user.
+          example: "a84996d3-9a77-4e8c-947f-f00c4d64a167"
+        password:
+            $ref: '#/components/schemas/Password'
     APITokenStatusEnum:
       type: string
       enum:
