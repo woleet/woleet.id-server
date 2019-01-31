@@ -8,8 +8,8 @@ import {
   setServerConfig
 } from './controllers/server-config';
 // Config
-import { secureModule } from './config';
-import { init as initdb } from './database';
+import { secureModule, secretEnvVariableName } from './config';
+import { init as initdb, postinit as postinitdb } from './database';
 import { initializeOIDC, updateOIDC } from './controllers/openid';
 import { initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider } from './controllers/oidc-provider';
 import { bootOIDCProvider, bootServers } from './boot.servers';
@@ -18,11 +18,12 @@ import { exit } from './exit';
 
 initdb()
   .catch((err) => exit(`Failed to init database: ${err.message}`, err))
-  .then(() => secureModule.init())
+  .then(() => secureModule.init(secretEnvVariableName))
   .then(() => {
-    log.info('Secret successfully initialized');
+    log.info('Secure module successfully initialized');
   })
   .catch((err) => exit(`Failed to init secret: ${err.message}`, err))
+  .then(() => postinitdb())
   .then(() => initServerConfig())
   .catch((err) => exit(`Failed to init server config: ${err.message}`, err))
   .then(() => registerOIDCUpdateFunction(updateOIDC))

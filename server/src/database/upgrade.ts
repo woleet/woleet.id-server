@@ -1,7 +1,10 @@
 import { Sequelize } from 'sequelize';
 import * as log from 'loglevel';
-import { ServerConfig } from '.';
-import { serverConfig } from '../config';
+import * as read from 'read';
+import * as crypto from 'crypto';
+import { ServerConfig, Key } from '.';
+import { serverConfig, secretEnvVariableName, secureModule } from '../config';
+import { promisify } from 'util';
 
 const { CONFIG_ID } = serverConfig;
 
@@ -60,13 +63,14 @@ async function upgrade3(sequelize) {
   }
 
   const { config } = cfg.toJSON();
+  log.info({ config });
   if (config.version < 2) {
     log.warn('Need to add "privateKeyIV" and "mnemonicEntropyIV" column to the "keys" table');
     const privateKeyIV = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "privateKeyIV" CHAR (${16 * 2});`);
-    log.info(privateKeyIV);
+    log.debug(privateKeyIV);
     const mnemonicEntropyIV = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "mnemonicEntropyIV" CHAR (${16 * 2});`);
-    log.info(mnemonicEntropyIV);
-    await ServerConfig.update(CONFIG_ID, { config: Object.assign({ version: 2 }, config) });
+    log.debug(mnemonicEntropyIV);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 2 }) });
   }
 }
 
@@ -74,4 +78,91 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
   await upgrade3(sequelize);
+}
+
+async function postUpgrade3(sequelize) {
+  log.warn('Checking for post-update 2 of the "keys" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version === 2) {
+    await Key.model.sync();
+    const testKey = await Key.model.findOne({ paranoid: false });
+
+    if (!testKey) {
+      log.warn(`No key to update`);
+      return;
+    }
+
+    log.warn('Need to re-encrypt keys, we will ask you to enter your encryption secret (again) if not set as environment variable.');
+
+    let secret = process.env[secretEnvVariableName] || '';
+
+    if (!secret) {
+      log.warn(`No ${secretEnvVariableName} environment set, please enter encryption secret:`);
+      const options = { prompt: '>', silent: true };
+      const _read = promisify(read);
+      while (!secret) {
+        secret = await _read(options);
+        if (!secret) {
+          log.warn('Encryption secret must not be empty, please type it:');
+        }
+      }
+    }
+
+    const _secret = crypto.createHash('sha256')
+      .update(secret, 'utf8')
+      .digest();
+
+    log.warn('Checking that the secret is correct...');
+
+    function decrypt(data: Buffer) {
+      const decipher = crypto.createDecipher('aes-256-cbc', _secret);
+      return Buffer.concat([decipher.update(data), decipher.final()]);
+    }
+
+    try {
+      decrypt(Buffer.from(testKey.get('privateKey'), 'hex'));
+    } catch (err) {
+      log.error('Failed to decrypt key! Please check that the secret is correct and try again.');
+      throw new Error('Failed to decrypt key');
+    }
+
+    log.warn('Secret is corretcly set, re-encypting all keys.');
+
+    const keys = await Key.model.findAll({ paranoid: false });
+
+    log.warn(`${keys.length} keys to update...`);
+
+    for (const key of keys) {
+      log.warn(`Updating key ${key.get('id')} ...`);
+      const p = decrypt(Buffer.from(testKey.get('privateKey'), 'hex'));
+      const e = decrypt(Buffer.from(testKey.get('mnemonicEntropy'), 'hex'));
+      {
+        const { data, iv } = await secureModule.encrypt(p);
+        key.set('privateKeyIV', iv.toString('hex'));
+        key.set('privateKey', data.toString('hex'));
+      }
+      {
+        const { data, iv } = await secureModule.encrypt(e);
+        key.set('mnemonicEntropyIV', iv.toString('hex'));
+        key.set('mnemonicEntropy', data.toString('hex'));
+      }
+      await key.save();
+      log.debug(`Updated key ${key.get('id')}`);
+    }
+
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 3 }) });
+  }
+}
+
+/**
+ * Upgrade function called when secure module is initialized
+ */
+export async function postUpgrade(sequelize: Sequelize) {
+  await postUpgrade3(sequelize);
 }

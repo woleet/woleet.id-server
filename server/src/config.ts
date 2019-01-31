@@ -24,8 +24,11 @@ log.methodFactory = function (methodName, logLevel, loggerName) {
   };
 };
 
+const prefix = 'WOLEET_ID_SERVER_';
+
+export const secretEnvVariableName = prefix + 'ENCRYPTION_SECRET';
+
 function getenv<T = string>(name: string, fallback: T = null): T {
-  const prefix = 'WOLEET_ID_SERVER_';
   const value = process.env[prefix + name];
   if (!value && fallback !== null) {
     log.warn(`No value found for "${prefix + name}"${fallback !== null ? `, defaulting to '${JSON.stringify(fallback)}'` : '!'}`);
@@ -111,7 +114,7 @@ export const events = {
 
 export const serverConfig = {
   default: {
-    version: 2, // datamodel version
+    version: 3, // datamodel version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true
   },

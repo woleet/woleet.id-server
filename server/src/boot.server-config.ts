@@ -26,6 +26,7 @@ export async function initServerConfig() {
       return;
     }
 
+    log.info('Checking that the secret is correct...');
     try {
       await signMessage(key, randomBytes(32).toString('hex'));
     } catch (err) {
