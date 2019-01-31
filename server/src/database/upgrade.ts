@@ -51,7 +51,27 @@ async function upgrade2(sequelize) {
   }
 }
 
+async function upgrade3(sequelize) {
+  log.warn('Checking for update 2 of the "keys" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 2) {
+    log.warn('Need to add "privateKeyIV" and "mnemonicEntropyIV" column to the "keys" table');
+    const privateKeyIV = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "privateKeyIV" CHAR (${16 * 2});`);
+    log.info(privateKeyIV);
+    const mnemonicEntropyIV = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "mnemonicEntropyIV" CHAR (${16 * 2});`);
+    log.info(mnemonicEntropyIV);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign({ version: 2 }, config) });
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
+  await upgrade3(sequelize);
 }
