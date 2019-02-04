@@ -4,42 +4,11 @@ import { Router } from '@angular/router';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormControl, ValidationErrors, Validators } from '@angular/forms';
-import { cleanupObject, ErrorMessageProvider, replaceInObject } from '@components/util';
+import { cleanupObject, ErrorMessageProvider, replaceInObject, passwordValidator, asciiValidator} from '@components/util';
 import * as traverse from 'traverse';
 import cc from '@components/cc';
 import { addedDiff, updatedDiff } from 'deep-object-diff';
 import * as log from 'loglevel';
-
-function asciiValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
-  if (str && !/^[\x00-\x7F]*$/.test(str)) {
-    return ({ ascii: true });
-  }
-
-  return null;
-}
-
-function passwordValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
-
-  if (str && !/.*[0-9].*/.test(str)) {
-    return ({ password: { missing: 'one number' } });
-  }
-
-  if (str && !/.*[a-z].*/.test(str)) {
-    return ({ password: { missing: 'one lowercase' } });
-  }
-
-  if (str && !/.*[A-Z].*/.test(str)) {
-    return ({ password: { missing: 'one uppercase' } });
-  }
-
-  if (str && /^(.{0,5}|[a-zA-Z0-9]*)$/i.test(str)) {
-    return ({ password: { missing: 'one special character' } });
-  }
-
-  return null;
-}
 
 function noSpaceValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;

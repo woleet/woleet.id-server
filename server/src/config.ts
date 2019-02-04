@@ -56,7 +56,8 @@ export const ports = {
   oidcp: (getenv('OIDCP_PORT', 3003)),
   signature: (getenv('SIGNATURE_PORT', defaultPort)),
   identity: (getenv('IDENTITY_PORT', defaultPort)),
-  api: (getenv('API_PORT', defaultPort))
+  api: (getenv('API_PORT', defaultPort)),
+  smtp: (getenv('SMTP_PORT', 3004))
 };
 
 export const db = {
@@ -105,6 +106,7 @@ export const events = {
     'signature', 'login', 'config.edit',
     'key.create', 'key.edit', 'key.delete',
     'user.create', 'user.edit', 'user.delete',
+    'user.passwordReset', 'user.passwordUpdate',
     'token.create', 'token.edit', 'token.delete'
   ]
 };

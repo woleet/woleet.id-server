@@ -1206,6 +1206,8 @@ components:
       - user.create
       - user.edit
       - user.delete
+      - user.passwordReset
+      - user.passwordUpdate
       - token.create
       - token.edit
       - token.delete

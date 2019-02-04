@@ -24,7 +24,7 @@ interface ApiUserObject extends UserObject, ApiCommonProperties {
   role: UserRoleEnum;
   status: UserStatusEnum;
   email: string | null; // step 1: will be mandatory
-  tokenResetPassword?: uuid | null;
+  tokenResetPassword?: string | null;
   defaultKeyId: string | null;
   identity: ApiIdentityObject;
 }
@@ -54,6 +54,6 @@ interface ApiPutUserObject extends UserObject {
 
 interface ApiResetPasswordObject {
   email: string;
-  token: uuid;
+  token: string;
   password: string;
 }

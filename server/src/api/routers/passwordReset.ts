@@ -30,9 +30,10 @@ const router = new Router({ prefix: '/password-reset' });
  * @swagger
  *  operationId: passwordResetLink
  */
-router.post('/', vid, async function (ctx) {
-  const { userMail } = ctx.request.body;
-  const user = await sendEmail(userMail);
+router.post('/', async function (ctx) {
+  const { email } = ctx.request.body;
+  console.log(ctx.request.body);
+  const user = await sendEmail(email);
 
   event.register({
     type: 'user.passwordReset',
@@ -42,6 +43,9 @@ router.post('/', vid, async function (ctx) {
     associatedKeyId: null,
     data: null
   });
+
+  ctx.body = 'ok';
+
 });
 
 /**
@@ -49,7 +53,7 @@ router.post('/', vid, async function (ctx) {
  * @swagger
  *  operationId: updatePassword
  */
-router.post('/validate', vid, async function (ctx) {
+router.post('/validate', async function (ctx) {
   const updatePassword = ctx.request.body;
   let user = await checkTokenValidity(updatePassword);
 

@@ -41,6 +41,7 @@ import { SettingsPageComponent } from '@pages/settings';
 import { UserEditPageComponent } from '@pages/user.edit';
 import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
+import { ResetPasswordPageComponent } from '@pages/reset-password';
 
 // Services
 import { AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService } from '@guards/auth';
@@ -104,7 +105,8 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     StopRipplePropagationDirective,
     ErrorPageComponent,
     OAuthRedirectComponent,
-    OIDCProviderInteractionComponent
+    OIDCProviderInteractionComponent,
+    ResetPasswordPageComponent
   ],
   imports: [
     // angular

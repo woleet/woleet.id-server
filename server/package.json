@@ -53,12 +53,14 @@
     "koa-router": "7.4.0",
     "loglevel": "^1.6.1",
     "lru-cache": "4.1.3",
+    "nodemailer": "^5.1.1",
     "oidc-provider": "^5.1.2",
     "openid-client": "^2.4.3",
     "pg": "7.4.3",
     "pg-hstore": "2.3.2",
     "read": "^1.0.7",
     "secp256k1": "3.5.0",
-    "sequelize": "4.38.0"
+    "sequelize": "4.38.0",
+    "smtp-server": "^3.5.0"
   }
 }

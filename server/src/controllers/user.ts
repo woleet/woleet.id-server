@@ -5,9 +5,11 @@ import { NotFoundUserError } from '../errors';
 import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
-import { uuid } from 'test/utils';
 import * as uuidV4 from 'uuid/v4';
-import { serializeUser } from 'src/api/serialize/user';
+
+// move to serverConfig after
+import * as nodemailer from 'nodemailer';
+import { cookies, ports, server as config } from '../config';
 
 const debug = Debug('id:ctr');
 
@@ -163,6 +165,48 @@ export async function sendEmail(email: string): Promise<InternalUserObject> {
 
   user = await User.update(user.getDataValue('id'), update);
 
+  const transporter = nodemailer.createTransport({
+    host: '127.0.0.1',
+    port: 3004,
+    tls: {
+      // do not fail on invalid certs
+      rejectUnauthorized: false
+    }
+  });
+
+    transporter.verify(function(error, success) {
+      console.log('###############################');
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Server is ready to take our messages');
+      }
+      console.log('###############################');
+    });
+
+  const link = 'https://localhost:4220/reset-password?token=' +
+    token + '&email=' + email;
+
+  await transporter.sendMail(MailTemplate(link, email), function (err, info) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(info);
+      console.log('###############################');
+      console.log('Message sent: %s', info.messageId);
+      // Preview only available when sending through an Ethereal account
+      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    }
+  });
   return user.toJSON();
 }
+
+function MailTemplate(link: string, email: string): object {
+  return {
+     from: 'Woleet no-reply@woleet.com',
+     to: email,
+     subject: 'Password recovery',
+     text: 'Your reset link: ' + link,
+   };
+ }
 
