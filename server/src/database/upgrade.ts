@@ -86,7 +86,7 @@ async function upgrade4(sequelize) {
 
   const { config } = cfg.toJSON();
   log.info({ config });
-  if (config.version === 3) {
+  if (config.version < 4) {
     log.warn('Need to add "phone" and "countryCallingCode" column to the "user" table');
     const phone = await sequelize.query(`ALTER TABLE "user" ADD COLUMN "phone" STRING;`);
     log.debug(phone);

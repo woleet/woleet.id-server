@@ -47,6 +47,7 @@ function phoneNumberValidator(control: AbstractControl): ValidationErrors | null
 
     onInputChange(phoneInput: string) {
       this.AYTPhone = new AsYouType().input(phoneInput);
+      console.log(this.AYTPhone);
       if (phoneInput) {
         if (parsePhoneNumberFromString(this.AYTPhone)) {
           if (parsePhoneNumberFromString(this.AYTPhone).isValid()) {
