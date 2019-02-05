@@ -1,5 +1,6 @@
 import { Key, User } from '../database';
 import { getServerConfig } from './server-config';
+import { secureModule } from '../config';
 
 import {
   NotFoundUserError, NotFoundKeyError, BlockedUserError,
@@ -7,14 +8,10 @@ import {
   KeyOwnerMismatchError, ExpiredKeyError
 } from '../errors';
 
-import * as message from 'bitcoinjs-message';
-import { decrypt } from './utils/encryption';
-
-/**
- * TODO: move to secure module
- */
-export async function signMessage(privkeyHex: string, hashToSign: string, compressed: boolean) {
-  return message.sign(hashToSign, decrypt(privkeyHex), compressed);
+export function signMessage(key: SequelizeKeyObject, message: string, compressed = true): Promise<string> {
+  const privateKey = Buffer.from(key.get('privateKey'), 'hex');
+  const privateKeyIV = Buffer.from(key.get('privateKeyIV'), 'hex');
+  return secureModule.sign(privateKey, message, privateKeyIV, compressed);
 }
 
 export async function sign({ hashToSign, pubKey, userId, customUserId }) {
@@ -87,13 +84,13 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     throw new ExpiredKeyError();
   }
 
-  const sig = await signMessage(key.get('privateKey'), hashToSign, key.get('compressed'));
+  const signature = await signMessage(key, hashToSign);
 
   return {
     userId: user.get('id'),
     keyId: key.get('id'),
     pubKey: key.get('publicKey'),
     signedHash: hashToSign,
-    signature: sig.toString('base64')
+    signature
   };
 }
