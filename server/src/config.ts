@@ -1,13 +1,13 @@
 // tslint:disable:radix
 
-import { promisify } from 'util';
 import { SetOption } from 'cookies';
 import { readFileSync } from 'fs';
 import * as log from 'loglevel';
-import * as read from 'read';
 import * as crypto from 'crypto';
 import * as assert from 'assert';
 import * as chalk from 'chalk';
+
+import { SecureModule } from './woleet-secure-module';
 
 // Logger setup
 
@@ -24,8 +24,11 @@ log.methodFactory = function (methodName, logLevel, loggerName) {
   };
 };
 
+const prefix = 'WOLEET_ID_SERVER_';
+
+export const secretEnvVariableName = prefix + 'ENCRYPTION_SECRET';
+
 function getenv<T = string>(name: string, fallback: T = null): T {
-  const prefix = 'WOLEET_ID_SERVER_';
   const value = process.env[prefix + name];
   if (!value && fallback !== null) {
     log.warn(`No value found for "${prefix + name}"${fallback !== null ? `, defaulting to '${JSON.stringify(fallback)}'` : '!'}`);
@@ -111,6 +114,7 @@ export const events = {
 
 export const serverConfig = {
   default: {
+    version: 3, // datamodel version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true,
     publicInfo: {},
@@ -126,23 +130,4 @@ export const cookies: { keys: string[], options: SetOption } = {
   }
 };
 
-const ENCRYPTION_SECRET = getenv('ENCRYPTION_SECRET');
-
-export const encryption = {
-  secret: ENCRYPTION_SECRET,
-  init: async function (): Promise<void> {
-    if (!ENCRYPTION_SECRET) {
-      log.warn('No WOLEET_ID_SERVER_ENCRYPTION_SECRET environment set, please enter encryption secret:');
-      const options = { prompt: '>', silent: true };
-      const _read = promisify(read);
-      let secret = '';
-      while (!secret) {
-        secret = await _read(options);
-        if (!secret) {
-          log.warn('Encryption secret must not be empty, please type it:');
-        }
-        encryption.secret = secret;
-      }
-    }
-  }
-};
+export const secureModule = new SecureModule;

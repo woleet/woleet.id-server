@@ -1,7 +1,6 @@
 import { Key, User } from '../database';
 import { NotFoundKeyError, NotFoundUserError } from '../errors';
-import { Mnemonic, HDPrivateKey, KeyRing } from 'bcoin';
-import { encrypt, decrypt } from './utils/encryption';
+import { secureModule } from '../config';
 
 /**
  * Key
@@ -14,31 +13,17 @@ import { encrypt, decrypt } from './utils/encryption';
 /**
  * @swagger
  *  operationId: createKey
- * TODO: move to secure module
  */
 export async function createKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
-
-  // Get new phrase
-  const mnemonic = new Mnemonic();
-
-  // Create an HD private key
-  const master = HDPrivateKey.fromMnemonic(mnemonic);
-  const xkey = master.derivePath('m/44\'/0\'/0\'');
-
-  const compressed = true;
-  const ring = KeyRing.fromPrivate(xkey.privateKey, compressed);
-
-  const publicKey = ring.getAddress('base58');
-  const privateKey = ring.getPrivateKey();
-
-  const encryptedEntropy = encrypt(mnemonic.getEntropy());
-  const encryptedPrivateKey = encrypt(privateKey);
+  const _newKey = await secureModule.createKey();
 
   const newKey = await Key.create(Object.assign({}, key, {
-    mnemonicEntropy: encryptedEntropy.toString('hex'),
-    privateKey: encryptedPrivateKey.toString('hex'),
-    compressed,
-    publicKey,
+    mnemonicEntropy: _newKey.entropy.toString('hex'),
+    mnemonicEntropyIV: _newKey.entropyIV.toString('hex'),
+    privateKey: _newKey.privateKey.toString('hex'),
+    privateKeyIV: _newKey.privateKeyIV.toString('hex'),
+    compressed: _newKey.compressed,
+    publicKey: _newKey.publicKey,
     userId
   }));
 
@@ -89,9 +74,6 @@ export async function getOwnerByPubKey(pubKey): Promise<InternalUserObject> {
   return key.get('user').toJSON();
 }
 
-/**
- * TODO: move to secure module
- */
 export async function exportKey(id: string): Promise<string> {
   const key = await Key.getById(id);
 
@@ -99,13 +81,10 @@ export async function exportKey(id: string): Promise<string> {
     throw new NotFoundKeyError();
   }
 
-  const entropy = decrypt(key.get('mnemonicEntropy'));
+  const entropy = Buffer.from(key.get('mnemonicEntropy'), 'hex');
+  const entropyIV = Buffer.from(key.get('mnemonicEntropyIV'), 'hex');
 
-  // Get key mnemonic
-  const mnemonic = Mnemonic.fromEntropy(entropy);
-
-  // Return phrase
-  return mnemonic.getPhrase();
+  return secureModule.exportPhrase(entropy, entropyIV);
 }
 
 export async function getAllKeys(full = false): Promise<InternalKeyObject[]> {
