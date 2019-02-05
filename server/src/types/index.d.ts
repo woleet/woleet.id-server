@@ -100,8 +100,12 @@ declare global {
 
     /** Hexadecimal represention of the mnemonic phrase */
     mnemonicEntropy: string;
+    /** Hexadecimal represention of the mnemonic's initialization vector */
+    mnemonicEntropyIV: string;
     /** Hexadecimal represention of the private key */
     privateKey: string;
+    /** Hexadecimal represention of the private key's initialization vector */
+    privateKeyIV: string;
     /** Boolean to indicate weither the privatekey is compresssed or not */
     compressed: boolean;
     /** Base 58 represention of the public key */

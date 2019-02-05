@@ -9,9 +9,9 @@ const debug = Debug('id:boot.server-config');
 import { Key } from './database';
 import { randomBytes } from 'crypto';
 import { createUser } from './controllers/user';
-import { signMessage } from './controllers/sign';
 import { exit } from './exit';
 import { serverConfig } from './config';
+import { signMessage } from './controllers/sign';
 
 export async function initServerConfig() {
   const config = await loadServerConfig();
@@ -26,8 +26,9 @@ export async function initServerConfig() {
       return;
     }
 
+    log.info('Checking that the secret is correct...');
     try {
-      await signMessage(key.get('privateKey'), randomBytes(32).toString('hex'), key.get('compressed'));
+      await signMessage(key, randomBytes(32).toString('hex'));
     } catch (err) {
       log.warn(err.message);
       throw new Error('Secret is not the same that the previously set one');
