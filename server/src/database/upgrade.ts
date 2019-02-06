@@ -85,10 +85,10 @@ async function upgrade4(sequelize) {
 
   const { config } = cfg.toJSON();
   if (config.version < 4) {
-    log.warn('Need to add "phone" and "countryCallingCode" column to the "user" table');
-    const phone = await sequelize.query(`ALTER TABLE "user" ADD COLUMN "phone" STRING;`);
+    log.warn('Need to add "phone" and "countryCallingCode" column to the "users" table');
+    const phone = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "phone" VARCHAR;`);
     log.debug(phone);
-    const countryCallingCode = await sequelize.query(`ALTER TABLE "user" ADD COLUMN "countryCallingCode" STRING;`);
+    const countryCallingCode = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "countryCallingCode" VARCHAR;`);
     log.debug(countryCallingCode);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 4 }) });
   }
