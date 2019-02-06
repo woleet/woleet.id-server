@@ -50,7 +50,7 @@ async function upgrade2(sequelize) {
   if (!config.version) {
     log.warn('Need to add "expiration" column to the "keys" table');
     const res = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN expiration TIMESTAMP WITH TIME ZONE;`);
-    log.info(res);
+    log.debug(res);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign({ version: 1 }, config) });
   }
 }
@@ -64,7 +64,6 @@ async function upgrade3(sequelize) {
   }
 
   const { config } = cfg.toJSON();
-  log.info({ config });
   if (config.version < 2) {
     doPostUpgrade3 = true;
     log.warn('Need to add "privateKeyIV" and "mnemonicEntropyIV" column to the "keys" table');
@@ -85,7 +84,6 @@ async function upgrade4(sequelize) {
   }
 
   const { config } = cfg.toJSON();
-  log.info({ config });
   if (config.version < 4) {
     log.warn('Need to add "phone" and "countryCallingCode" column to the "user" table');
     const phone = await sequelize.query(`ALTER TABLE "user" ADD COLUMN "phone" STRING;`);

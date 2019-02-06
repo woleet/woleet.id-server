@@ -38,7 +38,8 @@ describe('/user', () => {
     const userProperties = [
       'id', 'role', 'defaultKeyId', 'identity',
       'status', 'lastLogin', 'username', 'email',
-      'deletedAt', 'updatedAt', 'createdAt'
+      'deletedAt', 'updatedAt', 'createdAt',
+      'countryCallingCode', 'phone'
     ];
 
     const user = {
