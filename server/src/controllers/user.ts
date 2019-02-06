@@ -137,76 +137,96 @@ export async function deleteUser(id: string): Promise<InternalUserObject> {
   return user.toJSON();
 }
 
-export async function checkTokenValidity(updatePassword: ApiResetPasswordObject): Promise<InternalUserObject> {
-  let user = await User.getByEmail(updatePassword.email);
+export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject): Promise<InternalUserObject> {
+  let user = await User.getByEmail(infoUpdatePassword.email);
 
-  const key = await serializeAndEncodePassword(updatePassword.password);
-  const update = Object.assign({}, {tokenResetPassword: null, key});
+  const key = await serializeAndEncodePassword(infoUpdatePassword.password);
+  const update = Object.assign({}, {tokenResetPassword: null, passwordHash: key.passwordHash,
+    passwordSalt: key.passwordSalt, passwordItrs: key.passwordItrs });
 
-  user = await User.update(user.getDataValue('id'), update);
+    user = await User.update(user.getDataValue('id'), update);
 
-  if (!user) {
-    throw new NotFoundUserError();
-  }
-
-  return user.toJSON();
-}
-
-export async function sendEmail(email: string): Promise<InternalUserObject> {
-  let user = await User.getByEmail(email);
-
-  if (!user) {
-    throw new NotFoundUserError();
-  }
-
-  const token = uuidV4();
-
-  const update = Object.assign({}, {tokenResetPassword: token});
-
-  user = await User.update(user.getDataValue('id'), update);
-
-  const transporter = nodemailer.createTransport({
-    host: '127.0.0.1',
-    port: 3004,
-    tls: {
-      // do not fail on invalid certs
-      rejectUnauthorized: false
+    if (!user) {
+      throw new NotFoundUserError();
     }
-  });
+
+    return user.toJSON();
+  }
+
+  export async function sendEmail(email: string): Promise<InternalUserObject> {
+    let user = await User.getByEmail(email);
+
+    if (!user) {
+      throw new NotFoundUserError();
+    }
+
+    const token = uuidV4();
+
+    const update = Object.assign({}, {tokenResetPassword: token});
+
+    user = await User.update(user.getDataValue('id'), update);
+
+    // with ethereal. Catch the email with the url sent in the console.
+
+    // const account = await nodemailer.createTestAccount();
+
+    // const transporter = nodemailer.createTransport({
+    //   host: 'smtp.ethereal.email',
+    //   port: 587,
+    //   secure: false,
+    //   tls: {
+    //     // do not fail on invalid certs
+    //     rejectUnauthorized: false
+    //   },
+    //   auth: {
+    //     user: account.user, // generated ethereal user
+    //     pass: account.pass  // generated ethereal password
+    //   }
+    // });
+
+    // with sendgrid
+
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.sendgrid.net',
+      port: 587,
+      service: 'SendGrid',
+      auth: {
+        user: 'apikey',
+        pass: ''''
+      }
+    });
 
     transporter.verify(function(error, success) {
-      console.log('###############################');
       if (error) {
         console.log(error);
       } else {
         console.log('Server is ready to take our messages');
       }
-      console.log('###############################');
     });
 
-  const link = 'https://localhost:4220/reset-password?token=' +
+    console.log(token);
+
+    const link = 'https://localhost:4220/reset-password?token=' +
     token + '&email=' + email;
 
-  await transporter.sendMail(MailTemplate(link, email), function (err, info) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(info);
-      console.log('###############################');
-      console.log('Message sent: %s', info.messageId);
-      // Preview only available when sending through an Ethereal account
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    }
-  });
-  return user.toJSON();
-}
+    await transporter.sendMail(MailTemplate(link, email), function (err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(info);
+        console.log('Message sent: %s', info.messageId);
+        // Preview only available when sending through an Ethereal account
+        // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      }
+    });
+    return user.toJSON();
+  }
 
-function MailTemplate(link: string, email: string): object {
-  return {
-     from: 'Woleet no-reply@woleet.com',
-     to: email,
-     subject: 'Password recovery',
-     text: 'Your reset link: ' + link,
-   };
- }
-
+  function MailTemplate(link: string, email: string): object {
+    return {
+      from: 'Woleet no-reply@woleet.com',
+      to: email,
+      subject: 'Password recovery',
+      text: 'Your reset link: ' + link,
+    };
+  }

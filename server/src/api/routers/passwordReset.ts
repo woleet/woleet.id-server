@@ -2,7 +2,7 @@ import * as Router from 'koa-router';
 
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
-import { checkTokenValidity, sendEmail, updateUser } from '../../controllers/user';
+import { updatePassword, sendEmail, updateUser } from '../../controllers/user';
 import { store as event } from '../../controllers/server-event';
 
 const vid = validate.param('id', 'uuid');
@@ -54,11 +54,8 @@ router.post('/', async function (ctx) {
  *  operationId: updatePassword
  */
 router.post('/validate', async function (ctx) {
-  const updatePassword = ctx.request.body;
-  let user = await checkTokenValidity(updatePassword);
-
-
-  user = await updateUser(user.id, user);
+  const infoUpdatePassword = ctx.request.body;
+  const user = await updatePassword(infoUpdatePassword);
 
   event.register({
     type: 'user.passwordUpdate',
@@ -68,6 +65,8 @@ router.post('/validate', async function (ctx) {
     associatedKeyId: null,
     data: hidePassword(user)
   });
+
+  ctx.body = 'ok';
 
 });
 

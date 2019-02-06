@@ -26,7 +26,7 @@
                 <mat-error *ngIf="form.passwordConfirm.invalid">Password doesn't match</mat-error>
             </mat-form-field>
             <button mat-raised-button color="primary" class="w-100"
-            [disabled]="form.password.invalid || form.passwordConfirm.invalid" (click)="validate()">Change Password</button>
+            [disabled]="form.password.invalid || form.passwordConfirm.invalid">Change Password</button>
         </form>
     </div>
     <br>

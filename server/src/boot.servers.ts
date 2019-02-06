@@ -51,27 +51,6 @@ function startServer(app, port): Server {
   return server;
 }
 
-function startSMTPServer(options, port): Server {
-  let server = null;
-
-  options.key = config.key;
-  options.cert = config.cert;
-  options.secure = false;
-  options.authOptional = true;
-
-  if (config.proxy) {
-    log.warn('Server configured to trust proxy');
-    options.proxy = true;
-  }
-
-  const SMTPServer = require('smtp-server').SMTPServer;
-
-  server = new SMTPServer(options);
-  server.listen(port);
-
-  return server;
-}
-
 export function bootServers(): Promise<void> {
   log.info('Starting servers...');
 
@@ -117,9 +96,7 @@ export function bootServers(): Promise<void> {
 
   const oidc = bootOIDCProvider();
 
-  const smtp = bootSMTPServer();
-
-  return Promise.all(promises.concat(oidc).concat(smtp)).then(() => { });
+  return Promise.all(promises.concat(oidc)).then(() => { });
 }
 
 export async function bootOIDCProvider(): Promise<void> {
@@ -163,23 +140,5 @@ export async function bootOIDCProvider(): Promise<void> {
     } else {
       resolve();
     }
-  });
-}
-
-export async function bootSMTPServer(): Promise<void> {
-  const port = ports.smtp;
-
-  await new Promise((resolve) => {
-    log.info(`SMTP server listening on port ${port}.`);
-
-    const server = startSMTPServer({}, port);
-
-    server.on('listening', () => {
-      log.info(`SMTP server listening on port ${port}.`);
-      resolve();
-    });
-    server.on('error', (err) => {
-      return exit(`SMTP server encountered an error: ${err.message}`, err);
-    });
   });
 }
