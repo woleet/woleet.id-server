@@ -157,7 +157,7 @@ declare global {
     grantId: string,
     scope: string,
     kind: string,
-    jti: string,
+    jti: string
   }
 
   /* APIToken: server specific */
@@ -169,14 +169,24 @@ declare global {
 
     name: string;
     status: APITokenStatusEnum;
+
+    hash: string;
     value: string;
+
+    /** Value initialization vector */
+    valueIV: string;
   }
 
   interface ApiFullPostAPITokenObject extends APITokenObject {
     name: string;
     type?: KeyTypeEnum;
     status?: KeyStatusEnum;
+
+    hash: string;
     value: string;
+
+    /** Value initialization vector */
+    valueIV: string;
   }
 
   /* Authorization */

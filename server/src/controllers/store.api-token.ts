@@ -1,5 +1,6 @@
 import { Cache } from 'lru-cache';
 import * as LRU from 'lru-cache';
+import * as crypto from 'crypto';
 import { APIToken } from '../database';
 
 function serialize(token: SequelizeAPITokenObject): InternalTokenObject {
@@ -22,14 +23,24 @@ export class APITokenStore {
     this.lru = new LRU();
   }
 
-  async get(value: string): Promise<InternalTokenObject> {
-    let token = this.lru.get(value);
+  async getByValue(value: string): Promise<InternalTokenObject> {
+    try {
+      const bin = Buffer.from(value, 'base64')
+      const hash = crypto.createHash('sha256').update(bin).digest('hex');
+      return this.getByHash(hash);
+    } catch (err) {
+      return null;
+    }
+  }
+
+  async getByHash(hash: string): Promise<InternalTokenObject> {
+    let token = this.lru.get(hash);
 
     if (token) {
       return token;
     }
 
-    const apiToken = await APIToken.getByValue(value);
+    const apiToken = await APIToken.getByHash(hash);
 
     if (!apiToken) {
       return null;
@@ -37,12 +48,12 @@ export class APITokenStore {
 
     token = serialize(apiToken);
 
-    this.lru.set(value, token);
+    this.lru.set(hash, token);
     return token;
   }
 
-  async resetCache(value: string) {
-    this.lru.del(value);
+  async resetCache(hash: string) {
+    this.lru.del(hash);
   }
 
 }
