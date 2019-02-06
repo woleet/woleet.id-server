@@ -96,11 +96,30 @@ async function upgrade4(sequelize) {
   }
 }
 
+async function upgrade5(sequelize) {
+  log.warn('Checking for update 2 of the "user" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  log.info({ config });
+  if (config.version < 5) {
+    log.warn('Need to add "tokenResetPassword" column to the "user" table');
+    const tokenResetPassword = await sequelize.query(`ALTER TABLE "user" ADD COLUMN "tokenResetPassword" UUID;`);
+    log.debug(tokenResetPassword);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 5 }) });
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
   await upgrade3(sequelize);
   await upgrade4(sequelize);
+  await upgrade5(sequelize);
 }
 
 async function postUpgrade3(sequelize) {

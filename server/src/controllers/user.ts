@@ -203,8 +203,6 @@ export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject)
       }
     });
 
-    console.log(token);
-
     const link = 'https://localhost:4220/reset-password?token=' +
     token + '&email=' + email;
 
