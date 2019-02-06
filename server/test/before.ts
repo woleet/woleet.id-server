@@ -3,22 +3,17 @@
 /* tslint import/no-extraneous-dependencies: "off" */
 
 import 'mocha';
-import { setSecret } from '../../server/src/controllers/utils/encryption';
+import { secureModule } from '../../server/src/config';
 import { init as initdb } from '../../server/src/database';
 import { initServerConfig } from '../../server/src/boot.server-config';
 
-before((done) => {
-  (async () => {
+before(() => {
+  return (async () => {
     console.log('Initializing test secret...');
-    setSecret('test');
+    process.env.__test_secret = 'test';
+    await secureModule.init('__test_secret');
 
-    try {
-      await initdb();
-      await initServerConfig();
-    } catch (err) {
-      done(err);
-    }
-
-    done();
+    await initdb();
+    await initServerConfig();
   })();
 });
