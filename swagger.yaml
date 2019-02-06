@@ -1048,6 +1048,14 @@ components:
           type: string
           description: User name (can be used for login).
           example: "johndoe"
+        countryCallingCode:
+          type: string
+          description: User country calling code
+          example: "33"
+        phone:
+          type: string
+          description: User phone number
+          example: "123456789"
         status:
           $ref: '#/components/schemas/UserStatusEnum'
         role:

@@ -34,6 +34,7 @@
             <mat-error *ngIf="form.password.invalid">{{ getErrorMessage(form.password) }}</mat-error>
           </mat-form-field>
         </div>
+        <intl-tel-input [user]="user" (inputUnfocus)="savePhone($event)"></intl-tel-input>
       </mat-card-content>
       <!-- <div><br></div> -->
       <mat-card-content class="w-100">
@@ -107,7 +108,7 @@
     <br>
   </div>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="submit()" [disabled]="formLocked || f.invalid || !isValid()">
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="formLocked || f.invalid || !isValid() || !phoneValid">
       {{ mode == 'edit' ? 'SAVE' : mode == 'create' ? 'CREATE' : 'UNKNOWN' }}
     </button>
     <button mat-button [disabled]="formLocked" (click)="triggerCancel()">CANCEL</button>

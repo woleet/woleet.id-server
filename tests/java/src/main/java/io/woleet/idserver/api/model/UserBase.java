@@ -45,6 +45,14 @@ public class UserBase {
   @SerializedName(SERIALIZED_NAME_USERNAME)
   private String username;
 
+  public static final String SERIALIZED_NAME_COUNTRY_CALLING_CODE = "countryCallingCode";
+  @SerializedName(SERIALIZED_NAME_COUNTRY_CALLING_CODE)
+  private String countryCallingCode;
+
+  public static final String SERIALIZED_NAME_PHONE = "phone";
+  @SerializedName(SERIALIZED_NAME_PHONE)
+  private String phone;
+
   public static final String SERIALIZED_NAME_STATUS = "status";
   @SerializedName(SERIALIZED_NAME_STATUS)
   private UserStatusEnum status = null;
@@ -104,6 +112,42 @@ public class UserBase {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public UserBase countryCallingCode(String countryCallingCode) {
+    this.countryCallingCode = countryCallingCode;
+    return this;
+  }
+
+   /**
+   * User country calling code
+   * @return countryCallingCode
+  **/
+  @ApiModelProperty(example = "33", value = "User country calling code")
+  public String getCountryCallingCode() {
+    return countryCallingCode;
+  }
+
+  public void setCountryCallingCode(String countryCallingCode) {
+    this.countryCallingCode = countryCallingCode;
+  }
+
+  public UserBase phone(String phone) {
+    this.phone = phone;
+    return this;
+  }
+
+   /**
+   * User phone number
+   * @return phone
+  **/
+  @ApiModelProperty(example = "123456789", value = "User phone number")
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
   }
 
   public UserBase status(UserStatusEnum status) {
@@ -191,6 +235,8 @@ public class UserBase {
     return Objects.equals(this.id, userBase.id) &&
         Objects.equals(this.email, userBase.email) &&
         Objects.equals(this.username, userBase.username) &&
+        Objects.equals(this.countryCallingCode, userBase.countryCallingCode) &&
+        Objects.equals(this.phone, userBase.phone) &&
         Objects.equals(this.status, userBase.status) &&
         Objects.equals(this.role, userBase.role) &&
         Objects.equals(this.identity, userBase.identity) &&
@@ -199,7 +245,7 @@ public class UserBase {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, email, username, status, role, identity, defaultKeyId);
+    return Objects.hash(id, email, username, countryCallingCode, phone, status, role, identity, defaultKeyId);
   }
 
 
@@ -211,6 +257,8 @@ public class UserBase {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    countryCallingCode: ").append(toIndentedString(countryCallingCode)).append("\n");
+    sb.append("    phone: ").append(toIndentedString(phone)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("    identity: ").append(toIndentedString(identity)).append("\n");

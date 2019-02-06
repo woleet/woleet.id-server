@@ -23,6 +23,8 @@ interface ApiUserObject extends UserObject, ApiCommonProperties {
 
   role: UserRoleEnum;
   status: UserStatusEnum;
+  countryCallingCode: string | null;
+  phone: string | null;
   email: string | null; // step 1: will be mandatory
   tokenResetPassword?: string | null;
   defaultKeyId: string | null;
@@ -31,6 +33,8 @@ interface ApiUserObject extends UserObject, ApiCommonProperties {
 
 interface ApiUserDTOObject extends UserObject {
   email: string | null;
+  countryCallingCode: string | null;
+  phone: string | null;
   role: UserRoleEnum;
   identity: ApiIdentityObject;
 }
@@ -40,6 +44,8 @@ interface ApiPostUserObject extends UserObject {
   status?: UserStatusEnum;
   email?: string;
   password?: string;
+  countryCallingCode?: string;
+  phone?: string;
   identity: ApiIdentityObject;
 }
 
@@ -48,6 +54,8 @@ interface ApiPutUserObject extends UserObject {
   status?: UserStatusEnum;
   email?: string;
   password?: string;
+  countryCallingCode?: string;
+  phone?: string;
   identity?: ApiIdentityObject;
   defaultKeyId?: string;
 }

@@ -81,6 +81,10 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
   form;
 
+  tmpPhone: string;
+  tmpCountryCallingCode: string;
+  phoneValid = true;
+
   countryCodes: Array<{ name: string, code: string }> = cc;
 
   constructor(private service: UserService, private router: Router) {
@@ -146,6 +150,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
     this.formLocked = true;
     const user = this.getFormObject();
+    user.phone = this.tmpPhone;
+    user.countryCallingCode = this.tmpCountryCallingCode;
 
     this.helper = null;
 
@@ -179,6 +185,20 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
   isValid() {
     return traverse(this.form).reduce((acc: boolean, e) => acc && ((e instanceof FormControl) ? e.valid : true));
+  }
+
+  savePhone(phoneParsed: any) {
+    if (phoneParsed == null) {
+      this.tmpPhone = null;
+      this.tmpCountryCallingCode = null;
+      this.phoneValid = true;
+    } else if (phoneParsed === 'Phone not valid') {
+      this.phoneValid = false;
+    } else {
+      this.tmpPhone = phoneParsed.nationalNumber;
+      this.tmpCountryCallingCode = phoneParsed.countryCallingCode;
+      this.phoneValid = true;
+    }
   }
 
 }

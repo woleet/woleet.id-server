@@ -7,6 +7,7 @@ import { serverConfig, secretEnvVariableName, secureModule } from '../config';
 import { promisify } from 'util';
 
 const { CONFIG_ID } = serverConfig;
+let doPostUpgrade3 = false;
 
 async function upgrade1(sequelize) {
   log.warn('Checking for update of the configuration model...');
@@ -65,6 +66,7 @@ async function upgrade3(sequelize) {
   const { config } = cfg.toJSON();
   log.info({ config });
   if (config.version < 2) {
+    doPostUpgrade3 = true;
     log.warn('Need to add "privateKeyIV" and "mnemonicEntropyIV" column to the "keys" table');
     const privateKeyIV = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "privateKeyIV" CHAR (${16 * 2});`);
     log.debug(privateKeyIV);
@@ -74,10 +76,31 @@ async function upgrade3(sequelize) {
   }
 }
 
+async function upgrade4(sequelize) {
+  log.warn('Checking for update of the "user" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  log.info({ config });
+  if (config.version < 4) {
+    log.warn('Need to add "phone" and "countryCallingCode" column to the "user" table');
+    const phone = await sequelize.query(`ALTER TABLE "user" ADD COLUMN "phone" STRING;`);
+    log.debug(phone);
+    const countryCallingCode = await sequelize.query(`ALTER TABLE "user" ADD COLUMN "countryCallingCode" STRING;`);
+    log.debug(countryCallingCode);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 4 }) });
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
   await upgrade3(sequelize);
+  await upgrade4(sequelize);
 }
 
 async function postUpgrade3(sequelize) {
@@ -88,8 +111,7 @@ async function postUpgrade3(sequelize) {
     return;
   }
 
-  const { config } = cfg.toJSON();
-  if (config.version === 2) {
+  if (doPostUpgrade3 === true) {
     await Key.model.sync();
     const testKey = await Key.model.findOne({ paranoid: false });
 
@@ -155,8 +177,6 @@ async function postUpgrade3(sequelize) {
       await key.save();
       log.debug(`Updated key ${key.get('id')}`);
     }
-
-    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 3 }) });
   }
 }
 

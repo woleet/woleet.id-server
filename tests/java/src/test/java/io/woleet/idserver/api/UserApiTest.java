@@ -97,6 +97,10 @@ public class UserApiTest extends CRUDApiTest {
             userPost.email(EMAIL).username(USERNAME);
             String PASSWORD = Config.randomHash();
             userPost.password(PASSWORD);
+            String COUNTRYCALLINGCODE = "33";
+            userPost.setCountryCallingCode(COUNTRYCALLINGCODE);
+            String PHONE = "123456879";
+            userPost.setPhone(PHONE);
 
             // Set identity information
             String COMMON_NAME = Config.randomCommonName();
@@ -139,12 +143,18 @@ public class UserApiTest extends CRUDApiTest {
             String USERNAME = Config.randomUsername();
             String EMAIL = USERNAME + "@woleet.com";
             String PASSWORD = Config.randomHash();
+            String COUNTRYCALLINGCODE = "33";
+            String PHONE = "123456879";
             if (Config.randomBoolean())
                 userPut.username(USERNAME);
             if (Config.randomBoolean())
                 userPut.email(EMAIL);
             if (Config.randomBoolean())
                 userPut.password(PASSWORD);
+            if (Config.randomBoolean())
+                userPut.countryCallingCode(COUNTRYCALLINGCODE);
+            if (Config.randomBoolean())
+                userPut.phone(PHONE);
 
             // Set identity information
             String COMMON_NAME = Config.randomCommonName();
@@ -210,6 +220,8 @@ public class UserApiTest extends CRUDApiTest {
         assertEquals(expected.getUsername(), actual.getUsername());
         assertEquals(expected.getEmail(), actual.getEmail());
         assertEquals(expected.getIdentity(), actual.getIdentity());
+        assertEquals(expected.getCountryCallingCode(), actual.getCountryCallingCode());
+        assertEquals(expected.getPhone(), actual.getPhone());
     }
 
     @Override
@@ -221,6 +233,8 @@ public class UserApiTest extends CRUDApiTest {
         assertEquals(put.getRole() != null ? put.getRole() : post.getRole(), get.getRole());
         assertEquals(put.getUsername() != null ? put.getUsername() : post.getUsername(), get.getUsername());
         assertEquals(put.getEmail() != null ? put.getEmail() : post.getEmail(), get.getEmail());
+        assertEquals(put.getCountryCallingCode() != null ? put.getCountryCallingCode() : post.getCountryCallingCode(), get.getCountryCallingCode());
+        assertEquals(put.getPhone() != null ? put.getPhone() : post.getPhone(), get.getPhone());
         if (put.getIdentity() != null) {
             FullIdentity d = put.getIdentity();
             FullIdentity e = post.getIdentity();

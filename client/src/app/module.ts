@@ -30,6 +30,7 @@ import { ConfigIdentityUrlComponent } from '@parts/config.identity-url';
 import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
 import { APITokenCardComponent } from '@parts/api-token.card';
 import { KeyCreateCardComponent } from '@parts/key.card.create';
+import { IntlTelInputComponent } from '@parts/intl-tel-input';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -106,6 +107,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ErrorPageComponent,
     OAuthRedirectComponent,
     OIDCProviderInteractionComponent,
+    IntlTelInputComponent,
     ResetPasswordPageComponent
   ],
   imports: [

@@ -54,6 +54,8 @@ declare global {
 
     role: UserRoleEnum;
     status: UserStatusEnum;
+    countryCallingCode: string;
+    phone: string;
     email: string | null;
     /** Hexadecimal represention password hash */
     passwordHash: string;
@@ -79,6 +81,8 @@ declare global {
     role?: UserRoleEnum;
     status?: UserStatusEnum;
     email?: string;
+    countryCallingCode?: string;
+    phone?: string;
     passwordHash?: string;
     passwordSalt?: string;
     passwordItrs?: number;
