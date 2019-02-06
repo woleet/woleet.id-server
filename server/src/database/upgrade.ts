@@ -7,7 +7,7 @@ import { serverConfig, secretEnvVariableName, secureModule } from '../config';
 import { promisify } from 'util';
 
 const { CONFIG_ID } = serverConfig;
-let updated = false;
+let doPostUpgrade3 = false;
 
 async function upgrade1(sequelize) {
   log.warn('Checking for update of the configuration model...');
@@ -66,7 +66,7 @@ async function upgrade3(sequelize) {
   const { config } = cfg.toJSON();
   log.info({ config });
   if (config.version < 2) {
-    updated = true;
+    doPostUpgrade3 = true;
     log.warn('Need to add "privateKeyIV" and "mnemonicEntropyIV" column to the "keys" table');
     const privateKeyIV = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "privateKeyIV" CHAR (${16 * 2});`);
     log.debug(privateKeyIV);
@@ -111,8 +111,7 @@ async function postUpgrade3(sequelize) {
     return;
   }
 
-  const { config } = cfg.toJSON();
-  if (updated === true) {
+  if (doPostUpgrade3 === true) {
     await Key.model.sync();
     const testKey = await Key.model.findOne({ paranoid: false });
 

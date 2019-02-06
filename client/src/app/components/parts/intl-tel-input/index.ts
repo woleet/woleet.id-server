@@ -2,7 +2,7 @@ import { Component, Input, ContentChild, ViewChild, OnInit, Output, EventEmitter
 import { FormControl, ValidationErrors, AbstractControl} from '@angular/forms';
 import { parsePhoneNumberFromString, AsYouType } from 'libphonenumber-js';
 import { ErrorMessageProvider } from '@components/util';
-
+import * as log from 'loglevel';
 
 function phoneNumberValidator(control: AbstractControl): ValidationErrors | null {
   if (control.value !== undefined && control.value !== '') {
@@ -47,7 +47,7 @@ function phoneNumberValidator(control: AbstractControl): ValidationErrors | null
 
     onInputChange(phoneInput: string) {
       this.AYTPhone = new AsYouType().input(phoneInput);
-      console.log(this.AYTPhone);
+      log.debug(this.AYTPhone);
       if (phoneInput) {
         if (parsePhoneNumberFromString(this.AYTPhone)) {
           if (parsePhoneNumberFromString(this.AYTPhone).isValid()) {
