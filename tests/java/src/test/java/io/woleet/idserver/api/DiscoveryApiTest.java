@@ -101,8 +101,10 @@ public class DiscoveryApiTest {
         }
 
         // Discover test user's keys
-        String pubKey = keyApi.getKeyById(user.getDefaultKeyId()).getPubKey();
         List<KeyDisco> response = tokenAuthApi.discoverUserKeys(user.getId());
+
+        // Check that test user's default key is part of his keys
+        String pubKey = keyApi.getKeyById(user.getDefaultKeyId()).getPubKey();
         for (KeyDisco key : response)
             if (key.getPubKey().equals(pubKey))
                 return;
