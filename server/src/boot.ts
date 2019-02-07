@@ -9,7 +9,7 @@ import {
 } from './controllers/server-config';
 // Config
 import { secureModule, secretEnvVariableName } from './config';
-import { init as initdb, postinit as postinitdb } from './database';
+import { init as initdb, postinit as postinitdb, afterinit as afterinitdb } from './database';
 import { initializeOIDC, updateOIDC } from './controllers/openid';
 import { initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider } from './controllers/oidc-provider';
 import { bootOIDCProvider, bootServers } from './boot.servers';
@@ -26,6 +26,7 @@ initdb()
   .then(() => postinitdb())
   .then(() => initServerConfig())
   .catch((err) => exit(`Failed to init server config: ${err.message}`, err))
+  .then(() => afterinitdb())
   .then(() => registerOIDCUpdateFunction(updateOIDC))
   .then(() => registerOIDCPBootFunction(bootOIDCProvider))
   .then(() => registerOIDCPStopFunction(stopOIDCProvider))

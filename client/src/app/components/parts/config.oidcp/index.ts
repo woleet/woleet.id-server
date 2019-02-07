@@ -122,7 +122,7 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
 
   addClient() {
     this.oidcpClients.push({
-      token_endpoint_auth_method: "client_secret_basic",
+      token_endpoint_auth_method: 'client_secret_basic',
       client_id: 'client-' + Math.random().toString(16).slice(-4),
       client_secret: 'secret-' + Math.random().toString(16).slice(-8),
       redirect_uris: [''],

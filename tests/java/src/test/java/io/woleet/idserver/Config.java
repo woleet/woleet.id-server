@@ -151,6 +151,8 @@ public class Config {
         UserPost userPost = new UserPost();
         String USERNAME = randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
+        String COUNTRYCALLINGCODE = "33";
+        String PHONE = "123456789";
         userPost.email(EMAIL).username(USERNAME).role(UserRoleEnum.USER).status(UserStatusEnum.ACTIVE);
         userPost.password("pass");
         FullIdentity fullIdentity = new FullIdentity();

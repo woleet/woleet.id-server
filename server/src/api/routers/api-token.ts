@@ -45,7 +45,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
     data: hideTokenValue(token)
   });
 
-  ctx.body = serializeapiToken(created);
+  ctx.body = await serializeapiToken(created);
 });
 
 /**
@@ -55,7 +55,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
  */
 router.get('/list', async function (ctx) {
   const users = await getAllAPITokens();
-  ctx.body = users.map(serializeapiToken);
+  ctx.body = await Promise.all(users.map(serializeapiToken));
 });
 
 /**
@@ -66,7 +66,7 @@ router.get('/list', async function (ctx) {
 router.get('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const apiToken = await getAPITokenById(id);
-  ctx.body = serializeapiToken(apiToken);
+  ctx.body = await serializeapiToken(apiToken);
 });
 
 /**
@@ -90,7 +90,7 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
     data: update
   });
 
-  ctx.body = serializeapiToken(apiToken);
+  ctx.body = await serializeapiToken(apiToken);
 });
 
 /**
@@ -112,7 +112,7 @@ router.delete('/:id', vid, async function (ctx) {
     data: null
   });
 
-  ctx.body = serializeapiToken(apiToken);
+  ctx.body = await serializeapiToken(apiToken);
 });
 
 export { router };
