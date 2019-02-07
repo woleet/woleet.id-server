@@ -1,9 +1,8 @@
 <div>
-    <mat-form-field class="w-100">
-        <input matInput type="tel" placeholder="Phone" [(ngModel)]="phoneNumber"
-            [formControl]="form.phone" (input)="onInputChange($event.target.value)"
-            (focus)="form.phone.focused = true" (focusout)="form.phone.focused = false; onFocusOut()">
-        <mat-hint *ngIf="form.phone.focused">Your phone number in the international format</mat-hint>
-        <mat-error *ngIf="form.phone.invalid">Must be a valid internationnal phone number</mat-error>
-    </mat-form-field>
+  <mat-form-field class="w-100">
+    <input matInput type="tel" placeholder="Phone" [(ngModel)]="phoneNumber" [formControl]="form.phone" (input)="onInputChange($event.target.value)"
+      (focus)="form.phone.focused = true" (focusout)="form.phone.focused = false; onFocusOut()">
+    <mat-hint *ngIf="form.phone.focused">Phone number with international prefix</mat-hint>
+    <mat-error *ngIf="form.phone.invalid">Must be a valid internationnal phone number</mat-error>
+  </mat-form-field>
 </div>

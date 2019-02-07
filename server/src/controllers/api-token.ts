@@ -4,13 +4,19 @@ import * as crypto from 'crypto';
 import * as Debug from 'debug';
 import { NotFoundAPITokenError } from '../errors';
 import { store } from './store.api-token';
+import { secureModule } from '../config';
 
 const debug = Debug('id:ctr');
 
 export async function createAPIToken(apiToken: ApiPostAPITokenObject): Promise<InternalAPITokenObject> {
   debug('Create apiToken');
-  const value = crypto.randomBytes(32).toString('base64');
-  const newApiToken = await APIToken.create(Object.assign({ value }, apiToken));
+  const random = crypto.randomBytes(32);
+  const { data, iv } = await secureModule.encrypt(random);
+  const hash = crypto.createHash('sha256').update(random).digest('hex');
+  const value = data.toString('hex');
+  const valueIV = iv.toString('hex');
+
+  const newApiToken = await APIToken.create(Object.assign(apiToken, { hash, value, valueIV }));
 
   return newApiToken.toJSON();
 }
@@ -23,7 +29,7 @@ export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject): P
     throw new NotFoundAPITokenError();
   }
 
-  store.resetCache(updatedApiToken.getDataValue('value'));
+  store.resetCache(updatedApiToken.get('hash'));
   return updatedApiToken.toJSON();
 }
 
