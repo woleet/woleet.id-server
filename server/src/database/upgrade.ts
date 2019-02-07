@@ -165,14 +165,14 @@ async function postUpgrade3() {
 
     for (const key of keys) {
       log.warn(`Updating key ${key.get('id')} ...`);
-      const p = decrypt(Buffer.from(testKey.get('privateKey'), 'hex'));
-      const e = decrypt(Buffer.from(testKey.get('mnemonicEntropy'), 'hex'));
       {
+        const p = decrypt(Buffer.from(key.get('privateKey'), 'hex'));
         const { data, iv } = await secureModule.encrypt(p);
         key.set('privateKeyIV', iv.toString('hex'));
         key.set('privateKey', data.toString('hex'));
       }
       {
+        const e = decrypt(Buffer.from(key.get('mnemonicEntropy'), 'hex'));
         const { data, iv } = await secureModule.encrypt(e);
         key.set('mnemonicEntropyIV', iv.toString('hex'));
         key.set('mnemonicEntropy', data.toString('hex'));

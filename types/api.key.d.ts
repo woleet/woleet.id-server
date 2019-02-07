@@ -29,6 +29,7 @@ interface ApiPostKeyObject extends KeyObject {
   type?: KeyTypeEnum;
   status?: KeyStatusEnum;
   expiration?: number;
+  phrase?:string;
 }
 
 interface ApiPutKeyObject extends KeyObject {

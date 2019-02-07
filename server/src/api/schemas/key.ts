@@ -6,7 +6,8 @@ const keyStatusEnum = ['active', 'blocked'];
 const createKey = Joi.object().keys({
   name: Name.required(),
   status: Joi.string().valid(keyStatusEnum),
-  expiration: Joi.number().allow(null)
+  expiration: Joi.number().allow(null),
+  phrase: Joi.string()
 });
 
 const updateKey = Joi.object().keys({
