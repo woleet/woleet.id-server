@@ -2,12 +2,22 @@ import { Sequelize } from 'sequelize';
 import * as log from 'loglevel';
 import * as read from 'read';
 import * as crypto from 'crypto';
-import { ServerConfig, Key } from '.';
+import { ServerConfig, Key, APIToken } from '.';
 import { serverConfig, secretEnvVariableName, secureModule } from '../config';
 import { promisify } from 'util';
 
 const { CONFIG_ID } = serverConfig;
 let doPostUpgrade3 = false;
+let doPostUpgrade5 = false;
+
+async function getConfig() {
+  await ServerConfig.model.sync();
+  const config = await ServerConfig.getById(CONFIG_ID);
+  if (!config) {
+    return;
+  }
+  return config.toJSON().config;
+}
 
 async function upgrade1(sequelize) {
   log.warn('Checking for update of the configuration model...');
@@ -40,14 +50,8 @@ async function upgrade1(sequelize) {
 
 async function upgrade2(sequelize) {
   log.warn('Checking for update of the "keys" model...');
-  await ServerConfig.model.sync();
-  const cfg = await ServerConfig.getById(CONFIG_ID);
-  if (!cfg) {
-    return;
-  }
-
-  const { config } = cfg.toJSON();
-  if (!config.version) {
+  const config = await getConfig();
+  if (config && !config.version) {
     log.warn('Need to add "expiration" column to the "keys" table');
     const res = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN expiration TIMESTAMP WITH TIME ZONE;`);
     log.debug(res);
@@ -57,17 +61,12 @@ async function upgrade2(sequelize) {
 
 async function upgrade3(sequelize) {
   log.warn('Checking for update 2 of the "keys" model...');
-  await ServerConfig.model.sync();
-  const cfg = await ServerConfig.getById(CONFIG_ID);
-  if (!cfg) {
-    return;
-  }
 
-  const { config } = cfg.toJSON();
-  if (config.version < 2) {
+  const config = await getConfig();
+  if (config && config.version < 2) {
     doPostUpgrade3 = true;
     log.warn('Need to add "privateKeyIV" and "mnemonicEntropyIV" column to the "keys" table');
-    const privateKeyIV = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "privateKeyIV" CHAR (${16 * 2});`);
+    const privateKeyIV = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "privateKeyIV" CHAR(${16 * 2});`);
     log.debug(privateKeyIV);
     const mnemonicEntropyIV = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "mnemonicEntropyIV" CHAR (${16 * 2});`);
     log.debug(mnemonicEntropyIV);
@@ -77,14 +76,9 @@ async function upgrade3(sequelize) {
 
 async function upgrade4(sequelize) {
   log.warn('Checking for update of the "user" model...');
-  await ServerConfig.model.sync();
-  const cfg = await ServerConfig.getById(CONFIG_ID);
-  if (!cfg) {
-    return;
-  }
 
-  const { config } = cfg.toJSON();
-  if (config.version < 4) {
+  const config = await getConfig();
+  if (config && config.version < 4) {
     log.warn('Need to add "phone" and "countryCallingCode" column to the "users" table');
     const phone = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "phone" VARCHAR;`);
     log.debug(phone);
@@ -94,20 +88,31 @@ async function upgrade4(sequelize) {
   }
 }
 
+async function upgrade5(sequelize) {
+  log.warn('Checking for update of the "apiToken" model...');
+
+  const config = await getConfig();
+  if (config && config.version < 5) {
+    doPostUpgrade5 = true;
+    log.warn('Need to add "hash" and "valueIV" column to the "apiToken" table');
+    const hash = await sequelize.query(`ALTER TABLE "apiTokens" ADD COLUMN "hash" CHAR(${32 * 2});`);
+    log.debug(hash);
+    const valueIV = await sequelize.query(`ALTER TABLE "apiTokens" ADD COLUMN "valueIV" CHAR(${16 * 2});`);
+    log.debug(valueIV);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 5 }) });
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
   await upgrade3(sequelize);
   await upgrade4(sequelize);
+  await upgrade5(sequelize);
 }
 
-async function postUpgrade3(sequelize) {
+async function postUpgrade3() {
   log.warn('Checking for post-update 2 of the "keys" model...');
-  await ServerConfig.model.sync();
-  const cfg = await ServerConfig.getById(CONFIG_ID);
-  if (!cfg) {
-    return;
-  }
 
   if (doPostUpgrade3 === true) {
     await Key.model.sync();
@@ -178,9 +183,50 @@ async function postUpgrade3(sequelize) {
   }
 }
 
+async function afterInitUpgrade5() {
+  log.warn('Checking for after-init-update of the "apiToken" model...');
+
+  if (doPostUpgrade5 === true) {
+    await APIToken.model.sync();
+    const testToken = await APIToken.model.findOne({ paranoid: false });
+
+    if (!testToken) {
+      log.warn(`No token to update`);
+      return;
+    }
+
+    log.warn('Need to encrypt tokens.');
+
+    const tokens = await APIToken.model.findAll({ paranoid: false });
+
+    log.warn(`${tokens.length} tokens to update...`);
+
+    for (const token of tokens) {
+      log.warn(`Updating token ${token.get('id')} ...`);
+      {
+        const bin = Buffer.from(token.get('value'), 'base64');
+        const hash = crypto.createHash('sha256').update(bin).digest('hex');
+        const { data, iv } = await secureModule.encrypt(bin);
+        token.set('hash', hash);
+        token.set('value', data.toString('hex'));
+        token.set('valueIV', iv.toString('hex'));
+      }
+      await token.save();
+      log.debug(`Updated token ${token.get('id')}`);
+    }
+  }
+}
+
 /**
  * Upgrade function called when secure module is initialized
  */
 export async function postUpgrade(sequelize: Sequelize) {
-  await postUpgrade3(sequelize);
+  await postUpgrade3();
+}
+
+/**
+ * Upgrade function called when secure module is initialized and secret validated
+ */
+export async function afterInitUpgrade(sequelize: Sequelize) {
+  await afterInitUpgrade5();
 }

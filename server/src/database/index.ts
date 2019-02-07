@@ -7,7 +7,7 @@ import { ServerConfig } from './model/server-config';
 import { User } from './model/user';
 import { Key } from './model/key';
 import { getServerConfig, setServerConfig } from '../controllers/server-config';
-import { upgrade, postUpgrade } from './upgrade';
+import { upgrade, postUpgrade, afterInitUpgrade } from './upgrade';
 import { db } from '../config';
 
 const debug = Debug('id:db');
@@ -77,4 +77,12 @@ export async function init() {
  */
 export async function postinit() {
   await postUpgrade(sequelize);
+}
+
+
+/**
+ * Upgrade function called when secure module is initialized and secret validated
+ */
+export async function afterinit() {
+  await afterInitUpgrade(sequelize);
 }
