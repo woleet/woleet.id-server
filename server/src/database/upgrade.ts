@@ -116,10 +116,10 @@ async function upgrade6(sequelize) {
   if (config.version < 6) {
     doPostUpgrade3 = true;
     log.warn('Need to change "privateKeyIV" and "mnemonicEntropyIV" type to handle 24 mnemonics words');
-    const privateKeyIV = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "privateKeyIV" TYPE VARCHAR;`);
-    log.debug(privateKeyIV);
-    const mnemonicEntropyIV = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "mnemonicEntropyIV" TYPE VARCHAR;`);
-    log.debug(mnemonicEntropyIV);
+    const privateKey = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "privateKey" TYPE VARCHAR;`);
+    log.debug(privateKey);
+    const mnemonicEntropy = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "mnemonicEntropy" TYPE VARCHAR;`);
+    log.debug(mnemonicEntropy);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 6 }) });
   }
 }
