@@ -5,6 +5,7 @@ import { createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, updateKe
 import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
+import { BadRequest } from 'http-errors';
 
 const vkid = validate.param('id', 'uuid');
 const vuid = validate.param('userId', 'uuid');
@@ -27,7 +28,19 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
   const { userId } = ctx.params;
   const key: ApiPostKeyObject = ctx.request.body;
 
-  const created = await createKey(userId, key);
+  if (key.phrase.split(' ').length < 12) {
+    throw new BadRequest('The phrase length must be at least 12 words.');
+  } else if (key.phrase.split(' ').length > 50) {
+    throw new BadRequest('the phrase length cannot exceed 50 words.');
+  }
+
+  let created;
+
+  try {
+    created = await createKey(userId, key);
+  } catch (error) {
+    throw new BadRequest(error.toString());
+  }
 
   event.register({
     type: 'key.create',
