@@ -2,7 +2,8 @@ import * as Router from 'koa-router';
 
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
-import { updatePassword, sendEmail, updateUser } from '../../controllers/user';
+import { serializeUser } from '../serialize/user';
+import { updatePassword, sendEmail } from '../../controllers/user';
 import { store as event } from '../../controllers/server-event';
 
 const vid = validate.param('id', 'uuid');
@@ -32,7 +33,6 @@ const router = new Router({ prefix: '/password-reset' });
  */
 router.post('/', async function (ctx) {
   const { email } = ctx.request.body;
-  console.log(ctx.request.body);
   const user = await sendEmail(email);
 
   event.register({
@@ -44,7 +44,7 @@ router.post('/', async function (ctx) {
     data: null
   });
 
-  ctx.body = 'ok';
+  ctx.body = '';
 
 });
 
@@ -66,7 +66,7 @@ router.post('/validate', async function (ctx) {
     data: hidePassword(user)
   });
 
-  ctx.body = 'ok';
+  ctx.body = serializeUser(user);
 
 });
 

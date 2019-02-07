@@ -1,7 +1,7 @@
 import { User } from '../database';
 
 import * as Debug from 'debug';
-import { NotFoundUserError } from '../errors';
+import { NotFoundUserError, TokenResetPasswordInvalid } from '../errors';
 import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
@@ -9,7 +9,6 @@ import * as uuidV4 from 'uuid/v4';
 
 // move to serverConfig after
 import * as nodemailer from 'nodemailer';
-import { cookies, ports, server as config } from '../config';
 
 const debug = Debug('id:ctr');
 
@@ -138,6 +137,10 @@ export async function deleteUser(id: string): Promise<InternalUserObject> {
 
 export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject): Promise<InternalUserObject> {
   let user = await User.getByEmail(infoUpdatePassword.email);
+
+  if (infoUpdatePassword.token !== user.toJSON().tokenResetPassword) {
+    throw new TokenResetPasswordInvalid();
+  }
 
   const key = await serializeAndEncodePassword(infoUpdatePassword.password);
   const update = Object.assign({}, {tokenResetPassword: null, passwordHash: key.passwordHash,

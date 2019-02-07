@@ -52,9 +52,6 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider {
     }
 
     async validate() {
-        console.log(this.email);
-        console.log(this.token);
-        console.log(this.password);
         const success = this.userService.validate(this.email, this.password, this.token);
     }
 

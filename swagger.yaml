@@ -584,13 +584,8 @@ paths:
         - UserPasswordReset
         summary: Send a link to the user via his email address.
         operationId: passwordResetLink
-        requestBody:
-          description: User's email to send the link to.
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PasswordReset'
+        parameters:
+          - $ref: '#/components/parameters/PasswordResetParameter'
         responses:
           '200':
             description: Successful operation.
@@ -606,6 +601,8 @@ paths:
         - UserPasswordReset
         summary: Change the user password.
         operationId: updatePassword
+        parameters:
+          - $ref: '#/components/parameters/PasswordResetParameter'
         requestBody:
           description: User's email to send the link to.
           required: true
@@ -623,7 +620,7 @@ paths:
                 schema:
                   $ref: '#/components/responses/APIError'
           '401':
-            description: Missing or bad session cookie.
+            description: Missing or bad reset password token.
             content:
               application/json:
                 schema:
@@ -1106,13 +1103,10 @@ components:
       items:
         $ref: '#/components/schemas/UserDisco'
     PasswordReset:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          description: User email (can be used for login).
-          example: "john.doe@acme.com"
+        type: string
+        format: email
+        description: User email (can be used for login).
+        example: "john.doe@acme.com"
     UpdatePassword:
       type: object
       properties:
@@ -1524,6 +1518,14 @@ components:
       schema:
         type: string
         example: 'd8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975'
+    PasswordResetParameter:
+      name: userEmail
+      in: path
+      description: Send a link to the user via his email address.
+      required: true
+      schema:
+        type: email
+        example: 'john.doe@random.com'
   requestBodies:
     KeyPost:
       content:
