@@ -103,12 +103,33 @@ async function upgrade5(sequelize) {
   }
 }
 
+async function upgrade6(sequelize) {
+  log.warn('Checking for update 3 of the "keys" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 6) {
+    doPostUpgrade3 = true;
+    log.warn('Need to change "privateKeyIV" and "mnemonicEntropyIV" type to handle 24 mnemonics words');
+    const privateKey = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "privateKey" TYPE VARCHAR;`);
+    log.debug(privateKey);
+    const mnemonicEntropy = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "mnemonicEntropy" TYPE VARCHAR;`);
+    log.debug(mnemonicEntropy);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 6 }) });
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
   await upgrade3(sequelize);
   await upgrade4(sequelize);
   await upgrade5(sequelize);
+  await upgrade6(sequelize);
 }
 
 async function postUpgrade3() {
