@@ -11,11 +11,11 @@ const KeyModel = {
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   name: { type: STRING, allowNull: false },
   // encrypted
-  mnemonicEntropy: { type: CHAR((16 + 16) * 2), unique: true, allowNull: false },
-  mnemonicEntropyIV: { type: CHAR(16 * 2), allowNull: false },
+  mnemonicEntropy: { type: STRING, unique: true, allowNull: false },
+  mnemonicEntropyIV: { type: CHAR((16) * 2), allowNull: false },
   // encrypted
-  privateKey: { type: CHAR((32 + 16) * 2), unique: true, allowNull: false },
-  privateKeyIV: { type: CHAR(16 * 2), allowNull: false },
+  privateKey: { type: STRING, unique: true, allowNull: false },
+  privateKeyIV: { type: CHAR((16) * 2), allowNull: false },
   publicKey: { type: STRING, unique: true, allowNull: false },
   compressed: { type: BOOLEAN },
   lastUsed: { type: DATE, defaultValue: null },
