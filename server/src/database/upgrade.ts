@@ -5,7 +5,6 @@ import * as crypto from 'crypto';
 import { ServerConfig, Key, APIToken } from '.';
 import { serverConfig, secretEnvVariableName, secureModule } from '../config';
 import { promisify } from 'util';
-import sequelize = require('sequelize');
 
 const { CONFIG_ID } = serverConfig;
 let doPostUpgrade3 = false;

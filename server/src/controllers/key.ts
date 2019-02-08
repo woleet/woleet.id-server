@@ -15,7 +15,12 @@ import { secureModule } from '../config';
  *  operationId: createKey
  */
 export async function createKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
-  const _newKey = key.phrase ? await secureModule.importPhrase(key.phrase) : await secureModule.createKey();
+  let _newKey;
+  try {
+    _newKey = key.phrase ? await secureModule.importPhrase(key.phrase) : await secureModule.createKey();
+  } catch (error) {
+    throw error;
+  }
 
   const newKey = await Key.create(Object.assign({}, key, {
     mnemonicEntropy: _newKey.entropy.toString('hex'),

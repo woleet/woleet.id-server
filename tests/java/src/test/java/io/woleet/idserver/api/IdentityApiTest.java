@@ -38,11 +38,16 @@ public class IdentityApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
-        // Get server's default public key
+        // Check that server's default key and identity URL are set
         ServerConfig serverConfig = new ServerConfigApi(Config.getAdminAuthApiClient()).getServerConfig();
+        assertTrue(serverConfig.getFallbackOnDefaultKey());
         assertNotNull(serverConfig.getIdentityURL());
+        assertNotNull(serverConfig.getDefaultKeyId());
+
+        // Get server's default public key
         String pubKey = new KeyApi(Config.getAdminAuthApiClient()).getKeyById(serverConfig.getDefaultKeyId())
                 .getPubKey();
+        assertNotNull(pubKey);
 
         // Get and verify server's default identity
         String leftData = Config.randomString(32);

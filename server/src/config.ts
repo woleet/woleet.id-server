@@ -115,7 +115,7 @@ export const events = {
 
 export const serverConfig = {
   default: {
-    version: 5, // datamodel version
+    version: 6, // datamodel version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true
   },
