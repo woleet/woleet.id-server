@@ -5,6 +5,7 @@ import { validate } from '../schemas';
 import { serializeUser } from '../serialize/user';
 import { updatePassword, sendEmail } from '../../controllers/user';
 import { store as event } from '../../controllers/server-event';
+import { BadRequest, Unauthorized } from 'http-errors';
 
 const vid = validate.param('id', 'uuid');
 
@@ -32,7 +33,12 @@ const router = new Router({ prefix: '/password-reset' });
  *  operationId: passwordResetLink
  */
 router.post('/', async function (ctx) {
-  const { email } = ctx.request.body;
+  const { email } = ctx.request.query;
+
+  if (!email) {
+    throw new BadRequest('Need to send the email adresse.');
+  }
+
   const user = await sendEmail(email);
 
   event.register({
@@ -55,7 +61,22 @@ router.post('/', async function (ctx) {
  */
 router.post('/validate', async function (ctx) {
   const infoUpdatePassword = ctx.request.body;
-  const user = await updatePassword(infoUpdatePassword);
+  let user;
+  if (!infoUpdatePassword.email) {
+    throw new BadRequest('Need to send the email adresse.');
+  }
+  if (!infoUpdatePassword.token) {
+    throw new BadRequest('Need to send the reset token.');
+  }
+  if (!infoUpdatePassword.password) {
+    throw new BadRequest('Need to send the new password.');
+  }
+
+  try {
+    user = await updatePassword(infoUpdatePassword);
+  } catch (err) {
+    throw new Unauthorized(err.m);
+  }
 
   event.register({
     type: 'user.passwordUpdate',

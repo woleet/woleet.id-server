@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { mainRoute } from '@app/config';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -12,7 +12,7 @@ import { UserService } from '@services/user';
     templateUrl: './index.html',
     styleUrls: ['./style.scss']
 })
-export class ResetPasswordPageComponent extends ErrorMessageProvider {
+export class ResetPasswordPageComponent extends ErrorMessageProvider implements OnInit {
 
     email: string;
     lock$: boolean;
@@ -23,14 +23,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider {
     userService: UserService;
     token: string;
 
-    form = {email: new FormControl('', [Validators.email]),
-            password: new FormControl('', [
-                passwordValidator,
-                asciiValidator,
-                Validators.minLength(6),
-                Validators.maxLength(64),
-            ]),
-            passwordConfirm: new FormControl('', [/*this.passwordConfirmValidator*/])};
+    form;
 
     constructor(activatedRoute: ActivatedRoute, userConst: UserService) {
         super();
@@ -45,6 +38,17 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider {
                 this.validationStep = false;
             }
         });
+    }
+
+    ngOnInit() {
+        this.form = {email: new FormControl('', [Validators.email]),
+        password: new FormControl('', [
+            passwordValidator,
+            asciiValidator,
+            Validators.minLength(6),
+            Validators.maxLength(64),
+        ]),
+        passwordConfirm: new FormControl('', [/*this.passwordConfirmValidator*/])};
     }
 
     async resetPassword() {

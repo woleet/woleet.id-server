@@ -123,8 +123,8 @@ async function upgrade6(sequelize) {
   }
 }
 
-async function upgrade5(sequelize) {
-  log.warn('Checking for update 2 of the "user" model...');
+async function upgrade7(sequelize) {
+  log.warn('Checking for update 2 of the "users" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -133,11 +133,11 @@ async function upgrade5(sequelize) {
 
   const { config } = cfg.toJSON();
   log.info({ config });
-  if (config.version < 5) {
-    log.warn('Need to add "tokenResetPassword" column to the "user" table');
-    const tokenResetPassword = await sequelize.query(`ALTER TABLE "user" ADD COLUMN "tokenResetPassword" UUID;`);
+  if (config.version < 7) {
+    log.warn('Need to add "tokenResetPassword" column to the "users" table');
+    const tokenResetPassword = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "tokenResetPassword" UUID;`);
     log.debug(tokenResetPassword);
-    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 5 }) });
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 7 }) });
   }
 }
 
@@ -148,6 +148,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade4(sequelize);
   await upgrade5(sequelize);
   await upgrade6(sequelize);
+  await upgrade7(sequelize);
 }
 
 async function postUpgrade3() {
