@@ -6,9 +6,11 @@ import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
 import * as uuidV4 from 'uuid/v4';
+import { getTransporter } from './smtp';
 
 // move to serverConfig after
 import * as nodemailer from 'nodemailer';
+import log = require('loglevel');
 
 const debug = Debug('id:ctr');
 
@@ -188,23 +190,7 @@ export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject)
 
     // with sendgrid
 
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.sendgrid.net',
-      port: 587,
-      service: 'SendGrid',
-      auth: {
-        user: 'apikey',
-        pass: ''''
-      }
-    });
-
-    transporter.verify(function(error, success) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Server is ready to take our messages');
-      }
-    });
+    const transporter = getTransporter();
 
     const link = 'https://localhost:4220/reset-password?token=' +
     token + '&email=' + email;

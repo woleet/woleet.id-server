@@ -1,0 +1,14 @@
+<mat-card>
+  <mat-card-content>
+    <mat-form-field class="w-100">
+      <textarea matInput placeholder="Mail template" [formControl]="form"></textarea>
+      <mat-error *ngIf="form.invalid">{{ getErrorMessage(form) }}</mat-error>
+    </mat-form-field>
+  </mat-card-content>
+  <ng-template #loading>Loading...<br></ng-template>
+  <mat-card-actions *ngIf="(config$ | async) as config; else loading">
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) || (config.publicInfo.HTMLFrame == form.value) || (form.invalid)">SAVE</button>
+    <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
+  </mat-card-actions>
+</mat-card>
+<ng-template #loading>Loading...<br></ng-template>

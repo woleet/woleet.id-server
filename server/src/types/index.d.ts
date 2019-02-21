@@ -251,6 +251,13 @@ declare global {
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
     keyExpirationOffset?: string;
+    // SMTP config
+    useSMTP?: boolean;
+    SMTPHost?: string;
+    SMTPPort?: string;
+    SMTPUser?: string;
+    SMTPSecret?: string;
+    SMTPService?: string;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -271,6 +278,13 @@ declare global {
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
     keyExpirationOffset?: string;
+    // SMTP config
+    useSMTP?: boolean;
+    SMTPHost?: string;
+    SMTPPort?: string;
+    SMTPUser?: string;
+    SMTPSecret?: string;
+    SMTPService?: string;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -291,6 +305,13 @@ declare global {
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
     keyExpirationOffset?: string;
+    // SMTP config
+    useSMTP?: boolean;
+    SMTPHost?: string;
+    SMTPPort?: string;
+    SMTPUser?: string;
+    SMTPSecret?: string;
+    SMTPService?: string;
   }
 
   /* OIDC Provider */

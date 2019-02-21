@@ -1,8 +1,9 @@
-import {ServerConfig} from '../database';
-import {serverConfig} from '../config';
+import { ServerConfig } from '../database';
+import { serverConfig } from '../config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
-import {exit} from '../exit';
+import { exit } from '../exit';
+import { updateConfig } from 'src/api/schemas/server-config';
 
 const debug = Debug('id:ctrl:config');
 
@@ -36,6 +37,7 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
     inMemoryConfig = cfg.toJSON().config;
     await checkOIDCConfigChange(up);
     await checkOIDCPConfigChange(up);
+    await checkSMTPConfigChange(up);
     return getServerConfig();
   } catch (err) {
     exit('FATAL: Failed update the server configuration.', err);
@@ -47,18 +49,21 @@ const fns: {
   updateOIDCClient: () => Promise<any>,
   stopOIDCProvider: () => Promise<any>,
   bootOIDCProvider: () => Promise<any>,
-  updateOIDCProvider: () => Promise<any>
+  updateOIDCProvider: () => Promise<any>,
+  updateSMTP: () => Promise<any>
 } = {
   updateOIDCClient: null,
   bootOIDCProvider: null,
   stopOIDCProvider: null,
-  updateOIDCProvider: null
+  updateOIDCProvider: null,
+  updateSMTP: null
 };
 
 export const registerOIDCUpdateFunction = registrationFunctionFactory('updateOIDCClient');
 export const registerOIDCPStopFunction = registrationFunctionFactory('stopOIDCProvider');
 export const registerOIDCPBootFunction = registrationFunctionFactory('bootOIDCProvider');
 export const registerOIDCPUpdateFunction = registrationFunctionFactory('updateOIDCProvider');
+export const registerSMTPUpdateFunction = registrationFunctionFactory('updateSMTP');
 
 function registrationFunctionFactory(name) {
   return function (fn: () => Promise<any>) {
@@ -114,6 +119,24 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
     } catch (err) {
       log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
       return setServerConfig({ useOpenIDConnect: false });
+    }
+  }
+}
+
+async function checkSMTPConfigChange(up: ServerConfigUpdate) {
+  if (up.useSMTP !== undefined
+    || up.SMTPHost
+    || up.SMTPPort
+    || up.SMTPUser
+    || up.SMTPSecret
+    || up.SMTPService
+  ) {
+    debug('Update SMTP with', { up });
+    try {
+      await fns.updateSMTP();
+    } catch (err) {
+      log.error('Failed to initialize SMTP, it will be automatically disabled!', err);
+      return setServerConfig({ useSMTP: false });
     }
   }
 }

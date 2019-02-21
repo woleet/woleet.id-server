@@ -97,6 +97,10 @@ export function secureUrlValidator(control: AbstractControl): ValidationErrors |
   return null;
 }
 
+export function SMTPHostValidator() {
+
+}
+
 export function endValidator(expectedEnd: string) {
   return function (control: AbstractControl): ValidationErrors | null {
     const str: string = control.value;

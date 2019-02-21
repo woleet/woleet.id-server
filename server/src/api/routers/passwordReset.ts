@@ -33,8 +33,10 @@ const router = new Router({ prefix: '/password-reset' });
  *  operationId: passwordResetLink
  */
 router.post('/', async function (ctx) {
-  const { email } = ctx.request.query;
+  const { email } = ctx.request.body;
 
+  console.log(email);
+  console.log('start send reset mail');
   if (!email) {
     throw new BadRequest('Need to send the email adresse.');
   }
