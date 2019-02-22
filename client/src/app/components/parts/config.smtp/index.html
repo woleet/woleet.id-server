@@ -9,30 +9,13 @@
   <mat-divider></mat-divider>
   <br>
   <form [formGroup]="form">
-    <mat-form-field class="w-100" *ngIf="form.get('SMTPHost')  as f">
-      <input matInput placeholder="SMTP Host" formControlName="SMTPHost" (input)="change()" [required]="useSMTP$ | async">
-      <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
+    <mat-form-field class="w-100" *ngIf="form.get('SMTPConfig')  as f">
+        <textarea matInput matTooltip="Write with the JSON format" placeholder="SMTP transporter config" formControlName="SMTPConfig" (input)="change()" [required]="useSMTP$ | async"></textarea>
+        <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
     </mat-form-field>
-    <mat-form-field class="w-100" *ngIf="form.get('SMTPPort') as f">
-      <input matInput placeholder="SMTP Port" formControlName="SMTPPort" (input)="change()" [required]="useSMTP$ | async">
-      <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
-    </mat-form-field>
-    <mat-form-field class="w-100" *ngIf="form.get('SMTPUser') as f">
-      <input matInput placeholder="SMTP User" formControlName="SMTPUser" (input)="change()" [required]="useSMTP$ | async">
-      <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
-    </mat-form-field>
-    <mat-form-field class="w-100" *ngIf="form.get('SMTPSecret') as f">
-      <input matInput placeholder="SMTP Secret" [type]="reveal ? 'text' : 'password'" formControlName="SMTPSecret"
-        (input)="change()" [required]="useSMTP$ | async">
-      <button mat-button *ngIf="f.value" matSuffix mat-icon-button (click)="reveal=!reveal">
-        <mat-icon matTooltip="Show secret" aria-label="Show secret button">remove_red_eye</mat-icon>
-      </button>
-      <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
-    </mat-form-field>
-    <mat-form-field class="w-100" *ngIf="form.get('SMTPService')  as f">
-      <input matInput placeholder="SMTP Service" formControlName="SMTPService" (input)="change()" [required]="useSMTP$ | async">
-      <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
-    </mat-form-field>
+    <div>
+      <a href="https://nodemailer.com/smtp/" target="_blank">SMTP transporter configuration documentation.</a>
+    </div>
   </form>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="update()" [disabled]="(!changed) || (formLocked$ | async)|| ((useSMTP$ | async) && !(formValid$ | async))">SAVE</button>

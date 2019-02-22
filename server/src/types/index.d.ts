@@ -253,11 +253,7 @@ declare global {
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
-    SMTPHost?: string;
-    SMTPPort?: string;
-    SMTPUser?: string;
-    SMTPSecret?: string;
-    SMTPService?: string;
+    SMTPConfig?: string;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -280,11 +276,7 @@ declare global {
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
-    SMTPHost?: string;
-    SMTPPort?: string;
-    SMTPUser?: string;
-    SMTPSecret?: string;
-    SMTPService?: string;
+    SMTPConfig?: string
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -307,11 +299,7 @@ declare global {
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
-    SMTPHost?: string;
-    SMTPPort?: string;
-    SMTPUser?: string;
-    SMTPSecret?: string;
-    SMTPService?: string;
+    SMTPConfig?: string;
   }
 
   /* OIDC Provider */

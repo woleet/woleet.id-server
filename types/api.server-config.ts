@@ -32,11 +32,7 @@ interface ApiServerConfig {
 
   // SMTP config
   useSMTP: boolean;
-  SMTPHost: string | null;
-  SMTPPort: string | null;
-  SMTPUser: string | null;
-  SMTPSecret: string | null;
-  SMTPService: string | null;
+  SMTPConfig: string | null;
 }
 
 interface ApiServerConfigUpdate {
@@ -62,9 +58,5 @@ interface ApiServerConfigUpdate {
 
   // SMTP config
   useSMTP?: boolean;
-  SMTPHost?: string;
-  SMTPPort?: string;
-  SMTPUser?: string;
-  SMTPSecret?: string;
-  SMTPService?: string;
+  SMTPConfig?: string;
 }

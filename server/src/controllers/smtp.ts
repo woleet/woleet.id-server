@@ -15,41 +15,15 @@ async function configure() {
     return;
   }
 
-  if (!config.SMTPHost) {
-    debug('no SMTPHost set, skipping configuration');
-    log.warn('No SMTPHost set while SMTP is enabled, skipping configuration');
+  if (!config.SMTPConfig) {
+    debug('no SMTPConfig set, skipping configuration');
+    log.warn('No SMTPConfig set while SMTP is enabled, skipping configuration');
     return;
   }
 
-  if (!config.SMTPPort) {
-    debug('no SMTPPort set, skipping configuration');
-    log.warn('No SMTPPort set while SMTP is enabled, skipping configuration');
-    return;
-  }
+  const { SMTPConfig } = getServerConfig();
 
-  if (!config.SMTPUser) {
-    debug('no SMTPUser set, skipping configuration');
-    log.warn('No SMTPUser set while SMTP is enabled, skipping configuration');
-    return;
-  }
-
-  if (!config.SMTPSecret) {
-    debug('no SMTPSecret set, skipping configuration');
-    log.warn('No SMTPSecret set while SMTP is enabled, skipping configuration');
-    return;
-  }
-
-  const { SMTPHost, SMTPPort, SMTPUser, SMTPSecret, SMTPService } = getServerConfig();
-
-  transporter = nodemailer.createTransport({
-    host: SMTPHost,
-    port: SMTPPort,
-    service: SMTPService,
-    auth: {
-      user: SMTPUser,
-      pass: SMTPSecret
-    }
-  });
+  transporter = nodemailer.createTransport(JSON.parse(SMTPConfig));
 
   // transporter = await nodemailer.createTransport({
   //   host: 'smtp.sendgrid.net',

@@ -125,11 +125,7 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
 
 async function checkSMTPConfigChange(up: ServerConfigUpdate) {
   if (up.useSMTP !== undefined
-    || up.SMTPHost
-    || up.SMTPPort
-    || up.SMTPUser
-    || up.SMTPSecret
-    || up.SMTPService
+    || up.SMTPConfig
   ) {
     debug('Update SMTP with', { up });
     try {

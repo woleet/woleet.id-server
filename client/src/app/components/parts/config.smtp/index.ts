@@ -30,11 +30,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
 
   ngOnInit() {
     this.form = new FormGroup({
-      SMTPHost: new FormControl({ value: '' }, []),
-      SMTPPort: new FormControl({ value: '' }, []),
-      SMTPUser: new FormControl({ value: '' }, []),
-      SMTPSecret: new FormControl({ value: '' }, []),
-      SMTPService: new FormControl({ value: '' }, [])
+      SMTPConfig: new FormControl({ value: '' }, []),
     });
     const config$ = this.config$ = this.configService.getConfig();
 
@@ -49,11 +45,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
 
       this.useSMTP$.next(config.useSMTP);
 
-      this.form.get('SMTPHost').setValue(config.SMTPHost || '');
-      this.form.get('SMTPPort').setValue(config.SMTPPort || '');
-      this.form.get('SMTPUser').setValue(config.SMTPUser || '');
-      this.form.get('SMTPSecret').setValue(config.SMTPSecret || '');
-      this.form.get('SMTPService').setValue(config.SMTPService || '');
+      this.form.get('SMTPConfig').setValue(config.SMTPConfig || '');
 
       this.changed = false;
       this.formValid$.next(this.isFormValid());
@@ -79,18 +71,11 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
 
   update() {
     const useSMTP = this._useSMTP;
-    const SMTPHost = this.form.get('SMTPHost').value || null;
-    const SMTPPort = this.form.get('SMTPPort').value || null;
-    const SMTPUser = this.form.get('SMTPUser').value || null;
-    const SMTPSecret = this.form.get('SMTPSecret').value || null;
-    const SMTPService = this.form.get('SMTPService').value || null;
+
+    const SMTPConfig = this.form.get('SMTPConfig').value || null;
     this.configService.update({
-      SMTPHost,
       useSMTP,
-      SMTPPort,
-      SMTPUser,
-      SMTPSecret,
-      SMTPService
+      SMTPConfig,
     });
   }
 
