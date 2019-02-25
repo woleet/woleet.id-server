@@ -37,8 +37,6 @@ router.post('/', async function (ctx) {
   const { email } = ctx.request.body;
   let user;
 
-  console.log(email);
-  console.log('start send reset mail');
   if (!email) {
     throw new BadRequest('Need to send the email adresse.');
   }
@@ -46,7 +44,7 @@ router.post('/', async function (ctx) {
   try {
     user = await sendEmail(email, ctx.header.referer);
   } catch {
-    throw new NotFound(email + ' is not present in the database');
+    throw new NotFound(email + ' does not correspond to a user.');
   }
 
   event.register({
@@ -83,7 +81,7 @@ router.post('/validate', async function (ctx) {
   try {
     user = await updatePassword(infoUpdatePassword);
   } catch (err) {
-    throw new Unauthorized(err.m);
+    throw new Unauthorized('Invalid token.');
   }
 
   event.register({

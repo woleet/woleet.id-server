@@ -6,9 +6,6 @@ import { server } from '../config';
 
 import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
-import log = require('loglevel');
-
-
 
 export async function sendEmail(email: string, referer: string): Promise<InternalUserObject> {
   let user = await User.getByEmail(email);
@@ -45,15 +42,8 @@ export async function sendEmail(email: string, referer: string): Promise<Interna
 
   const transporter = getTransporter();
 
-  const compile = velocityjs.Compile;
-
   const link = referer + '?token=' +
     token + '&email=' + email;
-
-  const text = new compile(velocityjs.parse(velocityjs.render(defaultMailTemplate,
-    { validationURL: link, domain: 'localhost', userName: user.getDataValue('username') })));
-
-  log.info(text);
 
   await transporter.sendMail(MailTemplate(link, email, user), function (err, info) {
     if (err) {

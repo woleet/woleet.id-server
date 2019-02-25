@@ -15,7 +15,9 @@ import {
   MatRippleModule,
   MatCheckboxModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MAT_DIALOG_DEFAULT_OPTIONS,
+  MatDialogModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -43,6 +45,7 @@ import { UserEditPageComponent } from '@pages/user.edit';
 import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
+import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 
 // Services
 import { AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService } from '@guards/auth';
@@ -110,7 +113,11 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     OIDCProviderInteractionComponent,
     IntlTelInputComponent,
     ResetPasswordPageComponent,
-    ConfigSMTPComponent
+    ConfigSMTPComponent,
+    DialogResetPasswordComponent
+  ],
+  entryComponents: [
+    DialogResetPasswordComponent
   ],
   imports: [
     // angular
@@ -147,7 +154,10 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     MatNativeDateModule,
 
     // app
-    AppRoutingModule
+    AppRoutingModule,
+
+    // dialog
+    MatDialogModule
   ],
   providers: [
     AppConfigService,
@@ -158,6 +168,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
       deps: [AppConfigService, Http],
       multi: true
     },
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
     AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
     NeedConfigGuardService, KeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
