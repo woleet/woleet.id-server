@@ -38,7 +38,7 @@ export async function sendEmail(email: string, referer: string): Promise<Interna
   //   }
   // });
 
-  // with sendgrid
+  // with configurated SMTP server
 
   const transporter = getTransporter();
 
