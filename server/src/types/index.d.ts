@@ -276,7 +276,7 @@ declare global {
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
-    SMTPConfig?: string
+    SMTPConfig?: string;
   }
 
   interface ServerConfigCreate extends ServerConfig {

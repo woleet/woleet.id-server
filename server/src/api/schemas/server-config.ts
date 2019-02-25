@@ -27,7 +27,7 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   keyExpirationOffset: Joi.string().allow(null),
   // SMTP config
   useSMTP: Joi.boolean(),
-  SMTPConfig: Joi.string().allow(null)
+  SMTPConfig: Joi.string().allow(null),
 });
 
 export { updateConfig };

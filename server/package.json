@@ -60,6 +60,7 @@
     "pg-hstore": "2.3.2",
     "read": "^1.0.7",
     "secp256k1": "3.5.0",
-    "sequelize": "4.38.0"
+    "sequelize": "4.38.0",
+    "velocityjs": "^1.1.3"
   }
 }

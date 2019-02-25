@@ -5,12 +5,6 @@ import { NotFoundUserError, TokenResetPasswordInvalid } from '../errors';
 import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
-import * as uuidV4 from 'uuid/v4';
-import { getTransporter } from './smtp';
-
-// move to serverConfig after
-import * as nodemailer from 'nodemailer';
-import log = require('loglevel');
 
 const debug = Debug('id:ctr');
 
@@ -145,74 +139,16 @@ export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject)
   }
 
   const key = await serializeAndEncodePassword(infoUpdatePassword.password);
-  const update = Object.assign({}, {tokenResetPassword: null, passwordHash: key.passwordHash,
-    passwordSalt: key.passwordSalt, passwordItrs: key.passwordItrs });
+  const update = Object.assign({}, {
+    tokenResetPassword: null, passwordHash: key.passwordHash,
+    passwordSalt: key.passwordSalt, passwordItrs: key.passwordItrs
+  });
 
-    user = await User.update(user.getDataValue('id'), update);
+  user = await User.update(user.getDataValue('id'), update);
 
-    if (!user) {
-      throw new NotFoundUserError();
-    }
-
-    return user.toJSON();
+  if (!user) {
+    throw new NotFoundUserError();
   }
 
-  export async function sendEmail(email: string): Promise<InternalUserObject> {
-    let user = await User.getByEmail(email);
-
-    if (!user) {
-      throw new NotFoundUserError();
-    }
-
-    const token = uuidV4();
-
-    const update = Object.assign({}, {tokenResetPassword: token});
-
-    user = await User.update(user.getDataValue('id'), update);
-
-    // with ethereal. Catch the email with the url sent in the console.
-
-    // const account = await nodemailer.createTestAccount();
-
-    // const transporter = nodemailer.createTransport({
-    //   host: 'smtp.ethereal.email',
-    //   port: 587,
-    //   secure: false,
-    //   tls: {
-    //     // do not fail on invalid certs
-    //     rejectUnauthorized: false
-    //   },
-    //   auth: {
-    //     user: account.user, // generated ethereal user
-    //     pass: account.pass  // generated ethereal password
-    //   }
-    // });
-
-    // with sendgrid
-
-    const transporter = getTransporter();
-
-    const link = 'https://localhost:4220/reset-password?token=' +
-    token + '&email=' + email;
-
-    await transporter.sendMail(MailTemplate(link, email), function (err, info) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(info);
-        console.log('Message sent: %s', info.messageId);
-        // Preview only available when sending through an Ethereal account
-        // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-      }
-    });
-    return user.toJSON();
-  }
-
-  function MailTemplate(link: string, email: string): object {
-    return {
-      from: 'Woleet no-reply@woleet.com',
-      to: email,
-      subject: 'Password recovery',
-      text: 'Your reset link: ' + link,
-    };
-  }
+  return user.toJSON();
+}

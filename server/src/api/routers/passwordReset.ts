@@ -3,9 +3,10 @@ import * as Router from 'koa-router';
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { serializeUser } from '../serialize/user';
-import { updatePassword, sendEmail } from '../../controllers/user';
+import { updatePassword } from '../../controllers/user';
+import { sendEmail } from '../../controllers/send-email';
 import { store as event } from '../../controllers/server-event';
-import { BadRequest, Unauthorized } from 'http-errors';
+import { BadRequest, Unauthorized, NotFound } from 'http-errors';
 
 const vid = validate.param('id', 'uuid');
 
@@ -34,6 +35,7 @@ const router = new Router({ prefix: '/password-reset' });
  */
 router.post('/', async function (ctx) {
   const { email } = ctx.request.body;
+  let user;
 
   console.log(email);
   console.log('start send reset mail');
@@ -41,7 +43,11 @@ router.post('/', async function (ctx) {
     throw new BadRequest('Need to send the email adresse.');
   }
 
-  const user = await sendEmail(email);
+  try {
+    user = await sendEmail(email, ctx.header.referer);
+  } catch {
+    throw new NotFound(email + ' is not present in the database');
+  }
 
   event.register({
     type: 'user.passwordReset',

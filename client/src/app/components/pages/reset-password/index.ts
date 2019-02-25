@@ -22,6 +22,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
     redirect: string;
     userService: UserService;
     token: string;
+    errorMsg: string;
 
     form;
 
@@ -52,18 +53,20 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
     }
 
     async resetPassword() {
-        const success = this.userService.resetPassword(this.email);
+      console.log('reset deb');
+      try {
+        const success = await this.userService.resetPassword(this.email);
+      } catch (err) {
+        this.errorMsg = err.error.message;
+      }
     }
 
     async validate() {
-        const success = this.userService.validate(this.email, this.password, this.token);
+      try {
+        const success = await this.userService.validate(this.email, this.password, this.token);
+      } catch (err) {
+        this.errorMsg = err.error.message;
+      }
     }
-
-    // passwordConfirmValidator(): ValidationErrors | null  {
-    //     if (this.passwordConfirm !== this.password) {
-    //         return ({ passwordConfirm: true });
-    //     }
-    //     return null;
-    // }
 
 }
