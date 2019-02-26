@@ -20,6 +20,7 @@ export class LoginPageComponent {
 
   errorMsg: string = null;
   useOIDC: boolean;
+  useSMTP: boolean;
   redirect: string;
   config: { OIDCPProviderURL: string; useOpenIDConnect: boolean; hasSession: boolean; };
 
@@ -48,6 +49,7 @@ export class LoginPageComponent {
     });
     const config = appConfigService.getStartupConfig();
     this.useOIDC = config && config.useOpenIDConnect;
+    this.useSMTP = config && config.useSMTP;
   }
 
   async login() {

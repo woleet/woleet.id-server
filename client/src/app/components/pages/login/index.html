@@ -21,7 +21,7 @@
     <button mat-raised-button color="primary" class="w-100" [disabled]="lock$ | async" (click)="login()">LOGIN</button>
   </form>
   <br>
-  <strong><a [routerLink]="['/reset-password']">Forgot password?</a></strong>
+  <strong *ngIf="useSMTP"><a [routerLink]="['/reset-password']">Forgot password?</a></strong>
   <br>
   <button mat-raised-button
     color="primary"

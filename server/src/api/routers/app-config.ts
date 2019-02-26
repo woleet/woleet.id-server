@@ -9,8 +9,8 @@ const router = new Router({ prefix: '/app-config' });
 
 router.get('/', async function (ctx) {
   const hasSession = !!(ctx.session && ctx.session.user);
-  const { useOpenIDConnect, OIDCPProviderURL } = getServerConfig();
-  ctx.body = { useOpenIDConnect, OIDCPProviderURL, hasSession };
+  const { useOpenIDConnect, OIDCPProviderURL, useSMTP } = getServerConfig();
+  ctx.body = { useOpenIDConnect, OIDCPProviderURL, hasSession, useSMTP };
 });
 
 export { router };
