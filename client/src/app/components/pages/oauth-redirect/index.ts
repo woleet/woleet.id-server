@@ -1,12 +1,12 @@
-import {Component} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {keys, mainRoute} from '@app/config';
+import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { keys, mainRoute } from '@app/config';
 
 import * as log from 'loglevel';
-import {LocalStorageService} from '@services/local-storage';
-import {AppConfigService} from '@services/boot';
-import {AuthService} from '@services/auth';
-import {redirectForOIDCProvider} from '@services/util';
+import { LocalStorageService } from '@services/local-storage';
+import { AppConfigService } from '@services/boot';
+import { AuthService } from '@services/auth';
+import { redirectForOIDCProvider } from '@services/util';
 
 const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 
@@ -16,6 +16,7 @@ const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 export class OAuthRedirectComponent {
 
   errorMsg: string = null;
+  redirect: string;
 
   constructor(
     activatedRoute: ActivatedRoute,
@@ -31,19 +32,20 @@ export class OAuthRedirectComponent {
         const user = await authService.forwardOAuth(params);
         log.debug('Successfully logged in', user);
 
-        const redirect = store.get(LOGIN_REDIRECT_KEY);
-        if (redirect) {
-          redirectForOIDCProvider(store, config, redirect);
-        }
-
-        if (user) {
-          if (user.role === 'admin') {
-            router.navigate(['users']);
-          } else {
-            router.navigate([mainRoute]);
-          }
+        this.redirect = store.get(LOGIN_REDIRECT_KEY);
+        if (this.redirect) {
+          redirectForOIDCProvider(store, config, this.redirect);
         } else {
-          this.errorMsg = 'Failed to login';
+
+          if (user) {
+            if (user.role === 'admin') {
+              router.navigate(['users']);
+            } else {
+              router.navigate([mainRoute]);
+            }
+          } else {
+            this.errorMsg = 'Failed to login';
+          }
         }
       } catch (err) {
         log.error(err);
