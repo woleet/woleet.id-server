@@ -1,4 +1,4 @@
-<div class="form-container" *ngIf="!redirect && useOIDC">
+<div class="form-container" *ngIf="!redirect && !useOIDC">
   <form role="form" (submit)="login()" #f="ngForm">
     <div>
       <mat-form-field class="w-100">

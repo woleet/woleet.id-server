@@ -17,7 +17,6 @@ export class OAuthRedirectComponent {
 
   errorMsg: string = null;
   redirect: string;
-  useOIDC: boolean;
 
   constructor(
     activatedRoute: ActivatedRoute,
@@ -27,7 +26,6 @@ export class OAuthRedirectComponent {
     store: LocalStorageService) {
     activatedRoute.queryParams.subscribe(async (params) => {
       const config = configService.getStartupConfig();
-      this.useOIDC = config.useOpenIDConnect;
 
       log.debug('Forward oauth parameters', params);
       try {
