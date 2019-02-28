@@ -5,7 +5,6 @@ import { serverURL } from './config';
 import { BootService } from '@services/boot';
 import { Lock } from '@components/util';
 import { Observable } from 'rxjs';
-import { LocalStorageService } from './local-storage';
 
 import { redirectForOIDC, redirectForOIDCProvider } from '@services/util';
 
@@ -20,23 +19,14 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private bootService: BootService,
-    // private store: LocalStorageService
   ) {
-    // const user = store.get('user');
     this.lock = new Lock();
     this.lock$ = this.lock.asObservable();
-
-    // if (user) {
-    //   try {
-    //     this.user = JSON.parse(user);
-    //   } catch { }
-    // }
   }
 
   async logout(request = true) {
     this.lock.incr();
     this.user = null;
-    // this.store.del('user');
     if (request) {
       this.http.get(`${serverURL}/logout/`).toPromise().catch(() => null);
     }
@@ -57,8 +47,6 @@ export class AuthService {
     }
 
     this.user = auth.user;
-    // this.store.set('user', JSON.stringify(auth.user));
-
     return this.user;
   }
 
@@ -88,7 +76,6 @@ export class AuthService {
     }
 
     this.user = auth.user;
-    // this.store.set('user', JSON.stringify(auth.user));
 
     return auth.user;
   }
