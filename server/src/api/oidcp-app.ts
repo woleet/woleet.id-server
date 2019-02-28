@@ -55,12 +55,11 @@ export function build(): Koa {
   provider.use(session);
 
   router.get('/session/end', async (ctx, next) => {
-    console.log("### PARAMS ###");
-    console.log(ctx.req);
-    if (ctx.session && ctx.params['logout'] == 'yes') {
+
+    if (ctx.session) {
       await delSession(ctx.session.id);
     }
-    ctx.cookies.set('session' + sessionSuffix, null);  
+    ctx.cookies.set('session' + sessionSuffix, null);
     await next();
   });
 
