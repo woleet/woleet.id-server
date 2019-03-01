@@ -55,7 +55,6 @@ export class AppConfigService {
         const redirect = this.store.get(LOGIN_REDIRECT_KEY);
         if (!config.hasSession) {
           log.debug(`User has no session, clear localstorage`);
-          this.store.del('user');
           if (this.bootOnLogin && redirect && config.useOpenIDConnect) {
             log.info(`Automatic use of OIDCP`);
             redirectForOIDC();
