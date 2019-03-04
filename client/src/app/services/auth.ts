@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, Params } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { serverURL } from './config';
-import { BootService } from '@services/boot';
+import { BootService, AppConfigService } from '@services/boot';
 import { Lock } from '@components/util';
 import { Observable } from 'rxjs';
 
@@ -19,9 +19,11 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private bootService: BootService,
+    appConfigService: AppConfigService,
   ) {
     this.lock = new Lock();
     this.lock$ = this.lock.asObservable();
+    this.user = appConfigService.getStartupConfig().user;
   }
 
   async logout(request = true) {
