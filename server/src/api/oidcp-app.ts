@@ -11,6 +11,8 @@ import * as Debug from 'debug';
 const debug = Debug('id:oidc:app');
 
 import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
+import { delSession } from '../controllers/authentication';
+import { sessionSuffix } from '../config';
 import { getProvider } from '../controllers/oidc-provider';
 
 import { session } from './authentication';
@@ -51,6 +53,15 @@ export function build(): Koa {
   });
 
   provider.use(session);
+
+  router.get('/session/end', async (ctx, next) => {
+
+    if (ctx.session) {
+      await delSession(ctx.session.id);
+    }
+    ctx.cookies.set('session' + sessionSuffix, null);
+    await next();
+  });
 
   router.get('/auth', async (ctx, next) => {
     const config = getServerConfig();
