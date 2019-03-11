@@ -28,7 +28,7 @@ export class ConfigOIDCPClientComponent extends ErrorMessageProvider implements 
         this.client.redirect_uris.map((value = '') => new FormControl(value, [secureUrlValidator]))
       ),
       postLogoutRedirectUris: new FormArray(
-        this.client.post_logout_redirect_uris.map((value = '') => new FormControl(value, [secureUrlValidator]))
+        (this.client.post_logout_redirect_uris || ['']).map((value = '') => new FormControl(value, [secureUrlValidator]))
       )
     });
     Object.defineProperty(this.client, '_valid', { enumerable: false, value: () => this.clientForm.valid });
