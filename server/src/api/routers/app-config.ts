@@ -12,7 +12,7 @@ router.get('/', async function (ctx) {
   const user = ctx.session && ctx.session.user && serializeUserDTO(ctx.session.user.toJSON()) || null;
   const hasSession = !!(ctx.session && ctx.session.user);
   const { useOpenIDConnect, OIDCPProviderURL, useSMTP } = getServerConfig();
-  ctx.body = { useOpenIDConnect, OIDCPProviderURL, hasSession, user };
+  ctx.body = { useOpenIDConnect, OIDCPProviderURL, hasSession, user, useSMTP };
 });
 
 export { router };
