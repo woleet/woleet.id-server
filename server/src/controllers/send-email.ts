@@ -1,7 +1,8 @@
 import { User } from '../database';
 import { NotFoundUserError } from '../errors';
-import * as velocityjs from 'velocityjs';
-import { defaultMailTemplate } from '../../assets/defaultMailTemplate';
+import * as mustache from 'mustache';
+import * as fs from 'fs';
+import * as path from 'path';
 import { server } from '../config';
 
 import * as uuidV4 from 'uuid/v4';
@@ -45,7 +46,11 @@ export async function sendEmail(email: string, referer: string): Promise<Interna
   const link = referer + '?token=' +
     token + '&email=' + email;
 
-  await transporter.sendMail(MailTemplate(link, email, user), function (err, info) {
+  const file = readFile('../../assets/defaultMailTemplate.html');
+  const html = await file.then((template) => mustache.render(template,
+    { validationURL: link, domain: server.host, userName: user.getDataValue('x500CommonName') }));
+
+  await transporter.sendMail(MailTemplate(email, user, html), function (err, info) {
     if (err) {
       console.log(err);
     } else {
@@ -58,12 +63,22 @@ export async function sendEmail(email: string, referer: string): Promise<Interna
   return user.toJSON();
 }
 
-function MailTemplate(link: string, email: string, user: SequelizeUserObject): object {
+function readFile(file) {
+  return new Promise((resolve, reject) => {
+      fs.readFile(path.join(__dirname, file), 'utf8', (err, data) => {
+          if (err) {reject(err); }
+          const template = data.replace(/\n+ */g, ''); // remove space after \n
+          mustache.parse(template);   // optional, speeds up future uses
+          resolve(template);
+      });
+  });
+}
+
+function MailTemplate(email: string, user: SequelizeUserObject, html: any): object {
   return {
     from: 'Woleet no-reply@woleet.com',
     to: email,
     subject: 'Password recovery',
-    html: velocityjs.render(defaultMailTemplate,
-      { validationURL: link, domain: server.host, userName: user.getDataValue('x500CommonName') })
+    html: html
   };
 }

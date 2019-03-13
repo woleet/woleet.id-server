@@ -53,6 +53,7 @@
     "koa-router": "7.4.0",
     "loglevel": "^1.6.1",
     "lru-cache": "4.1.3",
+    "mustache": "^3.0.1",
     "nodemailer": "^5.1.1",
     "oidc-provider": "^5.1.2",
     "openid-client": "^2.4.3",
