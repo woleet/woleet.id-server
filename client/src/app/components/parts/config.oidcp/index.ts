@@ -126,6 +126,7 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
       client_id: 'client-' + Math.random().toString(16).slice(-4),
       client_secret: 'secret-' + Math.random().toString(16).slice(-8),
       redirect_uris: [''],
+      post_logout_redirect_uris: [''],
       _valid: null
     });
     this.change();

@@ -199,3 +199,4 @@ Woleet.ID Server can be used as an OpenID Connect provider by 3rd party applicat
 > NOTE: The OpenID Connect Provider will not be effectively enabled without at least one specified OpenID client.
 
 You will be then able to get user information from your third party app. The associated OpenID client must request access to the `openid profile email` scope to get user information and `signature` to use the signature endpoint.
+

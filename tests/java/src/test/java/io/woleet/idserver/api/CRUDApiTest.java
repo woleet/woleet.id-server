@@ -233,7 +233,7 @@ public abstract class CRUDApiTest {
         ObjectPost objectPost = newObjectPost();
         try {
             adminAuthApi.createObject(objectPost);
-            fail("Should not be able to create an object without common name");
+            fail("Should not be able to create an object without minimal attributes");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
