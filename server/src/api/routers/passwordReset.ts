@@ -29,7 +29,7 @@ function hidePassword(user) {
 const router = new Router({ prefix: '/password-reset' });
 
 /**
- * @route: /password-reset/{userMail}
+ * @route: /password-reset
  * @swagger
  *  operationId: passwordResetLink
  */
@@ -48,7 +48,7 @@ router.post('/', async function (ctx) {
   }
 
   event.register({
-    type: 'user.passwordReset',
+    type: 'user.edit',
     authorizedUserId: null,
     associatedTokenId: null,
     associatedUserId: user.id,
@@ -61,7 +61,7 @@ router.post('/', async function (ctx) {
 });
 
 /**
- * @route: /password-reset/{userMail}
+ * @route: /password-reset
  * @swagger
  *  operationId: updatePassword
  */
@@ -85,7 +85,7 @@ router.post('/validate', async function (ctx) {
   }
 
   event.register({
-    type: 'user.passwordUpdate',
+    type: 'user.edit',
     authorizedUserId: null,
     associatedTokenId: null,
     associatedUserId: user.id,

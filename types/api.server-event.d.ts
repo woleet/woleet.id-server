@@ -7,7 +7,6 @@ type ServerEventTypeEnum =
   | 'error'
   | 'key.create' | 'key.edit' | 'key.delete'
   | 'user.create' | 'user.edit' | 'user.delete'
-  | 'user.passwordReset' | 'user.passwordUpdate'
   | 'token.create' | 'token.edit' | 'token.delete'
   ;
 
