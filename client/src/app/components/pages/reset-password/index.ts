@@ -65,6 +65,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
   async validate() {
     try {
       const success = await this.userService.validate(this.email, this.password, this.token);
+      this.router.navigate(['/login']);
     } catch (err) {
       const dialogRef = this.dialog.open(DialogResetPasswordComponent, {
         width: '250px'
