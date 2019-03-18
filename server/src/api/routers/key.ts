@@ -28,10 +28,12 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
   const { userId } = ctx.params;
   const key: ApiPostKeyObject = ctx.request.body;
 
-  if (key.phrase.split(' ').length < 12) {
-    throw new BadRequest('The phrase length must be at least 12 words.');
-  } else if (key.phrase.split(' ').length > 50) {
-    throw new BadRequest('the phrase length cannot exceed 50 words.');
+  if (key.phrase) {
+    if (key.phrase.split(' ').length < 12) {
+      throw new BadRequest('The phrase length must be at least 12 words.');
+    } else if (key.phrase.split(' ').length > 50) {
+      throw new BadRequest('the phrase length cannot exceed 50 words.');
+    }
   }
 
   let created;

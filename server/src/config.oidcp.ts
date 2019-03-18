@@ -36,7 +36,7 @@ export const provider = {
   subjectTypes: ['public', 'pairwise'],
   interactionUrl: function interactionUrl(ctx, interaction: Interaction) {
     // All interactions case should be either disabled or contextually avoided
-    throw new Error(`Unexpected interaction "${interaction.error}"`);
+    throw new Error(`Unexpected interaction: "${interaction.error}", "${interaction.error_description}", "${interaction.reason}"`);
   },
   interactionCheck: function interactionCheck(ctx) {
     if (!ctx.oidc.session.sidFor(ctx.oidc.client.clientId)) {
@@ -53,5 +53,39 @@ export const provider = {
     IdToken: 1 * 60 * 60, // 1 hour in seconds
     DeviceCode: 10 * 60, // 10 minutes in seconds
     RefreshToken: 1 * 24 * 60 * 60, // 1 day in seconds
+  },
+  logoutSource: async function logoutSource(ctx, form) {
+    // @param ctx - koa request context
+    // @param form - form source (id="op.logoutForm") to be embedded in the page and submitted by
+    //   the End-User
+    ctx.body = `<!DOCTYPE html>
+  <head>
+  <title>Logging out</title>
+  </head>
+  <body>
+  <div>
+    ${form}
+    <script>
+      (function(){
+        function logout() {
+          var form = document.getElementById('op.logoutForm');
+          var input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'logout';
+          input.value = 'yes';
+          form.appendChild(input);
+          form.submit();
+        }
+        function rpLogoutOnly() {
+          var form = document.getElementById('op.logoutForm');
+          form.submit();
+        }
+
+        logout();
+      })();
+    </script>
+  </div>
+  </body>
+  </html>`;
   }
 };

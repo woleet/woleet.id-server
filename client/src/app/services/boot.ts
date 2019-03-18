@@ -17,7 +17,7 @@ const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 @Injectable({ providedIn: 'root' })
 export class AppConfigService {
 
-  private _appConfig: { OIDCPProviderURL: string, useOpenIDConnect: boolean, hasSession: boolean, publicInfo: object };
+  private _appConfig: { OIDCPProviderURL: string, useOpenIDConnect: boolean, hasSession: boolean, user: ApiUserDTOObject };
   bootOnLogin = false;
 
   constructor(
@@ -55,7 +55,6 @@ export class AppConfigService {
         const redirect = this.store.get(LOGIN_REDIRECT_KEY);
         if (!config.hasSession) {
           log.debug(`User has no session, clear localstorage`);
-          this.store.del('user');
           if (this.bootOnLogin && redirect && config.useOpenIDConnect) {
             log.info(`Automatic use of OIDCP`);
             redirectForOIDC();

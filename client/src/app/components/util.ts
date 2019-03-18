@@ -1,4 +1,4 @@
-import {AbstractControl, FormControl, ValidationErrors} from '@angular/forms';
+import { AbstractControl, FormControl, ValidationErrors } from '@angular/forms';
 import * as traverse from 'traverse';
 import { BehaviorSubject } from 'rxjs';
 import * as timestring from 'timestring';
@@ -122,9 +122,9 @@ export class ErrorMessageProvider {
       case 'required':
         return 'You must enter a value';
       case 'minlength':
-        return `'Must be at least ${error.requiredLength} character long`;
+        return `Must be at least ${error.requiredLength} characters long`;
       case 'maxlength':
-        return `Must be at most ${error.requiredLength} character long`;
+        return `Must be at most ${error.requiredLength} characters long`;
       case 'email':
         return 'Must be a valid email';
       case 'noSpace':

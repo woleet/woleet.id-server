@@ -5,7 +5,8 @@ const oidcpClient = Joi.object().keys(<DefineJoiModelAttributes<ApiOIDCPClient>>
   token_endpoint_auth_method: Joi.string().min(1),
   client_id: Joi.string().min(1),
   client_secret: Joi.string().min(1),
-  redirect_uris: Joi.array().items(Joi.string().uri({ scheme: ['https'] }))
+  redirect_uris: Joi.array().items(Joi.string().uri({ scheme: ['https'] })),
+  post_logout_redirect_uris: Joi.array().items(Joi.string().uri({ scheme: ['https'] }).allow(''))
 });
 
 const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig>>{
