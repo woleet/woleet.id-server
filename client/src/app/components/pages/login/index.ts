@@ -35,7 +35,7 @@ export class LoginPageComponent {
     this.lock$ = authService.lock$;
     this.config = appConfigService.getStartupConfig();
     this.useOIDC = this.config.useOpenIDConnect;
-    this.serverPublicInfo = this.config.publicInfo;
+    this.serverPublicInfo = this.config.publicInfo || null;
     activatedRoute.queryParams.subscribe(async (params) => {
       log.debug('Forwarded login parameters', params);
       if (params.origin && params.origin.startsWith('oidcp') && params.redirect) {
