@@ -50,7 +50,7 @@ export class LoginPageComponent {
     });
     const config = appConfigService.getStartupConfig();
     this.useOIDC = config && config.useOpenIDConnect;
-    this.serverPublicInfo = config.publicInfo || null;
+    this.serverPublicInfo = config && config.publicInfo;
   }
 
   async login() {

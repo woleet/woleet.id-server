@@ -33,7 +33,6 @@ export async function initServerConfig() {
       log.warn(err.message);
       throw new Error('Secret is not the same that the previously set one');
     }
-
   } else {
     log.warn('No configuration found in database, creating a new one along with a default admin user...');
     log.debug('Creating an admin user');
