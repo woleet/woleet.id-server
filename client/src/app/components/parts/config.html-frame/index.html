@@ -5,8 +5,7 @@
     <div *ngIf="(config$ | async) as config; else loading">
       <div fxLayout="row" fxLayoutAlign="space-between start">
         <div fxLayout="column" class="btn-h">
-            <span *ngIf="config.publicInfo && config.publicInfo.HTMLFrame;else unset">{{ config.publicInfo.HTMLFrame }}</span>
-            <ng-template #unset><span>unset</span></ng-template>
+            <span>{{ config.publicInfo.HTMLFrame || 'unset' }}</span>
         </div>
         <div fxLayout="column">
           <button mat-icon-button color="primary" [disabled]="(formLocked$ | async)" (click)="editMode=true">

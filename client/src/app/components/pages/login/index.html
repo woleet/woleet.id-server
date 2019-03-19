@@ -1,11 +1,5 @@
-<div *ngIf="serverPublicInfo; else default">
-  <logo [logoURL]="serverPublicInfo.logoURL"></logo>
-  <html-frame [HtmlFrame]="serverPublicInfo.HTMLFrame"></html-frame>
-</div>
-<ng-template #default>
-    <logo [logoURL]=""></logo>
-    <html-frame [HtmlFrame]=""></html-frame>
-</ng-template>
+<logo [logoURL]="serverPublicInfo.logoURL"></logo>
+<html-frame [HtmlFrame]="serverPublicInfo.HTMLFrame"></html-frame>
 <div class="form-container" *ngIf="(!redirect || !useOIDC)">
   <form role="form" (submit)="login()" #f="ngForm">
     <div>
