@@ -22,7 +22,7 @@
         <div>
           <mat-form-field class="w-100">
             <input matInput type="email" placeholder="Email" [formControl]="form.email" autoComplete="new-password"
-                   (focus)="form.email.focused = true" (focusout)="form.email.focused = false">
+                   (focus)="form.email.focused = true" (focusout)="form.email.focused = false" required>
             <mat-error *ngIf="form.email.invalid">{{ getErrorMessage(form.email) }}</mat-error>
           </mat-form-field>
         </div>

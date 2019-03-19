@@ -134,6 +134,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
       password: new FormControl(undefined, [
         Validators.minLength(6),
         Validators.maxLength(64),
+        Validators.required,
         passwordValidator,
         asciiValidator
       ]),
