@@ -23,7 +23,7 @@
     "@types/koa": "^2.0.46",
     "@types/koa-bodyparser": "^4.2.0",
     "@types/koa-morgan": "^1.0.4",
-    "@types/koa-router": "^7.0.32",
+    "@types/koa-router": "7.0.32",
     "@types/loglevel": "^1.5.3",
     "@types/lru-cache": "^4.1.1",
     "@types/mocha": "^5.2.5",
