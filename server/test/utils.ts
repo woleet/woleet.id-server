@@ -27,8 +27,8 @@ export function assertError(done: () => any, status: number, message?: string) {
   };
 }
 
-export function exclisiveInclude(input: Object, expectedKeys: string[]) {
+export function exclusiveInclude(input: Object, expectedKeys: string[]) {
   for (const key of Object.keys(input)) {
-    assert(expectedKeys.includes(key), `Unepected property "${key}"`);
+    assert(expectedKeys.includes(key), `Unexpected property "${key}"`);
   }
 }

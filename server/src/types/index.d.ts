@@ -47,7 +47,8 @@ declare global {
 
   /* User: server specific */
 
-  interface SequelizeUserObject extends Instance<InternalUserObject> { }
+  interface SequelizeUserObject extends Instance<InternalUserObject> {
+  }
 
   interface InternalUserObject extends UserObject, InternalIdentityObject, CommonInternalProperties {
     lastLogin: Date;
@@ -57,9 +58,9 @@ declare global {
     countryCallingCode: string;
     phone: string;
     email: string | null;
-    /** Hexadecimal represention password hash */
+    /** Hexadecimal representation password hash */
     passwordHash: string;
-    /** Hexadecimal represention password salt */
+    /** Hexadecimal representation password salt */
     passwordSalt: string;
     passwordItrs: number;
 
@@ -92,7 +93,8 @@ declare global {
 
   /* Key: server specific */
 
-  interface SequelizeKeyObject extends Instance<InternalKeyObject> { }
+  interface SequelizeKeyObject extends Instance<InternalKeyObject> {
+  }
 
   interface InternalKeyObject extends KeyObject, CommonInternalProperties {
     lastUsed: Date;
@@ -165,7 +167,8 @@ declare global {
 
   /* APIToken: server specific */
 
-  interface SequelizeAPITokenObject extends Instance<InternalAPITokenObject> { }
+  interface SequelizeAPITokenObject extends Instance<InternalAPITokenObject> {
+  }
 
   interface InternalAPITokenObject extends APITokenObject, CommonInternalProperties {
     lastUsed: Date;
@@ -324,7 +327,6 @@ declare global {
     grant_types: OIDCGrantTypesEnum[],
     redirect_uris: uri[],
   }
-
 }
 
 declare module 'koa' {

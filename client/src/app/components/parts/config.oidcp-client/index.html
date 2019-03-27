@@ -50,7 +50,7 @@
             [placeholder]="'Post-logout redirect URI #' + ($index + 1)"
             formControlName="{{ $index }}"
             (input)="refreshTargetValue()"
-            [required]="false">
+            [required]="true">
           <mat-error *ngIf="uri.invalid">{{ getErrorMessage(uri) }}</mat-error>
         </mat-form-field>
         <button mat-icon-button color="warn" (click)="deletePostLogoutRedirectUri($index)"

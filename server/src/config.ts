@@ -7,7 +7,7 @@ import * as crypto from 'crypto';
 import * as assert from 'assert';
 import * as chalk from 'chalk';
 
-import { SecureModule } from './woleet-secure-module';
+import { SecureModule } from '@woleet/woleet-secure-module';
 
 // Logger setup
 

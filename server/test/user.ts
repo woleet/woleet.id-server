@@ -3,7 +3,7 @@ import agents from './agents';
 import * as assert from 'assert';
 import './before';
 
-import { assertError, exclisiveInclude } from './utils';
+import { assertError, exclusiveInclude } from './utils';
 
 function servers() {
   return agents.api;
@@ -63,7 +63,7 @@ describe('/user', () => {
           assert.equal(status, 200);
           // status.should.be.equal(200);
 
-          exclisiveInclude(body, userProperties);
+          exclusiveInclude(body, userProperties);
 
           // body.should.have.property('id').to.be.a('string').that.match(uuid);
           // body.should.have.property('type').to.be.a('string').that.equal('user');

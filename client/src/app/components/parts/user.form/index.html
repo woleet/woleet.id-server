@@ -13,7 +13,7 @@
         </div>
         <div>
           <mat-form-field class="w-100">
-            <input matInput type="text" placeholder="Username" [formControl]="form.username" autoComplete="new-password"
+            <input matInput type="text" placeholder="Username" [formControl]="form.username"
                    (focus)="form.username.focused = true" (focusout)="form.username.focused = false">
             <mat-error *ngIf="form.username.invalid">{{ getErrorMessage(form.username) }}</mat-error>
             <mat-hint *ngIf="form.username.focused">Alias used to login</mat-hint>
@@ -21,16 +21,15 @@
         </div>
         <div>
           <mat-form-field class="w-100">
-            <input matInput type="email" placeholder="Email" [formControl]="form.email" autoComplete="new-password"
-                   (focus)="form.email.focused = true" (focusout)="form.email.focused = false">
+            <input matInput type="email" placeholder="Email" [formControl]="form.email"
+                   (focus)="form.email.focused = true" (focusout)="form.email.focused = false" required>
             <mat-error *ngIf="form.email.invalid">{{ getErrorMessage(form.email) }}</mat-error>
           </mat-form-field>
         </div>
         <div>
           <mat-form-field class="w-100">
             <input matInput type="password" placeholder="Password" [formControl]="form.password"
-                   autoComplete="new-password" (focus)="form.password.focused = true"
-                   (focusout)="form.password.focused = false">
+                   (focus)="form.password.focused = true" (focusout)="form.password.focused = false" required>
             <mat-error *ngIf="form.password.invalid">{{ getErrorMessage(form.password) }}</mat-error>
           </mat-form-field>
         </div>
@@ -41,9 +40,9 @@
         <mat-card-subtitle>Identity</mat-card-subtitle>
         <div>
           <mat-form-field class="w-100">
-            <input matInput type="text" placeholder="Common name" [formControl]="form.identity.commonName" required
+            <input matInput type="text" placeholder="Common name" [formControl]="form.identity.commonName"
                    (focus)="form.identity.commonName.focused = true"
-                   (focusout)="form.identity.commonName.focused = false">
+                   (focusout)="form.identity.commonName.focused = false" required>
             <mat-error
               *ngIf="form.identity.commonName.invalid">{{ getErrorMessage(form.identity.commonName) }}</mat-error>
             <mat-hint *ngIf="form.identity.commonName.focused">Full user name (CN)</mat-hint>
@@ -108,7 +107,8 @@
     <br>
   </div>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="submit()" [disabled]="formLocked || f.invalid || !isValid() || !phoneValid">
+    <button mat-raised-button color="primary" (click)="submit()"
+            [disabled]="formLocked || f.invalid || !isValid() || !phoneValid">
       {{ mode == 'edit' ? 'SAVE' : mode == 'create' ? 'CREATE' : 'UNKNOWN' }}
     </button>
     <button mat-button [disabled]="formLocked" (click)="triggerCancel()">CANCEL</button>

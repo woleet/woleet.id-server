@@ -10,7 +10,7 @@ import { initServerConfig } from '../../server/src/boot.server-config';
 before(() => {
   return (async () => {
     console.log('Initializing test secret...');
-    process.env.__test_secret = 'test';
+    process.env.__test_secret = 'secret';
     await secureModule.init('__test_secret');
 
     await initdb();

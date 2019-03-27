@@ -17,15 +17,14 @@ COPY package-lock.json /tmp/server/
 COPY package.json /tmp/server-prod/
 COPY package-lock.json /tmp/server-prod/
 
-# Install build dependencies
+# Install runtime and dev dependencies
 RUN cd /tmp/server && npm i --ignore-scripts
 
-# Install prod dependencies
+# Install runtime dependencies only
 RUN cd /tmp/server-prod && npm i --production
 
-# Copy source
+# Copy sources
 COPY . /tmp/server
-
 COPY tmp/types /tmp/types
 
 WORKDIR /tmp/server
