@@ -1,24 +1,24 @@
 import { ServerConfigService as ConfigService } from '@services/server-config';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'logo',
-    templateUrl: './index.html',
-    styleUrls: ['./style.scss']
+  selector: 'logo',
+  templateUrl: './index.html',
+  styleUrls: ['./style.scss']
 })
 export class LogoComponent implements OnInit {
 
-    @Input()
-    logoURL: ApiServerConfig['publicInfo']['logoURL'];
+  @Input()
+  logoURL: ApiServerConfig['publicInfo']['logoURL'];
 
-    logo: string;
-    defaultLogo: string;
+  logo: string;
+  defaultLogo: string;
 
-    constructor(private configService: ConfigService) {
-    }
+  constructor(private configService: ConfigService) {
+  }
 
-    ngOnInit() {
-        this.defaultLogo = '../../../../assets/logo.svg';
-        this.logo = this.logoURL || this.defaultLogo;
-    }
+  ngOnInit() {
+    this.defaultLogo = '../../../../assets/logo.svg';
+    this.logo = this.logoURL || this.defaultLogo;
+  }
 }

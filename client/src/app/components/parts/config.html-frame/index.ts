@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider } from '@components/util';
 import { Observable } from 'rxjs';
@@ -53,8 +53,7 @@ export class ConfigHTMLFrameUrlComponent extends ErrorMessageProvider implements
 
   async submit() {
     const HTMLFrame = this.form.value || null;
-    const publicInfo = {HTMLFrame: HTMLFrame };
-    log.debug('Set HTML frame URL to', HTMLFrame);
+    const publicInfo = { HTMLFrame: HTMLFrame };
     this.configService.update({ publicInfo });
   }
 
