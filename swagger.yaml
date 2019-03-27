@@ -1123,6 +1123,21 @@ components:
           type: boolean
           example: true
           description: True is the server must fallback on the default key (if any).
+        publicInfo:
+          $ref: '#/components/schema/ServerPublicInfo'
+    ServerPublicInfo:
+      type: object
+      properties:
+        logoURL:
+          type: string
+          example: "https://mydomain.com/logo.svg"
+          description: >
+            The URL of the logo that will be displayed in the sign in page.
+        HTMLFrame:
+          type: string
+          example: "Hello World"
+          description: >
+            The HTML frame that will be displayed in the sign in page.
     ServerEventTypeEnum:
       type: string
       enum:

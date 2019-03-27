@@ -116,7 +116,8 @@ export const serverConfig = {
   default: {
     version: 6, // datamodel version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
-    fallbackOnDefaultKey: true
+    fallbackOnDefaultKey: true,
+    publicInfo: {},
   },
   CONFIG_ID: 'SERVER-CONFIG'
 };

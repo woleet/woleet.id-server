@@ -31,6 +31,10 @@ import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
 import { APITokenCardComponent } from '@parts/api-token.card';
 import { KeyCreateCardComponent } from '@parts/key.card.create';
 import { IntlTelInputComponent } from '@parts/intl-tel-input';
+import { ConfigLogoUrlComponent } from '@parts/config.logo-url';
+import { ConfigHTMLFrameUrlComponent } from '@parts/config.html-frame';
+import { LogoComponent } from '@parts/logo';
+import { HtmlFrameComponent } from '@parts/html-frame';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -106,7 +110,11 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ErrorPageComponent,
     OAuthRedirectComponent,
     OIDCProviderInteractionComponent,
-    IntlTelInputComponent
+    IntlTelInputComponent,
+    ConfigLogoUrlComponent,
+    ConfigHTMLFrameUrlComponent,
+    LogoComponent,
+    HtmlFrameComponent
   ],
   imports: [
     // angular

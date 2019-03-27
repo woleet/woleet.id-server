@@ -1,16 +1,16 @@
 import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
-import { ErrorMessageProvider, urlValidator, endValidator } from '@components/util';
+import { ErrorMessageProvider } from '@components/util';
 import { Observable } from 'rxjs';
 import * as log from 'loglevel';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'config-identity-url',
+  selector: 'config-html-frame',
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
+export class ConfigHTMLFrameUrlComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
 
   editMode = false;
 
@@ -28,7 +28,7 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
   }
 
   ngOnInit() {
-    this.form = new FormControl('', [urlValidator]);
+    this.form = new FormControl('', []);
 
     const config$ = this.config$ = this.configService.getConfig();
 
@@ -40,7 +40,7 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
       }
 
       this.editMode = false;
-      this.form.setValue(config.identityURL);
+      this.form.setValue(config.publicInfo.HTMLFrame);
     });
 
     this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
@@ -52,9 +52,10 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
   }
 
   async submit() {
-    const identityURL = this.form.value;
-    log.debug('Set identity URL to', identityURL);
-    this.configService.update({ identityURL });
+    const HTMLFrame = this.form.value || null;
+    const publicInfo = {HTMLFrame: HTMLFrame };
+    log.debug('Set HTML frame URL to', HTMLFrame);
+    this.configService.update({ publicInfo });
   }
 
   cancelEdit() {
