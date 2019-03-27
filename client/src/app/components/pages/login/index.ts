@@ -56,11 +56,12 @@ export class LoginPageComponent {
     if (user) {
       if (this.redirect) {
         redirectForOIDCProvider(this.store, this.config, this.redirect);
-      }
-      if (user.role === 'admin') {
-        this.router.navigate(['users']);
       } else {
-        this.router.navigate([mainRoute]);
+        if (user.role === 'admin') {
+          this.router.navigate(['users']);
+        } else {
+          this.router.navigate([mainRoute]);
+        }
       }
     } else {
       this.errorMsg = 'Failed to login.';
