@@ -37,10 +37,10 @@ async function configure() {
 
   await transporter.verify(function (error, success) {
     if (error) {
-      console.log(error);
+      log.error(error);
       Error('Bad configuration');
     } else {
-      console.log('Server is ready to take our messages');
+      log.info('Server is ready to take our messages');
     }
   });
 }

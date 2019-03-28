@@ -141,8 +141,6 @@ export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject)
 
   const timestamp = parseInt(user.toJSON().tokenResetPassword.split('_')[1], 10);
 
-  console.log((Date.now() - timestamp));
-
   if ((Date.now() - timestamp) > RESET_PASSWORD_TOKEN_LIFETIME) {
     throw new TokenResetPasswordInvalid();
   }

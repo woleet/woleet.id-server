@@ -8,6 +8,7 @@ import { server } from '../config';
 import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
 import * as nodemailer from 'nodemailer';
+import log = require('loglevel');
 
 export async function sendResetPasswordEmail(email: string, referer: string): Promise<InternalUserObject> {
   let user = await User.getByEmail(email);
@@ -34,7 +35,7 @@ export async function sendResetPasswordEmail(email: string, referer: string): Pr
     try {
   await sendEmail(email, user, html);
 } catch (err) {
-  console.log(err);
+  log.error(err);
 }
 
   return user.toJSON();
@@ -66,12 +67,12 @@ export async function sendEmail(email: string, user: SequelizeUserObject, html: 
 
   await transporter.sendMail(MailTemplate(email, user, html), function (err, info) {
     if (err) {
-      console.log(err);
+      log.error(err);
     } else {
-      console.log(info);
-      console.log('Message sent: %s', info.messageId);
+      log.info(info);
+      log.info('Message sent: %s', info.messageId);
       // Preview only available when sending through an Ethereal account
-      // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      // log.info('Preview URL: %s', nodemailer.getTestMessageUrl(info));
     }
   });
 }
