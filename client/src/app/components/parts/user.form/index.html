@@ -26,10 +26,12 @@
             <mat-error *ngIf="form.email.invalid">{{ getErrorMessage(form.email) }}</mat-error>
           </mat-form-field>
         </div>
-        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP" [(ngModel)]="sendPassLink" (change)="check()" [ngModelOptions]="{standalone: true}">
+        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP" [matTooltip]="!useSMTP? 'You can set the SMTP server in the Settings tab':''"
+        [(ngModel)]="sendPassLink" (change)="check()" [ngModelOptions]="{standalone: true}">
             Send a Password settings link to the user
         </mat-checkbox>
-        <button mat-button color="warn" *ngIf="mode === 'edit'" [disabled]="formLocked" (click)="sendResetPassword(user)">
+        <button mat-button color="warn" *ngIf="mode === 'edit'" matInput [disabled]="!useSMTP" [matTooltip]="!useSMTP? 'You can set the SMTP server in the Settings tab':''"
+        (click)="sendResetPassword(user)">
             <mat-icon matTooltip="Send a Password settings link to the user" aria-label="Send link user button">mail_outline</mat-icon>
             Send a Password settings link to the user
         </button>
