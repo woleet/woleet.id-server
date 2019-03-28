@@ -64,7 +64,7 @@ declare global {
     passwordSalt: string;
     passwordItrs: number;
 
-    tokenResetPassword: uuid | null;
+    tokenResetPassword: string | null;
 
     defaultKeyId: string;
   }
@@ -87,7 +87,7 @@ declare global {
     passwordHash?: string;
     passwordSalt?: string;
     passwordItrs?: number;
-    tokenResetPassword?: uuid;
+    tokenResetPassword?: string;
     defaultKeyId?: string;
   }
 

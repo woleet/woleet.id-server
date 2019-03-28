@@ -1,4 +1,12 @@
-<div>Invalid token.</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="close()">Close</button>
+<div *ngIf="data">
+    <div>Your password as been changed, please log in.</div>
+    <div mat-dialog-actions>
+      <button mat-button (click)="close()">Ok</button>
+    </div>
+</div>
+<div *ngIf="!data">
+  <div>Invalid token.</div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="close()">Close</button>
+  </div>
 </div>

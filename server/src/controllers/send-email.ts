@@ -7,19 +7,40 @@ import { server } from '../config';
 
 import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
+import * as nodemailer from 'nodemailer';
 
-export async function sendEmail(email: string, referer: string): Promise<InternalUserObject> {
+export async function sendResetPasswordEmail(email: string, referer: string): Promise<InternalUserObject> {
   let user = await User.getByEmail(email);
 
   if (!user) {
     throw new NotFoundUserError();
   }
 
-  const token = uuidV4();
+  const uuid = uuidV4();
+
+  const token = uuid + '_' + Date.now();
 
   const update = Object.assign({}, { tokenResetPassword: token });
 
   user = await User.update(user.getDataValue('id'), update);
+
+  const link = referer + '?token=' +
+    token + '&email=' + email;
+
+  const file = readFile('../../assets/defaultMailTemplate.html');
+  const html = await file.then((template) => mustache.render(template,
+    { validationURL: link, domain: server.host, userName: user.getDataValue('x500CommonName') }));
+
+    try {
+  await sendEmail(email, user, html);
+} catch (err) {
+  console.log(err);
+}
+
+  return user.toJSON();
+}
+
+export async function sendEmail(email: string, user: SequelizeUserObject, html: any) {
 
   // with ethereal. Catch the email with the url sent in the console.
 
@@ -43,13 +64,6 @@ export async function sendEmail(email: string, referer: string): Promise<Interna
 
   const transporter = getTransporter();
 
-  const link = referer + '?token=' +
-    token + '&email=' + email;
-
-  const file = readFile('../../assets/defaultMailTemplate.html');
-  const html = await file.then((template) => mustache.render(template,
-    { validationURL: link, domain: server.host, userName: user.getDataValue('x500CommonName') }));
-
   await transporter.sendMail(MailTemplate(email, user, html), function (err, info) {
     if (err) {
       console.log(err);
@@ -60,7 +74,6 @@ export async function sendEmail(email: string, referer: string): Promise<Interna
       // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
     }
   });
-  return user.toJSON();
 }
 
 function readFile(file) {

@@ -7,6 +7,7 @@ import { ErrorMessageProvider, passwordValidator, asciiValidator } from '@compon
 import { UserService } from '@services/user';
 import { MatDialog } from '@angular/material';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
+import { DialogMailResetComponent } from '@components/parts/dialog-mail-reset';
 
 @Component({
   templateUrl: './index.html',
@@ -57,6 +58,12 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
   async resetPassword() {
     try {
       const success = await this.userService.resetPassword(this.email);
+      const dialogRef = this.dialog.open(DialogMailResetComponent, {
+        width: '250px'
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        this.router.navigate(['/login']);
+      });
     } catch (err) {
       this.errorMsg = err.error.message;
     }
@@ -65,16 +72,22 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
   async validate() {
     try {
       const success = await this.userService.validate(this.email, this.password, this.token);
-      this.router.navigate(['/login']);
+      const dialogRef = this.dialog.open(DialogResetPasswordComponent, {
+        width: '250px',
+        data: {success: false}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        this.router.navigate(['/login']);
+      });
     } catch (err) {
       const dialogRef = this.dialog.open(DialogResetPasswordComponent, {
-        width: '250px'
+        width: '250px',
+        data: false
       });
 
       dialogRef.afterClosed().subscribe(result => {
         this.router.navigate(['/login']);
       });
-      // this.errorMsg = err.error.message;
     }
   }
 

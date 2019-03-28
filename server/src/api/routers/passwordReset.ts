@@ -4,7 +4,7 @@ import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { serializeUser } from '../serialize/user';
 import { updatePassword } from '../../controllers/user';
-import { sendEmail } from '../../controllers/send-email';
+import { sendResetPasswordEmail } from '../../controllers/send-email';
 import { store as event } from '../../controllers/server-event';
 import { BadRequest, Unauthorized, NotFound } from 'http-errors';
 
@@ -42,7 +42,7 @@ router.post('/', async function (ctx) {
   }
 
   try {
-    user = await sendEmail(email, ctx.header.referer);
+    user = await sendResetPasswordEmail(email, ctx.header.referer);
   } catch {
     throw new NotFound(email + ' does not correspond to a user.');
   }

@@ -8,7 +8,7 @@ const UserModel = {
   role: { type: ENUM(['user', 'admin']), defaultValue: 'user' },
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   email: { type: STRING, unique: true },
-  tokenResetPassword: {type: UUID, unique: true, allowNull: true },
+  tokenResetPassword: {type: STRING, unique: true, allowNull: true },
   username: { type: STRING, unique: true, allowNull: true /* allowNull: false */ }, // step 1
   countryCallingCode: {type: STRING, unique: false, allowNull: true},
   phone: {type: STRING, unique: false, allowNull: true},

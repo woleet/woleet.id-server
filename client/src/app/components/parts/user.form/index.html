@@ -14,7 +14,7 @@
         <div>
           <mat-form-field class="w-100">
             <input matInput type="text" placeholder="Username" [formControl]="form.username"
-                   (focus)="form.username.focused = true" (focusout)="form.username.focused = false">
+              (focus)="form.username.focused = true" (focusout)="form.username.focused = false">
             <mat-error *ngIf="form.username.invalid">{{ getErrorMessage(form.username) }}</mat-error>
             <mat-hint *ngIf="form.username.focused">Alias used to login</mat-hint>
           </mat-form-field>
@@ -22,14 +22,21 @@
         <div>
           <mat-form-field class="w-100">
             <input matInput type="email" placeholder="Email" [formControl]="form.email"
-                   (focus)="form.email.focused = true" (focusout)="form.email.focused = false" required>
+              (focus)="form.email.focused = true" (focusout)="form.email.focused = false" required>
             <mat-error *ngIf="form.email.invalid">{{ getErrorMessage(form.email) }}</mat-error>
           </mat-form-field>
         </div>
+        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP" [(ngModel)]="sendPassLink" (change)="check()" [ngModelOptions]="{standalone: true}">
+            Send a Password settings link to the user
+        </mat-checkbox>
+        <button mat-button color="warn" *ngIf="mode === 'edit'" [disabled]="formLocked" (click)="sendResetPassword(user)">
+            <mat-icon matTooltip="Send a Password settings link to the user" aria-label="Send link user button">mail_outline</mat-icon>
+            Send a Password settings link to the user
+        </button>
         <div>
           <mat-form-field class="w-100">
             <input matInput type="password" placeholder="Password" [formControl]="form.password"
-                   (focus)="form.password.focused = true" (focusout)="form.password.focused = false" required>
+              (focus)="form.password.focused = true" (focusout)="form.password.focused = false" [required]="!sendPassLink">
             <mat-error *ngIf="form.password.invalid">{{ getErrorMessage(form.password) }}</mat-error>
           </mat-form-field>
         </div>
@@ -41,31 +48,29 @@
         <div>
           <mat-form-field class="w-100">
             <input matInput type="text" placeholder="Common name" [formControl]="form.identity.commonName"
-                   (focus)="form.identity.commonName.focused = true"
-                   (focusout)="form.identity.commonName.focused = false" required>
-            <mat-error
-              *ngIf="form.identity.commonName.invalid">{{ getErrorMessage(form.identity.commonName) }}</mat-error>
+              (focus)="form.identity.commonName.focused = true" (focusout)="form.identity.commonName.focused = false"
+              required>
+            <mat-error *ngIf="form.identity.commonName.invalid">{{ getErrorMessage(form.identity.commonName) }}
+            </mat-error>
             <mat-hint *ngIf="form.identity.commonName.focused">Full user name (CN)</mat-hint>
           </mat-form-field>
         </div>
         <div>
           <mat-form-field class="w-100">
             <input matInput type="text" placeholder="Organization" [formControl]="form.identity.organization"
-                   (focus)="form.identity.organization.focused = true"
-                   (focusout)="form.identity.organization.focused = false">
-            <mat-error
-              *ngIf="form.identity.organization.invalid">{{ getErrorMessage(form.identity.organization) }}</mat-error>
+              (focus)="form.identity.organization.focused = true"
+              (focusout)="form.identity.organization.focused = false">
+            <mat-error *ngIf="form.identity.organization.invalid">{{ getErrorMessage(form.identity.organization) }}
+            </mat-error>
             <!-- <mat-hint *ngIf="form.identity.organization.focused"></mat-hint> -->
           </mat-form-field>
         </div>
         <div>
           <mat-form-field class="w-100">
             <input matInput type="text" placeholder="Organizational Unit"
-                   [formControl]="form.identity.organizationalUnit"
-                   (focus)="form.identity.organizationalUnit.focused = true"
-                   (focusout)="form.identity.organizationalUnit.focused = false">
-            <mat-error
-              *ngIf="form.identity.organizationalUnit.invalid">{{ getErrorMessage(form.identity.organizationalUnit)
+              [formControl]="form.identity.organizationalUnit" (focus)="form.identity.organizationalUnit.focused = true"
+              (focusout)="form.identity.organizationalUnit.focused = false">
+            <mat-error *ngIf="form.identity.organizationalUnit.invalid">{{ getErrorMessage(form.identity.organizationalUnit)
               }}
             </mat-error>
             <!-- <mat-hint *ngIf="form.identity.organizationalUnit.focused"></mat-hint> -->
@@ -74,8 +79,7 @@
         <div>
           <mat-form-field class="w-100">
             <input matInput type="text" placeholder="Locality" [formControl]="form.identity.locality"
-                   (focus)="form.identity.locality.focused = true"
-                   (focusout)="form.identity.locality.focused = false">
+              (focus)="form.identity.locality.focused = true" (focusout)="form.identity.locality.focused = false">
             <mat-error *ngIf="form.identity.locality.invalid">{{ getErrorMessage(form.identity.locality) }}</mat-error>
             <!-- <mat-hint *ngIf="form.identity.locality.focused"></mat-hint> -->
           </mat-form-field>
@@ -91,8 +95,7 @@
         <div>
           <mat-form-field class="w-100">
             <input matInput type="text" placeholder="userId" [formControl]="form.identity.userId"
-                   (focus)="form.identity.userId.focused = true"
-                   (focusout)="form.identity.userId.focused = false">
+              (focus)="form.identity.userId.focused = true" (focusout)="form.identity.userId.focused = false">
             <mat-error *ngIf="form.identity.userId.invalid">{{ getErrorMessage(form.identity.userId) }}</mat-error>
             <mat-hint *ngIf="form.identity.userId.focused">
               A custom user identifier you can use to select the user (must be unique)
@@ -108,7 +111,7 @@
   </div>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="submit()"
-            [disabled]="formLocked || f.invalid || !isValid() || !phoneValid">
+      [disabled]="formLocked || f.invalid || !isValid() || !phoneValid">
       {{ mode == 'edit' ? 'SAVE' : mode == 'create' ? 'CREATE' : 'UNKNOWN' }}
     </button>
     <button mat-button [disabled]="formLocked" (click)="triggerCancel()">CANCEL</button>

@@ -7,6 +7,7 @@ import { createKey } from './key';
 import { store } from './store.session';
 
 const debug = Debug('id:ctr');
+const RESET_PASSWORD_TOKEN_LIFETIME = 1000 * 60 * 30;
 
 async function serializeAndEncodePassword(password: string) {
   const key = await encode(password);
@@ -135,6 +136,14 @@ export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject)
   let user = await User.getByEmail(infoUpdatePassword.email);
 
   if (infoUpdatePassword.token !== user.toJSON().tokenResetPassword) {
+    throw new TokenResetPasswordInvalid();
+  }
+
+  const timestamp = parseInt(user.toJSON().tokenResetPassword.split('_')[1], 10);
+
+  console.log((Date.now() - timestamp));
+
+  if ((Date.now() - timestamp) > RESET_PASSWORD_TOKEN_LIFETIME) {
     throw new TokenResetPasswordInvalid();
   }
 

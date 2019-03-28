@@ -46,6 +46,7 @@ import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
+import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
 
 // Services
 import { AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService } from '@guards/auth';
@@ -114,10 +115,12 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     IntlTelInputComponent,
     ResetPasswordPageComponent,
     ConfigSMTPComponent,
-    DialogResetPasswordComponent
+    DialogResetPasswordComponent,
+    DialogMailResetComponent
   ],
   entryComponents: [
-    DialogResetPasswordComponent
+    DialogResetPasswordComponent,
+    DialogMailResetComponent
   ],
   imports: [
     // angular

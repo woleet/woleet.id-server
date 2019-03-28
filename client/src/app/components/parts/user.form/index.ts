@@ -1,14 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { UserService } from '@services/user';
 import { Router } from '@angular/router';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormControl, ValidationErrors, Validators } from '@angular/forms';
-import { cleanupObject, ErrorMessageProvider, replaceInObject, passwordValidator, asciiValidator} from '@components/util';
+import { cleanupObject, ErrorMessageProvider, replaceInObject, passwordValidator, asciiValidator } from '@components/util';
 import * as traverse from 'traverse';
 import cc from '@components/cc';
 import { addedDiff, updatedDiff } from 'deep-object-diff';
 import * as log from 'loglevel';
+import { Observable, Subscription } from 'rxjs';
+import { ServerConfigService as ConfigService } from '@services/server-config';
 
 function noSpaceValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
@@ -55,14 +57,27 @@ function uppercaseOnlyValidator(control: AbstractControl): ValidationErrors | nu
   return null;
 }
 
+function passwordMandatoryValidatorOnEdit(value: boolean) {
+  return function passwordMandatoryValidator(control: AbstractControl): ValidationErrors | null {
+    if (!value) {
+      return ({ passwordMandatoryValidator: true});
+    }
+    return null;
+  };
+}
+
 @Component({
   selector: 'create-edit-user',
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class UserFormComponent extends ErrorMessageProvider implements OnInit {
+export class UserFormComponent extends ErrorMessageProvider implements OnInit, OnDestroy, AfterViewInit {
 
   formLocked = false;
+  useSMTP: boolean;
+  sendPassLink = false;
+
+  config$: Observable<ApiServerConfig>;
 
   @Input()
   mode: 'create' | 'edit';
@@ -84,11 +99,15 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
   tmpPhone: string;
   tmpCountryCallingCode: string;
   phoneValid = true;
+  errorMsg: string;
 
   countryCodes: Array<{ name: string, code: string }> = cc;
 
-  constructor(private service: UserService, private router: Router) {
+  private onDestroy: EventEmitter<void>;
+
+  constructor(private service: UserService, private router: Router, private configService: ConfigService, private cdr: ChangeDetectorRef) {
     super();
+    this.onDestroy = new EventEmitter();
   }
 
   private setFormControl(user) {
@@ -104,7 +123,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
         Validators.minLength(6),
         Validators.maxLength(64),
         passwordValidator,
-        asciiValidator
+        asciiValidator,
+        passwordMandatoryValidatorOnEdit(!this.sendPassLink)
       ]),
       role: user.role,
       identity: {
@@ -139,10 +159,39 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
 
   ngOnInit() {
     log.debug('init', this.mode, this.user);
+
+    const config$ = this.config$ = this.configService.getConfig();
+
+    this.registerSubscription(config$.subscribe((config) => {
+      if (!config) {
+        return;
+      }
+      this.useSMTP = config.useSMTP;
+    }));
     if (this.mode === 'edit') {
       this.form = this.setFormControl(copy<ApiUserObject>(this.user));
     } else {
       this.form = this.setFormControl({ role: 'user', identity: {} });
+    }
+  }
+
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
+  }
+
+  registerSubscription(sub: Subscription) {
+    this.onDestroy.subscribe(() => sub.unsubscribe());
+  }
+
+  ngOnDestroy() {
+    this.onDestroy.emit();
+  }
+
+  async sendResetPassword(user: ApiUserObject) {
+    try {
+      const success = await this.service.resetPassword(user.email);
+    } catch (err) {
+      this.errorMsg = err.error.message;
     }
   }
 
@@ -169,6 +218,14 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
       promise = this.service.create(cleaned)
         .then((up) => this.submitSucceed.emit(up))
         .then(() => this.router.navigate(['/users']));
+
+      if (this.sendPassLink) {
+        try {
+        await this.sendResetPassword(user);
+        } catch (err) {
+          log.debug(err);
+        }
+      }
     }
 
     await promise
@@ -199,6 +256,10 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
       this.tmpCountryCallingCode = phoneParsed.countryCallingCode;
       this.phoneValid = true;
     }
+  }
+
+  check() {
+    this.cdr.detectChanges();
   }
 
 }

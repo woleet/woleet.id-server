@@ -135,7 +135,7 @@ async function upgrade7(sequelize) {
   log.info({ config });
   if (config.version < 7) {
     log.warn('Need to add "tokenResetPassword" column to the "users" table');
-    const tokenResetPassword = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "tokenResetPassword" UUID;`);
+    const tokenResetPassword = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "tokenResetPassword" VARCHAR;`);
     log.debug(tokenResetPassword);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 7 }) });
   }
