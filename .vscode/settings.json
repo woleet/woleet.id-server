@@ -3,5 +3,6 @@
     "app": "shellscript",
     "start-pg-dev": "shellscript",
     "Dockerfile.*": "dockerfile"
-  }
+  },
+  "editor.tabSize": 2
 }
