@@ -237,6 +237,10 @@ declare global {
   interface InternalServerConfigObject extends ServerConfig {
     version: number;
     identityURL: string;
+    publicInfo?: {
+      logoURL?: string;
+      HTMLFrame?: string;
+    }
     defaultKeyId: string;
     defaultKey?: InternalKeyObject;
     fallbackOnDefaultKey: boolean;
@@ -261,6 +265,10 @@ declare global {
 
   interface ServerConfigUpdate extends ServerConfig {
     identityURL?: string;
+    publicInfo?: {
+      logoURL?: string;
+      HTMLFrame?: string;
+    }
     defaultKeyId?: string;
     fallbackOnDefaultKey?: boolean;
     allowUserToSign?: boolean;
@@ -284,6 +292,10 @@ declare global {
 
   interface ServerConfigCreate extends ServerConfig {
     identityURL: string;
+    publicInfo?:{
+      logoURL?: string;
+      HTMLFrame?: string;
+    }
     defaultKeyId: string;
     fallbackOnDefaultKey?: boolean;
     allowUserToSign?: boolean;

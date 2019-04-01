@@ -1,17 +1,16 @@
 import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
-import { ErrorMessageProvider, timeStringValidator } from '@components/util';
+import { ErrorMessageProvider, urlValidator, endValidator } from '@components/util';
 import { Observable } from 'rxjs';
 import * as log from 'loglevel';
-import * as timestring from 'timestring';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'config-key-expiration',
+  selector: 'config-logo-url',
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class ConfigKeyExpirationComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
+export class ConfigLogoUrlComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
 
   editMode = false;
 
@@ -29,7 +28,7 @@ export class ConfigKeyExpirationComponent extends ErrorMessageProvider implement
   }
 
   ngOnInit() {
-    this.form = new FormControl('', [timeStringValidator]);
+    this.form = new FormControl('', [urlValidator]);
 
     const config$ = this.config$ = this.configService.getConfig();
 
@@ -41,7 +40,7 @@ export class ConfigKeyExpirationComponent extends ErrorMessageProvider implement
       }
 
       this.editMode = false;
-      this.form.setValue(config.keyExpirationOffset);
+      this.form.setValue(config.publicInfo.logoURL);
     });
 
     this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
@@ -53,19 +52,14 @@ export class ConfigKeyExpirationComponent extends ErrorMessageProvider implement
   }
 
   async submit() {
-    const keyExpirationOffset = this.form.value || null;
-    keyExpirationOffset ?
-      log.debug('Set default key expiration to', keyExpirationOffset, timestring(keyExpirationOffset))
-      : log.debug('Unset default key expiration.');
-    this.configService.update({ keyExpirationOffset });
+    const logoURL = this.form.value || null;
+    const publicInfo = {logoURL: logoURL};
+    log.debug('Set logo URL to', logoURL);
+    this.configService.update({ publicInfo });
   }
 
   cancelEdit() {
     this.editMode = false;
-  }
-
-  getSeconds(str) {
-    return timestring(str);
   }
 
 }
