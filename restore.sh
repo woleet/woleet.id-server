@@ -36,5 +36,6 @@ if [ "$#" -eq 2 ]; then
   test_params
   start
 else
-  echo "Not enough mineral!"
+  echo "$0 take the environment and the path of your dump file (*.sql)"
+  display_env
 fi

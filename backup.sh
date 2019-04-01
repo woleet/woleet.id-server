@@ -25,7 +25,7 @@ start() {
   fi
   if test -e "$path"; then
     echo "Create dump_${env}_$(date +%d-%m-%Y"_"%H_%M_%S).sql in $path."
-    docker exec -t $image pg_dumpall -c -U postgres > "$path/dump_${env}_$(date +%d-%m-%Y"_"%H_%M_%S).sql"
+    docker exec $image pg_dumpall -c -U postgres > "$path/dump_${env}_$(date +%d-%m-%Y"_"%H_%M_%S).sql"
   else
     echo "This path does not exist!"
   fi
@@ -37,5 +37,6 @@ if [ "$#" -eq 2 ]; then
   test_params
   start
 else
-  echo "Not enough mineral!"
+  echo "$0 take the environment and the path of your dump directory"
+  display_env
 fi
