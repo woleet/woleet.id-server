@@ -120,7 +120,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ConfigLogoUrlComponent,
     ConfigHTMLFrameUrlComponent,
     LogoComponent,
-    HtmlFrameComponent
+    HtmlFrameComponent,
     ResetPasswordPageComponent,
     ConfigSMTPComponent,
     DialogResetPasswordComponent,
