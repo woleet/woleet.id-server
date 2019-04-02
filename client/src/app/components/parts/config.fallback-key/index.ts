@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
@@ -57,7 +57,6 @@ export class ConfigFallbackKeyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    log.debug('unsubscribing');
     this.onDestroy.emit();
   }
 

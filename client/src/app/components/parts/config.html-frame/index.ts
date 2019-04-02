@@ -47,7 +47,6 @@ export class ConfigHTMLFrameUrlComponent extends ErrorMessageProvider implements
   }
 
   ngOnDestroy() {
-    log.debug('unsubscribing');
     this.onDestroy.emit();
   }
 
