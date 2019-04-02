@@ -1,12 +1,12 @@
 <div *ngIf="data">
-    <mat-dialog-content>Your password as been changed, please log in.</mat-dialog-content>
-    <div mat-dialog-actions>
-      <mat-dialog-actions align="center" mat-button (click)="close()">Ok</mat-dialog-actions>
-    </div>
+  <mat-dialog-content style="font-family: Roboto, 'Helvetica Neue', sans-serif;">Your password as been changed, please log in.</mat-dialog-content>
+  <mat-dialog-actions align="center">
+    <button mat-button (click)="close()">Ok</button>
+  </mat-dialog-actions>
 </div>
 <div *ngIf="!data">
-  <mat-dialog-content>Invalid token.</mat-dialog-content>
-  <div mat-dialog-actions>
-    <mat-dialog-actions align="center" mat-button (click)="close()">Close</mat-dialog-actions>
-  </div>
+  <mat-dialog-content style="font-family: Roboto, 'Helvetica Neue', sans-serif;">Invalid token.</mat-dialog-content>
+  <mat-dialog-actions align="center">
+      <button mat-button (click)="close()">Close</button>
+  </mat-dialog-actions>
 </div>
