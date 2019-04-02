@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
-import { ErrorMessageProvider, urlValidator, endValidator } from '@components/util';
+import { ErrorMessageProvider, urlValidator } from '@components/util';
 import { Observable } from 'rxjs';
 import * as log from 'loglevel';
 import { FormControl } from '@angular/forms';
@@ -47,7 +47,6 @@ export class ConfigLogoUrlComponent extends ErrorMessageProvider implements OnIn
   }
 
   ngOnDestroy() {
-    log.debug('unsubscribing');
     this.onDestroy.emit();
   }
 

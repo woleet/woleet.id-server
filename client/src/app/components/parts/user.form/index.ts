@@ -1,30 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output
+} from '@angular/core';
 import { UserService } from '@services/user';
 import { Router } from '@angular/router';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormControl, ValidationErrors, Validators } from '@angular/forms';
-import { cleanupObject, ErrorMessageProvider, replaceInObject, passwordValidator, asciiValidator } from '@components/util';
+import {
+  asciiValidator, cleanupObject, ErrorMessageProvider, passwordValidator, replaceInObject
+} from '@components/util';
 import * as traverse from 'traverse';
 import cc from '@components/cc';
 import { addedDiff, updatedDiff } from 'deep-object-diff';
 import * as log from 'loglevel';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 
 function noSpaceValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
   if (str && str.indexOf(' ') !== -1) {
     return ({ noSpace: true });
-  }
-
-  return null;
-}
-
-function lettersOnlyValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
-  if (str && !/^[a-z]+$/i.test(str)) {
-    return ({ lettersOnly: true });
   }
 
   return null;
@@ -48,19 +43,10 @@ function safeWordValidator(control: AbstractControl): ValidationErrors | null {
   return null;
 }
 
-function uppercaseOnlyValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
-  if (str && !/^[A-Z]$/.test(str)) {
-    return ({ uppercaseOnly: true });
-  }
-
-  return null;
-}
-
 function passwordMandatoryValidatorOnEdit(value: boolean) {
-  return function passwordMandatoryValidator(control: AbstractControl): ValidationErrors | null {
+  return function passwordMandatoryValidator(): ValidationErrors | null {
     if (!value) {
-      return ({ passwordMandatoryValidator: true});
+      return ({ passwordMandatoryValidator: true });
     }
     return null;
   };
@@ -75,9 +61,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   formLocked = false;
   useSMTP: boolean;
-  sendPassLink = false;
-
-  config$: Observable<ApiServerConfig>;
+  sendPasswordEmail = false;
 
   @Input()
   mode: 'create' | 'edit';
@@ -124,7 +108,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         Validators.maxLength(64),
         passwordValidator,
         asciiValidator,
-        passwordMandatoryValidatorOnEdit(!this.sendPassLink)
+        passwordMandatoryValidatorOnEdit(!this.sendPasswordEmail)
       ]),
       role: user.role,
       identity: {
@@ -146,26 +130,18 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   }
 
   private getFormObject() {
-    // get "value" attribute of each form control attibutes recursively
-    // deleting falsy ones
-    const user = traverse(this.form).map(function (e) {
+    // get "value" attribute of each form control attributes recursively deleting falsy ones
+    return traverse(this.form).map(function (e) {
       if (e instanceof FormControl) {
         return e.value === null ? this.delete(false) : e.value;
       }
     });
-
-    return user;
   }
 
   ngOnInit() {
-    log.debug('init', this.mode, this.user);
-
-    const config$ = this.config$ = this.configService.getConfig();
-
-    this.registerSubscription(config$.subscribe((config) => {
-      if (!config) {
+    this.registerSubscription(this.configService.getConfig().subscribe((config) => {
+      if (!config)
         return;
-      }
       this.useSMTP = config.useSMTP;
     }));
     if (this.mode === 'edit') {
@@ -189,7 +165,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   async sendResetPassword(user: ApiUserObject) {
     try {
-      const success = await this.service.resetPassword(user.email);
+      await this.service.resetPassword(user.email);
     } catch (err) {
       this.errorMsg = err.error.message;
     }
@@ -219,9 +195,9 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         .then((up) => this.submitSucceed.emit(up))
         .then(() => this.router.navigate(['/users']));
 
-      if (this.sendPassLink) {
+      if (this.sendPasswordEmail) {
         try {
-        await this.sendResetPassword(user);
+          await this.sendResetPassword(user);
         } catch (err) {
           log.debug(err);
         }
@@ -257,9 +233,4 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       this.phoneValid = true;
     }
   }
-
-  check() {
-    this.cdr.detectChanges();
-  }
-
 }
