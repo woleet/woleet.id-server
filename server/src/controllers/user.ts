@@ -59,7 +59,7 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
 }
 
 export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<InternalUserObject> {
-  debug('Update user', attrs);
+  debug('Update user', id);
 
   const update = Object.assign({}, attrs);
 
