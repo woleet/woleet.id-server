@@ -12,13 +12,11 @@
   <br>
   <form [formGroup]="form">
     <mat-form-field class="w-100" *ngIf="form.get('SMTPConfig')  as f">
-      <textarea matInput matTooltip="Use JSON format" placeholder="SMTP transport config"
+      <textarea matInput matTooltip="Use JSON format" placeholder="SMTP transport configuration"
         formControlName="SMTPConfig" (input)="change()" [required]="useSMTP$ | async"></textarea>
       <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
     </mat-form-field>
-    <div>
-      <a href="https://nodemailer.com/smtp/" target="_blank">SMTP transport configuration</a>
-    </div>
+    <a href="https://nodemailer.com/smtp/" target="_blank">About SMTP transport configuration</a>
   </form>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="update()"
