@@ -10,7 +10,7 @@ import { getTransporter } from './smtp';
 import * as nodemailer from 'nodemailer';
 import log = require('loglevel');
 
-export async function sendResetPasswordEmail(email: string, referer: string): Promise<InternalUserObject> {
+export async function sendResetPasswordEmail(email: string, origin: string): Promise<InternalUserObject> {
   let user = await User.getByEmail(email);
 
   if (!user) {
@@ -25,7 +25,7 @@ export async function sendResetPasswordEmail(email: string, referer: string): Pr
 
   user = await User.update(user.getDataValue('id'), update);
 
-  const link = referer + '?token=' +
+  const link = origin + '/reset-password?token=' +
     token + '&email=' + email;
 
   const file = readFile('../../assets/defaultMailTemplate.html');

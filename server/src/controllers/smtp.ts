@@ -25,16 +25,6 @@ async function configure() {
 
   transporter = nodemailer.createTransport(JSON.parse(SMTPConfig));
 
-  // transporter = await nodemailer.createTransport({
-  //   host: 'smtp.sendgrid.net',
-  //   port: 587,
-  //   service: 'SenGrid',
-  //   auth: {
-  //     user: 'apikey',
-  //     pass: ''''
-  //   }
-  // });
-
   await transporter.verify(function (error, success) {
     if (error) {
       log.error(error);
