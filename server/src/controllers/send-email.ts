@@ -32,7 +32,7 @@ export async function sendResetPasswordEmail(email: string, origin: string): Pro
     : readFile('../../assets/defaultPasswordResetMailTemplate.html');
 
   const html = await file.then((template) => mustache.render(template,
-    { validationURL: link, domain: server.host, userName: user.getDataValue('x500CommonName') }));
+    { validationURL: link, domain: null, userName: user.getDataValue('x500CommonName') }));
 
   try {
     await sendEmail(email, user, html);
