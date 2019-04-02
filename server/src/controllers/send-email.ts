@@ -12,7 +12,7 @@ import log = require('loglevel');
 
 export async function sendResetPasswordEmail(email: string, origin: string): Promise<InternalUserObject> {
   let user = await User.getByEmail(email);
-
+  console.log(user);
   if (!user) {
     throw new NotFoundUserError();
   }
@@ -28,15 +28,18 @@ export async function sendResetPasswordEmail(email: string, origin: string): Pro
   const link = origin + '/reset-password?token=' +
     token + '&email=' + email;
 
-  const file = readFile('../../assets/defaultMailTemplate.html');
+  const file = user.getDataValue('passwordHash') === null
+    ? readFile('../../assets/defaultOnboardingMail.html')
+    : readFile('../../assets/defaultMailTemplate.html');
+
   const html = await file.then((template) => mustache.render(template,
     { validationURL: link, domain: server.host, userName: user.getDataValue('x500CommonName') }));
 
-    try {
-  await sendEmail(email, user, html);
-} catch (err) {
-  log.error(err);
-}
+  try {
+    await sendEmail(email, user, html);
+  } catch (err) {
+    log.error(err);
+  }
 
   return user.toJSON();
 }
@@ -79,12 +82,12 @@ export async function sendEmail(email: string, user: SequelizeUserObject, html: 
 
 function readFile(file) {
   return new Promise((resolve, reject) => {
-      fs.readFile(path.join(__dirname, file), 'utf8', (err, data) => {
-          if (err) {reject(err); }
-          const template = data.replace(/\n+ */g, ''); // remove space after \n
-          mustache.parse(template);   // optional, speeds up future uses
-          resolve(template);
-      });
+    fs.readFile(path.join(__dirname, file), 'utf8', (err, data) => {
+      if (err) { reject(err); }
+      const template = data.replace(/\n+ */g, ''); // remove space after \n
+      mustache.parse(template);   // optional, speeds up future uses
+      resolve(template);
+    });
   });
 }
 
