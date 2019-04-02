@@ -2,12 +2,31 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import * as log from 'loglevel';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup, AbstractControl } from '@angular/forms';
 import { ErrorMessageProvider, passwordValidator, asciiValidator } from '@components/util';
 import { UserService } from '@services/user';
 import { MatDialog } from '@angular/material';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@components/parts/dialog-mail-reset';
+
+export function confirmPasswordValidator(control: AbstractControl) {
+  const str: string = control.value;
+
+  if (!str) {
+    return;
+  }
+
+  try {
+    const password = control.parent.get('password').value;
+    if (str !== password) {
+      return ({ dont_match: true });
+    }
+  } catch (err) {
+    return ({ dont_match: true });
+  }
+
+  return null;
+}
 
 @Component({
   templateUrl: './index.html',
@@ -24,8 +43,11 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
   userService: UserService;
   token: string;
   errorMsg: string;
+  emailInputFocused: boolean;
 
-  form;
+  formEmail: FormGroup;
+  formValidate: FormGroup;
+  passwordControl: FormControl;
 
   constructor(activatedRoute: ActivatedRoute, userConst: UserService, public dialog: MatDialog, private router: Router) {
     super();
@@ -43,16 +65,21 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
   }
 
   ngOnInit() {
-    this.form = {
-      email: new FormControl('', [Validators.email]),
+    this.formEmail = new FormGroup({
+      email: new FormControl('', [Validators.email])
+    });
+    this.formValidate = new FormGroup({
       password: new FormControl('', [
         passwordValidator,
         asciiValidator,
         Validators.minLength(6),
-        Validators.maxLength(64),
+        Validators.maxLength(64)
       ]),
-      passwordConfirm: new FormControl('', [])
-    };
+      passwordConfirm: new FormControl('', [
+        Validators.required,
+        confirmPasswordValidator
+      ])
+    });
   }
 
   async resetPassword() {
@@ -74,7 +101,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
       const success = await this.userService.validate(this.email, this.password, this.token);
       const dialogRef = this.dialog.open(DialogResetPasswordComponent, {
         width: '250px',
-        data: {success: false}
+        data: { success: false }
       });
       dialogRef.afterClosed().subscribe(result => {
         this.router.navigate(['/login']);
@@ -89,6 +116,15 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
         this.router.navigate(['/login']);
       });
     }
+  }
+
+  test() {
+    console.log(this.password);
+    console.log(this.passwordConfirm);
+  }
+
+  isValid() {
+    return this.password === this.passwordConfirm;
   }
 
 }
