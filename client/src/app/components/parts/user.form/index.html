@@ -25,20 +25,19 @@
           [(ngModel)]="sendPasswordEmail" [ngModelOptions]="{standalone: true}">
           Send password configuration email
         </mat-checkbox>
-        <button mat-raised-button *ngIf="mode === 'edit'" matInput [disabled]="!useSMTP"
+        <button mat-raised-button *ngIf="mode === 'edit'" matInput [disabled]="!useSMTP || form.email.invalid"
           [matTooltip]="!useSMTP? 'You must setup the SMTP server to activate this option':''"
-          (click)="sendResetPassword(user)">
+          (click)="sendResetPasswordEmail(user)">
           Send password reset email
         </button>
         <mat-form-field class="w-100">
           <input matInput type="password" placeholder="Password" [formControl]="form.password"
             (focus)="form.password.focused = true" (focusout)="form.password.focused = false"
-            [required]="!sendPasswordEmail">
+            [required]="mode === 'create' && !sendPasswordEmail">
           <mat-error *ngIf="form.password.invalid">{{ getErrorMessage(form.password) }}</mat-error>
         </mat-form-field>
         <intl-tel-input [user]="user" (inputUnfocus)="savePhone($event)"></intl-tel-input>
       </mat-card-content>
-      <!-- <div><br></div> -->
       <mat-card-content class="w-100">
         <mat-card-subtitle>Identity</mat-card-subtitle>
         <mat-form-field class="w-100">

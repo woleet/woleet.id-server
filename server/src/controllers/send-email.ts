@@ -7,7 +7,6 @@ import { server } from '../config';
 
 import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
-import * as nodemailer from 'nodemailer';
 import log = require('loglevel');
 
 export async function sendResetPasswordEmail(email: string, origin: string): Promise<InternalUserObject> {
@@ -29,8 +28,8 @@ export async function sendResetPasswordEmail(email: string, origin: string): Pro
     token + '&email=' + email;
 
   const file = user.getDataValue('passwordHash') === null
-    ? readFile('../../assets/defaultOnboardingMail.html')
-    : readFile('../../assets/defaultMailTemplate.html');
+    ? readFile('../../assets/defaultOnboardingMailTemplate.html')
+    : readFile('../../assets/defaultPasswordResetMailTemplate.html');
 
   const html = await file.then((template) => mustache.render(template,
     { validationURL: link, domain: server.host, userName: user.getDataValue('x500CommonName') }));

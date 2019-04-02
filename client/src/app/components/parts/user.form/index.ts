@@ -43,10 +43,10 @@ function safeWordValidator(control: AbstractControl): ValidationErrors | null {
   return null;
 }
 
-function passwordMandatoryValidatorOnEdit(value: boolean) {
+function passwordMandatoryValidatorOnEdit(sendPasswordEmail: boolean) {
   return function passwordMandatoryValidator(): ValidationErrors | null {
-    if (!value) {
-      return ({ passwordMandatoryValidator: true });
+    if (!sendPasswordEmail) {
+      return { passwordMandatoryValidator: true };
     }
     return null;
   };
@@ -140,8 +140,9 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   ngOnInit() {
     this.registerSubscription(this.configService.getConfig().subscribe((config) => {
-      if (!config)
+      if (!config) {
         return;
+      }
       this.useSMTP = config.useSMTP;
     }));
     if (this.mode === 'edit') {
@@ -163,7 +164,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     this.onDestroy.emit();
   }
 
-  async sendResetPassword(user: ApiUserObject) {
+  async sendResetPasswordEmail(user: ApiUserObject) {
     try {
       await this.service.resetPassword(user.email);
     } catch (err) {
@@ -197,7 +198,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
       if (this.sendPasswordEmail) {
         try {
-          await this.sendResetPassword(user);
+          await this.sendResetPasswordEmail(user);
         } catch (err) {
           log.debug(err);
         }
