@@ -84,6 +84,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
 
   async resetPassword() {
     try {
+      this.email = this.formEmail.get('email').value;
       const success = await this.userService.resetPassword(this.email);
       const dialogRef = this.dialog.open(DialogMailResetComponent, {
         width: '250px'
@@ -98,6 +99,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
 
   async validate() {
     try {
+      this.password = this.formValidate.get('password').value;
       const success = await this.userService.validate(this.email, this.password, this.token);
       const dialogRef = this.dialog.open(DialogResetPasswordComponent, {
         width: '250px',
@@ -117,14 +119,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
       });
     }
   }
-
   test() {
-    console.log(this.password);
-    console.log(this.passwordConfirm);
+    console.log(this.email);
   }
-
-  isValid() {
-    return this.password === this.passwordConfirm;
-  }
-
 }
