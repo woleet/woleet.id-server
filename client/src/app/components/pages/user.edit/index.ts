@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  templateUrl: './index.html',
-  styleUrls: ['./style.scss']
+  templateUrl: './index.html'
 })
-export class UserEditPageComponent { }
+export class UserEditPageComponent {
+}

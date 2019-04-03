@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  templateUrl: './setup.html',
-  styleUrls: ['./setup.scss']
+  templateUrl: './setup.html'
 })
 export class SetupPageComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit() { }
-
+  ngOnInit() {
+  }
 }

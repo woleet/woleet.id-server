@@ -18,7 +18,7 @@ export class LogoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.defaultLogo = '../../../../assets/logo.svg';
+    this.defaultLogo = '/assets/logo.svg';
     this.logo = this.logoURL || this.defaultLogo;
   }
 }

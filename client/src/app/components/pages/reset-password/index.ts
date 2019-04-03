@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import * as log from 'loglevel';
-import { FormControl, Validators, FormGroup, AbstractControl } from '@angular/forms';
-import { ErrorMessageProvider, passwordValidator, asciiValidator } from '@components/util';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { asciiValidator, ErrorMessageProvider, passwordValidator } from '@components/util';
 import { UserService } from '@services/user';
 import { MatDialog } from '@angular/material';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';

@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { environment } from '@env/environment';
 
 @Component({
-  templateUrl: './about.html',
-  styleUrls: ['./about.scss']
+  templateUrl: './about.html'
 })
 export class AboutPageComponent {
 
