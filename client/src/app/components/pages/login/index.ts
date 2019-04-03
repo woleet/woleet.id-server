@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '@services/auth';
 import { mainRoute } from '@app/config';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import * as log from 'loglevel';
 import { Observable } from 'rxjs';
@@ -23,7 +23,7 @@ export class LoginPageComponent {
   serverPublicInfo: ApiServerConfig['publicInfo'];
   useSMTP: boolean;
   redirect: string;
-  config: { OIDCPProviderURL: string; useOpenIDConnect: boolean; hasSession: boolean; publicInfo: object};
+  config: { OIDCPProviderURL: string; useOpenIDConnect: boolean; hasSession: boolean; publicInfo: object };
 
   constructor(
     private authService: AuthService,
@@ -43,7 +43,7 @@ export class LoginPageComponent {
         try {
           this.redirect = atob(params.redirect);
         } catch {
-          console.warn(`failed to decode`, params.redirect);
+          log.warn(`failed to decode`, params.redirect);
           errorService.setError('redirect-parameter', new Error(params.redirect));
           this.router.navigate(['/error']);
         }

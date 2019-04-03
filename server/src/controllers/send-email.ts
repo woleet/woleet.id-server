@@ -3,7 +3,6 @@ import { NotFoundUserError } from '../errors';
 import * as mustache from 'mustache';
 import * as fs from 'fs';
 import * as path from 'path';
-import { server } from '../config';
 
 import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
@@ -11,7 +10,6 @@ import log = require('loglevel');
 
 export async function sendResetPasswordEmail(email: string, origin: string): Promise<InternalUserObject> {
   let user = await User.getByEmail(email);
-  console.log(user);
   if (!user) {
     throw new NotFoundUserError();
   }
@@ -82,9 +80,11 @@ export async function sendEmail(email: string, user: SequelizeUserObject, html: 
 function readFile(file) {
   return new Promise((resolve, reject) => {
     fs.readFile(path.join(__dirname, file), 'utf8', (err, data) => {
-      if (err) { reject(err); }
+      if (err) {
+        reject(err);
+      }
       const template = data.replace(/\n+ */g, ''); // remove space after \n
-      mustache.parse(template);   // optional, speeds up future uses
+      mustache.parse(template); // optional, speeds up future uses
       resolve(template);
     });
   });

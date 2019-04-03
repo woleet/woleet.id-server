@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
-import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'config-oidcp-client',
@@ -76,12 +76,10 @@ export class ConfigOIDCPClientComponent extends ErrorMessageProvider implements 
       redirect_uris: up.redirectUris,
       post_logout_redirect_uris: up.postLogoutRedirectUris
     });
-    console.log({ up, controls });
     this.change.emit();
   }
 
   deleteClient() {
     this.delete.emit();
   }
-
 }
