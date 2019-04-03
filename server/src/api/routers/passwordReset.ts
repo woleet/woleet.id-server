@@ -6,7 +6,7 @@ import { serializeUser } from '../serialize/user';
 import { updatePassword } from '../../controllers/user';
 import { sendResetPasswordEmail } from '../../controllers/send-email';
 import { store as event } from '../../controllers/server-event';
-import { BadRequest, Unauthorized, NotFound } from 'http-errors';
+import { BadRequest, NotFound, Unauthorized } from 'http-errors';
 
 const vid = validate.param('id', 'uuid');
 
@@ -38,7 +38,7 @@ router.post('/', async function (ctx) {
   let user;
 
   if (!email) {
-    throw new BadRequest('Need to send the email adresse.');
+    throw new BadRequest('Need to send the email address.');
   }
 
   try {
@@ -69,7 +69,7 @@ router.post('/validate', async function (ctx) {
   const infoUpdatePassword = ctx.request.body;
   let user;
   if (!infoUpdatePassword.email) {
-    throw new BadRequest('Need to send the email adresse.');
+    throw new BadRequest('Need to send the email address.');
   }
   if (!infoUpdatePassword.token) {
     throw new BadRequest('Need to send the reset token.');

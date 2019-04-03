@@ -7,7 +7,7 @@ Woleet.ID Server identities are made of **X500 information** (like the common na
 associated to one or several **bitcoin keys** (each being made of a public bitcoin address and of a private key securely stored encrypted in the server's database).
  
 Woleet.ID Server provides a **private API** allowing your users to **sign data using their bitcoin addresses**,
-and a **public API** allowing third-parties to **get the identity of a signee** and **validate the ownership of the bitcoin adresses** by your organization.
+and a **public API** allowing third-parties to **get the identity of a signee** and **validate the ownership of the bitcoin addresses** by your organization.
 
 Basically, Woleet.ID Server enables you to integrate Woleet's [signature anchoring](https://doc.woleet.io/docs/signature-anchoring) into your organization workflow.
 
