@@ -119,7 +119,4 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
       });
     }
   }
-  test() {
-    console.log(this.email);
-  }
 }
