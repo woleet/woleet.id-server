@@ -37,6 +37,10 @@ export class AuthService {
           this.lock.decr();
         })
         .catch(() => null);
+    } else {
+      this.router.navigate(['login']);
+      this.bootService.restart();
+      this.lock.decr();
     }
   }
 
