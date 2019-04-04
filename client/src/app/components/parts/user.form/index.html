@@ -20,13 +20,13 @@
             (focus)="form.email.focused = true" (focusout)="form.email.focused = false" required>
           <mat-error *ngIf="form.email.invalid">{{ getErrorMessage(form.email) }}</mat-error>
         </mat-form-field>
-        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP"
-          [matTooltip]="!useSMTP? 'You must setup the SMTP server to activate this option':''"
+        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP || !ServerClientURL"
+          [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''"
           [(ngModel)]="sendPasswordEmail" [ngModelOptions]="{standalone: true}">
           Send password initialization link by email
         </mat-checkbox>
-        <button mat-raised-button *ngIf="mode === 'edit'" matInput [disabled]="!useSMTP || form.email.invalid"
-          [matTooltip]="!useSMTP? 'You must setup the SMTP server to activate this option':''"
+        <button mat-raised-button *ngIf="mode === 'edit'" matInput [disabled]="!useSMTP || form.email.invalid || !ServerClientURL"
+          [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''"
           (click)="sendResetPasswordEmail(user)">
           Send password reset link by email
         </button>

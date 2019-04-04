@@ -28,15 +28,22 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
   const link = ServerClientURL + '/reset-password?token=' +
     token + '&email=' + email;
 
-  const file = user.getDataValue('passwordHash') === null
-    ? readFile('../../assets/defaultOnboardingMailTemplate.html')
-    : readFile('../../assets/defaultPasswordResetMailTemplate.html');
+  let subject;
+  let file;
+
+  if ( user.getDataValue('passwordHash') === null) {
+    file = readFile('../../assets/defaultOnboardingMailTemplate.html');
+    subject = 'Onboarding';
+  } else {
+    file = readFile('../../assets/defaultPasswordResetMailTemplate.html');
+    subject = 'Password recovery';
+  }
 
   const html = await file.then((template) => mustache.render(template,
     { validationURL: link, domain: null, userName: user.getDataValue('x500CommonName') }));
 
   try {
-    await sendEmail(email, user, html);
+    await sendEmail(email, subject, html);
   } catch (err) {
     log.error(err);
   }
@@ -44,7 +51,7 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
   return user.toJSON();
 }
 
-export async function sendEmail(email: string, user: SequelizeUserObject, html: any) {
+export async function sendEmail(email: string, subject: string, html: any) {
 
   // with ethereal. Catch the email with the url sent in the console.
 
@@ -68,7 +75,7 @@ export async function sendEmail(email: string, user: SequelizeUserObject, html: 
 
   const transporter = getTransporter();
 
-  await transporter.sendMail(MailTemplate(email, user, html), function (err, info) {
+  await transporter.sendMail(MailTemplate(email, subject, html), function (err, info) {
     if (err) {
       log.error(err);
     } else {
@@ -93,11 +100,11 @@ function readFile(file) {
   });
 }
 
-function MailTemplate(email: string, user: SequelizeUserObject, html: any): object {
+function MailTemplate(email: string, subject: string, html: any): object {
   return {
     from: 'Woleet no-reply@woleet.com',
     to: email,
-    subject: 'Password recovery',
+    subject: subject,
     html: html
   };
 }
