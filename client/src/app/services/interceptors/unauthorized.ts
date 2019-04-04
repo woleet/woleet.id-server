@@ -18,7 +18,9 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
           if (authorization && authorization.startsWith('Basic ')) {
             return throwError(err);
           }
-
+          if (request.url.endsWith('password-reset/validate')) {
+            return throwError(err);
+          }
           this.auth.logout(false);
         }
 

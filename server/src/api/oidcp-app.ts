@@ -7,9 +7,6 @@ import { BadRequest } from 'http-errors';
 
 import * as log from 'loglevel';
 import * as Debug from 'debug';
-
-const debug = Debug('id:oidc:app');
-
 import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
 import { delSession } from '../controllers/authentication';
 import { sessionSuffix } from '../config';
@@ -17,6 +14,8 @@ import { getProvider } from '../controllers/oidc-provider';
 
 import { session } from './authentication';
 import { getServerConfig } from '../controllers/server-config';
+
+const debug = Debug('id:oidc:app');
 
 export function build(): Koa {
   const router = new Router();
@@ -32,7 +31,7 @@ export function build(): Koa {
         ctx.status = err.status;
         throw new BadRequest(err.message);
       } else {
-        console.warn('OIDCERR', err);
+        log.error('OIDCERR', err);
         throw err;
       }
     }

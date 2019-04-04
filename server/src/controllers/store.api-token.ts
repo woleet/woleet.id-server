@@ -25,7 +25,7 @@ export class APITokenStore {
 
   async getByValue(value: string): Promise<InternalTokenObject> {
     try {
-      const bin = Buffer.from(value, 'base64')
+      const bin = Buffer.from(value, 'base64');
       const hash = crypto.createHash('sha256').update(bin).digest('hex');
       return this.getByHash(hash);
     } catch (err) {

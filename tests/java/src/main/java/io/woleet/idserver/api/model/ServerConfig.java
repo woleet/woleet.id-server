@@ -22,6 +22,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.woleet.idserver.api.model.ServerPublicInfo;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -41,6 +42,10 @@ public class ServerConfig {
   public static final String SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY = "fallbackOnDefaultKey";
   @SerializedName(SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY)
   private Boolean fallbackOnDefaultKey;
+
+  public static final String SERIALIZED_NAME_PUBLIC_INFO = "publicInfo";
+  @SerializedName(SERIALIZED_NAME_PUBLIC_INFO)
+  private ServerPublicInfo publicInfo = null;
 
   public ServerConfig identityURL(String identityURL) {
     this.identityURL = identityURL;
@@ -96,6 +101,24 @@ public class ServerConfig {
     this.fallbackOnDefaultKey = fallbackOnDefaultKey;
   }
 
+  public ServerConfig publicInfo(ServerPublicInfo publicInfo) {
+    this.publicInfo = publicInfo;
+    return this;
+  }
+
+   /**
+   * Get publicInfo
+   * @return publicInfo
+  **/
+  @ApiModelProperty(value = "")
+  public ServerPublicInfo getPublicInfo() {
+    return publicInfo;
+  }
+
+  public void setPublicInfo(ServerPublicInfo publicInfo) {
+    this.publicInfo = publicInfo;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -108,12 +131,13 @@ public class ServerConfig {
     ServerConfig serverConfig = (ServerConfig) o;
     return Objects.equals(this.identityURL, serverConfig.identityURL) &&
         Objects.equals(this.defaultKeyId, serverConfig.defaultKeyId) &&
-        Objects.equals(this.fallbackOnDefaultKey, serverConfig.fallbackOnDefaultKey);
+        Objects.equals(this.fallbackOnDefaultKey, serverConfig.fallbackOnDefaultKey) &&
+        Objects.equals(this.publicInfo, serverConfig.publicInfo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identityURL, defaultKeyId, fallbackOnDefaultKey);
+    return Objects.hash(identityURL, defaultKeyId, fallbackOnDefaultKey, publicInfo);
   }
 
 
@@ -125,6 +149,7 @@ public class ServerConfig {
     sb.append("    identityURL: ").append(toIndentedString(identityURL)).append("\n");
     sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("    fallbackOnDefaultKey: ").append(toIndentedString(fallbackOnDefaultKey)).append("\n");
+    sb.append("    publicInfo: ").append(toIndentedString(publicInfo)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -7,6 +7,7 @@ import { router as apiToken } from './routers/api-token';
 import { router as info } from './routers/info';
 import { router as user } from './routers/user';
 import { router as key } from './routers/key';
+import { router as passwordReset } from './routers/passwordReset';
 
 import { router as sign } from './routers/sign';
 import { router as identity } from './routers/identity';
@@ -34,6 +35,7 @@ apiRouter.use(auth.routes());
 apiRouter.use(session);
 apiRouter.use(appConfig.routes());
 apiRouter.use(openid.routes());
+apiRouter.use(passwordReset.routes());
 apiRouter.use(userAuth);
 apiRouter.use(info.routes());
 apiRouter.use(adminAuth);

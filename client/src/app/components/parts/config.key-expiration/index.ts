@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider, timeStringValidator } from '@components/util';
 import { Observable } from 'rxjs';
@@ -48,7 +48,6 @@ export class ConfigKeyExpirationComponent extends ErrorMessageProvider implement
   }
 
   ngOnDestroy() {
-    log.debug('unsubscribing');
     this.onDestroy.emit();
   }
 

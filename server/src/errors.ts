@@ -72,3 +72,8 @@ export class ServerNotReadyError extends Error {
   constructor(m = 'Server not ready') { super(m); }
   name = 'ServerNotReadyError';
 }
+
+export class TokenResetPasswordInvalid extends Error {
+  constructor(m = 'Password reset token is invalid.') { super(m); }
+  name = 'TokenResetPasswordInvalid';
+}

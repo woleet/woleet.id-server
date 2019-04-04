@@ -25,7 +25,7 @@ export class UserCardComponent {
   @Output()
   update = new EventEmitter<ApiUserObject>();
 
-  constructor(private userSerive: UserService) { }
+  constructor(private userService: UserService) { }
 
   setEditMode(active) {
     this.editMode = active;
@@ -36,7 +36,7 @@ export class UserCardComponent {
       return;
     }
     this.formLocked = true;
-    const del = await this.userSerive.delete(this.user.id);
+    const del = await this.userService.delete(this.user.id);
     this.formLocked = false;
     this.delete.emit(del);
   }
@@ -46,7 +46,7 @@ export class UserCardComponent {
       return;
     }
     this.formLocked = true;
-    const up = await this.userSerive.update(this.user.id, { status: 'blocked' });
+    const up = await this.userService.update(this.user.id, { status: 'blocked' });
     this.formLocked = false;
     this.user = up;
     this.update.emit(up);
@@ -54,7 +54,7 @@ export class UserCardComponent {
 
   async unblockUser() {
     this.formLocked = true;
-    const up = await this.userSerive.update(this.user.id, { status: 'active' });
+    const up = await this.userService.update(this.user.id, { status: 'active' });
     this.formLocked = false;
     this.user = up;
     this.update.emit(up);

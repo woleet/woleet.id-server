@@ -29,7 +29,11 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   OIDCPProviderURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   OIDCPIssuerURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   OIDCPClients: Joi.array().items(oidcpClient).allow(null),
-  keyExpirationOffset: Joi.string().allow(null)
+  keyExpirationOffset: Joi.string().allow(null),
+  // SMTP config
+  useSMTP: Joi.boolean(),
+  SMTPConfig: Joi.string().allow(null),
+  ServerClientURL: Joi.string().uri({ scheme: ['https'] }).allow(null)
 });
 
 export { updateConfig };

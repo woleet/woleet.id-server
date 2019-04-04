@@ -5,8 +5,7 @@ import { TrackById } from '../../util';
 import { UserService } from '@services/user';
 
 @Component({
-  templateUrl: './index.html',
-  styleUrls: ['./style.scss']
+  templateUrl: './index.html'
 })
 export class UserDetailPageComponent extends TrackById implements OnInit {
 
@@ -36,5 +35,4 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   refreshUser() {
     this.user$ = this.userService.getById(this.userId);
   }
-
 }

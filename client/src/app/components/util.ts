@@ -113,6 +113,37 @@ export function endValidator(expectedEnd: string) {
   };
 }
 
+export function asciiValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+  if (str && !/^[\x00-\x7F]*$/.test(str)) {
+    return ({ ascii: true });
+  }
+
+  return null;
+}
+
+export function passwordValidator(control: AbstractControl): ValidationErrors | null {
+  const str: string = control.value;
+
+  if (str && !/.*[0-9].*/.test(str)) {
+    return ({ password: { missing: 'one number' } });
+  }
+
+  if (str && !/.*[a-z].*/.test(str)) {
+    return ({ password: { missing: 'one lowercase' } });
+  }
+
+  if (str && !/.*[A-Z].*/.test(str)) {
+    return ({ password: { missing: 'one uppercase' } });
+  }
+
+  if (str && /^(.{0,5}|[a-zA-Z0-9]*)$/i.test(str)) {
+    return ({ password: { missing: 'one special character' } });
+  }
+
+  return null;
+}
+
 export class ErrorMessageProvider {
   getErrorMessage(field: FormControl) {
     const errorName = field.errors && Object.keys(field.errors)[0];
