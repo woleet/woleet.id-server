@@ -127,6 +127,16 @@ export WOLEET_ID_SERVER_SIGNATURE_PORT={port to use for the /sign and /discover 
  
     ./app.sh stop
 
+# Backup the server
+
+    ./app.sh backup <your_environment> <your_backup_path>
+
+# Restore the server
+
+    ./app.sh restore <your_environment> <your_backup_file>
+
+> NOTE: If you want restore in local mode just stop your server manually and precise 'local' as the environment.
+
 # Test the server
 
 [Client web app](https://localhost:3000/)

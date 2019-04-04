@@ -85,7 +85,12 @@ restore() {
     image=woleetid-server_wid-postgres_1
   fi
   if test ${path##*.} = "sql"; then
+    # search and stop the server container 
+    docker stop "$(docker ps -a -q --filter ancestor="${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}":server --format="{{.ID}}")"
+    # restore the base
     docker exec -i $image psql -U postgres <"$path"
+    # start the stopped container
+    start
   else
     echo "${path} is not a dump file"
   fi
