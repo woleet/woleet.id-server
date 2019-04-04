@@ -261,6 +261,7 @@ declare global {
     // SMTP config
     useSMTP?: boolean;
     SMTPConfig?: string;
+    ServerClientURL?: string;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -288,6 +289,7 @@ declare global {
     // SMTP config
     useSMTP?: boolean;
     SMTPConfig?: string;
+    ServerClientURL?: string;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -315,6 +317,7 @@ declare global {
     // SMTP config
     useSMTP?: boolean;
     SMTPConfig?: string;
+    ServerClientURL?: string;
   }
 
   /* OIDC Provider */

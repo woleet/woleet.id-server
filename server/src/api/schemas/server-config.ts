@@ -33,6 +33,7 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   // SMTP config
   useSMTP: Joi.boolean(),
   SMTPConfig: Joi.string().allow(null),
+  ServerClientURL: Joi.string().uri({ scheme: ['https'] }).allow(null)
 });
 
 export { updateConfig };

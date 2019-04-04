@@ -7,8 +7,9 @@ import * as path from 'path';
 import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
 import log = require('loglevel');
+import { getServerConfig } from './server-config';
 
-export async function sendResetPasswordEmail(email: string, host: string): Promise<InternalUserObject> {
+export async function sendResetPasswordEmail(email: string): Promise<InternalUserObject> {
   let user = await User.getByEmail(email);
   if (!user) {
     throw new NotFoundUserError();
@@ -22,10 +23,10 @@ export async function sendResetPasswordEmail(email: string, host: string): Promi
 
   user = await User.update(user.getDataValue('id'), update);
 
-  const link = 'https://' + host + '/reset-password?token=' +
-    token + '&email=' + email;
+  const ServerClientURL = getServerConfig().ServerClientURL;
 
-  console.log(link);
+  const link = ServerClientURL + '/reset-password?token=' +
+    token + '&email=' + email;
 
   const file = user.getDataValue('passwordHash') === null
     ? readFile('../../assets/defaultOnboardingMailTemplate.html')
