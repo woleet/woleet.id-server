@@ -84,10 +84,10 @@ restore() {
   elif [[ $env =~ docker ]]; then
     image=woleetid-server_wid-postgres_1
   fi
-  if test ${file##*.} = "sql"; then
-    docker exec -i $image psql -U postgres <"$file"
+  if test ${path##*.} = "sql"; then
+    docker exec -i $image psql -U postgres <"$path"
   else
-    echo "${file} is not a dump file"
+    echo "${path} is not a dump file"
   fi
 }
 
@@ -174,9 +174,9 @@ elif [ "$operation" == "backup" ]; then
   backup "$env" "$path"
 elif [ "$operation" == "restore" ]; then
   env=$1
-  file=$2
-  test_params "$operation" "$env" "$file"
-  restore "$env" "$file"
+  path=$2
+  test_params "$operation" "$env" "$path"
+  restore "$env" "$path"
 else
   display_usage_app
   exit -1
