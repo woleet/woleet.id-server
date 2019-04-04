@@ -33,6 +33,11 @@ interface ApiServerConfig {
   OIDCPClients: ApiOIDCPClient[] | null;
   enableOIDCP: boolean;
   keyExpirationOffset?: string;
+
+  // SMTP config
+  useSMTP: boolean;
+  SMTPConfig: string | null;
+  ServerClientURL: string | null;
 }
 
 interface ApiServerConfigUpdate {
@@ -59,4 +64,9 @@ interface ApiServerConfigUpdate {
   OIDCPClients?: ApiOIDCPClient[];
   enableOIDCP?: boolean;
   keyExpirationOffset?: string;
+
+  // SMTP config
+  useSMTP?: boolean;
+  SMTPConfig?: string;
+  ServerClientURL?: string;
 }

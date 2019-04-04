@@ -15,7 +15,9 @@ import {
   MatRippleModule,
   MatCheckboxModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MAT_DIALOG_DEFAULT_OPTIONS,
+  MatDialogModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -27,6 +29,7 @@ import { UserCardComponent } from '@parts/user.card';
 import { KeyCardComponent } from '@parts/key.card';
 import { ConfigFallbackKeyComponent } from '@parts/config.fallback-key';
 import { ConfigIdentityUrlComponent } from '@parts/config.identity-url';
+import { ConfigWebClientUrlComponent } from '@parts/config.server-client-url';
 import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
 import { APITokenCardComponent } from '@parts/api-token.card';
 import { KeyCreateCardComponent } from '@parts/key.card.create';
@@ -46,6 +49,9 @@ import { SettingsPageComponent } from '@pages/settings';
 import { UserEditPageComponent } from '@pages/user.edit';
 import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
+import { ResetPasswordPageComponent } from '@pages/reset-password';
+import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
+import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
 
 // Services
 import { AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService } from '@guards/auth';
@@ -73,6 +79,7 @@ import { Http, HttpModule } from '@angular/http';
 import { ConfigOpenIDComponent } from '@components/parts/config.openid';
 import { ConfigOIDCPComponent } from '@components/parts/config.oidcp';
 import { ConfigOIDCPClientComponent } from '@components/parts/config.oidcp-client';
+import { ConfigSMTPComponent } from '@components/parts/config.smtp';
 import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 
@@ -96,6 +103,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     AboutPageComponent,
     ConfigFallbackKeyComponent,
     ConfigIdentityUrlComponent,
+    ConfigWebClientUrlComponent,
     ConfigOpenIDComponent,
     ConfigOIDCPComponent,
     ConfigOIDCPClientComponent,
@@ -114,7 +122,15 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ConfigLogoUrlComponent,
     ConfigHTMLFrameUrlComponent,
     LogoComponent,
-    HtmlFrameComponent
+    HtmlFrameComponent,
+    ResetPasswordPageComponent,
+    ConfigSMTPComponent,
+    DialogResetPasswordComponent,
+    DialogMailResetComponent
+  ],
+  entryComponents: [
+    DialogResetPasswordComponent,
+    DialogMailResetComponent
   ],
   imports: [
     // angular
@@ -151,7 +167,10 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     MatNativeDateModule,
 
     // app
-    AppRoutingModule
+    AppRoutingModule,
+
+    // dialog
+    MatDialogModule
   ],
   providers: [
     AppConfigService,
@@ -162,6 +181,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
       deps: [AppConfigService, Http],
       multi: true
     },
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
     AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
     NeedConfigGuardService, KeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,

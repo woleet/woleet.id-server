@@ -4,8 +4,8 @@
   <form role="form" (submit)="login()" #f="ngForm">
     <div>
       <mat-form-field class="w-100">
-        <input matInput type="text" placeholder="Username or email" [disabled]="lock$ | async" [(ngModel)]="user.username"
-          name="username" autocomplete="username" autofocus>
+        <input matInput type="text" placeholder="Username or email" [disabled]="lock$ | async"
+          [(ngModel)]="user.username" name="username" autocomplete="username" autofocus>
       </mat-form-field>
     </div>
     <br>
@@ -23,10 +23,10 @@
     <button mat-raised-button color="primary" class="w-100" [disabled]="lock$ | async" (click)="login()">LOGIN</button>
   </form>
   <br>
+  <div *ngIf="useSMTP && ServerClientURL" class="mat-form-field">
+    <a [routerLink]="['/reset-password']">Forgot password?</a>
+  </div>
   <br>
-  <button mat-raised-button
-    color="primary"
-    class="w-100"
-    *ngIf="useOIDC"
-    [disabled]="lock$ | async" (click)="openid()">LOGIN WITH OPENID</button>
+  <button mat-raised-button color="primary" class="w-100" *ngIf="useOIDC" [disabled]="lock$ | async"
+    (click)="openid()">LOGIN WITH OPENID</button>
 </div>

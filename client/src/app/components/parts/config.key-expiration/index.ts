@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider, timeStringValidator } from '@components/util';
 import { Observable } from 'rxjs';
@@ -48,13 +48,14 @@ export class ConfigKeyExpirationComponent extends ErrorMessageProvider implement
   }
 
   ngOnDestroy() {
-    log.debug('unsubscribing');
     this.onDestroy.emit();
   }
 
   async submit() {
-    const keyExpirationOffset = this.form.value;
-    log.debug('Set idnetity URL to', keyExpirationOffset, timestring(keyExpirationOffset));
+    const keyExpirationOffset = this.form.value || null;
+    keyExpirationOffset ?
+      log.debug('Set default key expiration to', keyExpirationOffset, timestring(keyExpirationOffset))
+      : log.debug('Unset default key expiration.');
     this.configService.update({ keyExpirationOffset });
   }
 

@@ -27,4 +27,12 @@ export class UserService {
     return this.http.delete(`${serverURL}/user/${keyId}`).toPromise();
   }
 
+  async resetPassword(email: string) {
+    return this.http.post<Boolean>(`${serverURL}/password-reset`, { email: email }).toPromise();
+  }
+
+  async validate(email: string, password: string, token: string) {
+    return this.http.post<Boolean>(`${serverURL}/password-reset/validate`, {email: email, password: password, token: token}).toPromise();
+  }
+
 }

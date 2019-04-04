@@ -20,10 +20,13 @@ import { UserDetailPageComponent } from '@pages/user.detail';
 import { ErrorPageComponent } from '@components/pages/error';
 import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
 import { OIDCProviderInteractionComponent } from '@pages/oidcp-interaction';
+import { ResetPasswordPageComponent } from '@pages/reset-password';
 
 const routes: Routes = [
   { path: 'error', data: { title: 'Error', hideNav: true }, component: ErrorPageComponent, canActivate: [HasError] },
   { path: 'login', data: { title: 'Login', hideNav: true }, component: LoginPageComponent, canActivate: [HasNoError, IsAnonymous] },
+  { path: 'reset-password', data: { title: 'ResetPassword', hideNav: true },
+  component: ResetPasswordPageComponent, canActivate: [HasNoError, IsAnonymous] },
   { path: 'setup', data: { title: 'Setup' }, component: SetupPageComponent, canActivate: [NeedConfig] },
   { path: 'user', data: { title: 'My profile' }, component: UserPageComponent, canActivate: [IsUser] },
   { path: 'user/:id', data: { title: 'User keys' }, component: UserDetailPageComponent, canActivate: [IsAdmin] },

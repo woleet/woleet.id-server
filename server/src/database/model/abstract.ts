@@ -37,7 +37,7 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
         return null;
       }
 
-      await up.updateAttributes(attrs);
+      await up.update(attrs);
 
       return up;
     } catch (err) {

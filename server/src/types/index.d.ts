@@ -64,6 +64,8 @@ declare global {
     passwordSalt: string;
     passwordItrs: number;
 
+    tokenResetPassword: string | null;
+
     defaultKeyId: string;
   }
 
@@ -85,6 +87,7 @@ declare global {
     passwordHash?: string;
     passwordSalt?: string;
     passwordItrs?: number;
+    tokenResetPassword?: string;
     defaultKeyId?: string;
   }
 
@@ -255,6 +258,10 @@ declare global {
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
     keyExpirationOffset?: string;
+    // SMTP config
+    useSMTP?: boolean;
+    SMTPConfig?: string;
+    ServerClientURL?: string;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -279,6 +286,10 @@ declare global {
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
     keyExpirationOffset?: string;
+    // SMTP config
+    useSMTP?: boolean;
+    SMTPConfig?: string;
+    ServerClientURL?: string;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -303,6 +314,10 @@ declare global {
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
     keyExpirationOffset?: string;
+    // SMTP config
+    useSMTP?: boolean;
+    SMTPConfig?: string;
+    ServerClientURL?: string;
   }
 
   /* OIDC Provider */
