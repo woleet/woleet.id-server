@@ -18,7 +18,7 @@
     </mat-form-field>
     <a href="https://nodemailer.com/smtp/" target="_blank">About SMTP transport configuration</a>
     <mat-form-field class="w-100" *ngIf="form.get('ClientURL')  as f">
-      <input matInput placeholder="Server's Web Client URL" formControlName="ClientURL" required>
+      <input matInput placeholder="Server's Web Client URL" formControlName="ClientURL" (input)="change()" required>
       <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
     </mat-form-field>
   </form>
