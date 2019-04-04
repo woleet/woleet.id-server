@@ -578,59 +578,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/UserArray'
-  /password-reset:
-    post:
-      tags:
-        - UserPasswordReset
-        summary: Send a link to the user via his email address.
-        operationId: passwordResetLink
-        parameters:
-          - $ref: '#/components/parameters/PasswordResetParameter'
-        responses:
-          '200':
-            description: Successful operation.
-          '400':
-            description: Invalid object supplied.
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/responses/APIError'
-  /password-reset/validate:
-    post:
-      tags:
-        - UserPasswordReset
-        summary: Change the user password.
-        operationId: updatePassword
-        parameters:
-          - $ref: '#/components/parameters/PasswordResetParameter'
-        requestBody:
-          description: User's email to send the link to.
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/updatePassword'
-        responses:
-          '200':
-            description: Successful operation.
-          '400':
-            description: Invalid object supplied.
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/responses/APIError'
-          '401':
-            description: Missing or bad reset password token.
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/responses/APIError'
-          '404':
-            description: User not found.
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/responses/APIError'
   /api-token:
     post:
       tags:
@@ -1006,24 +953,24 @@ components:
     UserRoleEnum:
       type: string
       enum:
-       - user
-       - admin
+        - user
+        - admin
       default: "user"
       description: User role.
       example: "user"
     UserStatusEnum:
       type: string
       enum:
-      - active
-      - blocked
+        - active
+        - blocked
       default: "active"
       description: User status (a `blocked` user cannot sign).
       example: "active"
     KeyStatusEnum:
       type: string
       enum:
-      - active
-      - blocked
+        - active
+        - blocked
       default: "active"
       description: Key status (a `blocked` key cannot be used to sign).
       example: "active"
@@ -1083,11 +1030,11 @@ components:
             - identity
     UserPut:
       allOf:
-      - $ref: '#/components/schemas/UserBase'
-      - type: object
-        properties:
-          password:
-            $ref: '#/components/schemas/Password'
+        - $ref: '#/components/schemas/UserBase'
+        - type: object
+          properties:
+            password:
+              $ref: '#/components/schemas/Password'
     UserArray:
       type: array
       items:
@@ -1102,31 +1049,11 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/UserDisco'
-    PasswordReset:
-        type: string
-        format: email
-        description: User email (can be used for login).
-        example: "john.doe@acme.com"
-    UpdatePassword:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          description: User email (can be used for login).
-          example: "john.doe@acme.com"
-        token:
-          type: string
-          format: uuid
-          description: Identifier of the related user.
-          example: "a84996d3-9a77-4e8c-947f-f00c4d64a167"
-        password:
-            $ref: '#/components/schemas/Password'
     APITokenStatusEnum:
       type: string
       enum:
-      - active
-      - blocked
+        - active
+        - blocked
       default: "active"
       description: API token status (a `blocked` API token cannot be used).
       example: "active"
@@ -1214,18 +1141,18 @@ components:
     ServerEventTypeEnum:
       type: string
       enum:
-      - login
-      - signature
-      - config.edit
-      - key.create
-      - key.edit
-      - key.delete
-      - user.create
-      - user.edit
-      - user.delete
-      - token.create
-      - token.edit
-      - token.delete
+        - login
+        - signature
+        - config.edit
+        - key.create
+        - key.edit
+        - key.delete
+        - user.create
+        - user.edit
+        - user.delete
+        - token.create
+        - token.edit
+        - token.delete
       description: Type of the event.
       example: "user.edit"
     ServerEventBase:
@@ -1262,13 +1189,13 @@ components:
           example: "461816ca-5623-4417-a2d1-5ee960f0a7a9"
     ServerEventGet:
       allOf:
-      - $ref: '#/components/schemas/ServerEventBase'
-      - type: object
-        properties:
-          data:
-            type: object
-            description: Specific additional data associated with the event.
-            example: { "username": "foo", "identity" : {"countryName" : "FR"} }
+        - $ref: '#/components/schemas/ServerEventBase'
+        - type: object
+          properties:
+            data:
+              type: object
+              description: Specific additional data associated with the event.
+              example: { "username": "foo", "identity": {"countryName": "FR"} }
     ServerEventArray:
       type: array
       items:
@@ -1276,7 +1203,7 @@ components:
     KeyTypeEnum:
       type: string
       enum:
-      - bip39
+        - bip39
       description: Key type.
       example: "bip39"
     KeyBase:
@@ -1331,7 +1258,7 @@ components:
         - $ref: '#/components/schemas/KeyBase'
         - type: object
           required:
-          - name
+            - name
     KeyPut:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
@@ -1531,14 +1458,6 @@ components:
       schema:
         type: string
         example: 'd8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975'
-    PasswordResetParameter:
-      name: userEmail
-      in: path
-      description: Send a link to the user via his email address.
-      required: true
-      schema:
-        type: email
-        example: 'john.doe@random.com'
   requestBodies:
     KeyPost:
       content:
