@@ -42,7 +42,7 @@ router.post('/', async function (ctx) {
   }
 
   try {
-    user = await sendResetPasswordEmail(email, ctx.header.origin);
+    user = await sendResetPasswordEmail(email, ctx.header.host);
   } catch {
     throw new NotFound(email + ' does not correspond to a user.');
   }
