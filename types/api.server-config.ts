@@ -37,6 +37,7 @@ interface ApiServerConfig {
   // SMTP config
   useSMTP: boolean;
   SMTPConfig: string | null;
+  ServerClientURL: string | null;
 }
 
 interface ApiServerConfigUpdate {
@@ -67,4 +68,5 @@ interface ApiServerConfigUpdate {
   // SMTP config
   useSMTP?: boolean;
   SMTPConfig?: string;
+  ServerClientURL?: string;
 }

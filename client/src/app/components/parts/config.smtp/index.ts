@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'config-stmp',
@@ -31,6 +31,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
   ngOnInit() {
     this.form = new FormGroup({
       SMTPConfig: new FormControl({ value: '' }, []),
+      ClientURL: new FormControl({value: ''}, [secureUrlValidator])
     });
     const config$ = this.config$ = this.configService.getConfig();
 
@@ -42,6 +43,9 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
       if (!config) {
         return;
       }
+
+      const guessClientURL = `${window.location.origin}`;
+      this.form.get('ClientURL').setValue(config.ServerClientURL || guessClientURL);
 
       this.useSMTP$.next(config.useSMTP);
 
@@ -73,9 +77,11 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
     const useSMTP = this._useSMTP;
 
     const SMTPConfig = this.form.get('SMTPConfig').value || null;
+    const ServerClientURL = this.form.get('ClientURL').value || null;
     this.configService.update({
       useSMTP,
       SMTPConfig,
+      ServerClientURL
     });
   }
 

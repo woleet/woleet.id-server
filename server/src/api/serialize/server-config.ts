@@ -17,7 +17,8 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     OIDCPClients,
     keyExpirationOffset,
     useSMTP,
-    SMTPConfig
+    SMTPConfig,
+    ServerClientURL
   } = config;
 
   return {
@@ -38,6 +39,7 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     OIDCPClients,
     keyExpirationOffset,
     useSMTP,
-    SMTPConfig
+    SMTPConfig,
+    ServerClientURL
   };
 }
