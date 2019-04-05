@@ -2,7 +2,7 @@ import { BadRequest } from 'http-errors';
 import * as Router from 'koa-router';
 
 import { validate } from '../schemas';
-import { getServerEventListByType, getAllServerEvents, getServerEventById } from '../../controllers/server-event';
+import { getAllServerEvents, getServerEventById, getServerEventListByType } from '../../controllers/server-event';
 import { serializeServerEvent } from '../serialize/server-event';
 import { events as eventsConfig } from '../../config';
 
@@ -31,7 +31,7 @@ router.get('/list', async function (ctx) {
     throw new BadRequest(`Type must be one of ${serverEventTypes.join(', ')}`);
   }
 
-  const ops = { };
+  const ops = {};
 
   const events = await (type ? getServerEventListByType(type, ops) : getAllServerEvents(ops));
   ctx.body = events.map(serializeServerEvent);

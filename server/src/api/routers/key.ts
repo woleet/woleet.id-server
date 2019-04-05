@@ -1,7 +1,9 @@
 import { validate } from '../schemas';
 import * as Router from 'koa-router';
 
-import { createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, updateKey, getOwner } from '../../controllers/key';
+import {
+  createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, getOwner, updateKey
+} from '../../controllers/key';
 import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';

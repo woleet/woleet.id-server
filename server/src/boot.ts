@@ -1,16 +1,12 @@
 import * as log from 'loglevel';
 
 import {
-  registerOIDCPBootFunction,
-  registerOIDCPStopFunction,
-  registerOIDCPUpdateFunction,
-  registerOIDCUpdateFunction,
-  registerSMTPUpdateFunction,
-  setServerConfig
+  registerOIDCPBootFunction, registerOIDCPStopFunction, registerOIDCPUpdateFunction, registerOIDCUpdateFunction,
+  registerSMTPUpdateFunction, setServerConfig
 } from './controllers/server-config';
 // Config
-import { secureModule, secretEnvVariableName } from './config';
-import { init as initdb, postinit as postinitdb, afterinit as afterinitdb } from './database';
+import { secretEnvVariableName, secureModule } from './config';
+import { afterinit as afterinitdb, init as initdb, postinit as postinitdb } from './database';
 import { initializeOIDC, updateOIDC } from './controllers/openid';
 import { initializeSMTP, updateSMTP } from './controllers/smtp';
 import { initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider } from './controllers/oidc-provider';
@@ -64,4 +60,4 @@ initdb()
   .then(() => bootServers())
   .catch((err) => exit(`Failed to start servers: ${err.message}`, err))
   .then(() => log.info('All done. You can now detach the CLI (ctrl+c)'))
-  ;
+;

@@ -1,8 +1,8 @@
-import {BOOLEAN, CHAR, DATE, ENUM, ForeignKeyConstraintError, STRING, UUID, UUIDV4} from 'sequelize';
-import {InvalidUserTargetedKeyError} from '../../errors';
+import { BOOLEAN, CHAR, DATE, ENUM, ForeignKeyConstraintError, STRING, UUID, UUIDV4 } from 'sequelize';
+import { InvalidUserTargetedKeyError } from '../../errors';
 
-import {AbstractInstanceAccess} from './abstract';
-import {User} from '..';
+import { AbstractInstanceAccess } from './abstract';
+import { User } from '..';
 
 const KeyModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },

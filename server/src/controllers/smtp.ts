@@ -1,8 +1,9 @@
 import * as nodemailer from 'nodemailer';
 import { getServerConfig } from './server-config';
 import * as Debug from 'debug';
-const debug = Debug('id:ctrl:openid');
 import * as log from 'loglevel';
+
+const debug = Debug('id:ctrl:openid');
 
 let transporter = null;
 export const getTransporter = () => transporter;

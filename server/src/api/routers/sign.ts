@@ -1,12 +1,12 @@
 import * as Router from 'koa-router';
-import {BadRequest, Unauthorized} from 'http-errors';
-import {sign} from '../../controllers/sign';
-import {validate} from '../schemas';
-import {bearerAuth} from '../authentication';
-import {store as event} from '../../controllers/server-event';
+import { BadRequest, Unauthorized } from 'http-errors';
+import { sign } from '../../controllers/sign';
+import { validate } from '../schemas';
+import { bearerAuth } from '../authentication';
+import { store as event } from '../../controllers/server-event';
 
-import {getServerConfig} from '../../controllers/server-config';
-import {Context} from 'koa';
+import { getServerConfig } from '../../controllers/server-config';
+import { Context } from 'koa';
 
 const vuuid = validate.raw('uuid');
 const vhash = validate.raw('sha256');

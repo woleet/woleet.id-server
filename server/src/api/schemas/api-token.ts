@@ -8,7 +8,7 @@ const createApiToken = Joi.object().keys(<DefineJoiModelAttributes<ApiPostAPITok
   status: Joi.string().valid(apiTokenStatusEnum)
 });
 
-const updateApiToken =  Joi.object().keys(<DefineJoiModelAttributes<ApiPostAPITokenObject>>{
+const updateApiToken = Joi.object().keys(<DefineJoiModelAttributes<ApiPostAPITokenObject>>{
   name: Name,
   status: Joi.string().valid(apiTokenStatusEnum)
 });

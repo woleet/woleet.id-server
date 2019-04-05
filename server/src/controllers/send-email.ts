@@ -6,8 +6,8 @@ import * as path from 'path';
 
 import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
-import log = require('loglevel');
 import { getServerConfig } from './server-config';
+import log = require('loglevel');
 
 export async function sendResetPasswordEmail(email: string): Promise<InternalUserObject> {
   let user = await User.getByEmail(email);
@@ -31,7 +31,7 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
   let subject;
   let file;
 
-  if ( user.getDataValue('passwordHash') === null) {
+  if (user.getDataValue('passwordHash') === null) {
     file = readFile('../../assets/defaultOnboardingMailTemplate.html');
     subject = 'Onboarding';
   } else {
