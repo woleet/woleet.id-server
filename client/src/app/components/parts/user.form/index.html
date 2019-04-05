@@ -4,7 +4,7 @@
       <mat-card-content class="w-100">
         <mat-card-subtitle>Login</mat-card-subtitle>
         <mat-form-field class="w-100">
-          <mat-select type="text" [(ngModel)]="form.role" name="role" placeholder="Role">
+          <mat-select type="text" [value]="form.role" name="role" placeholder="Role">
             <mat-option value="user">user</mat-option>
             <mat-option value="admin">admin</mat-option>
           </mat-select>
@@ -22,7 +22,7 @@
         </mat-form-field>
         <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP || !ServerClientURL"
           [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''"
-          [(ngModel)]="sendPasswordEmail" [ngModelOptions]="{standalone: true}">
+          (change)="sendPasswordEmailCheck()">
           Send password initialization link by email
         </mat-checkbox>
         <button mat-raised-button *ngIf="mode === 'edit'" matInput [disabled]="!useSMTP || form.email.invalid || !ServerClientURL"
@@ -75,7 +75,7 @@
           <!-- <mat-hint *ngIf="form.identity.locality.focused"></mat-hint> -->
         </mat-form-field>
         <mat-form-field class="w-100">
-          <mat-select [(ngModel)]="form.identity.country" type="text" name="country" placeholder="Country">
+          <mat-select [value]="form.identity.country" type="text" name="country" placeholder="Country">
             <mat-option [value]="null">None</mat-option>
             <mat-option [value]="c.code" *ngFor="let c of countryCodes">{{ c.name }}</mat-option>
           </mat-select>

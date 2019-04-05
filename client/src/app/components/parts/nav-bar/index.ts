@@ -35,7 +35,11 @@ export class NavBarComponent {
   }
 
   commonName() {
-    return this.authService.isAuthenticated() && this.authService.getUser().identity.commonName;
+    if (this.authService.isAuthenticated()) {
+      return this.authService.getUser().identity.commonName;
+    } else {
+      return 'Logout...';
+    }
   }
 
   isAdmin() {

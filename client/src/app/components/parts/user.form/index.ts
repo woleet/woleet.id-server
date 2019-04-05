@@ -236,4 +236,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       this.phoneValid = true;
     }
   }
+
+  sendPasswordEmailCheck() {
+    this.sendPasswordEmail = !this.sendPasswordEmail;
+  }
 }

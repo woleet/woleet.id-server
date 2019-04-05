@@ -35,16 +35,15 @@ export class IntlTelInputComponent extends ErrorMessageProvider implements OnIni
   inputUnfocus = new EventEmitter<any>();
 
   AYTPhone: any;
-  phoneNumber: string;
 
   form;
 
   ngOnInit() {
-    this.form = { phone: new FormControl('', [phoneNumberValidator]) };
+    this.form = new FormControl('', [phoneNumberValidator]);
 
     if (this.user) {
       if (this.user.phone) {
-        this.phoneNumber = new AsYouType().input('+' + this.user.countryCallingCode + this.user.phone);
+        this.form.setValue(new AsYouType().input('+' + this.user.countryCallingCode + this.user.phone));
       }
     }
   }
@@ -68,6 +67,6 @@ export class IntlTelInputComponent extends ErrorMessageProvider implements OnIni
   }
 
   onFocusOut() {
-    this.phoneNumber = this.AYTPhone;
+    this.form.setValue(this.AYTPhone);
   }
 }
