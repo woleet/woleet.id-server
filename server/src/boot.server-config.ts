@@ -1,17 +1,15 @@
-
-
-import { setServerConfig, loadServerConfig } from './controllers/server-config';
+import { loadServerConfig, setServerConfig } from './controllers/server-config';
 import * as log from 'loglevel';
 
 import * as Debug from 'debug';
-const debug = Debug('id:boot.server-config');
-
 import { Key } from './database';
 import { randomBytes } from 'crypto';
 import { createUser } from './controllers/user';
 import { exit } from './exit';
 import { serverConfig } from './config';
 import { signMessage } from './controllers/sign';
+
+const debug = Debug('id:boot.server-config');
 
 export async function initServerConfig() {
   const config = await loadServerConfig();
@@ -32,6 +30,10 @@ export async function initServerConfig() {
     } catch (err) {
       log.warn(err.message);
       throw new Error('Secret is not the same that the previously set one');
+    }
+    if (!config.publicInfo) {
+      log.warn('the public information is set as an empty object.');
+      config.publicInfo = {};
     }
 
   } else {

@@ -1,16 +1,14 @@
 import * as log from 'loglevel';
 
 import {
-  registerOIDCPBootFunction,
-  registerOIDCPStopFunction,
-  registerOIDCPUpdateFunction,
-  registerOIDCUpdateFunction,
-  setServerConfig
+  registerOIDCPBootFunction, registerOIDCPStopFunction, registerOIDCPUpdateFunction, registerOIDCUpdateFunction,
+  registerSMTPUpdateFunction, setServerConfig
 } from './controllers/server-config';
 // Config
-import { secureModule, secretEnvVariableName } from './config';
-import { init as initdb, postinit as postinitdb, afterinit as afterinitdb } from './database';
+import { secretEnvVariableName, secureModule } from './config';
+import { afterinit as afterinitdb, init as initdb, postinit as postinitdb } from './database';
 import { initializeOIDC, updateOIDC } from './controllers/openid';
+import { initializeSMTP, updateSMTP } from './controllers/smtp';
 import { initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider } from './controllers/oidc-provider';
 import { bootOIDCProvider, bootServers } from './boot.servers';
 import { initServerConfig } from './boot.server-config';
@@ -31,6 +29,7 @@ initdb()
   .then(() => registerOIDCPBootFunction(bootOIDCProvider))
   .then(() => registerOIDCPStopFunction(stopOIDCProvider))
   .then(() => registerOIDCPUpdateFunction(updateOIDCProvider))
+  .then(() => registerSMTPUpdateFunction(updateSMTP))
   .then(async () => {
     try {
       await initializeOIDC();
@@ -48,8 +47,17 @@ initdb()
       log.error('Failed to initialize OpenID Connect Provider, it will be automatically disabled!', err);
     }
   })
+  .then(async () => {
+    try {
+      await initializeSMTP();
+      return;
+    } catch (err) {
+      log.error('Failed to initialize SMTP, it will be automatically disabled!', err);
+    }
+    return setServerConfig({ useSMTP: false });
+  })
   .catch((err) => exit(`Failed to update server config: ${err.message}`, err))
   .then(() => bootServers())
   .catch((err) => exit(`Failed to start servers: ${err.message}`, err))
   .then(() => log.info('All done. You can now detach the CLI (ctrl+c)'))
-  ;
+;

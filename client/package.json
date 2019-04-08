@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Woleet.ID Server web client",
   "scripts": {
     "ng": "npx ng",
@@ -11,7 +11,6 @@
     "build": "npx ng build",
     "build:prod": "npx ng build --prod",
     "build:prod:silent": "npx ng build --prod --no-progress",
-    "test": "npx ng test",
     "lint": "npx ng lint"
   },
   "private": true,

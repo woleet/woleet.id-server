@@ -4,10 +4,11 @@ import { createKey } from './key';
 import { User } from '../database';
 import { store as sessionStore } from './store.session';
 import { lookForUser } from './authentication';
-import { getServerConfig, registerOIDCUpdateFunction } from './server-config';
+import { getServerConfig } from './server-config';
 import * as Debug from 'debug';
-const debug = Debug('id:ctrl:openid');
 import * as log from 'loglevel';
+
+const debug = Debug('id:ctrl:openid');
 
 let client = null;
 let redirectURL = null;
@@ -42,7 +43,10 @@ async function configure() {
   const issuer = await Issuer.discover(config.openIDConnectURL);
   debug('Discovered issuer', issuer.issuer);
 
-  client = new issuer.Client({ client_id: config.openIDConnectClientId, client_secret: config.openIDConnectClientSecret });
+  client = new issuer.Client({
+    client_id: config.openIDConnectClientId,
+    client_secret: config.openIDConnectClientSecret
+  });
 }
 
 export function initializeOIDC() {

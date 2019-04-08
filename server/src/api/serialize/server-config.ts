@@ -3,6 +3,7 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     fallbackOnDefaultKey,
     defaultKeyId,
     identityURL,
+    publicInfo,
     allowUserToSign,
     useOpenIDConnect,
     openIDConnectURL,
@@ -14,13 +15,17 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     OIDCPProviderURL,
     OIDCPIssuerURL,
     OIDCPClients,
-    keyExpirationOffset
+    keyExpirationOffset,
+    useSMTP,
+    SMTPConfig,
+    ServerClientURL
   } = config;
 
   return {
     fallbackOnDefaultKey,
     defaultKeyId,
     identityURL,
+    publicInfo,
     allowUserToSign,
     useOpenIDConnect,
     openIDConnectURL,
@@ -32,6 +37,9 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     OIDCPProviderURL,
     OIDCPIssuerURL,
     OIDCPClients,
-    keyExpirationOffset
+    keyExpirationOffset,
+    useSMTP,
+    SMTPConfig,
+    ServerClientURL
   };
 }

@@ -1,5 +1,4 @@
-
-import { STRING, ENUM, UUID, UUIDV4, DATE, CHAR } from 'sequelize';
+import { CHAR, DATE, ENUM, STRING, UUID, UUIDV4 } from 'sequelize';
 
 import { AbstractInstanceAccess } from './abstract';
 
@@ -20,7 +19,8 @@ class APITokenAccess extends AbstractInstanceAccess<InternalAPITokenObject, ApiF
     this.define('apiToken', APITokenModel, { paranoid: true });
   }
 
-  handleError(err: any) { }
+  handleError(err: any) {
+  }
 
   getByHash(hash: string) {
     return this.model.findOne({ where: { hash } });

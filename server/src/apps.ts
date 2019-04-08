@@ -3,6 +3,7 @@ import { ports } from './config';
 import * as Router from 'koa-router';
 
 import * as Debug from 'debug';
+
 const debug = Debug('id:factory');
 
 const names = ['signature', 'identity', 'api'];

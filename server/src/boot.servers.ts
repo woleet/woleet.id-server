@@ -9,10 +9,7 @@ import { errorHandler } from './api/error';
 
 import { build as oidcProviderAppFactory } from './api/oidcp-app';
 import {
-  getActiveServer,
-  isInitialized as isOIDCPInitialized,
-  setActiveServer,
-  stopOIDCProvider
+  getActiveServer, isInitialized as isOIDCPInitialized, setActiveServer, stopOIDCProvider
 } from './controllers/oidc-provider';
 import { definitions } from './apps';
 import { exit } from './exit';
@@ -96,7 +93,8 @@ export function bootServers(): Promise<void> {
 
   const oidc = bootOIDCProvider();
 
-  return Promise.all(promises.concat(oidc)).then(() => { });
+  return Promise.all(promises.concat(oidc)).then(() => {
+  });
 }
 
 export async function bootOIDCProvider(): Promise<void> {

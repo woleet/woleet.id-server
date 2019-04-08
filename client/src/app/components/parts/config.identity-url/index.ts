@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
-import { ErrorMessageProvider, urlValidator, endValidator } from '@components/util';
+import { ErrorMessageProvider, urlValidator } from '@components/util';
 import { Observable } from 'rxjs';
 import * as log from 'loglevel';
 import { FormControl } from '@angular/forms';
@@ -47,13 +47,12 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
   }
 
   ngOnDestroy() {
-    log.debug('unsubscribing');
     this.onDestroy.emit();
   }
 
   async submit() {
     const identityURL = this.form.value;
-    log.debug('Set idnetity URL to', identityURL);
+    log.debug('Set identity URL to', identityURL);
     this.configService.update({ identityURL });
   }
 

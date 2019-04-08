@@ -14,6 +14,10 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   defaultKeyId: uuid,
   fallbackOnDefaultKey: Joi.boolean(),
   allowUserToSign: Joi.boolean(),
+  publicInfo: Joi.object({
+    logoURL: Joi.string().uri({ scheme: ['http', 'https'] }).allow(null),
+    HTMLFrame: Joi.string().allow(null),
+  }),
   useOpenIDConnect: Joi.boolean(),
   openIDConnectURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   openIDConnectClientId: Joi.string().allow(null),
@@ -25,7 +29,11 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   OIDCPProviderURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   OIDCPIssuerURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   OIDCPClients: Joi.array().items(oidcpClient).allow(null),
-  keyExpirationOffset: Joi.string().allow(null)
+  keyExpirationOffset: Joi.string().allow(null),
+  // SMTP config
+  useSMTP: Joi.boolean(),
+  SMTPConfig: Joi.string().allow(null),
+  ServerClientURL: Joi.string().uri({ scheme: ['https'] }).allow(null)
 });
 
 export { updateConfig };

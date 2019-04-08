@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '@services/auth';
 import { mainRoute } from '@app/config';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import * as log from 'loglevel';
 import { Observable } from 'rxjs';
@@ -20,8 +20,11 @@ export class LoginPageComponent {
 
   errorMsg: string = null;
   useOIDC: boolean;
+  serverPublicInfo: ApiServerConfig['publicInfo'];
+  useSMTP: boolean;
+  ServerClientURL: string;
   redirect: string;
-  config: { OIDCPProviderURL: string; useOpenIDConnect: boolean; hasSession: boolean; };
+  config: { OIDCPProviderURL: string; useOpenIDConnect: boolean; hasSession: boolean; publicInfo: object };
 
   constructor(
     private authService: AuthService,
@@ -34,13 +37,14 @@ export class LoginPageComponent {
     this.lock$ = authService.lock$;
     this.config = appConfigService.getStartupConfig();
     this.useOIDC = this.config.useOpenIDConnect;
+    this.serverPublicInfo = this.config.publicInfo || null;
     activatedRoute.queryParams.subscribe(async (params) => {
       log.debug('Forwarded login parameters', params);
       if (params.origin && params.origin.startsWith('oidcp') && params.redirect) {
         try {
           this.redirect = atob(params.redirect);
         } catch {
-          console.warn(`failed to decode`, params.redirect);
+          log.warn(`failed to decode`, params.redirect);
           errorService.setError('redirect-parameter', new Error(params.redirect));
           this.router.navigate(['/error']);
         }
@@ -48,6 +52,9 @@ export class LoginPageComponent {
     });
     const config = appConfigService.getStartupConfig();
     this.useOIDC = config && config.useOpenIDConnect;
+    this.serverPublicInfo = config.publicInfo || null;
+    this.useSMTP = config && config.useSMTP;
+    this.ServerClientURL = config.ServerClientURL || null;
   }
 
   async login() {

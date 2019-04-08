@@ -1,5 +1,4 @@
-import { Instance } from 'sequelize';
-import { UUID, UUIDV4, ENUM, DATE, JSON } from 'sequelize';
+import { DATE, ENUM, Instance, JSON, UUID, UUIDV4 } from 'sequelize';
 
 import { AbstractInstanceAccess } from './abstract';
 import { events as eventsConfig } from '../../config';
@@ -23,10 +22,15 @@ class ServerEventAccess extends AbstractInstanceAccess<InternalServerEventObject
 
   constructor() {
     super();
-    this.define('serverEvent', ServerEventModel, { paranoid: false, indexes: [{ fields: ['occurredAt'] }], timestamps: false });
+    this.define('serverEvent', ServerEventModel, {
+      paranoid: false,
+      indexes: [{ fields: ['occurredAt'] }],
+      timestamps: false
+    });
   }
 
-  handleError(err: any) { }
+  handleError(err: any) {
+  }
 
   async createMany(evts: ServerEventCreate[]): Promise<Instance<InternalServerEventObject>[]> {
     return this.model.bulkCreate(evts);

@@ -3,8 +3,7 @@ import { APITokenService } from '@services/api-token';
 import { TrackById } from '@components/util';
 
 @Component({
-  templateUrl: './index.html',
-  styleUrls: ['./style.scss']
+  templateUrl: './index.html'
 })
 export class APITokensPageComponent extends TrackById implements OnInit {
 
@@ -12,7 +11,9 @@ export class APITokensPageComponent extends TrackById implements OnInit {
 
   apiTokens$: Promise<ApiAPITokenObject[]>;
 
-  constructor(private apiTokenService: APITokenService) { super(); }
+  constructor(private apiTokenService: APITokenService) {
+    super();
+  }
 
   ngOnInit() {
     this.refreshList();

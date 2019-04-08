@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import copy from 'deep-copy';
 
@@ -90,7 +90,6 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
     const OIDCPProviderURL = this.form.get('providerURL').value || null;
     const OIDCPInterfaceURL = this.form.get('interfaceURL').value || null;
     const OIDCPClients = this.oidcpClients;
-    console.log({ OIDCPClients: this.oidcpClients });
     OIDCPClients.forEach((c) => c.redirect_uris = c.redirect_uris.filter(e => !!e));
     const enableOIDCP = this._enableOIDCP;
     this.configService.update({

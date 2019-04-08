@@ -15,7 +15,10 @@ interface ApiServerConfig {
   defaultKeyId: string;
   fallbackOnDefaultKey: boolean;
   allowUserToSign: boolean;
-
+  publicInfo: {
+    logoURL?: string | null;
+    HTMLFrame?: string | null;
+  }
   // Open ID Connect config
   useOpenIDConnect: boolean;
   openIDConnectURL: string | null;
@@ -30,11 +33,20 @@ interface ApiServerConfig {
   OIDCPClients: ApiOIDCPClient[] | null;
   enableOIDCP: boolean;
   keyExpirationOffset?: string;
+
+  // SMTP config
+  useSMTP: boolean;
+  SMTPConfig: string | null;
+  ServerClientURL: string | null;
 }
 
 interface ApiServerConfigUpdate {
   identityURL?: string;
   defaultKeyId?: string;
+  publicInfo?: {
+    logoURL?: string;
+    HTMLFrame?: string;
+  }
   fallbackOnDefaultKey?: boolean;
   allowUserToSign?: boolean;
 
@@ -52,4 +64,9 @@ interface ApiServerConfigUpdate {
   OIDCPClients?: ApiOIDCPClient[];
   enableOIDCP?: boolean;
   keyExpirationOffset?: string;
+
+  // SMTP config
+  useSMTP?: boolean;
+  SMTPConfig?: string;
+  ServerClientURL?: string;
 }

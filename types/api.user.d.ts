@@ -26,6 +26,7 @@ interface ApiUserObject extends UserObject, ApiCommonProperties {
   countryCallingCode: string | null;
   phone: string | null;
   email: string | null; // step 1: will be mandatory
+  tokenResetPassword?: string | null;
   defaultKeyId: string | null;
   identity: ApiIdentityObject;
 }
@@ -57,4 +58,10 @@ interface ApiPutUserObject extends UserObject {
   phone?: string;
   identity?: ApiIdentityObject;
   defaultKeyId?: string;
+}
+
+interface ApiResetPasswordObject {
+  email: string;
+  token: string;
+  password: string;
 }

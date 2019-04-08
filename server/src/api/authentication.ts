@@ -1,4 +1,4 @@
-import { Unauthorized, Forbidden } from 'http-errors';
+import { Forbidden, Unauthorized } from 'http-errors';
 import { store as sessionStore } from '../controllers/store.session';
 import { store as apiTokenStore } from '../controllers/store.api-token';
 import { store as oauthAccessTokenStore } from '../controllers/store.oauth-token';
@@ -24,7 +24,7 @@ export async function bearerAuth(ctx: Context, next) {
     // Check if apiToken exists
     if (parts.length === 2 && parts[0] === 'Bearer') {
       const token: InternalTokenObject = (
-        await apiTokenStore.getByValue(parts[1]))
+          await apiTokenStore.getByValue(parts[1]))
         || (isInitialized() && await oauthAccessTokenStore.get(parts[1]));
 
       if (token) {

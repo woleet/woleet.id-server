@@ -1,0 +1,35 @@
+<div class="form-container">
+  <div *ngIf="!validationStep">
+    <form [formGroup]="formEmail" autoComplete="off" (submit)="resetPassword()" #f="ngForm">
+      <mat-form-field class="w-100">
+        <input matInput type="email" placeholder="Email" formControlName="email" (focus)="emailInputFocused = true"
+          (focusout)="emailInputFocused = false" required>
+        <mat-hint *ngIf="emailInputFocused">Your email address</mat-hint>
+        <mat-error>Must be a valid email address</mat-error>
+      </mat-form-field>
+      <br>
+      <mat-card *ngIf="errorMsg" class="error-card">{{ errorMsg }}</mat-card>
+      <br>
+      <button mat-raised-button color="primary" class="w-100" [disabled]="f.invalid">Ask for a reset
+        link</button>
+    </form>
+  </div>
+  <div *ngIf="validationStep">
+    <form [formGroup]="formValidate" autoComplete="off" (submit)="validate()" #f="ngForm">
+      <mat-form-field class="w-100" *ngIf="formValidate.get('password')  as f">
+        <input matInput type="password" placeholder="New password" formControlName="password" required>
+        <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100">
+        <input matInput type="password" placeholder="Confirm new password" formControlName="passwordConfirm" required>
+        <mat-error>Password doesn't match</mat-error>
+      </mat-form-field>
+      <br>
+      <mat-card *ngIf="errorMsg" class="error-card">{{ errorMsg }}</mat-card>
+      <br>
+      <button mat-raised-button color="primary" class="w-100" [disabled]="f.invalid">Change Password</button>
+    </form>
+  </div>
+  <br>
+  <div class="mat-form-field">Remember It? <a [routerLink]="['/login']">Return to the login page.</a></div>
+</div>

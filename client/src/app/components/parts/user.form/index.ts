@@ -1,59 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output
+} from '@angular/core';
 import { UserService } from '@services/user';
 import { Router } from '@angular/router';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormControl, ValidationErrors, Validators } from '@angular/forms';
-import { cleanupObject, ErrorMessageProvider, replaceInObject } from '@components/util';
+import {
+  asciiValidator, cleanupObject, ErrorMessageProvider, passwordValidator, replaceInObject
+} from '@components/util';
 import * as traverse from 'traverse';
 import cc from '@components/cc';
 import { addedDiff, updatedDiff } from 'deep-object-diff';
 import * as log from 'loglevel';
-
-function asciiValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
-  if (str && !/^[\x00-\x7F]*$/.test(str)) {
-    return ({ ascii: true });
-  }
-
-  return null;
-}
-
-function passwordValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
-
-  if (str && !/.*[0-9].*/.test(str)) {
-    return ({ password: { missing: 'one number' } });
-  }
-
-  if (str && !/.*[a-z].*/.test(str)) {
-    return ({ password: { missing: 'one lowercase' } });
-  }
-
-  if (str && !/.*[A-Z].*/.test(str)) {
-    return ({ password: { missing: 'one uppercase' } });
-  }
-
-  if (str && /^(.{0,5}|[a-zA-Z0-9]*)$/i.test(str)) {
-    return ({ password: { missing: 'one special character' } });
-  }
-
-  return null;
-}
+import { Subscription } from 'rxjs';
+import { ServerConfigService as ConfigService } from '@services/server-config';
 
 function noSpaceValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
   if (str && str.indexOf(' ') !== -1) {
     return ({ noSpace: true });
-  }
-
-  return null;
-}
-
-function lettersOnlyValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
-  if (str && !/^[a-z]+$/i.test(str)) {
-    return ({ lettersOnly: true });
   }
 
   return null;
@@ -77,13 +43,13 @@ function safeWordValidator(control: AbstractControl): ValidationErrors | null {
   return null;
 }
 
-function uppercaseOnlyValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
-  if (str && !/^[A-Z]$/.test(str)) {
-    return ({ uppercaseOnly: true });
-  }
-
-  return null;
+function passwordMandatoryValidatorOnEdit(sendPasswordEmail: boolean) {
+  return function passwordMandatoryValidator(): ValidationErrors | null {
+    if (!sendPasswordEmail) {
+      return { passwordMandatoryValidator: true };
+    }
+    return null;
+  };
 }
 
 @Component({
@@ -91,9 +57,12 @@ function uppercaseOnlyValidator(control: AbstractControl): ValidationErrors | nu
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class UserFormComponent extends ErrorMessageProvider implements OnInit {
+export class UserFormComponent extends ErrorMessageProvider implements OnInit, OnDestroy, AfterViewInit {
 
   formLocked = false;
+  useSMTP: boolean;
+  ServerClientURL: string;
+  sendPasswordEmail = false;
 
   @Input()
   mode: 'create' | 'edit';
@@ -115,11 +84,15 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
   tmpPhone: string;
   tmpCountryCallingCode: string;
   phoneValid = true;
+  errorMsg: string;
 
   countryCodes: Array<{ name: string, code: string }> = cc;
 
-  constructor(private service: UserService, private router: Router) {
+  private onDestroy: EventEmitter<void>;
+
+  constructor(private service: UserService, private router: Router, private configService: ConfigService, private cdr: ChangeDetectorRef) {
     super();
+    this.onDestroy = new EventEmitter();
   }
 
   private setFormControl(user) {
@@ -135,7 +108,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
         Validators.minLength(6),
         Validators.maxLength(64),
         passwordValidator,
-        asciiValidator
+        asciiValidator,
+        passwordMandatoryValidatorOnEdit(!this.sendPasswordEmail)
       ]),
       role: user.role,
       identity: {
@@ -157,23 +131,46 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
   }
 
   private getFormObject() {
-    // get "value" attribute of each form control attibutes recursively
-    // deleting falsy ones
-    const user = traverse(this.form).map(function (e) {
+    // get "value" attribute of each form control attributes recursively deleting falsy ones
+    return traverse(this.form).map(function (e) {
       if (e instanceof FormControl) {
         return e.value === null ? this.delete(false) : e.value;
       }
     });
-
-    return user;
   }
 
   ngOnInit() {
-    log.debug('init', this.mode, this.user);
+    this.registerSubscription(this.configService.getConfig().subscribe((config) => {
+      if (!config) {
+        return;
+      }
+      this.useSMTP = config.useSMTP;
+      this.ServerClientURL = config.ServerClientURL;
+    }));
     if (this.mode === 'edit') {
       this.form = this.setFormControl(copy<ApiUserObject>(this.user));
     } else {
       this.form = this.setFormControl({ role: 'user', identity: {} });
+    }
+  }
+
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
+  }
+
+  registerSubscription(sub: Subscription) {
+    this.onDestroy.subscribe(() => sub.unsubscribe());
+  }
+
+  ngOnDestroy() {
+    this.onDestroy.emit();
+  }
+
+  async sendResetPasswordEmail(user: ApiUserObject) {
+    try {
+      await this.service.resetPassword(user.email);
+    } catch (err) {
+      this.errorMsg = err.error.message;
     }
   }
 
@@ -200,6 +197,14 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
       promise = this.service.create(cleaned)
         .then((up) => this.submitSucceed.emit(up))
         .then(() => this.router.navigate(['/users']));
+
+      if (this.sendPasswordEmail) {
+        try {
+          await this.sendResetPasswordEmail(user);
+        } catch (err) {
+          log.debug(err);
+        }
+      }
     }
 
     await promise
@@ -231,5 +236,4 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit {
       this.phoneValid = true;
     }
   }
-
 }

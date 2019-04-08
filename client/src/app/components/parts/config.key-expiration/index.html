@@ -26,7 +26,7 @@
   <br>
   <mat-card-content>
     <mat-form-field class="w-100">
-      <input matInput placeholder="Default exipration time (e.g. 2w 1d 4h)" [formControl]="form" required>
+      <input matInput placeholder="Default exipration time (e.g. 2w 1d 4h)" [formControl]="form">
       <mat-error *ngIf="form.invalid">{{ getErrorMessage(form) }}</mat-error>
     </mat-form-field>
   </mat-card-content>

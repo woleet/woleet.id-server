@@ -1,15 +1,15 @@
 import * as Router from 'koa-router';
-import {createOAuthSession, createOAuthUser, getClient, getClientRedirectURL} from '../../controllers/openid';
-import {BadRequest, ServiceUnavailable} from 'http-errors';
+import { createOAuthSession, createOAuthUser, getClient, getClientRedirectURL } from '../../controllers/openid';
+import { BadRequest, ServiceUnavailable } from 'http-errors';
 import * as LRU from 'lru-cache';
-import {Cache} from 'lru-cache';
+import { Cache } from 'lru-cache';
 import * as uuid from 'uuid/v4';
-import {randomBytes} from 'crypto';
-import {serializeUserDTO} from '../serialize/userDTO';
+import { randomBytes } from 'crypto';
+import { serializeUserDTO } from '../serialize/userDTO';
 import * as log from 'loglevel';
-import {cookies, sessionSuffix} from '../../config';
-import {updateUser} from '../../controllers/user';
-import {setProviderSession} from '../../controllers/oidc-provider';
+import { cookies, sessionSuffix } from '../../config';
+import { updateUser } from '../../controllers/user';
+import { setProviderSession } from '../../controllers/oidc-provider';
 
 const router = new Router({ prefix: '/oauth' });
 

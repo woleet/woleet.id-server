@@ -1,12 +1,13 @@
 import { User } from '../database';
 
 import * as Debug from 'debug';
-import { NotFoundUserError } from '../errors';
+import { NotFoundUserError, TokenResetPasswordInvalid } from '../errors';
 import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
 
 const debug = Debug('id:ctr');
+const RESET_PASSWORD_TOKEN_LIFETIME = 1000 * 60 * 30;
 
 async function serializeAndEncodePassword(password: string) {
   const key = await encode(password);
@@ -58,7 +59,7 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
 }
 
 export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<InternalUserObject> {
-  debug('Update user', attrs);
+  debug('Update user', id);
 
   const update = Object.assign({}, attrs);
 
@@ -123,6 +124,34 @@ export async function deleteUser(id: string): Promise<InternalUserObject> {
   const user = await User.delete(id);
 
   await store.delSessionsWithUser(id);
+
+  if (!user) {
+    throw new NotFoundUserError();
+  }
+
+  return user.toJSON();
+}
+
+export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject): Promise<InternalUserObject> {
+  let user = await User.getByEmail(infoUpdatePassword.email);
+
+  if (infoUpdatePassword.token !== user.toJSON().tokenResetPassword) {
+    throw new TokenResetPasswordInvalid();
+  }
+
+  const timestamp = parseInt(user.toJSON().tokenResetPassword.split('_')[1], 10);
+
+  if ((Date.now() - timestamp) > RESET_PASSWORD_TOKEN_LIFETIME) {
+    throw new TokenResetPasswordInvalid();
+  }
+
+  const key = await serializeAndEncodePassword(infoUpdatePassword.password);
+  const update = Object.assign({}, {
+    tokenResetPassword: null, passwordHash: key.passwordHash,
+    passwordSalt: key.passwordSalt, passwordItrs: key.passwordItrs
+  });
+
+  user = await User.update(user.getDataValue('id'), update);
 
   if (!user) {
     throw new NotFoundUserError();

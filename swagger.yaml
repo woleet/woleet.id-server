@@ -953,24 +953,24 @@ components:
     UserRoleEnum:
       type: string
       enum:
-       - user
-       - admin
+        - user
+        - admin
       default: "user"
       description: User role.
       example: "user"
     UserStatusEnum:
       type: string
       enum:
-      - active
-      - blocked
+        - active
+        - blocked
       default: "active"
       description: User status (a `blocked` user cannot sign).
       example: "active"
     KeyStatusEnum:
       type: string
       enum:
-      - active
-      - blocked
+        - active
+        - blocked
       default: "active"
       description: Key status (a `blocked` key cannot be used to sign).
       example: "active"
@@ -1030,11 +1030,11 @@ components:
             - identity
     UserPut:
       allOf:
-      - $ref: '#/components/schemas/UserBase'
-      - type: object
-        properties:
-          password:
-            $ref: '#/components/schemas/Password'
+        - $ref: '#/components/schemas/UserBase'
+        - type: object
+          properties:
+            password:
+              $ref: '#/components/schemas/Password'
     UserArray:
       type: array
       items:
@@ -1052,8 +1052,8 @@ components:
     APITokenStatusEnum:
       type: string
       enum:
-      - active
-      - blocked
+        - active
+        - blocked
       default: "active"
       description: API token status (a `blocked` API token cannot be used).
       example: "active"
@@ -1123,21 +1123,36 @@ components:
           type: boolean
           example: true
           description: True is the server must fallback on the default key (if any).
+        publicInfo:
+          $ref: '#/components/schema/ServerPublicInfo'
+    ServerPublicInfo:
+      type: object
+      properties:
+        logoURL:
+          type: string
+          example: "https://mydomain.com/logo.svg"
+          description: >
+            The URL of the logo that will be displayed in the sign in page.
+        HTMLFrame:
+          type: string
+          example: "Hello World"
+          description: >
+            The HTML frame that will be displayed in the sign in page.
     ServerEventTypeEnum:
       type: string
       enum:
-      - login
-      - signature
-      - config.edit
-      - key.create
-      - key.edit
-      - key.delete
-      - user.create
-      - user.edit
-      - user.delete
-      - token.create
-      - token.edit
-      - token.delete
+        - login
+        - signature
+        - config.edit
+        - key.create
+        - key.edit
+        - key.delete
+        - user.create
+        - user.edit
+        - user.delete
+        - token.create
+        - token.edit
+        - token.delete
       description: Type of the event.
       example: "user.edit"
     ServerEventBase:
@@ -1174,13 +1189,13 @@ components:
           example: "461816ca-5623-4417-a2d1-5ee960f0a7a9"
     ServerEventGet:
       allOf:
-      - $ref: '#/components/schemas/ServerEventBase'
-      - type: object
-        properties:
-          data:
-            type: object
-            description: Specific additional data associated with the event.
-            example: { "username": "foo", "identity" : {"countryName" : "FR"} }
+        - $ref: '#/components/schemas/ServerEventBase'
+        - type: object
+          properties:
+            data:
+              type: object
+              description: Specific additional data associated with the event.
+              example: { "username": "foo", "identity": {"countryName": "FR"} }
     ServerEventArray:
       type: array
       items:
@@ -1188,7 +1203,7 @@ components:
     KeyTypeEnum:
       type: string
       enum:
-      - bip39
+        - bip39
       description: Key type.
       example: "bip39"
     KeyBase:
@@ -1243,7 +1258,7 @@ components:
         - $ref: '#/components/schemas/KeyBase'
         - type: object
           required:
-          - name
+            - name
     KeyPut:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
