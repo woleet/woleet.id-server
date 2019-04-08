@@ -16,10 +16,12 @@ export class APITokenCreateCardComponent extends ErrorMessageProvider {
   create = new EventEmitter<ApiAPITokenObject>();
 
   apiTokenName = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]);
+  formLocked = false;
 
   constructor(private apiTokenService: APITokenService) { super(); }
 
   async createAPIToken() {
+    this.formLocked = true;
 
     this.apiTokenName.disable();
 
@@ -31,6 +33,8 @@ export class APITokenCreateCardComponent extends ErrorMessageProvider {
     this.apiTokenName.reset();
     this.reset.emit();
     this.create.emit(newapiToken);
+
+    this.formLocked = false;
   }
 
   cancelAPIToken() {
