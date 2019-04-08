@@ -1,5 +1,4 @@
-import { STRING, ENUM, UUID, UUIDV4, DATE, DOUBLE, CHAR } from 'sequelize';
-import { UniqueConstraintError, Op } from 'sequelize';
+import { CHAR, DATE, DOUBLE, ENUM, Op, STRING, UniqueConstraintError, UUID, UUIDV4 } from 'sequelize';
 import { DuplicatedUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 
@@ -8,10 +7,10 @@ const UserModel = {
   role: { type: ENUM(['user', 'admin']), defaultValue: 'user' },
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   email: { type: STRING, unique: true },
-  tokenResetPassword: {type: STRING, unique: true, allowNull: true },
+  tokenResetPassword: { type: STRING, unique: true, allowNull: true },
   username: { type: STRING, unique: true, allowNull: true /* allowNull: false */ }, // step 1
-  countryCallingCode: {type: STRING, unique: false, allowNull: true},
-  phone: {type: STRING, unique: false, allowNull: true},
+  countryCallingCode: { type: STRING, unique: false, allowNull: true },
+  phone: { type: STRING, unique: false, allowNull: true },
   x500CommonName: { type: STRING, allowNull: false },
   x500Organization: { type: STRING, /* allowNull: false */ }, // step 1
   x500OrganizationalUnit: { type: STRING, /* allowNull: false */ }, // step 1

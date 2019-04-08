@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize';
-import {grantable, models} from './model/oidcp';
-import {sequelize} from './sequelize';
-import {User} from './index';
+import { grantable, models } from './model/oidcp';
+import { sequelize } from './sequelize';
+import { User } from './index';
 
 import * as assert from 'assert';
 import * as Debug from 'debug';
@@ -41,7 +41,9 @@ export class SequelizeAdapter {
     debug(`find ${id}`);
     return this.model.findByPrimary(id)
       .then((found) => {
-        if (!found) { return undefined; }
+        if (!found) {
+          return undefined;
+        }
         return {
           ...found.data,
           ...(found.consumedAt ? { consumed: true } : undefined),
@@ -56,7 +58,9 @@ export class SequelizeAdapter {
   findByUserCode(userCode) {
     debug(`findByUserCode ${userCode}`);
     return this.model.findOne({ where: { userCode } }).then((found) => {
-      if (!found) { return undefined; }
+      if (!found) {
+        return undefined;
+      }
       return {
         ...found.data,
         ...(found.consumedAt ? { consumed: true } : undefined),

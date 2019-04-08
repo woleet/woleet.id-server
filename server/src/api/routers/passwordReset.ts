@@ -11,13 +11,13 @@ import { BadRequest, NotFound, Unauthorized } from 'http-errors';
 const vid = validate.param('id', 'uuid');
 
 function hidePassword(user) {
-    if (user.password) {
-      const u = copy(user);
-      u.password = '@obfuscated@';
-      return u;
-    }
-    return user;
+  if (user.password) {
+    const u = copy(user);
+    u.password = '@obfuscated@';
+    return u;
   }
+  return user;
+}
 
 /**
  * User

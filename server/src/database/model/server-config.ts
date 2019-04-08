@@ -1,4 +1,4 @@
-import { STRING, JSON } from 'sequelize';
+import { JSON, STRING } from 'sequelize';
 
 import { AbstractInstanceAccess } from './abstract';
 import { serverConfig } from '../../config';
@@ -9,18 +9,16 @@ const ServerConfigModel = {
 };
 
 class ServerConfigAccess
-  extends AbstractInstanceAccess<
-  { config: InternalServerConfigObject },
-  { config: ServerConfigCreate, createdAt?: Date, updatedAt?: Date }
-  > {
+  extends AbstractInstanceAccess<{ config: InternalServerConfigObject },
+    { config: ServerConfigCreate, createdAt?: Date, updatedAt?: Date }> {
 
   constructor() {
     super();
     this.define('serverConfig', ServerConfigModel, { paranoid: false });
   }
 
-  handleError(err: any) { }
-
+  handleError(err: any) {
+  }
 }
 
 export const ServerConfig = new ServerConfigAccess();

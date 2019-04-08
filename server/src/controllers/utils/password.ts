@@ -12,16 +12,28 @@ const KEY_DIGEST = 'sha512';
 function _encode(password: Buffer, salt: Buffer, iterations: number = ITERATIONS): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     pbkdf2(password, salt, iterations, KEY_LENGTH, KEY_DIGEST, (err, derivedKey) => {
-      if (err) { reject(err); } else { resolve(derivedKey); }
+      if (err) {
+        reject(err);
+      } else {
+        resolve(derivedKey);
+      }
     });
   });
 }
 
-interface Key { hash: string; salt: string; iterations: number; }
+interface Key {
+  hash: string;
+  salt: string;
+  iterations: number;
+}
 
 export async function encode(password: string): Promise<Key> {
   const salt = randomBytes(128);
-  const key = await _encode(Buffer.from(password, 'utf8'), salt).then((hash) => ({ salt, iterations: ITERATIONS, hash }));
+  const key = await _encode(Buffer.from(password, 'utf8'), salt).then((hash) => ({
+    salt,
+    iterations: ITERATIONS,
+    hash
+  }));
   return {
     hash: key.hash.toString('hex'),
     salt: key.salt.toString('hex'),

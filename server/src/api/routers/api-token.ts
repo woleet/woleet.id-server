@@ -2,7 +2,9 @@ import * as Router from 'koa-router';
 
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
-import { createAPIToken, updateAPIToken, getAPITokenById, getAllAPITokens, deleteAPIToken } from '../../controllers/api-token';
+import {
+  createAPIToken, deleteAPIToken, getAllAPITokens, getAPITokenById, updateAPIToken
+} from '../../controllers/api-token';
 import { serializeapiToken } from '../serialize/api-token';
 import { store as event } from '../../controllers/server-event';
 

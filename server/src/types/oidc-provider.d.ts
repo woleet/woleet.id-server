@@ -1,4 +1,3 @@
-
 interface Interaction {
   error: 'login_required' | 'consent_required';
   error_description: string;

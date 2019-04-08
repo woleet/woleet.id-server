@@ -294,7 +294,7 @@ declare global {
 
   interface ServerConfigCreate extends ServerConfig {
     identityURL: string;
-    publicInfo?:{
+    publicInfo?: {
       logoURL?: string;
       HTMLFrame?: string;
     }

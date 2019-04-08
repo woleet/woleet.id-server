@@ -30,11 +30,18 @@ export class AuthService {
     this.lock.incr();
     this.user = null;
     if (request) {
-      this.http.get(`${serverURL}/logout/`).toPromise().catch(() => null);
+      this.http.get(`${serverURL}/logout/`).toPromise()
+        .then(() => {
+          this.router.navigate(['login']);
+          this.bootService.restart();
+          this.lock.decr();
+        })
+        .catch(() => null);
+    } else {
+      this.router.navigate(['login']);
+      this.bootService.restart();
+      this.lock.decr();
     }
-    this.router.navigate(['login']);
-    this.bootService.restart();
-    this.lock.decr();
   }
 
   async login(user: BasicAuthObject): Promise<ApiUserDTOObject | null> {
