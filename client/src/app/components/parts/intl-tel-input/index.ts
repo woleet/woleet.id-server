@@ -29,7 +29,7 @@ export class IntlTelInputComponent extends ErrorMessageProvider implements OnIni
   @Input()
   onlyNumbers;
 
-  @Input('user') user: ApiUserObject;
+  @Input() user: ApiUserObject;
 
   @Output()
   inputUnfocus = new EventEmitter<any>();

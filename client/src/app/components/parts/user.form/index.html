@@ -1,90 +1,83 @@
 <mat-card fxFlex>
-  <form role="form" autoComplete="off" (submit)="submit()" #f="ngForm">
+  <form role="form" [formGroup]='form' autoComplete="off" (submit)="submit()" #f="ngForm">
     <div *ngIf="form; else loading" fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="10px">
       <mat-card-content class="w-100">
         <mat-card-subtitle>Login</mat-card-subtitle>
         <mat-form-field class="w-100">
-          <mat-select type="text" [value]="form.role" name="role" placeholder="Role">
+          <mat-select type="text" [value]="form.get('role').value" name="role" placeholder="Role"
+            formControlName='role'>
             <mat-option value="user">user</mat-option>
             <mat-option value="admin">admin</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="w-100">
-          <input matInput type="text" placeholder="Username" [formControl]="form.username"
-            (focus)="form.username.focused = true" (focusout)="form.username.focused = false">
-          <mat-error *ngIf="form.username.invalid">{{ getErrorMessage(form.username) }}</mat-error>
-          <mat-hint *ngIf="form.username.focused">Alias used to login</mat-hint>
+          <input matInput type="text" placeholder="Username" formControlName="username" (focus)="usernameFocused = true"
+            (focusout)="usernameFocused = false">
+          <mat-error *ngIf="form.get('username').invalid">{{ getErrorMessage(form.get('username')) }}</mat-error>
+          <mat-hint *ngIf="usernameFocused">Alias used to login</mat-hint>
         </mat-form-field>
         <mat-form-field class="w-100">
-          <input matInput type="email" placeholder="Email" [formControl]="form.email"
-            (focus)="form.email.focused = true" (focusout)="form.email.focused = false" required>
-          <mat-error *ngIf="form.email.invalid">{{ getErrorMessage(form.email) }}</mat-error>
+          <input matInput type="email" placeholder="Email" formControlName="email" required>
+          <mat-error *ngIf="form.get('email').invalid">{{ getErrorMessage(form.get('email')) }}</mat-error>
         </mat-form-field>
         <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP || !ServerClientURL"
           [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''"
           (change)="sendPasswordEmailCheck()">
           Send password initialization link by email
         </mat-checkbox>
-        <button mat-raised-button *ngIf="mode === 'edit'" matInput [disabled]="!useSMTP || form.email.invalid || !ServerClientURL"
+        <button mat-raised-button *ngIf="mode === 'edit'" matInput
+          [disabled]="!useSMTP || form.get('email').invalid || !ServerClientURL"
           [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''"
           (click)="sendResetPasswordEmail(user)">
           Send password reset link by email
         </button>
         <mat-form-field class="w-100">
-          <input matInput type="password" placeholder="Password" [formControl]="form.password"
-            (focus)="form.password.focused = true" (focusout)="form.password.focused = false"
+          <input matInput type="password" placeholder="Password" formControlName="password"
             [required]="mode === 'create' && !sendPasswordEmail">
-          <mat-error *ngIf="form.password.invalid">{{ getErrorMessage(form.password) }}</mat-error>
+          <mat-error *ngIf="form.get('password').invalid">{{ getErrorMessage(form.get('password')) }}</mat-error>
         </mat-form-field>
         <intl-tel-input [user]="user" (inputUnfocus)="savePhone($event)"></intl-tel-input>
       </mat-card-content>
-      <mat-card-content class="w-100">
+      <mat-card-content class="w-100" formGroupName='identity'>
         <mat-card-subtitle>Identity</mat-card-subtitle>
         <mat-form-field class="w-100">
-          <input matInput type="text" placeholder="Common name" [formControl]="form.identity.commonName"
-            (focus)="form.identity.commonName.focused = true"
-            (focusout)="form.identity.commonName.focused = false"
-            required>
-          <mat-error *ngIf="form.identity.commonName.invalid">{{ getErrorMessage(form.identity.commonName) }}
+          <input matInput type="text" placeholder="Common name" formControlName="commonName"
+            (focus)="commonNameFocused = true" (focusout)="commonNameFocused = false" required>
+          <mat-error *ngIf="form.get('identity').get('commonName').invalid">
+            {{ getErrorMessage(form.get('identity').get('commonName')) }}
           </mat-error>
-          <mat-hint *ngIf="form.identity.commonName.focused">Full user name (CN)</mat-hint>
+          <mat-hint *ngIf="commonNameFocused">Full user name (CN)</mat-hint>
         </mat-form-field>
         <mat-form-field class="w-100">
-          <input matInput type="text" placeholder="Organization" [formControl]="form.identity.organization"
-            (focus)="form.identity.organization.focused = true"
-            (focusout)="form.identity.organization.focused = false">
-          <mat-error *ngIf="form.identity.organization.invalid">{{ getErrorMessage(form.identity.organization) }}
+          <input matInput type="text" placeholder="Organization" formControlName="organization">
+          <mat-error *ngIf="form.get('identity').get('organization').invalid">
+            {{ getErrorMessage(form.get('identity').get('organization')) }}
           </mat-error>
-          <!-- <mat-hint *ngIf="form.identity.organization.focused"></mat-hint> -->
         </mat-form-field>
         <mat-form-field class="w-100">
-          <input matInput type="text" placeholder="Organizational Unit"
-            [formControl]="form.identity.organizationalUnit"
-            (focus)="form.identity.organizationalUnit.focused = true"
-            (focusout)="form.identity.organizationalUnit.focused = false">
-          <mat-error
-            *ngIf="form.identity.organizationalUnit.invalid">{{ getErrorMessage(form.identity.organizationalUnit)
+          <input matInput type="text" placeholder="Organizational Unit" formControlName="organizationalUnit">
+          <mat-error *ngIf="form.get('identity').get('organizationalUnit').invalid">{{ getErrorMessage(form.get('identity').get('organizationalUnit'))
             }}
           </mat-error>
-          <!-- <mat-hint *ngIf="form.identity.organizationalUnit.focused"></mat-hint> -->
         </mat-form-field>
         <mat-form-field class="w-100">
-          <input matInput type="text" placeholder="Locality" [formControl]="form.identity.locality"
-            (focus)="form.identity.locality.focused = true" (focusout)="form.identity.locality.focused = false">
-          <mat-error *ngIf="form.identity.locality.invalid">{{ getErrorMessage(form.identity.locality) }}</mat-error>
-          <!-- <mat-hint *ngIf="form.identity.locality.focused"></mat-hint> -->
+          <input matInput type="text" placeholder="Locality" formControlName="locality">
+          <mat-error *ngIf="form.get('identity').get('locality').invalid">
+            {{ getErrorMessage(form.get('identity').get('locality')) }}</mat-error>
         </mat-form-field>
         <mat-form-field class="w-100">
-          <mat-select [value]="form.identity.country" type="text" name="country" placeholder="Country">
+          <mat-select [value]="form.get('identity').get('country')" type="text" name="country" placeholder="Country"
+            formControlName='country'>
             <mat-option [value]="null">None</mat-option>
             <mat-option [value]="c.code" *ngFor="let c of countryCodes">{{ c.name }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="w-100">
-          <input matInput type="text" placeholder="userId" [formControl]="form.identity.userId"
-            (focus)="form.identity.userId.focused = true" (focusout)="form.identity.userId.focused = false">
-          <mat-error *ngIf="form.identity.userId.invalid">{{ getErrorMessage(form.identity.userId) }}</mat-error>
-          <mat-hint *ngIf="form.identity.userId.focused">
+          <input matInput type="text" placeholder="userId" formControlName="userId" (focus)="userIdFocused = true"
+            (focusout)="userIdFocused = false">
+          <mat-error *ngIf="form.get('identity').get('userId').invalid">
+            {{ getErrorMessage(form.get('identity').get('userId')) }}</mat-error>
+          <mat-hint *ngIf="userIdFocused">
             A custom user identifier you can use to select the user (must be unique)
           </mat-hint>
         </mat-form-field>
@@ -96,8 +89,7 @@
     <br>
   </div>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="submit()"
-      [disabled]="formLocked || f.invalid || !isValid() || !phoneValid">
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="formLocked || f.invalid || !phoneValid">
       {{ mode == 'edit' ? 'SAVE' : mode == 'create' ? 'CREATE' : 'UNKNOWN' }}
     </button>
     <button mat-button [disabled]="formLocked" (click)="triggerCancel()">CANCEL</button>
