@@ -54,7 +54,7 @@ backup() {
 
   BACKUP_PATH="$1"
   if [[ -d $BACKUP_PATH ]]; then
-    echo "Create dump_$(date +%d-%m-%Y"_"%H_%M_%S).sql in $BACKUP_PATH."
+    echo "Create dump_$(date +%Y-%m-%d_%H_%M_%S).sql in $BACKUP_PATH."
     docker exec woleetid-server_wid-postgres_1 pg_dumpall -c -U postgres -h /var/run/postgresql >"$BACKUP_PATH/dump_$(date +%Y-%m-%d_%H_%M_%S).sql"
   else
     echo "This path does not exist!"
@@ -76,6 +76,10 @@ restore() {
     docker exec woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql -c "GRANT CONNECT ON DATABASE wid TO ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
     if [[ $(docker ps -q --filter name=woleetid-server_wid-server_1 --filter status=running | wc -w) -eq 1 ]]; then
       docker restart woleetid-server_wid-server_1
+      if [ -z $WOLEET_ID_SERVER_ENCRYPTION_SECRET ]; then
+        echo "No WOLEET_ID_SERVER_ENCRYPTION_SECRET environment set, attaching to container ${server}..."
+        docker attach woleetid-server_wid-server_1 --detach-keys='ctrl-c'
+      fi
     fi
   else
     echo "${RESTORE_FILE} is not a dump file"
