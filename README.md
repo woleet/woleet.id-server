@@ -2,10 +2,10 @@
 
 Woleet.ID Server is a server (and an associated client web application) to be hosted inside your organization's IT.
 It allows you to **manage the identity of your users and the set of cryptographic keys** they can use to sign data.
- 
+
 Woleet.ID Server identities are made of **X500 information** (like the common name, organization name, country code, etc.) 
 associated to one or several **bitcoin keys** (each being made of a public bitcoin address and of a private key securely stored encrypted in the server's database).
- 
+
 Woleet.ID Server provides a **private API** allowing your users to **sign data using their bitcoin addresses**,
 and a **public API** allowing third-parties to **get the identity of a signee** and **validate the ownership of the bitcoin addresses** by your organization.
 
@@ -48,7 +48,7 @@ Woleet.ID Server can be built and run using Docker (tested on Linux and  macOS),
 > NOTE: Building and running the server and the client web app using Docker is the simplest way to go and is recommended for production environments.
 
 Here we only document building and running Woleet.ID Server using Docker.
-If you want to build or run without Docker, you can find detailed information about how to build and run Woleet.ID Server in [client's](client/README.md) and [server's](server/README.md) README files. 
+If you want to build or run without Docker, you can find detailed information about how to build and run Woleet.ID Server in [client's](client/README.md) and [server's](server/README.md) README files.
 
 # Prerequisites and configuration
 
@@ -59,7 +59,8 @@ It can be [self signed](https://www.digitalocean.com/community/tutorials/how-to-
 but it is highly recommended to use an Organization Validation (OV) certificate, since your organization's identity information will be extracted from this certificate during the identity verification process).
 
 You need to set two environment variables pointing to the certificate and its associate key:
-```
+
+```bash
 export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE={path to certificate .crt file}
 export WOLEET_ID_SERVER_HTTP_TLS_KEY={path to certificate .key file}
 ```
@@ -68,14 +69,16 @@ export WOLEET_ID_SERVER_HTTP_TLS_KEY={path to certificate .key file}
 
 Woleet.ID Server requires a PostgreSQL database.
 When run using Docker, the database is automatically deployed as a Docker container using a local directory to store data.
-You can change the location of this directory by setting the following environment variable: 
-```
+You can change the location of this directory by setting the following environment variable:
+
+```bash
 export WOLEET_ID_SERVER_DATA_DIR={path to the Docker volume where to store the database, default: ./db}
 ```
 
 > NOTE: If you want to use Docker to run Woleet.ID Server but don't want ot use Docker to run the database,
 you will have to modify the `docker-compose.yml` file and configure the database to use by setting the following environment variables:
-```
+
+```bash
 export WOLEET_ID_SERVER_POSTGRES_HOST={PostgreSQL host, default: wid-postgres}
 export WOLEET_ID_SERVER_POSTGRES_DB={PostgreSQL database, default: wid}
 export WOLEET_ID_SERVER_POSTGRES_USER={PostgreSQL user, default: pguser}
@@ -93,15 +96,18 @@ Woleet.ID Server requires a recent Docker version:
 ## Encryption secret
 
 Woleet.ID Server encrypts keys stored in the database using a encryption secret you need to define using the following environment variable:
-```
+
+```bash
 export WOLEET_ID_SERVER_ENCRYPTION_SECRET={encryption secret, default: 'secret'}
 ```
+
 > WARNING: don't forget to set your own the encryption secret before starting the server for the first time!
 
 ## Server ports
 
 You can define the ports on which Woleet.ID Server listens by setting the following environment variables:
-```
+
+```bash
 export WOLEET_ID_SERVER_API_PORT={port to use for the client web app and the server main API endpoints dedicated to the client web app, default: 3000}
 export WOLEET_ID_SERVER_IDENTITY_PORT={port to use for the /identity endpoint, default: 3001}
 export WOLEET_ID_SERVER_SIGNATURE_PORT={port to use for the /sign and /discover endpoints, default 3002}
@@ -127,6 +133,14 @@ export WOLEET_ID_SERVER_SIGNATURE_PORT={port to use for the /sign and /discover 
  
     ./app.sh stop
 
+# Backup the server
+
+    ./app.sh backup <your_backup_path>
+
+# Restore the server
+
+    ./app.sh restore <your_backup_file>
+
 # Test the server
 
 [Client web app](https://localhost:3000/)
@@ -144,7 +158,7 @@ You should get:
 You should get:
 
     { "message": "Invalid or missing API token", "status": 401 }
-    
+
 # Change administrator account password
 
 When you run it for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
@@ -168,25 +182,25 @@ The identity URL is the public URL of the `/identity` endpoint.
 > WARNING: It is preferable to serve the identity URL on the default HTTPS port 443. To do this, simply set WOLEET_ID_SERVER_IDENTITY_PORT to 443.
 
 # Use Woleet.ID Server with an OpenID Connect provider
- 
+
 Woleet.ID Server can use an OpenID Connect provider to authenticate users.
 When a new user connects to Woleet.ID Server using OpenID Connect, a user account is automatically created and a default key is generated.
 
 - Select the `Settings` menu
-- Go to the "OpenID Connect configuration" panel 
+- Go to the "OpenID Connect configuration" panel
 - Check "Use OpenID Connect"
 - Set the `OpenID Connect URL` in order to match `<OpenID Connect URL>/.well-known/openid-configuration`
 - Set the `Client ID` and `Client secret` as defined by your provider
 - Set the `Authorization callback URL` as `https://<current web interface>/oauth/callback` (it should be automatically set)
- 
+
 > NOTE: The "Use OpenID Connect" checkbox will be automatically unchecked if the server cannot reach the OpenID Connect URL
- 
+
 # Use Woleet.ID Server as an OpenID Connect provider
- 
+
 Woleet.ID Server can be used as an OpenID Connect provider by 3rd party applications.
 
 - Select the `Settings` menu
-- Go to the "OpenID Connect Provider configuration" panel 
+- Go to the "OpenID Connect Provider configuration" panel
 - Check "Enable OpenID Connect Provider"
 - Set the `Issuer URL` as `https://<OpenID Issuer URL>`
   > Note: that is only if you want to conform to the Discovery specification, the `Issuer URL` value itself does not need to resolve to anything
@@ -195,8 +209,7 @@ Woleet.ID Server can be used as an OpenID Connect provider by 3rd party applicat
 - Define a client:
   - Set the `Client Id` and `Client Secret` (it should be automatically set)
   - Set a least one `Redirect URI`
- 
+
 > NOTE: The OpenID Connect Provider will not be effectively enabled without at least one specified OpenID client.
 
 You will be then able to get user information from your third party app. The associated OpenID client must request access to the `openid profile email` scope to get user information and `signature` to use the signature endpoint.
-

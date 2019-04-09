@@ -7,7 +7,7 @@ The `WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE` and `WOLEET_ID_SEVER_HTTP_TLS_KEY` e
 ## Development mode
 
 Install node packages:
-    
+
     $ npm install
 
 Start the server in development mode:

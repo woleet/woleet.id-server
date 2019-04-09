@@ -5,7 +5,7 @@
 set -e
 
 docker run $@ \
-  --name pg-dev \
+  --name woleetid-server_wid-postgres_1 \
   --rm \
   -p 5432:5432 \
   -e POSTGRES_DB=wid \
