@@ -74,6 +74,9 @@ restore() {
     docker exec woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql -c "SELECT pid, pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${WOLEET_ID_SERVER_POSTGRES_DB:-wid}' AND pid <> pg_backend_pid();"
     docker exec -i woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql < "$RESTORE_FILE"
     docker exec woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql -c "GRANT CONNECT ON DATABASE wid TO ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
+    if [[ $(docker ps -q --filter name=woleetid-server_wid-server_1 --filter status=running | wc -w) -eq 1 ]]; then
+      docker restart woleetid-server_wid-server_1
+    fi
   else
     echo "${RESTORE_FILE} is not a dump file"
   fi
