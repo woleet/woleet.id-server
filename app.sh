@@ -6,10 +6,6 @@ display_usage_app() {
   echo "usage: $0 [start|stop|restart|build|push|check|logs|backup|restore]"
 }
 
-display_env() {
-  echo "env: $1 [docker|local]"
-}
-
 tmp_client_dir=./client/tmp/
 tmp_server_dir=./server/tmp/
 
@@ -49,50 +45,37 @@ start() {
   fi
 }
 
-test_params() {
-  if [[ -z "$operation" || -z "$env" || -z "$path" ]]; then
-    echo "$operation take the environment and the path of your dump directory"
-    exit 0
-  fi
-  if ! [[ $env =~ local|docker ]]; then
-    display_env "$0"
-    exit 0
-  fi
-  if ! test -e "$path"; then
-    echo "This path/file does not exist!"
-    exit 0
-  fi
-}
-
 backup() {
-  if [[ $env =~ local ]]; then
-    image=pg-dev
-  elif [[ $env =~ docker ]]; then
-    image=woleetid-server_wid-postgres_1
+  if [[ $# -ne 1 ]]
+  then
+    echo "usage: $0 backup <folder used to store backups>"
+    exit 1
   fi
-  if test -e "$path"; then
-    echo "Create dump_${env}_$(date +%d-%m-%Y"_"%H_%M_%S).sql in $path."
-    docker exec $image pg_dumpall -c -U postgres >"$path/dump_${env}_$(date +%d-%m-%Y"_"%H_%M_%S).sql"
+
+  BACKUP_PATH="$1"
+  if [[ -d $BACKUP_PATH ]]; then
+    echo "Create dump_$(date +%d-%m-%Y"_"%H_%M_%S).sql in $BACKUP_PATH."
+    docker exec woleetid-server_wid-postgres_1 pg_dumpall -c -U postgres -h /var/run/postgresql >"$BACKUP_PATH/dump_$(date +%Y-%m-%d_%H_%M_%S).sql"
   else
     echo "This path does not exist!"
   fi
 }
 
 restore() {
-  if [[ $env =~ local ]]; then
-    image=pg-dev
-  elif [[ $env =~ docker ]]; then
-    image=woleetid-server_wid-postgres_1
+  if [[ $# -ne 1 ]]
+  then
+    echo "usage: $0 restore <file to restore>.sql"
+    exit 1
   fi
-  if test ${path##*.} = "sql"; then
-    # search and stop the server container 
-    docker stop "$(docker ps -a -q --filter ancestor="${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}":server --format="{{.ID}}")"
-    # restore the base
-    docker exec -i $image psql -U postgres <"$path"
-    # start the stopped container
-    start
+
+  RESTORE_FILE="$1"
+  if [[ ${RESTORE_FILE##*.} == sql ]]; then
+    docker exec woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql -c "REVOKE CONNECT ON DATABASE wid FROM ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
+    docker exec woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql -c "SELECT pid, pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${WOLEET_ID_SERVER_POSTGRES_DB:-wid}' AND pid <> pg_backend_pid();"
+    docker exec -i woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql < "$RESTORE_FILE"
+    docker exec woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql -c "GRANT CONNECT ON DATABASE wid TO ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
   else
-    echo "${path} is not a dump file"
+    echo "${RESTORE_FILE} is not a dump file"
   fi
 }
 
@@ -100,7 +83,7 @@ operation=$1
 
 if [ -z $operation ]; then
   display_usage_app
-  exit -1
+  exit 1
 fi
 
 shift
@@ -173,16 +156,10 @@ elif [ "$operation" == "build" ]; then
 
   echo "Done."
 elif [ "$operation" == "backup" ]; then
-  env=$1
-  path=$2
-  test_params "$operation" "$env" "$path"
-  backup "$env" "$path"
+  backup "$@"
 elif [ "$operation" == "restore" ]; then
-  env=$1
-  path=$2
-  test_params "$operation" "$env" "$path"
-  restore "$env" "$path"
+  restore "$@"
 else
   display_usage_app
-  exit -1
+  exit 1
 fi
