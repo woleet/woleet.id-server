@@ -118,6 +118,8 @@ export const serverConfig = {
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true,
     publicInfo: {},
+    mailResetTemplate: readFileSync('assets/defaultPasswordResetMailTemplate.html', {encoding: 'ascii'}),
+    mailOnboardingTemplate: readFileSync('assets/defaultOnboardingMailTemplate.html', {encoding: 'ascii'})
   },
   CONFIG_ID: 'SERVER-CONFIG'
 };

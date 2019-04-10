@@ -1,0 +1,31 @@
+<mat-card>
+  <mat-card-title>Set server's mail template</mat-card-title>
+  <mat-divider></mat-divider>
+  <br>
+  <div>
+    The templating is done with the HTML format with <a href="https://mustache.github.io/mustache.5.html" target="_blank">mustache</a> for the variable.<br>
+    Variables available are: logoURL, userName, resetPasswordLink and domain.<br>
+  </div>
+  <br>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <form [formGroup]="formMail" autoComplete="off" (submit)="submit()" #f="ngForm">
+      <mat-form-field class="w-100">
+        <textarea matInput placeholder="Reset mail template" formControlName="resetMail" matTooltip="Use HTML + mustache format"></textarea>
+        <mat-error *ngIf="formMail.get('resetMail').invalid">{{ getErrorMessage(formMail.get('resetMail')) }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100">
+        <textarea matInput placeholder="Onboarding mail template" formControlName="onboardingMail" matTooltip="Use HTML + mustache format"></textarea>
+        <mat-error *ngIf="formMail.get('onboardingMail').invalid">{{ getErrorMessage(formMail.get('onboardingMail')) }}
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <ng-template #loading>Loading...<br></ng-template>
+  <mat-card-actions *ngIf="(config$ | async) as config; else loading">
+    <button mat-raised-button color="primary" (click)="submit()"
+      [disabled]="(formLocked$ | async) ||
+      ((config.mailResetTemplate == formMail.get('resetMail').value) && (config.mailOnboardingTemplate == formMail.get('onboardingMail').value)) ||
+      (formMail.invalid)">SAVE</button>
+  </mat-card-actions>
+</mat-card>

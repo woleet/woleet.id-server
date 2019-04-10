@@ -74,6 +74,7 @@ import { ConfigOpenIDComponent } from '@components/parts/config.openid';
 import { ConfigOIDCPComponent } from '@components/parts/config.oidcp';
 import { ConfigOIDCPClientComponent } from '@components/parts/config.oidcp-client';
 import { ConfigSMTPComponent } from '@components/parts/config.smtp';
+import { ConfigMailTemplateComponent } from '@components/parts/config.mail';
 import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 
@@ -115,6 +116,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     IntlTelInputComponent,
     ConfigLogoUrlComponent,
     ConfigHTMLFrameUrlComponent,
+    ConfigMailTemplateComponent,
     LogoComponent,
     HtmlFrameComponent,
     ResetPasswordPageComponent,
