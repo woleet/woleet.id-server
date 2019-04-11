@@ -1,21 +1,24 @@
 <mat-card>
-  <mat-card-title>Set server's mail template</mat-card-title>
+  <mat-card-title>Mail templates</mat-card-title>
   <mat-divider></mat-divider>
   <br>
   <div>
-    The templating is done with the HTML format with <a href="https://mustache.github.io/mustache.5.html" target="_blank">mustache</a> for the variable.<br>
-    Variables available are: logoURL, userName, resetPasswordLink and domain.<br>
+    Mail templates use HTML and <a href="https://mustache.github.io/mustache.5.html" target="_blank">mustache</a> variables.<br>
+    Available variables are: <strong class="monospace-font">logoURL</strong>, <strong class="monospace-font">userName</strong>, <strong class="monospace-font">resetPasswordLink</strong> and <strong class="monospace-font">domain</strong>.<br>
   </div>
   <br>
   <mat-divider></mat-divider>
+  <br>
   <mat-card-content>
     <form [formGroup]="formMail" autoComplete="off" (submit)="submit()" #f="ngForm">
       <mat-form-field class="w-100">
-        <textarea matInput placeholder="Reset mail template" formControlName="resetMail" matTooltip="Use HTML + mustache format"></textarea>
+        <mat-label class="bigger-label">Password reset mail template</mat-label>
+        <textarea matInput rows="5" formControlName="resetMail" matTooltip="Use HTML + mustache format"></textarea>
         <mat-error *ngIf="formMail.get('resetMail').invalid">{{ getErrorMessage(formMail.get('resetMail')) }}</mat-error>
       </mat-form-field>
       <mat-form-field class="w-100">
-        <textarea matInput placeholder="Onboarding mail template" formControlName="onboardingMail" matTooltip="Use HTML + mustache format"></textarea>
+          <mat-label class="bigger-label">Onboarding mail template</mat-label>
+        <textarea matInput rows="5" formControlName="onboardingMail" matTooltip="Use HTML + mustache format"></textarea>
         <mat-error *ngIf="formMail.get('onboardingMail').invalid">{{ getErrorMessage(formMail.get('onboardingMail')) }}
         </mat-error>
       </mat-form-field>

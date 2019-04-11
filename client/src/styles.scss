@@ -66,6 +66,14 @@ $accent: mat-palette($mat-red, 400);
   margin: auto;
 }
 
+.bigger-label {
+  font-size: 20px;
+}
+
+.monospace-font {
+  font-family: 'Courier New', Courier, monospace;
+}
+
 .error-card {
   @include mat-elevation(2);
   color: mat-color($mat-red, 300);
