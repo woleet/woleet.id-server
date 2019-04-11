@@ -6,6 +6,8 @@ import { Key } from './database';
 import { randomBytes } from 'crypto';
 import { createUser } from './controllers/user';
 import { exit } from './exit';
+import { readFileSync } from 'fs';
+import * as path from 'path';
 import { serverConfig } from './config';
 import { signMessage } from './controllers/sign';
 
@@ -34,6 +36,16 @@ export async function initServerConfig() {
     if (!config.publicInfo) {
       log.warn('the public information is set as an empty object.');
       config.publicInfo = {};
+    }
+    if (!config.mailOnboardingTemplate) {
+      log.warn('The onboarding template is set to default.');
+      config.mailOnboardingTemplate = readFileSync(
+        path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), {encoding: 'ascii'});
+    }
+    if (!config.mailResetTemplate) {
+      log.warn('The reset mail template is set to default.');
+      config.mailResetTemplate = readFileSync(
+        path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), {encoding: 'ascii'});
     }
 
   } else {
