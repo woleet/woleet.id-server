@@ -263,7 +263,7 @@ declare global {
     SMTPConfig?: string;
     ServerClientURL?: string;
     // Mail template
-    mailResetTemplate?: string;
+    mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
   }
 
@@ -294,7 +294,7 @@ declare global {
     SMTPConfig?: string;
     ServerClientURL?: string;
     // Mail template
-    mailResetTemplate?: string;
+    mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
   }
 
@@ -325,7 +325,7 @@ declare global {
     SMTPConfig?: string;
     ServerClientURL?: string;
     // Mail template
-    mailResetTemplate?: string;
+    mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
   }
 

@@ -26,7 +26,7 @@ export class ConfigMailTemplateComponent extends ErrorMessageProvider implements
 
   ngOnInit() {
     this.formMail = new FormGroup({
-      resetMail: new FormControl('', []),
+      resetPasswordMail: new FormControl('', []),
       onboardingMail: new FormControl('', [])
     });
 
@@ -38,7 +38,7 @@ export class ConfigMailTemplateComponent extends ErrorMessageProvider implements
         return;
       }
 
-      this.formMail.get('resetMail').setValue(config.mailResetTemplate);
+      this.formMail.get('resetPasswordMail').setValue(config.mailResetPasswordTemplate);
       this.formMail.get('onboardingMail').setValue(config.mailOnboardingTemplate);
     });
 
@@ -50,8 +50,8 @@ export class ConfigMailTemplateComponent extends ErrorMessageProvider implements
   }
 
   async submit() {
-    const mailResetTemplate = this.formMail.get('resetMail').value;
+    const mailResetPasswordTemplate = this.formMail.get('resetPasswordMail').value;
     const mailOnboardingTemplate = this.formMail.get('onboardingMail').value;
-    this.configService.update({ mailResetTemplate, mailOnboardingTemplate });
+    this.configService.update({ mailResetPasswordTemplate, mailOnboardingTemplate });
   }
 }

@@ -42,9 +42,9 @@ export async function initServerConfig() {
       config.mailOnboardingTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), {encoding: 'ascii'});
     }
-    if (!config.mailResetTemplate) {
+    if (!config.mailResetPasswordTemplate) {
       log.warn('The reset mail template is set to default.');
-      config.mailResetTemplate = readFileSync(
+      config.mailResetPasswordTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), {encoding: 'ascii'});
     }
 

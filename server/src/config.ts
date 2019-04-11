@@ -121,7 +121,7 @@ export const serverConfig = {
     publicInfo: {},
     mailOnboardingTemplate: readFileSync(
       path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), {encoding: 'ascii'}),
-    mailResetTemplate: readFileSync(
+      mailResetPasswordTemplate: readFileSync(
         path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), {encoding: 'ascii'})
   },
   CONFIG_ID: 'SERVER-CONFIG'

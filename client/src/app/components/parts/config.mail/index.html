@@ -13,8 +13,8 @@
     <form [formGroup]="formMail" autoComplete="off" (submit)="submit()" #f="ngForm">
       <mat-form-field class="w-100">
         <mat-label class="bigger-label">Password reset mail template</mat-label>
-        <textarea matInput rows="5" formControlName="resetMail" matTooltip="Use HTML + mustache format"></textarea>
-        <mat-error *ngIf="formMail.get('resetMail').invalid">{{ getErrorMessage(formMail.get('resetMail')) }}</mat-error>
+        <textarea matInput rows="5" formControlName="resetPasswordMail" matTooltip="Use HTML + mustache format"></textarea>
+        <mat-error *ngIf="formMail.get('resetPasswordMail').invalid">{{ getErrorMessage(formMail.get('resetPasswordMail')) }}</mat-error>
       </mat-form-field>
       <mat-form-field class="w-100">
           <mat-label class="bigger-label">Onboarding mail template</mat-label>
@@ -28,7 +28,7 @@
   <mat-card-actions *ngIf="(config$ | async) as config; else loading">
     <button mat-raised-button color="primary" (click)="submit()"
       [disabled]="(formLocked$ | async) ||
-      ((config.mailResetTemplate == formMail.get('resetMail').value) && (config.mailOnboardingTemplate == formMail.get('onboardingMail').value)) ||
+      ((config.mailResetPasswordTemplate == formMail.get('resetPasswordMail').value) && (config.mailOnboardingTemplate == formMail.get('onboardingMail').value)) ||
       (formMail.invalid)">SAVE</button>
   </mat-card-actions>
 </mat-card>

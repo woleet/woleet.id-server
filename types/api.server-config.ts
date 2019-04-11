@@ -40,7 +40,7 @@ interface ApiServerConfig {
   ServerClientURL: string | null;
 
   // Mail template
-  mailResetTemplate: string | null;
+  mailResetPasswordTemplate: string | null;
   mailOnboardingTemplate: string | null;
 
 }
@@ -76,6 +76,6 @@ interface ApiServerConfigUpdate {
   ServerClientURL?: string;
 
   // Mail template
-  mailResetTemplate?: string;
+  mailResetPasswordTemplate?: string;
   mailOnboardingTemplate?: string;
 }
