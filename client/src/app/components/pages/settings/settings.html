@@ -1,19 +1,32 @@
-<config-fallback-key></config-fallback-key>
-<br>
-<config-identity-url></config-identity-url>
-<br>
-<config-web-client-url></config-web-client-url>
-<br>
-<config-key-expiration></config-key-expiration>
-<br>
-<config-logo-url></config-logo-url>
-<br>
-<config-html-frame></config-html-frame>
-<br>
-<config-openid></config-openid>
-<br>
-<config-oidcp></config-oidcp>
-<br>
-<config-stmp></config-stmp>
-<br>
-<config-mail-template></config-mail-template>
+<mat-tab-group mat-align-tabs="start">
+  <mat-tab label="Server key">
+    <br>
+    <config-fallback-key></config-fallback-key>
+    <br>
+    <config-key-expiration></config-key-expiration>
+  </mat-tab>
+  <mat-tab label="Server's URLs">
+    <br>
+    <config-identity-url></config-identity-url>
+    <br>
+    <config-web-client-url></config-web-client-url>
+  </mat-tab>
+  <mat-tab label="Style configuration">
+    <br>
+    <config-logo-url></config-logo-url>
+    <br>
+    <config-html-frame></config-html-frame>
+  </mat-tab>
+  <mat-tab label="OIDC configuration">
+    <br>
+    <config-openid></config-openid>
+    <br>
+    <config-oidcp></config-oidcp>
+  </mat-tab>
+  <mat-tab label="Mail configuration">
+    <br>
+    <config-stmp></config-stmp>
+    <br>
+    <config-mail-template></config-mail-template>
+  </mat-tab>
+</mat-tab-group>

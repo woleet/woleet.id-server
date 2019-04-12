@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
   MatIconModule, MatInputModule, MatListModule, MatNativeDateModule, MatRippleModule, MatSelectModule, MatSidenavModule,
-  MatToolbarModule, MatTooltipModule
+  MatTabsModule, MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -140,6 +140,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    MatTabsModule,
 
     // http
     HttpClientModule,
