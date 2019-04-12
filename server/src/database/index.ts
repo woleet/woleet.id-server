@@ -38,10 +38,6 @@ Key.model.beforeDelete(async (key) => {
 
   user.setDataValue('defaultKeyId', null);
 
-  console.log('/////////////////////////////');
-  console.log(user.getDataValue('defaultKeyId'));
-  console.log('/////////////////////////////');
-
   debug('updated user', user.toJSON());
 
   await user.save();
