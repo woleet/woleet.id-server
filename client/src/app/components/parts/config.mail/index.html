@@ -17,7 +17,7 @@
         <mat-error *ngIf="formMail.get('resetPasswordMail').invalid">{{ getErrorMessage(formMail.get('resetPasswordMail')) }}</mat-error>
       </mat-form-field>
       <mat-form-field class="w-100">
-          <mat-label class="bigger-label">Onboarding mail template</mat-label>
+          <mat-label class="bigger-label">User onboarding mail template</mat-label>
         <textarea matInput rows="5" formControlName="onboardingMail" matTooltip="Use HTML + mustache format"></textarea>
         <mat-error *ngIf="formMail.get('onboardingMail').invalid">{{ getErrorMessage(formMail.get('onboardingMail')) }}
         </mat-error>
