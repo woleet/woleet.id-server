@@ -262,6 +262,9 @@ declare global {
     useSMTP?: boolean;
     SMTPConfig?: string;
     ServerClientURL?: string;
+    // Mail template
+    mailResetPasswordTemplate?: string;
+    mailOnboardingTemplate?: string;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -290,6 +293,9 @@ declare global {
     useSMTP?: boolean;
     SMTPConfig?: string;
     ServerClientURL?: string;
+    // Mail template
+    mailResetPasswordTemplate?: string;
+    mailOnboardingTemplate?: string;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -318,6 +324,9 @@ declare global {
     useSMTP?: boolean;
     SMTPConfig?: string;
     ServerClientURL?: string;
+    // Mail template
+    mailResetPasswordTemplate?: string;
+    mailOnboardingTemplate?: string;
   }
 
   /* OIDC Provider */

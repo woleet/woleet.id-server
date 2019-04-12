@@ -5,7 +5,7 @@ import { UserService } from '@services/user';
 import { Router } from '@angular/router';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AbstractControl, FormControl, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, ValidationErrors, Validators, FormGroup } from '@angular/forms';
 import {
   asciiValidator, cleanupObject, ErrorMessageProvider, passwordValidator, replaceInObject
 } from '@components/util';
@@ -79,12 +79,16 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   helper;
 
-  form;
+  form: FormGroup;
 
   tmpPhone: string;
   tmpCountryCallingCode: string;
   phoneValid = true;
   errorMsg: string;
+
+  usernameFocused = false;
+  commonNameFocused = false;
+  userIdFocused = false;
 
   countryCodes: Array<{ name: string, code: string }> = cc;
 
@@ -96,7 +100,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   }
 
   private setFormControl(user) {
-    return {
+    return new FormGroup({
       username: new FormControl(user.username, [
         startsWithALetterValidator,
         safeWordValidator,
@@ -111,8 +115,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         asciiValidator,
         passwordMandatoryValidatorOnEdit(!this.sendPasswordEmail)
       ]),
-      role: user.role,
-      identity: {
+      role: new FormControl (user.role, []),
+      identity: new FormGroup ({
         commonName: new FormControl(user.identity.commonName, [
           Validators.required,
           Validators.minLength(3),
@@ -121,22 +125,18 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         organization: new FormControl(user.identity.organization, [Validators.maxLength(64)]),
         organizationalUnit: new FormControl(user.identity.organizationalUnit, [Validators.maxLength(64)]),
         locality: new FormControl(user.identity.locality, [Validators.maxLength(64)]),
-        country: user.identity.country || null,
+        country: new FormControl(user.identity.country || null, []),
         userId: new FormControl(user.identity.userId, [
           noSpaceValidator,
           Validators.maxLength(64)
         ])
-      }
-    };
+      })
+    });
   }
 
   private getFormObject() {
     // get "value" attribute of each form control attributes recursively deleting falsy ones
-    return traverse(this.form).map(function (e) {
-      if (e instanceof FormControl) {
-        return e.value === null ? this.delete(false) : e.value;
-      }
-    });
+    return this.form.value;
   }
 
   ngOnInit() {
@@ -175,9 +175,14 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   }
 
   async submit() {
-
     this.formLocked = true;
-    const user = this.getFormObject();
+    let user;
+    try {
+      user = this.getFormObject();
+    } catch (err) {
+      console.log('err');
+    }
+
     user.phone = this.tmpPhone;
     user.countryCallingCode = this.tmpCountryCallingCode;
 
@@ -219,10 +224,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     this.cancel.emit();
   }
 
-  isValid() {
-    return traverse(this.form).reduce((acc: boolean, e) => acc && ((e instanceof FormControl) ? e.valid : true));
-  }
-
   savePhone(phoneParsed: any) {
     if (phoneParsed == null) {
       this.tmpPhone = null;
@@ -235,5 +236,9 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       this.tmpCountryCallingCode = phoneParsed.countryCallingCode;
       this.phoneValid = true;
     }
+  }
+
+  sendPasswordEmailCheck() {
+    this.sendPasswordEmail = !this.sendPasswordEmail;
   }
 }

@@ -16,7 +16,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
 
   config$: Observable<ApiServerConfig>;
 
-  form: FormGroup;
+  formSMTP: FormGroup;
   _useSMTP: boolean;
   reveal = false;
   changed = false;
@@ -29,7 +29,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
   }
 
   ngOnInit() {
-    this.form = new FormGroup({
+    this.formSMTP = new FormGroup({
       SMTPConfig: new FormControl({ value: '' }, [])
     });
     const config$ = this.config$ = this.configService.getConfig();
@@ -45,7 +45,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
 
       this.useSMTP$.next(config.useSMTP);
 
-      this.form.get('SMTPConfig').setValue(config.SMTPConfig || '');
+      this.formSMTP.get('SMTPConfig').setValue(config.SMTPConfig || '');
 
       this.changed = false;
       this.formValid$.next(this.isFormValid());
@@ -53,9 +53,9 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
 
     this.registerSubscription(this.formLocked$.subscribe((locked) => {
       if (locked) {
-        this.form.disable();
+        this.formSMTP.disable();
       } else {
-        this.form.enable();
+        this.formSMTP.enable();
       }
     }));
 
@@ -72,7 +72,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
   update() {
     const useSMTP = this._useSMTP;
 
-    const SMTPConfig = this.form.get('SMTPConfig').value || null;
+    const SMTPConfig = this.formSMTP.get('SMTPConfig').value || null;
     this.configService.update({
       useSMTP,
       SMTPConfig
@@ -87,7 +87,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
   }
 
   isFormValid() {
-    return this.form.valid && Object.values(this.form.value).every(e => !!e);
+    return this.formSMTP.valid && Object.values(this.formSMTP.value).every(e => !!e);
   }
 
   change() {

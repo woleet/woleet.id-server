@@ -38,6 +38,11 @@ interface ApiServerConfig {
   useSMTP: boolean;
   SMTPConfig: string | null;
   ServerClientURL: string | null;
+
+  // Mail template
+  mailResetPasswordTemplate: string | null;
+  mailOnboardingTemplate: string | null;
+
 }
 
 interface ApiServerConfigUpdate {
@@ -69,4 +74,8 @@ interface ApiServerConfigUpdate {
   useSMTP?: boolean;
   SMTPConfig?: string;
   ServerClientURL?: string;
+
+  // Mail template
+  mailResetPasswordTemplate?: string;
+  mailOnboardingTemplate?: string;
 }

@@ -2,6 +2,7 @@
 
 import { SetOption } from 'cookies';
 import { readFileSync } from 'fs';
+import * as path from 'path';
 import * as log from 'loglevel';
 import * as crypto from 'crypto';
 import * as assert from 'assert';
@@ -118,6 +119,10 @@ export const serverConfig = {
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true,
     publicInfo: {},
+    mailOnboardingTemplate: readFileSync(
+      path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), {encoding: 'ascii'}),
+      mailResetPasswordTemplate: readFileSync(
+        path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), {encoding: 'ascii'})
   },
   CONFIG_ID: 'SERVER-CONFIG'
 };

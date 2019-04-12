@@ -10,8 +10,8 @@
   <br>
   <mat-divider></mat-divider>
   <br>
-  <form [formGroup]="form">
-    <mat-form-field class="w-100" *ngIf="form.get('SMTPConfig')  as f">
+  <form [formGroup]="formSMTP">
+    <mat-form-field class="w-100" *ngIf="formSMTP.get('SMTPConfig')  as f">
       <textarea matInput matTooltip="Use JSON format" placeholder="SMTP transport configuration"
         formControlName="SMTPConfig" (input)="change()" [required]="useSMTP$ | async"></textarea>
       <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>

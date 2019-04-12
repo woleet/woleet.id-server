@@ -1,4 +1,4 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
@@ -8,16 +8,9 @@ import { AppRoutingModule } from './routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
-  MatToolbarModule, MatButtonModule, MatSidenavModule,
-  MatIconModule, MatListModule, MatInputModule, MatCardModule,
-  MatSelectModule,
-  MatTooltipModule,
-  MatRippleModule,
-  MatCheckboxModule,
-  MatDatepickerModule,
-  MatNativeDateModule,
-  MAT_DIALOG_DEFAULT_OPTIONS,
-  MatDialogModule
+  MAT_DIALOG_DEFAULT_OPTIONS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
+  MatIconModule, MatInputModule, MatListModule, MatNativeDateModule, MatRippleModule, MatSelectModule, MatSidenavModule,
+  MatTabsModule, MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -52,9 +45,10 @@ import { UserDetailPageComponent } from '@pages/user.detail';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
-
 // Services
-import { AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService } from '@guards/auth';
+import {
+  AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService
+} from '@guards/auth';
 
 import { KeyService } from '@services/key';
 import { UserService } from '@services/user';
@@ -80,6 +74,7 @@ import { ConfigOpenIDComponent } from '@components/parts/config.openid';
 import { ConfigOIDCPComponent } from '@components/parts/config.oidcp';
 import { ConfigOIDCPClientComponent } from '@components/parts/config.oidcp-client';
 import { ConfigSMTPComponent } from '@components/parts/config.smtp';
+import { ConfigMailTemplateComponent } from '@components/parts/config.mail';
 import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 
@@ -121,6 +116,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     IntlTelInputComponent,
     ConfigLogoUrlComponent,
     ConfigHTMLFrameUrlComponent,
+    ConfigMailTemplateComponent,
     LogoComponent,
     HtmlFrameComponent,
     ResetPasswordPageComponent,
@@ -144,6 +140,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    MatTabsModule,
 
     // http
     HttpClientModule,
@@ -181,7 +178,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
       deps: [AppConfigService, Http],
       multi: true
     },
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },
     AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
     NeedConfigGuardService, KeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
@@ -190,4 +187,5 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
   bootstrap: [AppComponent]
 })
 
-export class AppModule { }
+export class AppModule {
+}
