@@ -41,7 +41,7 @@ export class KeyCardComponent extends ErrorMessageProvider {
 
   startDate = nextYear();
 
-  expiration = new FormControl(null, []);
+  expiration = new FormControl({value: '', disabled: true}, []);
 
   constructor(private keyService: KeyService, private userService: UserService) {
     super();
