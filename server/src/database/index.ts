@@ -24,8 +24,7 @@ Key.model.beforeDelete(async (key) => {
   debug(`delete key ${key.get('id')}`);
   const keyId: string = key.getDataValue('id');
   const userId: string = key.getDataValue('userId');
-  const where = { defaultKeyId: keyId };
-  const user = await User.model.findById(userId, { where });
+  const user = await User.model.findById(userId);
 
   const config = getServerConfig();
 
@@ -33,11 +32,15 @@ Key.model.beforeDelete(async (key) => {
     await setServerConfig({ defaultKeyId: null });
   }
 
-  if (!user) {
+  if (user.getDataValue('defaultKeyId') !== keyId) {
     return;
   }
 
   user.setDataValue('defaultKeyId', null);
+
+  console.log('/////////////////////////////');
+  console.log(user.getDataValue('defaultKeyId'));
+  console.log('/////////////////////////////');
 
   debug('updated user', user.toJSON());
 
