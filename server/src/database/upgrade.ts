@@ -157,16 +157,16 @@ async function upgrade8(sequelize) {
     const holder = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "holder" VARCHAR;`);
     log.debug(holder);
     log.warn('Need to change "mnemonicEntropy" column to the "key" table');
-    const mnemonicEntropy = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "mnemonicEntropy" VARCHAR NULL;`);
+    const mnemonicEntropy = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "mnemonicEntropy" DROP NOT NULL;`);
     log.debug(mnemonicEntropy);
     log.warn('Need to change "mnemonicEntropyIV" column to the "key" table');
-    const mnemonicEntropyIV = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "mnemonicEntropyIV" CHAR(${16 * 2}) NULL;`);
+    const mnemonicEntropyIV = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "mnemonicEntropyIV" DROP NOT NULL;`);
     log.debug(mnemonicEntropyIV);
     log.warn('Need to change "privateKey" column to the "key" table');
-    const privateKey = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "privateKey" VARCHAR NULL;`);
+    const privateKey = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "privateKey" DROP NOT NULL;`);
     log.debug(privateKey);
     log.warn('Need to change "privateKeyIV" column to the "key" table');
-    const privateKeyIV = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "privateKeyIV" CHAR(${16 * 2}) NULL;`);
+    const privateKeyIV = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "privateKeyIV" DROP NOT NULL;`);
     log.debug(privateKeyIV);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 8 }) });
   }

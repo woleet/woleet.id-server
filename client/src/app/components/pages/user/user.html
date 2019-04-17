@@ -3,8 +3,8 @@
   <div *ngIf="(keys$ | async) as keys; else loading">
     <br>
     <div *ngIf="!formOpened">
-      <button mat-raised-button color="primary" (click)="formOpened=true"
-      (create)="refreshKeyList()">ADD EXTERNAL KEY</button>
+      <button mat-raised-button color="primary" (click)="formOpened=true" (create)="refreshKeyList()">ADD EXTERNAL
+        KEY</button>
       <br>
     </div>
     <div *ngIf="formOpened">
@@ -15,8 +15,8 @@
     <div *ngIf="keys.length; else noKeys">
       <div *ngFor="let key of keys; trackBy: trackById;">
         <br>
-        <app-key-card [key]="key" [userId]="user.id"[default]="user.defaultKeyId == key.id"
-        (updateUser)="refreshUser()">
+        <app-key-card [key]="key" [userId]="user.id" [default]="user.defaultKeyId == key.id"
+          (updateUser)="refreshUser()">
         </app-key-card>
       </div>
       <ng-template #noKeys>
@@ -24,4 +24,5 @@
       </ng-template>
     </div>
   </div>
-  <ng-template #loading>Loading...</ng-template>
+</div>
+<ng-template #loading>Loading...</ng-template>
