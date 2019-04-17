@@ -9,6 +9,7 @@ import { promisify } from 'util';
 const { CONFIG_ID } = serverConfig;
 let doPostUpgrade3 = false;
 let doPostUpgrade5 = false;
+let doPostUpgrade8 = false;
 
 async function getConfig() {
   await ServerConfig.model.sync();
@@ -141,6 +142,36 @@ async function upgrade7(sequelize) {
   }
 }
 
+async function upgrade8(sequelize) {
+  log.warn('Checking for update 4 of the "keys" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 8) {
+    doPostUpgrade8 = true;
+    log.warn('Need to add "holder" column to the "key" table');
+    const holder = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "holder" VARCHAR;`);
+    log.debug(holder);
+    log.warn('Need to change "mnemonicEntropy" column to the "key" table');
+    const mnemonicEntropy = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "mnemonicEntropy" VARCHAR NULL;`);
+    log.debug(mnemonicEntropy);
+    log.warn('Need to change "mnemonicEntropyIV" column to the "key" table');
+    const mnemonicEntropyIV = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "mnemonicEntropyIV" CHAR(${16 * 2}) NULL;`);
+    log.debug(mnemonicEntropyIV);
+    log.warn('Need to change "privateKey" column to the "key" table');
+    const privateKey = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "privateKey" VARCHAR NULL;`);
+    log.debug(privateKey);
+    log.warn('Need to change "privateKeyIV" column to the "key" table');
+    const privateKeyIV = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "privateKeyIV" CHAR(${16 * 2}) NULL;`);
+    log.debug(privateKeyIV);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 8 }) });
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
@@ -149,6 +180,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade5(sequelize);
   await upgrade6(sequelize);
   await upgrade7(sequelize);
+  await upgrade8(sequelize);
 }
 
 async function postUpgrade3() {
@@ -223,6 +255,26 @@ async function postUpgrade3() {
   }
 }
 
+async function postUpgrade8() {
+  log.warn('');
+
+  if (doPostUpgrade8 === true) {
+    await Key.model.sync();
+    const keys = await Key.model.findAll({ paranoid: false });
+
+    log.warn(`${keys.length} keys to update...`);
+
+    for (const key of keys) {
+      log.warn(`Updating key ${key.get('id')} ...`);
+      {
+        key.set('holder', 'server');
+      }
+      await key.save();
+      log.debug(`Updated key ${key.get('id')}`);
+    }
+  }
+}
+
 async function afterInitUpgrade5() {
   log.warn('Checking for after-init-update of the "apiToken" model...');
 
@@ -262,6 +314,7 @@ async function afterInitUpgrade5() {
  */
 export async function postUpgrade(sequelize: Sequelize) {
   await postUpgrade3();
+  await postUpgrade8();
 }
 
 /**

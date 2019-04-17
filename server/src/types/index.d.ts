@@ -105,20 +105,21 @@ declare global {
     expiration: number;
 
     /** Hexadecimal represention of the mnemonic phrase */
-    mnemonicEntropy: string;
+    mnemonicEntropy?: string;
     /** Hexadecimal represention of the mnemonic's initialization vector */
-    mnemonicEntropyIV: string;
+    mnemonicEntropyIV?: string;
     /** Hexadecimal represention of the private key */
-    privateKey: string;
+    privateKey?: string;
     /** Hexadecimal represention of the private key's initialization vector */
-    privateKeyIV: string;
+    privateKeyIV?: string;
     /** Boolean to indicate weither the privatekey is compresssed or not */
-    compressed: boolean;
+    compressed?: boolean;
     /** Base 58 represention of the public key */
     publicKey: string;
 
     userId: string;
     user?: InternalUserObject;
+    holder: 'server' | 'user';
   }
 
   interface ApiFullPostKeyObject extends KeyObject {
@@ -126,13 +127,14 @@ declare global {
     type?: KeyTypeEnum;
     status?: KeyStatusEnum;
     expiration?: number;
+    holder: 'server' | 'user';
 
     /** Hexadecimal represention of the mnemonic phrase */
-    mnemonicEntropy: string;
+    mnemonicEntropy?: string;
     /** Hexadecimal represention of the private key */
-    privateKey: string;
+    privateKey?: string;
     /** Boolean to indicate weither the privatekey is compresssed or not */
-    compressed: boolean;
+    compressed?: boolean;
     /** Base 58 represention of the public key */
     publicKey: string;
     /** Reference to the owner of the key */

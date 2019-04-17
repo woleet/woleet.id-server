@@ -36,3 +36,18 @@ export class KeyService {
   }
 
 }
+
+@Injectable()
+export class UserKeyService {
+
+  constructor(private http: HttpClient) { }
+
+  getAll(): Promise<ApiKeyObject[]> {
+    return this.http.get<ApiKeyObject[]>(`${serverURL}/userkey/getall`).toPromise();
+  }
+
+  create(key: ApiPostKeyObject) {
+    return this.http.post<ApiKeyObject>(`${serverURL}/userkey/create`, key).toPromise();
+  }
+
+}

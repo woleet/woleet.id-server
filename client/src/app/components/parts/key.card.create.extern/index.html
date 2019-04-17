@@ -1,0 +1,25 @@
+<mat-card>
+  <mat-card-content>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Key name" [formControl]="keyName" required>
+        <mat-error *ngIf="keyName.invalid">{{ getErrorMessage(keyName) }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row">
+      <mat-form-field class="w-100">
+        <input matInput [formControl]="publicKey" placeholder="PublicKey" required>
+        <mat-error *ngIf="publicKey.invalid">{{ getErrorMessage(publicKey) }}</mat-error>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="createKey()"
+      [disabled]="formLocked || keyName.invalid">CREATE</button>
+    <button mat-button [disabled]="formLocked" (click)="cancelKey()">CANCEL</button>
+  </mat-card-actions>
+</mat-card>
+<div *ngFor="let errorMsg of errorMsgs;">
+  <br>
+  <mat-card *ngIf="errorMsg" class="error-card">{{ errorMsg.message }}</mat-card>
+</div>

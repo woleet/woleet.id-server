@@ -11,16 +11,17 @@ const KeyModel = {
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   name: { type: STRING, allowNull: false },
   // encrypted
-  mnemonicEntropy: { type: STRING, unique: true, allowNull: false },
-  mnemonicEntropyIV: { type: CHAR((16) * 2), allowNull: false },
+  mnemonicEntropy: { type: STRING, unique: true, allowNull: true },
+  mnemonicEntropyIV: { type: CHAR((16) * 2), allowNull: true },
   // encrypted
-  privateKey: { type: STRING, unique: true, allowNull: false },
-  privateKeyIV: { type: CHAR((16) * 2), allowNull: false },
+  privateKey: { type: STRING, unique: true, allowNull: true },
+  privateKeyIV: { type: CHAR((16) * 2), allowNull: true },
   publicKey: { type: STRING, unique: true, allowNull: false },
   compressed: { type: BOOLEAN },
   lastUsed: { type: DATE, defaultValue: null },
   expiration: { type: DATE },
-  userId: { type: UUID }
+  userId: { type: UUID },
+  holder: { type: ENUM(['server', 'user']), defaultValue: 'server'}
 };
 
 class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKeyObject> {

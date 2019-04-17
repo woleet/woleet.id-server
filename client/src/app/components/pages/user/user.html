@@ -1,4 +1,27 @@
 <div *ngIf="(info$ | async) as user; else loading">
-  <app-user-card [user]="user"></app-user-card>
-</div>
-<ng-template #loading>Loading...</ng-template>
+  <app-user-card [user]="user" (click)="key()"></app-user-card>
+  <div *ngIf="(keys$ | async) as keys; else loading">
+    <br>
+    <div *ngIf="!formOpened">
+      <button mat-raised-button color="primary" (click)="formOpened=true"
+      (create)="refreshKeyList()">ADD EXTERNAL KEY</button>
+      <br>
+    </div>
+    <div *ngIf="formOpened">
+      <key-card-create-extern (reset)="formOpened=false" (create)="refreshKeyList()"></key-card-create-extern>
+    </div>
+    <br>
+    <mat-divider></mat-divider>
+    <div *ngIf="keys.length; else noKeys">
+      <div *ngFor="let key of keys; trackBy: trackById;">
+        <br>
+        <app-key-card [key]="key" [userId]="user.id"[default]="user.defaultKeyId == key.id"
+        (updateUser)="refreshUser()">
+        </app-key-card>
+      </div>
+      <ng-template #noKeys>
+        <span class="btn-h">This user does not have any key</span>
+      </ng-template>
+    </div>
+  </div>
+  <ng-template #loading>Loading...</ng-template>

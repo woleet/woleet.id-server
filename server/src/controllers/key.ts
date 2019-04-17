@@ -16,7 +16,7 @@ import { secureModule } from '../config';
  */
 export async function createKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
   const _newKey = key.phrase ? await secureModule.importPhrase(key.phrase) : await secureModule.createKey();
-
+  const holder: KeyHolderEnum = 'server';
   const newKey = await Key.create(Object.assign({}, key, {
     mnemonicEntropy: _newKey.entropy.toString('hex'),
     mnemonicEntropyIV: _newKey.entropyIV.toString('hex'),
@@ -24,10 +24,27 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
     privateKeyIV: _newKey.privateKeyIV.toString('hex'),
     compressed: _newKey.compressed,
     publicKey: _newKey.publicKey,
+    holder,
     userId
   }));
 
   return newKey.toJSON();
+}
+
+export async function userCreateKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
+  const name = key.name;
+  const publicKey = key.publicKey;
+  try {
+  const newKey = await Key.create(Object.assign({
+    name,
+    publicKey,
+    holder: 'user',
+    userId
+  }));
+  return newKey.toJSON();
+} catch (err) {
+  throw err;
+}
 }
 
 /**
