@@ -1,6 +1,7 @@
 import { Key, User } from '../database';
 import { NotFoundKeyError, NotFoundUserError } from '../errors';
 import { secureModule } from '../config';
+import { getServerConfig } from './server-config';
 
 /**
  * Key
@@ -34,12 +35,14 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
 export async function userCreateKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
   const name = key.name;
   const publicKey = key.publicKey;
+  const expiration = getServerConfig().keyExpirationOffset || null;
   try {
   const newKey = await Key.create(Object.assign({
     name,
     publicKey,
     holder: 'user',
-    userId
+    userId,
+    expiration
   }));
   return newKey.toJSON();
 } catch (err) {

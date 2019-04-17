@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { UserKeyService } from '@services/key';
 import { ErrorMessageProvider, nextYear } from '@components/util';
-import { ServerConfigService } from '@services/server-config';
+import { addressValidator } from '@components/util';
 
 @Component({
   selector: 'key-card-create-extern',
@@ -26,7 +26,7 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
 
   startDate = nextYear();
 
-  publicKey = new FormControl('', [Validators.required, Validators.minLength(26), Validators.maxLength(35)]);
+  publicKey = new FormControl('', [Validators.required, Validators.minLength(26), Validators.maxLength(35), addressValidator]);
 
   setAsDefault = false;
 
