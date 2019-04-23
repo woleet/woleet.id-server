@@ -93,6 +93,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
             KeyPost keyPost = (KeyPost) objectBase;
 
             // Set status and name
+            keyPost.setStatus(KeyStatusEnum.ACTIVE);
             keyPost.setName(Config.randomName());
             keyPost.setPublicKey(Config.randomAddress());
 
@@ -163,7 +164,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
     void verifyObjectsEquals(CRUDApiTest.ObjectPost pExpected, CRUDApiTest.ObjectGet pActual) {
         KeyPost expected = (KeyPost) pExpected.get();
         KeyGet actual = (KeyGet) pActual.get();
-        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getPublicKey(), actual.getPubKey());
         assertEquals(expected.getName(), actual.getName());
     }
 
