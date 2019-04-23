@@ -180,7 +180,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     try {
       user = this.getFormObject();
     } catch (err) {
-      console.log('err');
+      log.error(err);
     }
 
     user.phone = this.tmpPhone;

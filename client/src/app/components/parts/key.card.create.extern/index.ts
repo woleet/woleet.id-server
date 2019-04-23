@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { UserKeyService } from '@services/key';
+import { ExternalKeyService } from '@services/key';
 import { ErrorMessageProvider, nextYear } from '@components/util';
 import { addressValidator } from '@components/util';
 
@@ -28,9 +28,11 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
 
   publicKey = new FormControl('', [Validators.required, Validators.minLength(26), Validators.maxLength(35), addressValidator]);
 
+  expiration = new FormControl(null, []);
+
   setAsDefault = false;
 
-  constructor(private keyService: UserKeyService) {
+  constructor(private keyService: ExternalKeyService) {
     super();
   }
 
@@ -41,7 +43,7 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
     let newKey;
 
     try {
-      newKey = await this.keyService.create({ name, publicKey });
+      newKey = await this.keyService.create(this.userId, { name, publicKey });
       this.formLocked = false;
       this.keyName.reset();
       this.reset.emit();

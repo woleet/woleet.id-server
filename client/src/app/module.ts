@@ -51,7 +51,7 @@ import {
   AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService
 } from '@guards/auth';
 
-import { KeyService, UserKeyService } from '@services/key';
+import { KeyService, ExternalKeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
 import { APITokenService } from '@services/api-token';
@@ -182,7 +182,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },
     AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
-    NeedConfigGuardService, KeyService, UserKeyService, UserService, InfoService, ConfigService, APITokenService,
+    NeedConfigGuardService, KeyService, ExternalKeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     NetworkErrorInterceptorService, AllowCredentialsInterceptorService, LocalStorageService
   ],

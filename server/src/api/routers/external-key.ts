@@ -10,17 +10,17 @@ import { BadRequest } from 'http-errors';
  * Key
  * Request handlers for key by user.
  * @swagger
- *  tags: [userkey]
+ *  tags: [external-key]
  */
-const router = new Router({ prefix: '/userkey' });
+const router = new Router({ prefix: '/external-key' });
 
 /**
- * @route: /userkey/create
+ * @route: /external-key/create
  * @swagger
  *  operationId: createKey
  */
-router.post('/create', validate.body('createKey'), async function (ctx) {
-  const userId = ctx.session.user.get('id');
+router.post('/create/:userId', validate.body('createKey'), async function (ctx) {
+  const { userId } = ctx.params;
   const key: ApiPostKeyObject = ctx.request.body;
 
   let created;
@@ -41,17 +41,6 @@ router.post('/create', validate.body('createKey'), async function (ctx) {
   });
 
   ctx.body = serializeKey(created);
-});
-
-/**
- * @route: /userkey/getall
- * @swagger
- *  operationId: getAll
- */
-router.get('/getall', async function (ctx) {
-  const userId = ctx.session.user.get('id');
-  const keys = await getAllKeysOfUser(userId);
-  ctx.body = keys.map(serializeKey);
 });
 
 export { router };

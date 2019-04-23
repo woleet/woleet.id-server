@@ -38,8 +38,18 @@ public class KeyBase {
   @SerializedName(SERIALIZED_NAME_STATUS)
   private KeyStatusEnum status = null;
 
+  public static final String SERIALIZED_NAME_PUBKEY = "publicKey";
+  @SerializedName(SERIALIZED_NAME_PUBKEY)
+  private String publicKey;
+
   public KeyBase name(String name) {
     this.name = name;
+    return this;
+  }
+
+  public KeyBase userKeyBase(String name, String publicKey) {
+    this.name = name;
+    this.publicKey = publicKey;
     return this;
   }
 
@@ -74,6 +84,18 @@ public class KeyBase {
     this.status = status;
   }
 
+  /**
+   * Get publicKey
+   * @return publicKey
+   **/
+  @ApiModelProperty(example = "1GASnFnfLbWMKQKZiaTLR3rFDz7CSvHSo", value = "Key address.")
+  public String getPublicKey() {
+    return publicKey;
+  }
+
+  public void setPublicKey(String publicKey) {
+    this.publicKey = publicKey;
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -85,7 +107,8 @@ public class KeyBase {
     }
     KeyBase keyBase = (KeyBase) o;
     return Objects.equals(this.name, keyBase.name) &&
-        Objects.equals(this.status, keyBase.status);
+        Objects.equals(this.status, keyBase.status) &&
+        Objects.equals(this.publicKey, keyBase.publicKey);
   }
 
   @Override
@@ -101,6 +124,7 @@ public class KeyBase {
     
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    publicKey: ").append(toIndentedString(publicKey)).append("\n");
     sb.append("}");
     return sb.toString();
   }
