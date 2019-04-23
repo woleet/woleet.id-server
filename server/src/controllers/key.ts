@@ -35,7 +35,7 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
 export async function userCreateKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
   const name = key.name;
   const publicKey = key.publicKey;
-  const expiration = getServerConfig().keyExpirationOffset || null;
+  const expiration = key.expiration;
   try {
   const newKey = await Key.create(Object.assign({
     name,

@@ -28,7 +28,7 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
 
   publicKey = new FormControl('', [Validators.required, Validators.minLength(26), Validators.maxLength(35), addressValidator]);
 
-  expiration = new FormControl(null, []);
+  expiration = new FormControl('', []);
 
   setAsDefault = false;
 
@@ -40,10 +40,11 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
     this.formLocked = true;
     const name = this.keyName.value;
     const publicKey = this.publicKey.value;
+    const expiration = this.expiration.value;
     let newKey;
 
     try {
-      newKey = await this.keyService.create(this.userId, { name, publicKey });
+      newKey = await this.keyService.create(this.userId, { name, publicKey, expiration });
       this.formLocked = false;
       this.keyName.reset();
       this.reset.emit();

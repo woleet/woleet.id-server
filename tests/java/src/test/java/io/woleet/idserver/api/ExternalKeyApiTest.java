@@ -11,16 +11,16 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-public class UserKeyApiTest extends CRUDApiTest {
+public class ExternalKeyApiTest extends CRUDApiTest {
 
     class Api implements CRUDApiTest.Api {
 
-        UserKeyApi userKeyApi;
+        ExternalKeyApi externalKeyApi;
 
         KeyApi keyApi;
 
-        Api(UserKeyApi userKeyApi, KeyApi keyApi) {
-            this.userKeyApi = userKeyApi;
+        Api(ExternalKeyApi externalKeyApi, KeyApi keyApi) {
+            this.externalKeyApi = externalKeyApi;
             this.keyApi = keyApi;
         }
 
@@ -32,8 +32,8 @@ public class UserKeyApiTest extends CRUDApiTest {
                 return new ArrayList<>();
 
             List<CRUDApiTest.ObjectGet> list = new ArrayList<>();
-            for (KeyGet keyGet : userKeyApi.getAllUserKeys())
-                list.add(new UserKeyApiTest.ObjectGet(keyGet));
+            for (KeyGet keyGet : keyApi.getAllUserKeys(user.getId()))
+                list.add(new ExternalKeyApiTest.ObjectGet(keyGet));
             return list;
         }
 
@@ -44,7 +44,7 @@ public class UserKeyApiTest extends CRUDApiTest {
 
         @Override
         public ObjectGet createObject(CRUDApiTest.ObjectPost objectPost) throws ApiException {
-            return new ObjectGet(userKeyApi.createUserKey((KeyPost) objectPost.get()));
+            return new ObjectGet(externalKeyApi.createExternalKey(user.getId(), (KeyPost) objectPost.get()));
         }
 
         @Override
@@ -84,7 +84,7 @@ public class UserKeyApiTest extends CRUDApiTest {
         @Override
         CRUDApiTest.ObjectPost setMinimalAttributes() {
             KeyPost keyPost = (KeyPost) objectBase;
-            keyPost.userKeyBase(Config.randomName(), Config.randomAddress());
+            keyPost.externKeyBase(Config.randomName(), Config.randomAddress());
             return new ObjectPost(keyPost);
         }
 
@@ -131,7 +131,7 @@ public class UserKeyApiTest extends CRUDApiTest {
 
     @Override
     Api newApi(ApiClient apiClient) {
-        return new Api(new UserKeyApi(apiClient), new KeyApi(apiClient));
+        return new Api(new ExternalKeyApi(apiClient), new KeyApi(apiClient));
     }
 
     @Override

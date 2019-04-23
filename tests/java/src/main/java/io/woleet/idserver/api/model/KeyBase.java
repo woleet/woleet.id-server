@@ -47,7 +47,7 @@ public class KeyBase {
     return this;
   }
 
-  public KeyBase userKeyBase(String name, String publicKey) {
+  public KeyBase externKeyBase(String name, String publicKey) {
     this.name = name;
     this.publicKey = publicKey;
     return this;
