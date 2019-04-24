@@ -40,7 +40,7 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
     this.formLocked = true;
     const name = this.keyName.value;
     const publicKey = this.publicKey.value;
-    const expiration = this.expiration.value;
+    const expiration = +this.expiration.value || undefined;
     let newKey;
 
     try {

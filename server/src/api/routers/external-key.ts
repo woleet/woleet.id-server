@@ -1,10 +1,12 @@
 import { validate } from '../schemas';
 import * as Router from 'koa-router';
 
-import { userCreateKey, getAllKeysOfUser } from '../../controllers/key';
+import { externalCreateKey } from '../../controllers/key';
 import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
 import { BadRequest } from 'http-errors';
+
+const vuid = validate.param('userId', 'uuid');
 
 /**
  * Key
@@ -19,14 +21,14 @@ const router = new Router({ prefix: '/external-key' });
  * @swagger
  *  operationId: createKey
  */
-router.post('/create/:userId', validate.body('createKey'), async function (ctx) {
+router.post('/create/:userId', vuid, validate.body('createKey'), async function (ctx) {
   const { userId } = ctx.params;
   const key: ApiPostKeyObject = ctx.request.body;
 
   let created;
 
   try {
-    created = await userCreateKey(userId, key);
+    created = await externalCreateKey(userId, key);
   } catch (error) {
     throw new BadRequest(error);
   }

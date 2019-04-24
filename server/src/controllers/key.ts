@@ -32,10 +32,10 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
   return newKey.toJSON();
 }
 
-export async function userCreateKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
+export async function externalCreateKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
   const name = key.name;
   const publicKey = key.publicKey;
-  const expiration = key.expiration;
+  const expiration = key.expiration || null;
   try {
   const newKey = await Key.create(Object.assign({
     name,
