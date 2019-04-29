@@ -5,11 +5,10 @@ import { UserService } from '@services/user';
 import { Router } from '@angular/router';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AbstractControl, FormControl, ValidationErrors, Validators, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import {
   asciiValidator, cleanupObject, ErrorMessageProvider, passwordValidator, replaceInObject
 } from '@components/util';
-import * as traverse from 'traverse';
 import cc from '@components/cc';
 import { addedDiff, updatedDiff } from 'deep-object-diff';
 import * as log from 'loglevel';
@@ -115,8 +114,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         asciiValidator,
         passwordMandatoryValidatorOnEdit(!this.sendPasswordEmail)
       ]),
-      role: new FormControl (user.role, []),
-      identity: new FormGroup ({
+      role: new FormControl(user.role, []),
+      identity: new FormGroup({
         commonName: new FormControl(user.identity.commonName, [
           Validators.required,
           Validators.minLength(3),
@@ -132,11 +131,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         ])
       })
     });
-  }
-
-  private getFormObject() {
-    // get "value" attribute of each form control attributes recursively deleting falsy ones
-    return this.form.value;
   }
 
   ngOnInit() {
@@ -176,13 +170,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   async submit() {
     this.formLocked = true;
-    let user;
-    try {
-      user = this.getFormObject();
-    } catch (err) {
-      log.error(err);
-    }
-
+    const user = this.form.value;
     user.phone = this.tmpPhone;
     user.countryCallingCode = this.tmpCountryCallingCode;
 

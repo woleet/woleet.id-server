@@ -60,7 +60,7 @@
       </div>
       <div fxLayout="column">
         <mat-form-field>
-          <input matInput [matDatepicker]="picker" [formControl]="expiration" placeholder="Expiration date" disabled>
+          <input matInput [matDatepicker]="picker" [formControl]="expiration" placeholder="Expiration date">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker startView="year" [startAt]="startDate" disabled="false"></mat-datepicker>
           <mat-error *ngIf="expiration.invalid">{{ getErrorMessage(expiration) }}</mat-error>
@@ -73,5 +73,4 @@
       [disabled]="formLocked || keyName.invalid">SAVE</button>
     <button mat-button [disabled]="formLocked" (click)="setEditMode(false)">CANCEL</button>
   </mat-card-actions>
-
 </mat-card>
