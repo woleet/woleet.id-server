@@ -20,7 +20,10 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     SMTPConfig,
     ServerClientURL,
     mailResetPasswordTemplate,
-    mailOnboardingTemplate
+    mailOnboardingTemplate,
+    proofDeskAPIURL,
+    proofDeskAPIToken,
+    proofDeskAPIIsValid
   } = config;
 
   return {
@@ -44,6 +47,9 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     SMTPConfig,
     ServerClientURL,
     mailResetPasswordTemplate,
-    mailOnboardingTemplate
+    mailOnboardingTemplate,
+    proofDeskAPIURL,
+    proofDeskAPIToken,
+    proofDeskAPIIsValid
   };
 }

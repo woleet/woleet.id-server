@@ -3,7 +3,7 @@ import { serverConfig } from '../config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { exit } from '../exit';
-import { updateConfig } from 'src/api/schemas/server-config';
+import * as https from 'https';
 
 const debug = Debug('id:ctrl:config');
 
@@ -26,6 +26,17 @@ export function getServerConfig(): InternalServerConfigObject {
 }
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
+  await checkProofDeskConfigChange(up)
+    .catch((err) => {
+      switch (err) {
+        case 0:
+          return setServerConfig({ proofDeskAPIIsValid: 0 });
+        case 1:
+          return setServerConfig({ proofDeskAPIIsValid: 1 });
+        default:
+          throw err;
+      }
+    });
   try {
     const config = Object.assign({}, inMemoryConfig, up);
     let cfg = await ServerConfig.update(CONFIG_ID, { config });
@@ -110,7 +121,6 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
       exit('FATAL: Failed to stop the OIDCP server.', err);
     }
   }
-
   if (up.OIDCPIssuerURL || up.OIDCPClients || up.enableOIDCP) {
     debug('Update OIDC Provider with', { up });
     try {
@@ -134,5 +144,43 @@ async function checkSMTPConfigChange(up: ServerConfigUpdate) {
       log.error('Failed to initialize SMTP, it will be automatically disabled!', err);
       return setServerConfig({ useSMTP: false });
     }
+  }
+}
+
+async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
+  if (up.proofDeskAPIURL || up.proofDeskAPIToken) {
+    debug('Update ProofDesk Config with', { up });
+    const url = new URL(up.proofDeskAPIURL || getServerConfig().proofDeskAPIURL);
+    const httpsOptions = {
+      host: url.host,
+      path: url.pathname + '/user/credits',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + up.proofDeskAPIToken || 'Bearer ' + getServerConfig().proofDeskAPIToken
+      }
+    };
+    return new Promise((resolve, reject) => {
+      https.get(httpsOptions, (res) => {
+        let data = '';
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+        res.on('end', () => {
+          try {
+            const json = JSON.parse(data);
+            if (!json.error) {
+              resolve(setServerConfig({ proofDeskAPIIsValid: 2 }));
+            } else {
+              reject(1);
+            }
+          } catch (err) {
+            reject(0);
+          }
+        });
+      }).on('error', (err) => {
+        reject(err.message);
+      });
+    });
   }
 }

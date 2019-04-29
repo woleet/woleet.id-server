@@ -43,6 +43,10 @@ interface ApiServerConfig {
   mailResetPasswordTemplate: string | null;
   mailOnboardingTemplate: string | null;
 
+  // ProofDesk config
+  proofDeskAPIURL: string | null;
+  proofDeskAPIToken: string | null;
+  proofDeskAPIIsValid: number | null;
 }
 
 interface ApiServerConfigUpdate {
@@ -78,4 +82,9 @@ interface ApiServerConfigUpdate {
   // Mail template
   mailResetPasswordTemplate?: string;
   mailOnboardingTemplate?: string;
+
+  // ProofDesk config
+  proofDeskAPIURL?: string;
+  proofDeskAPIToken?: string;
+  proofDeskAPIIsValid?: number;
 }

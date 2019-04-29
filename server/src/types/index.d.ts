@@ -265,6 +265,10 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -296,6 +300,10 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -327,6 +335,10 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
   }
 
   /* OIDC Provider */
