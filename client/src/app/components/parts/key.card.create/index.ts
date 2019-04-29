@@ -28,7 +28,7 @@ export class KeyCreateCardComponent extends ErrorMessageProvider {
 
   startDate = nextYear();
 
-  expiration = new FormControl(null, []);
+  expiration = new FormControl({value: '', disabled: true}, []);
 
   setAsDefault = false;
 

@@ -62,7 +62,6 @@ export class ConfigWebClientUrlComponent extends ErrorMessageProvider implements
     beginEdit() {
         this.editMode = true;
         const guessClientURL = `${window.location.origin}`;
-        console.log(this.form.value);
         if (this.form.value === undefined) {
             this.form.setValue(guessClientURL);
         }
