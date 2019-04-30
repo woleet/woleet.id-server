@@ -267,6 +267,7 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    mailKeyEnrolmentTemplate?:string;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -298,6 +299,7 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    mailKeyEnrolmentTemplate?:string;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -329,6 +331,7 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    mailKeyEnrolmentTemplate?:string;
   }
 
   /* OIDC Provider */

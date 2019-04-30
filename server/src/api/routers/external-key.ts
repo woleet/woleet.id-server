@@ -4,7 +4,8 @@ import * as Router from 'koa-router';
 import { externalCreateKey } from '../../controllers/key';
 import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
-import { BadRequest } from 'http-errors';
+import { sendKeyEnrolmentEmail } from '../../controllers/send-email';
+import { BadRequest, NotFound } from 'http-errors';
 
 const vuid = validate.param('userId', 'uuid');
 
@@ -43,6 +44,37 @@ router.post('/create/:userId', vuid, validate.body('createKey'), async function 
   });
 
   ctx.body = serializeKey(created);
+});
+
+/**
+ * @route: /external-key/create
+ * @swagger
+ *  operationId: createKey
+ */
+router.post('/enrolment', async function (ctx) {
+  const { email } = ctx.request.body;
+  let user;
+
+  if (!email) {
+    throw new BadRequest('Need to send the email address.');
+  }
+
+  try {
+    user = await sendKeyEnrolmentEmail(email);
+  } catch {
+    throw new NotFound(email + ' does not correspond to a user.');
+  }
+
+  event.register({
+    type: 'user.edit',
+    authorizedUserId: null,
+    associatedTokenId: null,
+    associatedUserId: user.id,
+    associatedKeyId: null,
+    data: null
+  });
+
+  ctx.body = '';
 });
 
 export { router };

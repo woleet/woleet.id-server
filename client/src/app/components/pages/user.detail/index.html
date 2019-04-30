@@ -4,6 +4,11 @@
     <button fxLaytout="column" mat-raised-button color="primary" (click)="externalFormOpened=true">
       ADD EXTERNAL KEY
     </button>
+    <button fxLayout="column" mat-raised-button color="primary" (click)="sendEnrolmentMail()"
+      [disabled]="!useSMTP || !ServerClientURL || !email"
+      [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''">
+      Enrol external key
+    </button>
   </div>
   <div *ngIf="formOpened">
     <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="userId"></key-card-create>
@@ -15,15 +20,6 @@
   <br>
   <mat-divider></mat-divider>
   <div *ngIf="keys.length; else noKeys">
-    <div fxLayout="row" fxLayoutWrap fxLayoutGap="20px" *ngIf="!formOpened">
-      <button mat-raised-button fxLayout="column" color="primary" (click)="formOpened=true">ADD KEY</button>
-      <button mat-raised-button fxLayout="column" color="primary" (click)="sendEnrolmentMail()">Enrol external key</button>
-    </div>
-    <div *ngIf="formOpened">
-      <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="userId"></key-card-create>
-    </div>
-    <br>
-    <mat-divider></mat-divider>
     <div *ngFor="let key of keys; trackBy: trackById;">
       <br>
       <app-key-card [key]="key" [userId]="(user$ | async)?.id" [modes]="['block', 'delete', 'edit']"

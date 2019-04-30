@@ -47,11 +47,11 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
 
   debug('Created user', newUser.toJSON());
 
-  const key = await createKey(userId, { name: 'default' });
-
-  debug('Created key', key);
-
-  newUser.setDataValue('defaultKeyId', key.id);
+  if (user.createDefaultKey) {
+    const key = await createKey(userId, { name: 'default' });
+    debug('Created key', key);
+    newUser.setDataValue('defaultKeyId', key.id);
+  }
 
   await newUser.save();
 

@@ -30,7 +30,9 @@ const createUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPostUserObject
   email: Joi.string().email().allow(null), // not required for step 1 (allowing null - but should be specified)
   username: SafeWord.min(1).max(64).allow(null), // not required for step 1 (allowing null - but should be specified)
   password: Word.allow(null), // not required for step 1 (allowing null - but should be specified)
-  identity: createIdentity.required()
+  identity: createIdentity.required(),
+  sendKeyEnrolmentMail: Joi.boolean(),
+  createDefaultKey: Joi.boolean(),
 });
 
 const updateUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPostUserObject>>{

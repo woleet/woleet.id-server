@@ -40,12 +40,17 @@ export async function initServerConfig() {
     if (!config.mailOnboardingTemplate) {
       log.warn('The onboarding template is set to default.');
       config.mailOnboardingTemplate = readFileSync(
-        path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), {encoding: 'ascii'});
+        path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), { encoding: 'ascii' });
     }
     if (!config.mailResetPasswordTemplate) {
       log.warn('The reset mail template is set to default.');
       config.mailResetPasswordTemplate = readFileSync(
-        path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), {encoding: 'ascii'});
+        path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), { encoding: 'ascii' });
+    }
+    if (!config.mailKeyEnrolmentTemplate) {
+      log.warn('The key enrolement mail template is set to default.');
+      config.mailKeyEnrolmentTemplate = readFileSync(
+        path.join(__dirname, '../assets/defaultKeyEnrolmentMailTemplate.html'), { encoding: 'ascii' });
     }
 
   } else {

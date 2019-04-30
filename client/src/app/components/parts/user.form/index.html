@@ -88,11 +88,11 @@
     <mat-divider></mat-divider>
     <br>
     <div fxLayout="row" fxLayout.gt-sm="column" fxLayoutGap="10px">
-      <mat-checkbox matInput [(ngModel)]="createDefaultKey" (change)="createDefaultKeyCheck()">Create a key on WIDS
+      <mat-checkbox matInput [(ngModel)]="createDefaultKey">Create a key on WIDS
       </mat-checkbox>
       <mat-checkbox matInput [disabled]="!useSMTP || !ServerClientURL"
         [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''"
-        [(ngModel)]="sendEnrolmentEmail" (change)="sendPasswordEmailCheck()">Send enrolment email</mat-checkbox>
+        [(ngModel)]="sendEnrolmentEmail">Send enrolment email</mat-checkbox>
     </div>
     <br>
   </div>

@@ -20,7 +20,8 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     SMTPConfig,
     ServerClientURL,
     mailResetPasswordTemplate,
-    mailOnboardingTemplate
+    mailOnboardingTemplate,
+    mailKeyEnrolmentTemplate
   } = config;
 
   return {
@@ -44,6 +45,7 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     SMTPConfig,
     ServerClientURL,
     mailResetPasswordTemplate,
-    mailOnboardingTemplate
+    mailOnboardingTemplate,
+    mailKeyEnrolmentTemplate
   };
 }

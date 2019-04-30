@@ -115,14 +115,16 @@ export const events = {
 
 export const serverConfig = {
   default: {
-    version: 8, // datamodel version
+    version: 9, // datamodel version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true,
     publicInfo: {},
     mailOnboardingTemplate: readFileSync(
-      path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), {encoding: 'ascii'}),
-      mailResetPasswordTemplate: readFileSync(
-        path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), {encoding: 'ascii'})
+      path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), { encoding: 'ascii' }),
+    mailResetPasswordTemplate: readFileSync(
+      path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), { encoding: 'ascii' }),
+    mailKeyEnrolmentTemplate: readFileSync(
+      path.join(__dirname, '../assets/defaultKeyEnrolmentMailTemplate.html'), { encoding: 'ascii' })
   },
   CONFIG_ID: 'SERVER-CONFIG'
 };

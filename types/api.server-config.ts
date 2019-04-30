@@ -42,6 +42,7 @@ interface ApiServerConfig {
   // Mail template
   mailResetPasswordTemplate: string | null;
   mailOnboardingTemplate: string | null;
+  mailKeyEnrolmentTemplate:string | null;
 
 }
 
@@ -78,4 +79,5 @@ interface ApiServerConfigUpdate {
   // Mail template
   mailResetPasswordTemplate?: string;
   mailOnboardingTemplate?: string;
+  mailKeyEnrolmentTemplate?:string;
 }

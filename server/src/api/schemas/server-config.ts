@@ -36,7 +36,8 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   ServerClientURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   // Mail template
   mailResetPasswordTemplate: Joi.string().allow(null),
-  mailOnboardingTemplate: Joi.string().allow(null)
+  mailOnboardingTemplate: Joi.string().allow(null),
+  mailKeyEnrolmentTemplate: Joi.string().allow(null)
 });
 
 export { updateConfig };
