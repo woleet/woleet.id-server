@@ -62,6 +62,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   useSMTP: boolean;
   ServerClientURL: string;
   sendPasswordEmail = false;
+  sendEnrolmentEmail = false;
+  createDefaultKey = true;
 
   @Input()
   mode: 'create' | 'edit';
@@ -228,5 +230,13 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   sendPasswordEmailCheck() {
     this.sendPasswordEmail = !this.sendPasswordEmail;
+  }
+
+  sendEnrolmentEmailCheck() {
+    console.log(this.sendEnrolmentEmail);
+  }
+
+  createDefaultKeyCheck() {
+    console.log(this.createDefaultKey);
   }
 }

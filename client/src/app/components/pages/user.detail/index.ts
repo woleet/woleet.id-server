@@ -36,4 +36,8 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   refreshUser() {
     this.user$ = this.userService.getById(this.userId);
   }
+
+  sendEnrolmentMail() {
+
+  }
 }
