@@ -8,7 +8,7 @@
     </div>
     <div fxLayout="row">
       <mat-form-field class="w-100">
-        <input matInput [formControl]="publicKey" placeholder="PublicKey" required>
+        <input matInput [formControl]="publicKey" placeholder="Public key" required>
         <mat-error *ngIf="publicKey.invalid">{{ getErrorMessage(publicKey) }}</mat-error>
       </mat-form-field>
     </div>

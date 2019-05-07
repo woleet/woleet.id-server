@@ -9,9 +9,9 @@
         <div fxLayout="column">
           <strong>{{ key.name }}</strong>
           <div>
-            <span>Public key: </span><code>{{ key.pubKey }}</code></div>
+            <span>Public key: </span><small><code>{{ key.pubKey }}</code></small></div>
           <div>
-            <span>Holder: </span>{{ key.holder }}
+            <span>Private key held by </span>{{ key.holder }}
           </div>
           <div class="text-gray text-slim">
             <span>Created on </span><span>{{ key.createdAt | date }}</span>
