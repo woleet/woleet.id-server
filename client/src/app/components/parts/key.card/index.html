@@ -9,15 +9,15 @@
         <div fxLayout="column">
           <strong>{{ key.name }}</strong>
           <div>
-            <span>Public&nbsp;key</span><code>{{ key.pubKey }}</code></div>
+            <span>Public key: </span><code>{{ key.pubKey }}</code></div>
           <div>
-            <span>Holder : </span><strong>{{ key.holder }}</strong>
+            <span>Holder: </span>{{ key.holder }}
           </div>
           <div class="text-gray text-slim">
-            <span>Created&nbsp;at</span>&nbsp;<span>{{ key.createdAt | date }}</span>
+            <span>Created on </span><span>{{ key.createdAt | date }}</span>
           </div>
           <div class="text-gray text-slim" *ngIf="key.expiration">
-            <span>Expires&nbsp;on</span>&nbsp;<span>{{ key.expiration | date }}</span>
+            <span>Expires on </span><span>{{ key.expiration | date }}</span>
           </div>
         </div>
       </div>
@@ -70,7 +70,8 @@
   </mat-card-content>
   <mat-card-actions *ngIf="editMode">
     <button mat-raised-button color="primary" (click)="editKey()"
-      [disabled]="formLocked || keyName.invalid">SAVE</button>
+      [disabled]="formLocked || keyName.invalid">SAVE
+    </button>
     <button mat-button [disabled]="formLocked" (click)="setEditMode(false)">CANCEL</button>
   </mat-card-actions>
 </mat-card>
