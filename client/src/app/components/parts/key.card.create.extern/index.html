@@ -21,7 +21,7 @@
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="createKey()"
-      [disabled]="formLocked || keyName.invalid">CREATE</button>
+      [disabled]="formLocked || keyName.invalid || publicKey.invalid">CREATE</button>
     <button mat-button [disabled]="formLocked" (click)="cancelKey()">CANCEL</button>
   </mat-card-actions>
 </mat-card>
