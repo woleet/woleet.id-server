@@ -3,6 +3,7 @@
   "version": "0.4.0",
   "description": "Woleet.ID Server web client",
   "scripts": {
+    "postinstall": "node patch.js",
     "ng": "npx ng",
     "dev": "npx ng serve --port 4220 -o --ssl --ssl-key $WOLEET_ID_SERVER_HTTP_TLS_KEY --ssl-cert $WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE",
     "dev:prod": "npx ng serve --port 4220 -o --prod --ssl --ssl-key $WOLEET_ID_SERVER_HTTP_TLS_KEY --ssl-cert $WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE",
@@ -15,18 +16,19 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/material": "^7.3.7",
-    "@angular/cdk": "^7.3.7",
-    "@angular/flex-layout": "^7.0.0-beta.24",
     "@angular/animations": "^7.2.12",
+    "@angular/cdk": "^7.3.7",
     "@angular/common": "^7.2.12",
     "@angular/compiler": "^7.2.12",
     "@angular/core": "^7.2.12",
+    "@angular/flex-layout": "^7.0.0-beta.24",
     "@angular/forms": "^7.2.12",
     "@angular/http": "^7.2.12",
+    "@angular/material": "^7.3.7",
     "@angular/platform-browser": "^7.2.12",
     "@angular/platform-browser-dynamic": "^7.2.12",
     "@angular/router": "^7.2.12",
+    "bs58check": "^2.1.2",
     "core-js": "^2.6.5",
     "deep-copy": "^1.4.2",
     "deep-object-diff": "^1.1.0",
@@ -44,11 +46,11 @@
     "@angular/compiler-cli": "^7.2.12",
     "@angular/language-service": "^7.2.12",
     "@types/loglevel": "^1.5.4",
-    "@types/node": "^8.10.45",
+    "@types/node": "^12.0.0",
     "@types/traverse": "^0.6.32",
     "codelyzer": "^4.5.0",
     "ts-node": "^5.0.1",
     "tslint": "^5.15.0",
-    "typescript": "^3.2.4"
+    "typescript": "3.2.4"
   }
 }
