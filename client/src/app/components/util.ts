@@ -2,6 +2,7 @@ import { AbstractControl, FormControl, ValidationErrors } from '@angular/forms';
 import * as traverse from 'traverse';
 import { BehaviorSubject } from 'rxjs';
 import * as timestring from 'timestring';
+import * as bs58check from 'bs58check';
 
 export class TrackById {
 
@@ -146,8 +147,10 @@ export function passwordValidator(control: AbstractControl): ValidationErrors | 
 
 export function addressValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
-  if (str && !/(^1[a-zA-Z0-9]+$|^3[a-zA-Z0-9]+$|^bc1[a-z0-9]+$)/.test(str)) {
-    return ({ address: { message: 'This address is not valid' }});
+  try {
+    bs58check.decode(str);
+  } catch {
+    return ({ address: { message: 'This address is not valid' } });
   }
 }
 
@@ -177,7 +180,7 @@ export class ErrorMessageProvider {
         return `Must contain at least ${error.missing}`;
       case 'url':
         return `Invalid url: ${error.message}`;
-        case 'address':
+      case 'address':
         return `${error.message}`;
       case 'end':
         return `Expect string to end with "${error.expectedEnd}"`;
