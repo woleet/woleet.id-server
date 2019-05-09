@@ -361,6 +361,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
+  /external-key/create/{userId}:
+    post:
+      tags:
+        - Key
+      summary: Create a new external key for a user.
+      operationId: createKey
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/ExternalKeyPost'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/KeyGet'
+        '400':
+          description: Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
   /user/{userId}/key:
     post:
       tags:
@@ -1147,6 +1182,7 @@ components:
         - key.create
         - key.edit
         - key.delete
+        - external-key.create
         - user.create
         - user.edit
         - user.delete
@@ -1206,6 +1242,19 @@ components:
         - bip39
       description: Key type.
       example: "bip39"
+    ExternalKeyBase:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Key name.
+          example: "Jim Smith's key"
+        publicKey:
+          type: string
+          description: Key address.
+          example: "1HA79GnnZdHLZBMBQusXcgPEeMcrpnWahb"
+        status:
+          $ref: '#/components/schemas/KeyStatusEnum'
     KeyBase:
       type: object
       properties:
@@ -1259,6 +1308,13 @@ components:
         - type: object
           required:
             - name
+    ExternalKeyPost:
+      allOf:
+        - $ref: '#/components/schemas/ExternalKeyBase'
+        - type: object
+          required:
+            - name
+            - publicKey
     KeyPut:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
