@@ -30,7 +30,7 @@ import java.io.IOException;
 import io.woleet.idserver.api.model.APIError;
 import io.woleet.idserver.api.model.KeyBase;
 import io.woleet.idserver.api.model.KeyGet;
-import io.woleet.idserver.api.model.KeyPost;
+import io.woleet.idserver.api.model.ExternalKeyPost;
 import io.woleet.idserver.api.model.KeyPut;
 import java.util.UUID;
 
@@ -69,7 +69,7 @@ public class ExternalKeyApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call createExternalKeyCall(UUID userId, KeyPost keyPost, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call createExternalKeyCall(UUID userId, ExternalKeyPost keyPost, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = keyPost;
 
         // create path and map variables
@@ -111,7 +111,7 @@ public class ExternalKeyApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call createExternalKeyValidateBeforeCall(UUID userId, KeyPost keyPost, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call createExternalKeyValidateBeforeCall(UUID userId, ExternalKeyPost keyPost, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
 
         // verify the required parameter 'keyPost' is set
         if (keyPost == null) {
@@ -131,7 +131,7 @@ public class ExternalKeyApi {
      * @return KeyGet
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public KeyGet createExternalKey(UUID userId, KeyPost keyPost) throws ApiException {
+    public KeyGet createExternalKey(UUID userId, ExternalKeyPost keyPost) throws ApiException {
         ApiResponse<KeyGet> resp = createExternalKeyWithHttpInfo(userId, keyPost);
         return resp.getData();
     }
@@ -144,7 +144,7 @@ public class ExternalKeyApi {
      * @return ApiResponse&lt;KeyGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<KeyGet> createExternalKeyWithHttpInfo(UUID userId, KeyPost keyPost) throws ApiException {
+    public ApiResponse<KeyGet> createExternalKeyWithHttpInfo(UUID userId, ExternalKeyPost keyPost) throws ApiException {
         com.squareup.okhttp.Call call = createExternalKeyValidateBeforeCall(userId, keyPost, null, null);
         Type localVarReturnType = new TypeToken<KeyGet>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
@@ -159,7 +159,7 @@ public class ExternalKeyApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call createExternalKeyAsync(UUID userId, KeyPost keyPost, final ApiCallback<KeyGet> callback) throws ApiException {
+    public com.squareup.okhttp.Call createExternalKeyAsync(UUID userId, ExternalKeyPost keyPost, final ApiCallback<KeyGet> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;

@@ -366,7 +366,7 @@ paths:
       tags:
         - Key
       summary: Create a new external key for a user.
-      operationId: createKey
+      operationId: createExternalKey
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
       requestBody:
@@ -1242,19 +1242,6 @@ components:
         - bip39
       description: Key type.
       example: "bip39"
-    ExternalKeyBase:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Key name.
-          example: "Jim Smith's key"
-        publicKey:
-          type: string
-          description: Key address.
-          example: "1HA79GnnZdHLZBMBQusXcgPEeMcrpnWahb"
-        status:
-          $ref: '#/components/schemas/KeyStatusEnum'
     KeyBase:
       type: object
       properties:
@@ -1308,13 +1295,6 @@ components:
         - type: object
           required:
             - name
-    ExternalKeyPost:
-      allOf:
-        - $ref: '#/components/schemas/ExternalKeyBase'
-        - type: object
-          required:
-            - name
-            - publicKey
     KeyPut:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
@@ -1329,6 +1309,26 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/KeyDisco'
+    ExternalKeyBase:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Key name.
+          example: "Jim Smith's key"
+        publicKey:
+          type: string
+          description: Key address.
+          example: "1HA79GnnZdHLZBMBQusXcgPEeMcrpnWahb"
+        status:
+          $ref: '#/components/schemas/KeyStatusEnum'
+    ExternalKeyPost:
+      allOf:
+        - $ref: '#/components/schemas/ExternalKeyBase'
+        - type: object
+          required:
+            - name
+            - publicKey
     SignatureResult:
       type: object
       properties:
@@ -1522,6 +1522,13 @@ components:
             $ref: '#/components/schemas/KeyPost'
       description: Key object to add.
       required: true
+    ExternalKeyPost:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExternalKeyPost'
+      description: External Key object to add.
+      required: true  
     KeyPut:
       content:
         application/json:
