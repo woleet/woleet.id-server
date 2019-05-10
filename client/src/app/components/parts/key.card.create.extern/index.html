@@ -1,24 +1,9 @@
 <mat-card>
-    <mat-card-content>
-      <div>
-        <mat-form-field class="w-100">
-          <input matInput placeholder="Key name" [formControl]="keyName" required>
-          <mat-error *ngIf="keyName.invalid">{{ getErrorMessage(keyName) }}</mat-error>
-        </mat-form-field>
-      </div>
-      <div fxLayout="row">
-        <mat-form-field class="w-100">
-          <input matInput [formControl]="publicKey" placeholder="Public key" (focus)="publicKeyFocused = true"
-          (focusout)="publicKeyFocused = false" required>
-          <mat-hint *ngIf="publicKeyFocused">Bitcoin address</mat-hint>
-          <mat-error *ngIf="publicKey.invalid">{{ getErrorMessage(publicKey) }}</mat-error>
-        </mat-form-field>
-      </div>
-      <mat-form-field>
-        <input matInput [matDatepicker]="picker" [formControl]="expiration" placeholder="Expiration date" disabled>
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker startView="year" [startAt]="startDate" disabled="false"></mat-datepicker>
-        <mat-error *ngIf="expiration.invalid">{{ getErrorMessage(expiration) }}</mat-error>
+  <mat-card-content>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Key name" [formControl]="keyName" required>
+        <mat-error *ngIf="keyName.invalid">{{ getErrorMessage(keyName) }}</mat-error>
       </mat-form-field>
     </div>
     <div fxLayout="row">
