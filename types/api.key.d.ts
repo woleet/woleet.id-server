@@ -2,6 +2,7 @@
 
 type KeyTypeEnum = 'bip39';
 type KeyStatusEnum = 'active' | 'blocked';
+type KeyHolderEnum = 'server' | 'user';
 
 interface KeyObject { }
 
@@ -9,6 +10,8 @@ interface ApiKeyObject extends KeyObject, ApiCommonProperties, ApiParanoidProper
 
   /** Key name */
   name: string;
+
+  holder: KeyHolderEnum;
 
   /** Base58 encoded public key */
   pubKey: string;
@@ -30,6 +33,7 @@ interface ApiPostKeyObject extends KeyObject {
   status?: KeyStatusEnum;
   expiration?: number;
   phrase?:string;
+  publicKey?: string;
 }
 
 interface ApiPutKeyObject extends KeyObject {

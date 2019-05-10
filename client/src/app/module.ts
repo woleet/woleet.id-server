@@ -26,6 +26,7 @@ import { ConfigWebClientUrlComponent } from '@parts/config.server-client-url';
 import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
 import { APITokenCardComponent } from '@parts/api-token.card';
 import { KeyCreateCardComponent } from '@parts/key.card.create';
+import { KeyCreateCardExternComponent } from '@parts/key.card.create.extern';
 import { IntlTelInputComponent } from '@parts/intl-tel-input';
 import { ConfigLogoUrlComponent } from '@parts/config.logo-url';
 import { ConfigHTMLFrameUrlComponent } from '@parts/config.html-frame';
@@ -50,7 +51,7 @@ import {
   AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService
 } from '@guards/auth';
 
-import { KeyService } from '@services/key';
+import { KeyService, ExternalKeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
 import { APITokenService } from '@services/api-token';
@@ -110,6 +111,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     APITokenCardComponent,
     APITokenCreateCardComponent,
     KeyCreateCardComponent,
+    KeyCreateCardExternComponent,
     StopPropagationDirective,
     StopRipplePropagationDirective,
     ErrorPageComponent,
@@ -182,7 +184,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },
     AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
-    NeedConfigGuardService, KeyService, UserService, InfoService, ConfigService, APITokenService,
+    NeedConfigGuardService, KeyService, ExternalKeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     NetworkErrorInterceptorService, AllowCredentialsInterceptorService, LocalStorageService
   ],

@@ -7,7 +7,8 @@ const createKey = Joi.object().keys({
   name: Name.required(),
   status: Joi.string().valid(keyStatusEnum),
   expiration: Joi.number().allow(null),
-  phrase: Joi.string()
+  phrase: Joi.string(),
+  publicKey: Joi.string()
 });
 
 const updateKey = Joi.object().keys({

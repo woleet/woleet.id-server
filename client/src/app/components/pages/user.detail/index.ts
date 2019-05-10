@@ -16,6 +16,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   user$: Promise<ApiUserObject>;
 
   formOpened = false;
+  externalFormOpened = false;
 
   constructor(private keyService: KeyService, private userService: UserService, private route: ActivatedRoute) {
     super();

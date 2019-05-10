@@ -36,3 +36,14 @@ export class KeyService {
   }
 
 }
+
+@Injectable()
+export class ExternalKeyService {
+
+  constructor(private http: HttpClient) { }
+
+  create(userId: string, key: ApiPostKeyObject) {
+    return this.http.post<ApiKeyObject>(`${serverURL}/external-key/create/${userId}`, key).toPromise();
+  }
+
+}

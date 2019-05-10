@@ -23,6 +23,7 @@ public class Config {
     // Initialize data needed to test users
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
     private static final String TEST_USERS_USERNAME_PREFIX = "tester_";
+    private static final String TEST_USERS_ADDRESS_PREFIX = "1";
 
     // Get API base path from the environment
     public static String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
@@ -127,6 +128,13 @@ public class Config {
      */
     public static String randomName() {
         return Config.TEST_USERS_COMMONNAME_PREFIX + randomString(32);
+    }
+
+    /**
+     * Create a new random address (for keys).
+     */
+    public static String randomAddress() {
+        return Config.TEST_USERS_ADDRESS_PREFIX + randomString(32);
     }
 
     /**
