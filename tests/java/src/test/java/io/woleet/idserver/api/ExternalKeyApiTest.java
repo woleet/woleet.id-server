@@ -44,7 +44,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
 
         @Override
         public ObjectGet createObject(CRUDApiTest.ObjectPost objectPost) throws ApiException {
-            return new ObjectGet(externalKeyApi.createExternalKey(user.getId(), (KeyPost) objectPost.get()));
+            return new ObjectGet(externalKeyApi.createExternalKey(user.getId(), (ExternalKeyPost) objectPost.get()));
         }
 
         @Override

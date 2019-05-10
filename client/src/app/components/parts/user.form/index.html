@@ -90,8 +90,8 @@
     <div fxLayout="row" fxLayout.gt-sm="column" fxLayoutGap="10px">
       <mat-checkbox matInput [(ngModel)]="createDefaultKey">Create a default key
       </mat-checkbox>
-      <mat-checkbox matInput [disabled]="!useSMTP || !ServerClientURL"
-        [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''"
+      <mat-checkbox matInput [disabled]="!useSMTP || !ServerClientURL || !contactAvailable"
+        [matTooltip]="!useSMTP || !ServerClientURL || !contactAvailable? 'You must setup the SMTP server, the server web client URL to activate this option and the admin contact':''"
         [(ngModel)]="sendEnrolmentEmail">Enrol external key by email</mat-checkbox>
     </div>
     <br>

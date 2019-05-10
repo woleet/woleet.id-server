@@ -3,7 +3,8 @@ import { serverConfig } from '../config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { exit } from '../exit';
-import { updateConfig } from 'src/api/schemas/server-config';
+import { writeFileSync } from 'fs';
+import * as path from 'path';
 
 const debug = Debug('id:ctrl:config');
 
@@ -28,6 +29,10 @@ export function getServerConfig(): InternalServerConfigObject {
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   try {
     const config = Object.assign({}, inMemoryConfig, up);
+    if (up.TCU) {
+      const base64Image = up.TCU.data.split(';base64,').pop();
+      writeFileSync(path.join(__dirname, '../../assets/default_TCU.pdf'), Buffer.from(base64Image, 'base64'));
+    }
     let cfg = await ServerConfig.update(CONFIG_ID, { config });
     if (!cfg) {
       debug('No config to update, will set', config);

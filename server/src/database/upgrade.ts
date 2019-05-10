@@ -172,6 +172,21 @@ async function upgrade8(sequelize) {
   }
 }
 
+// async function upgrade9(sequelize) {
+//   log.warn('Checking for creation of the "onboarding" table...');
+//   await ServerConfig.model.sync();
+//   const cfg = await ServerConfig.getById(CONFIG_ID);
+//   if (!cfg) {
+//     return;
+//   }
+
+//   const { config } = cfg.toJSON();
+//   if (config.version < 10) {
+//     log.warn('Need to create the "onboarding" table');
+//     const onboarding = await sequelize.query()
+//   }
+// }
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);

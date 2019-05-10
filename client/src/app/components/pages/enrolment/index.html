@@ -1,0 +1,122 @@
+<logo [logoURL]="serverPublicInfo.logoURL"></logo>
+<br>
+<mat-horizontal-stepper #stepper linear>
+  <ng-template matStepperIcon="welcome">
+    <mat-icon>home</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="identity">
+    <mat-icon>assignment_ind</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="createKey">
+    <mat-icon>lock</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="final">
+    <mat-icon>receipt</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="edit">
+    <mat-icon>search</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="done">
+    <mat-icon>done</mat-icon>
+  </ng-template>
+  <mat-step label="Welcome" state="welcome">
+    <h1>Welcome to Woleet Signature Service</h1>
+    <div>
+      <div>
+        <p>Electronic signature is all about approving the content of a document of a document, and keeping one's
+          committment, as a responsible individual.</p>
+      </div>
+      <div>
+        <p>To be ready to use Woleet Signature service, we need you to:</p>
+        <ul>
+          <li>Acknowledge your identity information.</li>
+          <li>Create a signature key.</li>
+          <li>Accept and sign Woleet signature Terms and Conditions of Use.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step label="Identity" state="identity" [completed]="isConfirmed">
+    <h1>Acknowledge your identity information</h1>
+    <div>
+      <div>
+        <p>The following information will be attached to the signature so as to identity you as a signatory.</p>
+        <br>
+        <div *ngIf="(user$ | async) as user; else loadinguser">
+          <app-user-card [user]="user" [modes]="['display']"></app-user-card>
+        </div>
+        <br>
+        <p>Your personal information is stored by Woleet and can be modified or deleted at any time, upon simple request
+          to privacy@woleet.com.</p>
+        <br>
+      </div>
+    </div>
+    <div>
+      <a href="{{emailstring}}" class="black-link" target="_top">
+        <button mat-button>Refuse</button>
+      </a>
+      <button mat-button (click)="confirm()">Confirm</button>
+    </div>
+    <div>
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext [disabled]="!isConfirmed"
+        [matTooltip]="!isConfirmed? 'Confirm your identity to continue.':''">Next</button>
+    </div>
+  </mat-step>
+  <mat-step label="Signature key" state="createKey">
+    <h1>Create a signature key</h1>
+    <div>
+      <div>
+        <p>The signature key is required to create the signature. If you do not already have one, please follow
+          instructions below.</p>
+        <br>
+        <p>You can use either a Ledger (cryptographic hardware) or your mobile (Android, iOS) to create a key. You need
+          to install Woleet.ID application and create a key.</p>
+        <br>
+        <p>Use my Ledger: <a href="https://doc.woleet.io/v1.5.1/docs/woleetid-for-ledger-nano-s" target="_blank">See
+            installation procedure</a></p>
+        <p>Use my mobile: <a href="https://doc.woleet.io/v1.5.1/docs/woleetid-for-mobile-phones" target="_blank">See
+            installation procedure</a></p>
+      </div>
+    </div>
+    <div>
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step label="TCU" state="final">
+    <h1>Accept and sign our Terms and Conditions of Use</h1>
+    <div>
+      <div>
+        <p>You can click <a href="https://doc.woleet.io/docs/terms-of-service" target="_blank">here</a> to read and
+          download Woleet Terms and Conditions of Use.</p>
+        <br>
+        <p>Please click on "get signature invitation email" to electronically sign the Woleet signature service Terms
+          and
+          Conditions of Use.</p>
+      </div>
+    </div>
+    <div>
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="signTCU()">Get signature invitation email</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+<ng-template #loadinguser>
+  <mat-card>Loading...</mat-card>
+</ng-template>

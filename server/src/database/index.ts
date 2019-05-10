@@ -6,6 +6,7 @@ import { ServerEvent } from './model/server-event';
 import { ServerConfig } from './model/server-config';
 import { User } from './model/user';
 import { Key } from './model/key';
+import { Onboarding } from './model/onboarding';
 import { getServerConfig, setServerConfig } from '../controllers/server-config';
 import { upgrade, postUpgrade, afterInitUpgrade } from './upgrade';
 import { db } from '../config';
@@ -19,6 +20,8 @@ User.model.hasMany(Key.model, { onDelete: 'cascade', hooks: true });
 User.model.belongsTo(Key.model, { as: 'defaultKey', constraints: false, hooks: true });
 
 Key.model.belongsTo(User.model, { foreignKey: { allowNull: false } });
+
+Onboarding.model.belongsTo(User.model, { foreignKey: {allowNull: false } });
 
 Key.model.beforeDelete(async (key) => {
   debug(`delete key ${key.get('id')}`);
@@ -43,7 +46,7 @@ Key.model.beforeDelete(async (key) => {
   await user.save();
 });
 
-export { User, Key, APIToken, ServerEvent, ServerConfig };
+export { User, Key, APIToken, ServerEvent, ServerConfig, Onboarding };
 
 export async function init() {
   let attempts = db.connectionAttempts;

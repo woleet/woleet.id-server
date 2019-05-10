@@ -1,62 +1,103 @@
 <div>
-  <mat-card *ngIf="!editMode && user.id"
-  matRipple="!formLocked"
-  fxLayout="row"
-  fxLayoutAlign="space-between start"
-  [ngClass]="{'clickable': (!formLocked), 'locked': formLocked}"
-  [routerLink]="formLocked ? null : ['/user/', user.id]">
+  <mat-card *ngIf="!editMode && user.id" matRipple="!formLocked" fxLayout="row" fxLayoutAlign="space-between start"
+    [ngClass]="{'clickable': ((!formLocked) && !modes.includes('display')), 'locked': formLocked}"
+    [routerLink]="(formLocked || modes.includes('display')) ? null : ['/user/', user.id]">
     <ng-container [ngTemplateOutlet]="userCardContent"></ng-container>
   </mat-card>
 
-  <mat-card *ngIf="!editMode && !user.id"
-  fxLayout="row"
-  fxLayoutAlign="space-between start">
+  <mat-card *ngIf="!editMode && !user.id" fxLayout="row" fxLayoutAlign="space-between start">
     <ng-container [ngTemplateOutlet]="userCardContent"></ng-container>
   </mat-card>
 
   <ng-template #userCardContent>
     <div fxLayout="column" *ngIf="user.identity as i">
-      <div fxLayout="row">
+      <div fxLayout="row" fxFill>
         <div fxLayout="column" class="card-icon">
           <mat-icon>account_box_outline</mat-icon>
         </div>
-        <div fxLayout="column">
-          <a *ngIf="user.username">{{ user.username }}
-            <!-- optional step 1 --></a>
-          <div *ngIf="user.email">{{ user.email }}
-            <!-- optional step 1 -->
+        <div fxLayout="column" fxLayoutGap="10px">
+          <div fxLayout="row">
+            <div fxLayout="column">
+              <div fxLayout="row" dir="ltr" class="fullName">{{ i.commonName }}
+              </div>
+            </div>
           </div>
-          <div>{{ i.commonName }}</div>
-          <div *ngIf="i.organization || i.organizationalUnit">
-            <span *ngIf="i.organization as org">{{ org }}</span>
-            <span *ngIf="i.organization && i.organizationalUnit">&nbsp;-&nbsp;</span>
-            <span *ngIf="i.organizationalUnit as ou">{{ ou }}</span>
-          </div>
-          <div *ngIf="i.locality || i.country">
-            <span *ngIf="i.locality">{{ i.locality }}</span>
-            <span *ngIf="i.locality && i.country">&nbsp;-&nbsp;</span>
-            <span *ngIf="i.country">{{ getCountry(i.country) }}</span>
+          <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutGap="10px">
+            <div>
+              <div fxLayout="row" fxLayoutGap="5px">
+                <div fxLayout="column">
+                  <div fxLayout="row" dir="rtl" class="label">
+                    username
+                  </div>
+                  <div fxLayout="row" dir="rtl" class="label">email</div>
+                  <div fxLayout="row" dir="rtl" class="label">phone
+                  </div>
+                </div>
+                <div fxLayout="column">
+                  <div fxLayout="row" dir="ltr">
+                    {{ user.username || '-' }}
+                  </div>
+                  <div fxLayout="row" dir="ltr">{{ user.email || '-' }}</div>
+                  <div fxLayout="row" dir="ltr">
+                    {{ getPhone(user) }}</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <!--No Wrap on the identity-->
+              <div fxLayout="row" fxLayoutGap="5px" class="identity">
+                <div fxLayout="column">
+                  <div fxLayout="row" fxLayoutGap="5px">
+                    <div fxLayout="column">
+                      <div fxLayout="row" class="label" dir="rtl">country</div>
+                      <div fxLayout="row" class="label" dir="rtl">locality</div>
+                    </div>
+                    <div fxLayout="column">
+                      <div fxLayout="row" dir="ltr">{{ getCountry(i.country) || '-' }}</div>
+                      <div fxLayout="row" dir="ltr">{{ i.locality || '-' }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div fxLayout="column">
+                  <div fxLayout="row" fxLayoutGap="5px">
+                    <div fxLayout="column">
+                      <div fxLayout="row" class="label" dir="rtl">organization</div>
+                      <div fxLayout="row" class="label" dir="rtl">org.unit</div>
+                    </div>
+                    <div fxLayout="column">
+                      <div fxLayout="row" dir="ltr">{{ i.organization || '-' }}</div>
+                      <div fxLayout="row" dir="ltr">{{ i.organizationalUnit || '-' }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div fxLayout="column" *ngIf="modes" no-prop no-ripple-prop>
       <div>
-        <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')" [disabled]="formLocked" (click)="setEditMode(true)">
+        <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')"
+          [disabled]="formLocked" (click)="setEditMode(true)">
           <mat-icon matTooltip="Edit user" aria-label="Edit user button">edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="modes.includes('block') && user.status !== 'blocked'" [disabled]="formLocked" (click)="blockUser()">
+        <button mat-icon-button color="warn" *ngIf="modes.includes('block') && user.status !== 'blocked'"
+          [disabled]="formLocked" (click)="blockUser()">
           <mat-icon matTooltip="Block user" aria-label="Block user button">pause_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="primary" *ngIf="modes.includes('block') && user.status === 'blocked'" [disabled]="formLocked" (click)="unblockUser()">
+        <button mat-icon-button color="primary" *ngIf="modes.includes('block') && user.status === 'blocked'"
+          [disabled]="formLocked" (click)="unblockUser()">
           <mat-icon matTooltip="Unblock user" aria-label="Unblock user button">play_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="modes.includes('delete')" [disabled]="formLocked" (click)="deleteUser()">
+        <button mat-icon-button color="warn" *ngIf="modes.includes('delete')" [disabled]="formLocked"
+          (click)="deleteUser()">
           <mat-icon matTooltip="Delete user" aria-label="Delete user button">delete</mat-icon>
         </button>
       </div>
     </div>
   </ng-template>
 
-  <create-edit-user *ngIf="editMode" mode="edit" [user]="user" (submitSucceed)="setEditMode(false); user = $event" (cancel)="setEditMode(false)"></create-edit-user>
+  <create-edit-user *ngIf="editMode" mode="edit" [user]="user" (submitSucceed)="setEditMode(false); user = $event"
+    (cancel)="setEditMode(false)"></create-edit-user>
 </div>

@@ -61,6 +61,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   formLocked = false;
   useSMTP: boolean;
   ServerClientURL: string;
+  contactAvailable: boolean;
   sendPasswordEmail = false;
   sendEnrolmentEmail = false;
   createDefaultKey = true;
@@ -142,6 +143,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       }
       this.useSMTP = config.useSMTP;
       this.ServerClientURL = config.ServerClientURL;
+      config.contact ? this.contactAvailable = true : this.contactAvailable = false;
     }));
     if (this.mode === 'edit') {
       this.form = this.setFormControl(copy<ApiUserObject>(this.user));

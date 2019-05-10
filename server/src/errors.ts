@@ -42,6 +42,14 @@ export class NotFoundKeyError extends NotFoundDBObjectError {
   name = 'NotFoundKeyError';
 }
 
+export class NotFoundOnboardingError extends NotFoundDBObjectError {
+  constructor(m = 'Onboarding not found') {
+    super(m);
+  }
+
+  name = 'NotFoundOnboardingError';
+}
+
 export abstract class ForeignKeyDBError extends DBError {
 }
 

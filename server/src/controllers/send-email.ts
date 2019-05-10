@@ -5,6 +5,7 @@ import * as mustache from 'mustache';
 import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
 import { getServerConfig } from './server-config';
+import { createOnboarding } from './onboarding';
 import log = require('loglevel');
 import * as nodemailer from 'nodemailer';
 
@@ -60,20 +61,22 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
   return user.toJSON();
 }
 
-export async function sendKeyEnrolmentEmail(email: string): Promise<InternalUserObject> {
+export async function sendKeyEnrolmentEmail(email: string): Promise<InternalOnboardingObject> {
   const user = await User.getByEmail(email);
   if (!user) {
     throw new NotFoundUserError();
   }
 
+  const onboarding = await createOnboarding(user.get('id'));
   const config = getServerConfig();
+  const ServerClientURL = config.ServerClientURL;
 
-  const link = '';
+  const link = ServerClientURL + '/enrolment/' +
+    onboarding.id;
   const logo = getLogo(config);
   const subject = 'Enrolment';
   const html = mustache.render(config.mailKeyEnrolmentTemplate,
     { keyEnrolmentURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
-
 
   try {
     await sendEmail(email, subject, html);
@@ -81,7 +84,7 @@ export async function sendKeyEnrolmentEmail(email: string): Promise<InternalUser
     log.error(err);
   }
 
-  return user.toJSON();
+  return onboarding;
 }
 
 export async function sendEmail(email: string, subject: string, html: any) {

@@ -11,6 +11,7 @@ import '../../../types/api.server-event';
 import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api';
+import '../../../types/api.onboarding';
 import './oidc-provider';
 
 declare global {
@@ -267,7 +268,14 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
-    mailKeyEnrolmentTemplate?:string;
+    mailKeyEnrolmentTemplate?: string;
+    // TCU
+    TCU?: {
+      name?: string;
+      data?: string;
+    }
+    // Admin contact
+    contact?: string;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -299,7 +307,14 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
-    mailKeyEnrolmentTemplate?:string;
+    mailKeyEnrolmentTemplate?: string;
+    // TCU
+    TCU?: {
+      name?: string;
+      data?: string;
+    }
+    // Admin contact
+    contact?: string;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -331,7 +346,28 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
-    mailKeyEnrolmentTemplate?:string;
+    mailKeyEnrolmentTemplate?: string;
+    // TCU
+    TCU?: {
+      name?: string;
+      data?: string;
+    }
+    // Admin contact
+    contact?: string;
+  }
+
+  /* Onboarding */
+
+  interface InternalOnboardingObject extends OnboardingObject {
+    id: string;
+    userId: string;
+    expiration: number;
+  }
+
+  interface SequelizeOnboardingObject extends Instance<InternalOnboardingObject> {
+  }
+
+  interface ApiPostOnboardingObject extends OnboardingObject {
   }
 
   /* OIDC Provider */

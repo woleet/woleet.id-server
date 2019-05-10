@@ -5,7 +5,10 @@ import { externalCreateKey } from '../../controllers/key';
 import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
 import { sendKeyEnrolmentEmail } from '../../controllers/send-email';
+import { serializeUser } from '../serialize/user';
 import { BadRequest, NotFound } from 'http-errors';
+import { getOwner, getTCUHash, createSignatureRequest } from '../../controllers/onboarding';
+import { admin as adminAuth } from '../authentication';
 
 const vuid = validate.param('userId', 'uuid');
 
@@ -16,6 +19,43 @@ const vuid = validate.param('userId', 'uuid');
  *  tags: [external-key]
  */
 const router = new Router({ prefix: '/external-key' });
+
+/**
+ * @route: /external-key/enrolment/{id}
+ * @swagger
+ *  operationId: enrolment
+ */
+router.get('/enrolment/:id', async function (ctx) {
+  const { id } = ctx.params;
+  let user;
+  try {
+    user = await getOwner(id);
+  } catch {
+    throw new NotFound('This demand is not available.');
+  }
+  ctx.body = serializeUser(user);
+});
+
+/**
+ * @route: /external-key/enrolment/{id}
+ * @swagger
+ *  operationId: enrolment
+ */
+router.get('/enrolment/finalize', async function (ctx) {
+  const { email } = ctx.request.body;
+
+  const hashTCU = await getTCUHash();
+
+  try {
+    createSignatureRequest(hashTCU, email);
+  } catch (error) {
+    console.log(error);
+  }
+
+  ctx.body = 'ok';
+});
+
+router.use(adminAuth);
 
 /**
  * @route: /external-key/create
@@ -47,9 +87,9 @@ router.post('/create/:userId', vuid, validate.body('createKey'), async function 
 });
 
 /**
- * @route: /external-key/create
+ * @route: /external-key/enrolment
  * @swagger
- *  operationId: createKey
+ *  operationId: enrolment
  */
 router.post('/enrolment', async function (ctx) {
   const { email } = ctx.request.body;

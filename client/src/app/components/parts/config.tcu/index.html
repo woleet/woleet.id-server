@@ -1,0 +1,19 @@
+  <mat-card>
+    <mat-card-title>Terms and Conditions of Use</mat-card-title>
+    <mat-divider></mat-divider>
+    <br>
+    <br>
+    <mat-card-content>
+        <input type="file" id="userFile" (change)="onSelectFile($event)" #fileInput style="display: none">
+        <mat-form-field >
+          <input matInput [formControl]="form" placeholder="Terms and Conditions of Use" readonly>
+        </mat-form-field>
+        <button mat-button (click)="selectFile()">Select</button>
+    </mat-card-content>
+    <ng-template #loading>Loading...<br></ng-template>
+    <mat-card-actions *ngIf="(config$ | async) as config; else loading">
+      <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) || (config.TCU.name == form.value) || (config.TCU.data == fileURL) || (form.invalid)">SAVE</button>
+      <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
+    </mat-card-actions>
+  </mat-card>
+  

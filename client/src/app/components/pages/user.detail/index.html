@@ -5,8 +5,9 @@
       ADD EXTERNAL KEY
     </button>
     <button fxLayout="column" mat-raised-button color="primary" (click)="sendEnrolmentMail()"
-      [disabled]="!useSMTP || !ServerClientURL || !email"
-      [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''">
+      [disabled]="!useSMTP || !ServerClientURL || !contactAvailable || !email"
+      [matTooltip]="!useSMTP || !ServerClientURL || !contactAvailable? 'You must setup the SMTP server, the server web client URL to activate this option and the admin contact':''"
+      [matTooltip]="!email? 'You have to set the user email to enrol is key':''">
       Enrol external key
     </button>
   </div>

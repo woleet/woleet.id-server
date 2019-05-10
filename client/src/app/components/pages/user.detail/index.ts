@@ -20,6 +20,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   formOpened = false;
   externalFormOpened = false;
 
+  contactAvailable: boolean;
   useSMTP: boolean;
   ServerClientURL: string;
   email: string;
@@ -42,6 +43,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
         return;
       }
       this.useSMTP = config.useSMTP;
+      config.contact ? this.contactAvailable = true : this.contactAvailable = false;
       this.ServerClientURL = config.ServerClientURL;
     }));
     this.user$.then((user) => {

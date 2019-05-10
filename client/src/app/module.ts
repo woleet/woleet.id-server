@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
   MatIconModule, MatInputModule, MatListModule, MatNativeDateModule, MatRippleModule, MatSelectModule, MatSidenavModule,
-  MatTabsModule, MatToolbarModule, MatTooltipModule
+  MatTabsModule, MatToolbarModule, MatTooltipModule, MatStepperModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -32,6 +32,8 @@ import { ConfigLogoUrlComponent } from '@parts/config.logo-url';
 import { ConfigHTMLFrameUrlComponent } from '@parts/config.html-frame';
 import { LogoComponent } from '@parts/logo';
 import { HtmlFrameComponent } from '@parts/html-frame';
+import { ConfigContactComponent } from '@parts/config.contact';
+import { ConfigTCUComponent } from '@parts/config.tcu';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -46,6 +48,7 @@ import { UserDetailPageComponent } from '@pages/user.detail';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
+import { EnrolmentPageComponent } from '@pages/enrolment';
 // Services
 import {
   AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService
@@ -57,6 +60,7 @@ import { InfoService } from '@services/info';
 import { APITokenService } from '@services/api-token';
 import { PageDataService } from '@services/page-data';
 import { ServerConfigService } from '@services/server-config';
+import { OnboardingService } from '@services/onboarding';
 
 import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
 import { NetworkErrorInterceptorService } from '@interceptors/network-error';
@@ -97,6 +101,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     UserEditPageComponent,
     UserDetailPageComponent,
     AboutPageComponent,
+    EnrolmentPageComponent,
     ConfigFallbackKeyComponent,
     ConfigIdentityUrlComponent,
     ConfigWebClientUrlComponent,
@@ -123,6 +128,8 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     HtmlFrameComponent,
     ResetPasswordPageComponent,
     ConfigSMTPComponent,
+    ConfigContactComponent,
+    ConfigTCUComponent,
     DialogResetPasswordComponent,
     DialogMailResetComponent
   ],
@@ -164,6 +171,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     MatCheckboxModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatStepperModule,
 
     // app
     AppRoutingModule,
@@ -183,7 +191,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },
     AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
     NeedConfigGuardService, KeyService, ExternalKeyService, UserService, InfoService, ConfigService, APITokenService,
-    PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
+    PageDataService, ServerConfigService, OnboardingService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     NetworkErrorInterceptorService, AllowCredentialsInterceptorService, LocalStorageService
   ],
   bootstrap: [AppComponent]
