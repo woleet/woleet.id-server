@@ -1,5 +1,5 @@
 <mat-card *ngIf="!editMode">
-  <mat-card-title>Server's Web Client URL</mat-card-title>
+  <mat-card-title>Web Client URL</mat-card-title>
   <mat-divider></mat-divider>
   <br>
   <div *ngIf="(config$ | async) as config; else loading">
@@ -9,7 +9,7 @@
       </div>
       <div fxLayout="column">
         <button mat-icon-button color="primary" [disabled]="(formLocked$ | async)" (click)="beginEdit()">
-          <mat-icon matTooltip="Edit server's web client URL" aria-label="Edit server's web client URL">edit</mat-icon>
+          <mat-icon matTooltip="Edit web client URL" aria-label="Edit web client URL button">edit</mat-icon>
         </button>
       </div>
     </div>
@@ -17,7 +17,7 @@
   <ng-template #loading>Loading...<br></ng-template>
 </mat-card>
 <mat-card *ngIf="editMode">
-  <mat-card-title>Set server's Web Client URL</mat-card-title>
+  <mat-card-title>Set Web Client URL</mat-card-title>
   <mat-divider></mat-divider>
   <br>
   <br>

@@ -42,7 +42,7 @@ export class ConfigWebClientUrlComponent extends ErrorMessageProvider implements
             this.form.setValue(config.ServerClientURL);
         });
 
-        this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+        this.onDestroy.subscribe(() => log.debug('Unsubscribe', subscription.unsubscribe()));
     }
 
     ngOnDestroy() {

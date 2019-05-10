@@ -1,8 +1,10 @@
 <div *ngIf="(keys$ | async) as keys; else loadingKeys">
   <div fxLayout="row" fxLayoutWrap fxLayoutGap="20px" *ngIf="!formOpened && !externalFormOpened">
-    <button fxLaytout="column" mat-raised-button color="primary" (click)="formOpened=true">ADD KEY</button>
+    <button fxLaytout="column" mat-raised-button color="primary" (click)="formOpened=true">
+      ADD KEY PAIR
+    </button>
     <button fxLaytout="column" mat-raised-button color="primary" (click)="externalFormOpened=true">
-      ADD EXTERNAL KEY
+      ADD PUBLIC KEY
     </button>
     <button fxLayout="column" mat-raised-button color="primary" (click)="sendEnrolmentMail()"
       [disabled]="!useSMTP || !ServerClientURL || !email"
