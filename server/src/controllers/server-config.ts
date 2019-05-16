@@ -26,13 +26,14 @@ export function getServerConfig(): InternalServerConfigObject {
 }
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
-  await checkProofDeskConfigChange(up)
+  up = await checkProofDeskConfigChange(up)
+    .then(() => up)
     .catch((err) => {
       switch (err) {
         case 0:
-          return setServerConfig({ proofDeskAPIIsValid: 0 });
+          return { proofDeskAPIIsValid: 0 };
         case 1:
-          return setServerConfig({ proofDeskAPIIsValid: 1 });
+          return { proofDeskAPIIsValid: 1 };
         default:
           throw err;
       }
