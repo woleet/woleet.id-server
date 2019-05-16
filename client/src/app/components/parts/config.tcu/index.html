@@ -12,8 +12,7 @@
     </mat-card-content>
     <ng-template #loading>Loading...<br></ng-template>
     <mat-card-actions *ngIf="(config$ | async) as config; else loading">
-      <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) || (config.TCU.name == form.value) || (config.TCU.data == fileURL) || (form.invalid)">SAVE</button>
-      <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
+      <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) || (form.invalid) || form.pristine ">SAVE</button>
     </mat-card-actions>
   </mat-card>
   

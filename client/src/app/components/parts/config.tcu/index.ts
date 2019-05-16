@@ -11,8 +11,6 @@ import { FormControl } from '@angular/forms';
 })
 export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
 
-  editMode = false;
-
   formLocked$: Observable<boolean>;
 
   config$: Observable<ApiServerConfig>;
@@ -45,8 +43,11 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
         return;
       }
 
-      this.editMode = false;
-      this.form.setValue(config.TCU.name);
+      if (config.TCU) {
+        this.form.setValue(config.TCU.name);
+      } else {
+        this.form.setValue('');
+      }
     });
 
     this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
@@ -65,10 +66,6 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
     this.configService.update({ TCU });
   }
 
-  cancelEdit() {
-    this.editMode = false;
-  }
-
   onSelectFile(event) {
     if (event.target.files && event.target.files.length > 0) {
       this.file = event.target.files[0];
@@ -79,6 +76,7 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
         this.fileURL = reader.result;
       };
       this.fileInformation = null;
+      this.form.markAsDirty();
     }
   }
 
