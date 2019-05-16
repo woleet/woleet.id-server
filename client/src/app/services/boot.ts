@@ -18,8 +18,17 @@ const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 export class AppConfigService {
 
   private _appConfig: {
-    OIDCPProviderURL: string, useOpenIDConnect: boolean, hasSession: boolean, publicInfo: object,
-    user: ApiUserDTOObject, useSMTP: boolean, ServerClientURL: string, TCU: object, contact: string
+    OIDCPProviderURL: string, useOpenIDConnect: boolean, hasSession: boolean,
+    publicInfo: {
+      logoURL: string,
+      HTMLFrame: string
+    },
+    user: ApiUserDTOObject, useSMTP: boolean, ServerClientURL: string,
+    TCU: {
+      name: string,
+      data: string
+    },
+    contact: string
   };
   bootOnLogin = false;
 

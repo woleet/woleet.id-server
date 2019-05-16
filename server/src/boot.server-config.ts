@@ -52,7 +52,10 @@ export async function initServerConfig() {
       config.mailKeyEnrolmentTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultKeyEnrolmentMailTemplate.html'), { encoding: 'ascii' });
     }
-
+    if (!config.TCU) {
+      log.warn('The TCU name is set to default.');
+      config.TCU = { name: 'default_TCU.pdf' };
+    }
   } else {
     log.warn('No configuration found in database, creating a new one along with a default admin user...');
     log.debug('Creating an admin user');

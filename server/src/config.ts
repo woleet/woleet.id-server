@@ -124,7 +124,8 @@ export const serverConfig = {
     mailResetPasswordTemplate: readFileSync(
       path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), { encoding: 'ascii' }),
     mailKeyEnrolmentTemplate: readFileSync(
-      path.join(__dirname, '../assets/defaultKeyEnrolmentMailTemplate.html'), { encoding: 'ascii' })
+      path.join(__dirname, '../assets/defaultKeyEnrolmentMailTemplate.html'), { encoding: 'ascii' }),
+    TCU: { name: 'default_TCU.pdf' }
   },
   CONFIG_ID: 'SERVER-CONFIG'
 };

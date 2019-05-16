@@ -3,7 +3,7 @@ import { serverConfig } from '../config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { exit } from '../exit';
-import { writeFileSync } from 'fs';
+import { writeFileSync, readFileSync } from 'fs';
 import * as path from 'path';
 
 const debug = Debug('id:ctrl:config');
@@ -11,6 +11,9 @@ const debug = Debug('id:ctrl:config');
 const { CONFIG_ID } = serverConfig;
 
 let inMemoryConfig: InternalServerConfigObject = null;
+
+let TCUdata: string = 'data:application/pdf;base64,' + readFileSync(
+  path.join(__dirname, '../../assets/default_TCU.pdf'), { encoding: 'base64' });
 
 export async function loadServerConfig(): Promise<InternalServerConfigObject> {
   const cfg = await ServerConfig.getById(CONFIG_ID);
@@ -23,15 +26,19 @@ export async function loadServerConfig(): Promise<InternalServerConfigObject> {
 }
 
 export function getServerConfig(): InternalServerConfigObject {
-  return inMemoryConfig;
+  const config = inMemoryConfig;
+  config.TCU.data = TCUdata;
+  return config;
 }
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   try {
     const config = Object.assign({}, inMemoryConfig, up);
     if (up.TCU) {
+      TCUdata = up.TCU.data;
       const base64Image = up.TCU.data.split(';base64,').pop();
       writeFileSync(path.join(__dirname, '../../assets/default_TCU.pdf'), Buffer.from(base64Image, 'base64'));
+      up.TCU.data = null;
     }
     let cfg = await ServerConfig.update(CONFIG_ID, { config });
     if (!cfg) {

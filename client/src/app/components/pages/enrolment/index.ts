@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material';
 import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { OnboardingService } from '@services/onboarding';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 /**
  * @title Stepper overview
@@ -23,16 +24,29 @@ export class EnrolmentPageComponent implements OnInit {
   onboardingId: string;
   user$: Promise<ApiUserObject>;
   emailstring: string;
+  TCUURL: SafeUrl;
+  // defaultURL = 'https://doc.woleet.io/docs/terms-of-service';
 
-  config: { publicInfo: object, TCU: object, contact: string };
+  config: {
+    publicInfo: {
+      logoURL: string,
+      HTMLFrame: string
+    },
+    TCU: {
+      name: string,
+      data: string
+    },
+    contact: string
+  };
   serverPublicInfo: ApiServerConfig['publicInfo'];
 
   constructor(private _formBuilder: FormBuilder, appConfigService: AppConfigService, public dialog: MatDialog,
-    private route: ActivatedRoute, private onboardingService: OnboardingService) {
+    private route: ActivatedRoute, private onboardingService: OnboardingService, sanitization: DomSanitizer) {
     this.config = appConfigService.getStartupConfig();
     this.serverPublicInfo = this.config.publicInfo || null;
     this.onboardingId = this.route.snapshot.params.id;
     this.user$ = this.onboardingService.getUserByOnboardingId(this.onboardingId);
+    this.TCUURL = sanitization.bypassSecurityTrustUrl(this.config.TCU.data);
   }
 
   ngOnInit() {
