@@ -27,7 +27,11 @@ export function getServerConfig(): InternalServerConfigObject {
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   up = await checkProofDeskConfigChange(up)
+    // if the verification pass continue with the config update
     .then(() => up)
+    // else replace the update with the corresponding error (0: for URL error; 1: for token error)
+    // the URL error just verify if the response is a json
+    // TO IMPROVE
     .catch((err) => {
       switch (err) {
         case 0:
