@@ -12,7 +12,7 @@ export class OnboardingService {
   }
 
   createTCUSignatureRequest(email: string) {
-    return this.http.post<boolean>(`${serverURL}/external-key/enrolment/finalize/`, { email: email }).toPromise();
+    return this.http.post<boolean>(`${serverURL}/external-key/enrolment/finalize`, { email: email }).toPromise();
   }
 
 }

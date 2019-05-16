@@ -37,11 +37,11 @@ router.get('/enrolment/:id', async function (ctx) {
 });
 
 /**
- * @route: /external-key/enrolment/{id}
+ * @route: /external-key/enrolment/finalize
  * @swagger
  *  operationId: enrolment
  */
-router.get('/enrolment/finalize', async function (ctx) {
+router.post('/enrolment/finalize', async function (ctx) {
   const { email } = ctx.request.body;
 
   const hashTCU = await getTCUHash();

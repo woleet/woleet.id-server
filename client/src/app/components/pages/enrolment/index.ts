@@ -66,6 +66,9 @@ export class EnrolmentPageComponent implements OnInit {
   signTCU() {
     this.user$.then((user) => {
       this.onboardingService.createTCUSignatureRequest(user.email);
+    })
+    .catch(err => {
+      console.log(err);
     });
   }
 }

@@ -66,7 +66,7 @@ export async function deleteOnboarding(id: string): Promise<InternalOnboardingOb
 
 export async function getTCUHash(): Promise<string> {
 
-  const TCU = readFileSync(path.join(__dirname, '../../assets/default_TCU.pdf'), { encoding: 'ascii' });
+  const TCU = readFileSync(path.join(__dirname, '../../assets/default_TCU.pdf'), { encoding: 'base64' });
 
   const hash = crypto.createHash('sha256');
   hash.update(Buffer.from(TCU, 'base64'));
@@ -87,25 +87,25 @@ export async function createSignatureRequest(hash: string, email: string) {
     //     'Authorization': 'Bearer ' + getServerConfig().proofDeskAPIToken
     //   }
   };
-  const req = https.request(httpsOptions, (res) => {
-    //   let data = '';
-    //   res.on('data', (chunk) => {
-    //     data += chunk;
-    //   });
-    //   res.on('end', () => {
-    //   });
-    // }).on('error', (err) => {
-    //   log.error(error);
-  });
-  req.write({
-    'authorizedSignees': [
-      {
-        'commonName': userJSON.x500CommonName,
-        'email': email
-      }
-    ],
-    'name': 'WIDS TCU signature',
-    'hashToSign': hash,
-  });
-  req.end();
+  // const req = https.request(httpsOptions, (res) => {
+  //     let data = '';
+  //     res.on('data', (chunk) => {
+  //       data += chunk;
+  //     });
+  //     res.on('end', () => {
+  //     });
+  //   }).on('error', (err) => {
+  //     log.error(error);
+  // });
+  // req.write({
+  //   'authorizedSignees': [
+  //     {
+  //       'commonName': userJSON.x500CommonName,
+  //       'email': email
+  //     }
+  //   ],
+  //   'name': 'WIDS TCU signature',
+  //   'hashToSign': hash,
+  // });
+  // req.end();
 }
