@@ -24,6 +24,9 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     mailKeyEnrolmentTemplate,
     TCU,
     contact,
+    proofDeskAPIURL,
+    proofDeskAPIToken,
+    proofDeskAPIIsValid
   } = config;
 
   return {
@@ -51,5 +54,8 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     mailKeyEnrolmentTemplate,
     TCU,
     contact,
+    proofDeskAPIURL,
+    proofDeskAPIToken,
+    proofDeskAPIIsValid
   };
 }

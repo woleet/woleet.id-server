@@ -276,6 +276,10 @@ declare global {
     }
     // Admin contact
     contact?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -315,6 +319,10 @@ declare global {
     }
     // Admin contact
     contact?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -354,6 +362,10 @@ declare global {
     }
     // Admin contact
     contact?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
   }
 
   /* Onboarding */

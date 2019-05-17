@@ -5,6 +5,7 @@ import * as log from 'loglevel';
 import { exit } from '../exit';
 import { writeFileSync, readFileSync } from 'fs';
 import * as path from 'path';
+import * as https from 'https';
 
 const debug = Debug('id:ctrl:config');
 
@@ -43,6 +44,22 @@ export function getServerConfig(): InternalServerConfigObject {
 }
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
+  up = await checkProofDeskConfigChange(up)
+    // if the verification pass continue with the config update
+    .then(() => up)
+    // else replace the update with the corresponding error (0: for URL error; 1: for token error)
+    // the URL error just verify if the response is a json
+    // TO IMPROVE
+    .catch((err) => {
+      switch (err) {
+        case 0:
+          return { proofDeskAPIIsValid: 0 };
+        case 1:
+          return { proofDeskAPIIsValid: 1 };
+        default:
+          throw err;
+      }
+    });
   try {
     const config = Object.assign({}, getInMemoryConfig(), up);
     if (up.TCU && up.TCU.data) {
@@ -133,7 +150,6 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
       exit('FATAL: Failed to stop the OIDCP server.', err);
     }
   }
-
   if (up.OIDCPIssuerURL || up.OIDCPClients || up.enableOIDCP) {
     debug('Update OIDC Provider with', { up });
     try {
@@ -157,5 +173,43 @@ async function checkSMTPConfigChange(up: ServerConfigUpdate) {
       log.error('Failed to initialize SMTP, it will be automatically disabled!', err);
       return setServerConfig({ useSMTP: false });
     }
+  }
+}
+
+async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
+  if (up.proofDeskAPIURL || up.proofDeskAPIToken) {
+    debug('Update ProofDesk Config with', { up });
+    const url = new URL(up.proofDeskAPIURL || getServerConfig().proofDeskAPIURL);
+    const httpsOptions = {
+      host: url.host,
+      path: url.pathname + '/user/credits',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + up.proofDeskAPIToken || 'Bearer ' + getServerConfig().proofDeskAPIToken
+      }
+    };
+    return new Promise((resolve, reject) => {
+      https.get(httpsOptions, (res) => {
+        let data = '';
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+        res.on('end', () => {
+          try {
+            const json = JSON.parse(data);
+            if (!json.error) {
+              resolve(setServerConfig({ proofDeskAPIIsValid: 2 }));
+            } else {
+              reject(1);
+            }
+          } catch (err) {
+            reject(0);
+          }
+        });
+      }).on('error', (err) => {
+        reject(err.message);
+      });
+    });
   }
 }
