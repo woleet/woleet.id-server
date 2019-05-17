@@ -3,8 +3,6 @@ import { NotFoundOnboardingError } from '../errors';
 import * as crypto from 'crypto';
 import { readFileSync } from 'fs';
 import * as path from 'path';
-import * as https from 'https';
-import { getServerConfig } from './server-config';
 
 /**
  * Onboarding

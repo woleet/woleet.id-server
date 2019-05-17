@@ -5,7 +5,6 @@ import { NotFoundKeyError, BlockedKeyError } from '../errors';
 import { serializeIdentity } from '../api/serialize/identity';
 import { getServerConfig } from './server-config';
 import { signMessage } from './sign';
-import { privateKeyTweakAdd } from 'secp256k1';
 
 export async function getIdentity(leftData: string, pubKey: string) {
 

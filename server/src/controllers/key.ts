@@ -1,7 +1,6 @@
 import { Key, User } from '../database';
 import { NotFoundKeyError, NotFoundUserError } from '../errors';
 import { secureModule } from '../config';
-import { getServerConfig } from './server-config';
 
 /**
  * Key

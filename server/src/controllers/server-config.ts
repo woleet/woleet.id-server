@@ -15,18 +15,26 @@ let inMemoryConfig: InternalServerConfigObject = null;
 let TCUdata: string = 'data:application/pdf;base64,' + readFileSync(
   path.join(__dirname, '../../assets/default_TCU.pdf'), { encoding: 'base64' });
 
+function getInMemoryConfig(): InternalServerConfigObject {
+  return inMemoryConfig;
+}
+
+function setInMemoryConfig(newConfig: InternalServerConfigObject): void {
+  inMemoryConfig = newConfig;
+}
+
 export async function loadServerConfig(): Promise<InternalServerConfigObject> {
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
     log.warn('No configuration found in database');
     return;
   }
-  inMemoryConfig = cfg.toJSON().config;
-  return getServerConfig();
+  setInMemoryConfig(cfg.toJSON().config);
+  return getInMemoryConfig();
 }
 
 export function getServerConfig(): InternalServerConfigObject {
-  const config = inMemoryConfig;
+  const config = getInMemoryConfig();
   if (!config.TCU) {
     config.TCU = {};
   }
@@ -36,8 +44,8 @@ export function getServerConfig(): InternalServerConfigObject {
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   try {
-    const config = Object.assign({}, inMemoryConfig, up);
-    if (up.TCU) {
+    const config = Object.assign({}, getInMemoryConfig(), up);
+    if (up.TCU && up.TCU.data) {
       TCUdata = up.TCU.data;
       const base64Image = up.TCU.data.split(';base64,').pop();
       writeFileSync(path.join(__dirname, '../../assets/default_TCU.pdf'), Buffer.from(base64Image, 'base64'));
@@ -48,12 +56,12 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
       debug('No config to update, will set', config);
       cfg = await ServerConfig.create({ config });
     }
-    debug('Updated', inMemoryConfig, 'to', cfg.toJSON(), 'with', up);
-    inMemoryConfig = cfg.toJSON().config;
+    debug('Updated', getInMemoryConfig(), 'to', cfg.toJSON(), 'with', up);
+    setInMemoryConfig(cfg.toJSON().config);
     await checkOIDCConfigChange(up);
     await checkOIDCPConfigChange(up);
     await checkSMTPConfigChange(up);
-    return getServerConfig();
+    return getInMemoryConfig();
   } catch (err) {
     exit('FATAL: Failed update the server configuration.', err);
   }
