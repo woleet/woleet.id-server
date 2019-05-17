@@ -108,6 +108,7 @@ export const events = {
     'error',
     'signature', 'login', 'config.edit',
     'key.create', 'key.edit', 'key.delete',
+    'external-key.create',
     'user.create', 'user.edit', 'user.delete',
     'token.create', 'token.edit', 'token.delete'
   ]

@@ -42,6 +42,8 @@ public enum ServerEventTypeEnum {
   
   KEY_DELETE("key.delete"),
   
+  EXTERNAL_KEY_CREATE("external-key.create"),
+  
   USER_CREATE("user.create"),
   
   USER_EDIT("user.edit"),
