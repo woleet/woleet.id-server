@@ -1028,6 +1028,15 @@ components:
         - type: object
           required:
             - identity
+            - sendKeyEnrolmentMail
+            - createDefaultKey
+          properties:
+              sendKeyEnrolmentMail:
+                type: boolean
+                description: If true send an enrolment mail.
+              createDefaultKey:
+                type: boolean
+                description: If true create a key holded by the server when this user is created.
     UserPut:
       allOf:
         - $ref: '#/components/schemas/UserBase'
@@ -1273,6 +1282,26 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/KeyDisco'
+    ExternalKeyBase:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Key name.
+          example: "Jim Smith's key"
+        publicKey:
+          type: string
+          description: Key address.
+          example: "1HA79GnnZdHLZBMBQusXcgPEeMcrpnWahb"
+        status:
+          $ref: '#/components/schemas/KeyStatusEnum'
+    ExternalKeyPost:
+      allOf:
+        - $ref: '#/components/schemas/ExternalKeyBase'
+        - type: object
+          required:
+            - name
+            - publicKey
     SignatureResult:
       type: object
       properties:
@@ -1466,6 +1495,13 @@ components:
             $ref: '#/components/schemas/KeyPost'
       description: Key object to add.
       required: true
+    ExternalKeyPost:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExternalKeyPost'
+      description: External Key object to add.
+      required: true  
     KeyPut:
       content:
         application/json:

@@ -44,7 +44,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
 
         @Override
         public ObjectGet createObject(CRUDApiTest.ObjectPost objectPost) throws ApiException {
-            return new ObjectGet(externalKeyApi.createExternalKey(user.getId(), (KeyPost) objectPost.get()));
+            return new ObjectGet(externalKeyApi.createExternalKey(user.getId(), (ExternalKeyPost) objectPost.get()));
         }
 
         @Override
@@ -66,7 +66,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
 
         @Override
         public String getName() {
-            return ((KeyBase) objectBase).getName();
+            return ((KeyGet) objectBase).getName();
         }
 
         @Override
@@ -75,22 +75,23 @@ public class ExternalKeyApiTest extends CRUDApiTest {
         }
     }
 
-    class ObjectPost extends CRUDApiTest.ObjectPost<KeyPost> {
+    class ObjectPost extends CRUDApiTest.ObjectPost<ExternalKeyPost> {
 
-        ObjectPost(KeyPost keyPost) {
+        ObjectPost(ExternalKeyPost keyPost) {
             super(keyPost);
         }
 
         @Override
         CRUDApiTest.ObjectPost setMinimalAttributes() {
-            KeyPost keyPost = (KeyPost) objectBase;
-            keyPost.externKeyBase(Config.randomName(), Config.randomAddress());
+            ExternalKeyPost keyPost = (ExternalKeyPost) objectBase;
+            keyPost.setName(Config.randomName());
+            keyPost.setPublicKey(Config.randomAddress());
             return new ObjectPost(keyPost);
         }
 
         @Override
         CRUDApiTest.ObjectPost setFullAttributes() {
-            KeyPost keyPost = (KeyPost) objectBase;
+            ExternalKeyPost keyPost = (ExternalKeyPost) objectBase;
 
             // Set status and name
             keyPost.setStatus(KeyStatusEnum.ACTIVE);
@@ -137,7 +138,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
 
     @Override
     ObjectPost newObjectPost() {
-        return new ObjectPost(new KeyPost());
+        return new ObjectPost(new ExternalKeyPost());
     }
 
     @Override
@@ -162,7 +163,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
 
     @Override
     void verifyObjectsEquals(CRUDApiTest.ObjectPost pExpected, CRUDApiTest.ObjectGet pActual) {
-        KeyPost expected = (KeyPost) pExpected.get();
+        ExternalKeyPost expected = (ExternalKeyPost) pExpected.get();
         KeyGet actual = (KeyGet) pActual.get();
         assertEquals(expected.getPublicKey(), actual.getPubKey());
         assertEquals(expected.getName(), actual.getName());
@@ -171,7 +172,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
     @Override
     void verifyObjectUpdated(CRUDApiTest.ObjectPut pPut, CRUDApiTest.ObjectPost pPost, CRUDApiTest.ObjectGet pGet) {
         KeyPut put = (KeyPut) pPut.get();
-        KeyPost post = (KeyPost) pPost.get();
+        ExternalKeyPost post = (ExternalKeyPost) pPost.get();
         KeyGet get = (KeyGet) pGet.get();
         assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
         assertEquals(put.getName() != null ? put.getName() : post.getName(), get.getName());
