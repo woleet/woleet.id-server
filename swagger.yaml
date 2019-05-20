@@ -1063,6 +1063,15 @@ components:
         - type: object
           required:
             - identity
+            - sendKeyEnrolmentMail
+            - createDefaultKey
+          properties:
+              sendKeyEnrolmentMail:
+                type: boolean
+                description: If true send an enrolment mail.
+              createDefaultKey:
+                type: boolean
+                description: If true create a key holded by the server when this user is created.
     UserPut:
       allOf:
         - $ref: '#/components/schemas/UserBase'

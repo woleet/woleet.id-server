@@ -66,7 +66,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
 
         @Override
         public String getName() {
-            return ((KeyBase) objectBase).getName();
+            return ((KeyGet) objectBase).getName();
         }
 
         @Override

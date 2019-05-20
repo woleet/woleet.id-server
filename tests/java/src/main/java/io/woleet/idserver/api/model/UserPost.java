@@ -15,10 +15,18 @@ package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.FullIdentity;
 import io.woleet.idserver.api.model.UserPut;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
+import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -26,6 +34,50 @@ import java.util.UUID;
  */
 
 public class UserPost extends UserPut {
+  public static final String SERIALIZED_NAME_SEND_KEY_ENROLMENT_MAIL = "sendKeyEnrolmentMail";
+  @SerializedName(SERIALIZED_NAME_SEND_KEY_ENROLMENT_MAIL)
+  private Boolean sendKeyEnrolmentMail;
+
+  public static final String SERIALIZED_NAME_CREATE_DEFAULT_KEY = "createDefaultKey";
+  @SerializedName(SERIALIZED_NAME_CREATE_DEFAULT_KEY)
+  private Boolean createDefaultKey;
+
+  public UserPost sendKeyEnrolmentMail(Boolean sendKeyEnrolmentMail) {
+    this.sendKeyEnrolmentMail = sendKeyEnrolmentMail;
+    return this;
+  }
+
+   /**
+   * If true send an enrolment mail.
+   * @return sendKeyEnrolmentMail
+  **/
+  @ApiModelProperty(required = true, value = "If true send an enrolment mail.")
+  public Boolean getSendKeyEnrolmentMail() {
+    return sendKeyEnrolmentMail;
+  }
+
+  public void setSendKeyEnrolmentMail(Boolean sendKeyEnrolmentMail) {
+    this.sendKeyEnrolmentMail = sendKeyEnrolmentMail;
+  }
+
+  public UserPost createDefaultKey(Boolean createDefaultKey) {
+    this.createDefaultKey = createDefaultKey;
+    return this;
+  }
+
+   /**
+   * If true create a key holded by the server when this user is created.
+   * @return createDefaultKey
+  **/
+  @ApiModelProperty(required = true, value = "If true create a key holded by the server when this user is created.")
+  public Boolean getCreateDefaultKey() {
+    return createDefaultKey;
+  }
+
+  public void setCreateDefaultKey(Boolean createDefaultKey) {
+    this.createDefaultKey = createDefaultKey;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -35,12 +87,15 @@ public class UserPost extends UserPut {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return super.equals(o);
+    UserPost userPost = (UserPost) o;
+    return Objects.equals(this.sendKeyEnrolmentMail, userPost.sendKeyEnrolmentMail) &&
+        Objects.equals(this.createDefaultKey, userPost.createDefaultKey) &&
+        super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode());
+    return Objects.hash(sendKeyEnrolmentMail, createDefaultKey, super.hashCode());
   }
 
 
@@ -49,6 +104,8 @@ public class UserPost extends UserPut {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserPost {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    sendKeyEnrolmentMail: ").append(toIndentedString(sendKeyEnrolmentMail)).append("\n");
+    sb.append("    createDefaultKey: ").append(toIndentedString(createDefaultKey)).append("\n");
     sb.append("}");
     return sb.toString();
   }

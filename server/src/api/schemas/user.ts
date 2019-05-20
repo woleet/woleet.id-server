@@ -35,7 +35,7 @@ const createUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPostUserObject
   createDefaultKey: Joi.boolean(),
 });
 
-const updateUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPostUserObject>>{
+const updateUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPutUserObject>>{
   role: Joi.string().valid(userRoleEnum),
   status: Joi.string().valid(userStatusEnum),
   countryCallingCode: Joi.string().allow(null),

@@ -65,7 +65,9 @@ export async function initServerConfig() {
         password: 'pass',
         role: 'admin',
         username: 'admin',
-        identity: { commonName: 'Admin' }
+        identity: { commonName: 'Admin' },
+        createDefaultKey: true,
+        sendKeyEnrolmentMail: false
       });
     } catch (err) {
       return exit(`Failed to create user "admin": ${err.message}`, err);
