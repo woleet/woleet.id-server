@@ -3,6 +3,10 @@ import { NotFoundOnboardingError } from '../errors';
 import * as crypto from 'crypto';
 import { readFileSync } from 'fs';
 import * as path from 'path';
+import { getServerConfig } from './server-config';
+import * as https from 'https';
+import * as querystring from 'querystring';
+import log = require('loglevel');
 
 /**
  * Onboarding
@@ -75,35 +79,36 @@ export async function getTCUHash(): Promise<string> {
 export async function createSignatureRequest(hash: string, email: string) {
   const user = await User.getByEmail(email);
   const userJSON = user.toJSON();
-  // const url = new URL(getServerConfig().proofDeskAPIURL *;
+  const url = new URL(getServerConfig().proofDeskAPIURL);
   const httpsOptions = {
-    //   host: url.host,
-    //   path: url.pathname + '/signatureRequest',
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': 'Bearer ' + getServerConfig().proofDeskAPIToken
-    //   }
+    host: url.host,
+    path: url.pathname + '/signatureRequest',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + getServerConfig().proofDeskAPIToken
+    }
   };
-  // const req = https.request(httpsOptions, (res) => {
-  //     let data = '';
-  //     res.on('data', (chunk) => {
-  //       data += chunk;
-  //     });
-  //     res.on('end', () => {
-  //     });
-  //   }).on('error', (err) => {
-  //     log.error(error);
-  // });
-  // req.write({
-  //   'authorizedSignees': [
-  //     {
-  //       'commonName': userJSON.x500CommonName,
-  //       'email': email
-  //     }
-  //   ],
-  //   'name': 'WIDS TCU signature',
-  //   'hashToSign': hash,
-  // });
-  // req.end();
+  const body = `{
+    "authorizedSignees": [
+      {
+        "commonName": "${userJSON.x500CommonName}",
+        "email": "${email}"
+      }],
+      "name": "WIDS TCU signature",
+      "hashToSign": "${hash}"
+    }`;
+  return new Promise(async (resolve, reject) => {
+    const req = https.request(httpsOptions, (res) => {
+
+      res.on('data', (response) => {
+        resolve(response.toString());
+      });
+
+    }).on('error', (err) => {
+      reject(err);
+    });
+    req.write(body);
+    req.end();
+  });
 }

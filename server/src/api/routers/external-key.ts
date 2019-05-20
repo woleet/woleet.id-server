@@ -9,6 +9,7 @@ import { serializeUser } from '../serialize/user';
 import { BadRequest, NotFound } from 'http-errors';
 import { getOwner, getTCUHash, createSignatureRequest } from '../../controllers/onboarding';
 import { admin as adminAuth } from '../authentication';
+import log = require('loglevel');
 
 const vuid = validate.param('userId', 'uuid');
 
@@ -37,22 +38,44 @@ router.get('/enrolment/:id', async function (ctx) {
 });
 
 /**
- * @route: /external-key/enrolment/finalize
+ * @route: /external-key/enrolment/:id/create-signature-request
  * @swagger
  *  operationId: enrolment
  */
-router.post('/enrolment/finalize', async function (ctx) {
+router.post('/enrolment/:id/create-signature-request', async function (ctx) {
+  const { id } = ctx.params;
   const { email } = ctx.request.body;
+  let user;
 
   const hashTCU = await getTCUHash();
+  let response;
 
   try {
-    createSignatureRequest(hashTCU, email);
+    await createSignatureRequest(hashTCU, email)
+    .then((res) => {
+      response = res;
+    });
   } catch (error) {
-    console.log(error);
+    log.error(error);
   }
 
-  ctx.body = 'ok';
+  try {
+    user = await getOwner(id);
+    user = serializeUser(user);
+  } catch {
+    throw new NotFound('This demand is not available.');
+  }
+
+  event.register({
+    type: 'external-key.create-signature-request',
+    authorizedUserId: null,
+    associatedTokenId: null,
+    associatedUserId: serializeUser(user).id,
+    associatedKeyId: null,
+    data: response
+  });
+
+  ctx.body = '';
 });
 
 router.use(adminAuth);

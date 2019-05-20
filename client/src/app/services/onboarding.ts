@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { serverURL } from './config';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class OnboardingService {
 
   constructor(private http: HttpClient) { }
 
-  getUserByOnboardingId(userId: string): Promise<ApiUserObject> {
-    return this.http.get<ApiUserObject>(`${serverURL}/external-key/enrolment/${userId}/`).toPromise();
+  getUserByOnboardingId(onboardingId: string): Observable<ApiUserObject> {
+    return this.http.get<ApiUserObject>(`${serverURL}/external-key/enrolment/${onboardingId}/`);
   }
 
-  createTCUSignatureRequest(email: string) {
-    return this.http.post<boolean>(`${serverURL}/external-key/enrolment/finalize`, { email: email }).toPromise();
+  createTCUSignatureRequest(onboardingId: string, email: string) {
+    return this.http.post<boolean>
+      (`${serverURL}/external-key/enrolment/${onboardingId}/create-signature-request`, { email: email })
+      .toPromise();
   }
 
 }

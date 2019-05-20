@@ -3,9 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppConfigService } from '@services/boot';
 import { MatDialog } from '@angular/material';
 import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingService } from '@services/onboarding';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DialogSignTCUComponent } from '@parts/dialog-sign-TCU';
+import * as log from 'loglevel';
 
 /**
  * @title Stepper overview
@@ -22,7 +24,7 @@ export class EnrolmentPageComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   onboardingId: string;
-  user$: Promise<ApiUserObject>;
+  user: ApiUserObject;
   emailstring: string;
   TCUURL: SafeUrl;
   // defaultURL = 'https://doc.woleet.io/docs/terms-of-service';
@@ -41,11 +43,12 @@ export class EnrolmentPageComponent implements OnInit {
   serverPublicInfo: ApiServerConfig['publicInfo'];
 
   constructor(private _formBuilder: FormBuilder, appConfigService: AppConfigService, public dialog: MatDialog,
-    private route: ActivatedRoute, private onboardingService: OnboardingService, sanitization: DomSanitizer) {
+    private route: ActivatedRoute, private onboardingService: OnboardingService, sanitization: DomSanitizer,
+    private router: Router) {
     this.config = appConfigService.getStartupConfig();
     this.serverPublicInfo = this.config.publicInfo || null;
     this.onboardingId = this.route.snapshot.params.id;
-    this.user$ = this.onboardingService.getUserByOnboardingId(this.onboardingId);
+    this.onboardingService.getUserByOnboardingId(this.onboardingId).subscribe((user) => this.user = user);
     this.TCUURL = sanitization.bypassSecurityTrustUrl(this.config.TCU.data);
   }
 
@@ -63,12 +66,16 @@ export class EnrolmentPageComponent implements OnInit {
     this.isConfirmed = true;
   }
 
-  signTCU() {
-    this.user$.then((user) => {
-      this.onboardingService.createTCUSignatureRequest(user.email);
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  signTCU(): void {
+      this.onboardingService.createTCUSignatureRequest(this.onboardingId, this.user.email)
+      .then(() => {
+        const dialogRef = this.dialog.open(DialogSignTCUComponent, {
+          width: '250px'
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          this.router.navigate(['/login']);
+        });
+      })
+      .catch((err) => log.debug(err));
   }
 }

@@ -65,6 +65,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   sendPasswordEmail = false;
   sendEnrolmentEmail = false;
   createDefaultKey = true;
+  isProofDeskAvailable = false;
 
   @Input()
   mode: 'create' | 'edit';
@@ -143,6 +144,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       }
       this.useSMTP = config.useSMTP;
       this.ServerClientURL = config.ServerClientURL;
+      this.isProofDeskAvailable = (!!config.proofDeskAPIToken || !!config.proofDeskAPIURL);
       config.contact ? this.contactAvailable = true : this.contactAvailable = false;
     }));
     if (this.mode === 'edit') {
@@ -247,5 +249,9 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   sendPasswordEmailCheck() {
     this.sendPasswordEmail = !this.sendPasswordEmail;
+  }
+
+  canEnrol(): Boolean {
+    return (this.useSMTP && this.ServerClientURL && this.contactAvailable && this.isProofDeskAvailable);
   }
 }

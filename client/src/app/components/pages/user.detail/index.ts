@@ -27,6 +27,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   ServerClientURL: string;
   email: string;
   errorMsg: string;
+  isProofDeskAvailable = false;
 
   private onDestroy: EventEmitter<void>;
 
@@ -46,6 +47,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
         return;
       }
       this.useSMTP = config.useSMTP;
+      this.isProofDeskAvailable = (!!config.proofDeskAPIToken || !!config.proofDeskAPIURL);
       config.contact ? this.contactAvailable = true : this.contactAvailable = false;
       this.ServerClientURL = config.ServerClientURL;
     }));
@@ -76,5 +78,9 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
     this.dialog.open(DialogEnrolMailComponent, {
       width: '250px'
     });
+  }
+
+  canEnrol(): Boolean {
+    return (this.useSMTP && this.ServerClientURL && this.contactAvailable && this.isProofDeskAvailable);
   }
 }

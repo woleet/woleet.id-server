@@ -48,7 +48,7 @@
       <div>
         <p>The following information will be attached to the signature so as to identity you as a signatory.</p>
         <br>
-        <div *ngIf="(user$ | async) as user; else loadinguser">
+        <div *ngIf="user; else loadinguser">
           <app-user-card [user]="user" [modes]="['display']"></app-user-card>
         </div>
         <br>
