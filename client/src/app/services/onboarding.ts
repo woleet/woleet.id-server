@@ -12,10 +12,9 @@ export class OnboardingService {
     return this.http.get<ApiUserObject>(`${serverURL}/external-key/enrolment/${onboardingId}/`);
   }
 
-  createTCUSignatureRequest(onboardingId: string, email: string) {
+  createTCUSignatureRequest(onboardingId: string, email: string): Observable<Object> {
     return this.http.post<boolean>
-      (`${serverURL}/external-key/enrolment/${onboardingId}/create-signature-request`, { email: email })
-      .toPromise();
+      (`${serverURL}/external-key/enrolment/${onboardingId}/create-signature-request`, { email: email });
   }
 
 }

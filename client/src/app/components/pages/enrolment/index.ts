@@ -68,14 +68,15 @@ export class EnrolmentPageComponent implements OnInit {
 
   signTCU(): void {
       this.onboardingService.createTCUSignatureRequest(this.onboardingId, this.user.email)
-      .then(() => {
+      .subscribe(() => {
         const dialogRef = this.dialog.open(DialogSignTCUComponent, {
           width: '250px'
         });
         dialogRef.afterClosed().subscribe(result => {
           this.router.navigate(['/login']);
         });
-      })
-      .catch((err) => log.debug(err));
+      }, (error) => {
+        log.error(error);
+      });
   }
 }
