@@ -54,10 +54,17 @@ export class EnrolmentPageComponent implements OnInit {
           return this.user = user;
         }
         , (error) => {
-          if (error.error.message === 'NotFoundOnboardingError') {
-            this.errorMessage = 'This page doesn\'t refer to an enrolment in progress.';
+          switch (error.error.message) {
+            case 'NotFoundOnboardingError':
+              this.errorMessage = 'This page doesn\'t refer to an enrolment in progress.';
+              break;
+            case 'OnboardingExpiredError':
+              this.errorMessage = 'This page refer to an enrolment that is expired.' +
+                ' Please contact the admin to begin a new enrolment process';
+              break;
+            default:
+              this.errorMessage = error.error.message;
           }
-          log.error(error);
         });
     this.TCUURL = sanitization.bypassSecurityTrustUrl(this.config.TCU.data);
   }

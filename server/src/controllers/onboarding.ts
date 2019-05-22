@@ -1,5 +1,5 @@
 import { Onboarding, User, Key } from '../database';
-import { NotFoundOnboardingError } from '../errors';
+import { NotFoundOnboardingError, OnboardingExpiredError } from '../errors';
 import * as crypto from 'crypto';
 import { readFileSync } from 'fs';
 import * as path from 'path';
@@ -9,6 +9,7 @@ import log = require('loglevel');
 import { Observable } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { sendEnrolmentFinalizeEmail } from './send-email';
+import * as timestring from 'timestring';
 
 /**
  * Onboarding
@@ -23,8 +24,12 @@ import { sendEnrolmentFinalizeEmail } from './send-email';
  *  operationId: createOnboarding
  */
 export async function createOnboarding(userId: string): Promise<InternalOnboardingObject> {
+  const expiration = !!getServerConfig().enrolmentExpirationOffset ?
+    Date.now() + timestring(getServerConfig().enrolmentExpirationOffset) * 1000 :
+    null;
   const newOnboarding = await Onboarding.create(Object.assign({}, {
-    userId
+    userId,
+    expiration
   }));
   return newOnboarding.toJSON();
 }
@@ -36,17 +41,32 @@ export async function getOnboardingById(id: string): Promise<InternalOnboardingO
     throw new NotFoundOnboardingError();
   }
 
+  if (onboarding.toJSON().expiration) {
+    if (Date.now() > onboarding.toJSON().expiration) {
+      deleteOnboarding(id);
+      throw new OnboardingExpiredError();
+    }
+  }
+
   return onboarding.toJSON();
 }
 
 export async function getOwner(id): Promise<InternalUserObject> {
   const onboarding = await Onboarding.getById(id);
-  // get user by onboarding userId
 
   if (!onboarding) {
     throw new NotFoundOnboardingError();
   }
 
+
+  if (onboarding.toJSON().expiration) {
+    if (Date.now() > onboarding.toJSON().expiration) {
+      deleteOnboarding(id);
+      throw new OnboardingExpiredError();
+    }
+  }
+
+  // get user by onboarding userId
   const user = await User.getById(onboarding.get('userId'));
 
   return user.toJSON();

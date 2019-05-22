@@ -58,6 +58,7 @@
     "pg-hstore": "^2.3.2",
     "read": "^1.0.7",
     "rxjs": "^6.5.2",
-    "sequelize": "^4.43.0"
+    "sequelize": "^4.43.0",
+    "timestring": "^6.0.0"
   }
 }

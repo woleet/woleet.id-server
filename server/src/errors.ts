@@ -50,6 +50,14 @@ export class NotFoundOnboardingError extends NotFoundDBObjectError {
   name = 'NotFoundOnboardingError';
 }
 
+export class OnboardingExpiredError extends NotFoundDBObjectError {
+  constructor(m = 'Onboarding expired') {
+    super(m);
+  }
+
+  name = 'OnboardingExpiredError';
+}
+
 export abstract class ForeignKeyDBError extends DBError {
 }
 

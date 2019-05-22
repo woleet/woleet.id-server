@@ -260,6 +260,8 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+
+    enrolmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
@@ -303,6 +305,8 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+
+    enrolmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
@@ -346,6 +350,8 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+
+    enrolmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;

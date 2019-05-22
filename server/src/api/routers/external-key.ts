@@ -126,7 +126,7 @@ router.post('/enrolment', async function (ctx) {
 
   try {
     user = await sendKeyEnrolmentEmail(email);
-  } catch {
+  } catch (err) {
     throw new NotFound(email + ' does not correspond to a user.');
   }
 

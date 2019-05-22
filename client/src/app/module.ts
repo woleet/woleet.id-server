@@ -84,6 +84,7 @@ import { ConfigMailTemplateComponent } from '@components/parts/config.mail';
 import { ConfigProofDeskComponent } from '@components/parts/config.proofdesk';
 import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
+import { ConfigEnrolmentExpirationComponent } from '@parts/config.enrolment-expiration';
 
 export function startupServiceFactory(startupService: AppConfigService): Function {
   return () => startupService.load();
@@ -111,6 +112,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ConfigOIDCPComponent,
     ConfigOIDCPClientComponent,
     ConfigKeyExpirationComponent,
+    ConfigEnrolmentExpirationComponent,
     ConfigProofDeskComponent,
     UserCardComponent,
     KeyCardComponent,
