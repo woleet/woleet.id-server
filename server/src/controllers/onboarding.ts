@@ -1,12 +1,14 @@
-import { Onboarding, User } from '../database';
+import { Onboarding, User, Key } from '../database';
 import { NotFoundOnboardingError } from '../errors';
 import * as crypto from 'crypto';
 import { readFileSync } from 'fs';
 import * as path from 'path';
 import { getServerConfig } from './server-config';
 import * as https from 'https';
-import * as querystring from 'querystring';
 import log = require('loglevel');
+import { Observable } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+import { sendEnrolmentFinalizeEmail } from './send-email';
 
 /**
  * Onboarding
@@ -24,7 +26,6 @@ export async function createOnboarding(userId: string): Promise<InternalOnboardi
   const newOnboarding = await Onboarding.create(Object.assign({}, {
     userId
   }));
-
   return newOnboarding.toJSON();
 }
 
@@ -41,11 +42,12 @@ export async function getOnboardingById(id: string): Promise<InternalOnboardingO
 export async function getOwner(id): Promise<InternalUserObject> {
   const onboarding = await Onboarding.getById(id);
   // get user by onboarding userId
-  const user = await User.getById(onboarding.get('userId'));
 
   if (!onboarding) {
     throw new NotFoundOnboardingError();
   }
+
+  const user = await User.getById(onboarding.get('userId'));
 
   return user.toJSON();
 }
@@ -101,8 +103,8 @@ export async function createSignatureRequest(hash: string, email: string) {
   return new Promise(async (resolve, reject) => {
     const req = https.request(httpsOptions, (res) => {
 
-      res.on('data', (response) => {
-        resolve(response.toString());
+      res.on('data', (result) => {
+        resolve(JSON.parse(result.toString()));
       });
 
     }).on('error', (err) => {
@@ -111,4 +113,64 @@ export async function createSignatureRequest(hash: string, email: string) {
     req.write(body);
     req.end();
   });
+}
+
+export async function monitorSignatureRequests(requestId: string, onboardingId: string, user: ApiUserObject) {
+  const url = new URL(getServerConfig().proofDeskAPIURL);
+  const httpsOptions = {
+    host: url.host,
+    path: url.pathname + `/signatureRequest/${requestId}`,
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + getServerConfig().proofDeskAPIToken
+    }
+  };
+  let result;
+  const observable = new Observable<any>(subscriber => {
+
+    const interval = setInterval(() => {
+      https.get(httpsOptions, (res) => {
+        let data = '';
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+        res.on('end', () => {
+          result = JSON.parse(data);
+          subscriber.next(result);
+        });
+      }).on('error', (err) => {
+        log.error(err);
+      });
+    }, 1000 * 6);
+
+    return () => clearInterval(interval);
+  });
+  observable
+    .pipe(takeWhile(res => {
+      if (res.anchors.length > 0) {
+        return !res.anchors[0].pubKey;
+      } else {
+        return true;
+      }
+    }))
+    .subscribe(() => { return; },
+      error => log.error(error),
+      () => {
+        finalizeOnboarding(onboardingId, user, result.anchors[0].pubKey);
+      }
+    );
+}
+
+async function finalizeOnboarding(onboardingId: string, user: ApiUserObject, publicKey: string) {
+  const name = user.identity.commonName + '\'s key';
+  const userId = user.id;
+  await Key.create(Object.assign({
+    name,
+    publicKey,
+    holder: 'user',
+    userId
+  }));
+  deleteOnboarding(onboardingId);
+  sendEnrolmentFinalizeEmail(user.identity.commonName, publicKey);
 }

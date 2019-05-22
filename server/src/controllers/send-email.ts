@@ -8,6 +8,8 @@ import { getServerConfig } from './server-config';
 import { createOnboarding } from './onboarding';
 import log = require('loglevel');
 import * as nodemailer from 'nodemailer';
+import { readFileSync } from 'fs';
+import * as path from 'path';
 
 function getLogo(config): String {
   if (config.publicInfo.logoURL) {
@@ -85,6 +87,23 @@ export async function sendKeyEnrolmentEmail(email: string): Promise<InternalOnbo
   }
 
   return onboarding;
+}
+
+export async function sendEnrolmentFinalizeEmail(userName: string, address: string): Promise<void> {
+  const config = getServerConfig();
+  const logo = getLogo(config);
+
+  const subject = 'Enrolment Confirmation';
+  const template = readFileSync(
+    path.join(__dirname, '../../assets/defaultAdminEnrolmentConfirmationMailTemplate.html'), { encoding: 'ascii' });
+  const html = mustache.render(template,
+    { domain: null, logoURL: logo, userName, address });
+
+  try {
+    await sendEmail(config.contact, subject, html);
+  } catch (err) {
+    log.error(err);
+  }
 }
 
 export async function sendEmail(email: string, subject: string, html: any) {

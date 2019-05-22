@@ -7,7 +7,7 @@ import { store as event } from '../../controllers/server-event';
 import { sendKeyEnrolmentEmail } from '../../controllers/send-email';
 import { serializeUser } from '../serialize/user';
 import { BadRequest, NotFound } from 'http-errors';
-import { getOwner, getTCUHash, createSignatureRequest } from '../../controllers/onboarding';
+import { getOwner, getTCUHash, createSignatureRequest, monitorSignatureRequests } from '../../controllers/onboarding';
 import { admin as adminAuth } from '../authentication';
 import log = require('loglevel');
 
@@ -31,8 +31,8 @@ router.get('/enrolment/:id', async function (ctx) {
   let user;
   try {
     user = await getOwner(id);
-  } catch {
-    throw new NotFound('This demand is not available.');
+  } catch (err) {
+    throw new BadRequest(err.name);
   }
   ctx.body = serializeUser(user);
 });
@@ -51,20 +51,22 @@ router.post('/enrolment/:id/create-signature-request', async function (ctx) {
   let response;
 
   try {
+    user = await getOwner(id);
+    user = serializeUser(user);
+  } catch (err) {
+    throw new BadRequest(err.name);
+  }
+
+  try {
     await createSignatureRequest(hashTCU, email)
-    .then((res) => {
+    .then((res: any) => {
       response = res;
     });
   } catch (error) {
     log.error(error);
   }
 
-  try {
-    user = await getOwner(id);
-    user = serializeUser(user);
-  } catch {
-    throw new NotFound('This demand is not available.');
-  }
+  monitorSignatureRequests(response.id, id, user);
 
   event.register({
     type: 'external-key.create-signature-request',
@@ -72,7 +74,7 @@ router.post('/enrolment/:id/create-signature-request', async function (ctx) {
     associatedTokenId: null,
     associatedUserId: serializeUser(user).id,
     associatedKeyId: null,
-    data: response
+    data: JSON.stringify(response)
   });
 
   ctx.body = '';

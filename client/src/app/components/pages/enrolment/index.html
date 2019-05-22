@@ -1,6 +1,6 @@
 <logo [logoURL]="serverPublicInfo.logoURL"></logo>
 <br>
-<mat-horizontal-stepper #stepper linear>
+<mat-horizontal-stepper *ngIf="!errorMessage && !completed" #stepper linear>
   <ng-template matStepperIcon="welcome">
     <mat-icon>home</mat-icon>
   </ng-template>
@@ -116,6 +116,26 @@
     </div>
   </mat-step>
 </mat-horizontal-stepper>
+<div *ngIf="errorMessage">
+  <mat-card>
+    <mat-card-title>Enrolment not available</mat-card-title>
+    <mat-divider></mat-divider>
+    <br>
+    <mat-card-content>
+      {{errorMessage}}
+    </mat-card-content>
+  </mat-card>
+</div>
+<div *ngIf="completed">
+    <mat-card>
+      <mat-card-title>Enrolment is completed</mat-card-title>
+      <mat-divider></mat-divider>
+      <br>
+      <mat-card-content>
+        The Signature request has been sent you can now close this page.
+      </mat-card-content>
+    </mat-card>
+  </div>
 <ng-template #loadinguser>
   <mat-card>Loading...</mat-card>
 </ng-template>

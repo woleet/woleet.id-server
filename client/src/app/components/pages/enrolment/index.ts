@@ -6,7 +6,6 @@ import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingService } from '@services/onboarding';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { DialogSignTCUComponent } from '@parts/dialog-sign-TCU';
 import * as log from 'loglevel';
 
 /**
@@ -27,7 +26,8 @@ export class EnrolmentPageComponent implements OnInit {
   user: ApiUserObject;
   emailstring: string;
   TCUURL: SafeUrl;
-  // defaultURL = 'https://doc.woleet.io/docs/terms-of-service';
+  errorMessage = '';
+  completed = false;
 
   config: {
     publicInfo: {
@@ -48,7 +48,17 @@ export class EnrolmentPageComponent implements OnInit {
     this.config = appConfigService.getStartupConfig();
     this.serverPublicInfo = this.config.publicInfo || null;
     this.onboardingId = this.route.snapshot.params.id;
-    this.onboardingService.getUserByOnboardingId(this.onboardingId).subscribe((user) => this.user = user);
+    this.onboardingService.getUserByOnboardingId(this.onboardingId)
+      .subscribe(
+        (user) => {
+          return this.user = user;
+        }
+        , (error) => {
+          if (error.error.message === 'NotFoundOnboardingError') {
+            this.errorMessage = 'This page doesn\'t refer to an enrolment in progress.';
+          }
+          log.error(error);
+        });
     this.TCUURL = sanitization.bypassSecurityTrustUrl(this.config.TCU.data);
   }
 
@@ -67,14 +77,9 @@ export class EnrolmentPageComponent implements OnInit {
   }
 
   signTCU(): void {
-      this.onboardingService.createTCUSignatureRequest(this.onboardingId, this.user.email)
+    this.onboardingService.createTCUSignatureRequest(this.onboardingId, this.user.email)
       .subscribe(() => {
-        const dialogRef = this.dialog.open(DialogSignTCUComponent, {
-          width: '250px'
-        });
-        dialogRef.afterClosed().subscribe(result => {
-          this.router.navigate(['/login']);
-        });
+        this.completed = true;
       }, (error) => {
         log.error(error);
       });

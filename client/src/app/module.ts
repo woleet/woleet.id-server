@@ -49,7 +49,6 @@ import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
 import { DialogEnrolMailComponent } from '@parts/dialog-enrol-mail';
-import { DialogSignTCUComponent } from '@parts/dialog-sign-TCU';
 import { EnrolmentPageComponent } from '@pages/enrolment';
 // Services
 import {
@@ -136,14 +135,12 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ConfigTCUComponent,
     DialogResetPasswordComponent,
     DialogMailResetComponent,
-    DialogEnrolMailComponent,
-    DialogSignTCUComponent
+    DialogEnrolMailComponent
   ],
   entryComponents: [
     DialogResetPasswordComponent,
     DialogMailResetComponent,
-    DialogEnrolMailComponent,
-    DialogSignTCUComponent
+    DialogEnrolMailComponent
   ],
   imports: [
     // angular
