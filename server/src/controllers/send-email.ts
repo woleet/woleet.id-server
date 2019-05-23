@@ -5,8 +5,19 @@ import * as mustache from 'mustache';
 import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
 import { getServerConfig } from './server-config';
+import { createEnrollment } from './enrollment';
 import log = require('loglevel');
 // import * as nodemailer from 'nodemailer';
+import { readFileSync } from 'fs';
+import * as path from 'path';
+
+function getLogo(config): String {
+  if (config.publicInfo.logoURL) {
+    return config.publicInfo.logoURL;
+  } else {
+    return 'https://www.woleet.io/wp-content/uploads/2018/12/Woleet-logo-black-big-e1550678072706.png';
+  }
+}
 
 export async function sendResetPasswordEmail(email: string): Promise<InternalUserObject> {
   let user = await User.getByEmail(email);
@@ -31,13 +42,7 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
 
   let subject;
   let html;
-  let logo;
-
-  if (config.publicInfo.logoURL) {
-    logo = config.publicInfo.logoURL;
-  } else {
-    logo = 'https://www.woleet.io/wp-content/uploads/2018/12/Woleet-logo-black-big-e1550678072706.png';
-  }
+  const logo = getLogo(config);
 
   if (user.getDataValue('passwordHash') === null) {
     html = mustache.render(config.mailOnboardingTemplate,
@@ -56,6 +61,49 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
   }
 
   return user.toJSON();
+}
+
+export async function sendKeyEnrollmentEmail(email: string): Promise<InternalEnrollmentObject> {
+  const user = await User.getByEmail(email);
+  if (!user) {
+    throw new NotFoundUserError();
+  }
+
+  const enrollment = await createEnrollment(user.get('id'));
+  const config = getServerConfig();
+  const ServerClientURL = config.ServerClientURL;
+
+  const link = ServerClientURL + '/enrollment/' +
+    enrollment.id;
+  const logo = getLogo(config);
+  const subject = 'Enrollment';
+  const html = mustache.render(config.mailKeyEnrollmentTemplate,
+    { keyEnrollmentURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
+
+  try {
+    await sendEmail(email, subject, html);
+  } catch (err) {
+    log.error(err);
+  }
+
+  return enrollment;
+}
+
+export async function sendEnrollmentFinalizeEmail(userName: string, address: string): Promise<void> {
+  const config = getServerConfig();
+  const logo = getLogo(config);
+
+  const subject = 'Enrollment Confirmation';
+  const template = readFileSync(
+    path.join(__dirname, '../../assets/defaultAdminEnrollmentConfirmationMailTemplate.html'), { encoding: 'ascii' });
+  const html = mustache.render(template,
+    { domain: null, logoURL: logo, userName, address });
+
+  try {
+    await sendEmail(config.contact, subject, html);
+  } catch (err) {
+    log.error(err);
+  }
 }
 
 export async function sendEmail(email: string, subject: string, html: any) {

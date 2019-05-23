@@ -4,6 +4,7 @@ import { validate } from '../schemas';
 import { getServerConfig, setServerConfig } from '../../controllers/server-config';
 import { store as event } from '../../controllers/server-event';
 import { serializeServerConfig } from '../serialize/server-config';
+import { BadRequest } from 'http-errors';
 
 /**
  * ServerConfig
@@ -26,7 +27,9 @@ router.get('/', function (ctx) {
  *  operationId: updateServerConfig
  */
 router.put('/', validate.body('updateConfig'), async function (ctx) {
-  const config = await setServerConfig(ctx.request.body);
+  let config;
+
+  config = await setServerConfig(ctx.request.body);
 
   event.register({
     type: 'config.edit',

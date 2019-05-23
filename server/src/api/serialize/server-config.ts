@@ -16,11 +16,18 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     OIDCPIssuerURL,
     OIDCPClients,
     keyExpirationOffset,
+    enrollmentExpirationOffset,
     useSMTP,
     SMTPConfig,
     ServerClientURL,
     mailResetPasswordTemplate,
-    mailOnboardingTemplate
+    mailOnboardingTemplate,
+    mailKeyEnrollmentTemplate,
+    TCU,
+    contact,
+    proofDeskAPIURL,
+    proofDeskAPIToken,
+    proofDeskAPIIsValid
   } = config;
 
   return {
@@ -40,10 +47,17 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     OIDCPIssuerURL,
     OIDCPClients,
     keyExpirationOffset,
+    enrollmentExpirationOffset,
     useSMTP,
     SMTPConfig,
     ServerClientURL,
     mailResetPasswordTemplate,
-    mailOnboardingTemplate
+    mailOnboardingTemplate,
+    mailKeyEnrollmentTemplate,
+    TCU,
+    contact,
+    proofDeskAPIURL,
+    proofDeskAPIToken,
+    proofDeskAPIIsValid
   };
 }

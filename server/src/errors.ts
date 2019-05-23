@@ -42,6 +42,22 @@ export class NotFoundKeyError extends NotFoundDBObjectError {
   name = 'NotFoundKeyError';
 }
 
+export class NotFoundEnrollmentError extends NotFoundDBObjectError {
+  constructor(m = 'Enrollment not found') {
+    super(m);
+  }
+
+  name = 'NotFoundEnrollmentError';
+}
+
+export class EnrollmentExpiredError extends NotFoundDBObjectError {
+  constructor(m = 'Enrollment expired') {
+    super(m);
+  }
+
+  name = 'EnrollmentExpiredError';
+}
+
 export abstract class ForeignKeyDBError extends DBError {
 }
 

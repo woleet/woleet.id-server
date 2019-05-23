@@ -1,0 +1,39 @@
+<mat-card *ngIf="!editMode">
+    <mat-card-title>Default key expiration</mat-card-title>
+    <mat-divider></mat-divider>
+    <br>
+    <div *ngIf="(config$ | async) as config; else loading">
+      <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div fxLayout="column" class="btn-h">
+          <div>
+            <span>{{ config.enrollmentExpirationOffset || 'unset' }}</span>&nbsp;
+            <span *ngIf="config.enrollmentExpirationOffset">({{ getSeconds(config.enrollmentExpirationOffset) }} seconds)</span>
+          </div>
+        </div>
+        <div fxLayout="column">
+          <button mat-icon-button color="primary" [disabled]="(formLocked$ | async)" (click)="editMode=true">
+            <mat-icon matTooltip="Edit identity URL" aria-label="Edit identity URL button">edit</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <ng-template #loading>Loading...<br></ng-template>
+  </mat-card>
+  <mat-card *ngIf="editMode">
+    <mat-card-title>Set default key expiration</mat-card-title>
+    <mat-divider></mat-divider>
+    <br>
+    <br>
+    <mat-card-content>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Default exipration time (e.g. 2w 1d 4h)" [formControl]="form">
+        <mat-error *ngIf="form.invalid">{{ getErrorMessage(form) }}</mat-error>
+      </mat-form-field>
+    </mat-card-content>
+    <ng-template #loading>Loading...<br></ng-template>
+    <mat-card-actions *ngIf="(config$ | async) as config; else loading">
+      <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) || (config.enrollmentExpirationOffset == form.value) || (form.invalid)">SAVE</button>
+      <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
+    </mat-card-actions>
+  </mat-card>
+  

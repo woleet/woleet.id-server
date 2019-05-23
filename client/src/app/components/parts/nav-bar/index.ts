@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '@services/auth';
 import { environment } from '@env/environment';
 import { PageDataService } from '@services/page-data';
@@ -12,11 +12,14 @@ import { ErrorService } from '@services/error';
 export class NavBarComponent {
   production = false;
   lock$;
+  mode = 'side';
+  opened = true;
 
   constructor(
     private authService: AuthService,
     private pageDataService: PageDataService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private ref: ChangeDetectorRef
   ) {
     this.production = environment.production;
     this.lock$ = authService.lock$;
@@ -44,5 +47,9 @@ export class NavBarComponent {
 
   isAdmin() {
     return this.authService.isAdmin();
+  }
+
+  collapseSideBar() {
+    this.opened = !this.opened;
   }
 }

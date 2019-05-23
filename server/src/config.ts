@@ -108,7 +108,7 @@ export const events = {
     'error',
     'signature', 'login', 'config.edit',
     'key.create', 'key.edit', 'key.delete',
-    'external-key.create',
+    'enrollment.create', 'enrollment.create-signature-request',
     'user.create', 'user.edit', 'user.delete',
     'token.create', 'token.edit', 'token.delete'
   ]
@@ -116,14 +116,17 @@ export const events = {
 
 export const serverConfig = {
   default: {
-    version: 8, // datamodel version
+    version: 9, // datamodel version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true,
     publicInfo: {},
     mailOnboardingTemplate: readFileSync(
-      path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), {encoding: 'ascii'}),
-      mailResetPasswordTemplate: readFileSync(
-        path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), {encoding: 'ascii'})
+      path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), { encoding: 'ascii' }),
+    mailResetPasswordTemplate: readFileSync(
+      path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), { encoding: 'ascii' }),
+    mailKeyEnrollmentTemplate: readFileSync(
+      path.join(__dirname, '../assets/defaultKeyEnrollmentMailTemplate.html'), { encoding: 'ascii' }),
+    TCU: { name: 'default_TCU.pdf' }
   },
   CONFIG_ID: 'SERVER-CONFIG'
 };

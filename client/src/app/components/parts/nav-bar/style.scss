@@ -88,5 +88,15 @@ mat-sidenav-container{
 }
 
 .collapse {
-  // width: 100px;
+  width: 0px;
+}
+
+
+.collapse-button {
+  height: 28px;
+  background-position: center;
+}
+
+.sub-logo-collapse {
+  margin-left: -30px;
 }

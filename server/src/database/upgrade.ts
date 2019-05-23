@@ -172,6 +172,32 @@ async function upgrade8(sequelize) {
   }
 }
 
+async function upgrade9(sequelize) {
+  log.warn('Rename "onboarding" table...');
+  await ServerConfig.model.sync();
+
+  let old;
+  try {
+    old = await sequelize.query(`SELECT * FROM "Onboarding";`);
+  } catch {
+
+  }
+
+  if (old) {
+    log.warn('Rename Onboarding table to Enrollment...');
+    const [rename] = await sequelize.query('ALTER TABLE "Onboarding" RENAME TO "Enrollment";');
+
+    await sequelize.query(
+      `ALTER TYPE "public"."enum_serverEvents_type" ADD VALUE IF NOT EXISTS 'enrollment.create-signature-request' BEFORE 'user.create'`
+    );
+
+    await sequelize.query(
+      `ALTER TYPE "public"."enum_serverEvents_type" ADD VALUE IF NOT EXISTS`
+      + ` 'enrollment.create' BEFORE 'enrollment.create-signature-request'`
+    );
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
@@ -181,6 +207,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade6(sequelize);
   await upgrade7(sequelize);
   await upgrade8(sequelize);
+  await upgrade9(sequelize);
 }
 
 async function postUpgrade3() {

@@ -31,6 +31,10 @@ export class UserService {
     return this.http.post<Boolean>(`${serverURL}/password-reset`, { email: email }).toPromise();
   }
 
+  async keyEnrollment(email: string) {
+    return this.http.post<Boolean>(`${serverURL}/enrollment`, { email: email }).toPromise();
+  }
+
   async validate(email: string, password: string, token: string) {
     return this.http.post<Boolean>(`${serverURL}/password-reset/validate`, {email: email, password: password, token: token}).toPromise();
   }

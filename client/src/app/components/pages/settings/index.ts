@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@services/auth';
 
 @Component({
-  templateUrl: './settings.html'
+  templateUrl: './index.html'
 })
 export class SettingsPageComponent implements OnInit {
 

@@ -361,10 +361,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
-  /external-key/create/{userId}:
+  /user/{userId}/extern-key:
     post:
       tags:
-        - ExternalKey
+        - Key
       summary: Create a new external key for a user.
       operationId: createExternalKey
       parameters:
@@ -1063,6 +1063,15 @@ components:
         - type: object
           required:
             - identity
+            - sendKeyEnrollmentMail
+            - createDefaultKey
+          properties:
+              sendKeyEnrollmentMail:
+                type: boolean
+                description: If true send an enrollment mail.
+              createDefaultKey:
+                type: boolean
+                description: If true create a key holded by the server when this user is created.
     UserPut:
       allOf:
         - $ref: '#/components/schemas/UserBase'
@@ -1182,7 +1191,8 @@ components:
         - key.create
         - key.edit
         - key.delete
-        - external-key.create
+        - enrollment.create
+        - enrollment.create-signature-request
         - user.create
         - user.edit
         - user.delete
@@ -1528,7 +1538,7 @@ components:
           schema:
             $ref: '#/components/schemas/ExternalKeyPost'
       description: External Key object to add.
-      required: true
+      required: true  
     KeyPut:
       content:
         application/json:

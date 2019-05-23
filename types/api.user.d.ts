@@ -48,6 +48,8 @@ interface ApiPostUserObject extends UserObject {
   countryCallingCode?: string;
   phone?: string;
   identity: ApiIdentityObject;
+  sendKeyEnrollmentMail: boolean;
+  createDefaultKey: boolean;
 }
 
 interface ApiPutUserObject extends UserObject {

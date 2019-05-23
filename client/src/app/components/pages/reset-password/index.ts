@@ -7,7 +7,7 @@ import { asciiValidator, ErrorMessageProvider, passwordValidator } from '@compon
 import { UserService } from '@services/user';
 import { MatDialog } from '@angular/material';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
-import { DialogMailResetComponent } from '@components/parts/dialog-mail-reset';
+import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
 
 export function confirmPasswordValidator(control: AbstractControl) {
   const str: string = control.value;

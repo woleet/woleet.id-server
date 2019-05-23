@@ -84,6 +84,18 @@
       </mat-card-content>
     </div>
   </form>
+  <div *ngIf="mode === 'create'">
+    <mat-divider></mat-divider>
+    <br>
+    <div fxLayout="row" fxLayout.gt-sm="column" fxLayoutGap="10px">
+      <mat-checkbox matInput [(ngModel)]="createDefaultKey">Create a default key
+      </mat-checkbox>
+      <mat-checkbox matInput [disabled]="!canEnrol()"
+        [matTooltip]="!canEnrol()? 'You must setup the SMTP server, the server web client URL to activate this option, the admin contact and ProofDesk API':''"
+        [(ngModel)]="sendEnrollmentEmail">Enrol external key by email</mat-checkbox>
+    </div>
+    <br>
+  </div>
   <div *ngIf="helper">
     <mat-card class="error-card">{{ helper }}</mat-card>
     <br>

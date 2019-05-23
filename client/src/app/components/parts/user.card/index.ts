@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { UserService } from '@services/user';
+import { AsYouType } from 'libphonenumber-js';
 import { confirm } from '../../util';
 import cc from '@components/cc';
 
@@ -14,7 +15,7 @@ export class UserCardComponent {
   editMode = false;
 
   @Input()
-  modes: ('block' | 'edit' | 'detail' | 'delete')[];
+  modes: ('block' | 'edit' | 'detail' | 'delete' | 'display')[];
 
   @Input()
   user: ApiUserObject;
@@ -62,7 +63,11 @@ export class UserCardComponent {
 
   getCountry(code) {
     const country = cc.find(({ code: c }) => c === code);
-    return country && country.name;
+    return (country && country.name);
+  }
+
+  getPhone(user) {
+    return user.phone ? new AsYouType().input('+' + user.countryCallingCode + user.phone) : '-';
   }
 
 }

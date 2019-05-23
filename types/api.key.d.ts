@@ -6,7 +6,7 @@ type KeyHolderEnum = 'server' | 'user';
 
 interface KeyObject { }
 
-interface ApiKeyObject extends KeyObject, ApiCommonProperties, ApiParanoidProperties {
+interface ApiKeyObject extends KeyObject, ApiCommonProperties {
 
   /** Key name */
   name: string;

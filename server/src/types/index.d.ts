@@ -11,6 +11,7 @@ import '../../../types/api.server-event';
 import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api';
+import '../../../types/api.enrollment';
 import './oidc-provider';
 
 declare global {
@@ -259,6 +260,8 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+
+    enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
@@ -267,6 +270,18 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    mailKeyEnrollmentTemplate?: string;
+    // TCU
+    TCU?: {
+      name?: string;
+      data?: string;
+    }
+    // Admin contact
+    contact?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -290,6 +305,8 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+
+    enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
@@ -298,6 +315,18 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    mailKeyEnrollmentTemplate?: string;
+    // TCU
+    TCU?: {
+      name?: string;
+      data?: string;
+    }
+    // Admin contact
+    contact?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -321,6 +350,8 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+
+    enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
@@ -329,6 +360,32 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    mailKeyEnrollmentTemplate?: string;
+    // TCU
+    TCU?: {
+      name?: string;
+      data?: string;
+    }
+    // Admin contact
+    contact?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
+  }
+
+  /* Enrollment */
+
+  interface InternalEnrollmentObject extends EnrollmentObject {
+    id: string;
+    userId: string;
+    expiration: number;
+  }
+
+  interface SequelizeEnrollmentObject extends Instance<InternalEnrollmentObject> {
+  }
+
+  interface ApiPostEnrollmentObject extends EnrollmentObject {
   }
 
   /* OIDC Provider */
