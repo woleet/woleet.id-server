@@ -4,8 +4,14 @@
 
 OPENAPI_CODEGEN='java -jar openapi-generator-cli.jar'
 
-# Generation of the Java client used for tests
+# Clean previously generated code
 rm -rf tests/java/src/main
 rm -rf tests/java/docs
+rm -rf tests/java/*gradle*
+rm -rf tests/java/target
+rm -rf tests/java/build.*
+rm -rf tests/java/git_push.sh
+
+# Generation of the Java client used for tests
 $OPENAPI_CODEGEN generate -i swagger.yaml -g java -D hideGenerationTimestamp=true -Djava8=true -DdateLibrary=java8 -o tests/java --api-package io.woleet.idserver.api --artifact-id woleet-idserver-api-client --group-id io.woleet.idserver --model-package io.woleet.idserver.api.model --artifact-version 1.0.0
 
