@@ -55,7 +55,7 @@ export function bootServers(): Promise<void> {
 
     return new Promise<void>((resolve) => {
 
-      log.info(`Starting ${name} server(s) on port ${port}...`);
+      log.info(`Starting ${name} server on port ${port}...`);
 
       const app = new Koa();
 
@@ -81,7 +81,7 @@ export function bootServers(): Promise<void> {
       server.on('error', (err) => exit(`Server ${name} encountered an error: ${err.message}`, err));
 
       server.on('listening', () => {
-        log.info(`[${name.split('-').join(', ')}] listening on port ${port}.`);
+        log.info(`${name.split('-').join(', ')} listening on port ${port}.`);
         resolve();
       });
 
