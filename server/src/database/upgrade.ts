@@ -173,12 +173,8 @@ async function upgrade8(sequelize) {
 }
 
 async function upgrade9(sequelize) {
-  log.warn('Checking for creation of the "onboarding" table...');
+  log.warn('Rename "onboarding" table...');
   await ServerConfig.model.sync();
-  const cfg = await ServerConfig.getById(CONFIG_ID);
-  if (!cfg) {
-    return;
-  }
 
   let old;
   try {
@@ -186,6 +182,14 @@ async function upgrade9(sequelize) {
   } catch {
 
   }
+
+  await sequelize.query(
+    `ALTER TYPE "public"."enum_serverEvents_type" ADD VALUE IF NOT EXISTS 'enrollment.create-signature-request' BEFORE 'user.create'`
+  );
+
+  await sequelize.query(
+    `ALTER TYPE "public"."enum_serverEvents_type" ADD VALUE IF NOT EXISTS 'enrollment.create' BEFORE 'enrollment.create-signature-request'`
+  );
 
   if (old) {
     log.warn('Rename Onboarding table to Enrollment...');
