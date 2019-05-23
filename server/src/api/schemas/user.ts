@@ -31,7 +31,7 @@ const createUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPostUserObject
   username: SafeWord.min(1).max(64).allow(null), // not required for step 1 (allowing null - but should be specified)
   password: Word.allow(null), // not required for step 1 (allowing null - but should be specified)
   identity: createIdentity.required(),
-  sendKeyEnrolmentMail: Joi.boolean(),
+  sendKeyEnrollmentMail: Joi.boolean(),
   createDefaultKey: Joi.boolean(),
 });
 

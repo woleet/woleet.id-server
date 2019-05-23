@@ -48,7 +48,7 @@ interface ApiPostUserObject extends UserObject {
   countryCallingCode?: string;
   phone?: string;
   identity: ApiIdentityObject;
-  sendKeyEnrolmentMail: boolean;
+  sendKeyEnrollmentMail: boolean;
   createDefaultKey: boolean;
 }
 

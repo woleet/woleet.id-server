@@ -4,7 +4,7 @@ import { AppConfigService } from '@services/boot';
 import { MatDialog } from '@angular/material';
 import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OnboardingService } from '@services/onboarding';
+import { EnrollmentService } from '@services/enrollment';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import * as log from 'loglevel';
 
@@ -18,11 +18,11 @@ import * as log from 'loglevel';
     provide: MAT_STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
   }]
 })
-export class EnrolmentPageComponent implements OnInit {
+export class EnrollmentPageComponent implements OnInit {
   isConfirmed = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
-  onboardingId: string;
+  enrollmentId: string;
   user: ApiUserObject;
   emailstring: string;
   TCUURL: SafeUrl;
@@ -43,24 +43,24 @@ export class EnrolmentPageComponent implements OnInit {
   serverPublicInfo: ApiServerConfig['publicInfo'];
 
   constructor(private _formBuilder: FormBuilder, appConfigService: AppConfigService, public dialog: MatDialog,
-    private route: ActivatedRoute, private onboardingService: OnboardingService, sanitization: DomSanitizer,
+    private route: ActivatedRoute, private enrollmentService: EnrollmentService, sanitization: DomSanitizer,
     private router: Router) {
     this.config = appConfigService.getStartupConfig();
     this.serverPublicInfo = this.config.publicInfo || null;
-    this.onboardingId = this.route.snapshot.params.id;
-    this.onboardingService.getUserByOnboardingId(this.onboardingId)
+    this.enrollmentId = this.route.snapshot.params.id;
+    this.enrollmentService.getUserByEnrollmentId(this.enrollmentId)
       .subscribe(
         (user) => {
           return this.user = user;
         }
         , (error) => {
           switch (error.error.message) {
-            case 'NotFoundOnboardingError':
-              this.errorMessage = 'This page doesn\'t refer to an enrolment in progress.';
+            case 'NotFoundEnrollmentError':
+              this.errorMessage = 'This page doesn\'t refer to an enrollment in progress.';
               break;
-            case 'OnboardingExpiredError':
-              this.errorMessage = 'This page refer to an enrolment that is expired.' +
-                ' Please contact the admin to begin a new enrolment process';
+            case 'EnrollmentExpiredError':
+              this.errorMessage = 'This page refer to an enrollment that is expired.' +
+                ' Please contact the admin to begin a new enrollment process';
               break;
             default:
               this.errorMessage = error.error.message;
@@ -76,7 +76,7 @@ export class EnrolmentPageComponent implements OnInit {
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
-    this.emailstring = 'mailto:' + this.config.contact + '?Subject=Enrolment Refusal&body=';
+    this.emailstring = 'mailto:' + this.config.contact + '?Subject=Enrollment Refusal&body=';
   }
 
   confirm() {
@@ -84,7 +84,7 @@ export class EnrolmentPageComponent implements OnInit {
   }
 
   signTCU(): void {
-    this.onboardingService.createTCUSignatureRequest(this.onboardingId, this.user.email)
+    this.enrollmentService.createTCUSignatureRequest(this.enrollmentId, this.user.email)
       .subscribe(() => {
         this.completed = true;
       }, (error) => {

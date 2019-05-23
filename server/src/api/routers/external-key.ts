@@ -1,32 +1,27 @@
-import { validate } from '../schemas';
 import * as Router from 'koa-router';
 
-import { externalCreateKey } from '../../controllers/key';
-import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
-import { sendKeyEnrolmentEmail } from '../../controllers/send-email';
+import { sendKeyEnrollmentEmail } from '../../controllers/send-email';
 import { serializeUser } from '../serialize/user';
 import { BadRequest, NotFound } from 'http-errors';
-import { getOwner, getTCUHash, createSignatureRequest, monitorSignatureRequests } from '../../controllers/onboarding';
+import { getOwner, getTCUHash, createSignatureRequest, monitorSignatureRequests } from '../../controllers/enrollment';
 import { admin as adminAuth } from '../authentication';
 import log = require('loglevel');
 
-const vuid = validate.param('userId', 'uuid');
+/**
+ * Key enrollment
+ * Request handlers for key enrollment.
+ * @swagger
+ *  tags: [enrollment]
+ */
+const router = new Router();
 
 /**
- * Key
- * Request handlers for key by user.
+ * @route: /enrollment/{id}
  * @swagger
- *  tags: [external-key]
+ *  operationId: getEnrollment
  */
-const router = new Router({ prefix: '/external-key' });
-
-/**
- * @route: /external-key/enrolment/{id}
- * @swagger
- *  operationId: enrolment
- */
-router.get('/enrolment/:id', async function (ctx) {
+router.get('/enrollment/:id', async function (ctx) {
   const { id } = ctx.params;
   let user;
   try {
@@ -38,11 +33,11 @@ router.get('/enrolment/:id', async function (ctx) {
 });
 
 /**
- * @route: /external-key/enrolment/:id/create-signature-request
+ * @route: /enrollment/:id/create-signature-request
  * @swagger
- *  operationId: enrolment
+ *  operationId: finalizeEnrollment
  */
-router.post('/enrolment/:id/create-signature-request', async function (ctx) {
+router.post('/enrollment/:id/create-signature-request', async function (ctx) {
   const { id } = ctx.params;
   const { email } = ctx.request.body;
   let user;
@@ -69,7 +64,7 @@ router.post('/enrolment/:id/create-signature-request', async function (ctx) {
   monitorSignatureRequests(response.id, id, user);
 
   event.register({
-    type: 'external-key.create-signature-request',
+    type: 'enrollment.create-signature-request',
     authorizedUserId: null,
     associatedTokenId: null,
     associatedUserId: serializeUser(user).id,
@@ -83,40 +78,11 @@ router.post('/enrolment/:id/create-signature-request', async function (ctx) {
 router.use(adminAuth);
 
 /**
- * @route: /external-key/create
+ * @route: /enrollment
  * @swagger
- *  operationId: createKey
+ *  operationId: createEnrollment
  */
-router.post('/create/:userId', vuid, validate.body('createKey'), async function (ctx) {
-  const { userId } = ctx.params;
-  const key: ApiPostKeyObject = ctx.request.body;
-
-  let created;
-
-  try {
-    created = await externalCreateKey(userId, key);
-  } catch (error) {
-    throw new BadRequest(error);
-  }
-
-  event.register({
-    type: 'external-key.create',
-    authorizedUserId: ctx.session.user.get('id'),
-    associatedTokenId: null,
-    associatedUserId: userId,
-    associatedKeyId: created.id,
-    data: key
-  });
-
-  ctx.body = serializeKey(created);
-});
-
-/**
- * @route: /external-key/enrolment
- * @swagger
- *  operationId: enrolment
- */
-router.post('/enrolment', async function (ctx) {
+router.post('/enrollment', async function (ctx) {
   const { email } = ctx.request.body;
   let user;
 
@@ -125,13 +91,13 @@ router.post('/enrolment', async function (ctx) {
   }
 
   try {
-    user = await sendKeyEnrolmentEmail(email);
+    user = await sendKeyEnrollmentEmail(email);
   } catch (err) {
     throw new NotFound(email + ' does not correspond to a user.');
   }
 
   event.register({
-    type: 'user.edit',
+    type: 'enrollment.create',
     authorizedUserId: null,
     associatedTokenId: null,
     associatedUserId: user.id,

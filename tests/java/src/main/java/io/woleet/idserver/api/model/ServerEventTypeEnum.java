@@ -44,6 +44,8 @@ public enum ServerEventTypeEnum {
   
   EXTERNAL_KEY_CREATE("external-key.create"),
   
+  EXTERNAL_KEY_CREATE_SIGNATURE_REQUEST("external-key.create-signature-request"),
+  
   USER_CREATE("user.create"),
   
   USER_EDIT("user.edit"),

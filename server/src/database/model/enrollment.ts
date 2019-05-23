@@ -2,20 +2,20 @@ import { UniqueConstraintError, UUID, UUIDV4, DATE } from 'sequelize';
 import { DuplicatedUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 
-const OnboardingModel = {
+const EnrollmentModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
   userId: { type: UUID },
   expiration: { type: DATE }
 };
 
-class OnboardingAccess extends AbstractInstanceAccess<InternalOnboardingObject, ApiPostOnboardingObject> {
+class EnrollmentAccess extends AbstractInstanceAccess<InternalEnrollmentObject, ApiPostEnrollmentObject> {
 
   constructor() {
     super();
-    this.define('onboarding', OnboardingModel, { paranoid: false });
+    this.define('enrollment', EnrollmentModel, { paranoid: false });
   }
 
-  async getById(id: string): Promise<SequelizeOnboardingObject> {
+  async getById(id: string): Promise<SequelizeEnrollmentObject> {
     return this.model.findOne({ where: { id } });
   }
 
@@ -28,4 +28,4 @@ class OnboardingAccess extends AbstractInstanceAccess<InternalOnboardingObject, 
 
 }
 
-export const Onboarding = new OnboardingAccess();
+export const Enrollment = new EnrollmentAccess();

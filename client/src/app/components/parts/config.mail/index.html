@@ -31,9 +31,9 @@
       <mat-divider></mat-divider>
       <br>
       <mat-form-field class="w-100">
-          <mat-label class="bigger-label">User key enrolement mail template</mat-label>
-          <textarea matInput rows="5" formControlName="keyEnrolementMail" matTooltip="Use HTML + mustache format"></textarea>
-          <mat-error *ngIf="formMail.get('keyEnrolementMail').invalid">{{ getErrorMessage(formMail.get('keyEnrolementMail')) }}
+          <mat-label class="bigger-label">User key enrollment mail template</mat-label>
+          <textarea matInput rows="5" formControlName="keyEnrollmentMail" matTooltip="Use HTML + mustache format"></textarea>
+          <mat-error *ngIf="formMail.get('keyEnrollmentMail').invalid">{{ getErrorMessage(formMail.get('keyEnrollmentMail')) }}
           </mat-error>
         </mat-form-field>
     </form>
@@ -43,7 +43,7 @@
     <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) ||
       ((config.mailResetPasswordTemplate == formMail.get('resetPasswordMail').value)
       && (config.mailOnboardingTemplate == formMail.get('onboardingMail').value)
-      && (config.mailKeyEnrolmentTemplate == this.formMail.get('keyEnrolementMail').value)) ||
+      && (config.mailKeyEnrollmentTemplate == this.formMail.get('keyEnrollmentMail').value)) ||
       (formMail.invalid)">SAVE</button>
   </mat-card-actions>
 </mat-card>

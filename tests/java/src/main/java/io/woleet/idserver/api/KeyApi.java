@@ -74,7 +74,7 @@ public class KeyApi {
         Object localVarPostBody = externalKeyPost;
 
         // create path and map variables
-        String localVarPath = "/external-key/create/{userId}"
+        String localVarPath = "/user/{userId}/extern-key"
             .replaceAll("\\{" + "userId" + "\\}", apiClient.escapeString(userId.toString()));
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();

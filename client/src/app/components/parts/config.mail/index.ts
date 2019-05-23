@@ -28,7 +28,7 @@ export class ConfigMailTemplateComponent extends ErrorMessageProvider implements
     this.formMail = new FormGroup({
       resetPasswordMail: new FormControl('', []),
       onboardingMail: new FormControl('', []),
-      keyEnrolementMail: new FormControl('', []),
+      keyEnrollmentMail: new FormControl('', []),
     });
 
     const config$ = this.config$ = this.configService.getConfig();
@@ -41,7 +41,7 @@ export class ConfigMailTemplateComponent extends ErrorMessageProvider implements
 
       this.formMail.get('resetPasswordMail').setValue(config.mailResetPasswordTemplate);
       this.formMail.get('onboardingMail').setValue(config.mailOnboardingTemplate);
-      this.formMail.get('keyEnrolementMail').setValue(config.mailKeyEnrolmentTemplate);
+      this.formMail.get('keyEnrollementMail').setValue(config.mailKeyEnrollmentTemplate);
     });
 
     this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
@@ -54,7 +54,7 @@ export class ConfigMailTemplateComponent extends ErrorMessageProvider implements
   async submit() {
     const mailResetPasswordTemplate = this.formMail.get('resetPasswordMail').value;
     const mailOnboardingTemplate = this.formMail.get('onboardingMail').value;
-    const mailKeyEnrolmentTemplate = this.formMail.get('keyEnrolementMail').value;
-    this.configService.update({ mailResetPasswordTemplate, mailOnboardingTemplate, mailKeyEnrolmentTemplate });
+    const mailKeyEnrollmentTemplate = this.formMail.get('keyEnrollementMail').value;
+    this.configService.update({ mailResetPasswordTemplate, mailOnboardingTemplate, mailKeyEnrollmentTemplate });
   }
 }

@@ -1,5 +1,5 @@
-import { Onboarding, User, Key } from '../database';
-import { NotFoundOnboardingError, OnboardingExpiredError } from '../errors';
+import { Enrollment, User, Key } from '../database';
+import { NotFoundEnrollmentError, EnrollmentExpiredError } from '../errors';
 import * as crypto from 'crypto';
 import { readFileSync } from 'fs';
 import * as path from 'path';
@@ -8,84 +8,84 @@ import * as https from 'https';
 import log = require('loglevel');
 import { Observable } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
-import { sendEnrolmentFinalizeEmail } from './send-email';
+import { sendEnrollmentFinalizeEmail } from './send-email';
 import * as timestring from 'timestring';
 
 /**
- * Onboarding
- * Request handlers for onboarding.
- * @alias module:handlers.Onboarding
+ * Enrollment
+ * Request handlers for enrollment.
+ * @alias module:handlers.Enrollment
  * @swagger
  *  tags: [authentication]
  */
 
 /**
  * @swagger
- *  operationId: createOnboarding
+ *  operationId: createEnrollment
  */
-export async function createOnboarding(userId: string): Promise<InternalOnboardingObject> {
-  const expiration = !!getServerConfig().enrolmentExpirationOffset ?
-    Date.now() + timestring(getServerConfig().enrolmentExpirationOffset) * 1000 :
+export async function createEnrollment(userId: string): Promise<InternalEnrollmentObject> {
+  const expiration = !!getServerConfig().enrollmentExpirationOffset ?
+    Date.now() + timestring(getServerConfig().enrollmentExpirationOffset) * 1000 :
     null;
-  const newOnboarding = await Onboarding.create(Object.assign({}, {
+  const newEnrollment = await Enrollment.create(Object.assign({}, {
     userId,
     expiration
   }));
-  return newOnboarding.toJSON();
+  return newEnrollment.toJSON();
 }
 
-export async function getOnboardingById(id: string): Promise<InternalOnboardingObject> {
-  const onboarding = await Onboarding.getById(id);
+export async function getEnrollmentById(id: string): Promise<InternalEnrollmentObject> {
+  const enrollment = await Enrollment.getById(id);
 
-  if (!onboarding) {
-    throw new NotFoundOnboardingError();
+  if (!enrollment) {
+    throw new NotFoundEnrollmentError();
   }
 
-  if (onboarding.toJSON().expiration) {
-    if (Date.now() > onboarding.toJSON().expiration) {
-      deleteOnboarding(id);
-      throw new OnboardingExpiredError();
+  if (enrollment.toJSON().expiration) {
+    if (Date.now() > enrollment.toJSON().expiration) {
+      deleteEnrollment(id);
+      throw new EnrollmentExpiredError();
     }
   }
 
-  return onboarding.toJSON();
+  return enrollment.toJSON();
 }
 
 export async function getOwner(id): Promise<InternalUserObject> {
-  const onboarding = await Onboarding.getById(id);
+  const enrollment = await Enrollment.getById(id);
 
-  if (!onboarding) {
-    throw new NotFoundOnboardingError();
+  if (!enrollment) {
+    throw new NotFoundEnrollmentError();
   }
 
 
-  if (onboarding.toJSON().expiration) {
-    if (Date.now() > onboarding.toJSON().expiration) {
-      deleteOnboarding(id);
-      throw new OnboardingExpiredError();
+  if (enrollment.toJSON().expiration) {
+    if (Date.now() > enrollment.toJSON().expiration) {
+      deleteEnrollment(id);
+      throw new EnrollmentExpiredError();
     }
   }
 
-  // get user by onboarding userId
-  const user = await User.getById(onboarding.get('userId'));
+  // get user by enrollment userId
+  const user = await User.getById(enrollment.get('userId'));
 
   return user.toJSON();
 }
 
-export async function getAllOnboarding(full = false): Promise<InternalOnboardingObject[]> {
-  const onboardings = await Onboarding.getAll({ full });
-  return onboardings.map((onboarding) => onboarding.toJSON());
+export async function getAllEnrollment(full = false): Promise<InternalEnrollmentObject[]> {
+  const enrollments = await Enrollment.getAll({ full });
+  return enrollments.map((enrollment) => enrollment.toJSON());
 }
 
-export async function deleteOnboarding(id: string): Promise<InternalOnboardingObject> {
+export async function deleteEnrollment(id: string): Promise<InternalEnrollmentObject> {
 
-  const onboarding = await Onboarding.delete(id);
+  const enrollment = await Enrollment.delete(id);
 
-  if (!onboarding) {
-    throw new NotFoundOnboardingError();
+  if (!enrollment) {
+    throw new NotFoundEnrollmentError();
   }
 
-  return onboarding.toJSON();
+  return enrollment.toJSON();
 }
 
 export async function getTCUHash(): Promise<string> {
@@ -135,7 +135,7 @@ export async function createSignatureRequest(hash: string, email: string) {
   });
 }
 
-export async function monitorSignatureRequests(requestId: string, onboardingId: string, user: ApiUserObject) {
+export async function monitorSignatureRequests(requestId: string, enrollmentId: string, user: ApiUserObject) {
   const url = new URL(getServerConfig().proofDeskAPIURL);
   const httpsOptions = {
     host: url.host,
@@ -177,12 +177,12 @@ export async function monitorSignatureRequests(requestId: string, onboardingId: 
     .subscribe(() => { return; },
       error => log.error(error),
       () => {
-        finalizeOnboarding(onboardingId, user, result.anchors[0].pubKey);
+        finalizeEnrollment(enrollmentId, user, result.anchors[0].pubKey);
       }
     );
 }
 
-async function finalizeOnboarding(onboardingId: string, user: ApiUserObject, publicKey: string) {
+async function finalizeEnrollment(enrollmentId: string, user: ApiUserObject, publicKey: string) {
   const name = user.identity.commonName + '\'s key';
   const userId = user.id;
   await Key.create(Object.assign({
@@ -191,6 +191,6 @@ async function finalizeOnboarding(onboardingId: string, user: ApiUserObject, pub
     holder: 'user',
     userId
   }));
-  deleteOnboarding(onboardingId);
-  sendEnrolmentFinalizeEmail(user.identity.commonName, publicKey);
+  deleteEnrollment(enrollmentId);
+  sendEnrollmentFinalizeEmail(user.identity.commonName, publicKey);
 }

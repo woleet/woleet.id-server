@@ -49,7 +49,7 @@ import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
 import { DialogEnrolMailComponent } from '@parts/dialog-enrol-mail';
-import { EnrolmentPageComponent } from '@pages/enrolment';
+import { EnrollmentPageComponent } from '@pages/enrollment';
 // Services
 import {
   AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService
@@ -61,7 +61,7 @@ import { InfoService } from '@services/info';
 import { APITokenService } from '@services/api-token';
 import { PageDataService } from '@services/page-data';
 import { ServerConfigService } from '@services/server-config';
-import { OnboardingService } from '@services/onboarding';
+import { EnrollmentService } from '@services/enrollment';
 
 import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
 import { NetworkErrorInterceptorService } from '@interceptors/network-error';
@@ -84,7 +84,7 @@ import { ConfigMailTemplateComponent } from '@components/parts/config.mail';
 import { ConfigProofDeskComponent } from '@components/parts/config.proofdesk';
 import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
-import { ConfigEnrolmentExpirationComponent } from '@parts/config.enrolment-expiration';
+import { ConfigEnrollmentExpirationComponent } from '@parts/config.enrollment-expiration';
 
 export function startupServiceFactory(startupService: AppConfigService): Function {
   return () => startupService.load();
@@ -104,7 +104,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     UserEditPageComponent,
     UserDetailPageComponent,
     AboutPageComponent,
-    EnrolmentPageComponent,
+    EnrollmentPageComponent,
     ConfigFallbackKeyComponent,
     ConfigIdentityUrlComponent,
     ConfigWebClientUrlComponent,
@@ -112,7 +112,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ConfigOIDCPComponent,
     ConfigOIDCPClientComponent,
     ConfigKeyExpirationComponent,
-    ConfigEnrolmentExpirationComponent,
+    ConfigEnrollmentExpirationComponent,
     ConfigProofDeskComponent,
     UserCardComponent,
     KeyCardComponent,
@@ -198,7 +198,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },
     AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
     NeedConfigGuardService, KeyService, ExternalKeyService, UserService, InfoService, ConfigService, APITokenService,
-    PageDataService, ServerConfigService, OnboardingService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
+    PageDataService, ServerConfigService, EnrollmentService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     NetworkErrorInterceptorService, AllowCredentialsInterceptorService, LocalStorageService
   ],
   bootstrap: [AppComponent]

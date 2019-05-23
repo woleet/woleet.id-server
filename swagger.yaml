@@ -361,7 +361,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
-  /external-key/create/{userId}:
+  /user/{userId}/extern-key:
     post:
       tags:
         - Key
@@ -1063,12 +1063,12 @@ components:
         - type: object
           required:
             - identity
-            - sendKeyEnrolmentMail
+            - sendKeyEnrollmentMail
             - createDefaultKey
           properties:
-              sendKeyEnrolmentMail:
+              sendKeyEnrollmentMail:
                 type: boolean
-                description: If true send an enrolment mail.
+                description: If true send an enrollment mail.
               createDefaultKey:
                 type: boolean
                 description: If true create a key holded by the server when this user is created.
@@ -1191,8 +1191,8 @@ components:
         - key.create
         - key.edit
         - key.delete
-        - external-key.create
-        - external-key.create-signature-request
+        - enrollment.create
+        - enrollment.create-signature-request
         - user.create
         - user.edit
         - user.delete

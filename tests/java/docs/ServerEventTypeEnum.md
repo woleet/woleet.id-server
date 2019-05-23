@@ -18,6 +18,8 @@
 
 * `EXTERNAL_KEY_CREATE` (value: `"external-key.create"`)
 
+* `EXTERNAL_KEY_CREATE_SIGNATURE_REQUEST` (value: `"external-key.create-signature-request"`)
+
 * `USER_CREATE` (value: `"user.create"`)
 
 * `USER_EDIT` (value: `"user.edit"`)

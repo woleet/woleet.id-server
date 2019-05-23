@@ -11,7 +11,7 @@ import '../../../types/api.server-event';
 import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api';
-import '../../../types/api.onboarding';
+import '../../../types/api.enrollment';
 import './oidc-provider';
 
 declare global {
@@ -261,7 +261,7 @@ declare global {
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
 
-    enrolmentExpirationOffset?: string;
+    enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
@@ -270,7 +270,7 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
-    mailKeyEnrolmentTemplate?: string;
+    mailKeyEnrollmentTemplate?: string;
     // TCU
     TCU?: {
       name?: string;
@@ -306,7 +306,7 @@ declare global {
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
 
-    enrolmentExpirationOffset?: string;
+    enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
@@ -315,7 +315,7 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
-    mailKeyEnrolmentTemplate?: string;
+    mailKeyEnrollmentTemplate?: string;
     // TCU
     TCU?: {
       name?: string;
@@ -351,7 +351,7 @@ declare global {
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
 
-    enrolmentExpirationOffset?: string;
+    enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
@@ -360,7 +360,7 @@ declare global {
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
-    mailKeyEnrolmentTemplate?: string;
+    mailKeyEnrollmentTemplate?: string;
     // TCU
     TCU?: {
       name?: string;
@@ -374,18 +374,18 @@ declare global {
     proofDeskAPIIsValid?: number;
   }
 
-  /* Onboarding */
+  /* Enrollment */
 
-  interface InternalOnboardingObject extends OnboardingObject {
+  interface InternalEnrollmentObject extends EnrollmentObject {
     id: string;
     userId: string;
     expiration: number;
   }
 
-  interface SequelizeOnboardingObject extends Instance<InternalOnboardingObject> {
+  interface SequelizeEnrollmentObject extends Instance<InternalEnrollmentObject> {
   }
 
-  interface ApiPostOnboardingObject extends OnboardingObject {
+  interface ApiPostEnrollmentObject extends EnrollmentObject {
   }
 
   /* OIDC Provider */

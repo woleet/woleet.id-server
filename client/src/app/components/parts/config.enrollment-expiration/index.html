@@ -6,8 +6,8 @@
       <div fxLayout="row" fxLayoutAlign="space-between start">
         <div fxLayout="column" class="btn-h">
           <div>
-            <span>{{ config.enrolmentExpirationOffset || 'unset' }}</span>&nbsp;
-            <span *ngIf="config.enrolmentExpirationOffset">({{ getSeconds(config.enrolmentExpirationOffset) }} seconds)</span>
+            <span>{{ config.enrollmentExpirationOffset || 'unset' }}</span>&nbsp;
+            <span *ngIf="config.enrollmentExpirationOffset">({{ getSeconds(config.enrollmentExpirationOffset) }} seconds)</span>
           </div>
         </div>
         <div fxLayout="column">
@@ -32,7 +32,7 @@
     </mat-card-content>
     <ng-template #loading>Loading...<br></ng-template>
     <mat-card-actions *ngIf="(config$ | async) as config; else loading">
-      <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) || (config.enrolmentExpirationOffset == form.value) || (form.invalid)">SAVE</button>
+      <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) || (config.enrollmentExpirationOffset == form.value) || (form.invalid)">SAVE</button>
       <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
     </mat-card-actions>
   </mat-card>

@@ -69,9 +69,9 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
     this.user$ = this.userService.getById(this.userId);
   }
 
-  async sendEnrolmentMail() {
+  async sendEnrollmentMail() {
     try {
-      await this.userService.keyEnrolment(this.email);
+      await this.userService.keyEnrollment(this.email);
     } catch (err) {
       this.errorMsg = err.error.message;
     }

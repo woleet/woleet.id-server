@@ -4,7 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**createExternalKey**](KeyApi.md#createExternalKey) | **POST** /external-key/create/{userId} | Create a new external key for a user.
+[**createExternalKey**](KeyApi.md#createExternalKey) | **POST** /user/{userId}/extern-key | Create a new external key for a user.
 [**createKey**](KeyApi.md#createKey) | **POST** /user/{userId}/key | Create a new key for a user.
 [**deleteKey**](KeyApi.md#deleteKey) | **DELETE** /key/{keyId} | Delete a key.
 [**getAllUserKeys**](KeyApi.md#getAllUserKeys) | **GET** /user/{userId}/key/list | List all keys of a user.

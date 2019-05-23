@@ -4,17 +4,17 @@ import { serverURL } from './config';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class OnboardingService {
+export class EnrollmentService {
 
   constructor(private http: HttpClient) { }
 
-  getUserByOnboardingId(onboardingId: string): Observable<ApiUserObject> {
-    return this.http.get<ApiUserObject>(`${serverURL}/external-key/enrolment/${onboardingId}/`);
+  getUserByEnrollmentId(enrollmentId: string): Observable<ApiUserObject> {
+    return this.http.get<ApiUserObject>(`${serverURL}/enrollment/${enrollmentId}/`);
   }
 
-  createTCUSignatureRequest(onboardingId: string, email: string): Observable<Object> {
+  createTCUSignatureRequest(enrollmentId: string, email: string): Observable<Object> {
     return this.http.post<boolean>
-      (`${serverURL}/external-key/enrolment/${onboardingId}/create-signature-request`, { email: email });
+      (`${serverURL}/enrollment/${enrollmentId}/create-signature-request`, { email: email });
   }
 
 }

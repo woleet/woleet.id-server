@@ -111,7 +111,7 @@ router.get('/callback', async function (ctx) {
     }
   } else {
     session = await createOAuthUser({ email: info.email, identity: { commonName: info.name }, createDefaultKey: true,
-    sendKeyEnrolmentMail: false });
+    sendKeyEnrollmentMail: false });
     ctx.cookies.set('session' + sessionSuffix, session.token, cookies.options);
   }
 

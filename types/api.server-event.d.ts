@@ -6,7 +6,7 @@ type ServerEventTypeEnum =
   | 'login'
   | 'error'
   | 'key.create' | 'key.edit' | 'key.delete'
-  | 'external-key.create' | 'external-key.create-signature-request'
+  | 'enrollment.create' | 'enrollment.create-signature-request'
   | 'user.create' | 'user.edit' | 'user.delete'
   | 'token.create' | 'token.edit' | 'token.delete'
   ;

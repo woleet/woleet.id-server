@@ -31,8 +31,8 @@ export class UserService {
     return this.http.post<Boolean>(`${serverURL}/password-reset`, { email: email }).toPromise();
   }
 
-  async keyEnrolment(email: string) {
-    return this.http.post<Boolean>(`${serverURL}/external-key/enrolment`, { email: email }).toPromise();
+  async keyEnrollment(email: string) {
+    return this.http.post<Boolean>(`${serverURL}/external-key/enrollment`, { email: email }).toPromise();
   }
 
   async validate(email: string, password: string, token: string) {

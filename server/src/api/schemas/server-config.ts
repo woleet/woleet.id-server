@@ -30,7 +30,7 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   OIDCPIssuerURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   OIDCPClients: Joi.array().items(oidcpClient).allow(null),
   keyExpirationOffset: Joi.string().allow(null),
-  enrolmentExpirationOffset: Joi.string().allow(null),
+  enrollmentExpirationOffset: Joi.string().allow(null),
   // SMTP config
   useSMTP: Joi.boolean(),
   SMTPConfig: Joi.string().allow(null),
@@ -38,7 +38,7 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   // Mail template
   mailResetPasswordTemplate: Joi.string().allow(null),
   mailOnboardingTemplate: Joi.string().allow(null),
-  mailKeyEnrolmentTemplate: Joi.string().allow(null),
+  mailKeyEnrollmentTemplate: Joi.string().allow(null),
   TCU: Joi.object({
     data: Joi.string().allow(null),
     name: Joi.string().allow(null),

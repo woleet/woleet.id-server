@@ -7,10 +7,10 @@ import * as timestring from 'timestring';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'config-enrolment-expiration',
+  selector: 'config-enrollment-expiration',
   templateUrl: './index.html'
 })
-export class ConfigEnrolmentExpirationComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
+export class ConfigEnrollmentExpirationComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
 
   editMode = false;
 
@@ -40,7 +40,7 @@ export class ConfigEnrolmentExpirationComponent extends ErrorMessageProvider imp
       }
 
       this.editMode = false;
-      this.form.setValue(config.enrolmentExpirationOffset);
+      this.form.setValue(config.enrollmentExpirationOffset);
     });
 
     this.onDestroy.subscribe(() => log.debug('Unsubscribe', subscription.unsubscribe()));
@@ -51,11 +51,11 @@ export class ConfigEnrolmentExpirationComponent extends ErrorMessageProvider imp
   }
 
   async submit() {
-    const enrolmentExpirationOffset = this.form.value || null;
-    enrolmentExpirationOffset ?
-      log.debug('Set default key expiration to', enrolmentExpirationOffset, timestring(enrolmentExpirationOffset))
+    const enrollmentExpirationOffset = this.form.value || null;
+    enrollmentExpirationOffset ?
+      log.debug('Set default key expiration to', enrollmentExpirationOffset, timestring(enrollmentExpirationOffset))
       : log.debug('Unset default key expiration.');
-    this.configService.update({ enrolmentExpirationOffset });
+    this.configService.update({ enrollmentExpirationOffset });
   }
 
   cancelEdit() {

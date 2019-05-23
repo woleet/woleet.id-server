@@ -42,20 +42,20 @@ export class NotFoundKeyError extends NotFoundDBObjectError {
   name = 'NotFoundKeyError';
 }
 
-export class NotFoundOnboardingError extends NotFoundDBObjectError {
-  constructor(m = 'Onboarding not found') {
+export class NotFoundEnrollmentError extends NotFoundDBObjectError {
+  constructor(m = 'Enrollment not found') {
     super(m);
   }
 
-  name = 'NotFoundOnboardingError';
+  name = 'NotFoundEnrollmentError';
 }
 
-export class OnboardingExpiredError extends NotFoundDBObjectError {
-  constructor(m = 'Onboarding expired') {
+export class EnrollmentExpiredError extends NotFoundDBObjectError {
+  constructor(m = 'Enrollment expired') {
     super(m);
   }
 
-  name = 'OnboardingExpiredError';
+  name = 'EnrollmentExpiredError';
 }
 
 export abstract class ForeignKeyDBError extends DBError {

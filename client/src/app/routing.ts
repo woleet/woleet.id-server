@@ -21,7 +21,7 @@ import { ErrorPageComponent } from '@components/pages/error';
 import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
 import { OIDCProviderInteractionComponent } from '@pages/oidcp-interaction';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
-import { EnrolmentPageComponent } from '@pages/enrolment';
+import { EnrollmentPageComponent } from '@pages/enrollment';
 
 const routes: Routes = [
   { path: 'error', data: { title: 'Error', hideNav: true }, component: ErrorPageComponent, canActivate: [HasError] },
@@ -31,7 +31,7 @@ const routes: Routes = [
     component: ResetPasswordPageComponent, canActivate: [HasNoError, IsAnonymous]
   },
   {
-    path: 'enrolment/:id', data: { title: 'Enrolment', hideNav: true }, component: EnrolmentPageComponent,
+    path: 'enrollment/:id', data: { title: 'Enrollment', hideNav: true }, component: EnrollmentPageComponent,
     canActivate: [HasNoError, IsAnonymous]
   },
   { path: 'setup', data: { title: 'Setup' }, component: SetupPageComponent, canActivate: [NeedConfig] },

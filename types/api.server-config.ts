@@ -33,7 +33,7 @@ interface ApiServerConfig {
   OIDCPClients: ApiOIDCPClient[] | null;
   enableOIDCP: boolean;
 
-  enrolmentExpirationOffset?: string;
+  enrollmentExpirationOffset?: string;
   keyExpirationOffset?: string;
 
   // SMTP config
@@ -44,7 +44,7 @@ interface ApiServerConfig {
   // Mail template
   mailResetPasswordTemplate: string | null;
   mailOnboardingTemplate: string | null;
-  mailKeyEnrolmentTemplate: string | null;
+  mailKeyEnrollmentTemplate: string | null;
 
   // TCU
   TCU: {
@@ -84,7 +84,7 @@ interface ApiServerConfigUpdate {
   OIDCPClients?: ApiOIDCPClient[];
   enableOIDCP?: boolean;
 
-  enrolmentExpirationOffset?: string;
+  enrollmentExpirationOffset?: string;
   keyExpirationOffset?: string;
 
   // SMTP config
@@ -95,7 +95,7 @@ interface ApiServerConfigUpdate {
   // Mail template
   mailResetPasswordTemplate?: string;
   mailOnboardingTemplate?: string;
-  mailKeyEnrolmentTemplate?: string;
+  mailKeyEnrollmentTemplate?: string;
 
   // TCU
   TCU?: {

@@ -5,7 +5,7 @@ import * as mustache from 'mustache';
 import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
 import { getServerConfig } from './server-config';
-import { createOnboarding } from './onboarding';
+import { createEnrollment } from './enrollment';
 import log = require('loglevel');
 // import * as nodemailer from 'nodemailer';
 import { readFileSync } from 'fs';
@@ -63,22 +63,22 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
   return user.toJSON();
 }
 
-export async function sendKeyEnrolmentEmail(email: string): Promise<InternalOnboardingObject> {
+export async function sendKeyEnrollmentEmail(email: string): Promise<InternalEnrollmentObject> {
   const user = await User.getByEmail(email);
   if (!user) {
     throw new NotFoundUserError();
   }
 
-  const onboarding = await createOnboarding(user.get('id'));
+  const enrollment = await createEnrollment(user.get('id'));
   const config = getServerConfig();
   const ServerClientURL = config.ServerClientURL;
 
-  const link = ServerClientURL + '/enrolment/' +
-    onboarding.id;
+  const link = ServerClientURL + '/enrollment/' +
+    enrollment.id;
   const logo = getLogo(config);
-  const subject = 'Enrolment';
-  const html = mustache.render(config.mailKeyEnrolmentTemplate,
-    { keyEnrolmentURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
+  const subject = 'Enrollment';
+  const html = mustache.render(config.mailKeyEnrollmentTemplate,
+    { keyEnrollmentURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
 
   try {
     await sendEmail(email, subject, html);
@@ -86,16 +86,16 @@ export async function sendKeyEnrolmentEmail(email: string): Promise<InternalOnbo
     log.error(err);
   }
 
-  return onboarding;
+  return enrollment;
 }
 
-export async function sendEnrolmentFinalizeEmail(userName: string, address: string): Promise<void> {
+export async function sendEnrollmentFinalizeEmail(userName: string, address: string): Promise<void> {
   const config = getServerConfig();
   const logo = getLogo(config);
 
-  const subject = 'Enrolment Confirmation';
+  const subject = 'Enrollment Confirmation';
   const template = readFileSync(
-    path.join(__dirname, '../../assets/defaultAdminEnrolmentConfirmationMailTemplate.html'), { encoding: 'ascii' });
+    path.join(__dirname, '../../assets/defaultAdminEnrollmentConfirmationMailTemplate.html'), { encoding: 'ascii' });
   const html = mustache.render(template,
     { domain: null, logoURL: logo, userName, address });
 

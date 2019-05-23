@@ -108,7 +108,7 @@ export const events = {
     'error',
     'signature', 'login', 'config.edit',
     'key.create', 'key.edit', 'key.delete',
-    'external-key.create', 'external-key.create-signature-request',
+    'enrollment.create', 'enrollment.create-signature-request',
     'user.create', 'user.edit', 'user.delete',
     'token.create', 'token.edit', 'token.delete'
   ]
@@ -124,8 +124,8 @@ export const serverConfig = {
       path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), { encoding: 'ascii' }),
     mailResetPasswordTemplate: readFileSync(
       path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), { encoding: 'ascii' }),
-    mailKeyEnrolmentTemplate: readFileSync(
-      path.join(__dirname, '../assets/defaultKeyEnrolmentMailTemplate.html'), { encoding: 'ascii' }),
+    mailKeyEnrollmentTemplate: readFileSync(
+      path.join(__dirname, '../assets/defaultKeyEnrollmentMailTemplate.html'), { encoding: 'ascii' }),
     TCU: { name: 'default_TCU.pdf' }
   },
   CONFIG_ID: 'SERVER-CONFIG'

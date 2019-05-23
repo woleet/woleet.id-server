@@ -47,10 +47,10 @@ export async function initServerConfig() {
       config.mailResetPasswordTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), { encoding: 'ascii' });
     }
-    if (!config.mailKeyEnrolmentTemplate) {
+    if (!config.mailKeyEnrollmentTemplate) {
       log.warn('The key enrolement mail template is set to default.');
-      config.mailKeyEnrolmentTemplate = readFileSync(
-        path.join(__dirname, '../assets/defaultKeyEnrolmentMailTemplate.html'), { encoding: 'ascii' });
+      config.mailKeyEnrollmentTemplate = readFileSync(
+        path.join(__dirname, '../assets/defaultKeyEnrollmentMailTemplate.html'), { encoding: 'ascii' });
     }
     if (!config.TCU) {
       log.warn('The TCU name is set to default.');
@@ -67,7 +67,7 @@ export async function initServerConfig() {
         username: 'admin',
         identity: { commonName: 'Admin' },
         createDefaultKey: true,
-        sendKeyEnrolmentMail: false
+        sendKeyEnrollmentMail: false
       });
     } catch (err) {
       return exit(`Failed to create user "admin": ${err.message}`, err);
