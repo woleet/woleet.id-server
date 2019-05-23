@@ -364,7 +364,7 @@ paths:
   /external-key/create/{userId}:
     post:
       tags:
-        - Key
+        - ExternalKey
       summary: Create a new external key for a user.
       operationId: createExternalKey
       parameters:
@@ -1528,7 +1528,7 @@ components:
           schema:
             $ref: '#/components/schemas/ExternalKeyPost'
       description: External Key object to add.
-      required: true  
+      required: true
     KeyPut:
       content:
         application/json:
