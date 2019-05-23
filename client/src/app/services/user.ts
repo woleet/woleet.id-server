@@ -32,7 +32,7 @@ export class UserService {
   }
 
   async keyEnrollment(email: string) {
-    return this.http.post<Boolean>(`${serverURL}/external-key/enrollment`, { email: email }).toPromise();
+    return this.http.post<Boolean>(`${serverURL}/enrollment`, { email: email }).toPromise();
   }
 
   async validate(email: string, password: string, token: string) {
