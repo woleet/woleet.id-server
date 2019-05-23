@@ -15,12 +15,9 @@ public class ExternalKeyApiTest extends CRUDApiTest {
 
     class Api implements CRUDApiTest.Api {
 
-        ExternalKeyApi externalKeyApi;
-
         KeyApi keyApi;
 
-        Api(ExternalKeyApi externalKeyApi, KeyApi keyApi) {
-            this.externalKeyApi = externalKeyApi;
+        Api(KeyApi keyApi) {
             this.keyApi = keyApi;
         }
 
@@ -44,7 +41,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
 
         @Override
         public ObjectGet createObject(CRUDApiTest.ObjectPost objectPost) throws ApiException {
-            return new ObjectGet(externalKeyApi.createExternalKey(user.getId(), (ExternalKeyPost) objectPost.get()));
+            return new ObjectGet(keyApi.createExternalKey(user.getId(), (ExternalKeyPost) objectPost.get()));
         }
 
         @Override
@@ -133,7 +130,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
 
     @Override
     Api newApi(ApiClient apiClient) {
-        return new Api(new ExternalKeyApi(apiClient), new KeyApi(apiClient));
+        return new Api(new KeyApi(apiClient));
     }
 
     @Override
