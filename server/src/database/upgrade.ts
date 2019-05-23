@@ -172,20 +172,26 @@ async function upgrade8(sequelize) {
   }
 }
 
-// async function upgrade9(sequelize) {
-//   log.warn('Checking for creation of the "onboarding" table...');
-//   await ServerConfig.model.sync();
-//   const cfg = await ServerConfig.getById(CONFIG_ID);
-//   if (!cfg) {
-//     return;
-//   }
+async function upgrade9(sequelize) {
+  log.warn('Checking for creation of the "onboarding" table...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
 
-//   const { config } = cfg.toJSON();
-//   if (config.version < 10) {
-//     log.warn('Need to create the "onboarding" table');
-//     const onboarding = await sequelize.query()
-//   }
-// }
+  let old;
+  try {
+    old = await sequelize.query(`SELECT * FROM "Onboarding";`);
+  } catch {
+
+  }
+
+  if (old) {
+    log.warn('Rename Onboarding table to Enrollment...');
+    const [rename] = await sequelize.query('ALTER TABLE "Onboarding" RENAME TO "Enrollment";');
+  }
+}
 
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
@@ -196,6 +202,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade6(sequelize);
   await upgrade7(sequelize);
   await upgrade8(sequelize);
+  await upgrade9(sequelize);
 }
 
 async function postUpgrade3() {

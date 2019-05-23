@@ -16,9 +16,9 @@
 
 * `KEY_DELETE` (value: `"key.delete"`)
 
-* `EXTERNAL_KEY_CREATE` (value: `"external-key.create"`)
+* `ENROLLMENT_CREATE` (value: `"enrollment.create"`)
 
-* `EXTERNAL_KEY_CREATE_SIGNATURE_REQUEST` (value: `"external-key.create-signature-request"`)
+* `ENROLLMENT_CREATE_SIGNATURE_REQUEST` (value: `"enrollment.create-signature-request"`)
 
 * `USER_CREATE` (value: `"user.create"`)
 

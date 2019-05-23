@@ -42,9 +42,9 @@ public enum ServerEventTypeEnum {
   
   KEY_DELETE("key.delete"),
   
-  EXTERNAL_KEY_CREATE("external-key.create"),
+  ENROLLMENT_CREATE("enrollment.create"),
   
-  EXTERNAL_KEY_CREATE_SIGNATURE_REQUEST("external-key.create-signature-request"),
+  ENROLLMENT_CREATE_SIGNATURE_REQUEST("enrollment.create-signature-request"),
   
   USER_CREATE("user.create"),
   

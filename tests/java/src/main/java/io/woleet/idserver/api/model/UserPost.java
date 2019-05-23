@@ -34,30 +34,30 @@ import java.util.UUID;
  */
 
 public class UserPost extends UserPut {
-  public static final String SERIALIZED_NAME_SEND_KEY_ENROLMENT_MAIL = "sendKeyEnrolmentMail";
-  @SerializedName(SERIALIZED_NAME_SEND_KEY_ENROLMENT_MAIL)
-  private Boolean sendKeyEnrolmentMail;
+  public static final String SERIALIZED_NAME_SEND_KEY_ENROLLMENT_MAIL = "sendKeyEnrollmentMail";
+  @SerializedName(SERIALIZED_NAME_SEND_KEY_ENROLLMENT_MAIL)
+  private Boolean sendKeyEnrollmentMail;
 
   public static final String SERIALIZED_NAME_CREATE_DEFAULT_KEY = "createDefaultKey";
   @SerializedName(SERIALIZED_NAME_CREATE_DEFAULT_KEY)
   private Boolean createDefaultKey;
 
-  public UserPost sendKeyEnrolmentMail(Boolean sendKeyEnrolmentMail) {
-    this.sendKeyEnrolmentMail = sendKeyEnrolmentMail;
+  public UserPost sendKeyEnrollmentMail(Boolean sendKeyEnrollmentMail) {
+    this.sendKeyEnrollmentMail = sendKeyEnrollmentMail;
     return this;
   }
 
    /**
-   * If true send an enrolment mail.
-   * @return sendKeyEnrolmentMail
+   * If true send an enrollment mail.
+   * @return sendKeyEnrollmentMail
   **/
-  @ApiModelProperty(required = true, value = "If true send an enrolment mail.")
-  public Boolean getSendKeyEnrolmentMail() {
-    return sendKeyEnrolmentMail;
+  @ApiModelProperty(required = true, value = "If true send an enrollment mail.")
+  public Boolean getSendKeyEnrollmentMail() {
+    return sendKeyEnrollmentMail;
   }
 
-  public void setSendKeyEnrolmentMail(Boolean sendKeyEnrolmentMail) {
-    this.sendKeyEnrolmentMail = sendKeyEnrolmentMail;
+  public void setSendKeyEnrollmentMail(Boolean sendKeyEnrollmentMail) {
+    this.sendKeyEnrollmentMail = sendKeyEnrollmentMail;
   }
 
   public UserPost createDefaultKey(Boolean createDefaultKey) {
@@ -88,14 +88,14 @@ public class UserPost extends UserPut {
       return false;
     }
     UserPost userPost = (UserPost) o;
-    return Objects.equals(this.sendKeyEnrolmentMail, userPost.sendKeyEnrolmentMail) &&
+    return Objects.equals(this.sendKeyEnrollmentMail, userPost.sendKeyEnrollmentMail) &&
         Objects.equals(this.createDefaultKey, userPost.createDefaultKey) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sendKeyEnrolmentMail, createDefaultKey, super.hashCode());
+    return Objects.hash(sendKeyEnrollmentMail, createDefaultKey, super.hashCode());
   }
 
 
@@ -104,7 +104,7 @@ public class UserPost extends UserPut {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserPost {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    sendKeyEnrolmentMail: ").append(toIndentedString(sendKeyEnrolmentMail)).append("\n");
+    sb.append("    sendKeyEnrollmentMail: ").append(toIndentedString(sendKeyEnrollmentMail)).append("\n");
     sb.append("    createDefaultKey: ").append(toIndentedString(createDefaultKey)).append("\n");
     sb.append("}");
     return sb.toString();
