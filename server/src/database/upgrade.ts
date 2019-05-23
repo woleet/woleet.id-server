@@ -192,7 +192,8 @@ async function upgrade9(sequelize) {
     );
 
     await sequelize.query(
-      `ALTER TYPE "public"."enum_serverEvents_type" ADD VALUE IF NOT EXISTS 'enrollment.create' BEFORE 'enrollment.create-signature-request'`
+      `ALTER TYPE "public"."enum_serverEvents_type" ADD VALUE IF NOT EXISTS`
+      + ` 'enrollment.create' BEFORE 'enrollment.create-signature-request'`
     );
   }
 }

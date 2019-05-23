@@ -28,7 +28,7 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
 
   constructor() {
     super();
-    this.define('key', KeyModel, { paranoid: true });
+    this.define('key', KeyModel, { paranoid: false });
   }
 
   async getAllKeysOfUser(userId: string, full = false): Promise<SequelizeKeyObject[]> {
