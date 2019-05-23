@@ -34,10 +34,10 @@ router.post('/create/:userId', vuid, validate.body('createKey'), async function 
   }
 
   event.register({
-    type: 'key.create',
+    type: 'external-key.create',
     authorizedUserId: ctx.session.user.get('id'),
     associatedTokenId: null,
-    associatedUserId: null,
+    associatedUserId: userId,
     associatedKeyId: created.id,
     data: key
   });

@@ -16,6 +16,8 @@
 
 * `KEY_DELETE` (value: `"key.delete"`)
 
+* `EXTERNAL_KEY_CREATE` (value: `"external-key.create"`)
+
 * `USER_CREATE` (value: `"user.create"`)
 
 * `USER_EDIT` (value: `"user.edit"`)

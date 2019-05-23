@@ -12,6 +12,7 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
 
   formLocked = false;
   errorMsgs: any[];
+  publicKeyFocused: Boolean;
 
   @Input()
   userId: string;
