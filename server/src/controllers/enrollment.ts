@@ -185,12 +185,16 @@ export async function monitorSignatureRequests(requestId: string, enrollmentId: 
 async function finalizeEnrollment(enrollmentId: string, user: ApiUserObject, publicKey: string) {
   const name = user.identity.commonName + '\'s key';
   const userId = user.id;
-  await Key.create(Object.assign({
-    name,
-    publicKey,
-    holder: 'user',
-    userId
-  }));
+  try {
+    await Key.create(Object.assign({
+      name,
+      publicKey,
+      holder: 'user',
+      userId
+    }));
+    sendEnrollmentFinalizeEmail(user.identity.commonName, publicKey);
+  } catch (err) {
+    log.error(err.errors);
+  }
   deleteEnrollment(enrollmentId);
-  sendEnrollmentFinalizeEmail(user.identity.commonName, publicKey);
 }
