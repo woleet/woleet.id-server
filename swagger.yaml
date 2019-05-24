@@ -1068,7 +1068,7 @@ components:
           properties:
               sendKeyEnrollmentMail:
                 type: boolean
-                description: If true send an enrollment mail.
+                description: If true send an enrollment email.
               createDefaultKey:
                 type: boolean
                 description: If true create a key holded by the server when this user is created.
@@ -1538,7 +1538,7 @@ components:
           schema:
             $ref: '#/components/schemas/ExternalKeyPost'
       description: External Key object to add.
-      required: true  
+      required: true
     KeyPut:
       content:
         application/json:

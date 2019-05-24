@@ -31,7 +31,7 @@
       <mat-divider></mat-divider>
       <br>
       <mat-form-field class="w-100">
-          <mat-label class="bigger-label">User key enrollment mail template</mat-label>
+          <mat-label class="bigger-label">Key enrollment mail template</mat-label>
           <textarea matInput rows="5" formControlName="keyEnrollmentMail" matTooltip="Use HTML + mustache format"></textarea>
           <mat-error *ngIf="formMail.get('keyEnrollmentMail').invalid">{{ getErrorMessage(formMail.get('keyEnrollmentMail')) }}
           </mat-error>

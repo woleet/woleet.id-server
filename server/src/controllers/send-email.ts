@@ -6,10 +6,10 @@ import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
 import { getServerConfig } from './server-config';
 import { createEnrollment } from './enrollment';
-import log = require('loglevel');
 // import * as nodemailer from 'nodemailer';
 import { readFileSync } from 'fs';
 import * as path from 'path';
+import log = require('loglevel');
 
 function getLogo(config): String {
   if (config.publicInfo.logoURL) {
@@ -76,7 +76,7 @@ export async function sendKeyEnrollmentEmail(email: string): Promise<InternalEnr
   const link = webClientURL + '/enrollment/' +
     enrollment.id;
   const logo = getLogo(config);
-  const subject = 'Enrollment';
+  const subject = 'Key enrollment request';
   const html = mustache.render(config.mailKeyEnrollmentTemplate,
     { keyEnrollmentURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
 
@@ -93,7 +93,7 @@ export async function sendEnrollmentFinalizeEmail(userName: string, address: str
   const config = getServerConfig();
   const logo = getLogo(config);
 
-  const subject = 'Enrollment Confirmation';
+  const subject = 'Key enrollment confirmation';
   const template = readFileSync(
     path.join(__dirname, '../../assets/defaultAdminEnrollmentConfirmationMailTemplate.html'), { encoding: 'ascii' });
   const html = mustache.render(template,

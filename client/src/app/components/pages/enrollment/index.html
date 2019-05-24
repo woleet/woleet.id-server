@@ -23,15 +23,15 @@
     <h1>Welcome to Woleet Signature Service</h1>
     <div>
       <div>
-        <p>Electronic signature is all about approving the content of a document of a document, and keeping one's
-          committment, as a responsible individual.</p>
+        <p>Electronic signature consists in approving the content of an electronic document and fulfilling its
+          commitment as a responsible person.</p>
       </div>
       <div>
-        <p>To be ready to use Woleet Signature service, we need you to:</p>
+        <p>To be ready to use Woleet signature service, you need to:</p>
         <ul>
           <li>Acknowledge your identity information.</li>
-          <li>Create a signature key.</li>
-          <li>Accept and sign Woleet signature Terms and Conditions of Use.</li>
+          <li>Create a signature key (that stays under your control).</li>
+          <li>Accept and sign Woleet signature service's Terms and Conditions of Use using this key.</li>
         </ul>
       </div>
     </div>
@@ -46,7 +46,7 @@
     <h1>Acknowledge your identity information</h1>
     <div>
       <div>
-        <p>The following information will be attached to the signature so as to identity you as a signatory.</p>
+        <p>The following identity information will be attached to your signature to identify you as a signatory.</p>
         <br>
         <div *ngIf="user; else loadinguser">
           <app-user-card [user]="user" [modes]="['display']"></app-user-card>
@@ -69,23 +69,31 @@
       <br>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button matStepperNext [disabled]="!isConfirmed"
-        [matTooltip]="!isConfirmed? 'Confirm your identity to continue.':''">Next</button>
+        [matTooltip]="!isConfirmed ? 'Confirm your identity to continue.':''">
+        Next
+      </button>
     </div>
   </mat-step>
   <mat-step label="Signature key" state="createKey">
-    <h1>Create a signature key</h1>
+    <h1>Create your signature key</h1>
     <div>
       <div>
-        <p>The signature key is required to create the signature. If you do not already have one, please follow
-          instructions below.</p>
-        <br>
-        <p>You can use either a Ledger (cryptographic hardware) or your mobile (Android, iOS) to create a key. You need
-          to install Woleet.ID application and create a key.</p>
-        <br>
-        <p>Use my Ledger: <a href="https://doc.woleet.io/v1.5.1/docs/woleetid-for-ledger-nano-s" target="_blank">See
-            installation procedure</a></p>
-        <p>Use my mobile: <a href="https://doc.woleet.io/v1.5.1/docs/woleetid-for-mobile-phones" target="_blank">See
-            installation procedure</a></p>
+        <p>A signature key is required to sign. If you do not already have one, please follow the instructions
+          below:</p>
+        <p>You can use either
+          a Ledger Nano S (cryptographic hardware) or
+          a mobile device (Android, iOS) to create your key.
+          In both case, you have to install the Woleet.ID application and initialize it: this application will create
+          your key, keep it safe and allow to sign with it.
+        </p>
+        <p>
+          Please follow the
+          <a href="https://doc.woleet.io/docs/woleetid-for-ledger-nano-s" target="_blank">
+            Woleet.ID for Ledger Nano S installation procedure</a>
+          or the
+          <a href="https://doc.woleet.io/docs/woleetid-for-mobile-phones" target="_blank">
+            Woleet.ID for mobile device installation procedure</a>
+        </p>
       </div>
     </div>
     <div>
@@ -100,11 +108,10 @@
     <h1>Accept and sign our Terms and Conditions of Use</h1>
     <div>
       <div>
-        <p>You can click <a [href]="TCUURL" target="_blank">here</a> to read and
-          download Woleet Terms and Conditions of Use.</p>
-        <p>Please click on "get signature invitation email" to electronically sign the Woleet signature service Terms
-          and
-          Conditions of Use.</p>
+        <p>You can click <a [href]="TCUURL" target="_blank">here</a>
+          to download and read Woleet signature service's Terms and Conditions of Use.</p>
+        <p>If you agree, please click on the <strong>Get signature invitation email</strong> button below
+          to sign Woleet signature service's Terms and Conditions of Use.</p>
       </div>
     </div>
     <div>
@@ -127,15 +134,18 @@
   </mat-card>
 </div>
 <div *ngIf="completed">
-    <mat-card>
-      <mat-card-title>Enrollment is completed</mat-card-title>
-      <mat-divider></mat-divider>
+  <mat-card>
+    <mat-card-title>Thank you!</mat-card-title>
+    <mat-divider></mat-divider>
+    <br>
+    <mat-card-content>
+      A signature request has been sent to you by email.
+      You can now finish your key enrollment by fulfilling this signature request.
       <br>
-      <mat-card-content>
-        The Signature request has been sent you can now close this page.
-      </mat-card-content>
-    </mat-card>
-  </div>
+      You can now close this page.
+    </mat-card-content>
+  </mat-card>
+</div>
 <ng-template #loadinguser>
   <mat-card>Loading...</mat-card>
 </ng-template>

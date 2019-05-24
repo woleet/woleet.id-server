@@ -48,10 +48,10 @@ public class UserPost extends UserPut {
   }
 
    /**
-   * If true send an enrollment mail.
+   * If true send an enrollment email.
    * @return sendKeyEnrollmentMail
   **/
-  @ApiModelProperty(required = true, value = "If true send an enrollment mail.")
+  @ApiModelProperty(required = true, value = "If true send an enrollment email.")
   public Boolean getSendKeyEnrollmentMail() {
     return sendKeyEnrollmentMail;
   }
