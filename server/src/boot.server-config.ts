@@ -48,7 +48,7 @@ export async function initServerConfig() {
         path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), { encoding: 'ascii' });
     }
     if (!config.mailKeyEnrollmentTemplate) {
-      log.warn('The key enrolement mail template is set to default.');
+      log.warn('The key enrollment mail template is set to default.');
       config.mailKeyEnrollmentTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultKeyEnrollmentMailTemplate.html'), { encoding: 'ascii' });
     }
