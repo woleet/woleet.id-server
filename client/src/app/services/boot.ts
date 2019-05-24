@@ -25,7 +25,6 @@ export class AppConfigService {
     },
     user: ApiUserDTOObject, useSMTP: boolean, webClientURL: string,
     TCU: {
-      name: string,
       data: string
     },
     contact: string

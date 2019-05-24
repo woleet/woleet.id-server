@@ -273,7 +273,7 @@ declare global {
     mailKeyEnrollmentTemplate?: string;
     // TCU
     TCU?: {
-      name?: string;
+      toDefault?: boolean;
       data?: string;
     }
     // Admin contact
@@ -318,7 +318,7 @@ declare global {
     mailKeyEnrollmentTemplate?: string;
     // TCU
     TCU?: {
-      name?: string;
+      toDefault?: boolean;
       data?: string;
     }
     // Admin contact
@@ -363,7 +363,7 @@ declare global {
     mailKeyEnrollmentTemplate?: string;
     // TCU
     TCU?: {
-      name?: string;
+      toDefault?: boolean;
       data?: string;
     }
     // Admin contact

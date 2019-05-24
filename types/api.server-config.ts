@@ -48,7 +48,7 @@ interface ApiServerConfig {
 
   // TCU
   TCU: {
-    name?: string | null;
+    toDefault?: boolean | null;
     data?: string | null;
   } | null;
 
@@ -100,7 +100,7 @@ interface ApiServerConfigUpdate {
 
   // TCU
   TCU?: {
-    name?: string;
+    toDefault?: boolean;
     data?: string;
   }
 

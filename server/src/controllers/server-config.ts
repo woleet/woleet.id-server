@@ -14,7 +14,7 @@ const { CONFIG_ID } = serverConfig;
 let inMemoryConfig: InternalServerConfigObject = null;
 
 let TCUdata: string = 'data:application/pdf;base64,' + readFileSync(
-  path.join(__dirname, '../../assets/default_TCU.pdf'), { encoding: 'base64' });
+  path.join(__dirname, '../../assets/server_TCU.pdf'), { encoding: 'base64' });
 
 function getInMemoryConfig(): InternalServerConfigObject {
   return inMemoryConfig;
@@ -45,34 +45,45 @@ export function getServerConfig(): InternalServerConfigObject {
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   try {
-  up = await checkProofDeskConfigChange(up)
-    // if the verification pass continue with the config update
-    .then(() => up)
-    // else replace the update with the corresponding error (0: for URL error; 1: for token error)
-    // the URL error just verify if the response is a json
-    // TO IMPROVE
-    .catch((err) => {
-      log.error(err);
-      switch (err) {
-        case 0:
-          return { proofDeskAPIIsValid: 0 };
-        case 1:
-          return { proofDeskAPIIsValid: 1 };
-        default:
-          throw err;
-      }
-    });
+    up = await checkProofDeskConfigChange(up)
+      // if the verification pass continue with the config update
+      .then(() => up)
+      // else replace the update with the corresponding error (0: for URL error; 1: for token error)
+      // the URL error just verify if the response is a json
+      // TO IMPROVE
+      .catch((err) => {
+        log.error(err);
+        switch (err) {
+          case 0:
+            return { proofDeskAPIIsValid: 0 };
+          case 1:
+            return { proofDeskAPIIsValid: 1 };
+          default:
+            throw err;
+        }
+      });
   } catch (err) {
     log.error(err);
     up = { proofDeskAPIIsValid: 0 };
   }
   try {
     const config = Object.assign({}, getInMemoryConfig(), up);
-    if (up.TCU && up.TCU.data) {
-      TCUdata = up.TCU.data;
-      const base64Image = up.TCU.data.split(';base64,').pop();
-      writeFileSync(path.join(__dirname, '../../assets/default_TCU.pdf'), Buffer.from(base64Image, 'base64'));
-      up.TCU.data = null;
+    if (up.TCU) {
+      if (up.TCU.data) {
+        TCUdata = up.TCU.data;
+        const base64Image = up.TCU.data.split(';base64,').pop();
+        writeFileSync(path.join(__dirname, '../../assets/server_TCU.pdf'), Buffer.from(base64Image, 'base64'));
+        log.info('Change TCU file');
+        up.TCU.data = null;
+      }
+      if (up.TCU.toDefault) {
+        TCUdata = 'data:application/pdf;base64,' + readFileSync(
+          path.join(__dirname, '../../assets/default_TCU.pdf'), { encoding: 'base64' });
+        const base64Image = TCUdata.split(';base64,').pop();
+        writeFileSync(path.join(__dirname, '../../assets/server_TCU.pdf'), Buffer.from(base64Image, 'base64'));
+        log.info('Reset TCU fil to default value');
+        up.TCU.toDefault = null;
+      }
     }
     let cfg = await ServerConfig.update(CONFIG_ID, { config });
     if (!cfg) {

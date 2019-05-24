@@ -35,7 +35,6 @@ export class EnrollmentPageComponent implements OnInit {
       HTMLFrame: string
     },
     TCU: {
-      name: string,
       data: string
     },
     contact: string

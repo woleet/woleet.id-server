@@ -3,17 +3,18 @@
     <mat-divider></mat-divider>
     <br>
     <br>
-    <mat-card-content>
-        <input type="file" id="userFile" (change)="onSelectFile($event)" #fileInput style="display: none">
-        <mat-form-field >
-          <input matInput [formControl]="form" placeholder="Terms and Conditions of Use" readonly>
-        </mat-form-field>
-        <button mat-button (click)="selectFile()">CHANGE</button>
+    <mat-card-content hidden>
+        <input type="file" id="userFile" (change)="onSelectFile($event)" #fileInput hidden>
         <br>
         <mat-error *ngIf="errorMessage">
           {{errorMessage}}
         </mat-error>
     </mat-card-content>
     <ng-template #loading>Loading...<br></ng-template>
+    <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="selectFile()">CHANGE</button>
+        <button mat-raised-button color="primary" (click)="reset()">RESET TO DEFAULT</button>
+        <a [href]="TCUURL" target="_blank" class="black-link"><button mat-raised-button color="primary">VIEW CURRENT TCU</button></a>
+    </mat-card-actions>
   </mat-card>
   

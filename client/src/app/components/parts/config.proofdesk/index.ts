@@ -17,8 +17,6 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
   config$: Observable<ApiServerConfig>;
 
   proofDeskAPIIsValid;
-  proofDeskAPIURL: string;
-  proofDeskAPIToken: string;
 
   form: FormGroup;
 
@@ -43,6 +41,8 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
       if (!config) {
         return;
       }
+      console.log(config);
+      console.log(config.proofDeskAPIURL);
       this.form.get('proofDeskAPIURL').setValue(config.proofDeskAPIURL || 'https://api.woleet.io/v1');
       this.form.get('proofDeskAPIToken').setValue(config.proofDeskAPIToken || '');
     }));

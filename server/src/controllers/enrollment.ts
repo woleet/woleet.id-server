@@ -90,7 +90,7 @@ export async function deleteEnrollment(id: string): Promise<InternalEnrollmentOb
 
 export async function getTCUHash(): Promise<string> {
 
-  const TCU = readFileSync(path.join(__dirname, '../../assets/default_TCU.pdf'), { encoding: 'base64' });
+  const TCU = readFileSync(path.join(__dirname, '../../assets/server_TCU.pdf'), { encoding: 'base64' });
 
   const hash = crypto.createHash('sha256');
   hash.update(Buffer.from(TCU, 'base64'));
