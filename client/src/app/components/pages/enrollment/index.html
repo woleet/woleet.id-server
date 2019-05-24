@@ -39,7 +39,7 @@
       <br>
       <mat-divider></mat-divider>
       <br>
-      <button mat-button matStepperNext>Next</button>
+      <button mat-raised-button color="primary" matStepperNext>NEXT</button>
     </div>
   </mat-step>
   <mat-step label="Identity" state="identity" [completed]="isConfirmed">
@@ -59,18 +59,17 @@
     </div>
     <div>
       <a href="{{emailstring}}" class="black-link" target="_top">
-        <button mat-button>Refuse</button>
+        <button mat-button>REFUSE</button>
       </a>
-      <button mat-button (click)="confirm()">Confirm</button>
+      <button mat-raised-button color="primary" (click)="confirm()">CONFIRM</button>
     </div>
     <div>
       <br>
       <mat-divider></mat-divider>
       <br>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext [disabled]="!isConfirmed"
-        [matTooltip]="!isConfirmed ? 'Confirm your identity to continue.':''">
-        Next
+      <button mat-button matStepperPrevious>BACK</button>
+      <button mat-raised-button color="primary" matStepperNext [disabled]="!isConfirmed"
+        [matTooltip]="!isConfirmed? 'Confirm your identity to continue.':''">NEXT
       </button>
     </div>
   </mat-step>
@@ -100,15 +99,15 @@
       <br>
       <mat-divider></mat-divider>
       <br>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext>Next</button>
+      <button mat-button matStepperPrevious>BACK</button>
+      <button mat-raised-button color="primary" matStepperNext>NEXT</button>
     </div>
   </mat-step>
   <mat-step label="TCU" state="final">
     <h1>Accept and sign our Terms and Conditions of Use</h1>
     <div>
       <div>
-        <p>You can click <a [href]="TCUURL" target="_blank">here</a>
+        <p>You can click <a [href]="TCUURL">here</a>
           to download and read Woleet signature service's Terms and Conditions of Use.</p>
         <p>If you agree, please click on the <strong>Get signature invitation email</strong> button below
           to sign Woleet signature service's Terms and Conditions of Use.</p>
@@ -118,8 +117,8 @@
       <br>
       <mat-divider></mat-divider>
       <br>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="signTCU()">Get signature invitation email</button>
+      <button mat-button matStepperPrevious>BACK</button>
+      <button mat-raised-button color="primary" (click)="signTCU()">GET SIGNATURE INVITATION EMAIL</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>

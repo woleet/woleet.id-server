@@ -3,7 +3,8 @@ import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'dialogMailReset',
-  templateUrl: 'index.html'
+  templateUrl: 'index.html',
+  styleUrls: ['style.scss']
 })
 export class DialogMailResetComponent {
 

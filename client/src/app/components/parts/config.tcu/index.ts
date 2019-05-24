@@ -3,7 +3,7 @@ import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider } from '@components/util';
 import { Observable } from 'rxjs';
 import * as log from 'loglevel';
-import { FormControl } from '@angular/forms';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'config-tcu',
@@ -15,24 +15,23 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
 
   config$: Observable<ApiServerConfig>;
 
-  form: FormControl;
-
   file: any;
   fileURL: any;
   fileInformation: string;
+  errorMessage: string;
+  TCUURL: SafeUrl;
 
   private onDestroy: EventEmitter<void>;
 
   @ViewChild('fileInput')
   fileInput: ElementRef;
 
-  constructor(private configService: ConfigService) {
+  constructor(private configService: ConfigService, private sanitization: DomSanitizer) {
     super();
     this.onDestroy = new EventEmitter();
   }
 
   ngOnInit() {
-    this.form = new FormControl('', []);
 
     const config$ = this.config$ = this.configService.getConfig();
 
@@ -42,12 +41,7 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
       if (!config) {
         return;
       }
-
-      if (config.TCU) {
-        this.form.setValue(config.TCU.name);
-      } else {
-        this.form.setValue('');
-      }
+      this.TCUURL = this.sanitization.bypassSecurityTrustUrl(config.TCU.data);
     });
 
     this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
@@ -59,8 +53,7 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
 
   async submit() {
     const TCU = {
-      data: this.fileURL,
-      name: this.file.name,
+      data: this.fileURL
     };
     log.debug('Set Terms and Conditions of Use to', TCU);
     this.configService.update({ TCU });
@@ -68,15 +61,19 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
 
   onSelectFile(event) {
     if (event.target.files && event.target.files.length > 0) {
-      this.file = event.target.files[0];
-      this.form.setValue(this.file.name);
-      const reader = new FileReader;
-      reader.readAsDataURL(this.file);
-      reader.onloadend = () => {
-        this.fileURL = reader.result;
-      };
-      this.fileInformation = null;
-      this.form.markAsDirty();
+      if (event.target.files[0].size < 1000000) {
+        this.file = event.target.files[0];
+        const reader = new FileReader;
+        reader.readAsDataURL(this.file);
+        reader.onloadend = () => {
+          this.fileURL = reader.result;
+          this.submit();
+        };
+        this.fileInformation = null;
+        this.errorMessage = null;
+      } else {
+        this.errorMessage = 'This file is too large to be uploaded this way.';
+      }
     }
   }
 
@@ -84,4 +81,11 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
     this.fileInput.nativeElement.click();
   }
 
+  reset(): void {
+    const TCU = {
+      toDefault: true
+    };
+    log.debug('Set Terms and Conditions of Use to default');
+    this.configService.update({ TCU });
+  }
 }

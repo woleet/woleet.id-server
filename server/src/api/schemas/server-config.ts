@@ -41,7 +41,7 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   mailKeyEnrollmentTemplate: Joi.string().allow(null),
   TCU: Joi.object({
     data: Joi.string().allow(null),
-    name: Joi.string().allow(null),
+    toDefault: Joi.boolean().allow(null),
   }).allow(null),
   contact: Joi.string().allow(null),
   // ProofDesk config
