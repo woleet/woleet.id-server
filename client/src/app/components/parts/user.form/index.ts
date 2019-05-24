@@ -144,7 +144,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       }
       this.useSMTP = config.useSMTP;
       this.ServerClientURL = config.ServerClientURL;
-      this.isProofDeskAvailable = (!!config.proofDeskAPIToken || !!config.proofDeskAPIURL);
+      this.isProofDeskAvailable = (!!config.proofDeskAPIToken && !!config.proofDeskAPIURL);
       config.contact ? this.contactAvailable = true : this.contactAvailable = false;
     }));
     if (this.mode === 'edit') {

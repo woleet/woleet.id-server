@@ -1,14 +1,11 @@
 <!-- <nav role="navigation"> -->
 <mat-toolbar *ngIf="!hide()">
   <div fxLayout="row">
-    <button fxHide fxShow.sm fxShow.xs mat-icon-button class="collapse-button" (click)="collapseSideBar()">
+    <button mat-icon-button class="collapse-button" (click)="collapseSideBar()">
       <mat-icon>view_headline</mat-icon>
     </button>
     <div class="logo"></div>
-    <div class="sub-logo" fxShow fxHide.sm fxHide.xs>
-      <span class="text-gray text-slim">{{ page() }}</span>
-    </div>
-    <div class="sub-logo-collapse" fxHide fxShow.sm fxShow.xs>
+    <div class="sub-logo">
       <span class="text-gray text-slim">{{ page() }}</span>
     </div>
   </div>
