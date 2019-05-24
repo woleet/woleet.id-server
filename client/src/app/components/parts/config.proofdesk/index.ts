@@ -4,6 +4,7 @@ import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'config-proofdesk',
@@ -16,6 +17,8 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
   config$: Observable<ApiServerConfig>;
 
   proofDeskAPIIsValid;
+  proofDeskAPIURL: string;
+  proofDeskAPIToken: string;
 
   form: FormGroup;
 
@@ -36,15 +39,13 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
 
     this.formLocked$ = this.configService.isDoingSomething();
 
-    this.registerSubscription(config$.subscribe((config) => {
+    this.registerSubscription(config$.pipe(take(1)).subscribe((config) => {
       if (!config) {
         return;
       }
-
       this.form.get('proofDeskAPIURL').setValue(config.proofDeskAPIURL || 'https://api.woleet.io/v1');
       this.form.get('proofDeskAPIToken').setValue(config.proofDeskAPIToken || '');
     }));
-
 
     this.registerSubscription(this.formLocked$.subscribe((locked) => {
       if (locked) {

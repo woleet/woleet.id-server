@@ -52,6 +52,7 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
     // the URL error just verify if the response is a json
     // TO IMPROVE
     .catch((err) => {
+      log.error(err);
       switch (err) {
         case 0:
           return { proofDeskAPIIsValid: 0 };
@@ -61,7 +62,8 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
           throw err;
       }
     });
-  } catch {
+  } catch (err) {
+    log.error(err);
     up = { proofDeskAPIIsValid: 0 };
   }
   try {
@@ -77,7 +79,7 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
       debug('No config to update, will set', config);
       cfg = await ServerConfig.create({ config });
     }
-    debug('Updated', getInMemoryConfig(), 'to', cfg.toJSON(), 'with', up);
+    debug('Updated with', up);
     setInMemoryConfig(cfg.toJSON().config);
     await checkOIDCConfigChange(up);
     await checkOIDCPConfigChange(up);
@@ -205,9 +207,11 @@ async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
             if (!json.error) {
               resolve(setServerConfig({ proofDeskAPIIsValid: 2 }));
             } else {
+              log.error('Bad token authentification impossible.');
               reject(1);
             }
           } catch (err) {
+            log.error('Response is not a JSON, bad URL.');
             reject(0);
           }
         });

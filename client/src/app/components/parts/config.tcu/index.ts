@@ -20,6 +20,7 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
   file: any;
   fileURL: any;
   fileInformation: string;
+  errorMessage: string;
 
   private onDestroy: EventEmitter<void>;
 
@@ -68,15 +69,20 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
 
   onSelectFile(event) {
     if (event.target.files && event.target.files.length > 0) {
-      this.file = event.target.files[0];
-      this.form.setValue(this.file.name);
-      const reader = new FileReader;
-      reader.readAsDataURL(this.file);
-      reader.onloadend = () => {
-        this.fileURL = reader.result;
-      };
-      this.fileInformation = null;
-      this.form.markAsDirty();
+      if (event.target.files[0].size < 1000000) {
+        this.file = event.target.files[0];
+        this.form.setValue(this.file.name);
+        const reader = new FileReader;
+        reader.readAsDataURL(this.file);
+        reader.onloadend = () => {
+          this.fileURL = reader.result;
+          this.submit();
+        };
+        this.fileInformation = null;
+        this.errorMessage = null;
+      } else {
+        this.errorMessage = 'This file is too large to be uploaded this way.';
+      }
     }
   }
 
