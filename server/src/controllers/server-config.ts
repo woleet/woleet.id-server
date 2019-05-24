@@ -44,6 +44,7 @@ export function getServerConfig(): InternalServerConfigObject {
 }
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
+  try {
   up = await checkProofDeskConfigChange(up)
     // if the verification pass continue with the config update
     .then(() => up)
@@ -60,6 +61,9 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
           throw err;
       }
     });
+  } catch {
+    up = { proofDeskAPIIsValid: 0 };
+  }
   try {
     const config = Object.assign({}, getInMemoryConfig(), up);
     if (up.TCU && up.TCU.data) {
