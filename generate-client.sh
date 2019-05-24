@@ -4,6 +4,14 @@
 
 OPENAPI_CODEGEN='java -jar openapi-generator-cli.jar'
 
+# Clean previously generated code
+rm -rf tests/java/src/main
+rm -rf tests/java/docs
+rm -rf tests/java/*gradle*
+rm -rf tests/java/target
+rm -rf tests/java/build.*
+rm -rf tests/java/git_push.sh
+
 # Generation of the Java client used for tests
 rm -rf tests/java/src/main
 rm -rf tests/java/docs
