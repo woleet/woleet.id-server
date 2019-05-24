@@ -187,8 +187,8 @@ Woleet.ID Server can use an OpenID Connect provider to authenticate users.
 When a new user connects to Woleet.ID Server using OpenID Connect, a user account is automatically created and a default key is generated.
 
 - Select the `Settings` menu
-- Go to the "OpenID Connect configuration" panel
-- Check "Use OpenID Connect"
+- Go to the `OpenID Connect -> Client configuration` panel
+- Check `Enable OpenID Connect client`
 - Set the `OpenID Connect URL` in order to match `<OpenID Connect URL>/.well-known/openid-configuration`
 - Set the `Client ID` and `Client secret` as defined by your provider
 - Set the `Authorization callback URL` as `https://<current web interface>/oauth/callback` (it should be automatically set)
@@ -200,8 +200,8 @@ When a new user connects to Woleet.ID Server using OpenID Connect, a user accoun
 Woleet.ID Server can be used as an OpenID Connect provider by 3rd party applications.
 
 - Select the `Settings` menu
-- Go to the "OpenID Connect Provider configuration" panel
-- Check "Enable OpenID Connect Provider"
+- Go to the `OpenID Connect -> Provider configuration` panel
+- Check `Enable OpenID Connect Provider`
 - Set the `Issuer URL` as `https://<OpenID Issuer URL>`
   > Note: that is only if you want to conform to the Discovery specification, the `Issuer URL` value itself does not need to resolve to anything
 - Set the `Provider URL` as `https://<OpenID Provider URL>` (it should be automatically set)

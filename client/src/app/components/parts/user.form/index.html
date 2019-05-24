@@ -21,13 +21,13 @@
           <mat-error *ngIf="form.get('email').invalid">{{ getErrorMessage(form.get('email')) }}</mat-error>
         </mat-form-field>
         <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP || !ServerClientURL"
-          [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''"
+          [matTooltip]="!useSMTP || !ServerClientURL? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL':''"
           (change)="sendPasswordEmailCheck()">
           Send password initialization link by email
         </mat-checkbox>
         <button mat-raised-button *ngIf="mode === 'edit'" matInput
           [disabled]="!useSMTP || form.get('email').invalid || !ServerClientURL"
-          [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''"
+          [matTooltip]="!useSMTP || !ServerClientURL? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL':''"
           (click)="sendResetPasswordEmail(user)">
           Send password reset link by email
         </button>
@@ -56,14 +56,15 @@
         </mat-form-field>
         <mat-form-field class="w-100">
           <input matInput type="text" placeholder="Organizational Unit" formControlName="organizationalUnit">
-          <mat-error *ngIf="form.get('identity').get('organizationalUnit').invalid">{{ getErrorMessage(form.get('identity').get('organizationalUnit'))
-            }}
+          <mat-error *ngIf="form.get('identity').get('organizationalUnit').invalid">
+            {{ getErrorMessage(form.get('identity').get('organizationalUnit')) }}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="w-100">
           <input matInput type="text" placeholder="Locality" formControlName="locality">
           <mat-error *ngIf="form.get('identity').get('locality').invalid">
-            {{ getErrorMessage(form.get('identity').get('locality')) }}</mat-error>
+            {{ getErrorMessage(form.get('identity').get('locality')) }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="w-100">
           <mat-select [value]="form.get('identity').get('country')" type="text" name="country" placeholder="Country"
@@ -76,7 +77,8 @@
           <input matInput type="text" placeholder="userId" formControlName="userId" (focus)="userIdFocused = true"
             (focusout)="userIdFocused = false">
           <mat-error *ngIf="form.get('identity').get('userId').invalid">
-            {{ getErrorMessage(form.get('identity').get('userId')) }}</mat-error>
+            {{ getErrorMessage(form.get('identity').get('userId')) }}
+          </mat-error>
           <mat-hint *ngIf="userIdFocused">
             A custom user identifier you can use to select the user (must be unique)
           </mat-hint>
@@ -88,11 +90,14 @@
     <mat-divider></mat-divider>
     <br>
     <div fxLayout="row" fxLayout.gt-sm="column" fxLayoutGap="10px">
-      <mat-checkbox matInput [(ngModel)]="createDefaultKey">Create a default key
+      <mat-checkbox matInput [(ngModel)]="createDefaultKey">
+        Create a default key pair
       </mat-checkbox>
       <mat-checkbox matInput [disabled]="!canEnrol()"
-        [matTooltip]="!canEnrol()? 'You must setup the SMTP server, the server web client URL to activate this option, the admin contact and ProofDesk API':''"
-        [(ngModel)]="sendEnrollmentEmail">Enroll external key by email</mat-checkbox>
+        [matTooltip]="!canEnrol()? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL\n- Organization -> Admin contact\n- ProofDesk account -> API configuration':''"
+        [(ngModel)]="sendEnrollmentEmail">
+        Enroll public key by email
+      </mat-checkbox>
     </div>
     <br>
   </div>
