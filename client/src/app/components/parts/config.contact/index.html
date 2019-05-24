@@ -1,5 +1,5 @@
 <mat-card *ngIf="!editMode">
-    <mat-card-title>Admin Contact</mat-card-title>
+    <mat-card-title>Admin contact</mat-card-title>
     <mat-divider></mat-divider>
     <br>
     <div *ngIf="(config$ | async) as config; else loading">
@@ -33,4 +33,3 @@
       <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
     </mat-card-actions>
   </mat-card>
-  

@@ -108,3 +108,7 @@ $accent: mat-palette($mat-red, 400);
     padding: 0;
   }
 }
+
+.mat-tooltip {
+  white-space: pre-line;
+}

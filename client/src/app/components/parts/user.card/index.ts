@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UserService } from '@services/user';
 import { AsYouType } from 'libphonenumber-js';
 import { confirm } from '../../util';
@@ -33,7 +33,7 @@ export class UserCardComponent {
   }
 
   async deleteUser() {
-    if (!confirm(`Delete user ${this.user.identity.commonName} ?`)) {
+    if (!confirm(`Delete user ${this.user.identity.commonName}?`)) {
       return;
     }
     this.formLocked = true;
@@ -43,7 +43,7 @@ export class UserCardComponent {
   }
 
   async blockUser() {
-    if (!confirm(`Block user ${this.user.identity.commonName} ?`)) {
+    if (!confirm(`Block user ${this.user.identity.commonName}?`)) {
       return;
     }
     this.formLocked = true;

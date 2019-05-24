@@ -49,7 +49,7 @@ export class APITokenCardComponent extends ErrorMessageProvider {
   }
 
   async deleteToken() {
-    if (!confirm(`Delete token ${this.apiToken.name} ?`)) {
+    if (!confirm(`Delete token ${this.apiToken.name}?`)) {
       return;
     }
     const deleted = await this.apiTokenService.delete(this.apiToken.id);
@@ -58,7 +58,7 @@ export class APITokenCardComponent extends ErrorMessageProvider {
   }
 
   async blockToken() {
-    if (!confirm(`Block token ${this.apiToken.name} ?`)) {
+    if (!confirm(`Block token ${this.apiToken.name}?`)) {
       return;
     }
     const up = await this.apiTokenService.update(this.apiToken.id, { status: 'blocked' });

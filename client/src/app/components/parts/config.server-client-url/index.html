@@ -1,5 +1,5 @@
 <mat-card *ngIf="!editMode">
-  <mat-card-title>Web Client URL</mat-card-title>
+  <mat-card-title>Web client URL</mat-card-title>
   <mat-divider></mat-divider>
   <br>
   <div *ngIf="(config$ | async) as config; else loading">
@@ -17,7 +17,7 @@
   <ng-template #loading>Loading...<br></ng-template>
 </mat-card>
 <mat-card *ngIf="editMode">
-  <mat-card-title>Set Web Client URL</mat-card-title>
+  <mat-card-title>Set web client URL</mat-card-title>
   <mat-divider></mat-divider>
   <br>
   <br>
@@ -30,7 +30,9 @@
   <ng-template #loading>Loading...<br></ng-template>
   <mat-card-actions *ngIf="(config$ | async) as config; else loading">
     <button mat-raised-button color="primary" (click)="submit()"
-      [disabled]="(formLocked$ | async) || (config.ServerClientURL == form.value) || (form.invalid)">SAVE</button>
+      [disabled]="(formLocked$ | async) || (config.ServerClientURL == form.value) || (form.invalid)">
+      SAVE
+    </button>
     <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
   </mat-card-actions>
 </mat-card>

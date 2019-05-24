@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { KeyService } from '@services/key';
 import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider, nextYear } from '@components/util';
@@ -59,7 +59,7 @@ export class KeyCardComponent extends ErrorMessageProvider {
   }
 
   async deleteKey() {
-    if (!confirm(`Delete key ${this.key.name} ?`)) {
+    if (!confirm(`Delete key ${this.key.name}?`)) {
       return;
     }
     this.formLocked = true;
@@ -89,7 +89,7 @@ export class KeyCardComponent extends ErrorMessageProvider {
   }
 
   async blockKey() {
-    if (!confirm(`Block key ${this.key.name} ?`)) {
+    if (!confirm(`Block key ${this.key.name}?`)) {
       return;
     }
     this.formLocked = true;
