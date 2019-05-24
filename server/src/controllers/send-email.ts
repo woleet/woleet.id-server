@@ -76,7 +76,7 @@ export async function sendKeyEnrollmentEmail(email: string): Promise<InternalEnr
   const link = webClientURL + '/enrollment/' +
     enrollment.id;
   const logo = getLogo(config);
-  const subject = 'Key enrollment request';
+  const subject = 'Signature key enrollment request';
   const html = mustache.render(config.mailKeyEnrollmentTemplate,
     { keyEnrollmentURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
 

@@ -46,14 +46,14 @@
     <h1>Acknowledge your identity information</h1>
     <div>
       <div>
-        <p>The following identity information will be attached to your signature to identify you as a signatory.</p>
+        <p>The following identity information will be attached to your signature to identify you as a signatory:</p>
         <br>
         <div *ngIf="user; else loadinguser">
           <app-user-card [user]="user" [modes]="['display']"></app-user-card>
         </div>
         <br>
-        <p>Your personal information is stored by Woleet and can be modified or deleted at any time, upon simple request
-          to privacy@woleet.com.</p>
+        <p>Your personal information is stored by Woleet signature service and can be modified or deleted at any time,
+          upon simple request to privacy@woleet.com.</p>
         <br>
       </div>
     </div>
@@ -138,10 +138,10 @@
     <mat-divider></mat-divider>
     <br>
     <mat-card-content>
-      A signature request has been sent to you by email.
-      You can now finish your key enrollment by fulfilling this signature request.
+      A signature request has been sent to you by email.<br>
+      Please finish your key enrollment by fulfilling this signature request.<br>
       <br>
-      You can now close this page.
+      <strong>You can now close this page.</strong>
     </mat-card-content>
   </mat-card>
 </div>
