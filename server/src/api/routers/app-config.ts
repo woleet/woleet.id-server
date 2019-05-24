@@ -11,8 +11,8 @@ const router = new Router({ prefix: '/app-config' });
 router.get('/', async function (ctx) {
   const user = ctx.session && ctx.session.user && serializeUserDTO(ctx.session.user.toJSON()) || null;
   const hasSession = !!(ctx.session && ctx.session.user);
-  const { useOpenIDConnect, OIDCPProviderURL, publicInfo, useSMTP, ServerClientURL, TCU, contact } = getServerConfig();
-  ctx.body = { useOpenIDConnect, OIDCPProviderURL, hasSession, user, publicInfo, useSMTP, ServerClientURL, TCU, contact };
+  const { useOpenIDConnect, OIDCPProviderURL, publicInfo, useSMTP, webClientURL, TCU, contact } = getServerConfig();
+  ctx.body = { useOpenIDConnect, OIDCPProviderURL, hasSession, user, publicInfo, useSMTP, webClientURL, TCU, contact };
 });
 
 export { router };

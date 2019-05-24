@@ -23,7 +23,7 @@ export class AppConfigService {
       logoURL: string,
       HTMLFrame: string
     },
-    user: ApiUserDTOObject, useSMTP: boolean, ServerClientURL: string,
+    user: ApiUserDTOObject, useSMTP: boolean, webClientURL: string,
     TCU: {
       name: string,
       data: string

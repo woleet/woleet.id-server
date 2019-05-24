@@ -20,14 +20,14 @@
           <input matInput type="email" placeholder="Email" formControlName="email" required>
           <mat-error *ngIf="form.get('email').invalid">{{ getErrorMessage(form.get('email')) }}</mat-error>
         </mat-form-field>
-        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP || !ServerClientURL"
-          [matTooltip]="!useSMTP || !ServerClientURL? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL':''"
+        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP || !webClientURL"
+          [matTooltip]="!useSMTP || !webClientURL? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL':''"
           (change)="sendPasswordEmailCheck()">
           Send password initialization link by email
         </mat-checkbox>
         <button mat-raised-button *ngIf="mode === 'edit'" matInput
-          [disabled]="!useSMTP || form.get('email').invalid || !ServerClientURL"
-          [matTooltip]="!useSMTP || !ServerClientURL? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL':''"
+          [disabled]="!useSMTP || form.get('email').invalid || !webClientURL"
+          [matTooltip]="!useSMTP || !webClientURL? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL':''"
           (click)="sendResetPasswordEmail(user)">
           Send password reset link by email
         </button>

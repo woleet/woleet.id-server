@@ -24,7 +24,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
 
   contactAvailable: boolean;
   useSMTP: boolean;
-  ServerClientURL: string;
+  webClientURL: string;
   email: string;
   errorMsg: string;
   isProofDeskAvailable = false;
@@ -49,7 +49,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
       this.useSMTP = config.useSMTP;
       this.isProofDeskAvailable = (!!config.proofDeskAPIToken || !!config.proofDeskAPIURL);
       config.contact ? this.contactAvailable = true : this.contactAvailable = false;
-      this.ServerClientURL = config.ServerClientURL;
+      this.webClientURL = config.webClientURL;
     }));
     this.user$.then((user) => {
       this.email = user.email;
@@ -81,6 +81,6 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   }
 
   canEnrol(): Boolean {
-    return (this.useSMTP && this.ServerClientURL && this.contactAvailable && this.isProofDeskAvailable);
+    return (this.useSMTP && this.webClientURL && this.contactAvailable && this.isProofDeskAvailable);
   }
 }

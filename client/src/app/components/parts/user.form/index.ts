@@ -60,7 +60,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   formLocked = false;
   useSMTP: boolean;
-  ServerClientURL: string;
+  webClientURL: string;
   contactAvailable: boolean;
   sendPasswordEmail = false;
   sendEnrollmentEmail = false;
@@ -143,7 +143,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         return;
       }
       this.useSMTP = config.useSMTP;
-      this.ServerClientURL = config.ServerClientURL;
+      this.webClientURL = config.webClientURL;
       this.isProofDeskAvailable = (!!config.proofDeskAPIToken && !!config.proofDeskAPIURL);
       config.contact ? this.contactAvailable = true : this.contactAvailable = false;
     }));
@@ -252,6 +252,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   }
 
   canEnrol(): Boolean {
-    return (this.useSMTP && this.ServerClientURL && this.contactAvailable && this.isProofDeskAvailable);
+    return (this.useSMTP && this.webClientURL && this.contactAvailable && this.isProofDeskAvailable);
   }
 }

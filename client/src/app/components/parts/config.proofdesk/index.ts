@@ -3,7 +3,7 @@ import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'config-proofdesk',
@@ -28,8 +28,8 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
 
   ngOnInit() {
     this.form = new FormGroup({
-      proofDeskAPIURL: new FormControl({ value: '', }, [secureUrlValidator]),
-      proofDeskAPIToken: new FormControl({ value: '' }, [])
+      proofDeskAPIURL: new FormControl({ value: '', }, [secureUrlValidator, Validators.required]),
+      proofDeskAPIToken: new FormControl({ value: '' }, [Validators.required])
     });
 
     const config$ = this.config$ = this.configService.getConfig();
@@ -41,7 +41,7 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
         return;
       }
 
-      this.form.get('proofDeskAPIURL').setValue(config.proofDeskAPIURL || '');
+      this.form.get('proofDeskAPIURL').setValue(config.proofDeskAPIURL || 'https://api.woleet.io/v1');
       this.form.get('proofDeskAPIToken').setValue(config.proofDeskAPIToken || '');
     }));
 

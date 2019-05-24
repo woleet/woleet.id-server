@@ -35,9 +35,9 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
 
   user = await User.update(user.getDataValue('id'), update);
 
-  const ServerClientURL = config.ServerClientURL;
+  const webClientURL = config.webClientURL;
 
-  const link = ServerClientURL + '/reset-password?token=' +
+  const link = webClientURL + '/reset-password?token=' +
     token + '&email=' + email;
 
   let subject;
@@ -71,9 +71,9 @@ export async function sendKeyEnrollmentEmail(email: string): Promise<InternalEnr
 
   const enrollment = await createEnrollment(user.get('id'));
   const config = getServerConfig();
-  const ServerClientURL = config.ServerClientURL;
+  const webClientURL = config.webClientURL;
 
-  const link = ServerClientURL + '/enrollment/' +
+  const link = webClientURL + '/enrollment/' +
     enrollment.id;
   const logo = getLogo(config);
   const subject = 'Enrollment';

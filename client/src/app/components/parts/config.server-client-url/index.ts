@@ -39,7 +39,7 @@ export class ConfigWebClientUrlComponent extends ErrorMessageProvider implements
             }
 
             this.editMode = false;
-            this.form.setValue(config.ServerClientURL);
+            this.form.setValue(config.webClientURL);
         });
 
         this.onDestroy.subscribe(() => log.debug('Unsubscribe', subscription.unsubscribe()));
@@ -50,9 +50,9 @@ export class ConfigWebClientUrlComponent extends ErrorMessageProvider implements
     }
 
     async submit() {
-        const ServerClientURL = this.form.value;
-        log.debug('Set web client URL to', ServerClientURL);
-        this.configService.update({ ServerClientURL });
+        const webClientURL = this.form.value;
+        log.debug('Set web client URL to', webClientURL);
+        this.configService.update({ webClientURL });
     }
 
     cancelEdit() {

@@ -34,7 +34,7 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   // SMTP config
   useSMTP: Joi.boolean(),
   SMTPConfig: Joi.string().allow(null),
-  ServerClientURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
+  webClientURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   // Mail template
   mailResetPasswordTemplate: Joi.string().allow(null),
   mailOnboardingTemplate: Joi.string().allow(null),
