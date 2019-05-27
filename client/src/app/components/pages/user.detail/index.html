@@ -6,12 +6,13 @@
     <button fxLaytout="column" mat-raised-button color="primary" (click)="externalFormOpened=true">
       ADD PUBLIC KEY
     </button>
-    <button fxLayout="column" mat-raised-button color="primary" (click)="sendEnrollmentMail()"
-      [disabled]="!canEnrol() || !email"
-      [matTooltip]="!canEnrol()? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL\n- Organization -> admin contact\n- ProofDesk account -> API configuration':''"
-      [matTooltip]="!email? 'You have to set the user email to enroll his public key':''">
-      ENROLL PUBLIC KEY
-    </button>
+    <div [matTooltipDisabled]="canEnroll()"
+      matTooltip="To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL\n- Organization -> admin contact\n- ProofDesk account -> API configuration">
+      <button fxLayout="column" mat-raised-button color="primary" (click)="sendEnrollmentMail()"
+        [disabled]="!canEnroll()">
+        ENROLL PUBLIC KEY
+      </button>
+    </div>
   </div>
   <div *ngIf="formOpened">
     <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="userId"></key-card-create>

@@ -21,16 +21,18 @@
           <mat-error *ngIf="form.get('email').invalid">{{ getErrorMessage(form.get('email')) }}</mat-error>
         </mat-form-field>
         <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP || !webClientURL"
-          [matTooltip]="!useSMTP || !webClientURL? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL':''"
+          [matTooltipDisabled]="canSendEmailToUser()"
+          matTooltip="To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL"
           (change)="sendPasswordEmailCheck()">
           Send password initialization link by email
         </mat-checkbox>
-        <button mat-raised-button *ngIf="mode === 'edit'" matInput
-          [disabled]="!useSMTP || form.get('email').invalid || !webClientURL"
-          [matTooltip]="!useSMTP || !webClientURL? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL':''"
-          (click)="sendResetPasswordEmail(user)">
-          Send password reset link by email
-        </button>
+        <div [matTooltipDisabled]="canSendEmailToUser()"
+          matTooltip="To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL'">
+          <button mat-raised-button *ngIf="mode === 'edit'" matInput [disabled]="!canSendEmailToUser()"
+            (click)="sendResetPasswordEmail(user)">
+            Send password reset link by email
+          </button>
+        </div>
         <mat-form-field class="w-100">
           <input matInput type="password" placeholder="Password" formControlName="password" autocomplete="off"
             [required]="mode === 'create' && !sendPasswordEmail">
@@ -91,10 +93,10 @@
       Create a default key pair
     </mat-checkbox>
     <br>
-    <mat-checkbox matInput [disabled]="!canEnrol()"
-      [matTooltip]="!canEnrol()? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL\n- Organization -> Admin contact\n- ProofDesk account -> API configuration':''"
+    <mat-checkbox matInput [disabled]="!canEnroll()" [matTooltipDisabled]="canEnroll()"
+      matTooltip="To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL\n- Organization -> Admin contact\n- ProofDesk account -> API configuration"
       [(ngModel)]="sendEnrollmentEmail">
-      Enroll users's public key by email
+      Enroll user's public key by email
     </mat-checkbox>
     <br>
     <br>

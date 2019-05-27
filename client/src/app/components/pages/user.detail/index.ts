@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { KeyService } from '@services/key';
 import { TrackById } from '../../util';
@@ -80,7 +80,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
     });
   }
 
-  canEnrol(): Boolean {
+  canEnroll(): Boolean {
     return (this.useSMTP && this.webClientURL && this.contactAvailable && this.isProofDeskAvailable);
   }
 }
