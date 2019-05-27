@@ -87,18 +87,16 @@
     </div>
   </form>
   <div *ngIf="mode === 'create'">
-    <mat-divider></mat-divider>
+    <mat-checkbox matInput [(ngModel)]="createDefaultKey">
+      Create a default key pair
+    </mat-checkbox>
     <br>
-    <div fxLayout="row" fxLayout.gt-sm="column" fxLayoutGap="10px">
-      <mat-checkbox matInput [(ngModel)]="createDefaultKey">
-        Create a default key pair
-      </mat-checkbox>
-      <mat-checkbox matInput [disabled]="!canEnrol()"
-        [matTooltip]="!canEnrol()? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL\n- Organization -> Admin contact\n- ProofDesk account -> API configuration':''"
-        [(ngModel)]="sendEnrollmentEmail">
-        Enroll public key by email
-      </mat-checkbox>
-    </div>
+    <mat-checkbox matInput [disabled]="!canEnrol()"
+      [matTooltip]="!canEnrol()? 'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL\n- Organization -> Admin contact\n- ProofDesk account -> API configuration':''"
+      [(ngModel)]="sendEnrollmentEmail">
+      Enroll users's public key by email
+    </mat-checkbox>
+    <br>
     <br>
   </div>
   <div *ngIf="helper">
