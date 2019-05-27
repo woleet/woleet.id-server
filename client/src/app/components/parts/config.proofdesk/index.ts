@@ -4,7 +4,6 @@ import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'config-proofdesk',
@@ -37,7 +36,7 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
 
     this.formLocked$ = this.configService.isDoingSomething();
 
-    this.registerSubscription(config$.pipe(first()).subscribe((config) => {
+    this.registerSubscription(config$.subscribe((config) => {
       if (!config) {
         return;
       }
