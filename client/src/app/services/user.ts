@@ -38,5 +38,4 @@ export class UserService {
   async validate(email: string, password: string, token: string) {
     return this.http.post<Boolean>(`${serverURL}/password-reset/validate`, {email: email, password: password, token: token}).toPromise();
   }
-
 }

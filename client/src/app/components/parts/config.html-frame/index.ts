@@ -59,5 +59,4 @@ export class ConfigHTMLFrameUrlComponent extends ErrorMessageProvider implements
   cancelEdit() {
     this.editMode = false;
   }
-
 }

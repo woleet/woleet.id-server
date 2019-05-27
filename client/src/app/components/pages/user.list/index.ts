@@ -23,5 +23,4 @@ export class UserListPageComponent extends TrackById implements OnInit {
   refreshUserList() {
     this.users$ = this.service.getAll();
   }
-
 }

@@ -22,5 +22,4 @@ export class APITokensPageComponent extends TrackById implements OnInit {
   refreshList() {
     this.apiTokens$ = this.apiTokenService.getAll();
   }
-
 }

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Router, Params } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { serverURL } from './config';
-import { BootService, AppConfigService } from '@services/boot';
+import { AppConfigService, BootService } from '@services/boot';
 import { Lock } from '@components/util';
 import { Observable } from 'rxjs';
 
-import { redirectForOIDC, redirectForOIDCProvider } from '@services/util';
+import { redirectForOIDC } from '@services/util';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -88,5 +88,4 @@ export class AuthService {
 
     return auth.user;
   }
-
 }

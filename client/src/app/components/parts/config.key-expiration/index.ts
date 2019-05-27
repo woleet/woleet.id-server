@@ -66,5 +66,4 @@ export class ConfigKeyExpirationComponent extends ErrorMessageProvider implement
   getSeconds(str) {
     return timestring(str);
   }
-
 }

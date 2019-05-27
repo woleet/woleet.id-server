@@ -16,5 +16,4 @@ export class EnrollmentService {
     return this.http.post<boolean>
       (`${serverURL}/enrollment/${enrollmentId}/create-signature-request`, { email: email });
   }
-
 }

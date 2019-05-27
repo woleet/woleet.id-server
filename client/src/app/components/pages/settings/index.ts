@@ -13,5 +13,4 @@ export class SettingsPageComponent implements OnInit {
   ngOnInit() {
     this.admin = this.auth.isAdmin();
   }
-
 }

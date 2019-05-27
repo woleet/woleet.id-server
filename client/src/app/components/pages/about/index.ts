@@ -7,5 +7,4 @@ import { environment } from '@env/environment';
 export class AboutPageComponent {
 
   env = environment;
-
 }

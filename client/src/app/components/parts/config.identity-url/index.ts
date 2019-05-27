@@ -59,5 +59,4 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
   cancelEdit() {
     this.editMode = false;
   }
-
 }

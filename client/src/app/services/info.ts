@@ -10,5 +10,4 @@ export class InfoService {
   getInfo() {
     return this.http.get<ApiUserDTOObject>(`${serverURL}/info/`).toPromise();
   }
-
 }

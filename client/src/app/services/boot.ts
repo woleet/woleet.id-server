@@ -115,5 +115,4 @@ export class BootService {
       reboot.next();
     });
   }
-
 }

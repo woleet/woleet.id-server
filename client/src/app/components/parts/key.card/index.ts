@@ -106,5 +106,4 @@ export class KeyCardComponent extends ErrorMessageProvider {
     this.formLocked = false;
     this.update.emit();
   }
-
 }

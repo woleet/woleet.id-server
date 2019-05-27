@@ -65,5 +65,4 @@ export class ConfigEnrollmentExpirationComponent extends ErrorMessageProvider im
   getSeconds(str) {
     return timestring(str);
   }
-
 }

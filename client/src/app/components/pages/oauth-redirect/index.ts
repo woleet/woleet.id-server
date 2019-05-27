@@ -51,8 +51,6 @@ export class OAuthRedirectComponent {
         log.error(err);
         this.errorMsg = `Failed to login: ${err.error.message}`;
       }
-
     });
   }
-
 }

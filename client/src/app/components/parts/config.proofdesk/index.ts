@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
 import { HttpClient } from '@angular/common/http';
@@ -51,7 +51,6 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
         this.form.enable();
       }
     }));
-
   }
 
   registerSubscription(sub: Subscription) {

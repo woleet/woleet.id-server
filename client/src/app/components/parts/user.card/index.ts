@@ -69,5 +69,4 @@ export class UserCardComponent {
   getPhone(user) {
     return user.phone ? new AsYouType().input('+' + user.countryCallingCode + user.phone) : '-';
   }
-
 }

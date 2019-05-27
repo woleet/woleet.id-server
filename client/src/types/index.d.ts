@@ -18,5 +18,4 @@ declare global {
     username: string;
     password: string;
   }
-
 }

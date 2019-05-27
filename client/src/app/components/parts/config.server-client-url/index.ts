@@ -6,65 +6,64 @@ import * as log from 'loglevel';
 import { FormControl } from '@angular/forms';
 
 @Component({
-    selector: 'config-web-client-url',
-    templateUrl: './index.html'
+  selector: 'config-web-client-url',
+  templateUrl: './index.html'
 })
 export class ConfigWebClientUrlComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
 
-    editMode = false;
+  editMode = false;
 
-    formLocked$: Observable<boolean>;
+  formLocked$: Observable<boolean>;
 
-    config$: Observable<ApiServerConfig>;
+  config$: Observable<ApiServerConfig>;
 
-    form: FormControl;
+  form: FormControl;
 
-    private onDestroy: EventEmitter<void>;
+  private onDestroy: EventEmitter<void>;
 
-    constructor(private configService: ConfigService) {
-        super();
-        this.onDestroy = new EventEmitter();
+  constructor(private configService: ConfigService) {
+    super();
+    this.onDestroy = new EventEmitter();
+  }
+
+  ngOnInit() {
+    this.form = new FormControl('', [urlValidator]);
+
+    const config$ = this.config$ = this.configService.getConfig();
+
+    this.formLocked$ = this.configService.isDoingSomething();
+
+    const subscription = config$.subscribe((config) => {
+      if (!config) {
+        return;
+      }
+
+      this.editMode = false;
+      this.form.setValue(config.webClientURL);
+    });
+
+    this.onDestroy.subscribe(() => log.debug('Unsubscribe', subscription.unsubscribe()));
+  }
+
+  ngOnDestroy() {
+    this.onDestroy.emit();
+  }
+
+  async submit() {
+    const webClientURL = this.form.value;
+    log.debug('Set web client URL to', webClientURL);
+    this.configService.update({ webClientURL });
+  }
+
+  cancelEdit() {
+    this.editMode = false;
+  }
+
+  beginEdit() {
+    this.editMode = true;
+    const guessClientURL = `${window.location.origin}`;
+    if (this.form.value === undefined) {
+      this.form.setValue(guessClientURL);
     }
-
-    ngOnInit() {
-        this.form = new FormControl('', [urlValidator]);
-
-        const config$ = this.config$ = this.configService.getConfig();
-
-        this.formLocked$ = this.configService.isDoingSomething();
-
-        const subscription = config$.subscribe((config) => {
-            if (!config) {
-                return;
-            }
-
-            this.editMode = false;
-            this.form.setValue(config.webClientURL);
-        });
-
-        this.onDestroy.subscribe(() => log.debug('Unsubscribe', subscription.unsubscribe()));
-    }
-
-    ngOnDestroy() {
-        this.onDestroy.emit();
-    }
-
-    async submit() {
-        const webClientURL = this.form.value;
-        log.debug('Set web client URL to', webClientURL);
-        this.configService.update({ webClientURL });
-    }
-
-    cancelEdit() {
-        this.editMode = false;
-    }
-
-    beginEdit() {
-        this.editMode = true;
-        const guessClientURL = `${window.location.origin}`;
-        if (this.form.value === undefined) {
-            this.form.setValue(guessClientURL);
-        }
-    }
-
+  }
 }

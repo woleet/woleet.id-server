@@ -58,5 +58,4 @@ export class ConfigContactComponent extends ErrorMessageProvider implements OnIn
   cancelEdit() {
     this.editMode = false;
   }
-
 }

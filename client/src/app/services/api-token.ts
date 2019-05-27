@@ -26,5 +26,4 @@ export class APITokenService {
   delete(apiTokenId: string) {
     return this.http.delete<ApiAPITokenObject>(`${serverURL}/api-token/${apiTokenId}`).toPromise();
   }
-
 }

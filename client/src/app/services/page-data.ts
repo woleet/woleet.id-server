@@ -14,5 +14,4 @@ export class PageDataService {
     this.title = data.title;
     this._hideNav = data.hideNav || false;
   }
-
 }
