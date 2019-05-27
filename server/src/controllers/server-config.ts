@@ -72,16 +72,16 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
       if (up.TCU.data) {
         TCUdata = up.TCU.data;
         const base64Image = up.TCU.data.split(';base64,').pop();
-        writeFileSync(path.join(__dirname, '../../assets/server_TCU.pdf'), Buffer.from(base64Image, 'base64'));
+        await writeFileSync(path.join(__dirname, '../../assets/server_TCU.pdf'), Buffer.from(base64Image, 'base64'));
         log.info('Change TCU file');
         up.TCU.data = null;
       }
       if (up.TCU.toDefault) {
-        TCUdata = 'data:application/pdf;base64,' + readFileSync(
+        TCUdata = 'data:application/pdf;base64,' + await readFileSync(
           path.join(__dirname, '../../assets/default_TCU.pdf'), { encoding: 'base64' });
         const base64Image = TCUdata.split(';base64,').pop();
-        writeFileSync(path.join(__dirname, '../../assets/server_TCU.pdf'), Buffer.from(base64Image, 'base64'));
-        log.info('Reset TCU fil to default value');
+        await writeFileSync(path.join(__dirname, '../../assets/server_TCU.pdf'), Buffer.from(base64Image, 'base64'));
+        log.info('Reset TCU file to default value');
         up.TCU.toDefault = null;
       }
     }
@@ -95,7 +95,7 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
     await checkOIDCConfigChange(up);
     await checkOIDCPConfigChange(up);
     await checkSMTPConfigChange(up);
-    return getInMemoryConfig();
+    return getServerConfig();
   } catch (err) {
     exit('FATAL: Failed update the server configuration.', err);
   }

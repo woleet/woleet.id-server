@@ -5,8 +5,8 @@ type ServerEventTypeEnum =
   | 'config.edit'
   | 'login'
   | 'error'
-  | 'key.create' | 'key.edit' | 'key.delete'
   | 'enrollment.create' | 'enrollment.create-signature-request'
+  | 'key.create' | 'key.edit' | 'key.delete'
   | 'user.create' | 'user.edit' | 'user.delete'
   | 'token.create' | 'token.edit' | 'token.delete'
   ;

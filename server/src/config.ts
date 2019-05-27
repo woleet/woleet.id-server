@@ -107,10 +107,11 @@ export const events = {
   typesEnum: [
     'error',
     'signature', 'login', 'config.edit',
+    'enrollment.create',
     'key.create', 'key.edit', 'key.delete',
-    'enrollment.create', 'enrollment.create-signature-request',
+    'enrollment.create-signature-request',
     'user.create', 'user.edit', 'user.delete',
-    'token.create', 'token.edit', 'token.delete'
+    'token.create', 'token.edit', 'token.delete',
   ]
 };
 
