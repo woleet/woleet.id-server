@@ -7,7 +7,7 @@
       ADD PUBLIC KEY
     </button>
     <div [matTooltipDisabled]="canEnroll()"
-      [matTooltip]="'To activate this option, please setup:\n- Mailing -> SMTP configuration\n- Server URLs -> Web client URL\n- Organization -> admin contact\n- ProofDesk account -> API configuration'">
+      [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL\n- Organization / admin contact\n- ProofDesk account / API configuration'">
       <button fxLayout="column" mat-raised-button color="primary" (click)="sendEnrollmentMail()"
         [disabled]="!canEnroll()">
         ENROLL PUBLIC KEY
