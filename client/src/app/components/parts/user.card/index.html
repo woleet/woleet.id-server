@@ -26,20 +26,14 @@
             <div>
               <div fxLayout="row" fxLayoutGap="5px">
                 <div fxLayout="column">
-                  <div fxLayout="row" dir="rtl" class="label">
-                    username
-                  </div>
+                  <div fxLayout="row" dir="rtl" class="label">username</div>
                   <div fxLayout="row" dir="rtl" class="label">email</div>
-                  <div fxLayout="row" dir="rtl" class="label">phone
-                  </div>
+                  <div fxLayout="row" dir="rtl" class="label">phone</div>
                 </div>
                 <div fxLayout="column">
-                  <div fxLayout="row" dir="ltr">
-                    {{ user.username || '-' }}
-                  </div>
+                  <div fxLayout="row" dir="ltr">{{ user.username || '-' }}</div>
                   <div fxLayout="row" dir="ltr">{{ user.email || '-' }}</div>
-                  <div fxLayout="row" dir="ltr">
-                    {{ getPhone(user) }}</div>
+                  <div fxLayout="row" dir="ltr">{{ getPhone(user) }}</div>
                 </div>
               </div>
             </div>

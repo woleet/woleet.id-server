@@ -3,7 +3,7 @@ import { serverConfig } from '../config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { exit } from '../exit';
-import { writeFileSync, readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import * as path from 'path';
 import * as https from 'https';
 
@@ -14,7 +14,7 @@ const { CONFIG_ID } = serverConfig;
 let inMemoryConfig: InternalServerConfigObject = null;
 
 let TCUdata: string = 'data:application/pdf;base64,' + readFileSync(
-  path.join(__dirname, '../../assets/server_TCU.pdf'), { encoding: 'base64' });
+  path.join(__dirname, '../../assets/custom_TCU.pdf'), { encoding: 'base64' });
 
 function getInMemoryConfig(): InternalServerConfigObject {
   return inMemoryConfig;
@@ -72,7 +72,7 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
       if (up.TCU.data) {
         TCUdata = up.TCU.data;
         const base64Image = up.TCU.data.split(';base64,').pop();
-        await writeFileSync(path.join(__dirname, '../../assets/server_TCU.pdf'), Buffer.from(base64Image, 'base64'));
+        await writeFileSync(path.join(__dirname, '../../assets/custom_TCU.pdf'), Buffer.from(base64Image, 'base64'));
         log.info('Change TCU file');
         up.TCU.data = null;
       }
@@ -80,7 +80,7 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
         TCUdata = 'data:application/pdf;base64,' + await readFileSync(
           path.join(__dirname, '../../assets/default_TCU.pdf'), { encoding: 'base64' });
         const base64Image = TCUdata.split(';base64,').pop();
-        await writeFileSync(path.join(__dirname, '../../assets/server_TCU.pdf'), Buffer.from(base64Image, 'base64'));
+        await writeFileSync(path.join(__dirname, '../../assets/custom_TCU.pdf'), Buffer.from(base64Image, 'base64'));
         log.info('Reset TCU file to default value');
         up.TCU.toDefault = null;
       }

@@ -1,15 +1,15 @@
-import { Enrollment, User, Key } from '../database';
-import { NotFoundEnrollmentError, EnrollmentExpiredError } from '../errors';
+import { Enrollment, Key, User } from '../database';
+import { EnrollmentExpiredError, NotFoundEnrollmentError } from '../errors';
 import * as crypto from 'crypto';
 import { readFileSync } from 'fs';
 import * as path from 'path';
 import { getServerConfig } from './server-config';
 import * as https from 'https';
-import log = require('loglevel');
 import { Observable } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { sendEnrollmentFinalizeEmail } from './send-email';
 import * as timestring from 'timestring';
+import log = require('loglevel');
 
 /**
  * Enrollment
@@ -90,7 +90,7 @@ export async function deleteEnrollment(id: string): Promise<InternalEnrollmentOb
 
 export async function getTCUHash(): Promise<string> {
 
-  const TCU = readFileSync(path.join(__dirname, '../../assets/server_TCU.pdf'), { encoding: 'base64' });
+  const TCU = readFileSync(path.join(__dirname, '../../assets/custom_TCU.pdf'), { encoding: 'base64' });
 
   const hash = crypto.createHash('sha256');
   hash.update(Buffer.from(TCU, 'base64'));
