@@ -1,6 +1,6 @@
 <div class="form-container">
   <div *ngIf="!validationStep">
-    <form [formGroup]="formEmail" autoComplete="off" (submit)="resetPassword()" #f="ngForm">
+    <form [formGroup]="formEmail" autocomplete="off" (submit)="resetPassword()" #f="ngForm">
       <mat-form-field class="w-100">
         <input matInput type="email" placeholder="Email" formControlName="email" (focus)="emailInputFocused = true"
           (focusout)="emailInputFocused = false" required>
@@ -15,7 +15,7 @@
     </form>
   </div>
   <div *ngIf="validationStep">
-    <form [formGroup]="formValidate" autoComplete="off" (submit)="validate()" #f="ngForm">
+    <form [formGroup]="formValidate" autocomplete="off" (submit)="validate()" #f="ngForm">
       <mat-form-field class="w-100" *ngIf="formValidate.get('password')  as f">
         <input matInput type="password" placeholder="New password" formControlName="password" required>
         <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
