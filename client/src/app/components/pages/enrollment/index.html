@@ -48,7 +48,7 @@
       <div>
         <p>The following identity information will be attached to your signature to identify you as a signatory:</p>
         <br>
-        <div *ngIf="user; else loadinguser">
+        <div *ngIf="user; else loadingUser">
           <app-user-card [user]="user" [modes]="['display']"></app-user-card>
         </div>
         <br>
@@ -58,7 +58,7 @@
       </div>
     </div>
     <div>
-      <a href="{{emailstring}}" class="black-link" target="_top">
+      <a href="{{enrollmentRefusalEmailLink}}" class="black-link" target="_top">
         <button mat-button>REFUSE</button>
       </a>
       <button mat-raised-button color="primary" (click)="confirm()">CONFIRM</button>
@@ -68,9 +68,11 @@
       <mat-divider></mat-divider>
       <br>
       <button mat-button matStepperPrevious>BACK</button>
-      <button mat-raised-button color="primary" matStepperNext [disabled]="!isConfirmed"
-        [matTooltip]="!isConfirmed? 'Confirm your identity to continue.':''">NEXT
-      </button>
+      <span [matTooltipDisabled]="isConfirmed" matTooltip="Confirm your identity to continue.">
+        <button mat-raised-button color="primary" matStepperNext [disabled]="!isConfirmed">
+          NEXT
+        </button>
+      </span>
     </div>
   </mat-step>
   <mat-step label="Signature key" state="createKey">
@@ -145,6 +147,6 @@
     </mat-card-content>
   </mat-card>
 </div>
-<ng-template #loadinguser>
+<ng-template #loadingUser>
   <mat-card>Loading...</mat-card>
 </ng-template>

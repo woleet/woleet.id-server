@@ -24,7 +24,7 @@ export class EnrollmentPageComponent implements OnInit {
   secondFormGroup: FormGroup;
   enrollmentId: string;
   user: ApiUserObject;
-  emailstring: string;
+  enrollmentRefusalEmailLink: string;
   TCUURL: SafeUrl;
   errorMessage = '';
   completed = false;
@@ -75,7 +75,7 @@ export class EnrollmentPageComponent implements OnInit {
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
-    this.emailstring = 'mailto:' + this.config.contact + '?Subject=Enrollment Refusal&body=';
+    this.enrollmentRefusalEmailLink = 'mailto:' + this.config.contact + '?Subject=Enrollment Refusal&body=';
   }
 
   confirm() {
