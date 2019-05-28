@@ -4,20 +4,24 @@
     <div fxLayout="column">
       <div fxLayout="row">
         <div fxLayout="column" class="card-icon">
-          <mat-icon>vpn_key_outline</mat-icon>
+          <mat-icon style="height: 32px;">vpn_key_outline</mat-icon>
+          <mat-icon *ngIf="key.holder === 'server'" style="font-size: 36px; color: #ffacac; height: 32px;">
+            vpn_key_outline
+          </mat-icon>
         </div>
         <div fxLayout="column">
           <strong>{{ key.name }}</strong>
           <div>
-            <span>Public key: </span><small><code>{{ key.pubKey }}</code></small></div>
+            <span class="label">public key</span>
+            <code>{{ key.pubKey }}</code>
+          </div>
           <div>
-            <span>Private key held by </span>{{ key.holder }}
+            <span class="label">created on</span>
+            {{ key.createdAt | date }}
           </div>
-          <div class="text-gray text-slim">
-            <span>Created on </span><span>{{ key.createdAt | date }}</span>
-          </div>
-          <div class="text-gray text-slim" *ngIf="key.expiration">
-            <span>Expires on </span><span>{{ key.expiration | date }}</span>
+          <div *ngIf="key.expiration">
+            <span class="label">expires on</span>
+            {{ key.expiration | date }}
           </div>
         </div>
       </div>
