@@ -1,5 +1,5 @@
 import * as nodemailer from 'nodemailer';
-import { getServerConfig } from './server-config';
+import { getServerConfig, setServerConfig } from './server-config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 
@@ -24,15 +24,17 @@ async function configure() {
 
   const { SMTPConfig } = getServerConfig();
 
-  transporter = nodemailer.createTransport(JSON.parse(SMTPConfig));
+  transporter = await nodemailer.createTransport(JSON.parse(SMTPConfig));
 
-  await transporter.verify(function (error, success) {
-    if (error) {
-      log.error(error);
-      Error('Bad configuration');
-    } else {
-      log.info('Server is ready to take our messages');
-    }
+  return new Promise((resolve, reject) => {
+    transporter.verify(function (error, success) {
+      if (error) {
+        reject(error.response);
+      } else {
+        log.info('Server is ready to take our messages');
+        resolve();
+      }
+    });
   });
 }
 
