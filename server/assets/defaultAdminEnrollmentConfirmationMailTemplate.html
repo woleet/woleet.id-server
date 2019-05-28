@@ -22,7 +22,12 @@
                   <span style="font-size: 24px;color: #aaa;">Key enrollment confirmation</span><br><br>
                   <div style="font-size: 15px;line-height: 150%;">
                     Hi,<br><br>
-                    {{userName}} just finished the enrollment of the key {{address}}.
+                    {{#success}}
+                      {{userName}} just finished the enrollment of the key {{address}}.
+                    {{/success}}
+                    {{^success}}
+                      {{userName}} enrollment just failed look the server's logs for more infos.
+                    {{/success}}
                     <br><br>
                   </div>
                   <div style="color:#999;font-size:13px;line-height:150%;">

@@ -89,7 +89,7 @@ export async function sendKeyEnrollmentEmail(email: string): Promise<InternalEnr
   return enrollment;
 }
 
-export async function sendEnrollmentFinalizeEmail(userName: string, address: string): Promise<void> {
+export async function sendEnrollmentFinalizeEmail(userName: string, address: string, success: boolean): Promise<void> {
   const config = getServerConfig();
   const logo = getLogo(config);
 
@@ -97,7 +97,7 @@ export async function sendEnrollmentFinalizeEmail(userName: string, address: str
   const template = readFileSync(
     path.join(__dirname, '../../assets/defaultAdminEnrollmentConfirmationMailTemplate.html'), { encoding: 'ascii' });
   const html = mustache.render(template,
-    { domain: null, logoURL: logo, userName, address });
+    { domain: null, logoURL: logo, userName, address, success });
 
   try {
     await sendEmail(config.contact, subject, html);

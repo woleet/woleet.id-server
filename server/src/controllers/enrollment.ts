@@ -232,8 +232,9 @@ async function finalizeEnrollment(enrollmentId: string, user: ApiUserObject, pub
       holder: 'user',
       userId
     }));
-    sendEnrollmentFinalizeEmail(user.identity.commonName, publicKey);
+    sendEnrollmentFinalizeEmail(user.identity.commonName, publicKey, true);
   } catch (err) {
+    sendEnrollmentFinalizeEmail(user.identity.commonName, publicKey, false);
     log.error(err.errors);
   }
   deleteEnrollment(enrollmentId);
