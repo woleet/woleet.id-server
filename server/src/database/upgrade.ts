@@ -186,16 +186,6 @@ async function upgrade9(sequelize) {
   if (old) {
     log.warn('Rename Onboarding table to Enrollment...');
     const [rename] = await sequelize.query('ALTER TABLE "Onboarding" RENAME TO "Enrollment";');
-
-    log.warn('Add new event...');
-    await sequelize.query(
-      `ALTER TYPE "public"."enum_serverEvents_type" ADD VALUE IF NOT EXISTS 'enrollment.create-signature-request' BEFORE 'user.create'`
-    );
-
-    await sequelize.query(
-      `ALTER TYPE "public"."enum_serverEvents_type" ADD VALUE IF NOT EXISTS`
-      + ` 'enrollment.create' BEFORE 'enrollment.create-signature-request'`
-    );
   }
 }
 

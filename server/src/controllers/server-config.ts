@@ -6,6 +6,7 @@ import { exit } from '../exit';
 import { readFileSync, writeFileSync } from 'fs';
 import * as path from 'path';
 import * as https from 'https';
+import { getAgent } from './utils/agent';
 
 const debug = Debug('id:ctrl:config');
 
@@ -197,7 +198,7 @@ async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
   if (up.proofDeskAPIURL || up.proofDeskAPIToken) {
     debug('Update ProofDesk Config with', { up });
     const url = new URL(up.proofDeskAPIURL || getServerConfig().proofDeskAPIURL);
-    const httpsOptions = {
+    const httpsOptions: any = {
       host: url.host,
       path: url.pathname + '/user/credits',
       method: 'GET',
@@ -206,6 +207,10 @@ async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
         'Authorization': 'Bearer ' + up.proofDeskAPIToken || 'Bearer ' + getServerConfig().proofDeskAPIToken
       }
     };
+    const agent = getAgent(url, '/user/credits');
+    if (agent) {
+      httpsOptions.agent = agent;
+    }
     return new Promise((resolve, reject) => {
       https.get(httpsOptions, (res) => {
         let data = '';

@@ -10,6 +10,7 @@ import { takeWhile } from 'rxjs/operators';
 import { sendEnrollmentFinalizeEmail } from './send-email';
 import * as timestring from 'timestring';
 import log = require('loglevel');
+import { getAgent } from './utils/agent';
 
 /**
  * Enrollment
@@ -102,7 +103,7 @@ export async function createSignatureRequest(hash: string, email: string) {
   const user = await User.getByEmail(email);
   const userJSON = user.toJSON();
   const url = new URL(getServerConfig().proofDeskAPIURL);
-  const httpsOptions = {
+  const httpsOptions: any = {
     host: url.host,
     path: url.pathname + '/signatureRequest',
     method: 'POST',
@@ -111,6 +112,10 @@ export async function createSignatureRequest(hash: string, email: string) {
       'Authorization': 'Bearer ' + getServerConfig().proofDeskAPIToken
     }
   };
+  const agent = getAgent(url, '/signatureRequest');
+  if (agent) {
+    httpsOptions.agent = agent;
+  }
   const body = `{
     "authorizedSignees": [
       {
@@ -137,7 +142,7 @@ export async function createSignatureRequest(hash: string, email: string) {
 
 export async function monitorSignatureRequests(requestId: string, enrollmentId: string, user: ApiUserObject) {
   const url = new URL(getServerConfig().proofDeskAPIURL);
-  const httpsOptions = {
+  const httpsOptionsGet: any = {
     host: url.host,
     path: url.pathname + `/signatureRequest/${requestId}`,
     method: 'GET',
@@ -146,11 +151,15 @@ export async function monitorSignatureRequests(requestId: string, enrollmentId: 
       'Authorization': 'Bearer ' + getServerConfig().proofDeskAPIToken
     }
   };
+  const agentGet = getAgent(url, `/signatureRequest/${requestId}`);
+  if (agentGet) {
+    httpsOptionsGet.agent = agentGet;
+  }
   let result;
   const observable = new Observable<any>(subscriber => {
 
     const interval = setInterval(() => {
-      https.get(httpsOptions, (res) => {
+      https.get(httpsOptionsGet, (res) => {
         let data = '';
         res.on('data', (chunk) => {
           data += chunk;
@@ -176,8 +185,39 @@ export async function monitorSignatureRequests(requestId: string, enrollmentId: 
     }))
     .subscribe(() => { return; },
       error => log.error(error),
-      () => {
-        finalizeEnrollment(enrollmentId, user, result.anchors[0].pubKey);
+      async () => {
+        await finalizeEnrollment(enrollmentId, user, result.anchors[0].pubKey);
+        if (getServerConfig().identityURL) {
+
+          const httpsOptionsPut: any = {
+            host: url.host,
+            path: url.pathname + `/anchor/${result.anchors[0].id}`,
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + getServerConfig().proofDeskAPIToken
+            }
+          };
+          const agentPut = getAgent(url, `/anchor/${result.anchors[0].id}`);
+          if (agentPut) {
+            httpsOptionsPut.agent = agentPut;
+          }
+          const body = `{
+          "identityURL": "${getServerConfig().identityURL}"
+          }`;
+          const req = https.request(httpsOptionsPut, (res) => {
+            log.info('STATUS: ' + res.statusCode);
+            log.info('HEADERS: ' + JSON.stringify(res.headers));
+            res.on('data', function (chunk) {
+              log.info('BODY: ' + chunk);
+            });
+          });
+          req.on('error', function (e) {
+            log.error(e.message);
+          });
+          req.write(body);
+          req.end();
+        }
       }
     );
 }
