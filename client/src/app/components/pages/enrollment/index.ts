@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppConfigService } from '@services/boot';
 import { MatDialog } from '@angular/material';
 import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { EnrollmentService } from '@services/enrollment';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import * as log from 'loglevel';
@@ -43,8 +43,7 @@ export class EnrollmentPageComponent implements OnInit {
   serverPublicInfo: ApiServerConfig['publicInfo'];
 
   constructor(private _formBuilder: FormBuilder, appConfigService: AppConfigService, public dialog: MatDialog,
-    private route: ActivatedRoute, private enrollmentService: EnrollmentService, sanitization: DomSanitizer,
-    private router: Router) {
+    private route: ActivatedRoute, private enrollmentService: EnrollmentService, sanitization: DomSanitizer) {
     this.config = appConfigService.getStartupConfig();
     this.serverPublicInfo = this.config.publicInfo || null;
     this.enrollmentId = this.route.snapshot.params.id;
