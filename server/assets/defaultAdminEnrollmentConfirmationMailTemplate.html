@@ -19,14 +19,14 @@
               <div style="padding:10px">
                 <div style="background-color:#fff;color:#606060!important;padding:18px;
                       max-width:600px;margin: auto;font-family: Helvetica">
-                  <span style="font-size: 24px;color: #aaa;">Key enrollment confirmation</span><br><br>
+                  <span style="font-size: 24px;color: #aaa;">Key registration confirmation</span><br><br>
                   <div style="font-size: 15px;line-height: 150%;">
                     Hi,<br><br>
                     {{#success}}
-                      {{userName}} just finished the enrollment of the key {{address}}.
+                      {{userName}} just finished the registration of the key {{address}}.
                     {{/success}}
                     {{^success}}
-                      {{userName}} enrollment just failed look the server's logs for more infos.
+                      {{userName}} key registration just failed. Please look at server's logs for more info.
                     {{/success}}
                     <br><br>
                   </div>

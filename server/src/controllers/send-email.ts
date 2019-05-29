@@ -76,7 +76,7 @@ export async function sendKeyEnrollmentEmail(email: string): Promise<InternalEnr
   const link = webClientURL + '/enrollment/' +
     enrollment.id;
   const logo = getLogo(config);
-  const subject = 'Signature key enrollment request';
+  const subject = 'Register your signature key';
   const html = mustache.render(config.mailKeyEnrollmentTemplate,
     { keyEnrollmentURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
 
@@ -93,7 +93,7 @@ export async function sendEnrollmentFinalizeEmail(userName: string, address: str
   const config = getServerConfig();
   const logo = getLogo(config);
 
-  const subject = 'Key enrollment confirmation';
+  const subject = 'Key registration confirmation';
   const template = readFileSync(
     path.join(__dirname, '../../assets/defaultAdminEnrollmentConfirmationMailTemplate.html'), { encoding: 'ascii' });
   const html = mustache.render(template,

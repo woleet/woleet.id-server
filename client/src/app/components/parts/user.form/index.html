@@ -24,13 +24,13 @@
           [matTooltipDisabled]="canSendEmailToUser()"
           [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL'"
           (change)="sendPasswordEmailCheck()">
-          Send password initialization link by email
+          Send password initialization link
         </mat-checkbox>
         <div [matTooltipDisabled]="canSendEmailToUser()"
           [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL'">
           <button mat-raised-button *ngIf="mode === 'edit'" matInput [disabled]="!canSendEmailToUser()"
             (click)="sendResetPasswordEmail(user)">
-            Send password reset link by email
+            Send password reset link
           </button>
         </div>
         <mat-form-field class="w-100">
@@ -96,7 +96,7 @@
     <mat-checkbox matInput [disabled]="!canEnroll()" [matTooltipDisabled]="canEnroll()"
       [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL\n- Organization / Admin contact\n- ProofDesk account / API configuration'"
       [(ngModel)]="sendEnrollmentEmail">
-      Enroll user's public key by email
+      Send public key registration request
     </mat-checkbox>
     <br>
     <br>
