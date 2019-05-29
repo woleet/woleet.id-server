@@ -2,7 +2,7 @@
   <!-- Display mode -->
   <mat-card-content *ngIf="!editMode" fxLayout="row" fxLayoutAlign="space-between start">
     <div fxLayout="column">
-      <div fxLayout="row">
+      <div fxLayout="row" fxFill>
         <div fxLayout="column" class="card-icon">
           <mat-icon style="height: 32px;">vpn_key_outline</mat-icon>
           <mat-icon *ngIf="key.holder === 'server'" style="font-size: 36px; color: #ffacac; height: 32px;">
@@ -10,18 +10,18 @@
           </mat-icon>
         </div>
         <div fxLayout="column">
-          <strong>{{ key.name }}</strong>
-          <div>
-            <span class="label">public key</span>
-            <code>{{ key.pubKey }}</code>
+          <div fxLayout="row" style="margin-bottom: 10px"><strong>{{ key.name }}</strong></div>
+          <div fxLayout="row" fxLayoutGap="5px">
+            <div fxLayout="column" class="label" dir="rtl">public key</div>
+            <div fxLayout="column">{{ key.pubKey }}</div>
           </div>
-          <div>
-            <span class="label">created on</span>
-            {{ key.createdAt | date }}
+          <div fxLayout="row" fxLayoutGap="5px">
+            <div fxLayout="column" class="label" dir="rtl">created on</div>
+            <div fxLayout="column">{{ key.createdAt | date }}</div>
           </div>
-          <div *ngIf="key.expiration">
-            <span class="label">expires on</span>
-            {{ key.expiration | date }}
+          <div *ngIf="key.expiration" fxLayout="row" fxLayoutGap="5px">
+            <div fxLayout="column" class="label" dir="rtl">expires on</div>
+            <div fxLayout="column">{{ key.expiration | date }}</div>
           </div>
         </div>
       </div>
