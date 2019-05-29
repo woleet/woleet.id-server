@@ -28,11 +28,10 @@ const routes: Routes = [
   { path: 'login', data: { title: 'Login', hideNav: true }, component: LoginPageComponent, canActivate: [HasNoError, IsAnonymous] },
   {
     path: 'reset-password', data: { title: 'ResetPassword', hideNav: true },
-    component: ResetPasswordPageComponent, canActivate: [HasNoError, IsAnonymous]
+    component: ResetPasswordPageComponent
   },
   {
-    path: 'enrollment/:id', data: { title: 'Enrollment', hideNav: true }, component: EnrollmentPageComponent,
-    canActivate: [HasNoError, IsAnonymous]
+    path: 'enrollment/:id', data: { title: 'Enrollment', hideNav: true }, component: EnrollmentPageComponent
   },
   { path: 'setup', data: { title: 'Setup' }, component: SetupPageComponent, canActivate: [NeedConfig] },
   { path: 'user', data: { title: 'My profile' }, component: UserPageComponent, canActivate: [IsUser] },
