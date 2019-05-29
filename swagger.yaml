@@ -1044,7 +1044,7 @@ components:
         defaultKeyId:
           type: string
           format: uuid
-          description: Identifier of the default key to use for this user.
+          description: Identifier of the default key to use for this user. Cannot be set to an extern-key.
           example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
     UserGet:
       allOf:
