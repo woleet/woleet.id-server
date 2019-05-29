@@ -109,18 +109,24 @@
     <h1>Accept and sign our Terms and Conditions of Use</h1>
     <div>
       <div>
-        <p>You can click <a [href]="TCUURL" download="TCU.pdf">here</a>
-          to download and read Woleet Signature Service Terms and Conditions of Use.</p>
+        <p>Click on the button bellow to download and review the Woleet Signature Service Terms and Conditions of Use.
+        </p>
         <p>If you agree, please click on the <strong>Get signature invitation email</strong> button below
           to sign Woleet Signature Service Terms and Conditions of Use.</p>
       </div>
+    </div>
+    <div>
+      <a [href]="TCUURL" download="TCU.pdf" class="black-link">
+        <button mat-raised-button color="primary" (click)="download()">DOWNLOAD TCU</button>
+      </a>
     </div>
     <div>
       <br>
       <mat-divider></mat-divider>
       <br>
       <button mat-button matStepperPrevious>BACK</button>
-      <button mat-raised-button color="primary" (click)="signTCU()">GET SIGNATURE INVITATION EMAIL</button>
+      <button mat-raised-button color="primary" (click)="signTCU()" [disabled]="!isDownloaded()">GET SIGNATURE
+        INVITATION EMAIL</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>

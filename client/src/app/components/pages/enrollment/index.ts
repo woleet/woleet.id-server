@@ -28,6 +28,7 @@ export class EnrollmentPageComponent implements OnInit {
   TCUURL: SafeUrl;
   errorMessage = '';
   completed = false;
+  isDownloaded = false;
 
   config: {
     publicInfo: {
@@ -89,5 +90,9 @@ export class EnrollmentPageComponent implements OnInit {
       }, (error) => {
         log.error(error);
       });
+  }
+
+  download () {
+    this.isDownloaded = true;
   }
 }
