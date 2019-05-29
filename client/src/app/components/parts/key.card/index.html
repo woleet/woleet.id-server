@@ -58,7 +58,7 @@
     <div fxLayout="row" fxLayoutAlign="space-between start">
       <div fxLayout="column">
         <br>
-        <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="setAsDefault">
+        <mat-checkbox *ngIf="key.holder === 'server'" placeholder="Set as default key" [(ngModel)]="setAsDefault">
           Set as default
         </mat-checkbox>
       </div>

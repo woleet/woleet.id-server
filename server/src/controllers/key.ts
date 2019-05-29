@@ -135,3 +135,9 @@ export async function deleteKey(id: string): Promise<InternalKeyObject> {
   return key.toJSON();
 }
 
+export async function isKeyHoldedByServer(id: string): Promise<Boolean> {
+
+  const key = await Key.getById(id);
+
+  return key.toJSON().holder === 'server' ? true : false;
+}

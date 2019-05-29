@@ -4,6 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider, nextYear } from '@components/util';
 import { UserService } from '@services/user';
 import { confirm } from '../../util';
+import * as log from 'loglevel';
 
 @Component({
   selector: 'app-key-card',
@@ -41,7 +42,7 @@ export class KeyCardComponent extends ErrorMessageProvider {
 
   startDate = nextYear();
 
-  expiration = new FormControl({value: '', disabled: true}, []);
+  expiration = new FormControl({ value: '', disabled: true }, []);
 
   constructor(private keyService: KeyService, private userService: UserService) {
     super();
@@ -80,7 +81,11 @@ export class KeyCardComponent extends ErrorMessageProvider {
     }
 
     if (this.default !== this.setAsDefault) {
-      await this.userService.update(this.userId, { defaultKeyId: this.setAsDefault ? this.key.id : null });
+      try {
+        await this.userService.update(this.userId, { defaultKeyId: this.setAsDefault ? this.key.id : null });
+      } catch (err) {
+        log.error(err);
+      }
       this.updateUser.emit();
     }
 
