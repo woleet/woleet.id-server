@@ -27,7 +27,8 @@ export class AppConfigService {
     TCU: {
       data: string
     },
-    contact: string
+    contact: string,
+    organizationName: string
   };
   bootOnLogin = false;
 

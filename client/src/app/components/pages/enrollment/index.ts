@@ -38,7 +38,8 @@ export class EnrollmentPageComponent implements OnInit {
     TCU: {
       data: string
     },
-    contact: string
+    contact: string,
+    organizationName: string,
   };
   serverPublicInfo: ApiServerConfig['publicInfo'];
 

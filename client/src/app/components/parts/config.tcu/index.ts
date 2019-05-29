@@ -20,6 +20,7 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
   fileInformation: string;
   errorMessage: string;
   TCUURL: SafeUrl;
+  organizationName: string;
 
   private onDestroy: EventEmitter<void>;
 
@@ -42,6 +43,7 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
         return;
       }
       this.TCUURL = this.sanitization.bypassSecurityTrustUrl(config.TCU.data);
+      this.organizationName = config.organizationName;
     });
 
     this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
