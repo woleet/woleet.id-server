@@ -5,7 +5,7 @@ import { validate } from '../schemas';
 import { createUser, getUserById, updateUser, getAllUsers, deleteUser } from '../../controllers/user';
 import { serializeUser } from '../serialize/user';
 import { store as event } from '../../controllers/server-event';
-import { isKeyHoldedByServer } from 'src/controllers/key';
+import { isKeyHoldedByServer } from '../../controllers/key';
 import { BadRequest } from 'http-errors';
 
 const vid = validate.param('id', 'uuid');
