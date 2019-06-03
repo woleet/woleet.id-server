@@ -27,7 +27,7 @@ export class ConfigOrganizationNameComponent extends ErrorMessageProvider implem
   }
 
   ngOnInit() {
-    this.form = new FormControl('', [Validators.email]);
+    this.form = new FormControl('', [Validators.required]);
 
     const config$ = this.config$ = this.configService.getConfig();
 

@@ -145,7 +145,7 @@ export async function sendEmail(email: string, subject: string, html: any) {
 function MailTemplate(email: string, subject: string, html: any): object {
   const organizationName = getServerConfig().organizationName;
   return {
-    from: organizationName + 'no-reply@' + organizationName + '.com',
+    from: organizationName + ' no-reply@' + organizationName + '.com',
     to: email,
     subject: subject,
     html: html
