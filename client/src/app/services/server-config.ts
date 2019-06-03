@@ -13,6 +13,7 @@ export class ServerConfigService {
   private isDoingSomething$: BehaviorSubject<boolean>;
 
   private config$: BehaviorSubject<ApiServerConfig> = null;
+  private isConfigInit = false;
 
   private defaultKeyId: string;
   private defaultKey$: BehaviorSubject<ApiKeyObject>;
@@ -37,16 +38,20 @@ export class ServerConfigService {
     this.defaultKeyOwner$ = new BehaviorSubject(null);
   }
 
+  // Make an http call to initialize the config$ attribut
+  loadConfig() {
+    this.http.get<ApiServerConfig>(`${serverURL}/server-config`)
+      .subscribe((up) => {
+        log.debug('initialised', up);
+        this.config$.next(up);
+      });
+    this.isConfigInit = true;
+  }
+
+  // Get the server-config stocked as an attribute (as a observable in config$) or get it from the server the first time.
   getConfig(): Observable<ApiServerConfig> {
-    if (this._lastChecked < (+new Date - 3 * 1000)) {
-      this.incrLock();
-      this._lastChecked = +new Date;
-      this.http.get<ApiServerConfig>(`${serverURL}/server-config`)
-        .subscribe((up) => {
-          log.debug('initialised', up);
-          this.decrLock();
-          this.config$.next(up);
-        });
+    if (!this.isConfigInit) {
+      this.loadConfig();
     }
     return this.config$.asObservable();
   }
