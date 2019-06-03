@@ -139,5 +139,9 @@ export async function isKeyHoldedByServer(id: string): Promise<Boolean> {
 
   const key = await Key.getById(id);
 
+  if (!key) {
+    throw new NotFoundKeyError();
+  }
+
   return key.toJSON().holder === 'server' ? true : false;
 }
