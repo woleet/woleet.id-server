@@ -46,7 +46,7 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
 
   if (user.getDataValue('passwordHash') === null) {
     html = mustache.render(config.mailOnboardingTemplate,
-      { validationURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
+      { resetPasswordURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
     subject = 'Onboarding';
   } else {
     html = mustache.render(config.mailResetPasswordTemplate,
