@@ -5,7 +5,7 @@ import { secureModule } from '../config';
 import {
   NotFoundUserError, NotFoundKeyError, BlockedUserError,
   BlockedKeyError, NoDefaultKeyError, ServerNotReadyError,
-  KeyOwnerMismatchError, ExpiredKeyError
+  KeyOwnerMismatchError, ExpiredKeyError, KeyNotHeldByServerError
 } from '../errors';
 
 export function signMessage(key: SequelizeKeyObject, message: string, compressed = true): Promise<string> {
@@ -76,6 +76,11 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
   // A blocked key cannot sign
   if (key.getDataValue('status') === 'blocked') {
     throw new BlockedKeyError();
+  }
+
+  // Block the call if the private key is not held by the server
+  if (key.get('holder') !== 'server') {
+    throw new KeyNotHeldByServerError();
   }
 
   // A expired key cannot sign

@@ -87,6 +87,14 @@ export class BlockedKeyError extends BlockedResourceError {
   name = 'BlockedKeyError';
 }
 
+export class KeyNotHeldByServerError extends BlockedResourceError {
+  constructor(m = 'The private key is not held by the server') {
+    super(m);
+  }
+
+  name = 'KeyNotHeldByServerError';
+}
+
 export class ExpiredKeyError extends BlockedResourceError {
   constructor(m = 'Key expired') {
     super(m);
