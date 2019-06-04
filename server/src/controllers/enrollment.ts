@@ -9,8 +9,8 @@ import { Observable } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { sendEnrollmentFinalizeEmail } from './send-email';
 import * as timestring from 'timestring';
-import log = require('loglevel');
 import { getAgent } from './utils/agent';
+import log = require('loglevel');
 
 /**
  * Enrollment
@@ -53,13 +53,14 @@ export async function getEnrollmentById(id: string): Promise<InternalEnrollmentO
 }
 
 export async function getOwner(id): Promise<InternalUserObject> {
-  const enrollment = await Enrollment.getById(id);
 
+  // Get enrollment
+  const enrollment = await Enrollment.getById(id);
   if (!enrollment) {
     throw new NotFoundEnrollmentError();
   }
 
-
+  // Check that enrollment is not expired
   if (enrollment.toJSON().expiration) {
     if (Date.now() > enrollment.toJSON().expiration) {
       deleteEnrollment(id);
@@ -67,9 +68,8 @@ export async function getOwner(id): Promise<InternalUserObject> {
     }
   }
 
-  // get user by enrollment userId
+  // Return enrolled user
   const user = await User.getById(enrollment.get('userId'));
-
   return user.toJSON();
 }
 
@@ -183,7 +183,9 @@ export async function monitorSignatureRequests(requestId: string, enrollmentId: 
         return true;
       }
     }))
-    .subscribe(() => { return; },
+    .subscribe(() => {
+        return;
+      },
       error => log.error(error),
       async () => {
         await finalizeEnrollment(enrollmentId, user, result.anchors[0].pubKey);

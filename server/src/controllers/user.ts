@@ -96,7 +96,7 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
 }
 
 export async function getUserById(id: string): Promise<InternalUserObject> {
-  debug('Get user' + id);
+  debug('Get user', id);
 
   const user = await User.getById(id);
 
@@ -119,7 +119,7 @@ export async function searchAllUsers(search): Promise<InternalUserObject[]> {
 }
 
 export async function deleteUser(id: string): Promise<InternalUserObject> {
-  debug('Deleting user' + id);
+  debug('Deleting user', id);
 
   const user = await User.delete(id);
 

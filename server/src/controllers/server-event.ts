@@ -2,9 +2,9 @@ import { ServerEvent } from '../database';
 
 import * as Debug from 'debug';
 import * as log from 'loglevel';
+import { events as config } from '../config';
 
 const debug = Debug('id:events');
-import { events as config } from '../config';
 
 export class EventStore {
 
@@ -36,10 +36,9 @@ export class EventStore {
     if (len >= config.batchSize) {
       this.flush();
     } else if (!this.timer) {
-      debug('set timer');
+      debug('Set timer');
       this.timer = setTimeout(() => this.flush(), config.flushAfter);
     }
-
   }
 
   flush() {
