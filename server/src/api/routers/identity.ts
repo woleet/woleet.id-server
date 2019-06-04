@@ -30,10 +30,6 @@ router.get('/identity', async function (ctx) {
     throw new BadRequest('Invalid query parameter "pubKey"');
   }
 
-  if (!leftData) {
-    throw new BadRequest('Missing mandatory "leftData" parameter');
-  }
-
   ctx.body = await getIdentity(leftData, pubKey);
 });
 

@@ -60,5 +60,4 @@ export class ConfigLogoUrlComponent extends ErrorMessageProvider implements OnIn
   cancelEdit() {
     this.editMode = false;
   }
-
 }

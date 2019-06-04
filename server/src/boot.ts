@@ -59,5 +59,4 @@ initdb()
   .catch((err) => exit(`Failed to update server config: ${err.message}`, err))
   .then(() => bootServers())
   .catch((err) => exit(`Failed to start servers: ${err.message}`, err))
-  .then(() => log.info('All done. You can now detach the CLI (ctrl+c)'))
-;
+  .then(() => log.info('All done. You can now detach the CLI (ctrl+c)'));

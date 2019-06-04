@@ -22,7 +22,7 @@ export class LoginPageComponent {
   useOIDC: boolean;
   serverPublicInfo: ApiServerConfig['publicInfo'];
   useSMTP: boolean;
-  ServerClientURL: string;
+  webClientURL: string;
   redirect: string;
   config: { OIDCPProviderURL: string; useOpenIDConnect: boolean; hasSession: boolean; publicInfo: object };
 
@@ -54,7 +54,7 @@ export class LoginPageComponent {
     this.useOIDC = config && config.useOpenIDConnect;
     this.serverPublicInfo = config.publicInfo || null;
     this.useSMTP = config && config.useSMTP;
-    this.ServerClientURL = config.ServerClientURL || null;
+    this.webClientURL = config.webClientURL || null;
   }
 
   async login() {

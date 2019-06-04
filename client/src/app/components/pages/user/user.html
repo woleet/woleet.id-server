@@ -1,4 +1,0 @@
-<div *ngIf="(info$ | async) as user; else loading">
-  <app-user-card [user]="user"></app-user-card>
-</div>
-<ng-template #loading>Loading...</ng-template>

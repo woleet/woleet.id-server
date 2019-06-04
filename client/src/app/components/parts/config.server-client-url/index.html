@@ -1,15 +1,15 @@
 <mat-card *ngIf="!editMode">
-  <mat-card-title>Server's Web Client URL</mat-card-title>
+  <mat-card-title>Web client URL</mat-card-title>
   <mat-divider></mat-divider>
   <br>
   <div *ngIf="(config$ | async) as config; else loading">
     <div fxLayout="row" fxLayoutAlign="space-between start">
       <div fxLayout="column" class="btn-h">
-        <span>{{ config.ServerClientURL || 'unset' }}</span>
+        <span>{{ config.webClientURL || 'unset' }}</span>
       </div>
       <div fxLayout="column">
         <button mat-icon-button color="primary" [disabled]="(formLocked$ | async)" (click)="beginEdit()">
-          <mat-icon matTooltip="Edit server's web client URL" aria-label="Edit server's web client URL">edit</mat-icon>
+          <mat-icon matTooltip="Edit web client URL" aria-label="Edit web client URL button">edit</mat-icon>
         </button>
       </div>
     </div>
@@ -17,7 +17,7 @@
   <ng-template #loading>Loading...<br></ng-template>
 </mat-card>
 <mat-card *ngIf="editMode">
-  <mat-card-title>Set server's Web Client URL</mat-card-title>
+  <mat-card-title>Set web client URL</mat-card-title>
   <mat-divider></mat-divider>
   <br>
   <br>
@@ -30,7 +30,9 @@
   <ng-template #loading>Loading...<br></ng-template>
   <mat-card-actions *ngIf="(config$ | async) as config; else loading">
     <button mat-raised-button color="primary" (click)="submit()"
-      [disabled]="(formLocked$ | async) || (config.ServerClientURL == form.value) || (form.invalid)">SAVE</button>
+      [disabled]="(formLocked$ | async) || (config.websClientURL == form.value) || (form.invalid)">
+      SAVE
+    </button>
     <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
   </mat-card-actions>
 </mat-card>

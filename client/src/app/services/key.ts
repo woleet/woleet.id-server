@@ -34,5 +34,14 @@ export class KeyService {
   delete(keyId: string) {
     return this.http.delete<ApiKeyObject>(`${serverURL}/key/${keyId}`).toPromise();
   }
+}
 
+@Injectable()
+export class ExternalKeyService {
+
+  constructor(private http: HttpClient) { }
+
+  create(userId: string, key: ApiPostKeyObject) {
+    return this.http.post<ApiKeyObject>(`${serverURL}/user/${userId}/extern-key`, key).toPromise();
+  }
 }

@@ -44,7 +44,7 @@ export class ConfigKeyExpirationComponent extends ErrorMessageProvider implement
       this.form.setValue(config.keyExpirationOffset);
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => log.debug('Unsubscribe', subscription.unsubscribe()));
   }
 
   ngOnDestroy() {
@@ -66,5 +66,4 @@ export class ConfigKeyExpirationComponent extends ErrorMessageProvider implement
   getSeconds(str) {
     return timestring(str);
   }
-
 }

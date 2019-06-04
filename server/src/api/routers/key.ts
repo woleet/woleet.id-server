@@ -4,6 +4,7 @@ import * as Router from 'koa-router';
 import {
   createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, getOwner, updateKey
 } from '../../controllers/key';
+import { externalCreateKey } from '../../controllers/key';
 import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
@@ -51,6 +52,35 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
     authorizedUserId: ctx.session.user.get('id'),
     associatedTokenId: null,
     associatedUserId: null,
+    associatedKeyId: created.id,
+    data: key
+  });
+
+  ctx.body = serializeKey(created);
+});
+
+/**
+ * @route: /user/{userId}/key/
+ * @swagger
+ *  operationId: createExternal-key
+ */
+router.post('/user/:userId/extern-key', vuid, validate.body('createKey'), async function (ctx) {
+  const { userId } = ctx.params;
+  const key: ApiPostKeyObject = ctx.request.body;
+
+  let created;
+
+  try {
+    created = await externalCreateKey(userId, key);
+  } catch (error) {
+    throw new BadRequest(error);
+  }
+
+  event.register({
+    type: 'key.create',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: userId,
     associatedKeyId: created.id,
     data: key
   });

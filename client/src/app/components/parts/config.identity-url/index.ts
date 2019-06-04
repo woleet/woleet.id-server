@@ -43,7 +43,7 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
       this.form.setValue(config.identityURL);
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => log.debug('Unsubscribe', subscription.unsubscribe()));
   }
 
   ngOnDestroy() {
@@ -59,5 +59,4 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
   cancelEdit() {
     this.editMode = false;
   }
-
 }

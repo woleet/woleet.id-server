@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
-import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
+import { ErrorMessageProvider } from '@components/util';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -58,7 +58,6 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
         this.formSMTP.enable();
       }
     }));
-
   }
 
   registerSubscription(sub: Subscription) {
@@ -94,5 +93,4 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
     this.changed = true;
     this.formValid$.next(this.isFormValid());
   }
-
 }

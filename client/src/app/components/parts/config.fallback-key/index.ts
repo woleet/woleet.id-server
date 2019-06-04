@@ -90,5 +90,4 @@ export class ConfigFallbackKeyComponent implements OnInit, OnDestroy {
   cancelEdit() {
     this.editMode = false;
   }
-
 }

@@ -16,7 +16,7 @@ $nav-border: 1px solid #e0e0e0;
 }
 
 .sub-logo {
-  margin-left: 10px;
+  margin-left: -30px;
 }
 
 mat-toolbar {
@@ -39,6 +39,7 @@ mat-toolbar {
 
 mat-sidenav-container{
   background-color: #e4e7ea;
+  height: 100%;
 }
 
 .sidenav {
@@ -88,5 +89,11 @@ mat-sidenav-container{
 }
 
 .collapse {
-  // width: 100px;
+  width: 0px;
+}
+
+
+.collapse-button {
+  height: 28px;
+  background-position: center;
 }

@@ -32,6 +32,7 @@ interface ApiUserObject extends UserObject, ApiCommonProperties {
 }
 
 interface ApiUserDTOObject extends UserObject {
+  id: string;
   email: string | null;
   countryCallingCode: string | null;
   phone: string | null;
@@ -47,6 +48,8 @@ interface ApiPostUserObject extends UserObject {
   countryCallingCode?: string;
   phone?: string;
   identity: ApiIdentityObject;
+  sendKeyEnrollmentMail: boolean;
+  createDefaultKey: boolean;
 }
 
 interface ApiPutUserObject extends UserObject {

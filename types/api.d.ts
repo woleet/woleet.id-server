@@ -6,13 +6,6 @@ interface AuthResponseObject {
 
 /* Shared */
 
-interface ApiParanoidProperties {
-
-  /** Unix timestamp (ms) */
-  deletedAt: number;
-
-}
-
 interface ApiCommonProperties {
 
   /** UUID */

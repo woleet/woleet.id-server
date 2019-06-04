@@ -30,13 +30,24 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   OIDCPIssuerURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   OIDCPClients: Joi.array().items(oidcpClient).allow(null),
   keyExpirationOffset: Joi.string().allow(null),
+  enrollmentExpirationOffset: Joi.string().allow(null),
   // SMTP config
   useSMTP: Joi.boolean(),
   SMTPConfig: Joi.string().allow(null),
-  ServerClientURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
+  webClientURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   // Mail template
   mailResetPasswordTemplate: Joi.string().allow(null),
-  mailOnboardingTemplate: Joi.string().allow(null)
+  mailOnboardingTemplate: Joi.string().allow(null),
+  mailKeyEnrollmentTemplate: Joi.string().allow(null),
+  TCU: Joi.object({
+    data: Joi.string().allow(null),
+    toDefault: Joi.boolean().allow(null),
+  }).allow(null),
+  contact: Joi.string().allow(null),
+  // ProofDesk config
+  proofDeskAPIURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
+  proofDeskAPIToken: Joi.string().allow(null),
+  proofDeskAPIIsValid: Joi.number().allow(null)
 });
 
 export { updateConfig };

@@ -5,6 +5,8 @@ import { router as serverConfig } from './routers/server-config';
 import { router as serverEvent } from './routers/server-event';
 import { router as apiToken } from './routers/api-token';
 import { router as info } from './routers/info';
+import { router as enrollment } from './routers/enrollment';
+import { router as enrollmentCreate } from './routers/enrollment-create';
 import { router as user } from './routers/user';
 import { router as key } from './routers/key';
 import { router as passwordReset } from './routers/passwordReset';
@@ -36,6 +38,7 @@ apiRouter.use(session);
 apiRouter.use(appConfig.routes());
 apiRouter.use(openid.routes());
 apiRouter.use(passwordReset.routes());
+apiRouter.use(enrollment.routes());
 apiRouter.use(userAuth);
 apiRouter.use(info.routes());
 apiRouter.use(adminAuth);
@@ -44,6 +47,7 @@ apiRouter.use(key.routes());
 apiRouter.use(apiToken.routes());
 apiRouter.use(serverEvent.routes());
 apiRouter.use(serverConfig.routes());
+apiRouter.use(enrollmentCreate.routes());
 
 /**
  * Identity

@@ -40,14 +40,18 @@ export async function initServerConfig() {
     if (!config.mailOnboardingTemplate) {
       log.warn('The onboarding template is set to default.');
       config.mailOnboardingTemplate = readFileSync(
-        path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), {encoding: 'ascii'});
+        path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), { encoding: 'ascii' });
     }
     if (!config.mailResetPasswordTemplate) {
-      log.warn('The reset mail template is set to default.');
+      log.warn('The reset password template is set to default.');
       config.mailResetPasswordTemplate = readFileSync(
-        path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), {encoding: 'ascii'});
+        path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), { encoding: 'ascii' });
     }
-
+    if (!config.mailKeyEnrollmentTemplate) {
+      log.warn('The key enrollment mail template is set to default.');
+      config.mailKeyEnrollmentTemplate = readFileSync(
+        path.join(__dirname, '../assets/defaultKeyEnrollmentMailTemplate.html'), { encoding: 'ascii' });
+    }
   } else {
     log.warn('No configuration found in database, creating a new one along with a default admin user...');
     log.debug('Creating an admin user');
@@ -57,7 +61,9 @@ export async function initServerConfig() {
         password: 'pass',
         role: 'admin',
         username: 'admin',
-        identity: { commonName: 'Admin' }
+        identity: { commonName: 'Admin' },
+        createDefaultKey: true,
+        sendKeyEnrollmentMail: false
       });
     } catch (err) {
       return exit(`Failed to create user "admin": ${err.message}`, err);

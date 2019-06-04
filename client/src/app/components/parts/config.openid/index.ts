@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'config-openid',
@@ -68,7 +68,6 @@ export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnIni
         this.form.enable();
       }
     }));
-
   }
 
   registerSubscription(sub: Subscription) {
@@ -109,5 +108,4 @@ export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnIni
     this.changed = true;
     this.formValid$.next(this.isFormValid());
   }
-
 }

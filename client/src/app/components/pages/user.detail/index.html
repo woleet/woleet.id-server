@@ -1,31 +1,45 @@
 <div *ngIf="(keys$ | async) as keys; else loadingKeys">
+  <div fxLayout="row wrap" fxLayoutWrap fxLayoutGap="20px grid" *ngIf="!formOpened && !externalFormOpened">
+    <div fxLaytout="column">
+      <button mat-raised-button color="primary" (click)="formOpened=true">
+        ADD KEY PAIR
+      </button>
+    </div>
+    <div fxLaytout="column">
+      <button mat-raised-button color="primary" (click)="externalFormOpened=true">
+        DECLARE PUBLIC KEY
+      </button>
+    </div>
+    <div [matTooltipDisabled]="canEnroll()"
+      [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL\n- Organization / admin contact\n- ProofDesk account / API configuration'">
+      <button fxLayout="column" mat-raised-button color="primary" (click)="sendEnrollmentMail()"
+        [disabled]="!canEnroll()">
+        SEND PUBLIC KEY REGISTRATION REQUEST
+      </button>
+    </div>
+  </div>
+  <div *ngIf="formOpened">
+    <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="userId"></key-card-create>
+  </div>
+  <div *ngIf="externalFormOpened">
+    <key-card-create-extern (reset)="externalFormOpened=false" (create)="refreshKeyList()" [userId]="userId">
+    </key-card-create-extern>
+  </div>
+  <br>
+  <mat-divider></mat-divider>
   <div *ngIf="keys.length; else noKeys">
-    <div *ngIf="!formOpened">
-      <button mat-raised-button color="primary" (click)="formOpened=true">ADD KEY</button>
-    </div>
-    <div *ngIf="formOpened">
-      <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="userId"></key-card-create>
-    </div>
-    <br>
-    <mat-divider></mat-divider>
     <div *ngFor="let key of keys; trackBy: trackById;">
       <br>
-      <app-key-card
-        [key]="key" [userId]="(user$ | async)?.id"
-        [modes]="['block', 'delete', 'edit']"
-        [default]="(user$ | async)?.defaultKeyId == key.id"
-        (updateUser)="refreshUser()"
-        (delete)="refreshKeyList()"></app-key-card>
+      <app-key-card [key]="key" [userId]="(user$ | async)?.id" [modes]="['block', 'delete', 'edit']"
+        [default]="(user$ | async)?.defaultKeyId == key.id" (updateUser)="refreshUser()" (delete)="refreshKeyList()">
+      </app-key-card>
     </div>
   </div>
   <ng-template #noKeys>
-    <mat-card fxLayout="row" fxLayoutAlign="space-between start" *ngIf="!formOpened">
+    <br>
+    <mat-card fxLayout="row" fxLayoutAlign="space-between start">
       <span class="btn-h">This user does not have any key</span>
-      <button mat-raised-button color="primary" (click)="formOpened=true">ADD ONE</button>
     </mat-card>
-    <div *ngIf="formOpened">
-      <key-card-create (reset)="formOpened=false" (create)="refreshKeyList()" [userId]="userId"></key-card-create>
-    </div>
   </ng-template>
 </div>
 <ng-template #loadingKeys>

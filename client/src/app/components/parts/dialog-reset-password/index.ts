@@ -3,7 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'dialogResetPassword',
-  templateUrl: 'index.html'
+  templateUrl: 'index.html',
+  styleUrls: ['style.scss']
 })
 export class DialogResetPasswordComponent {
 

@@ -32,17 +32,33 @@ interface ApiServerConfig {
   OIDCPIssuerURL: string | null;
   OIDCPClients: ApiOIDCPClient[] | null;
   enableOIDCP: boolean;
+
+  enrollmentExpirationOffset?: string;
   keyExpirationOffset?: string;
 
   // SMTP config
   useSMTP: boolean;
   SMTPConfig: string | null;
-  ServerClientURL: string | null;
+  webClientURL: string | null;
 
   // Mail template
   mailResetPasswordTemplate: string | null;
   mailOnboardingTemplate: string | null;
+  mailKeyEnrollmentTemplate: string | null;
 
+  // TCU
+  TCU: {
+    toDefault?: boolean | null;
+    data?: string | null;
+  } | null;
+
+  // Admin contact
+  contact: string | null;
+
+  // ProofDesk config
+  proofDeskAPIURL: string | null;
+  proofDeskAPIToken: string | null;
+  proofDeskAPIIsValid: number | null;
 }
 
 interface ApiServerConfigUpdate {
@@ -68,14 +84,31 @@ interface ApiServerConfigUpdate {
   OIDCPIssuerURL?: string;
   OIDCPClients?: ApiOIDCPClient[];
   enableOIDCP?: boolean;
+
+  enrollmentExpirationOffset?: string;
   keyExpirationOffset?: string;
 
   // SMTP config
   useSMTP?: boolean;
   SMTPConfig?: string;
-  ServerClientURL?: string;
+  webClientURL?: string;
 
   // Mail template
   mailResetPasswordTemplate?: string;
   mailOnboardingTemplate?: string;
+  mailKeyEnrollmentTemplate?: string;
+
+  // TCU
+  TCU?: {
+    toDefault?: boolean;
+    data?: string;
+  }
+
+  // Admin contact
+  contact?: string;
+
+  // ProofDesk config
+  proofDeskAPIURL?: string;
+  proofDeskAPIToken?: string;
+  proofDeskAPIIsValid?: number;
 }

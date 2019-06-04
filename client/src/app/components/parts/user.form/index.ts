@@ -60,8 +60,12 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   formLocked = false;
   useSMTP: boolean;
-  ServerClientURL: string;
+  webClientURL: string;
+  contactAvailable: boolean;
   sendPasswordEmail = false;
+  sendEnrollmentEmail = false;
+  createDefaultKey = true;
+  proofDeskAvailable = false;
 
   @Input()
   mode: 'create' | 'edit';
@@ -139,7 +143,9 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         return;
       }
       this.useSMTP = config.useSMTP;
-      this.ServerClientURL = config.ServerClientURL;
+      this.webClientURL = config.webClientURL;
+      this.proofDeskAvailable = (!!config.proofDeskAPIToken && !!config.proofDeskAPIURL);
+      this.contactAvailable = !!config.contact;
     }));
     if (this.mode === 'edit') {
       this.form = this.setFormControl(copy<ApiUserObject>(this.user));
@@ -168,6 +174,14 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     }
   }
 
+  async sendKeyEnrollmentMail(user: ApiUserObject) {
+    try {
+      await this.service.keyEnrollment(user.email);
+    } catch (err) {
+      this.errorMsg = err.error.message;
+    }
+  }
+
   async submit() {
     this.formLocked = true;
     const user = this.form.value;
@@ -184,27 +198,34 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       promise = this.service.update(this.user.id, cleaned)
         .then((up) => this.submitSucceed.emit(up));
     } else {
+      user.sendKeyEnrollmentMail = this.sendEnrollmentEmail;
+      user.createDefaultKey = this.createDefaultKey;
       const cleaned: any = addedDiff({}, cleanupObject(user));
       log.debug(cleaned, user);
 
       promise = this.service.create(cleaned)
-        .then((up) => this.submitSucceed.emit(up))
-        .then(() => this.router.navigate(['/users']));
-
-      if (this.sendPasswordEmail) {
-        try {
-          await this.sendResetPasswordEmail(user);
-        } catch (err) {
-          log.debug(err);
-        }
-      }
+        .then((up) => {
+          if (this.sendPasswordEmail) {
+            try {
+              this.sendResetPasswordEmail(up);
+            } catch (err) {
+              log.debug(err);
+            }
+          }
+          if (this.sendEnrollmentEmail) {
+            try {
+              this.sendKeyEnrollmentMail(up);
+            } catch (err) {
+              log.debug(err);
+            }
+          }
+          return this.submitSucceed.emit(up);
+        }).then(() => this.router.navigate(['/users']));
     }
-
     await promise
       .catch((err: HttpErrorResponse) => {
         this.helper = err.error.message;
       });
-
     this.formLocked = false;
   }
 
@@ -228,5 +249,13 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   sendPasswordEmailCheck() {
     this.sendPasswordEmail = !this.sendPasswordEmail;
+  }
+
+  canSendEmailToUser(): Boolean {
+    return this.useSMTP && this.webClientURL && this.form.get('email').valid;
+  }
+
+  canEnroll(): Boolean {
+    return this.canSendEmailToUser() && this.contactAvailable && this.proofDeskAvailable;
   }
 }

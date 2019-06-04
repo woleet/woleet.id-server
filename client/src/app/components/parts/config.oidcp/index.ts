@@ -74,7 +74,6 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
         this.form.enable();
       }
     }));
-
   }
 
   registerSubscription(sub: Subscription) {
@@ -135,5 +134,4 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
     this.oidcpClients.splice(index, 1);
     this.change();
   }
-
 }

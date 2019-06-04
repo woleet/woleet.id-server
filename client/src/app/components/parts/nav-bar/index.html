@@ -1,21 +1,24 @@
 <!-- <nav role="navigation"> -->
 <mat-toolbar *ngIf="!hide()">
   <div fxLayout="row">
+    <button mat-icon-button class="collapse-button" (click)="collapseSideBar()">
+      <mat-icon>view_headline</mat-icon>
+    </button>
     <div class="logo"></div>
     <div class="sub-logo">
       <span class="text-gray text-slim">{{ page() }}</span>
     </div>
   </div>
-
   <div fxLayout="row">
     <h1 class="mat-title text-center" style="line-height: 40px; margin-right: 12px">{{ commonName() }}</h1>
     <mat-divider vertical></mat-divider>
-    <button mat-icon-button matTooltip="Logout" (click)="logout()" [disabled]="lock$ | async"><i class="material-icons">clear</i></button>
+    <button mat-icon-button matTooltip="Logout" (click)="logout()" [disabled]="lock$ | async"><i
+        class="material-icons">clear</i></button>
   </div>
 </mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav *ngIf="isAdmin() && !hide()" class="sidenav dark-theme" ngClass.xs="collapse" fixedInViewport="true" role="navigation"
-    mode="side" opened="true">
+  <mat-sidenav *ngIf="isAdmin() && !hide()" class="sidenav dark-theme" fixedInViewport="true" role="navigation"
+    mode="{{mode}}" opened="{{opened}}">
     <mat-nav-list>
       <mat-list-item routerLink="/users">
         <div mat-button>

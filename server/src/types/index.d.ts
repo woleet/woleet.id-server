@@ -11,6 +11,7 @@ import '../../../types/api.server-event';
 import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api';
+import '../../../types/api.enrollment';
 import './oidc-provider';
 
 declare global {
@@ -105,20 +106,21 @@ declare global {
     expiration: number;
 
     /** Hexadecimal represention of the mnemonic phrase */
-    mnemonicEntropy: string;
+    mnemonicEntropy?: string;
     /** Hexadecimal represention of the mnemonic's initialization vector */
-    mnemonicEntropyIV: string;
+    mnemonicEntropyIV?: string;
     /** Hexadecimal represention of the private key */
-    privateKey: string;
+    privateKey?: string;
     /** Hexadecimal represention of the private key's initialization vector */
-    privateKeyIV: string;
+    privateKeyIV?: string;
     /** Boolean to indicate weither the privatekey is compresssed or not */
-    compressed: boolean;
+    compressed?: boolean;
     /** Base 58 represention of the public key */
     publicKey: string;
 
     userId: string;
     user?: InternalUserObject;
+    holder: 'server' | 'user';
   }
 
   interface ApiFullPostKeyObject extends KeyObject {
@@ -126,13 +128,14 @@ declare global {
     type?: KeyTypeEnum;
     status?: KeyStatusEnum;
     expiration?: number;
+    holder: 'server' | 'user';
 
     /** Hexadecimal represention of the mnemonic phrase */
-    mnemonicEntropy: string;
+    mnemonicEntropy?: string;
     /** Hexadecimal represention of the private key */
-    privateKey: string;
+    privateKey?: string;
     /** Boolean to indicate weither the privatekey is compresssed or not */
-    compressed: boolean;
+    compressed?: boolean;
     /** Base 58 represention of the public key */
     publicKey: string;
     /** Reference to the owner of the key */
@@ -257,14 +260,28 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+
+    enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
     SMTPConfig?: string;
-    ServerClientURL?: string;
+    webClientURL?: string;
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    mailKeyEnrollmentTemplate?: string;
+    // TCU
+    TCU?: {
+      toDefault?: boolean;
+      data?: string;
+    }
+    // Admin contact
+    contact?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -288,14 +305,28 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+
+    enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
     SMTPConfig?: string;
-    ServerClientURL?: string;
+    webClientURL?: string;
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    mailKeyEnrollmentTemplate?: string;
+    // TCU
+    TCU?: {
+      toDefault?: boolean;
+      data?: string;
+    }
+    // Admin contact
+    contact?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -319,14 +350,42 @@ declare global {
     OIDCPIssuerURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
+
+    enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
     // SMTP config
     useSMTP?: boolean;
     SMTPConfig?: string;
-    ServerClientURL?: string;
+    webClientURL?: string;
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
+    mailKeyEnrollmentTemplate?: string;
+    // TCU
+    TCU?: {
+      toDefault?: boolean;
+      data?: string;
+    }
+    // Admin contact
+    contact?: string;
+    // ProofDesk config
+    proofDeskAPIURL?: string;
+    proofDeskAPIToken?: string;
+    proofDeskAPIIsValid?: number;
+  }
+
+  /* Enrollment */
+
+  interface InternalEnrollmentObject extends EnrollmentObject {
+    id: string;
+    userId: string;
+    expiration: number;
+  }
+
+  interface SequelizeEnrollmentObject extends Instance<InternalEnrollmentObject> {
+  }
+
+  interface ApiPostEnrollmentObject extends EnrollmentObject {
   }
 
   /* OIDC Provider */

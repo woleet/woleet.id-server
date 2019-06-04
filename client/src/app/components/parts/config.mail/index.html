@@ -3,32 +3,50 @@
   <mat-divider></mat-divider>
   <br>
   <div>
-    Mail templates use HTML and <a href="https://mustache.github.io/mustache.5.html" target="_blank">mustache</a> variables.<br>
-    Available variables are: <strong class="monospace-font">logoURL</strong>, <strong class="monospace-font">userName</strong>, <strong class="monospace-font">resetPasswordLink</strong> and <strong class="monospace-font">domain</strong>.<br>
+    Mail templates use HTML and <a href="https://mustache.github.io/mustache.5.html" target="_blank">mustache</a>
+    variables.<br>
+    Available variables are: <strong class="monospace-font">logoURL</strong>,
+    <strong class="monospace-font">userName</strong>,
+    <strong class="monospace-font">resetPasswordURL</strong>
   </div>
   <br>
   <mat-divider></mat-divider>
   <br>
   <mat-card-content>
-    <form [formGroup]="formMail" autoComplete="off" (submit)="submit()" #f="ngForm">
+    <form [formGroup]="formMail" (submit)="submit()" #f="ngForm">
       <mat-form-field class="w-100">
         <mat-label class="bigger-label">Password reset mail template</mat-label>
-        <textarea matInput rows="5" formControlName="resetPasswordMail" matTooltip="Use HTML + mustache format"></textarea>
-        <mat-error *ngIf="formMail.get('resetPasswordMail').invalid">{{ getErrorMessage(formMail.get('resetPasswordMail')) }}</mat-error>
+        <textarea matInput rows="5" formControlName="resetPasswordMail"
+          matTooltip="Use HTML + mustache format"></textarea>
+        <mat-error *ngIf="formMail.get('resetPasswordMail').invalid">
+          {{ getErrorMessage(formMail.get('resetPasswordMail')) }}
+        </mat-error>
       </mat-form-field>
       <mat-form-field class="w-100">
-          <mat-label class="bigger-label">User onboarding mail template</mat-label>
+        <mat-label class="bigger-label">User onboarding mail template</mat-label>
         <textarea matInput rows="5" formControlName="onboardingMail" matTooltip="Use HTML + mustache format"></textarea>
-        <mat-error *ngIf="formMail.get('onboardingMail').invalid">{{ getErrorMessage(formMail.get('onboardingMail')) }}
+        <mat-error *ngIf="formMail.get('onboardingMail').invalid">
+          {{ getErrorMessage(formMail.get('onboardingMail')) }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100">
+        <mat-label class="bigger-label">Key enrollment mail template</mat-label>
+        <textarea matInput rows="5" formControlName="keyEnrollmentMail"
+          matTooltip="Use HTML + mustache format"></textarea>
+        <mat-error
+          *ngIf="formMail.get('keyEnrollmentMail').invalid">{{ getErrorMessage(formMail.get('keyEnrollmentMail')) }}
         </mat-error>
       </mat-form-field>
     </form>
   </mat-card-content>
   <ng-template #loading>Loading...<br></ng-template>
   <mat-card-actions *ngIf="(config$ | async) as config; else loading">
-    <button mat-raised-button color="primary" (click)="submit()"
-      [disabled]="(formLocked$ | async) ||
-      ((config.mailResetPasswordTemplate == formMail.get('resetPasswordMail').value) && (config.mailOnboardingTemplate == formMail.get('onboardingMail').value)) ||
-      (formMail.invalid)">SAVE</button>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="(formLocked$ | async) ||
+      ((config.mailResetPasswordTemplate == formMail.get('resetPasswordMail').value)
+      && (config.mailOnboardingTemplate == formMail.get('onboardingMail').value)
+      && (config.mailKeyEnrollmentTemplate == this.formMail.get('keyEnrollmentMail').value)) ||
+      (formMail.invalid)">
+      SAVE
+    </button>
   </mat-card-actions>
 </mat-card>

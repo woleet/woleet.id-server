@@ -7,9 +7,9 @@ export function serializeKey(key: InternalKeyObject): ApiKeyObject {
     lastUsed: +key.lastUsed || null
   };
 
-  const { id, name, status, type, publicKey } = key;
+  const { id, name, status, type, publicKey, holder } = key;
 
   const expired = key.expiration ? (+key.expiration < Date.now()) : undefined;
 
-  return Object.assign({ id, name, status, type, pubKey: publicKey, expired }, dates);
+  return Object.assign({ id, name, status, type, pubKey: publicKey, expired, holder }, dates);
 }

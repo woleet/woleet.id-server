@@ -16,6 +16,10 @@
 
 * `KEY_DELETE` (value: `"key.delete"`)
 
+* `ENROLLMENT_CREATE` (value: `"enrollment.create"`)
+
+* `ENROLLMENT_CREATE_SIGNATURE_REQUEST` (value: `"enrollment.create-signature-request"`)
+
 * `USER_CREATE` (value: `"user.create"`)
 
 * `USER_EDIT` (value: `"user.edit"`)

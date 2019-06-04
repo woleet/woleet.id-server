@@ -21,17 +21,29 @@ export async function getIdentity(leftData: string, pubKey: string) {
 
   const identity = key.get('user');
 
-  const rightData = getServerConfig().identityURL + '.' + crypto.randomBytes(16).toString('hex');
+  if ((key.get('holder') === 'server') && leftData !== undefined) {
+    const rightData = getServerConfig().identityURL + '.' + crypto.randomBytes(16).toString('hex');
 
-  const signature = await signMessage(key, leftData + rightData, key.get('compressed'));
+    const signature = await signMessage(key, leftData + rightData, key.get('compressed'));
 
-  return {
-    rightData,
-    signature,
-    identity: serializeIdentity(identity, true),
-    key: {
-      name: key.get('name'),
-      pubKey: key.get('publicKey')
-    }
-  };
+    return {
+      rightData,
+      signature,
+      identity: serializeIdentity(identity, true),
+      key: {
+        name: key.get('name'),
+        pubKey: key.get('publicKey'),
+        holder: key.get('holder')
+      }
+    };
+  } else {
+    return {
+      identity: serializeIdentity(identity, true),
+      key: {
+        name: key.get('name'),
+        pubKey: key.get('publicKey'),
+        holder: key.get('holder')
+      }
+    };
+  }
 }

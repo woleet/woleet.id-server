@@ -108,3 +108,14 @@ $accent: mat-palette($mat-red, 400);
     padding: 0;
   }
 }
+
+.mat-tooltip {
+  white-space: pre-line;
+}
+
+.label {
+  color: #999;
+  min-width: 70px;
+  font-size: 10px;
+  margin: 4px 0 3px 0;
+}

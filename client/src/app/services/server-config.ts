@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { serverURL } from '@services/config';
 import { KeyService } from '@services/key';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import * as log from 'loglevel';
 
 @Injectable()
@@ -126,5 +126,4 @@ export class ServerConfigService {
   private decrLock() {
     this.isDoingSomething$.next(--this._lock !== 0);
   }
-
 }

@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
   MatIconModule, MatInputModule, MatListModule, MatNativeDateModule, MatRippleModule, MatSelectModule, MatSidenavModule,
-  MatTabsModule, MatToolbarModule, MatTooltipModule
+  MatTabsModule, MatToolbarModule, MatTooltipModule, MatStepperModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -26,11 +26,14 @@ import { ConfigWebClientUrlComponent } from '@parts/config.server-client-url';
 import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
 import { APITokenCardComponent } from '@parts/api-token.card';
 import { KeyCreateCardComponent } from '@parts/key.card.create';
+import { KeyCreateCardExternComponent } from '@parts/key.card.create.extern';
 import { IntlTelInputComponent } from '@parts/intl-tel-input';
 import { ConfigLogoUrlComponent } from '@parts/config.logo-url';
 import { ConfigHTMLFrameUrlComponent } from '@parts/config.html-frame';
 import { LogoComponent } from '@parts/logo';
 import { HtmlFrameComponent } from '@parts/html-frame';
+import { ConfigContactComponent } from '@parts/config.contact';
+import { ConfigTCUComponent } from '@parts/config.tcu';
 
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -45,17 +48,20 @@ import { UserDetailPageComponent } from '@pages/user.detail';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
+import { DialogEnrolMailComponent } from '@parts/dialog-enrol-mail';
+import { EnrollmentPageComponent } from '@pages/enrollment';
 // Services
 import {
   AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService
 } from '@guards/auth';
 
-import { KeyService } from '@services/key';
+import { KeyService, ExternalKeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
 import { APITokenService } from '@services/api-token';
 import { PageDataService } from '@services/page-data';
 import { ServerConfigService } from '@services/server-config';
+import { EnrollmentService } from '@services/enrollment';
 
 import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
 import { NetworkErrorInterceptorService } from '@interceptors/network-error';
@@ -75,8 +81,10 @@ import { ConfigOIDCPComponent } from '@components/parts/config.oidcp';
 import { ConfigOIDCPClientComponent } from '@components/parts/config.oidcp-client';
 import { ConfigSMTPComponent } from '@components/parts/config.smtp';
 import { ConfigMailTemplateComponent } from '@components/parts/config.mail';
+import { ConfigProofDeskComponent } from '@components/parts/config.proofdesk';
 import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
+import { ConfigEnrollmentExpirationComponent } from '@parts/config.enrollment-expiration';
 
 export function startupServiceFactory(startupService: AppConfigService): Function {
   return () => startupService.load();
@@ -96,6 +104,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     UserEditPageComponent,
     UserDetailPageComponent,
     AboutPageComponent,
+    EnrollmentPageComponent,
     ConfigFallbackKeyComponent,
     ConfigIdentityUrlComponent,
     ConfigWebClientUrlComponent,
@@ -103,11 +112,14 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ConfigOIDCPComponent,
     ConfigOIDCPClientComponent,
     ConfigKeyExpirationComponent,
+    ConfigEnrollmentExpirationComponent,
+    ConfigProofDeskComponent,
     UserCardComponent,
     KeyCardComponent,
     APITokenCardComponent,
     APITokenCreateCardComponent,
     KeyCreateCardComponent,
+    KeyCreateCardExternComponent,
     StopPropagationDirective,
     StopRipplePropagationDirective,
     ErrorPageComponent,
@@ -121,12 +133,16 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     HtmlFrameComponent,
     ResetPasswordPageComponent,
     ConfigSMTPComponent,
+    ConfigContactComponent,
+    ConfigTCUComponent,
     DialogResetPasswordComponent,
-    DialogMailResetComponent
+    DialogMailResetComponent,
+    DialogEnrolMailComponent
   ],
   entryComponents: [
     DialogResetPasswordComponent,
-    DialogMailResetComponent
+    DialogMailResetComponent,
+    DialogEnrolMailComponent
   ],
   imports: [
     // angular
@@ -162,6 +178,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     MatCheckboxModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatStepperModule,
 
     // app
     AppRoutingModule,
@@ -180,8 +197,8 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },
     AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
-    NeedConfigGuardService, KeyService, UserService, InfoService, ConfigService, APITokenService,
-    PageDataService, ServerConfigService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
+    NeedConfigGuardService, KeyService, ExternalKeyService, UserService, InfoService, ConfigService, APITokenService,
+    PageDataService, ServerConfigService, EnrollmentService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     NetworkErrorInterceptorService, AllowCredentialsInterceptorService, LocalStorageService
   ],
   bootstrap: [AppComponent]

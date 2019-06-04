@@ -16,7 +16,7 @@ import { secureModule } from '../config';
  */
 export async function createKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
   const _newKey = key.phrase ? await secureModule.importPhrase(key.phrase) : await secureModule.createKey();
-
+  const holder: KeyHolderEnum = 'server';
   const newKey = await Key.create(Object.assign({}, key, {
     mnemonicEntropy: _newKey.entropy.toString('hex'),
     mnemonicEntropyIV: _newKey.entropyIV.toString('hex'),
@@ -24,10 +24,29 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
     privateKeyIV: _newKey.privateKeyIV.toString('hex'),
     compressed: _newKey.compressed,
     publicKey: _newKey.publicKey,
+    holder,
     userId
   }));
 
   return newKey.toJSON();
+}
+
+export async function externalCreateKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
+  const name = key.name;
+  const publicKey = key.publicKey;
+  const expiration = key.expiration || null;
+  try {
+  const newKey = await Key.create(Object.assign({
+    name,
+    publicKey,
+    holder: 'user',
+    userId,
+    expiration
+  }));
+  return newKey.toJSON();
+} catch (err) {
+  throw err;
+}
 }
 
 /**
@@ -116,3 +135,13 @@ export async function deleteKey(id: string): Promise<InternalKeyObject> {
   return key.toJSON();
 }
 
+export async function isKeyHoldedByServer(id: string): Promise<Boolean> {
+
+  const key = await Key.getById(id);
+
+  if (!key) {
+    throw new NotFoundKeyError();
+  }
+
+  return key.toJSON().holder === 'server' ? true : false;
+}

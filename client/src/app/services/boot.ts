@@ -1,24 +1,34 @@
-import {Injectable, NgZone} from '@angular/core';
-import {Subject} from 'rxjs';
-import {Http, Response} from '@angular/http';
-import {map} from 'rxjs/operators';
+import { Injectable, NgZone } from '@angular/core';
+import { Subject } from 'rxjs';
+import { Http, Response } from '@angular/http';
+import { map } from 'rxjs/operators';
 
 import * as log from 'loglevel';
-import {serverURL} from './config';
-import {switchNetworkError} from '@interceptors/network-error';
-import {ErrorService} from '@services/error';
-import {LocalStorageService} from './local-storage';
-import {keys} from '@app/config';
-import {parse} from 'qs';
-import {redirectForOIDC, redirectForOIDCProvider} from '@services/util';
+import { serverURL } from './config';
+import { switchNetworkError } from '@interceptors/network-error';
+import { ErrorService } from '@services/error';
+import { LocalStorageService } from './local-storage';
+import { keys } from '@app/config';
+import { parse } from 'qs';
+import { redirectForOIDC, redirectForOIDCProvider } from '@services/util';
 
 const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 
 @Injectable({ providedIn: 'root' })
 export class AppConfigService {
 
-  private _appConfig: { OIDCPProviderURL: string, useOpenIDConnect: boolean,
-    hasSession: boolean, publicInfo: object, user: ApiUserDTOObject, useSMTP: boolean, ServerClientURL: string };
+  private _appConfig: {
+    OIDCPProviderURL: string, useOpenIDConnect: boolean, hasSession: boolean,
+    publicInfo: {
+      logoURL: string,
+      HTMLFrame: string
+    },
+    user: ApiUserDTOObject, useSMTP: boolean, webClientURL: string,
+    TCU: {
+      data: string
+    },
+    contact: string
+  };
   bootOnLogin = false;
 
   constructor(
@@ -105,5 +115,4 @@ export class BootService {
       reboot.next();
     });
   }
-
 }

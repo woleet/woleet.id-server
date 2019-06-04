@@ -1,5 +1,5 @@
 <mat-card fxFlex>
-  <form role="form" [formGroup]='form' autoComplete="off" (submit)="submit()" #f="ngForm">
+  <form role="form" [formGroup]='form' autocomplete="off" (submit)="submit()" #f="ngForm" autoComplete="off">
     <div *ngIf="form; else loading" fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="10px">
       <mat-card-content class="w-100">
         <mat-card-subtitle>Login</mat-card-subtitle>
@@ -17,22 +17,24 @@
           <mat-hint *ngIf="usernameFocused">Alias used to login</mat-hint>
         </mat-form-field>
         <mat-form-field class="w-100">
-          <input matInput type="email" placeholder="Email" formControlName="email" required>
+          <input matInput type="email" placeholder="Email" formControlName="email" autocomplete="off" required>
           <mat-error *ngIf="form.get('email').invalid">{{ getErrorMessage(form.get('email')) }}</mat-error>
         </mat-form-field>
-        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP || !ServerClientURL"
-          [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''"
+        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP || !webClientURL"
+          [matTooltipDisabled]="canSendEmailToUser()"
+          [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL'"
           (change)="sendPasswordEmailCheck()">
-          Send password initialization link by email
+          Send password initialization link
         </mat-checkbox>
-        <button mat-raised-button *ngIf="mode === 'edit'" matInput
-          [disabled]="!useSMTP || form.get('email').invalid || !ServerClientURL"
-          [matTooltip]="!useSMTP || !ServerClientURL? 'You must setup the SMTP server and the server web client URL to activate this option':''"
-          (click)="sendResetPasswordEmail(user)">
-          Send password reset link by email
-        </button>
+        <div [matTooltipDisabled]="canSendEmailToUser()"
+          [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL'">
+          <button mat-raised-button *ngIf="mode === 'edit'" matInput [disabled]="!canSendEmailToUser()"
+            (click)="sendResetPasswordEmail(user)">
+            Send password reset link
+          </button>
+        </div>
         <mat-form-field class="w-100">
-          <input matInput type="password" placeholder="Password" formControlName="password"
+          <input matInput type="password" placeholder="Password" formControlName="password" autocomplete="off"
             [required]="mode === 'create' && !sendPasswordEmail">
           <mat-error *ngIf="form.get('password').invalid">{{ getErrorMessage(form.get('password')) }}</mat-error>
         </mat-form-field>
@@ -56,14 +58,15 @@
         </mat-form-field>
         <mat-form-field class="w-100">
           <input matInput type="text" placeholder="Organizational Unit" formControlName="organizationalUnit">
-          <mat-error *ngIf="form.get('identity').get('organizationalUnit').invalid">{{ getErrorMessage(form.get('identity').get('organizationalUnit'))
-            }}
+          <mat-error *ngIf="form.get('identity').get('organizationalUnit').invalid">
+            {{ getErrorMessage(form.get('identity').get('organizationalUnit')) }}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="w-100">
           <input matInput type="text" placeholder="Locality" formControlName="locality">
           <mat-error *ngIf="form.get('identity').get('locality').invalid">
-            {{ getErrorMessage(form.get('identity').get('locality')) }}</mat-error>
+            {{ getErrorMessage(form.get('identity').get('locality')) }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="w-100">
           <mat-select [value]="form.get('identity').get('country')" type="text" name="country" placeholder="Country"
@@ -76,7 +79,8 @@
           <input matInput type="text" placeholder="userId" formControlName="userId" (focus)="userIdFocused = true"
             (focusout)="userIdFocused = false">
           <mat-error *ngIf="form.get('identity').get('userId').invalid">
-            {{ getErrorMessage(form.get('identity').get('userId')) }}</mat-error>
+            {{ getErrorMessage(form.get('identity').get('userId')) }}
+          </mat-error>
           <mat-hint *ngIf="userIdFocused">
             A custom user identifier you can use to select the user (must be unique)
           </mat-hint>
@@ -84,6 +88,19 @@
       </mat-card-content>
     </div>
   </form>
+  <div *ngIf="mode === 'create'">
+    <mat-checkbox matInput [(ngModel)]="createDefaultKey">
+      Create a default key pair
+    </mat-checkbox>
+    <br>
+    <mat-checkbox matInput [disabled]="!canEnroll()" [matTooltipDisabled]="canEnroll()"
+      [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL\n- Organization / Admin contact\n- ProofDesk account / API configuration'"
+      [(ngModel)]="sendEnrollmentEmail">
+      Send public key registration request
+    </mat-checkbox>
+    <br>
+    <br>
+  </div>
   <div *ngIf="helper">
     <mat-card class="error-card">{{ helper }}</mat-card>
     <br>

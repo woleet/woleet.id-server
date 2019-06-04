@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { PageDataService } from '@services/page-data';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -36,5 +35,4 @@ export class AppComponent implements OnInit {
       this.pageDataService.setData(event);
     });
   }
-
 }

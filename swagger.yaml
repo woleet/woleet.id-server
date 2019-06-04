@@ -361,6 +361,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
+  /user/{userId}/extern-key:
+    post:
+      tags:
+        - Key
+      summary: Create a new external key for a user.
+      operationId: createExternalKey
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/ExternalKeyPost'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/KeyGet'
+        '400':
+          description: Invalid input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
   /user/{userId}/key:
     post:
       tags:
@@ -1009,7 +1044,7 @@ components:
         defaultKeyId:
           type: string
           format: uuid
-          description: Identifier of the default key to use for this user.
+          description: Identifier of the default key to use for this user. Cannot be set to an extern-key.
           example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
     UserGet:
       allOf:
@@ -1028,6 +1063,15 @@ components:
         - type: object
           required:
             - identity
+            - sendKeyEnrollmentMail
+            - createDefaultKey
+          properties:
+              sendKeyEnrollmentMail:
+                type: boolean
+                description: If true send an enrollment email.
+              createDefaultKey:
+                type: boolean
+                description: If true create a key holded by the server when this user is created.
     UserPut:
       allOf:
         - $ref: '#/components/schemas/UserBase'
@@ -1147,6 +1191,8 @@ components:
         - key.create
         - key.edit
         - key.delete
+        - enrollment.create
+        - enrollment.create-signature-request
         - user.create
         - user.edit
         - user.delete
@@ -1273,6 +1319,26 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/KeyDisco'
+    ExternalKeyBase:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Key name.
+          example: "Jim Smith's key"
+        publicKey:
+          type: string
+          description: Key address.
+          example: "1HA79GnnZdHLZBMBQusXcgPEeMcrpnWahb"
+        status:
+          $ref: '#/components/schemas/KeyStatusEnum'
+    ExternalKeyPost:
+      allOf:
+        - $ref: '#/components/schemas/ExternalKeyBase'
+        - type: object
+          required:
+            - name
+            - publicKey
     SignatureResult:
       type: object
       properties:
@@ -1465,6 +1531,13 @@ components:
           schema:
             $ref: '#/components/schemas/KeyPost'
       description: Key object to add.
+      required: true
+    ExternalKeyPost:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExternalKeyPost'
+      description: External Key object to add.
       required: true
     KeyPut:
       content:
