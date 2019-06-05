@@ -2,7 +2,7 @@ import { validate } from '../schemas';
 import * as Router from 'koa-router';
 import { BadRequest } from 'http-errors';
 
-import { getOwnerByPubKey, getAllKeysOfUser } from '../../controllers/key';
+import { getOwnerByPubKey, DiscoverKeysOfUser } from '../../controllers/key';
 import { serializeKey } from '../serialize/key';
 import { serializeUser } from '../serialize/user';
 import { searchAllUsers, getUserById } from '../../controllers/user';
@@ -29,7 +29,7 @@ router.use(bearerAuth);
  */
 router.get('/keys/:userId', vuid, async function (ctx) {
   const { userId } = ctx.params;
-  const keys = await getAllKeysOfUser(userId);
+  const keys = await DiscoverKeysOfUser(userId);
   ctx.body = keys.map(serializeKey);
 });
 

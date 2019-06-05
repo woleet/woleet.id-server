@@ -1,6 +1,7 @@
 import { Key, User } from '../database';
 import { NotFoundKeyError, NotFoundUserError } from '../errors';
 import { secureModule } from '../config';
+import { getServerConfig } from './server-config';
 
 /**
  * Key
@@ -122,6 +123,21 @@ export async function getAllKeysOfUser(userId: string, full = false): Promise<In
   const keys = await Key.getAllKeysOfUser(userId, full);
 
   return keys.map((key) => key.toJSON());
+}
+
+export async function DiscoverKeysOfUser(userId: string, full = false): Promise<InternalKeyObject[]> {
+
+  const user = await User.getById(userId);
+
+  if (!user) {
+    throw new NotFoundUserError();
+  }
+
+  const keys = await Key.getAllKeysOfUser(userId, full);
+
+  const identityURL = getServerConfig().identityURL;
+
+  return keys.map((key) => Object.assign({}, key.toJSON(), { identityURL }));
 }
 
 export async function deleteKey(id: string): Promise<InternalKeyObject> {

@@ -1147,17 +1147,19 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/APITokenGet'
+    IdentityURL:
+      type: string
+      example: "https://identity.mydomain.com/identity"
+      description: >
+        The identity URL that the server returns with a signature.
+        <br>Note that the server always expects to be called on the "/identity" endpoint,
+        if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain)
+        you must not forget it in your reverse proxy configuration.
     ServerConfig:
       type: object
       properties:
         identityURL:
-          type: string
-          example: "https://identity.mydomain.com/identity"
-          description: >
-            The identity URL that the server returns with a signature.
-            <br>Note that the server always expects to be called on the "/identity" endpoint,
-            if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain)
-            you must not forget it in your reverse proxy configuration.
+          $ref: '#/components/schemas/IdentityURL'
         defaultKeyId:
           type: string
           format: uuid
@@ -1315,6 +1317,10 @@ components:
     KeyDisco:
       allOf:
         - $ref: '#/components/schemas/KeyGet'
+        - type: object
+          properties:
+            identityURL:
+              $ref: '#/components/schemas/IdentityURL'
     KeyDiscoArray:
       type: array
       items:
