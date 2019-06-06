@@ -1260,6 +1260,13 @@ components:
         - mobile
       description: Key device.
       example: "server"
+    KeyHolderEnum:
+      type: string
+      enum:
+        - server
+        - user
+      description: The entity who hold the private key.
+      example: "server"
     KeyBase:
       type: object
       properties:
@@ -1267,8 +1274,6 @@ components:
           type: string
           description: Key name.
           example: "Jim Smith's key"
-        device:
-          $ref: '#/components/schemas/KeyDeviceEnum'
         status:
           $ref: '#/components/schemas/KeyStatusEnum'
     KeyGet:
@@ -1288,6 +1293,10 @@ components:
               $ref: '#/components/schemas/PubKey'
             type:
               $ref: '#/components/schemas/KeyTypeEnum'
+            holder:
+              $ref: '#/components/schemas/KeyHolderEnum'
+            device:
+              $ref: '#/components/schemas/KeyDeviceEnum'
             expiration:
               type: integer
               format: int64
@@ -1318,6 +1327,10 @@ components:
     KeyPut:
       allOf:
         - $ref: '#/components/schemas/KeyBase'
+        - type: object
+          properties:
+            device:
+              $ref: '#/components/schemas/KeyDeviceEnum'
     KeyArray:
       type: array
       items:
@@ -1340,6 +1353,8 @@ components:
           type: string
           description: Key address.
           example: "1HA79GnnZdHLZBMBQusXcgPEeMcrpnWahb"
+        device:
+          $ref: '#/components/schemas/KeyDeviceEnum'
         status:
           $ref: '#/components/schemas/KeyStatusEnum'
     ExternalKeyPost:

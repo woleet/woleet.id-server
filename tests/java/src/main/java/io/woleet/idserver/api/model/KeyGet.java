@@ -23,6 +23,8 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.KeyBase;
+import io.woleet.idserver.api.model.KeyDeviceEnum;
+import io.woleet.idserver.api.model.KeyHolderEnum;
 import io.woleet.idserver.api.model.KeyStatusEnum;
 import io.woleet.idserver.api.model.KeyTypeEnum;
 import java.io.IOException;
@@ -44,6 +46,14 @@ public class KeyGet extends KeyBase {
   public static final String SERIALIZED_NAME_TYPE = "type";
   @SerializedName(SERIALIZED_NAME_TYPE)
   private KeyTypeEnum type = null;
+
+  public static final String SERIALIZED_NAME_HOLDER = "holder";
+  @SerializedName(SERIALIZED_NAME_HOLDER)
+  private KeyHolderEnum holder = null;
+
+  public static final String SERIALIZED_NAME_DEVICE = "device";
+  @SerializedName(SERIALIZED_NAME_DEVICE)
+  private KeyDeviceEnum device = null;
 
   public static final String SERIALIZED_NAME_EXPIRATION = "expiration";
   @SerializedName(SERIALIZED_NAME_EXPIRATION)
@@ -112,6 +122,42 @@ public class KeyGet extends KeyBase {
 
   public void setType(KeyTypeEnum type) {
     this.type = type;
+  }
+
+  public KeyGet holder(KeyHolderEnum holder) {
+    this.holder = holder;
+    return this;
+  }
+
+   /**
+   * Get holder
+   * @return holder
+  **/
+  @ApiModelProperty(value = "")
+  public KeyHolderEnum getHolder() {
+    return holder;
+  }
+
+  public void setHolder(KeyHolderEnum holder) {
+    this.holder = holder;
+  }
+
+  public KeyGet device(KeyDeviceEnum device) {
+    this.device = device;
+    return this;
+  }
+
+   /**
+   * Get device
+   * @return device
+  **/
+  @ApiModelProperty(value = "")
+  public KeyDeviceEnum getDevice() {
+    return device;
+  }
+
+  public void setDevice(KeyDeviceEnum device) {
+    this.device = device;
   }
 
   public KeyGet expiration(Long expiration) {
@@ -199,6 +245,8 @@ public class KeyGet extends KeyBase {
     return Objects.equals(this.id, keyGet.id) &&
         Objects.equals(this.pubKey, keyGet.pubKey) &&
         Objects.equals(this.type, keyGet.type) &&
+        Objects.equals(this.holder, keyGet.holder) &&
+        Objects.equals(this.device, keyGet.device) &&
         Objects.equals(this.expiration, keyGet.expiration) &&
         Objects.equals(this.expired, keyGet.expired) &&
         Objects.equals(this.createdAt, keyGet.createdAt) &&
@@ -210,7 +258,7 @@ public class KeyGet extends KeyBase {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, pubKey, type, expiration, expired, createdAt, updatedAt, deletedAt, lastUsed, super.hashCode());
+    return Objects.hash(id, pubKey, type, holder, device, expiration, expired, createdAt, updatedAt, deletedAt, lastUsed, super.hashCode());
   }
 
 
@@ -222,6 +270,8 @@ public class KeyGet extends KeyBase {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    pubKey: ").append(toIndentedString(pubKey)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    holder: ").append(toIndentedString(holder)).append("\n");
+    sb.append("    device: ").append(toIndentedString(device)).append("\n");
     sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");
     sb.append("    expired: ").append(toIndentedString(expired)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");

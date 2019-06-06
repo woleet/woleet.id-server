@@ -94,6 +94,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
             keyPost.setStatus(KeyStatusEnum.ACTIVE);
             keyPost.setName(Config.randomName());
             keyPost.setPublicKey(Config.randomAddress());
+            keyPost.setDevice(KeyDeviceEnum.MOBILE);
 
             return new ObjectPost(keyPost);
         }
@@ -112,6 +113,8 @@ public class ExternalKeyApiTest extends CRUDApiTest {
                 keyPut.setStatus(KeyStatusEnum.BLOCKED);
             if (Config.randomBoolean())
                 keyPut.setName(Config.randomName());
+            if (Config.randomBoolean())
+                keyPut.setDevice(null);
         }
     }
 
@@ -156,6 +159,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
         assertNotNull(key.getPubKey());
         assertNotNull(key.getType());
         assertNotNull(key.getStatus());
+        assertEquals(key.getHolder(), KeyHolderEnum.USER);
     }
 
     @Override

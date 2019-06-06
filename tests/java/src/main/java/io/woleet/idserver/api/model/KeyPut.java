@@ -15,14 +15,45 @@ package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.KeyBase;
+import io.woleet.idserver.api.model.KeyDeviceEnum;
 import io.woleet.idserver.api.model.KeyStatusEnum;
+import java.io.IOException;
 
 /**
  * KeyPut
  */
 
 public class KeyPut extends KeyBase {
+  public static final String SERIALIZED_NAME_DEVICE = "device";
+  @SerializedName(SERIALIZED_NAME_DEVICE)
+  private KeyDeviceEnum device = null;
+
+  public KeyPut device(KeyDeviceEnum device) {
+    this.device = device;
+    return this;
+  }
+
+   /**
+   * Get device
+   * @return device
+  **/
+  @ApiModelProperty(value = "")
+  public KeyDeviceEnum getDevice() {
+    return device;
+  }
+
+  public void setDevice(KeyDeviceEnum device) {
+    this.device = device;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -32,12 +63,14 @@ public class KeyPut extends KeyBase {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return super.equals(o);
+    KeyPut keyPut = (KeyPut) o;
+    return Objects.equals(this.device, keyPut.device) &&
+        super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode());
+    return Objects.hash(device, super.hashCode());
   }
 
 
@@ -46,6 +79,7 @@ public class KeyPut extends KeyBase {
     StringBuilder sb = new StringBuilder();
     sb.append("class KeyPut {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    device: ").append(toIndentedString(device)).append("\n");
     sb.append("}");
     return sb.toString();
   }

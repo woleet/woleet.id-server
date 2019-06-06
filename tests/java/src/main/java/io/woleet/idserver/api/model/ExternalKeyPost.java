@@ -16,6 +16,7 @@ package io.woleet.idserver.api.model;
 import java.util.Objects;
 import java.util.Arrays;
 import io.woleet.idserver.api.model.ExternalKeyBase;
+import io.woleet.idserver.api.model.KeyDeviceEnum;
 import io.woleet.idserver.api.model.KeyStatusEnum;
 
 /**
