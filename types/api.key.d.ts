@@ -3,6 +3,7 @@
 type KeyTypeEnum = 'bip39';
 type KeyStatusEnum = 'active' | 'blocked';
 type KeyHolderEnum = 'server' | 'user';
+type KeyDeviceEnum = undefined | 'server' | 'mobile' | 'nano';
 
 interface KeyObject { }
 
@@ -12,6 +13,7 @@ interface ApiKeyObject extends KeyObject, ApiCommonProperties {
   name: string;
 
   holder: KeyHolderEnum;
+  device: KeyDeviceEnum;
 
   /** Base58 encoded public key */
   pubKey: string;
@@ -29,6 +31,7 @@ interface ApiKeyObject extends KeyObject, ApiCommonProperties {
 
 interface ApiPostKeyObject extends KeyObject {
   name: string;
+  device?: KeyDeviceEnum;
   type?: KeyTypeEnum;
   status?: KeyStatusEnum;
   expiration?: number;
@@ -38,6 +41,7 @@ interface ApiPostKeyObject extends KeyObject {
 
 interface ApiPutKeyObject extends KeyObject {
   name?: string;
+  device?: KeyDeviceEnum;
   status?: KeyStatusEnum;
   expiration?: number;
 }

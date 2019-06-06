@@ -1252,6 +1252,14 @@ components:
         - bip39
       description: Key type.
       example: "bip39"
+    KeyDeviceEnum:
+      type: string
+      enum:
+        - server
+        - nano
+        - mobile
+      description: Key device.
+      example: "server"
     KeyBase:
       type: object
       properties:
@@ -1259,6 +1267,8 @@ components:
           type: string
           description: Key name.
           example: "Jim Smith's key"
+        device:
+          $ref: '#/components/schemas/KeyDeviceEnum'
         status:
           $ref: '#/components/schemas/KeyStatusEnum'
     KeyGet:

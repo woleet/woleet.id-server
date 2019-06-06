@@ -10,6 +10,7 @@ const { CONFIG_ID } = serverConfig;
 let doPostUpgrade3 = false;
 let doPostUpgrade5 = false;
 let doPostUpgrade8 = false;
+let doPostUpgrade10 = false;
 
 async function getConfig() {
   await ServerConfig.model.sync();
@@ -189,6 +190,24 @@ async function upgrade9(sequelize) {
   }
 }
 
+async function upgrade10(sequelize) {
+  log.warn('Checking for update 5 of the "keys" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 10) {
+    doPostUpgrade10 = true;
+    log.warn('Need to add "device" column to the "key" table');
+    const holder = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "device" VARCHAR;`);
+    log.debug(holder);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 10 }) });
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
@@ -199,6 +218,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade7(sequelize);
   await upgrade8(sequelize);
   await upgrade9(sequelize);
+  await upgrade10(sequelize);
 }
 
 async function postUpgrade3() {
@@ -293,6 +313,26 @@ async function postUpgrade8() {
   }
 }
 
+async function postUpgrade10() {
+  log.warn('');
+
+  if (doPostUpgrade10 === true) {
+    await Key.model.sync();
+    const keys = await Key.model.findAll({ paranoid: false });
+
+    log.warn(`${keys.length} keys to update...`);
+
+    for (const key of keys) {
+      log.warn(`Updating key ${key.get('id')} ...`);
+      {
+        key.set('holder', 'server');
+      }
+      await key.save();
+      log.debug(`Updated key ${key.get('id')}`);
+    }
+  }
+}
+
 async function afterInitUpgrade5() {
   log.warn('Checking for after-init-update of the "apiToken" model...');
 
@@ -333,6 +373,7 @@ async function afterInitUpgrade5() {
 export async function postUpgrade(sequelize: Sequelize) {
   await postUpgrade3();
   await postUpgrade8();
+  await postUpgrade10();
 }
 
 /**

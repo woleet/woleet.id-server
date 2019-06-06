@@ -120,7 +120,8 @@ declare global {
 
     userId: string;
     user?: InternalUserObject;
-    holder: 'server' | 'user';
+    holder: KeyHolderEnum;
+    device: KeyDeviceEnum;
   }
 
   interface ApiFullPostKeyObject extends KeyObject {
@@ -128,7 +129,8 @@ declare global {
     type?: KeyTypeEnum;
     status?: KeyStatusEnum;
     expiration?: number;
-    holder: 'server' | 'user';
+    holder: KeyHolderEnum;
+    device: KeyDeviceEnum;
 
     /** Hexadecimal represention of the mnemonic phrase */
     mnemonicEntropy?: string;

@@ -21,7 +21,8 @@ const KeyModel = {
   lastUsed: { type: DATE, defaultValue: null },
   expiration: { type: DATE },
   userId: { type: UUID },
-  holder: { type: ENUM(['server', 'user']), defaultValue: 'server'}
+  holder: { type: ENUM(['server', 'user']), defaultValue: 'server' },
+  device: { type: ENUM([undefined, 'server', 'nano', 'mobile']), defaultValue: undefined }
 };
 
 class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKeyObject> {
