@@ -163,7 +163,7 @@ paths:
       description: >
         Use this endpoint to get all users whose `email`, `username`, `x500CommonName`, `x500Organization` or `x500OrganizationalUnit` contains the search string.
       parameters:
-        - $ref: '#/components/parameters/UserSearchQueryParameter'
+        - $ref: '#/components/parameters/DiscoverUsersQueryParameter'
       responses:
         '200':
           description: Successful operation.
@@ -1473,7 +1473,7 @@ components:
       schema:
         type: string
         example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
-    UserSearchQueryParameter:
+    DiscoverUsersQueryParameter:
       name: search
       in: query
       description: A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
