@@ -9,11 +9,9 @@ import * as log from 'loglevel';
 export class ServerConfigService {
 
   private _lock = 0;
-  private _lastChecked = 0;
   private isDoingSomething$: BehaviorSubject<boolean>;
 
-  private config$: BehaviorSubject<ApiServerConfig> = null;
-  private isConfigInit = false;
+  private config$: BehaviorSubject<ApiServerConfig>;
 
   private defaultKeyId: string;
   private defaultKey$: BehaviorSubject<ApiKeyObject>;
@@ -25,35 +23,9 @@ export class ServerConfigService {
     private http: HttpClient,
     private keyService: KeyService
   ) {
-    this.config$ = new BehaviorSubject(null);
-    this.config$.subscribe((cfg) => {
-      if (cfg) {
-        this.setDefaultKey(cfg.defaultKeyId);
-        this.setDefaultKeyOwner(cfg.defaultKeyId);
-      }
-    });
-
     this.isDoingSomething$ = new BehaviorSubject(false);
     this.defaultKey$ = new BehaviorSubject(null);
     this.defaultKeyOwner$ = new BehaviorSubject(null);
-  }
-
-  // Make an http call to initialize the config$ attribut
-  loadConfig() {
-    this.http.get<ApiServerConfig>(`${serverURL}/server-config`)
-      .subscribe((up) => {
-        log.debug('initialised', up);
-        this.config$.next(up);
-      });
-    this.isConfigInit = true;
-  }
-
-  // Get the server-config stocked as an attribute (as a observable in config$) or get it from the server the first time.
-  getConfig(): Observable<ApiServerConfig> {
-    if (!this.isConfigInit) {
-      this.loadConfig();
-    }
-    return this.config$.asObservable();
   }
 
   private setDefaultKey(defaultKeyId) {
@@ -102,6 +74,41 @@ export class ServerConfigService {
     }
   }
 
+  private incrLock() {
+    this.isDoingSomething$.next(++this._lock !== 0);
+  }
+
+  private decrLock() {
+    this.isDoingSomething$.next(--this._lock !== 0);
+  }
+
+  /**
+   * Get a observable singleton on the server configuration.
+   * Automatically trigger the loading of the server configuration at first get.
+   */
+  getConfig(): Observable<ApiServerConfig> {
+
+    // Initialize the singleton used to observe the server configuration
+    if (!this.config$) {
+
+      this.config$ = new BehaviorSubject(null);
+
+      this.config$.subscribe((config) => {
+        if (config) {
+          this.setDefaultKey(config.defaultKeyId);
+          this.setDefaultKeyOwner(config.defaultKeyId);
+        }
+      });
+
+      this.http.get<ApiServerConfig>(`${serverURL}/server-config`)
+        .subscribe((config) => {
+          log.debug('Configuration service initialized');
+          this.config$.next(config);
+        });
+    }
+    return this.config$;
+  }
+
   update(config: ApiServerConfigUpdate): void {
     this.incrLock();
     this.http.put<ApiServerConfig>(`${serverURL}/server-config`, config)
@@ -122,13 +129,5 @@ export class ServerConfigService {
 
   getDefaultKeyOwner(): Observable<ApiUserObject> {
     return this.defaultKeyOwner$.asObservable();
-  }
-
-  private incrLock() {
-    this.isDoingSomething$.next(++this._lock !== 0);
-  }
-
-  private decrLock() {
-    this.isDoingSomething$.next(--this._lock !== 0);
   }
 }
