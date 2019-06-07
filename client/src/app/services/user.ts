@@ -28,14 +28,14 @@ export class UserService {
   }
 
   async resetPassword(email: string) {
-    return this.http.post<Boolean>(`${serverURL}/password-reset`, { email: email }).toPromise();
+    return this.http.post<Boolean>(`${serverURL}/password-reset`, { email }).toPromise();
   }
 
-  async keyEnrollment(email: string) {
-    return this.http.post<Boolean>(`${serverURL}/enrollment`, { email: email }).toPromise();
+  async keyEnrollment(enrollment: ApiPostEnrollmentObject) {
+    return this.http.post<Boolean>(`${serverURL}/enrollment`, enrollment).toPromise();
   }
 
   async validate(email: string, password: string, token: string) {
-    return this.http.post<Boolean>(`${serverURL}/password-reset/validate`, {email: email, password: password, token: token}).toPromise();
+    return this.http.post<Boolean>(`${serverURL}/password-reset/validate`, { email, password, token }).toPromise();
   }
 }

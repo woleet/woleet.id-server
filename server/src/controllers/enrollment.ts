@@ -1,5 +1,5 @@
 import { Enrollment, Key, User } from '../database';
-import { EnrollmentExpiredError, NotFoundEnrollmentError } from '../errors';
+import { EnrollmentExpiredError, NotFoundEnrollmentError, NotFoundUserError } from '../errors';
 import * as crypto from 'crypto';
 import { readFileSync } from 'fs';
 import * as path from 'path';
@@ -7,7 +7,7 @@ import { getServerConfig } from './server-config';
 import * as https from 'https';
 import { Observable } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
-import { sendEnrollmentFinalizeEmail } from './send-email';
+import { sendEnrollmentFinalizeEmail, sendKeyEnrollmentEmail } from './send-email';
 import * as timestring from 'timestring';
 import { getAgent } from './utils/agent';
 import log = require('loglevel');
@@ -24,14 +24,18 @@ import log = require('loglevel');
  * @swagger
  *  operationId: createEnrollment
  */
-export async function createEnrollment(userId: string): Promise<InternalEnrollmentObject> {
+export async function createEnrollment(enrollment: ApiPostEnrollmentObject): Promise<InternalEnrollmentObject> {
+  const user = await User.getById(enrollment.userId);
+  if (!user) {
+    throw new NotFoundUserError();
+  }
   const expiration = !!getServerConfig().enrollmentExpirationOffset ?
     Date.now() + timestring(getServerConfig().enrollmentExpirationOffset) * 1000 :
     null;
-  const newEnrollment = await Enrollment.create(Object.assign({}, {
-    userId,
-    expiration
-  }));
+
+  enrollment.expiration = enrollment.expiration || expiration;
+  const newEnrollment = await Enrollment.create(enrollment);
+  await sendKeyEnrollmentEmail(user.toJSON(), newEnrollment.toJSON().id);
   return newEnrollment.toJSON();
 }
 
@@ -99,10 +103,13 @@ export async function getTCUHash(): Promise<string> {
   return hash.digest('hex');
 }
 
-export async function createSignatureRequest(hash: string, email: string) {
-  const user = await User.getByEmail(email);
-  const userJSON = user.toJSON();
-  const url = new URL(getServerConfig().proofDeskAPIURL);
+export async function startKeyRegistration(enrollmentId) {
+  const config = getServerConfig();
+  const user = await getOwner(enrollmentId);
+  const currentEnrollment = await getEnrollmentById(enrollmentId);
+  const url = new URL(config.proofDeskAPIURL);
+  const identityURL = config.identityURL;
+  const hashTCU = await getTCUHash();
   const httpsOptions: any = {
     host: url.host,
     path: url.pathname + '/signatureRequest',
@@ -119,12 +126,18 @@ export async function createSignatureRequest(hash: string, email: string) {
   const body = `{
     "authorizedSignees": [
       {
-        "commonName": "${userJSON.x500CommonName}",
-        "email": "${email}"
+        "commonName": "${user.x500CommonName}",
+        "email": "${user.email}",
+        "identityURL": "${identityURL}",
+        "device": "${currentEnrollment.device}"
       }],
       "name": "WIDS TCU signature",
-      "hashToSign": "${hash}"
+      "hashToSign": "${hashTCU}"
     }`;
+  return createSignatureRequest(body, httpsOptions, url);
+}
+
+async function createSignatureRequest(body: string, httpsOptions: Object, url: URL) {
   return new Promise(async (resolve, reject) => {
     const req = https.request(httpsOptions, (res) => {
 
@@ -184,55 +197,27 @@ export async function monitorSignatureRequests(requestId: string, enrollmentId: 
       }
     }))
     .subscribe(() => {
-        return;
-      },
+      return;
+    },
       error => log.error(error),
       async () => {
         await finalizeEnrollment(enrollmentId, user, result.anchors[0].pubKey);
-        if (getServerConfig().identityURL) {
-
-          const httpsOptionsPut: any = {
-            host: url.host,
-            path: url.pathname + `/anchor/${result.anchors[0].id}`,
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + getServerConfig().proofDeskAPIToken
-            }
-          };
-          const agentPut = getAgent(url, `/anchor/${result.anchors[0].id}`);
-          if (agentPut) {
-            httpsOptionsPut.agent = agentPut;
-          }
-          const body = `{
-          "identityURL": "${getServerConfig().identityURL}"
-          }`;
-          const req = https.request(httpsOptionsPut, (res) => {
-            log.info('STATUS: ' + res.statusCode);
-            log.info('HEADERS: ' + JSON.stringify(res.headers));
-            res.on('data', function (chunk) {
-              log.info('BODY: ' + chunk);
-            });
-          });
-          req.on('error', function (e) {
-            log.error(e.message);
-          });
-          req.write(body);
-          req.end();
-        }
       }
     );
 }
 
 async function finalizeEnrollment(enrollmentId: string, user: ApiUserObject, publicKey: string) {
-  const name = user.identity.commonName + '\'s key';
+  const currentEnrollment = await getEnrollmentById(enrollmentId);
+  const name = currentEnrollment.name;
   const userId = user.id;
+  const device = currentEnrollment.device;
   try {
     await Key.create(Object.assign({
       name,
       publicKey,
       holder: 'user',
-      userId
+      userId,
+      device
     }));
     sendEnrollmentFinalizeEmail(user.identity.commonName, publicKey, true);
   } catch (err) {

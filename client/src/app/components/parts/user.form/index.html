@@ -93,12 +93,6 @@
       Create a default key pair
     </mat-checkbox>
     <br>
-    <mat-checkbox matInput [disabled]="!canEnroll()" [matTooltipDisabled]="canEnroll()"
-      [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL\n- Organization / Admin contact\n- ProofDesk account / API configuration'"
-      [(ngModel)]="sendEnrollmentEmail">
-      Send public key registration request
-    </mat-checkbox>
-    <br>
     <br>
   </div>
   <div *ngIf="helper">

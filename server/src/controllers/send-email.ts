@@ -63,30 +63,25 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
   return user.toJSON();
 }
 
-export async function sendKeyEnrollmentEmail(email: string): Promise<InternalEnrollmentObject> {
-  const user = await User.getByEmail(email);
-  if (!user) {
-    throw new NotFoundUserError();
-  }
+export async function sendKeyEnrollmentEmail(user: InternalUserObject, enrollmentID: string): Promise<void> {
 
-  const enrollment = await createEnrollment(user.get('id'));
   const config = getServerConfig();
   const webClientURL = config.webClientURL;
 
   const link = webClientURL + '/enrollment/' +
-    enrollment.id;
+    enrollmentID;
   const logo = getLogo(config);
   const subject = 'Register your signature key';
   const html = mustache.render(config.mailKeyEnrollmentTemplate,
-    { keyEnrollmentURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
+    { keyEnrollmentURL: link, domain: null, logoURL: logo, userName: user.x500CommonName });
 
   try {
-    await sendEmail(email, subject, html);
+    await sendEmail(user.email, subject, html);
   } catch (err) {
     log.error(err);
   }
 
-  return enrollment;
+  return;
 }
 
 export async function sendEnrollmentFinalizeEmail(userName: string, address: string, success: boolean): Promise<void> {

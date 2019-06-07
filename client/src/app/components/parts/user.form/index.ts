@@ -63,7 +63,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   webClientURL: string;
   contactAvailable: boolean;
   sendPasswordEmail = false;
-  sendEnrollmentEmail = false;
   createDefaultKey = true;
   proofDeskAvailable = false;
 
@@ -174,14 +173,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     }
   }
 
-  async sendKeyEnrollmentMail(user: ApiUserObject) {
-    try {
-      await this.service.keyEnrollment(user.email);
-    } catch (err) {
-      this.errorMsg = err.error.message;
-    }
-  }
-
   async submit() {
     this.formLocked = true;
     const user = this.form.value;
@@ -198,7 +189,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       promise = this.service.update(this.user.id, cleaned)
         .then((up) => this.submitSucceed.emit(up));
     } else {
-      user.sendKeyEnrollmentMail = this.sendEnrollmentEmail;
       user.createDefaultKey = this.createDefaultKey;
       const cleaned: any = addedDiff({}, cleanupObject(user));
       log.debug(cleaned, user);
@@ -208,13 +198,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
           if (this.sendPasswordEmail) {
             try {
               this.sendResetPasswordEmail(up);
-            } catch (err) {
-              log.debug(err);
-            }
-          }
-          if (this.sendEnrollmentEmail) {
-            try {
-              this.sendKeyEnrollmentMail(up);
             } catch (err) {
               log.debug(err);
             }

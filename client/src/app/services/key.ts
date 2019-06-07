@@ -45,3 +45,8 @@ export class ExternalKeyService {
     return this.http.post<ApiKeyObject>(`${serverURL}/user/${userId}/extern-key`, key).toPromise();
   }
 }
+
+export interface Device {
+  value: KeyDeviceEnum | null;
+  viewValue: string;
+}

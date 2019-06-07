@@ -1,7 +1,8 @@
 import * as Router from 'koa-router';
+import { validate } from '../schemas';
 
 import { store as event } from '../../controllers/server-event';
-import { sendKeyEnrollmentEmail } from '../../controllers/send-email';
+import { createEnrollment } from '../../controllers/enrollment';
 import { BadRequest, NotFound } from 'http-errors';
 
 /**
@@ -17,30 +18,26 @@ const router = new Router();
  * @swagger
  *  operationId: createEnrollment
  */
-router.post('/enrollment', async function (ctx) {
-  const { email } = ctx.request.body;
-  let user;
-
-  if (!email) {
-    throw new BadRequest('Need to send the email address.');
-  }
+router.post('/enrollment', validate.body('createEnrollment'), async function (ctx) {
+  const enrollment: ApiPostEnrollmentObject = ctx.request.body;
+  let newEnrollment: InternalEnrollmentObject;
 
   try {
-    user = await sendKeyEnrollmentEmail(email);
+    newEnrollment = await createEnrollment(enrollment);
   } catch (err) {
-    throw new NotFound(email + ' does not correspond to a user.');
+    throw err;
   }
 
   event.register({
     type: 'enrollment.create',
     authorizedUserId: null,
     associatedTokenId: null,
-    associatedUserId: user.id,
+    associatedUserId: newEnrollment.userId,
     associatedKeyId: null,
     data: null
   });
 
-  ctx.body = '';
+  ctx.body = newEnrollment;
 });
 
 export { router };

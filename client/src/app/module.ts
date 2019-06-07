@@ -27,6 +27,7 @@ import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
 import { APITokenCardComponent } from '@parts/api-token.card';
 import { KeyCreateCardComponent } from '@parts/key.card.create';
 import { KeyCreateCardExternComponent } from '@parts/key.card.create.extern';
+import { KeyCreateCardEnrollComponent } from '@parts/key.card.create.enroll';
 import { IntlTelInputComponent } from '@parts/intl-tel-input';
 import { ConfigLogoUrlComponent } from '@parts/config.logo-url';
 import { ConfigHTMLFrameUrlComponent } from '@parts/config.html-frame';
@@ -48,7 +49,6 @@ import { UserDetailPageComponent } from '@pages/user.detail';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
-import { DialogEnrolMailComponent } from '@parts/dialog-enrol-mail';
 import { EnrollmentPageComponent } from '@pages/enrollment';
 // Services
 import {
@@ -120,6 +120,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     APITokenCreateCardComponent,
     KeyCreateCardComponent,
     KeyCreateCardExternComponent,
+    KeyCreateCardEnrollComponent,
     StopPropagationDirective,
     StopRipplePropagationDirective,
     ErrorPageComponent,
@@ -136,13 +137,11 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ConfigContactComponent,
     ConfigTCUComponent,
     DialogResetPasswordComponent,
-    DialogMailResetComponent,
-    DialogEnrolMailComponent
+    DialogMailResetComponent
   ],
   entryComponents: [
     DialogResetPasswordComponent,
-    DialogMailResetComponent,
-    DialogEnrolMailComponent
+    DialogMailResetComponent
   ],
   imports: [
     // angular

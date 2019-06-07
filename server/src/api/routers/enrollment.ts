@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
 import { BadRequest } from 'http-errors';
-import { getOwner, getTCUHash, createSignatureRequest, monitorSignatureRequests } from '../../controllers/enrollment';
+import { getOwner, getTCUHash, startKeyRegistration, monitorSignatureRequests } from '../../controllers/enrollment';
 import log = require('loglevel');
 
 /**
@@ -37,10 +37,8 @@ router.get('/enrollment/:id', async function (ctx) {
  */
 router.post('/enrollment/:id/create-signature-request', async function (ctx) {
   const { id } = ctx.params;
-  const { email } = ctx.request.body;
   let user;
 
-  const hashTCU = await getTCUHash();
   let response;
 
   try {
@@ -51,10 +49,10 @@ router.post('/enrollment/:id/create-signature-request', async function (ctx) {
   }
 
   try {
-    await createSignatureRequest(hashTCU, email)
-    .then((res: any) => {
-      response = res;
-    });
+    await startKeyRegistration(id)
+      .then((res: any) => {
+        response = res;
+      });
   } catch (error) {
     log.error(error);
   }

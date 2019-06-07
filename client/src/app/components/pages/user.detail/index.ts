@@ -5,7 +5,6 @@ import { TrackById } from '../../util';
 import { UserService } from '@services/user';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { Subscription } from 'rxjs';
-import { DialogEnrolMailComponent } from '@components/parts/dialog-enrol-mail';
 import { MatDialog } from '@angular/material';
 
 @Component({
@@ -21,6 +20,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
 
   formOpened = false;
   externalFormOpened = false;
+  enrollFormOpened = false;
 
   contactAvailable: boolean;
   useSMTP: boolean;
@@ -67,17 +67,6 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
 
   refreshUser() {
     this.user$ = this.userService.getById(this.userId);
-  }
-
-  async sendEnrollmentMail() {
-    try {
-      await this.userService.keyEnrollment(this.email);
-    } catch (err) {
-      this.errorMsg = err.error.message;
-    }
-    this.dialog.open(DialogEnrolMailComponent, {
-      width: '250px'
-    });
   }
 
   canEnroll(): Boolean {

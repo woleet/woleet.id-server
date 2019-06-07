@@ -202,8 +202,11 @@ async function upgrade10(sequelize) {
   if (config.version < 10) {
     doPostUpgrade10 = true;
     log.warn('Need to add "device" column to the "key" table');
-    const device = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "device" VARCHAR;`);
-    log.debug(device);
+    const deviceKey = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "device" VARCHAR;`);
+    log.debug(deviceKey);
+    log.warn('Need to add "device" column to the "enrollment" table');
+    const deviceEnroll = await sequelize.query(`ALTER TABLE "enrollment" ADD COLUMN "device" VARCHAR;`);
+    log.debug(deviceEnroll);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 10 }) });
   }
 }
