@@ -2,7 +2,6 @@ import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider } from '@components/util';
 import { Observable } from 'rxjs';
-import * as log from 'loglevel';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -44,7 +43,7 @@ export class ConfigMailTemplateComponent extends ErrorMessageProvider implements
       this.formMail.get('keyEnrollmentMail').setValue(config.mailKeyEnrollmentTemplate);
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => subscription.unsubscribe());
   }
 
   ngOnDestroy() {

@@ -43,7 +43,7 @@ export class ConfigLogoUrlComponent extends ErrorMessageProvider implements OnIn
       this.form.setValue(config.publicInfo.logoURL);
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => subscription.unsubscribe());
   }
 
   ngOnDestroy() {

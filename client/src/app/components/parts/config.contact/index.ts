@@ -42,7 +42,7 @@ export class ConfigContactComponent extends ErrorMessageProvider implements OnIn
       this.form.setValue(config.contact);
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => subscription.unsubscribe());
   }
 
   ngOnDestroy() {

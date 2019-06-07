@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider } from '@components/util';
 import { Observable } from 'rxjs';
@@ -44,7 +44,7 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
       this.TCUURL = this.sanitization.bypassSecurityTrustUrl(config.TCU.data);
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => subscription.unsubscribe());
   }
 
   ngOnDestroy() {
