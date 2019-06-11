@@ -3,7 +3,7 @@ import * as log from 'loglevel';
 import * as read from 'read';
 import * as crypto from 'crypto';
 import { ServerConfig, Key, APIToken } from '.';
-import { serverConfig, secretEnvVariableName, secureModule } from '../config';
+import { serverConfig, secretEnvVariableName, secureModule, events } from '../config';
 import { promisify } from 'util';
 
 const { CONFIG_ID } = serverConfig;
@@ -212,22 +212,29 @@ async function upgrade11(sequelize) {
   log.warn('Checking for  update 1 of the "enrollment" model and server-event type...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
+  let enrollmentExist = false;
   if (!cfg) {
     return;
   }
+  try {
+    await sequelize.query(`SELECT * FROM "Enrollment";`);
+    enrollmentExist = true;
+  } catch { }
 
   const { config } = cfg.toJSON();
   if (config.version < 11) {
-    log.warn('Need to add "device" and "name" column to the "enrollment" table');
-    const deviceEnroll = await sequelize.query(`ALTER TABLE "enrollment" ADD COLUMN "device" VARCHAR;`);
-    log.debug(deviceEnroll);
-    const nameEnroll = await sequelize.query(`ALTER TABLE "enrollment" ADD COLUMN "name" VARCHAR;`);
-    log.debug(nameEnroll);
+    if (enrollmentExist) {
+      log.warn('Need to add "device" and "name" column to the "enrollments" table');
+      const deviceEnroll = await sequelize.query(`ALTER TABLE "Enrollments" ADD COLUMN "device" VARCHAR;`);
+      log.debug(deviceEnroll);
+      const nameEnroll = await sequelize.query(`ALTER TABLE "Enrollments" ADD COLUMN "name" VARCHAR;`);
+      log.debug(nameEnroll);
+    }
     log.warn('Need to add "enrollment.edit" and "enrollment.delete" type to the "serverEvent" table');
-    const editEnrollEvent = await sequelize.query(`ALTER TABLE "ServerEvent" TYPE "type" ADD VALUE "enrollment.edit";`);
-    log.debug(editEnrollEvent);
-    const deleteEnrollEvent = await sequelize.query(`ALTER TABLE "ServerEvent" TYPE "type" ADD VALUE "enrollment.delete";`);
-    log.debug(deleteEnrollEvent);
+    const deleteEnrollmentServerEvent = await sequelize.query(`ALTER TYPE "enum_serverEvents_type" ADD VALUE 'enrollment.delete';`);
+    log.debug(deleteEnrollmentServerEvent);
+    const editEnrollmentServerEvent = await sequelize.query(`ALTER TYPE "enum_serverEvents_type" ADD VALUE 'enrollment.edit';`);
+    log.debug(editEnrollmentServerEvent);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 11 }) });
   }
 }
