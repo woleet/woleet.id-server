@@ -105,17 +105,17 @@ declare global {
     status: KeyStatusEnum;
     expiration: number;
 
-    /** Hexadecimal represention of the mnemonic phrase */
+    /** Hexadecimal representation of the mnemonic phrase */
     mnemonicEntropy?: string;
-    /** Hexadecimal represention of the mnemonic's initialization vector */
+    /** Hexadecimal representation of the mnemonic's initialization vector */
     mnemonicEntropyIV?: string;
-    /** Hexadecimal represention of the private key */
+    /** Hexadecimal representation of the private key */
     privateKey?: string;
-    /** Hexadecimal represention of the private key's initialization vector */
+    /** Hexadecimal representation of the private key's initialization vector */
     privateKeyIV?: string;
-    /** Boolean to indicate weither the privatekey is compresssed or not */
+    /** Boolean to indicate whether the private key is compressed or not */
     compressed?: boolean;
-    /** Base 58 represention of the public key */
+    /** Base 58 representation of the public key */
     publicKey: string;
 
     userId: string;
@@ -130,13 +130,13 @@ declare global {
     expiration?: number;
     holder: 'server' | 'user';
 
-    /** Hexadecimal represention of the mnemonic phrase */
+    /** Hexadecimal representation of the mnemonic phrase */
     mnemonicEntropy?: string;
-    /** Hexadecimal represention of the private key */
+    /** Hexadecimal representation of the private key */
     privateKey?: string;
-    /** Boolean to indicate weither the privatekey is compresssed or not */
+    /** Boolean to indicate whether the private key is compressed or not */
     compressed?: boolean;
-    /** Base 58 represention of the public key */
+    /** Base 58 representation of the public key */
     publicKey: string;
     /** Reference to the owner of the key */
     userId: string;

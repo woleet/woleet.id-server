@@ -20,7 +20,6 @@ export async function initServerConfig() {
     debug(JSON.stringify(config, null, 2));
 
     const key = await Key.getAny();
-
     if (!key) {
       log.warn('Not any key in database, cannot check secret restoration');
       return;

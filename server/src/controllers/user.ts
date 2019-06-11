@@ -86,7 +86,6 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
   }
 
   const user = await User.update(id, update);
-
   if (!user) {
     throw new NotFoundUserError();
   }
@@ -99,7 +98,6 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
   debug('Get user', id);
 
   const user = await User.getById(id);
-
   if (!user) {
     throw new NotFoundUserError();
   }
@@ -122,12 +120,11 @@ export async function deleteUser(id: string): Promise<InternalUserObject> {
   debug('Deleting user', id);
 
   const user = await User.delete(id);
-
-  await store.delSessionsWithUser(id);
-
   if (!user) {
     throw new NotFoundUserError();
   }
+
+  await store.delSessionsWithUser(id);
 
   return user.toJSON();
 }
@@ -152,7 +149,6 @@ export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject)
   });
 
   user = await User.update(user.getDataValue('id'), update);
-
   if (!user) {
     throw new NotFoundUserError();
   }

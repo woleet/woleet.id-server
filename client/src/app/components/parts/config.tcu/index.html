@@ -4,7 +4,7 @@
   <mat-card-content hidden>
     <input type="file" id="userFile" (change)="onSelectFile($event)" #fileInput hidden>
     <mat-error *ngIf="errorMessage">
-      {{errorMessage}
+      {{errorMessage}}
     </mat-error>
   </mat-card-content>
   <mat-card-actions>

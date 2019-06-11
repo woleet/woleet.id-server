@@ -29,11 +29,15 @@ Use this endpoint to get information about the current user.
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
-// Configure API key authorization: CookieAuth
-ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-CookieAuth.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//CookieAuth.setApiKeyPrefix("Token");
+// Configure HTTP basic authorization: APITokenAuth
+HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
+APITokenAuth.setUsername("YOUR USERNAME");
+APITokenAuth.setPassword("YOUR PASSWORD");
+
+// Configure HTTP basic authorization: OAuthTokenAuth
+HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+OAuthTokenAuth.setUsername("YOUR USERNAME");
+OAuthTokenAuth.setPassword("YOUR PASSWORD");
 
 DiscoveryApi apiInstance = new DiscoveryApi();
 try {
@@ -54,7 +58,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[CookieAuth](../README.md#CookieAuth)
+[APITokenAuth](../README.md#APITokenAuth), [OAuthTokenAuth](../README.md#OAuthTokenAuth)
 
 ### HTTP request headers
 
@@ -80,11 +84,15 @@ Use this endpoint to get the user owning a given public key.
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
-// Configure API key authorization: CookieAuth
-ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-CookieAuth.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//CookieAuth.setApiKeyPrefix("Token");
+// Configure HTTP basic authorization: APITokenAuth
+HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
+APITokenAuth.setUsername("YOUR USERNAME");
+APITokenAuth.setPassword("YOUR PASSWORD");
+
+// Configure HTTP basic authorization: OAuthTokenAuth
+HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+OAuthTokenAuth.setUsername("YOUR USERNAME");
+OAuthTokenAuth.setPassword("YOUR PASSWORD");
 
 DiscoveryApi apiInstance = new DiscoveryApi();
 String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | Public key (bitcoin address when using BIP39 keys).
@@ -109,7 +117,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[CookieAuth](../README.md#CookieAuth)
+[APITokenAuth](../README.md#APITokenAuth), [OAuthTokenAuth](../README.md#OAuthTokenAuth)
 
 ### HTTP request headers
 
@@ -135,11 +143,15 @@ Use this endpoint to get all public keys owned by a given user.
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
-// Configure API key authorization: CookieAuth
-ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-CookieAuth.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//CookieAuth.setApiKeyPrefix("Token");
+// Configure HTTP basic authorization: APITokenAuth
+HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
+APITokenAuth.setUsername("YOUR USERNAME");
+APITokenAuth.setPassword("YOUR PASSWORD");
+
+// Configure HTTP basic authorization: OAuthTokenAuth
+HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+OAuthTokenAuth.setUsername("YOUR USERNAME");
+OAuthTokenAuth.setPassword("YOUR PASSWORD");
 
 DiscoveryApi apiInstance = new DiscoveryApi();
 UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
@@ -164,7 +176,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[CookieAuth](../README.md#CookieAuth)
+[APITokenAuth](../README.md#APITokenAuth), [OAuthTokenAuth](../README.md#OAuthTokenAuth)
 
 ### HTTP request headers
 
@@ -190,11 +202,15 @@ Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
-// Configure API key authorization: CookieAuth
-ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-CookieAuth.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//CookieAuth.setApiKeyPrefix("Token");
+// Configure HTTP basic authorization: APITokenAuth
+HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
+APITokenAuth.setUsername("YOUR USERNAME");
+APITokenAuth.setPassword("YOUR PASSWORD");
+
+// Configure HTTP basic authorization: OAuthTokenAuth
+HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+OAuthTokenAuth.setUsername("YOUR USERNAME");
+OAuthTokenAuth.setPassword("YOUR PASSWORD");
 
 DiscoveryApi apiInstance = new DiscoveryApi();
 String search = {"email":{"value":"john.doe@acme.com"},"username":{"value":"johndoe"},"x500CommonName":{"value":"John Doe"},"x500Organization":{"value":"Acme corp"},"x500OrganizationalUnit":{"value":"Business unit"}}; // String | A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
@@ -219,7 +235,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[CookieAuth](../README.md#CookieAuth)
+[APITokenAuth](../README.md#APITokenAuth), [OAuthTokenAuth](../README.md#OAuthTokenAuth)
 
 ### HTTP request headers
 

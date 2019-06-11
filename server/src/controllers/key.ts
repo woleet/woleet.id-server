@@ -31,22 +31,18 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
   return newKey.toJSON();
 }
 
-export async function externalCreateKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
-  const name = key.name;
-  const publicKey = key.publicKey;
-  const expiration = key.expiration || null;
-  try {
-  const newKey = await Key.create(Object.assign({
-    name,
-    publicKey,
-    holder: 'user',
-    userId,
-    expiration
+/**
+ * @swagger
+ *  operationId: createExternalKey
+ */
+export async function createExternalKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
+  const holder: KeyHolderEnum = 'user';
+  const newKey = await Key.create(Object.assign({}, key, {
+    publicKey: key.publicKey,
+    holder,
+    userId
   }));
   return newKey.toJSON();
-} catch (err) {
-  throw err;
-}
 }
 
 /**
@@ -55,7 +51,6 @@ export async function externalCreateKey(userId: string, key: ApiPostKeyObject): 
  */
 export async function updateKey(id: string, attrs: ApiPutKeyObject) {
   const key = await Key.update(id, attrs);
-
   if (!key) {
     throw new NotFoundKeyError();
   }
@@ -65,7 +60,6 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
 
 export async function getKeyById(id: string): Promise<InternalKeyObject> {
   const key = await Key.getById(id);
-
   if (!key) {
     throw new NotFoundKeyError();
   }
@@ -75,7 +69,6 @@ export async function getKeyById(id: string): Promise<InternalKeyObject> {
 
 export async function getOwner(id): Promise<InternalUserObject> {
   const key = await Key.getByIdAndPullUser(id);
-
   if (!key) {
     throw new NotFoundKeyError();
   }
@@ -85,7 +78,6 @@ export async function getOwner(id): Promise<InternalUserObject> {
 
 export async function getOwnerByPubKey(pubKey): Promise<InternalUserObject> {
   const key = await Key.getByPubKey(pubKey, null, true);
-
   if (!key) {
     throw new NotFoundKeyError();
   }
@@ -95,7 +87,6 @@ export async function getOwnerByPubKey(pubKey): Promise<InternalUserObject> {
 
 export async function exportKey(id: string): Promise<string> {
   const key = await Key.getById(id);
-
   if (!key) {
     throw new NotFoundKeyError();
   }
@@ -106,28 +97,19 @@ export async function exportKey(id: string): Promise<string> {
   return secureModule.exportPhrase(entropy, entropyIV);
 }
 
-export async function getAllKeys(full = false): Promise<InternalKeyObject[]> {
-  const keys = await Key.getAll({ full });
-  return keys.map((key) => key.toJSON());
-}
-
 export async function getAllKeysOfUser(userId: string, full = false): Promise<InternalKeyObject[]> {
-
   const user = await User.getById(userId);
-
   if (!user) {
     throw new NotFoundUserError();
   }
 
   const keys = await Key.getAllKeysOfUser(userId, full);
-
   return keys.map((key) => key.toJSON());
 }
 
 export async function deleteKey(id: string): Promise<InternalKeyObject> {
 
   const key = await Key.delete(id);
-
   if (!key) {
     throw new NotFoundKeyError();
   }
@@ -135,13 +117,12 @@ export async function deleteKey(id: string): Promise<InternalKeyObject> {
   return key.toJSON();
 }
 
-export async function isKeyHoldedByServer(id: string): Promise<Boolean> {
+export async function isKeyHeldByServer(id: string): Promise<Boolean> {
 
   const key = await Key.getById(id);
-
   if (!key) {
     throw new NotFoundKeyError();
   }
 
-  return key.toJSON().holder === 'server' ? true : false;
+  return key.toJSON().holder === 'server';
 }
