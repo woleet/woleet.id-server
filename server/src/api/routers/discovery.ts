@@ -2,18 +2,19 @@ import { validate } from '../schemas';
 import * as Router from 'koa-router';
 import { BadRequest } from 'http-errors';
 
-import { getOwnerByPubKey, getAllKeysOfUser } from '../../controllers/key';
-import { serializeKey } from '../serialize/key';
+import { getAllKeysOfUser, getOwnerByPubKey } from '../../controllers/key';
 import { serializeUser } from '../serialize/user';
-import { searchAllUsers, getUserById } from '../../controllers/user';
+import { getUserById, searchAllUsers } from '../../controllers/user';
 import { bearerAuth } from '../authentication';
+import { getServerConfig } from "../../controllers/server-config";
+import { serializeKey } from "../serialize/key";
 
 const vuid = validate.param('userId', 'uuid');
 const vaddr = validate.param('pubKey', 'address');
 
 /**
  * Discovery
- * Request handlers for dicovery features.
+ * Request handlers for discovery features.
  * @swagger
  *  tags: [discovery]
  */
@@ -30,7 +31,8 @@ router.use(bearerAuth);
 router.get('/keys/:userId', vuid, async function (ctx) {
   const { userId } = ctx.params;
   const keys = await getAllKeysOfUser(userId);
-  ctx.body = keys.map(serializeKey);
+  const identityURL = getServerConfig().identityURL;
+  ctx.body = keys.map((key) => Object.assign({}, serializeKey(key), { identityURL }));
 });
 
 /**

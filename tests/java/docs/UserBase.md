@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **status** | [**UserStatusEnum**](UserStatusEnum.md) |  |  [optional]
 **role** | [**UserRoleEnum**](UserRoleEnum.md) |  |  [optional]
 **identity** | [**FullIdentity**](FullIdentity.md) |  |  [optional]
-**defaultKeyId** | [**UUID**](UUID.md) | Identifier of the default key to use for this user. Cannot be set to an extern-key. |  [optional]
+**defaultKeyId** | [**UUID**](UUID.md) | Identifier of the default key to use for this user. Cannot be the an external key identitier. |  [optional]
 
 
 

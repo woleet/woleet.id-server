@@ -6,7 +6,6 @@ import { User } from '..';
 
 const KeyModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
-  customKeyId: { type: STRING, defaultValue: null, unique: true },
   type: { type: ENUM(['bip39']), defaultValue: 'bip39' },
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   name: { type: STRING, allowNull: false },

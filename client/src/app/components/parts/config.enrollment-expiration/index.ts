@@ -43,7 +43,7 @@ export class ConfigEnrollmentExpirationComponent extends ErrorMessageProvider im
       this.form.setValue(config.enrollmentExpirationOffset);
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsubscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => subscription.unsubscribe());
   }
 
   ngOnDestroy() {

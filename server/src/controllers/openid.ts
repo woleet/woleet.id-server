@@ -84,8 +84,8 @@ export async function createOAuthSession(email: string): Promise<{ token: string
   if (!config.useOpenIDConnect) {
     throw new Error('createOAuthUser called while openID connect is disabled');
   }
-  const user = await lookForUser(email);
 
+  const user = await lookForUser(email);
   if (!user) {
     return null;
   }

@@ -1,5 +1,5 @@
-<logo [logoURL]="serverPublicInfo.logoURL"></logo>
-<html-frame [HtmlFrame]="serverPublicInfo.HTMLFrame"></html-frame>
+<logo [logoURL]="publicInfo.logoURL"></logo>
+<html-frame [HtmlFrame]="publicInfo.HTMLFrame"></html-frame>
 <div class="form-container" *ngIf="(!redirect || !useOIDC)">
   <form role="form" (submit)="login()" #f="ngForm">
     <div>

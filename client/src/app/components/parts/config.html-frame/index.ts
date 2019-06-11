@@ -2,7 +2,6 @@ import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider } from '@components/util';
 import { Observable } from 'rxjs';
-import * as log from 'loglevel';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -43,7 +42,7 @@ export class ConfigHTMLFrameUrlComponent extends ErrorMessageProvider implements
       this.form.setValue(config.publicInfo.HTMLFrame);
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => subscription.unsubscribe());
   }
 
   ngOnDestroy() {

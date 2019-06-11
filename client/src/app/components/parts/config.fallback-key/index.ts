@@ -53,7 +53,7 @@ export class ConfigFallbackKeyComponent implements OnInit, OnDestroy {
       this.editMode = false;
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => subscription.unsubscribe());
   }
 
   ngOnDestroy() {

@@ -20,7 +20,7 @@ paths:
         - BasicAuth: []
       responses:
         '200':
-          description: User successfully logged in. A `session` cookie is returned.
+          description: User successfully logged in. A session cookie is returned.
           content:
             application/json:
               schema:
@@ -101,7 +101,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad API token.
+          description: Missing or bad token.
           content:
             application/json:
               schema:
@@ -158,12 +158,15 @@ paths:
     get:
       operationId: discoverUsers
       summary: Get all users matching a search string.
+      security:
+        - APITokenAuth: []
+        - OAuthTokenAuth: []
       tags:
         - Discovery
       description: >
         Use this endpoint to get all users whose `email`, `username`, `x500CommonName`, `x500Organization` or `x500OrganizationalUnit` contains the search string.
       parameters:
-        - $ref: '#/components/parameters/UserSearchQueryParameter'
+        - $ref: '#/components/parameters/DiscoverUsersQueryParameter'
       responses:
         '200':
           description: Successful operation.
@@ -181,6 +184,9 @@ paths:
     get:
       operationId: discoverUserByPubKey
       summary: Get the user associated to a public key.
+      security:
+        - APITokenAuth: []
+        - OAuthTokenAuth: []
       tags:
         - Discovery
       description: >
@@ -210,6 +216,9 @@ paths:
     get:
       operationId: discoverUser
       summary: Get information about the current user.
+      security:
+        - APITokenAuth: []
+        - OAuthTokenAuth: []
       tags:
         - Discovery
       description: >
@@ -231,6 +240,9 @@ paths:
     get:
       operationId: discoverUserKeys
       summary: Get all public keys of a user.
+      security:
+        - APITokenAuth: []
+        - OAuthTokenAuth: []
       tags:
         - Discovery
       description: >
@@ -1182,7 +1194,7 @@ components:
         defaultKeyId:
           type: string
           format: uuid
-          description: Identifier of the default key to use for this user. Cannot be set to an extern-key.
+          description: Identifier of the default key to use for this user. Cannot be the an external key identitier.
           example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
     UserGet:
       allOf:
@@ -1281,17 +1293,19 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/APITokenGet'
+    IdentityURL:
+      type: string
+      example: "https://identity.mydomain.com/identity"
+      description: >
+        The identity URL that the server returns with a signature.
+        <br>Note that the server always expects to be called on the "/identity" endpoint,
+        if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain)
+        you must not forget it in your reverse proxy configuration.
     ServerConfig:
       type: object
       properties:
         identityURL:
-          type: string
-          example: "https://identity.mydomain.com/identity"
-          description: >
-            The identity URL that the server returns with a signature.
-            <br>Note that the server always expects to be called on the "/identity" endpoint,
-            if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain)
-            you must not forget it in your reverse proxy configuration.
+          $ref: '#/components/schemas/IdentityURL'
         defaultKeyId:
           type: string
           format: uuid
@@ -1474,6 +1488,10 @@ components:
     KeyDisco:
       allOf:
         - $ref: '#/components/schemas/KeyGet'
+        - type: object
+          properties:
+            identityURL:
+              $ref: '#/components/schemas/IdentityURL'
     KeyDiscoArray:
       type: array
       items:
@@ -1691,7 +1709,7 @@ components:
       schema:
         type: string
         example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
-    UserSearchQueryParameter:
+    DiscoverUsersQueryParameter:
       name: search
       in: query
       description: A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.

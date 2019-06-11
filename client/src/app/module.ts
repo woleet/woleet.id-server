@@ -34,6 +34,7 @@ import { ConfigHTMLFrameUrlComponent } from '@parts/config.html-frame';
 import { LogoComponent } from '@parts/logo';
 import { HtmlFrameComponent } from '@parts/html-frame';
 import { ConfigContactComponent } from '@parts/config.contact';
+import { ConfigOrganizationNameComponent } from '@parts/config.organization-name';
 import { ConfigTCUComponent } from '@parts/config.tcu';
 
 import { LoginPageComponent } from '@pages/login';
@@ -135,6 +136,7 @@ export function startupServiceFactory(startupService: AppConfigService): Functio
     ResetPasswordPageComponent,
     ConfigSMTPComponent,
     ConfigContactComponent,
+    ConfigOrganizationNameComponent,
     ConfigTCUComponent,
     DialogResetPasswordComponent,
     DialogMailResetComponent

@@ -24,10 +24,10 @@ public class DiscoveryApiTest {
 
     private UserGet user;
 
-    private DiscoveryApi tokenAuthApi;
+    private DiscoveryApi discoveryApi;
 
     private ApiTokenApi apiTokenApi;
-    private APITokenGet apiTokenGet;
+    private APITokenGet apiToken;
 
     private KeyApi keyApi;
 
@@ -45,11 +45,11 @@ public class DiscoveryApiTest {
 
         // Create an helper API with API token authentication
         apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
-        apiTokenGet = apiTokenApi.createAPIToken((APITokenPost) new APITokenPost().name("test"));
+        apiToken = apiTokenApi.createAPIToken((APITokenPost) new APITokenPost().name("test"));
         ApiClient apiClient = Config.getNoAuthApiClient();
         apiClient.setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
-        apiClient.addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue());
-        tokenAuthApi = new DiscoveryApi(apiClient);
+        apiClient.addDefaultHeader("Authorization", "Bearer " + apiToken.getValue());
+        discoveryApi = new DiscoveryApi(apiClient);
     }
 
     @After
@@ -57,8 +57,8 @@ public class DiscoveryApiTest {
         Config.deleteAllTestUsers();
 
         // This code is called before setUp() is called, so API token can be null
-        if (apiTokenGet != null)
-            apiTokenApi.deleteAPIToken(apiTokenGet.getId());
+        if (apiToken != null)
+            apiTokenApi.deleteAPIToken(apiToken.getId());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class DiscoveryApiTest {
 
         // Try to discover a user using an invalid key
         try {
-            tokenAuthApi.discoverUserByPubKey("invalid pubKey");
+            discoveryApi.discoverUserByPubKey("invalid pubKey");
             fail("Should not be able to discover a user using an invalid key");
         } catch (ApiException e) {
             assertEquals("Invalid return code", 400, e.getCode());
@@ -75,7 +75,7 @@ public class DiscoveryApiTest {
 
         // Try to discover a user using an unknown key
         try {
-            tokenAuthApi.discoverUserByPubKey("3Beer3irc1vgs76ENA4coqsEQpGZeM5CTd");
+            discoveryApi.discoverUserByPubKey("3Beer3irc1vgs76ENA4coqsEQpGZeM5CTd");
             fail("Should not be able to discover a user using an unknown key");
         } catch (ApiException e) {
             assertEquals("Invalid return code", 404, e.getCode());
@@ -84,7 +84,7 @@ public class DiscoveryApiTest {
 
         // Discover test user from his public key
         String key = keyApi.getKeyById(user.getDefaultKeyId()).getPubKey();
-        UserDisco response = tokenAuthApi.discoverUserByPubKey(key);
+        UserDisco response = discoveryApi.discoverUserByPubKey(key);
         assertEquals(user.getId(), response.getId());
     }
 
@@ -93,7 +93,7 @@ public class DiscoveryApiTest {
 
         // Try to discover user's keys using an unknown identifier
         try {
-            tokenAuthApi.discoverUserKeys(Config.randomUUID());
+            discoveryApi.discoverUserKeys(Config.randomUUID());
             fail("Should not be able to discover user's key using an unknown identifier");
         } catch (ApiException e) {
             assertEquals("Invalid return code", 404, e.getCode());
@@ -101,7 +101,7 @@ public class DiscoveryApiTest {
         }
 
         // Discover test user's keys
-        List<KeyDisco> response = tokenAuthApi.discoverUserKeys(user.getId());
+        List<KeyDisco> response = discoveryApi.discoverUserKeys(user.getId());
 
         // Check that test user's default key is part of his keys
         String pubKey = keyApi.getKeyById(user.getDefaultKeyId()).getPubKey();
@@ -113,22 +113,15 @@ public class DiscoveryApiTest {
 
     @Test
     public void discoverUsersTest() throws ApiException {
-        List<UserDisco> response = tokenAuthApi.discoverUsers("test");
+        List<UserDisco> response = discoveryApi.discoverUsers("test");
         for (UserDisco u : response)
             if (u.getId().equals(user.getId()))
                 return;
         fail("Test user not found in user list");
     }
 
-    /**
-     * Get the user associated with the authorization token.
-     *
-     * @throws ApiException if the Api call fails
-     */
     @Test
     public void discoverUserTest() throws ApiException {
-        // TODO: The APIToken created has a userId to null. This should be addressed in order to test discoverUserTest
-        //UserDisco response = discoverApi.discoverUser();
-        //assertEquals(user.getId(), response.getId());
+        // TODO: The API token created has a userId set to null, so it is not possible to discover the current user.
     }
 }

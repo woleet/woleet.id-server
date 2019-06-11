@@ -210,10 +210,10 @@ public class UserBase {
   }
 
    /**
-   * Identifier of the default key to use for this user. Cannot be set to an extern-key.
+   * Identifier of the default key to use for this user. Cannot be the an external key identitier.
    * @return defaultKeyId
   **/
-  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use for this user. Cannot be set to an extern-key.")
+  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use for this user. Cannot be the an external key identitier.")
   public UUID getDefaultKeyId() {
     return defaultKeyId;
   }

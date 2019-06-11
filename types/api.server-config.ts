@@ -55,6 +55,8 @@ interface ApiServerConfig {
   // Admin contact
   contact: string | null;
 
+  organizationName: string | null;
+
   // ProofDesk config
   proofDeskAPIURL: string | null;
   proofDeskAPIToken: string | null;
@@ -106,6 +108,8 @@ interface ApiServerConfigUpdate {
 
   // Admin contact
   contact?: string;
+
+  organizationName?: string;
 
   // ProofDesk config
   proofDeskAPIURL?: string;

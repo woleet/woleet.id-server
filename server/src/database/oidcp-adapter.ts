@@ -132,7 +132,6 @@ export class OIDCAccount {
     const id = this.accountId;
 
     const user = await User.getById(id);
-
     if (!user) {
       throw new Error(`No user matches identifier ${id}`);
     }

@@ -27,7 +27,8 @@ export class AppConfigService {
     TCU: {
       data: string
     },
-    contact: string
+    contact: string,
+    organizationName: string
   };
   bootOnLogin = false;
 
@@ -46,7 +47,7 @@ export class AppConfigService {
           const redirect = atob(params.redirect);
           store.set(LOGIN_REDIRECT_KEY, redirect);
         } catch {
-          log.warn(`failed to decode`, params.redirect);
+          log.warn(`Failed to decode`, params.redirect);
           errorService.setError('redirect-parameter', new Error(params.redirect));
         }
       }

@@ -121,6 +121,7 @@ export const serverConfig = {
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true,
     publicInfo: {},
+    organizationName: 'Woleet',
     mailOnboardingTemplate: readFileSync(
       path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), { encoding: 'ascii' }),
     mailResetPasswordTemplate: readFileSync(

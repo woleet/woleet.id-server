@@ -4,13 +4,13 @@
   <mat-card-content hidden>
     <input type="file" id="userFile" (change)="onSelectFile($event)" #fileInput hidden>
     <mat-error *ngIf="errorMessage">
-      {{errorMessage}
+      {{errorMessage}}
     </mat-error>
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="selectFile()">CHANGE</button>
     <button mat-raised-button color="primary" (click)="reset()">RESET TO DEFAULT</button>
-    <a [href]="TCUURL" download="Woleet Signature Service TCU.pdf" class="black-link">
+    <a [href]="TCUURL" download="{{organizationName}} Signature Service TCU.pdf" class="black-link">
       <button mat-raised-button color="primary">VIEW</button>
     </a>
   </mat-card-actions>

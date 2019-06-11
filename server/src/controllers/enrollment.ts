@@ -143,8 +143,8 @@ export async function startKeyRegistration(enrollmentId) {
         "identityURL": "${identityURL}",
         "device": "${currentEnrollment.device}"
       }],
-      "name": "WIDS TCU signature",
-      "hashToSign": "${hashTCU}"
+      "name": "${getServerConfig().organizationName} Signature Service TCU.pdf",
+      "hashToSign": "${hash}"
     }`;
   return createSignatureRequest(body, httpsOptions, url);
 }

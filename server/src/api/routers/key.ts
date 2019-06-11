@@ -2,9 +2,8 @@ import { validate } from '../schemas';
 import * as Router from 'koa-router';
 
 import {
-  createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, getOwner, updateKey
+  createExternalKey, createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, getOwner, updateKey
 } from '../../controllers/key';
-import { externalCreateKey } from '../../controllers/key';
 import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
@@ -71,7 +70,7 @@ router.post('/user/:userId/extern-key', vuid, validate.body('createExternKey'), 
   let created;
 
   try {
-    created = await externalCreateKey(userId, key);
+    created = await createExternalKey(userId, key);
   } catch (error) {
     throw new BadRequest(error);
   }

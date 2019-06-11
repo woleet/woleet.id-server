@@ -20,18 +20,18 @@
     <mat-icon>done</mat-icon>
   </ng-template>
   <mat-step label="Welcome" state="welcome">
-    <h1>Welcome to Woleet Signature Service</h1>
+    <h1>Welcome to {{config.organizationName}} Signature Service</h1>
     <div>
       <div>
         <p>Electronic signature consists in approving the content of an electronic document and fulfilling its
           commitment as a responsible person.</p>
       </div>
       <div>
-        <p>To be ready to use Woleet signature service, you need to:</p>
+        <p>To be ready to use {{config.organizationName}} signature service, you need to:</p>
         <ul>
           <li>Acknowledge your identity information.</li>
           <li>Create a signature key (that stays under your control).</li>
-          <li>Accept and sign Woleet Signature Service Terms and Conditions of Use using this key.</li>
+          <li>Accept and sign {{config.organizationName}} Signature Service Terms and Conditions of Use using this key.</li>
         </ul>
       </div>
     </div>
@@ -52,7 +52,7 @@
           <app-user-card [user]="user" [modes]="['display']"></app-user-card>
         </div>
         <br>
-        <p>Your personal information is stored by Woleet signature service and can be modified or deleted at any time,
+        <p>Your personal information is stored by {{config.organizationName}} signature service and can be modified or deleted at any time,
           upon simple request to <a [href]="'mailto:' + config.contact" target="_top">{{config.contact}}</a>.</p>
         <br>
       </div>
@@ -109,10 +109,10 @@
     <h1>Accept and sign our Terms and Conditions of Use</h1>
     <div>
       <div>
-        <p>Click on the button bellow to download and review the Woleet Signature Service Terms and Conditions of Use.
+        <p>Click on the button bellow to download and review the {{config.organizationName}} Signature Service Terms and Conditions of Use.
         </p>
         <p>If you agree, please click on the <strong>Get signature invitation email</strong> button below
-          to sign Woleet Signature Service Terms and Conditions of Use.</p>
+          to sign {{config.organizationName}} Signature Service Terms and Conditions of Use.</p>
       </div>
     </div>
     <div>

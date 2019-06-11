@@ -100,7 +100,7 @@ public class DiscoveryApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "CookieAuth" };
+        String[] localVarAuthNames = new String[] { "APITokenAuth", "OAuthTokenAuth" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -214,7 +214,7 @@ public class DiscoveryApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "CookieAuth" };
+        String[] localVarAuthNames = new String[] { "APITokenAuth", "OAuthTokenAuth" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -336,7 +336,7 @@ public class DiscoveryApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "CookieAuth" };
+        String[] localVarAuthNames = new String[] { "APITokenAuth", "OAuthTokenAuth" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -461,7 +461,7 @@ public class DiscoveryApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "CookieAuth" };
+        String[] localVarAuthNames = new String[] { "APITokenAuth", "OAuthTokenAuth" };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 

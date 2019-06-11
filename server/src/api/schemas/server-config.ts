@@ -44,6 +44,7 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
     toDefault: Joi.boolean().allow(null),
   }).allow(null),
   contact: Joi.string().allow(null),
+  organizationName: Joi.string().allow(null),
   // ProofDesk config
   proofDeskAPIURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   proofDeskAPIToken: Joi.string().allow(null),
