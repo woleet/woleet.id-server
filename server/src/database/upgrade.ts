@@ -2,8 +2,8 @@ import { Sequelize } from 'sequelize';
 import * as log from 'loglevel';
 import * as read from 'read';
 import * as crypto from 'crypto';
-import { ServerConfig, Key, APIToken } from '.';
-import { serverConfig, secretEnvVariableName, secureModule } from '../config';
+import { APIToken, Key, ServerConfig } from '.';
+import { secretEnvVariableName, secureModule, serverConfig } from '../config';
 import { promisify } from 'util';
 
 const { CONFIG_ID } = serverConfig;
@@ -27,7 +27,6 @@ async function upgrade1(sequelize) {
     const [model] = await sequelize.query(`SELECT * FROM "ServerConfigs" AS config WHERE config.id = '${serverConfig.CONFIG_ID}';`);
     old = model[0];
   } catch {
-
   }
 
   if (old) {
@@ -45,12 +44,13 @@ async function upgrade1(sequelize) {
     await ServerConfig.create({ config, createdAt, updatedAt });
 
     log.warn('Dropping old configuration table...');
-    const [drop] = await sequelize.query('Drop TABLE "ServerConfigs";');
+    await sequelize.query('DROP TABLE "ServerConfigs";');
   }
 }
 
 async function upgrade2(sequelize) {
   log.warn('Checking for update of the "keys" model...');
+
   const config = await getConfig();
   if (config && !config.version) {
     log.warn('Need to add "expiration" column to the "keys" table');
@@ -133,7 +133,6 @@ async function upgrade7(sequelize) {
   }
 
   const { config } = cfg.toJSON();
-  log.info({ config });
   if (config.version < 7) {
     log.warn('Need to add "tokenResetPassword" column to the "users" table');
     const tokenResetPassword = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "tokenResetPassword" VARCHAR;`);
@@ -180,7 +179,6 @@ async function upgrade9(sequelize) {
   try {
     old = await sequelize.query(`SELECT * FROM "Onboarding";`);
   } catch {
-
   }
 
   if (old) {
