@@ -27,7 +27,6 @@ public class Config {
 
     // Get API base path from the environment
     public static String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
-
     static {
         if (WOLEET_ID_SERVER_API_BASEPATH == null)
             WOLEET_ID_SERVER_API_BASEPATH = "https://localhost:3000/api";

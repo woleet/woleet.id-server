@@ -15,11 +15,11 @@ import log = require('loglevel');
 const router = new Router();
 
 /**
- * @route: /enrollment/{id}
+ * @route: /enrollment/{id}/user
  * @swagger
- *  operationId: getEnrollment
+ *  operationId: getEnrollmentUser
  */
-router.get('/enrollment/:id', async function (ctx) {
+router.get('/enrollment/:id/user', async function (ctx) {
   const { id } = ctx.params;
   let user;
   try {
@@ -68,7 +68,7 @@ router.post('/enrollment/:id/create-signature-request', async function (ctx) {
     data: JSON.stringify(response)
   });
 
-  ctx.body = '';
+  ctx.body = JSON.stringify(response.id);
 });
 
 export { router };

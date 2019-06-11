@@ -884,6 +884,151 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
+  /enrollment:
+    post:
+      tags:
+        - Enrollment
+      summary: Create an enrollment request.
+      operationId: createEnrollment
+      requestBody:
+        $ref: '#/components/requestBodies/EnrollmentPost'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/EnrollmentGet'
+        '400':
+          description: Invalid object supplied / Invalid API token identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+  /enrollment/list:
+    get:
+      tags:
+        - Enrollment
+      summary: Get all enrollment requests.
+      operationId: getAllEnrollment
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/EnrollmentArray'
+  /enrollment/{EnrollmentId}:
+    get:
+      tags:
+        - Enrollment
+      summary: Get an enrollment request.
+      operationId: getEnrollment
+      parameters:
+        - $ref: '#/components/parameters/EnrollmentIdParameter'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/EnrollmentGet'
+    put:
+      tags:
+        - Enrollment
+      summary: Update an enrollment request.
+      operationId: updateEnrollment
+      parameters:
+        - $ref: '#/components/parameters/EnrollmentIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/EnrollmentPut'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/EnrollmentGet'
+        '400':
+          description: Invalid object supplied / Invalid API token identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+    delete:
+      tags:
+        - Enrollment
+      summary: Delete an enrollment request.
+      operationId: deleteEnrollment
+      parameters:
+        - $ref: '#/components/parameters/EnrollmentIdParameter'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/EnrollmentGet'
+        '400':
+          description: Invalid object supplied / Invalid API token identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+  /enrollment/{EnrollmentId}/create-signature-request:
+    post:
+      tags:
+        - Enrollment
+      summary: Get an enrollment request.
+      operationId: postSignatureRequest
+      parameters:
+        - $ref: '#/components/parameters/EnrollmentIdParameter'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/SignatureRequestIdGet'
+        '400':
+          description: Invalid object supplied / The signature request creation is not possible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+  /enrollment/{EnrollmentId}/user:
+    get:
+      tags:
+        - Enrollment
+      summary: Get an enrollment request user.
+      operationId: getEnrollmentUser
+      parameters:
+        - $ref: '#/components/parameters/EnrollmentIdParameter'
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserGet'
 components:
   schemas:
     Identity:
@@ -938,13 +1083,6 @@ components:
       format: password
       description: User password.
       example: "nSBa+rV3%2/LpD"
-    Mnemonics:
-      type: object
-      properties:
-        phrase:
-          type: string
-          description: List of mnemonic words used to recover or import a key.
-          example: "abandon ability able about above absent"
     PubKey:
       type: string
       description: Public key (bitcoin address when using BIP39 keys).
@@ -1063,12 +1201,8 @@ components:
         - type: object
           required:
             - identity
-            - sendKeyEnrollmentMail
             - createDefaultKey
           properties:
-              sendKeyEnrollmentMail:
-                type: boolean
-                description: If true send an enrollment email.
               createDefaultKey:
                 type: boolean
                 description: If true create a key holded by the server when this user is created.
@@ -1168,7 +1302,7 @@ components:
           example: true
           description: True is the server must fallback on the default key (if any).
         publicInfo:
-          $ref: '#/components/schema/ServerPublicInfo'
+          $ref: '#/components/schemas/ServerPublicInfo'
     ServerPublicInfo:
       type: object
       properties:
@@ -1193,6 +1327,8 @@ components:
         - key.delete
         - enrollment.create
         - enrollment.create-signature-request
+        - enrollment.delete
+        - enrollment.edit
         - user.create
         - user.edit
         - user.delete
@@ -1434,6 +1570,63 @@ components:
           required:
             - code
             - message
+    EnrollmentBase:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the enrolled key.
+          example: 'test'
+        device:
+          $ref: '#/components/schemas/KeyDeviceEnum'
+        expiration:
+          type: integer
+          format: int64
+          example: 1569542400000
+          description: >
+            Enrollment expiration date (Unix ms timestamp).
+            <br>Note that the field is not returned if the enrollment has no expiration date.
+    EnrollmentGet:
+      allOf:
+        - $ref: '#/components/schemas/EnrollmentBase'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Added enrollment id
+              example: "feb37e23-d04e-4e71-bf53-1f1a75ba3a68"
+            userId:
+              type: string
+              format: uuid
+              description: Id of the enrolled user.
+              example: 'feb37e23-d04e-4e71-bf53-1f1a75ba3a68'
+    EnrollmentPost:
+      allOf:
+        - $ref: '#/components/schemas/EnrollmentBase'
+        - type: object
+          required:
+            - userId
+            - name
+          properties:
+            userId:
+              type: string
+              format: uuid
+              description: Id of the enrolled user.
+              example: 'feb37e23-d04e-4e71-bf53-1f1a75ba3a68'
+            test:
+              type: boolean
+              description: True if it's a test.
+    EnrollmentPut:
+      allOf:
+        - $ref: '#/components/schemas/EnrollmentBase'
+    EnrollmentArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/EnrollmentGet'
+    SignatureRequestIdGet:
+      type: string
+      description: Id of the created signature request.
   parameters:
     UserIdParameter:
       name: userId
@@ -1549,6 +1742,15 @@ components:
       schema:
         type: string
         example: 'd8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975'
+    EnrollmentIdParameter:
+      name: EnrollmentId
+      in: path
+      description: Identifier of the enrollment.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: "813797c8-01e3-4a80-8068-bc2bda13df16"
   requestBodies:
     KeyPost:
       content:
@@ -1592,6 +1794,20 @@ components:
             $ref: '#/components/schemas/ServerConfig'
       description: Replacement server config object.
       required: true
+    EnrollmentPost:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EnrollmentPost'
+      description: Enrollment object to add.
+      required: true
+    EnrollmentPut:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EnrollmentPut'
+      description: Enrollment object to update.
+      required: true
   responses:
     UserGet:
       $ref: '#/components/schemas/UserGet'
@@ -1621,6 +1837,12 @@ components:
       $ref: '#/components/schemas/ServerEventGet'
     ServerEventArray:
       $ref: '#/components/schemas/ServerEventArray'
+    EnrollmentGet:
+      $ref: '#/components/schemas/EnrollmentGet'
+    EnrollmentArray:
+      $ref: '#/components/schemas/EnrollmentArray'
+    SignatureRequestIdGet:
+      $ref: '#/components/schemas/SignatureRequestIdGet'
   securitySchemes:
     BasicAuth:
       type: http

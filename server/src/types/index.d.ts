@@ -378,8 +378,7 @@ declare global {
 
   /* Enrollment */
 
-  interface InternalEnrollmentObject extends EnrollmentObject {
-    id: string;
+  interface InternalEnrollmentObject extends EnrollmentObject, CommonInternalProperties {
     userId: string;
     expiration: number;
     name: string;
@@ -387,9 +386,6 @@ declare global {
   }
 
   interface SequelizeEnrollmentObject extends Instance<InternalEnrollmentObject> {
-  }
-
-  interface ApiPostEnrollmentObject extends EnrollmentObject {
   }
 
   /* OIDC Provider */

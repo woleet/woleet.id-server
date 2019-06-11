@@ -32,10 +32,11 @@ export async function createEnrollment(enrollment: ApiPostEnrollmentObject): Pro
   const expiration = !!getServerConfig().enrollmentExpirationOffset ?
     Date.now() + timestring(getServerConfig().enrollmentExpirationOffset) * 1000 :
     null;
-
   enrollment.expiration = enrollment.expiration || expiration;
   const newEnrollment = await Enrollment.create(enrollment);
-  await sendKeyEnrollmentEmail(user.toJSON(), newEnrollment.toJSON().id);
+  if (!enrollment.test) {
+    await sendKeyEnrollmentEmail(user.toJSON(), newEnrollment.toJSON().id);
+  }
   return newEnrollment.toJSON();
 }
 
@@ -77,8 +78,8 @@ export async function getOwner(id): Promise<InternalUserObject> {
   return user.toJSON();
 }
 
-export async function getAllEnrollment(full = false): Promise<InternalEnrollmentObject[]> {
-  const enrollments = await Enrollment.getAll({ full });
+export async function getAllEnrollment(): Promise<InternalEnrollmentObject[]> {
+  const enrollments = await Enrollment.getAll();
   return enrollments.map((enrollment) => enrollment.toJSON());
 }
 
@@ -91,6 +92,17 @@ export async function deleteEnrollment(id: string): Promise<InternalEnrollmentOb
   }
 
   return enrollment.toJSON();
+}
+
+export async function putEnrollment(id: string, enrollment: ApiPutEnrollmentObject): Promise<InternalEnrollmentObject> {
+
+  const enrollmentUp = await Enrollment.update(id, enrollment);
+
+  if (!enrollmentUp) {
+    throw new NotFoundEnrollmentError();
+  }
+
+  return enrollmentUp.toJSON();
 }
 
 export async function getTCUHash(): Promise<string> {

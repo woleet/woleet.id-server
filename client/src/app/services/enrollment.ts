@@ -9,7 +9,7 @@ export class EnrollmentService {
   constructor(private http: HttpClient) { }
 
   getUserByEnrollmentId(enrollmentId: string): Observable<ApiUserObject> {
-    return this.http.get<ApiUserObject>(`${serverURL}/enrollment/${enrollmentId}/`);
+    return this.http.get<ApiUserObject>(`${serverURL}/enrollment/${enrollmentId}/user`);
   }
 
   createTCUSignatureRequest(enrollmentId: string, email: string): Observable<Object> {

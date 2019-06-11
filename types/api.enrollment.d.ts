@@ -14,4 +14,11 @@ interface ApiPostEnrollmentObject extends EnrollmentObject {
   userId: string;
   device?: KeyDeviceEnum;
   expiration?: number;
+  test?: boolean;
+}
+
+interface ApiPutEnrollmentObject extends EnrollmentObject {
+  name?: string;
+  device?: KeyDeviceEnum;
+  expiration?: number;
 }

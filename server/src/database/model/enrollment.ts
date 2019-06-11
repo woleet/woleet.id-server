@@ -1,5 +1,5 @@
-import { UniqueConstraintError, UUID, UUIDV4, DATE, ENUM, STRING } from 'sequelize';
-import { DuplicatedUserError } from '../../errors';
+import { ForeignKeyConstraintError, UUID, UUIDV4, DATE, ENUM, STRING } from 'sequelize';
+import { InvalidUserTargetedKeyError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 
 const EnrollmentModel = {
@@ -22,9 +22,8 @@ class EnrollmentAccess extends AbstractInstanceAccess<InternalEnrollmentObject, 
   }
 
   handleError(err: any) {
-    if (err instanceof UniqueConstraintError) {
-      const field = Object.keys(err['fields']);
-      throw new DuplicatedUserError(`Duplicated field ${field}`, err);
+    if (err instanceof ForeignKeyConstraintError) {
+      throw new InvalidUserTargetedKeyError('Invalid user id provided', err);
     }
   }
 

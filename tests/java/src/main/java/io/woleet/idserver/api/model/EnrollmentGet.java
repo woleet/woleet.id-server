@@ -22,38 +22,58 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.woleet.idserver.api.model.FullIdentity;
-import io.woleet.idserver.api.model.UserPut;
-import io.woleet.idserver.api.model.UserRoleEnum;
-import io.woleet.idserver.api.model.UserStatusEnum;
+import io.woleet.idserver.api.model.EnrollmentBase;
+import io.woleet.idserver.api.model.KeyDeviceEnum;
 import java.io.IOException;
 import java.util.UUID;
 
 /**
- * UserPost
+ * EnrollmentGet
  */
 
-public class UserPost extends UserPut {
-  public static final String SERIALIZED_NAME_CREATE_DEFAULT_KEY = "createDefaultKey";
-  @SerializedName(SERIALIZED_NAME_CREATE_DEFAULT_KEY)
-  private Boolean createDefaultKey;
+public class EnrollmentGet extends EnrollmentBase {
+  public static final String SERIALIZED_NAME_ID = "id";
+  @SerializedName(SERIALIZED_NAME_ID)
+  private UUID id;
 
-  public UserPost createDefaultKey(Boolean createDefaultKey) {
-    this.createDefaultKey = createDefaultKey;
+  public static final String SERIALIZED_NAME_USER_ID = "userId";
+  @SerializedName(SERIALIZED_NAME_USER_ID)
+  private UUID userId;
+
+  public EnrollmentGet id(UUID id) {
+    this.id = id;
     return this;
   }
 
    /**
-   * If true create a key holded by the server when this user is created.
-   * @return createDefaultKey
+   * Added enrollment id
+   * @return id
   **/
-  @ApiModelProperty(required = true, value = "If true create a key holded by the server when this user is created.")
-  public Boolean getCreateDefaultKey() {
-    return createDefaultKey;
+  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Added enrollment id")
+  public UUID getId() {
+    return id;
   }
 
-  public void setCreateDefaultKey(Boolean createDefaultKey) {
-    this.createDefaultKey = createDefaultKey;
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public EnrollmentGet userId(UUID userId) {
+    this.userId = userId;
+    return this;
+  }
+
+   /**
+   * Id of the enrolled user.
+   * @return userId
+  **/
+  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Id of the enrolled user.")
+  public UUID getUserId() {
+    return userId;
+  }
+
+  public void setUserId(UUID userId) {
+    this.userId = userId;
   }
 
 
@@ -65,23 +85,25 @@ public class UserPost extends UserPut {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserPost userPost = (UserPost) o;
-    return Objects.equals(this.createDefaultKey, userPost.createDefaultKey) &&
+    EnrollmentGet enrollmentGet = (EnrollmentGet) o;
+    return Objects.equals(this.id, enrollmentGet.id) &&
+        Objects.equals(this.userId, enrollmentGet.userId) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(createDefaultKey, super.hashCode());
+    return Objects.hash(id, userId, super.hashCode());
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserPost {\n");
+    sb.append("class EnrollmentGet {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    createDefaultKey: ").append(toIndentedString(createDefaultKey)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

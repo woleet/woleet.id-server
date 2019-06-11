@@ -17,7 +17,7 @@ const options = {
     idle: 10000
   },
 
-  logging: false,
+  logging: console.log,
   operatorsAliases: false
 };
 
