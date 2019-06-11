@@ -144,7 +144,7 @@ export async function startKeyRegistration(enrollmentId) {
         "device": "${currentEnrollment.device}"
       }],
       "name": "${getServerConfig().organizationName} Signature Service TCU.pdf",
-      "hashToSign": "${hash}"
+      "hashToSign": "${hashTCU}"
     }`;
   return createSignatureRequest(body, httpsOptions, url);
 }
