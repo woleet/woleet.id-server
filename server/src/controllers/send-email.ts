@@ -74,14 +74,14 @@ export async function sendKeyEnrollmentEmail(user: InternalUserObject, enrollmen
   const config = getServerConfig();
   const webClientURL = config.webClientURL;
 
-  const link = webClientURL + '/enrollment/' + enrollment.id;
+  const link = webClientURL + '/enrollment/' + enrollmentID;
   const logo = getLogo(config);
   const subject = 'Register your signature key';
   const html = mustache.render(config.mailKeyEnrollmentTemplate, {
     keyEnrollmentURL: link,
     organizationName: config.organizationName,
     logoURL: logo,
-    userName: user.getDataValue('x500CommonName')
+    userName: user.x500CommonName
   });
 
   try {

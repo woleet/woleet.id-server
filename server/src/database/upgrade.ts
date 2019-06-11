@@ -204,16 +204,31 @@ async function upgrade10(sequelize) {
     log.warn('Need to add "device" column to the "key" table');
     const deviceKey = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "device" VARCHAR;`);
     log.debug(deviceKey);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 10 }) });
+  }
+}
+
+async function upgrade11(sequelize) {
+  log.warn('Checking for  update 1 of the "enrollment" model and server-event type...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 11) {
     log.warn('Need to add "device" and "name" column to the "enrollment" table');
     const deviceEnroll = await sequelize.query(`ALTER TABLE "enrollment" ADD COLUMN "device" VARCHAR;`);
     log.debug(deviceEnroll);
     const nameEnroll = await sequelize.query(`ALTER TABLE "enrollment" ADD COLUMN "name" VARCHAR;`);
     log.debug(nameEnroll);
+    log.warn('Need to add "enrollment.edit" and "enrollment.delete" type to the "serverEvent" table');
     const editEnrollEvent = await sequelize.query(`ALTER TABLE "ServerEvent" TYPE "type" ADD VALUE "enrollment.edit";`);
     log.debug(editEnrollEvent);
     const deleteEnrollEvent = await sequelize.query(`ALTER TABLE "ServerEvent" TYPE "type" ADD VALUE "enrollment.delete";`);
     log.debug(deleteEnrollEvent);
-    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 10 }) });
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 11 }) });
   }
 }
 
@@ -228,6 +243,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade8(sequelize);
   await upgrade9(sequelize);
   await upgrade10(sequelize);
+  await upgrade11(sequelize);
 }
 
 async function postUpgrade3() {
