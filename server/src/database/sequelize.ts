@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { db } from '../config';
+import log = require('loglevel');
 
 const DATABASE = db.database;
 const PASSWORD = db.password;
@@ -17,7 +18,7 @@ const options = {
     idle: 10000
   },
 
-  logging: console.log,
+  logging: log.debug,
   operatorsAliases: false
 };
 
