@@ -33,7 +33,7 @@ export async function initServerConfig() {
       throw new Error('Secret is not the same that the previously set one');
     }
     if (!config.publicInfo) {
-      log.warn('The public information is set as an empty object.');
+      log.warn('The public information is not set.');
       config.publicInfo = {};
     }
     if (!config.mailOnboardingTemplate) {

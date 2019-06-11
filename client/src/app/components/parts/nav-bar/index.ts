@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '@services/auth';
 import { environment } from '@env/environment';
 import { PageDataService } from '@services/page-data';
@@ -18,8 +18,7 @@ export class NavBarComponent {
   constructor(
     private authService: AuthService,
     private pageDataService: PageDataService,
-    private errorService: ErrorService,
-    private ref: ChangeDetectorRef
+    private errorService: ErrorService
   ) {
     this.production = environment.production;
     this.lock$ = authService.lock$;

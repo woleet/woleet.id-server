@@ -122,7 +122,7 @@ export async function createSignatureRequest(hash: string, email: string) {
         "commonName": "${userJSON.x500CommonName}",
         "email": "${email}"
       }],
-      "name": "WIDS TCU signature",
+      "name": "${getServerConfig().organizationName} Signature Service TCU.pdf",
       "hashToSign": "${hash}"
     }`;
   return new Promise(async (resolve, reject) => {
