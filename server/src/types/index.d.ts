@@ -278,6 +278,9 @@ declare global {
     }
     // Admin contact
     contact?: string;
+
+    organizationName?: string;
+
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
@@ -323,6 +326,9 @@ declare global {
     }
     // Admin contact
     contact?: string;
+
+    organizationName?: string;
+
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
@@ -368,6 +374,9 @@ declare global {
     }
     // Admin contact
     contact?: string;
+
+    organizationName?: string;
+
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;

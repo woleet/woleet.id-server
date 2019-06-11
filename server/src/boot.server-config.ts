@@ -33,7 +33,7 @@ export async function initServerConfig() {
       throw new Error('Secret is not the same that the previously set one');
     }
     if (!config.publicInfo) {
-      log.warn('the public information is set as an empty object.');
+      log.warn('The public information is set as an empty object.');
       config.publicInfo = {};
     }
     if (!config.mailOnboardingTemplate) {
@@ -50,6 +50,10 @@ export async function initServerConfig() {
       log.warn('The key enrollment mail template is set to default.');
       config.mailKeyEnrollmentTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultKeyEnrollmentMailTemplate.html'), { encoding: 'ascii' });
+    }
+    if (!config.organizationName) {
+      log.warn('The organization name is set as Woleet.');
+      config.organizationName = 'Woleet';
     }
   } else {
     log.warn('No configuration found in database, creating a new one along with a default admin user...');

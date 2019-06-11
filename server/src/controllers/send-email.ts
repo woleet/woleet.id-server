@@ -50,7 +50,7 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
     subject = 'Onboarding';
   } else {
     html = mustache.render(config.mailResetPasswordTemplate,
-      { resetPasswordURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
+      { resetPasswordURL: link, organizationName: config.organizationName, logoURL: logo, userName: user.getDataValue('x500CommonName') });
     subject = 'Password recovery';
   }
 
@@ -78,7 +78,7 @@ export async function sendKeyEnrollmentEmail(email: string): Promise<InternalEnr
   const logo = getLogo(config);
   const subject = 'Register your signature key';
   const html = mustache.render(config.mailKeyEnrollmentTemplate,
-    { keyEnrollmentURL: link, domain: null, logoURL: logo, userName: user.getDataValue('x500CommonName') });
+    { keyEnrollmentURL: link, organizationName: config.organizationName, logoURL: logo, userName: user.getDataValue('x500CommonName') });
 
   try {
     await sendEmail(email, subject, html);
@@ -97,7 +97,7 @@ export async function sendEnrollmentFinalizeEmail(userName: string, address: str
   const template = readFileSync(
     path.join(__dirname, '../../assets/defaultAdminEnrollmentConfirmationMailTemplate.html'), { encoding: 'ascii' });
   const html = mustache.render(template,
-    { domain: null, logoURL: logo, userName, address, success });
+    { organizationName: config.organizationName, logoURL: logo, userName, address, success });
 
   try {
     await sendEmail(config.contact, subject, html);
@@ -143,8 +143,9 @@ export async function sendEmail(email: string, subject: string, html: any) {
 }
 
 function MailTemplate(email: string, subject: string, html: any): object {
+  const organizationName = getServerConfig().organizationName;
   return {
-    from: 'Woleet no-reply@woleet.com',
+    from: organizationName + ' no-reply@' + organizationName + '.com',
     to: email,
     subject: subject,
     html: html
