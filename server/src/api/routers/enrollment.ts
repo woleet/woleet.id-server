@@ -2,7 +2,6 @@ import * as Router from 'koa-router';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
 import { createSignatureRequest, getOwner, monitorSignatureRequest } from '../../controllers/enrollment';
-import * as log from 'loglevel';
 
 /**
  * Key enrollment
@@ -31,21 +30,13 @@ router.post('/enrollment/:id/create-signature-request', async function (ctx) {
 
   // Get the user targeted by the enrollment
   const { id: enrollmentId } = ctx.params;
-  let user = await getOwner(enrollmentId);
+  const user = await getOwner(enrollmentId);
 
   // Create a signature request of the TCU and send it to this user
-  let signatureRequest = null;
-  await createSignatureRequest(enrollmentId)
-    .then((res: any) => {
-      signatureRequest = res;
-    })
-    .catch(error => {
-      log.error(error);
-      throw error;
-    });
+  const { id: signatureRequestId } = await createSignatureRequest(enrollmentId);
 
   // Start monitoring this signature request
-  monitorSignatureRequest(signatureRequest.id, enrollmentId, user);
+  monitorSignatureRequest(signatureRequestId, enrollmentId, user);
 
   // Register signature request creation event
   event.register({
@@ -54,11 +45,11 @@ router.post('/enrollment/:id/create-signature-request', async function (ctx) {
     associatedTokenId: null,
     associatedUserId: user.id,
     associatedKeyId: null,
-    data: signatureRequest.id
+    data: signatureRequestId
   });
 
   // Return the identifier of the signature request
-  ctx.body = JSON.stringify(signatureRequest.id);
+  ctx.body = JSON.stringify(signatureRequestId);
 });
 
 export { router };

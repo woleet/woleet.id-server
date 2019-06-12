@@ -65,9 +65,8 @@ router.get('/user', async function (ctx) {
  */
 router.get('/users', async function (ctx) {
   const { search } = ctx.query;
-
   if (!search) {
-    throw new BadRequest('Missing "search" query parameter');
+    throw new BadRequest('Missing "search" parameter');
   }
 
   const users = await searchAllUsers(search);

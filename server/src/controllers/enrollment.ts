@@ -48,7 +48,7 @@ export async function getEnrollmentById(id: string): Promise<InternalEnrollmentO
 
   if (enrollment.toJSON().expiration) {
     if (Date.now() > enrollment.toJSON().expiration) {
-      deleteEnrollment(id);
+      await deleteEnrollment(id);
       throw new EnrollmentExpiredError();
     }
   }
@@ -67,7 +67,7 @@ export async function getOwner(id): Promise<InternalUserObject> {
   // Check that enrollment is not expired
   if (enrollment.toJSON().expiration) {
     if (Date.now() > enrollment.toJSON().expiration) {
-      deleteEnrollment(id);
+      await deleteEnrollment(id);
       throw new EnrollmentExpiredError();
     }
   }
@@ -107,7 +107,7 @@ export async function getTCUHash(): Promise<string> {
   return hash.digest('hex');
 }
 
-export async function createSignatureRequest(enrollmentId) {
+export async function createSignatureRequest(enrollmentId): Promise<any> {
   const config = getServerConfig();
   const user = await getOwner(enrollmentId);
   const currentEnrollment = await getEnrollmentById(enrollmentId);
@@ -138,10 +138,11 @@ export async function createSignatureRequest(enrollmentId) {
       "name": "${getServerConfig().organizationName} Signature Service TCU.pdf",
       "hashToSign": "${hashTCU}"
     }`;
+
   return new Promise(async (resolve, reject) => {
     const req = https.request(httpsOptions, (res) => {
-      res.on('data', (result) => {
-        resolve(JSON.parse(result.toString()));
+      res.on('data', (data) => {
+        resolve(JSON.parse(data));
       });
     }).on('error', (err) => {
       reject(err);
@@ -217,10 +218,10 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
       userId,
       device
     }));
-    sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, true);
+    await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, true);
   } catch (error) {
-    sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, false);
     log.error(error);
+    await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, false);
   }
-  deleteEnrollment(enrollmentId);
+  await deleteEnrollment(enrollmentId);
 }

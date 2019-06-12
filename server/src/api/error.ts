@@ -1,6 +1,5 @@
-import * as Debug from 'debug';
 import { IMiddleware } from 'koa-router';
-import { NotFound, HttpError } from 'http-errors';
+import { HttpError, NotFound } from 'http-errors';
 import * as errors from '../errors';
 import { store as event } from '../controllers/server-event';
 import * as log from 'loglevel';
@@ -39,8 +38,8 @@ const errorHandler: IMiddleware = async function (ctx, next) {
       ctx.status = 202;
       ctx.body = { message: err.message, status: 202 };
     } else {
-      log.error(`Unhandled error: ${err.message}`);
-      log.error('Full stack is', err);
+      log.error('Unhandled error:', err.message);
+      log.error('Stack:', err.stack);
 
       event.register({
         type: 'error',
@@ -52,7 +51,7 @@ const errorHandler: IMiddleware = async function (ctx, next) {
       });
 
       ctx.status = 500;
-      ctx.body = { message: 'Internal Server Error', status: 500 };
+      ctx.body = { message: 'Internal server error', status: 500 };
     }
   }
 };

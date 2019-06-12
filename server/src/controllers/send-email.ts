@@ -115,9 +115,7 @@ export async function sendEnrollmentFinalizeEmail(userName: string, address: str
 }
 
 export async function sendEmail(email: string, subject: string, html: any) {
-
   const transporter = getTransporter();
-
   await transporter.sendMail(MailTemplate(email, subject, html), function (err, info) {
     if (err) {
       log.error(err);
