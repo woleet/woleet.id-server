@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { KeyService, Device } from '@services/key';
+import { Device, KeyService } from '@services/key';
 import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider, nextYear } from '@components/util';
 import { UserService } from '@services/user';
@@ -46,9 +46,9 @@ export class KeyCardComponent extends ErrorMessageProvider {
   expiration = new FormControl({ value: '', disabled: true }, []);
 
   devices: Device[] = [
-    {value: null , viewValue: 'Any'},
-    {value: 'nano', viewValue: 'Ledger Nano S'},
-    {value: 'mobile', viewValue: 'Woleet ID for mobile'}
+    { value: null, viewValue: 'Any' },
+    { value: 'nano', viewValue: 'Ledger Nano S' },
+    { value: 'mobile', viewValue: 'Mobile device' }
   ];
 
   constructor(private keyService: KeyService, private userService: UserService) {
@@ -84,8 +84,7 @@ export class KeyCardComponent extends ErrorMessageProvider {
     const expiration = +this.expiration.value || null;
     const device = this.deviceSelected;
     if (name !== this.key.name || expiration !== this.key.expiration || device !== this.key.device) {
-      const up = await this.keyService.update(this.key.id, { name, expiration, device });
-      this.key = up;
+      this.key = await this.keyService.update(this.key.id, { name, expiration, device });
       this.update.emit();
     }
 
@@ -107,16 +106,14 @@ export class KeyCardComponent extends ErrorMessageProvider {
       return;
     }
     this.formLocked = true;
-    const up = await this.keyService.update(this.key.id, { status: 'blocked' });
-    this.key = up;
+    this.key = await this.keyService.update(this.key.id, { status: 'blocked' });
     this.formLocked = false;
     this.update.emit();
   }
 
   async unblockKey() {
     this.formLocked = true;
-    const up = await this.keyService.update(this.key.id, { status: 'active' });
-    this.key = up;
+    this.key = await this.keyService.update(this.key.id, { status: 'active' });
     this.formLocked = false;
     this.update.emit();
   }

@@ -1,9 +1,10 @@
 import * as Router from 'koa-router';
 import { validate } from '../schemas';
-import { BadRequest, MethodNotAllowed } from 'http-errors';
-
+import { MethodNotAllowed } from 'http-errors';
 import { store as event } from '../../controllers/server-event';
-import { createEnrollment, deleteEnrollment, putEnrollment, getAllEnrollment, getEnrollmentById } from '../../controllers/enrollment';
+import {
+  createEnrollment, deleteEnrollment, getAllEnrollment, getEnrollmentById, putEnrollment
+} from '../../controllers/enrollment';
 import { getServerConfig } from '../../controllers/server-config';
 
 /**
@@ -20,61 +21,59 @@ const router = new Router();
  *  operationId: createEnrollment
  */
 router.post('/enrollment', validate.body('createEnrollment'), async function (ctx) {
-  const enrollment: ApiPostEnrollmentObject = ctx.request.body;
-  let newEnrollment: InternalEnrollmentObject;
 
-  // TO DO: change this method with an end point to send the mail
+  // Get enrollment to create from body
+  const enrollment: ApiPostEnrollmentObject = ctx.request.body;
+
+  // Verify all settings required for enrollment
+  // TODO: change this method with an end point to send the mail
   if (!enrollment.test) {
     if (!getServerConfig().useSMTP) {
-      throw new MethodNotAllowed('SMTP Server not configurated.');
+      throw new MethodNotAllowed('SMTP Server not configured.');
     }
-
     if (!getServerConfig().contact) {
-      throw new MethodNotAllowed('Admin contact not configurated.');
+      throw new MethodNotAllowed('Admin contact not configured.');
     }
-
     if (!getServerConfig().webClientURL) {
-      throw new MethodNotAllowed('Web client URL not configurated.');
+      throw new MethodNotAllowed('Web client URL not configured.');
     }
-
     if (!getServerConfig().proofDeskAPIIsValid) {
-      throw new MethodNotAllowed('ProofDesk account not configurated.');
+      throw new MethodNotAllowed('ProofDesk account not configured.');
     }
   }
 
-  try {
-    newEnrollment = await createEnrollment(enrollment);
-  } catch (err) {
-    throw err;
-  }
+  // Create enrollment
+  let created = await createEnrollment(enrollment);
 
+  // Register enrollment creation event
   event.register({
     type: 'enrollment.create',
     authorizedUserId: ctx.session.user.get('id'),
     associatedTokenId: null,
-    associatedUserId: newEnrollment.userId,
+    associatedUserId: created.userId,
     associatedKeyId: null,
-    data: null
+    data: created.id
   });
 
-  ctx.body = newEnrollment;
+  // Return created enrollment in body
+  ctx.body = created;
 });
 
 router.put('/enrollment/:id', async function (ctx) {
   const enrollment: ApiPutEnrollmentObject = ctx.request.body;
   const { id } = ctx.params;
-  const update = await putEnrollment(id, enrollment);
+  const updated = await putEnrollment(id, enrollment);
 
   event.register({
-    type: 'enrollment.create',
+    type: 'enrollment.edit',
     authorizedUserId: ctx.session.user.get('id'),
     associatedTokenId: null,
-    associatedUserId: update.userId,
+    associatedUserId: updated.userId,
     associatedKeyId: null,
-    data: null
+    data: id
   });
 
-  ctx.body = update;
+  ctx.body = updated;
 });
 
 /**
@@ -84,7 +83,7 @@ router.put('/enrollment/:id', async function (ctx) {
  */
 router.get('/enrollment/list', async function (ctx) {
   const enrollments = await getAllEnrollment();
-  ctx.body = enrollments.map(enrollment => enrollment);
+  ctx.body = enrollments;
 });
 
 router.delete('/enrollment/:id', async function (ctx) {
@@ -97,7 +96,7 @@ router.delete('/enrollment/:id', async function (ctx) {
     associatedTokenId: null,
     associatedUserId: deleted.userId,
     associatedKeyId: null,
-    data: deleted
+    data: id
   });
 
   ctx.body = deleted;
@@ -110,9 +109,9 @@ router.delete('/enrollment/:id', async function (ctx) {
  */
 router.get('/enrollment/:id', async function (ctx) {
   const { id } = ctx.params;
-  const enrollment = await getEnrollmentById(id);
+  const get = await getEnrollmentById(id);
 
-  ctx.body = enrollment;
+  ctx.body = get;
 });
 
 export { router };

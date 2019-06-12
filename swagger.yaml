@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: This is Woleet.ID Server API documentation.
-  version: 1.0.4
+  version: 1.1.0
   title: Woleet.ID Server
   contact:
     email: contact@woleet.com
@@ -713,7 +713,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APITokenGet'
         '400':
-          description: Invalid object supplied / Invalid API token identifier.
+          description: Invalid object supplied.
           content:
             application/json:
               schema:
@@ -879,7 +879,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ServerConfig'
         '400':
-          description: Invalid object supplied / Invalid API token identifier.
+          description: Invalid object supplied.
           content:
             application/json:
               schema:
@@ -900,7 +900,7 @@ paths:
     post:
       tags:
         - Enrollment
-      summary: Create an enrollment request.
+      summary: Create a key enrollment request.
       operationId: createEnrollment
       requestBody:
         $ref: '#/components/requestBodies/EnrollmentPost'
@@ -912,7 +912,7 @@ paths:
               schema:
                 $ref: '#/components/responses/EnrollmentGet'
         '400':
-          description: Invalid object supplied / Invalid API token identifier.
+          description: Invalid object supplied.
           content:
             application/json:
               schema:
@@ -940,7 +940,7 @@ paths:
     get:
       tags:
         - Enrollment
-      summary: Get an enrollment request.
+      summary: Get a key enrollment request.
       operationId: getEnrollment
       parameters:
         - $ref: '#/components/parameters/EnrollmentIdParameter'
@@ -954,7 +954,7 @@ paths:
     put:
       tags:
         - Enrollment
-      summary: Update an enrollment request.
+      summary: Update a key enrollment request.
       operationId: updateEnrollment
       parameters:
         - $ref: '#/components/parameters/EnrollmentIdParameter'
@@ -968,7 +968,7 @@ paths:
               schema:
                 $ref: '#/components/responses/EnrollmentGet'
         '400':
-          description: Invalid object supplied / Invalid API token identifier.
+          description: Invalid object supplied.
           content:
             application/json:
               schema:
@@ -982,7 +982,7 @@ paths:
     delete:
       tags:
         - Enrollment
-      summary: Delete an enrollment request.
+      summary: Delete a key enrollment request.
       operationId: deleteEnrollment
       parameters:
         - $ref: '#/components/parameters/EnrollmentIdParameter'
@@ -994,7 +994,7 @@ paths:
               schema:
                 $ref: '#/components/responses/EnrollmentGet'
         '400':
-          description: Invalid object supplied / Invalid API token identifier.
+          description: Invalid object supplied.
           content:
             application/json:
               schema:
@@ -1009,8 +1009,8 @@ paths:
     post:
       tags:
         - Enrollment
-      summary: Get an enrollment request.
-      operationId: postSignatureRequest
+      summary: Create and send the signature request of the TCU to the owner of the enrolled key.
+      operationId: createSignatureRequest
       parameters:
         - $ref: '#/components/parameters/EnrollmentIdParameter'
       responses:
@@ -1030,7 +1030,7 @@ paths:
     get:
       tags:
         - Enrollment
-      summary: Get an enrollment request user.
+      summary: Get the user of a key enrollment request.
       operationId: getEnrollmentUser
       parameters:
         - $ref: '#/components/parameters/EnrollmentIdParameter'

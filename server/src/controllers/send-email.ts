@@ -1,14 +1,12 @@
 import { User } from '../database';
 import { NotFoundUserError } from '../errors';
 import * as mustache from 'mustache';
-
 import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
 import { getServerConfig } from './server-config';
-import { createEnrollment } from './enrollment';
 import { readFileSync } from 'fs';
 import * as path from 'path';
-import log = require('loglevel');
+import * as log from 'loglevel';
 
 function getLogo(config): String {
   if (config.publicInfo.logoURL) {

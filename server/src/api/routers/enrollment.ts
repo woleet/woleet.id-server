@@ -1,10 +1,8 @@
 import * as Router from 'koa-router';
-
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
-import { BadRequest } from 'http-errors';
-import { getOwner, getTCUHash, startKeyRegistration, monitorSignatureRequests } from '../../controllers/enrollment';
-import log = require('loglevel');
+import { createSignatureRequest, getOwner, monitorSignatureRequest } from '../../controllers/enrollment';
+import * as log from 'loglevel';
 
 /**
  * Key enrollment
@@ -21,54 +19,46 @@ const router = new Router();
  */
 router.get('/enrollment/:id/user', async function (ctx) {
   const { id } = ctx.params;
-  let user;
-  try {
-    user = await getOwner(id);
-  } catch (err) {
-    throw new BadRequest(err.name);
-  }
-  ctx.body = serializeUser(user);
+  ctx.body = serializeUser(await getOwner(id));
 });
 
 /**
  * @route: /enrollment/:id/create-signature-request
  * @swagger
- *  operationId: finalizeEnrollment
+ *  operationId: createSignatureRequest
  */
 router.post('/enrollment/:id/create-signature-request', async function (ctx) {
-  const { id } = ctx.params;
-  let user;
 
-  let response;
+  // Get the user targeted by the enrollment
+  const { id: enrollmentId } = ctx.params;
+  let user = await getOwner(enrollmentId);
 
-  try {
-    user = await getOwner(id);
-    user = serializeUser(user);
-  } catch (err) {
-    throw new BadRequest(err.name);
-  }
+  // Create a signature request of the TCU and send it to this user
+  let signatureRequest = null;
+  await createSignatureRequest(enrollmentId)
+    .then((res: any) => {
+      signatureRequest = res;
+    })
+    .catch(error => {
+      log.error(error);
+      throw error;
+    });
 
-  try {
-    await startKeyRegistration(id)
-      .then((res: any) => {
-        response = res;
-      });
-  } catch (error) {
-    log.error(error);
-  }
+  // Start monitoring this signature request
+  monitorSignatureRequest(signatureRequest.id, enrollmentId, user);
 
-  monitorSignatureRequests(response.id, id, user);
-
+  // Register signature request creation event
   event.register({
     type: 'enrollment.create-signature-request',
     authorizedUserId: null,
     associatedTokenId: null,
-    associatedUserId: serializeUser(user).id,
+    associatedUserId: user.id,
     associatedKeyId: null,
-    data: JSON.stringify(response)
+    data: signatureRequest.id
   });
 
-  ctx.body = JSON.stringify(response.id);
+  // Return the identifier of the signature request
+  ctx.body = JSON.stringify(signatureRequest.id);
 });
 
 export { router };

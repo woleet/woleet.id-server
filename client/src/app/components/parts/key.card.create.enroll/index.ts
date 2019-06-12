@@ -12,7 +12,6 @@ export class KeyCreateCardEnrollComponent extends ErrorMessageProvider {
 
   formLocked = false;
   errorMsgs: any[];
-  publicKeyFocused: Boolean;
   deviceSelected: KeyDeviceEnum | null;
 
   @Input()
@@ -29,14 +28,12 @@ export class KeyCreateCardEnrollComponent extends ErrorMessageProvider {
   startDate = nextYear();
 
   devices: Device[] = [
-    {value: null , viewValue: 'Any'},
-    {value: 'nano', viewValue: 'Ledger Nano S'},
-    {value: 'mobile', viewValue: 'Woleet ID for mobile'}
+    { value: null, viewValue: 'Any' },
+    { value: 'nano', viewValue: 'Ledger Nano S' },
+    { value: 'mobile', viewValue: 'Mobile device' }
   ];
 
   expiration = new FormControl('', []);
-
-  setAsDefault = false;
 
   constructor(private userService: UserService) {
     super();

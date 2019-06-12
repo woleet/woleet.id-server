@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
-import { HttpClient } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -15,13 +14,13 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
 
   config$: Observable<ApiServerConfig>;
 
-  proofDeskAPIIsValid;
+  proofDeskAPIIsValid: number;
 
   form: FormGroup;
 
   private onDestroy: EventEmitter<void>;
 
-  constructor(private configService: ConfigService, private http: HttpClient) {
+  constructor(private configService: ConfigService) {
     super();
     this.onDestroy = new EventEmitter();
   }

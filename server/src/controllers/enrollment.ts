@@ -10,7 +10,7 @@ import { takeWhile } from 'rxjs/operators';
 import { sendEnrollmentFinalizeEmail, sendKeyEnrollmentEmail } from './send-email';
 import * as timestring from 'timestring';
 import { getAgent } from './utils/agent';
-import log = require('loglevel');
+import * as log from 'loglevel';
 
 /**
  * Enrollment
@@ -42,7 +42,6 @@ export async function createEnrollment(enrollment: ApiPostEnrollmentObject): Pro
 
 export async function getEnrollmentById(id: string): Promise<InternalEnrollmentObject> {
   const enrollment = await Enrollment.getById(id);
-
   if (!enrollment) {
     throw new NotFoundEnrollmentError();
   }
@@ -84,9 +83,7 @@ export async function getAllEnrollment(): Promise<InternalEnrollmentObject[]> {
 }
 
 export async function deleteEnrollment(id: string): Promise<InternalEnrollmentObject> {
-
   const enrollment = await Enrollment.delete(id);
-
   if (!enrollment) {
     throw new NotFoundEnrollmentError();
   }
@@ -95,9 +92,7 @@ export async function deleteEnrollment(id: string): Promise<InternalEnrollmentOb
 }
 
 export async function putEnrollment(id: string, enrollment: ApiPutEnrollmentObject): Promise<InternalEnrollmentObject> {
-
   const enrollmentUp = await Enrollment.update(id, enrollment);
-
   if (!enrollmentUp) {
     throw new NotFoundEnrollmentError();
   }
@@ -106,16 +101,13 @@ export async function putEnrollment(id: string, enrollment: ApiPutEnrollmentObje
 }
 
 export async function getTCUHash(): Promise<string> {
-
   const TCU = readFileSync(path.join(__dirname, '../../assets/custom_TCU.pdf'), { encoding: 'base64' });
-
   const hash = crypto.createHash('sha256');
   hash.update(Buffer.from(TCU, 'base64'));
-
   return hash.digest('hex');
 }
 
-export async function startKeyRegistration(enrollmentId) {
+export async function createSignatureRequest(enrollmentId) {
   const config = getServerConfig();
   const user = await getOwner(enrollmentId);
   const currentEnrollment = await getEnrollmentById(enrollmentId);
@@ -141,22 +133,16 @@ export async function startKeyRegistration(enrollmentId) {
         "commonName": "${user.x500CommonName}",
         "email": "${user.email}",
         "identityURL": "${identityURL}",
-        "device": "${currentEnrollment.device}"
+        "device": "${currentEnrollment.device ? currentEnrollment.device.toUpperCase() : null}"
       }],
       "name": "${getServerConfig().organizationName} Signature Service TCU.pdf",
       "hashToSign": "${hashTCU}"
     }`;
-  return createSignatureRequest(body, httpsOptions, url);
-}
-
-async function createSignatureRequest(body: string, httpsOptions: Object, url: URL) {
   return new Promise(async (resolve, reject) => {
     const req = https.request(httpsOptions, (res) => {
-
       res.on('data', (result) => {
         resolve(JSON.parse(result.toString()));
       });
-
     }).on('error', (err) => {
       reject(err);
     });
@@ -165,9 +151,9 @@ async function createSignatureRequest(body: string, httpsOptions: Object, url: U
   });
 }
 
-export async function monitorSignatureRequests(requestId: string, enrollmentId: string, user: ApiUserObject) {
+export function monitorSignatureRequest(requestId: string, enrollmentId: string, user: InternalUserObject) {
   const url = new URL(getServerConfig().proofDeskAPIURL);
-  const httpsOptionsGet: any = {
+  const httpsOptions: any = {
     host: url.host,
     path: url.pathname + `/signatureRequest/${requestId}`,
     method: 'GET',
@@ -176,15 +162,15 @@ export async function monitorSignatureRequests(requestId: string, enrollmentId: 
       'Authorization': 'Bearer ' + getServerConfig().proofDeskAPIToken
     }
   };
-  const agentGet = getAgent(url, `/signatureRequest/${requestId}`);
-  if (agentGet) {
-    httpsOptionsGet.agent = agentGet;
+  const agent = getAgent(url, `/signatureRequest/${requestId}`);
+  if (agent) {
+    httpsOptions.agent = agent;
   }
+
   let result;
   const observable = new Observable<any>(subscriber => {
-
     const interval = setInterval(() => {
-      https.get(httpsOptionsGet, (res) => {
+      https.get(httpsOptions, (res) => {
         let data = '';
         res.on('data', (chunk) => {
           data += chunk;
@@ -193,24 +179,24 @@ export async function monitorSignatureRequests(requestId: string, enrollmentId: 
           result = JSON.parse(data);
           subscriber.next(result);
         });
-      }).on('error', (err) => {
-        log.error(err);
+      }).on('error', (error) => {
+        log.error(error);
       });
-    }, 1000 * 6);
-
+    }, 1000 * 5);
     return () => clearInterval(interval);
   });
+
   observable
     .pipe(takeWhile(res => {
-      if (res.anchors.length > 0) {
+      if (res.anchors && res.anchors.length > 0) {
         return !res.anchors[0].pubKey;
       } else {
         return true;
       }
     }))
     .subscribe(() => {
-      return;
-    },
+        return;
+      },
       error => log.error(error),
       async () => {
         await finalizeEnrollment(enrollmentId, user, result.anchors[0].pubKey);
@@ -218,10 +204,10 @@ export async function monitorSignatureRequests(requestId: string, enrollmentId: 
     );
 }
 
-async function finalizeEnrollment(enrollmentId: string, user: ApiUserObject, publicKey: string) {
+async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject, publicKey: string) {
   const currentEnrollment = await getEnrollmentById(enrollmentId);
   const name = currentEnrollment.name;
-  const userId = user.id;
+  const userId = currentEnrollment.userId;
   const device = currentEnrollment.device;
   try {
     await Key.create(Object.assign({
@@ -231,10 +217,10 @@ async function finalizeEnrollment(enrollmentId: string, user: ApiUserObject, pub
       userId,
       device
     }));
-    sendEnrollmentFinalizeEmail(user.identity.commonName, publicKey, true);
-  } catch (err) {
-    sendEnrollmentFinalizeEmail(user.identity.commonName, publicKey, false);
-    log.error(err.errors);
+    sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, true);
+  } catch (error) {
+    sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, false);
+    log.error(error);
   }
   deleteEnrollment(enrollmentId);
 }

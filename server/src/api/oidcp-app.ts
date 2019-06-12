@@ -31,7 +31,7 @@ export function build(): Koa {
         ctx.status = err.status;
         throw new BadRequest(err.message);
       } else {
-        log.error('OIDCERR', err);
+        log.error('OIDC error', err);
         throw err;
       }
     }
