@@ -20,8 +20,9 @@
     Woleet.ID Server is now linked to your ProofDesk account
   </mat-card-content>
   <mat-card-actions *ngIf="(config$ | async) as config; else loading">
-    <button mat-raised-button color="primary" (click)="update()" [disabled]="form.invalid || (config.proofDeskAPIURL == this.form.get('proofDeskAPIURL').value &&
-      config.proofDeskAPIToken == this.form.get('proofDeskAPIToken').value)">SAVE
+    <button mat-raised-button color="primary" (click)="update()"
+      [disabled]="form.invalid || (config.proofDeskAPIURL == this.form.get('proofDeskAPIURL').value && config.proofDeskAPIToken == this.form.get('proofDeskAPIToken').value)">
+      SAVE
     </button>
   </mat-card-actions>
 </mat-card>

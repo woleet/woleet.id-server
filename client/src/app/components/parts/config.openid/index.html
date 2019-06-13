@@ -46,9 +46,9 @@
     </mat-form-field>
   </form>
   <mat-card-actions>
-    <button mat-raised-button color="primary"
-      (click)="update()"
-      [disabled]="(!changed) || (formLocked$ | async)|| ((useOpenIDConnect$ | async) && !(formValid$ | async))">SAVE
+    <button mat-raised-button color="primary" (click)="update()"
+      [disabled]="(!changed) || (formLocked$ | async)|| ((useOpenIDConnect$ | async) && !(formValid$ | async))">
+      SAVE
     </button>
   </mat-card-actions>
 </mat-card>

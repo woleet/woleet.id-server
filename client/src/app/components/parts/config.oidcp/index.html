@@ -51,9 +51,9 @@
   </div>
   <br>
   <mat-card-actions>
-    <button mat-raised-button color="primary"
-      (click)="update()"
-      [disabled]="(!changed) || (formLocked$ | async) || !(formValid$ | async)">SAVE
+    <button mat-raised-button color="primary" (click)="update()"
+      [disabled]="(!changed) || (formLocked$ | async) || !(formValid$ | async)">
+      SAVE
     </button>
   </mat-card-actions>
 </mat-card>
