@@ -23,7 +23,7 @@ export class AuthService {
   ) {
     this.lock = new Lock();
     this.lock$ = this.lock.asObservable();
-    this.user = appConfigService.getStartupConfig().user;
+    this.user = appConfigService.getConfig().user;
   }
 
   async logout(request = true) {

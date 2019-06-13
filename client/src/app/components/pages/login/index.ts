@@ -1,9 +1,8 @@
+import * as log from 'loglevel';
 import { Component } from '@angular/core';
 import { AuthService } from '@services/auth';
 import { mainRoute } from '@app/config';
 import { ActivatedRoute, Router } from '@angular/router';
-
-import * as log from 'loglevel';
 import { Observable } from 'rxjs';
 import { AppConfigService } from '@services/boot';
 import { LocalStorageService } from '@services/local-storage';
@@ -19,25 +18,17 @@ export class LoginPageComponent {
   lock$: Observable<boolean>;
 
   errorMsg: string = null;
-  useOIDC: boolean;
-  publicInfo: ApiServerConfig['publicInfo'];
-  useSMTP: boolean;
-  webClientURL: string;
   redirect: string;
-  config: { OIDCPProviderURL: string; useOpenIDConnect: boolean; hasSession: boolean; publicInfo: object };
+  config: any;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    activatedRoute: ActivatedRoute,
-    private store: LocalStorageService,
-    errorService: ErrorService,
-    appConfigService: AppConfigService) {
+  constructor(private authService: AuthService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private store: LocalStorageService,
+              private errorService: ErrorService,
+              private appConfigService: AppConfigService) {
     this.user = { username: '', password: '' };
     this.lock$ = authService.lock$;
-    this.config = appConfigService.getStartupConfig();
-    this.useOIDC = this.config.useOpenIDConnect;
-    this.publicInfo = this.config.publicInfo || null;
     activatedRoute.queryParams.subscribe(async (params) => {
       log.debug('Forwarded login parameters', params);
       if (params.origin && params.origin.startsWith('oidcp') && params.redirect) {
@@ -50,11 +41,7 @@ export class LoginPageComponent {
         }
       }
     });
-    const config = appConfigService.getStartupConfig();
-    this.useOIDC = config && config.useOpenIDConnect;
-    this.publicInfo = config.publicInfo || null;
-    this.useSMTP = config && config.useSMTP;
-    this.webClientURL = config.webClientURL || null;
+    this.config = appConfigService.getConfig();
   }
 
   async login() {

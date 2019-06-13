@@ -8,7 +8,7 @@ import { readFileSync } from 'fs';
 import * as path from 'path';
 import * as log from 'loglevel';
 
-function getLogo(config): String {
+function getLogo(config: InternalServerConfigObject): String {
   if (config.publicInfo.logoURL) {
     return config.publicInfo.logoURL;
   } else {

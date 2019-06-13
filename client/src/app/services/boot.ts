@@ -18,12 +18,16 @@ const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 export class AppConfigService {
 
   private _appConfig: {
-    OIDCPProviderURL: string, useOpenIDConnect: boolean, hasSession: boolean,
+    OIDCPProviderURL: string,
+    useOpenIDConnect: boolean,
+    hasSession: boolean,
     publicInfo: {
       logoURL: string,
       HTMLFrame: string
     },
-    user: ApiUserDTOObject, useSMTP: boolean, webClientURL: string,
+    user: ApiUserDTOObject,
+    useSMTP: boolean,
+    webClientURL: string,
     TCU: {
       data: string
     },
@@ -40,7 +44,8 @@ export class AppConfigService {
     const params = parse(location.search.substring(1));
     log.debug(`Boot on ${location.href}`);
 
-    if (this.bootOnLogin = location.pathname === '/login') {
+    this.bootOnLogin = location.pathname === '/login';
+    if (this.bootOnLogin) {
       log.debug('Forwarded login parameters', params);
       if (params.origin && params.origin.startsWith('oidcp') && params.redirect) {
         try {
@@ -54,7 +59,7 @@ export class AppConfigService {
     }
   }
 
-  async load() {
+  async loadConfig() {
     this._appConfig = null;
 
     log.debug(`Load on ${location.href}`);
@@ -90,16 +95,18 @@ export class AppConfigService {
       ;
   }
 
-  getStartupConfig() {
+  getConfig() {
     return this._appConfig;
   }
 }
 
 const reboot: Subject<void> = new Subject();
+
 @Injectable({ providedIn: 'root' })
 export class BootService {
 
-  constructor(private ngZone: NgZone) { }
+  constructor(private ngZone: NgZone) {
+  }
 
   public static getBootControl() {
     return reboot.asObservable();

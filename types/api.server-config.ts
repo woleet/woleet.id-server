@@ -19,6 +19,7 @@ interface ApiServerConfig {
     logoURL?: string | null;
     HTMLFrame?: string | null;
   }
+
   // Open ID Connect config
   useOpenIDConnect: boolean;
   openIDConnectURL: string | null;

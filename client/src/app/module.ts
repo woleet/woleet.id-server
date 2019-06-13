@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
   MatIconModule, MatInputModule, MatListModule, MatNativeDateModule, MatRippleModule, MatSelectModule, MatSidenavModule,
-  MatTabsModule, MatToolbarModule, MatTooltipModule, MatStepperModule
+  MatStepperModule, MatTabsModule, MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -56,7 +56,7 @@ import {
   AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService
 } from '@guards/auth';
 
-import { KeyService, ExternalKeyService } from '@services/key';
+import { ExternalKeyService, KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
 import { APITokenService } from '@services/api-token';
@@ -87,8 +87,8 @@ import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 import { ConfigEnrollmentExpirationComponent } from '@parts/config.enrollment-expiration';
 
-export function startupServiceFactory(startupService: AppConfigService): Function {
-  return () => startupService.load();
+export function startupServiceFactory(appConfigService: AppConfigService): Function {
+  return () => appConfigService.loadConfig();
 }
 
 @NgModule({

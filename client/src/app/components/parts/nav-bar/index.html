@@ -4,7 +4,7 @@
     <button mat-icon-button class="collapse-button" (click)="collapseSideBar()">
       <mat-icon>view_headline</mat-icon>
     </button>
-    <div class="logo"></div>
+    <img class="logo" [src]="config.publicInfo.logoURL || '/assets/logo.svg'">
     <div class="sub-logo">
       <span class="text-gray text-slim">{{ page() }}</span>
     </div>

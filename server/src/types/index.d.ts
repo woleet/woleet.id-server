@@ -237,7 +237,7 @@ declare global {
     occurredAt?: Date;
   }
 
-  /* Config */
+  /* Server config */
 
   interface InternalServerConfigObject extends ServerConfig {
     version: number;
@@ -250,12 +250,14 @@ declare global {
     defaultKey?: InternalKeyObject;
     fallbackOnDefaultKey: boolean;
     allowUserToSign: boolean;
+
     // Open ID Connect config
     useOpenIDConnect: boolean;
     openIDConnectURL?: string;
     openIDConnectClientId?: string;
     openIDConnectClientSecret?: string;
     openIDConnectClientRedirectURL?: string;
+
     // Open ID Connect Provider config
     OIDCPInterfaceURL?: string;
     OIDCPProviderURL?: string;
@@ -265,19 +267,23 @@ declare global {
 
     enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
+
     // SMTP config
     useSMTP?: boolean;
     SMTPConfig?: string;
     webClientURL?: string;
+
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
     mailKeyEnrollmentTemplate?: string;
+
     // TCU
     TCU?: {
       toDefault?: boolean;
       data?: string;
     }
+
     // Admin contact
     contact?: string;
 
@@ -298,12 +304,14 @@ declare global {
     defaultKeyId?: string;
     fallbackOnDefaultKey?: boolean;
     allowUserToSign?: boolean;
+
     // Open ID Connect config
     useOpenIDConnect?: boolean;
     openIDConnectURL?: string;
     openIDConnectClientId?: string;
     openIDConnectClientSecret?: string;
     openIDConnectClientRedirectURL?: string;
+
     // Open ID Connect Provider config
     OIDCPInterfaceURL?: string;
     OIDCPProviderURL?: string;
@@ -313,19 +321,23 @@ declare global {
 
     enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
+
     // SMTP config
     useSMTP?: boolean;
     SMTPConfig?: string;
     webClientURL?: string;
+
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
     mailKeyEnrollmentTemplate?: string;
+
     // TCU
     TCU?: {
       toDefault?: boolean;
       data?: string;
     }
+
     // Admin contact
     contact?: string;
 

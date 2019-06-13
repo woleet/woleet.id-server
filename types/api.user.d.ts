@@ -4,7 +4,7 @@ type UserRoleEnum = 'user' | 'admin';
 type UserStatusEnum = 'active' | 'blocked';
 
 interface UserObject {
-  username?: string // madatory for step 2
+  username?: string // mandatory for step 2
 }
 
 interface ApiIdentityObject {

@@ -1,13 +1,10 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
 import { NeedConfigGuardService as NeedConfig } from '@guards/config';
-import { UserGuardService as IsUser } from '@guards/auth';
-import { AdminGuardService as IsAdmin } from '@guards/auth';
-import { AnonymousGuardService as IsAnonymous } from '@guards/auth';
-import { ErrorGuardService as HasError } from '@guards/auth';
-import { NoErrorGuardService as HasNoError } from '@guards/auth';
-
+import {
+  AdminGuardService as IsAdmin, AnonymousGuardService as IsAnonymous, ErrorGuardService as HasError,
+  NoErrorGuardService as HasNoError, UserGuardService as IsUser
+} from '@guards/auth';
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
 import { APITokensPageComponent } from '@pages/api-tokens';
@@ -24,18 +21,43 @@ import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { EnrollmentPageComponent } from '@pages/enrollment';
 
 const routes: Routes = [
-  { path: 'error', data: { title: 'Error', hideNav: true }, component: ErrorPageComponent, canActivate: [HasError] },
-  { path: 'login', data: { title: 'Login', hideNav: true }, component: LoginPageComponent, canActivate: [HasNoError, IsAnonymous] },
   {
-    path: 'reset-password', data: { title: 'ResetPassword', hideNav: true },
+    path: 'error',
+    data: { title: 'Error', hideNav: true },
+    component: ErrorPageComponent,
+    canActivate: [HasError]
+  },
+  {
+    path: 'login',
+    data: { title: 'Login', hideNav: true },
+    component: LoginPageComponent,
+    canActivate: [HasNoError, IsAnonymous]
+  },
+  {
+    path: 'reset-password',
+    data: { title: 'ResetPassword', hideNav: true },
     component: ResetPasswordPageComponent
   },
   {
-    path: 'enrollment/:id', data: { title: 'Enrollment', hideNav: true }, component: EnrollmentPageComponent
+    path: 'enrollment/:id',
+    data: { title: 'Enrollment', hideNav: true },
+    component: EnrollmentPageComponent
   },
-  { path: 'setup', data: { title: 'Setup' }, component: SetupPageComponent, canActivate: [NeedConfig] },
-  { path: 'user', data: { title: 'My profile' }, component: UserPageComponent, canActivate: [IsUser] },
-  { path: 'user/:id', data: { title: 'User keys' }, component: UserDetailPageComponent, canActivate: [IsAdmin] },
+  {
+    path: 'setup', data: { title: 'Setup' },
+    component: SetupPageComponent,
+    canActivate: [NeedConfig]
+  },
+  {
+    path: 'user', data: { title: 'My profile' },
+    component: UserPageComponent,
+    canActivate: [IsUser]
+  },
+  {
+    path: 'user/:id', data: { title: 'User keys' },
+    component: UserDetailPageComponent,
+    canActivate: [IsAdmin]
+  },
   {
     path: 'oauth/callback',
     data: { title: 'Please wait...', hideNav: true },
@@ -48,11 +70,32 @@ const routes: Routes = [
     component: OIDCProviderInteractionComponent,
     canActivate: [IsUser]
   },
-  { path: 'user/:id/edit', data: { title: 'Edit user' }, component: UserEditPageComponent, canActivate: [IsAdmin] },
-  { path: 'users', data: { title: 'Users' }, component: UserListPageComponent, canActivate: [IsAdmin] },
-  { path: 'settings', data: { title: 'Settings' }, component: SettingsPageComponent, canActivate: [IsAdmin] },
-  { path: 'api-tokens', data: { title: 'API tokens' }, component: APITokensPageComponent, canActivate: [IsAdmin] },
-  { path: 'about', data: { title: 'About' }, component: AboutPageComponent, canActivate: [IsUser] },
+  {
+    path: 'user/:id/edit', data: { title: 'Edit user' },
+    component: UserEditPageComponent,
+    canActivate: [IsAdmin]
+  },
+  {
+    path: 'users',
+    data: { title: 'Users' },
+    component: UserListPageComponent,
+    canActivate: [IsAdmin]
+  },
+  {
+    path: 'settings', data: { title: 'Settings' },
+    component: SettingsPageComponent,
+    canActivate: [IsAdmin]
+  },
+  {
+    path: 'api-tokens', data: { title: 'API tokens' },
+    component: APITokensPageComponent,
+    canActivate: [IsAdmin]
+  },
+  {
+    path: 'about', data: { title: 'About' },
+    component: AboutPageComponent,
+    canActivate: [IsUser]
+  },
   {
     path: '**',
     redirectTo: 'user',
@@ -65,4 +108,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
