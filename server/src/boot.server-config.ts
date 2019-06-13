@@ -19,9 +19,9 @@ export async function initServerConfig() {
     log.info(`Server configuration successfully restored`);
     debug(JSON.stringify(config, null, 2));
 
-    const key = await Key.getAny();
+    const key = await Key.model.findOne({ where: { holder: 'server' } });
     if (!key) {
-      log.warn('Not any key in database, cannot check secret restoration');
+      log.warn('No private key in the database, cannot check secret restoration');
       return;
     }
 

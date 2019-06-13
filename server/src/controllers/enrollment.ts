@@ -113,7 +113,7 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
       {
         "commonName": "${user.x500CommonName}",
         "email": "${user.email}",
-        "device": "${currentEnrollment.device ? currentEnrollment.device.toUpperCase() : null}"
+        "device": ${currentEnrollment.device ? '"' + currentEnrollment.device.toUpperCase() + '"' : null}
       }],
       "name": "${getServerConfig().organizationName} Signature Service TCU.pdf",
       "hashToSign": "${hashTCU}"

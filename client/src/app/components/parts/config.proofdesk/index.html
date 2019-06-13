@@ -2,6 +2,14 @@
   <mat-card-title>API configuration</mat-card-title>
   <mat-divider></mat-divider>
   <br>
+  <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="proofDeskAPIIsValid"
+    [disabled]="(formLocked$ | async)" (change)="updated = false">
+    Enable ProofDesk
+  </mat-checkbox>
+  <br>
+  <br>
+  <mat-divider></mat-divider>
+  <br>
   <form [formGroup]="form">
     <mat-form-field class="w-100" *ngIf="form.get('proofDeskAPIURL')  as f">
       <input matInput placeholder="API URL" formControlName="proofDeskAPIURL">
@@ -12,16 +20,14 @@
       <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
     </mat-form-field>
   </form>
-  <mat-error *ngIf="proofDeskAPIIsValid == 0">The API URL is not correct</mat-error>
-  <mat-error *ngIf="proofDeskAPIIsValid == 1">
-    The API Token is not correct. You can find it in ProofDesk / Account settings / API
-  </mat-error>
-  <mat-card-content *ngIf="proofDeskAPIIsValid == 2">
+  <mat-error *ngIf="updated && !proofDeskAPIIsValid">ProofDesk API is not valid.</mat-error>
+  <mat-card-content *ngIf="updated && proofDeskAPIIsValid">
     Woleet.ID Server is now linked to your ProofDesk account
   </mat-card-content>
   <mat-card-actions *ngIf="(config$ | async) as config; else loading">
     <button mat-raised-button color="primary" (click)="update()"
-      [disabled]="form.invalid || (config.proofDeskAPIURL == this.form.get('proofDeskAPIURL').value && config.proofDeskAPIToken == this.form.get('proofDeskAPIToken').value)">
+      [disabled]="form.invalid || (config.proofDeskAPIURL == this.form.get('proofDeskAPIURL').value &&
+      config.proofDeskAPIToken == this.form.get('proofDeskAPIToken').value && config.proofDeskAPIIsValid == proofDeskAPIIsValid)">
       SAVE
     </button>
   </mat-card-actions>
