@@ -3,18 +3,14 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { AppRoutingModule } from './routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import {
   MAT_DIALOG_DEFAULT_OPTIONS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
   MatIconModule, MatInputModule, MatListModule, MatNativeDateModule, MatRippleModule, MatSelectModule, MatSidenavModule,
   MatStepperModule, MatTabsModule, MatToolbarModule, MatTooltipModule
 } from '@angular/material';
-
 import { LayoutModule } from '@angular/cdk/layout';
-
 import { AppComponent } from '@parts/main';
 import { NavBarComponent } from '@parts/nav-bar';
 import { UserFormComponent } from '@parts/user.form';
@@ -32,11 +28,10 @@ import { IntlTelInputComponent } from '@parts/intl-tel-input';
 import { ConfigLogoUrlComponent } from '@parts/config.logo-url';
 import { ConfigHTMLFrameUrlComponent } from '@parts/config.html-frame';
 import { LogoComponent } from '@parts/logo';
-import { HtmlFrameComponent } from '@parts/html-frame';
+import { HtmlFrameComponent, SafeHtmlPipe } from '@parts/html-frame';
 import { ConfigContactComponent } from '@parts/config.contact';
 import { ConfigOrganizationNameComponent } from '@parts/config.organization-name';
 import { ConfigTCUComponent } from '@parts/config.tcu';
-
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
 import { APITokensPageComponent } from '@pages/api-tokens';
@@ -48,14 +43,12 @@ import { UserEditPageComponent } from '@pages/user.edit';
 import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
+import { EnrollmentPageComponent } from '@pages/enrollment';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
-import { EnrollmentPageComponent } from '@pages/enrollment';
-// Services
 import {
   AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService
 } from '@guards/auth';
-
 import { ExternalKeyService, KeyService } from '@services/key';
 import { UserService } from '@services/user';
 import { InfoService } from '@services/info';
@@ -63,12 +56,10 @@ import { APITokenService } from '@services/api-token';
 import { PageDataService } from '@services/page-data';
 import { ServerConfigService } from '@services/server-config';
 import { EnrollmentService } from '@services/enrollment';
-
 import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
 import { NetworkErrorInterceptorService } from '@interceptors/network-error';
 import { UnauthorizedInterceptorService } from '@interceptors/unauthorized';
 import { ForbiddenInterceptorService } from '@interceptors/forbidden';
-
 import { NeedConfigGuardService } from '@services/guards/config';
 import { ConfigService } from '@services/config';
 import { StopPropagationDirective } from '@directives/stop-propagation';
@@ -133,6 +124,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     ConfigMailTemplateComponent,
     LogoComponent,
     HtmlFrameComponent,
+    SafeHtmlPipe,
     ResetPasswordPageComponent,
     ConfigSMTPComponent,
     ConfigContactComponent,

@@ -59,12 +59,12 @@ function passwordMandatoryValidatorOnEdit(sendPasswordEmail: boolean) {
 export class UserFormComponent extends ErrorMessageProvider implements OnInit, OnDestroy, AfterViewInit {
 
   formLocked = false;
+
   useSMTP: boolean;
   webClientURL: string;
-  contactAvailable: boolean;
+
   sendPasswordEmail = false;
   createDefaultKey = true;
-  proofDeskAvailable = false;
 
   @Input()
   mode: 'create' | 'edit';
@@ -143,8 +143,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       }
       this.useSMTP = config.useSMTP;
       this.webClientURL = config.webClientURL;
-      this.proofDeskAvailable = (!!config.proofDeskAPIToken && !!config.proofDeskAPIURL);
-      this.contactAvailable = !!config.contact;
     }));
     if (this.mode === 'edit') {
       this.form = this.setFormControl(copy<ApiUserObject>(this.user));
@@ -236,9 +234,5 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   canSendEmailToUser(): Boolean {
     return this.useSMTP && this.webClientURL && this.form.get('email').valid;
-  }
-
-  canEnroll(): Boolean {
-    return this.canSendEmailToUser() && this.contactAvailable && this.proofDeskAvailable;
   }
 }

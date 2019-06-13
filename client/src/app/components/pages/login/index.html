@@ -1,5 +1,5 @@
 <logo [logoURL]="config.logoURL"></logo>
-<html-frame [HtmlFrame]="config.HTMLFrame"></html-frame>
+<html-frame [HTMLFrame]="config.HTMLFrame"></html-frame>
 <div class="form-container" *ngIf="(!redirect || !config.useOpenIDConnect)">
   <form role="form" (submit)="login()" #f="ngForm">
     <div>

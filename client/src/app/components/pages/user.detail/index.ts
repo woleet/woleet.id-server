@@ -22,12 +22,14 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   externalFormOpened = false;
   enrollFormOpened = false;
 
-  contactAvailable: boolean;
   useSMTP: boolean;
+  contactAvailable: boolean;
+  proofDeskAvailable: boolean;
   webClientURL: string;
+
   email: string;
+
   errorMsg: string;
-  isProofDeskAvailable = false;
 
   private onDestroy: EventEmitter<void>;
 
@@ -47,8 +49,8 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
         return;
       }
       this.useSMTP = config.useSMTP;
-      this.isProofDeskAvailable = (!!config.proofDeskAPIToken || !!config.proofDeskAPIURL);
-      config.contact ? this.contactAvailable = true : this.contactAvailable = false;
+      this.contactAvailable = !!config.contact;
+      this.proofDeskAvailable = config.proofDeskAPIIsValid;
       this.webClientURL = config.webClientURL;
     }));
     this.user$.then((user) => {
@@ -70,6 +72,6 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   }
 
   canEnroll(): Boolean {
-    return (this.useSMTP && this.webClientURL && this.contactAvailable && this.isProofDeskAvailable);
+    return (this.useSMTP && this.webClientURL && this.contactAvailable && this.proofDeskAvailable);
   }
 }

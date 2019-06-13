@@ -29,27 +29,18 @@ export class EnrollmentPageComponent implements OnInit {
   errorMessage = '';
   completed = false;
   isDownloaded = false;
-
-  config: {
-    logoURL: string,
-    HTMLFrame: string
-    TCU: {
-      data: string
-    },
-    contact: string,
-    organizationName: string,
-  };
+  config: any;
 
   constructor(private _formBuilder: FormBuilder, appConfigService: AppConfigService, public dialog: MatDialog,
-    private route: ActivatedRoute, private enrollmentService: EnrollmentService, sanitization: DomSanitizer) {
+              private route: ActivatedRoute, private enrollmentService: EnrollmentService, sanitization: DomSanitizer) {
     this.config = appConfigService.getConfig();
     this.enrollmentId = this.route.snapshot.params.id;
     this.enrollmentService.getUserByEnrollmentId(this.enrollmentId)
       .subscribe(
         (user) => {
           return this.user = user;
-        }
-        , (error) => {
+        },
+        (error) => {
           switch (error.error.message) {
             case 'NotFoundEnrollmentError':
               this.errorMessage = 'This page doesn\'t refer to an enrollment in progress.';
@@ -88,7 +79,7 @@ export class EnrollmentPageComponent implements OnInit {
       });
   }
 
-  download () {
+  download() {
     this.isDownloaded = true;
   }
 }
