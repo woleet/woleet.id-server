@@ -27,3 +27,6 @@ Thumbs.db
 
 # Databse
 db
+
+# Dump
+dump*

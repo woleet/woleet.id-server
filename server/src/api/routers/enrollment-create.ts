@@ -37,8 +37,8 @@ router.post('/enrollment', validate.body('createEnrollment'), async function (ct
     if (!getServerConfig().webClientURL) {
       throw new MethodNotAllowed('Web client URL not configured.');
     }
-    if (!getServerConfig().proofDeskAPIIsValid) {
-      throw new MethodNotAllowed('ProofDesk account not configured.');
+    if (getServerConfig().proofDeskAPIIsValid !== 2) {
+      throw new MethodNotAllowed('ProofDesk account not configurated.');
     }
   }
 
