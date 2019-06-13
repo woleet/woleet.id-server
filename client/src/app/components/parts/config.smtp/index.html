@@ -20,7 +20,8 @@
   </form>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="update()"
-      [disabled]="(!changed) || (formLocked$ | async)|| ((useSMTP$ | async) && !(formValid$ | async))">SAVE
+      [disabled]="(!changed) || (formLocked$ | async)|| ((useSMTP$ | async) && !(formValid$ | async))">
+      SAVE
     </button>
   </mat-card-actions>
 </mat-card>
