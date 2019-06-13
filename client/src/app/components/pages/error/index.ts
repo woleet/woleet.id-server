@@ -22,7 +22,6 @@ export class ErrorPageComponent implements OnInit {
         this.tip = 'Try to reload this page later';
         break;
       case 'server-error':
-        console.log(error);
         this.message = `The server encountered an error:\n${error.message}`;
         break;
       case 'network':
