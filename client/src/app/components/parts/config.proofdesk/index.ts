@@ -14,7 +14,8 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
 
   config$: Observable<ApiServerConfig>;
 
-  proofDeskAPIIsValid: number;
+  updated = false;
+  proofDeskAPIIsValid: boolean;
 
   form: FormGroup;
 
@@ -41,6 +42,7 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
       }
       this.form.get('proofDeskAPIURL').setValue(config.proofDeskAPIURL || 'https://api.woleet.io/v1');
       this.form.get('proofDeskAPIToken').setValue(config.proofDeskAPIToken || '');
+      this.proofDeskAPIIsValid = config.proofDeskAPIIsValid;
     }));
 
     this.registerSubscription(this.formLocked$.subscribe((locked) => {
@@ -63,15 +65,17 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
   async update() {
     const proofDeskAPIURL = this.form.get('proofDeskAPIURL').value || null;
     const proofDeskAPIToken = this.form.get('proofDeskAPIToken').value || null;
+    const proofDeskAPIIsValid = this.proofDeskAPIIsValid;
     this.configService.update({
       proofDeskAPIURL,
-      proofDeskAPIToken
+      proofDeskAPIToken,
+      proofDeskAPIIsValid,
     });
+    this.updated = true;
     this.registerSubscription(this.config$.subscribe((config) => {
       if (!config) {
         return;
       }
-      this.proofDeskAPIIsValid = config.proofDeskAPIIsValid;
     }));
   }
 }

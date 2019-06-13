@@ -292,7 +292,7 @@ declare global {
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
-    proofDeskAPIIsValid?: number;
+    proofDeskAPIIsValid?: boolean;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -346,7 +346,7 @@ declare global {
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
-    proofDeskAPIIsValid?: number;
+    proofDeskAPIIsValid?: boolean;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -394,7 +394,7 @@ declare global {
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
-    proofDeskAPIIsValid?: number;
+    proofDeskAPIIsValid?: boolean;
   }
 
   /* Enrollment */

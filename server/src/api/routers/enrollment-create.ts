@@ -37,13 +37,13 @@ router.post('/enrollment', validate.body('createEnrollment'), async function (ct
     if (!getServerConfig().webClientURL) {
       throw new MethodNotAllowed('Web client URL not configured.');
     }
-    if (getServerConfig().proofDeskAPIIsValid !== 2) {
+    if (!getServerConfig().proofDeskAPIIsValid) {
       throw new MethodNotAllowed('ProofDesk account not configurated.');
     }
   }
 
   // Create enrollment
-  let created = await createEnrollment(enrollment);
+  const created = await createEnrollment(enrollment);
 
   // Register enrollment creation event
   event.register({

@@ -46,28 +46,6 @@ export function getServerConfig(): InternalServerConfigObject {
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   try {
-    up = await checkProofDeskConfigChange(up)
-    // if the verification pass continue with the config update
-      .then(() => up)
-      // else replace the update with the corresponding error (0: for URL error; 1: for token error)
-      // the URL error just verify if the response is a json
-      // TO IMPROVE
-      .catch((err) => {
-        log.error(err);
-        switch (err) {
-          case 0:
-            return { proofDeskAPIIsValid: 0 };
-          case 1:
-            return { proofDeskAPIIsValid: 1 };
-          default:
-            throw err;
-        }
-      });
-  } catch (err) {
-    log.error(err);
-    up = { proofDeskAPIIsValid: 0 };
-  }
-  try {
     const config = Object.assign({}, getInMemoryConfig(), up);
     if (up.TCU) {
       if (up.TCU.data) {
@@ -96,6 +74,7 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
     await checkOIDCConfigChange(up);
     await checkOIDCPConfigChange(up);
     await checkSMTPConfigChange(up);
+    await checkProofDeskConfigChange(up);
     return getServerConfig();
   } catch (err) {
     exit('FATAL: Failed update the server configuration.', err);
@@ -195,7 +174,7 @@ async function checkSMTPConfigChange(up: ServerConfigUpdate) {
 }
 
 async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
-  if (up.proofDeskAPIURL || up.proofDeskAPIToken) {
+  if ((up.proofDeskAPIURL || up.proofDeskAPIToken) && up.proofDeskAPIIsValid) {
     debug('Update ProofDesk Config with', { up });
     const url = new URL(up.proofDeskAPIURL || getServerConfig().proofDeskAPIURL);
     const httpsOptions: any = {
@@ -211,28 +190,32 @@ async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
     if (agent) {
       httpsOptions.agent = agent;
     }
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       https.get(httpsOptions, (res) => {
         let data = '';
         res.on('data', (chunk) => {
           data += chunk;
         });
-        res.on('end', () => {
+        res.on('end', async () => {
           try {
             const json = JSON.parse(data);
             if (!json.error) {
-              resolve(setServerConfig({ proofDeskAPIIsValid: 2 }));
+              resolve();
             } else {
               log.error(json.error);
-              reject(1);
+              await setServerConfig({proofDeskAPIIsValid: false});
+              resolve();
             }
           } catch (err) {
             log.error('Response is not a JSON, bad URL.');
-            reject(0);
+            await setServerConfig({proofDeskAPIIsValid: false});
+            resolve();
           }
         });
-      }).on('error', (err) => {
-        reject(err.message);
+      }).on('error', async (err) => {
+        log.error(err.message);
+        await setServerConfig({proofDeskAPIIsValid: false});
+        resolve();
       });
     });
   }

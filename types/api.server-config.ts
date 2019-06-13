@@ -61,7 +61,7 @@ interface ApiServerConfig {
   // ProofDesk config
   proofDeskAPIURL: string | null;
   proofDeskAPIToken: string | null;
-  proofDeskAPIIsValid: number | null;
+  proofDeskAPIIsValid: boolean | null;
 }
 
 interface ApiServerConfigUpdate {
@@ -115,5 +115,5 @@ interface ApiServerConfigUpdate {
   // ProofDesk config
   proofDeskAPIURL?: string;
   proofDeskAPIToken?: string;
-  proofDeskAPIIsValid?: number;
+  proofDeskAPIIsValid?: boolean;
 }
