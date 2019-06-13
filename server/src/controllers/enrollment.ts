@@ -1,5 +1,5 @@
 import { Enrollment, Key, User } from '../database';
-import { EnrollmentExpiredError, NotFoundEnrollmentError, NotFoundUserError } from '../errors';
+import { NotFoundEnrollmentError, NotFoundUserError } from '../errors';
 import * as crypto from 'crypto';
 import { readFileSync } from 'fs';
 import * as path from 'path';
@@ -45,14 +45,6 @@ export async function getEnrollmentById(id: string): Promise<InternalEnrollmentO
   if (!enrollment) {
     throw new NotFoundEnrollmentError();
   }
-
-  if (enrollment.toJSON().expiration) {
-    if (Date.now() > enrollment.toJSON().expiration) {
-      await deleteEnrollment(id);
-      throw new EnrollmentExpiredError();
-    }
-  }
-
   return enrollment.toJSON();
 }
 
@@ -62,14 +54,6 @@ export async function getOwner(id): Promise<InternalUserObject> {
   const enrollment = await Enrollment.getById(id);
   if (!enrollment) {
     throw new NotFoundEnrollmentError();
-  }
-
-  // Check that enrollment is not expired
-  if (enrollment.toJSON().expiration) {
-    if (Date.now() > enrollment.toJSON().expiration) {
-      await deleteEnrollment(id);
-      throw new EnrollmentExpiredError();
-    }
   }
 
   // Return enrolled user
@@ -87,7 +71,6 @@ export async function deleteEnrollment(id: string): Promise<InternalEnrollmentOb
   if (!enrollment) {
     throw new NotFoundEnrollmentError();
   }
-
   return enrollment.toJSON();
 }
 
@@ -96,7 +79,6 @@ export async function putEnrollment(id: string, enrollment: ApiPutEnrollmentObje
   if (!enrollmentUp) {
     throw new NotFoundEnrollmentError();
   }
-
   return enrollmentUp.toJSON();
 }
 
@@ -112,7 +94,6 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
   const user = await getOwner(enrollmentId);
   const currentEnrollment = await getEnrollmentById(enrollmentId);
   const url = new URL(config.proofDeskAPIURL);
-  const identityURL = config.identityURL;
   const hashTCU = await getTCUHash();
   const httpsOptions: any = {
     host: url.host,
@@ -132,7 +113,6 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
       {
         "commonName": "${user.x500CommonName}",
         "email": "${user.email}",
-        "identityURL": "${identityURL}",
         "device": "${currentEnrollment.device ? currentEnrollment.device.toUpperCase() : null}"
       }],
       "name": "${getServerConfig().organizationName} Signature Service TCU.pdf",
@@ -152,23 +132,23 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
   });
 }
 
-export function monitorSignatureRequest(requestId: string, enrollmentId: string, user: InternalUserObject) {
+export function monitorSignatureRequest(signatureRequestId: string, enrollmentId: string, user: InternalUserObject) {
   const url = new URL(getServerConfig().proofDeskAPIURL);
   const httpsOptions: any = {
     host: url.host,
-    path: url.pathname + `/signatureRequest/${requestId}`,
+    path: url.pathname + `/signatureRequest/${signatureRequestId}`,
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + getServerConfig().proofDeskAPIToken
     }
   };
-  const agent = getAgent(url, `/signatureRequest/${requestId}`);
+  const agent = getAgent(url, `/signatureRequest/${signatureRequestId}`);
   if (agent) {
     httpsOptions.agent = agent;
   }
 
-  let result;
+  let signatureRequest;
   const observable = new Observable<any>(subscriber => {
     const interval = setInterval(() => {
       https.get(httpsOptions, (res) => {
@@ -177,8 +157,8 @@ export function monitorSignatureRequest(requestId: string, enrollmentId: string,
           data += chunk;
         });
         res.on('end', () => {
-          result = JSON.parse(data);
-          subscriber.next(result);
+          signatureRequest = JSON.parse(data);
+          subscriber.next(signatureRequest);
         });
       }).on('error', (error) => {
         log.error(error);
@@ -188,9 +168,9 @@ export function monitorSignatureRequest(requestId: string, enrollmentId: string,
   });
 
   observable
-    .pipe(takeWhile(res => {
-      if (res.anchors && res.anchors.length > 0) {
-        return !res.anchors[0].pubKey;
+    .pipe(takeWhile(signatureRequest => {
+      if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
+        return !signatureRequest.anchors[0].pubKey;
       } else {
         return true;
       }
@@ -200,17 +180,23 @@ export function monitorSignatureRequest(requestId: string, enrollmentId: string,
       },
       error => log.error(error),
       async () => {
-        await finalizeEnrollment(enrollmentId, user, result.anchors[0].pubKey);
+
+        // Once the signature request is fulfilled, finalize the enrollment
+        await finalizeEnrollment(enrollmentId, user, signatureRequest);
       }
     );
 }
 
-async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject, publicKey: string) {
+async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject, signatureRequest: any) {
+  const publicKey = signatureRequest.anchors[0].pubKey;
   const currentEnrollment = await getEnrollmentById(enrollmentId);
   const name = currentEnrollment.name;
   const userId = currentEnrollment.userId;
   const device = currentEnrollment.device;
   try {
+
+    // Create new external key: this must be done before setting the identity URL on the signature anchor,
+    // so that the public key can be resolved through the identity URL
     await Key.create(Object.assign({
       name,
       publicKey,
@@ -218,10 +204,48 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
       userId,
       device
     }));
+
+    // Set the identity URL on the signature anchor created by the signature request
+    await setAnchorIdentityURL(signatureRequest);
+
+    // Send a enrollment success email to the admin
     await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, true);
   } catch (error) {
     log.error(error);
+
+    // Send a enrollment failure email to the admin
     await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, false);
+  } finally {
+
+    // In all cases, delete the enrollment
+    await deleteEnrollment(enrollmentId);
   }
-  await deleteEnrollment(enrollmentId);
+}
+
+async function setAnchorIdentityURL(signatureRequest: any) {
+  if (!getServerConfig().identityURL)
+    return;
+  const url = new URL(getServerConfig().proofDeskAPIURL);
+  const httpsOptions: any = {
+    host: url.host,
+    path: url.pathname + `/anchor/${signatureRequest.anchors[0].id}`,
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + getServerConfig().proofDeskAPIToken
+    }
+  };
+  const agent = getAgent(url, `/anchor/${signatureRequest.anchors[0].id}`);
+  if (agent) {
+    httpsOptions.agent = agent;
+  }
+  const body = `{
+         "identityURL": "${getServerConfig().identityURL}"
+         }`;
+  const req = https.request(httpsOptions);
+  req.on('error', (error) => {
+    log.error(error);
+  });
+  req.write(body);
+  req.end();
 }
