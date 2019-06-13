@@ -3,7 +3,7 @@
   <mat-divider></mat-divider>
   <br>
   <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="proofDeskAPIIsValid"
-    [disabled]="(formLocked$ | async)" (change)="updated = false">
+    [disabled]="(formLocked$ | async)">
     Enable ProofDesk
   </mat-checkbox>
   <br>
@@ -20,10 +20,6 @@
       <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
     </mat-form-field>
   </form>
-  <mat-error *ngIf="updated && !proofDeskAPIIsValid">ProofDesk API is not valid.</mat-error>
-  <mat-card-content *ngIf="updated && proofDeskAPIIsValid">
-    Woleet.ID Server is now linked to your ProofDesk account
-  </mat-card-content>
   <mat-card-actions *ngIf="(config$ | async) as config; else loading">
     <button mat-raised-button color="primary" (click)="update()"
       [disabled]="form.invalid || (config.proofDeskAPIURL == this.form.get('proofDeskAPIURL').value &&

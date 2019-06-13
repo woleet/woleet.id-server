@@ -1315,11 +1315,6 @@ components:
           type: boolean
           example: true
           description: True is the server must fallback on the default key (if any).
-        publicInfo:
-          $ref: '#/components/schemas/ServerPublicInfo'
-    ServerPublicInfo:
-      type: object
-      properties:
         logoURL:
           type: string
           example: "https://mydomain.com/logo.svg"

@@ -21,10 +21,8 @@ export class AppConfigService {
     OIDCPProviderURL: string,
     useOpenIDConnect: boolean,
     hasSession: boolean,
-    publicInfo: {
-      logoURL: string,
-      HTMLFrame: string
-    },
+    logoURL: string,
+    HTMLFrame: string
     user: ApiUserDTOObject,
     useSMTP: boolean,
     webClientURL: string,

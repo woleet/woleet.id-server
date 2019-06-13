@@ -9,8 +9,8 @@ import * as path from 'path';
 import * as log from 'loglevel';
 
 function getLogo(config: InternalServerConfigObject): String {
-  if (config.publicInfo.logoURL) {
-    return config.publicInfo.logoURL;
+  if (config.logoURL) {
+    return config.logoURL;
   } else {
     return 'https://www.woleet.io/wp-content/uploads/2018/12/Woleet-logo-black-big-e1550678072706.png';
   }

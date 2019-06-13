@@ -22,7 +22,6 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.woleet.idserver.api.model.ServerPublicInfo;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -43,9 +42,13 @@ public class ServerConfig {
   @SerializedName(SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY)
   private Boolean fallbackOnDefaultKey;
 
-  public static final String SERIALIZED_NAME_PUBLIC_INFO = "publicInfo";
-  @SerializedName(SERIALIZED_NAME_PUBLIC_INFO)
-  private ServerPublicInfo publicInfo = null;
+  public static final String SERIALIZED_NAME_LOGO_U_R_L = "logoURL";
+  @SerializedName(SERIALIZED_NAME_LOGO_U_R_L)
+  private String logoURL;
+
+  public static final String SERIALIZED_NAME_HT_M_L_FRAME = "HTMLFrame";
+  @SerializedName(SERIALIZED_NAME_HT_M_L_FRAME)
+  private String htMLFrame;
 
   public ServerConfig identityURL(String identityURL) {
     this.identityURL = identityURL;
@@ -101,22 +104,40 @@ public class ServerConfig {
     this.fallbackOnDefaultKey = fallbackOnDefaultKey;
   }
 
-  public ServerConfig publicInfo(ServerPublicInfo publicInfo) {
-    this.publicInfo = publicInfo;
+  public ServerConfig logoURL(String logoURL) {
+    this.logoURL = logoURL;
     return this;
   }
 
    /**
-   * Get publicInfo
-   * @return publicInfo
+   * The URL of the logo that will be displayed in the sign in page. 
+   * @return logoURL
   **/
-  @ApiModelProperty(value = "")
-  public ServerPublicInfo getPublicInfo() {
-    return publicInfo;
+  @ApiModelProperty(example = "https://mydomain.com/logo.svg", value = "The URL of the logo that will be displayed in the sign in page. ")
+  public String getLogoURL() {
+    return logoURL;
   }
 
-  public void setPublicInfo(ServerPublicInfo publicInfo) {
-    this.publicInfo = publicInfo;
+  public void setLogoURL(String logoURL) {
+    this.logoURL = logoURL;
+  }
+
+  public ServerConfig htMLFrame(String htMLFrame) {
+    this.htMLFrame = htMLFrame;
+    return this;
+  }
+
+   /**
+   * The HTML frame that will be displayed in the sign in page. 
+   * @return htMLFrame
+  **/
+  @ApiModelProperty(example = "Hello World", value = "The HTML frame that will be displayed in the sign in page. ")
+  public String getHtMLFrame() {
+    return htMLFrame;
+  }
+
+  public void setHtMLFrame(String htMLFrame) {
+    this.htMLFrame = htMLFrame;
   }
 
 
@@ -132,12 +153,13 @@ public class ServerConfig {
     return Objects.equals(this.identityURL, serverConfig.identityURL) &&
         Objects.equals(this.defaultKeyId, serverConfig.defaultKeyId) &&
         Objects.equals(this.fallbackOnDefaultKey, serverConfig.fallbackOnDefaultKey) &&
-        Objects.equals(this.publicInfo, serverConfig.publicInfo);
+        Objects.equals(this.logoURL, serverConfig.logoURL) &&
+        Objects.equals(this.htMLFrame, serverConfig.htMLFrame);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identityURL, defaultKeyId, fallbackOnDefaultKey, publicInfo);
+    return Objects.hash(identityURL, defaultKeyId, fallbackOnDefaultKey, logoURL, htMLFrame);
   }
 
 
@@ -149,7 +171,8 @@ public class ServerConfig {
     sb.append("    identityURL: ").append(toIndentedString(identityURL)).append("\n");
     sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("    fallbackOnDefaultKey: ").append(toIndentedString(fallbackOnDefaultKey)).append("\n");
-    sb.append("    publicInfo: ").append(toIndentedString(publicInfo)).append("\n");
+    sb.append("    logoURL: ").append(toIndentedString(logoURL)).append("\n");
+    sb.append("    htMLFrame: ").append(toIndentedString(htMLFrame)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -39,7 +39,7 @@ export class ConfigHTMLFrameUrlComponent extends ErrorMessageProvider implements
       }
 
       this.editMode = false;
-      this.form.setValue(config.publicInfo.HTMLFrame);
+      this.form.setValue(config.HTMLFrame);
     });
 
     this.onDestroy.subscribe(() => subscription.unsubscribe());
@@ -51,8 +51,7 @@ export class ConfigHTMLFrameUrlComponent extends ErrorMessageProvider implements
 
   async submit() {
     const HTMLFrame = this.form.value || null;
-    const publicInfo = { HTMLFrame: HTMLFrame };
-    this.configService.update({ publicInfo });
+    this.configService.update({ HTMLFrame });
   }
 
   cancelEdit() {

@@ -40,7 +40,7 @@ export class ConfigLogoUrlComponent extends ErrorMessageProvider implements OnIn
       }
 
       this.editMode = false;
-      this.form.setValue(config.publicInfo.logoURL);
+      this.form.setValue(config.logoURL);
     });
 
     this.onDestroy.subscribe(() => subscription.unsubscribe());
@@ -52,9 +52,8 @@ export class ConfigLogoUrlComponent extends ErrorMessageProvider implements OnIn
 
   async submit() {
     const logoURL = this.form.value || null;
-    const publicInfo = {logoURL: logoURL};
     log.debug('Set logo URL to', logoURL);
-    this.configService.update({ publicInfo });
+    this.configService.update({ logoURL });
   }
 
   cancelEdit() {

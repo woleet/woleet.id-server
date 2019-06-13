@@ -31,22 +31,18 @@ export class EnrollmentPageComponent implements OnInit {
   isDownloaded = false;
 
   config: {
-    publicInfo: {
-      logoURL: string,
-      HTMLFrame: string
-    },
+    logoURL: string,
+    HTMLFrame: string
     TCU: {
       data: string
     },
     contact: string,
     organizationName: string,
   };
-  serverPublicInfo: ApiServerConfig['publicInfo'];
 
   constructor(private _formBuilder: FormBuilder, appConfigService: AppConfigService, public dialog: MatDialog,
     private route: ActivatedRoute, private enrollmentService: EnrollmentService, sanitization: DomSanitizer) {
     this.config = appConfigService.getConfig();
-    this.serverPublicInfo = this.config.publicInfo || null;
     this.enrollmentId = this.route.snapshot.params.id;
     this.enrollmentService.getUserByEnrollmentId(this.enrollmentId)
       .subscribe(

@@ -9,7 +9,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class HtmlFrameComponent implements OnInit {
 
     @Input()
-    HtmlFrame: ApiServerConfig['publicInfo']['HTMLFrame'];
+    HtmlFrame: ApiServerConfig['HTMLFrame'];
 
     frame: string;
     defaultFrame: string;

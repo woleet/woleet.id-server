@@ -120,7 +120,6 @@ export const serverConfig = {
     version: 11, // datamodel version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true,
-    publicInfo: {},
     organizationName: 'Woleet',
     mailOnboardingTemplate: readFileSync(
       path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), { encoding: 'ascii' }),

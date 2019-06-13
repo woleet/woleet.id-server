@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class LogoComponent implements OnInit {
 
   @Input()
-  logoURL: ApiServerConfig['publicInfo']['logoURL'];
+  logoURL: ApiServerConfig['logoURL'];
 
   currentLogoURL: string;
   defaultLogoURL: string;

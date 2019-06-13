@@ -32,10 +32,6 @@ export async function initServerConfig() {
       log.warn(err.message);
       throw new Error('Secret is not the same that the previously set one');
     }
-    if (!config.publicInfo) {
-      log.warn('The public information is not set.');
-      config.publicInfo = {};
-    }
     if (!config.mailOnboardingTemplate) {
       log.warn('The onboarding template is set to default.');
       config.mailOnboardingTemplate = readFileSync(

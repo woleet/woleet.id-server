@@ -14,7 +14,6 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
 
   config$: Observable<ApiServerConfig>;
 
-  updated = false;
   proofDeskAPIIsValid: boolean;
 
   form: FormGroup;
@@ -71,7 +70,6 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
       proofDeskAPIToken,
       proofDeskAPIIsValid,
     });
-    this.updated = true;
     this.registerSubscription(this.config$.subscribe((config) => {
       if (!config) {
         return;
