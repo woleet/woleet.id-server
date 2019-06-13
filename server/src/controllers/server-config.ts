@@ -112,7 +112,7 @@ function registrationFunctionFactory(name) {
 }
 
 async function checkOIDCConfigChange(up: ServerConfigUpdate) {
-  if (up.useOpenIDConnect !== undefined
+  if (up.enableOpenIDConnect !== undefined
     || up.openIDConnectURL
     || up.openIDConnectClientId
     || up.openIDConnectClientSecret
@@ -123,7 +123,7 @@ async function checkOIDCConfigChange(up: ServerConfigUpdate) {
       await fns.updateOIDCClient();
     } catch (err) {
       log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
-      return setServerConfig({ useOpenIDConnect: false });
+      return setServerConfig({ enableOpenIDConnect: false });
     }
   }
 }
@@ -154,13 +154,13 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
       await OIDCPSafeReboot();
     } catch (err) {
       log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
-      return setServerConfig({ useOpenIDConnect: false });
+      return setServerConfig({ enableOpenIDConnect: false });
     }
   }
 }
 
 async function checkSMTPConfigChange(up: ServerConfigUpdate) {
-  if (up.useSMTP !== undefined
+  if (up.enableSMTP !== undefined
     || up.SMTPConfig
   ) {
     debug('Update SMTP with', { up });
@@ -168,13 +168,13 @@ async function checkSMTPConfigChange(up: ServerConfigUpdate) {
       await fns.updateSMTP();
     } catch (err) {
       log.error('Failed to initialize SMTP, it will be automatically disabled!', err);
-      return setServerConfig({ useSMTP: false });
+      return setServerConfig({ enableSMTP: false });
     }
   }
 }
 
 async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
-  if ((up.proofDeskAPIURL || up.proofDeskAPIToken) && up.proofDeskAPIIsValid) {
+  if ((up.proofDeskAPIURL || up.proofDeskAPIToken) && up.enableProofDesk) {
     debug('Update ProofDesk Config with', { up });
     const url = new URL(up.proofDeskAPIURL || getServerConfig().proofDeskAPIURL);
     const httpsOptions: any = {
@@ -203,18 +203,18 @@ async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
               resolve();
             } else {
               log.error(json.error);
-              await setServerConfig({ proofDeskAPIIsValid: false });
+              await setServerConfig({ enableProofDesk: false });
               resolve();
             }
           } catch (err) {
             log.error('Response is not a JSON, bad URL.');
-            await setServerConfig({ proofDeskAPIIsValid: false });
+            await setServerConfig({ enableProofDesk: false });
             resolve();
           }
         });
       }).on('error', async (err) => {
         log.error(err.message);
-        await setServerConfig({ proofDeskAPIIsValid: false });
+        await setServerConfig({ enableProofDesk: false });
         resolve();
       });
     });

@@ -16,11 +16,12 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   allowUserToSign: Joi.boolean(),
   logoURL: Joi.string().uri({ scheme: ['http', 'https'] }).allow(null),
   HTMLFrame: Joi.string().allow(null),
-  useOpenIDConnect: Joi.boolean(),
+  enableOpenIDConnect: Joi.boolean(),
   openIDConnectURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   openIDConnectClientId: Joi.string().allow(null),
   openIDConnectClientSecret: Joi.string().allow(null),
   openIDConnectClientRedirectURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
+
   // OIDCP config
   enableOIDCP: Joi.boolean(),
   OIDCPInterfaceURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
@@ -29,10 +30,12 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   OIDCPClients: Joi.array().items(oidcpClient).allow(null),
   keyExpirationOffset: Joi.string().allow(null),
   enrollmentExpirationOffset: Joi.string().allow(null),
+
   // SMTP config
-  useSMTP: Joi.boolean(),
+  enableSMTP: Joi.boolean(),
   SMTPConfig: Joi.string().allow(null),
   webClientURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
+
   // Mail template
   mailResetPasswordTemplate: Joi.string().allow(null),
   mailOnboardingTemplate: Joi.string().allow(null),
@@ -43,10 +46,11 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   }).allow(null),
   contact: Joi.string().allow(null),
   organizationName: Joi.string().allow(null),
+
   // ProofDesk config
   proofDeskAPIURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   proofDeskAPIToken: Joi.string().allow(null),
-  proofDeskAPIIsValid: Joi.boolean().allow(null)
+  enableProofDesk: Joi.boolean().allow(null)
 });
 
 export { updateConfig };

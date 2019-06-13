@@ -2,7 +2,7 @@
   <mat-card-title>API configuration</mat-card-title>
   <mat-divider></mat-divider>
   <br>
-  <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="proofDeskAPIIsValid"
+  <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="enableProofDesk"
     [disabled]="(formLocked$ | async)">
     Enable ProofDesk
   </mat-checkbox>
@@ -23,7 +23,7 @@
   <mat-card-actions *ngIf="(config$ | async) as config; else loading">
     <button mat-raised-button color="primary" (click)="update()"
       [disabled]="form.invalid || (config.proofDeskAPIURL == this.form.get('proofDeskAPIURL').value &&
-      config.proofDeskAPIToken == this.form.get('proofDeskAPIToken').value && config.proofDeskAPIIsValid == proofDeskAPIIsValid)">
+      config.proofDeskAPIToken == this.form.get('proofDeskAPIToken').value && config.enableProofDesk == enableProofDesk)">
       SAVE
     </button>
   </mat-card-actions>

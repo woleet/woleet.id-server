@@ -22,7 +22,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   externalFormOpened = false;
   enrollFormOpened = false;
 
-  useSMTP: boolean;
+  enableSMTP: boolean;
   contactAvailable: boolean;
   proofDeskAvailable: boolean;
   webClientURL: string;
@@ -34,8 +34,8 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   private onDestroy: EventEmitter<void>;
 
   constructor(private keyService: KeyService, private userService: UserService,
-    private route: ActivatedRoute, private configService: ConfigService,
-    public dialog: MatDialog) {
+              private route: ActivatedRoute, private configService: ConfigService,
+              public dialog: MatDialog) {
     super();
     this.userId = this.route.snapshot.params.id;
     this.user$ = this.userService.getById(this.userId);
@@ -48,9 +48,9 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
       if (!config) {
         return;
       }
-      this.useSMTP = config.useSMTP;
+      this.enableSMTP = config.enableSMTP;
       this.contactAvailable = !!config.contact;
-      this.proofDeskAvailable = config.proofDeskAPIIsValid;
+      this.proofDeskAvailable = config.enableProofDesk;
       this.webClientURL = config.webClientURL;
     }));
     this.user$.then((user) => {
@@ -72,6 +72,6 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
   }
 
   canEnroll(): Boolean {
-    return (this.useSMTP && this.webClientURL && this.contactAvailable && this.proofDeskAvailable);
+    return (this.enableSMTP && this.webClientURL && this.contactAvailable && this.proofDeskAvailable);
   }
 }

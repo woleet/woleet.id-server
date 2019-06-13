@@ -250,7 +250,7 @@ declare global {
     allowUserToSign: boolean;
 
     // Open ID Connect config
-    useOpenIDConnect: boolean;
+    enableOpenIDConnect: boolean;
     openIDConnectURL?: string;
     openIDConnectClientId?: string;
     openIDConnectClientSecret?: string;
@@ -267,7 +267,7 @@ declare global {
     keyExpirationOffset?: string;
 
     // SMTP config
-    useSMTP?: boolean;
+    enableSMTP?: boolean;
     SMTPConfig?: string;
     webClientURL?: string;
 
@@ -290,7 +290,7 @@ declare global {
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
-    proofDeskAPIIsValid?: boolean;
+    enableProofDesk?: boolean;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -302,7 +302,7 @@ declare global {
     allowUserToSign?: boolean;
 
     // Open ID Connect config
-    useOpenIDConnect?: boolean;
+    enableOpenIDConnect?: boolean;
     openIDConnectURL?: string;
     openIDConnectClientId?: string;
     openIDConnectClientSecret?: string;
@@ -319,7 +319,7 @@ declare global {
     keyExpirationOffset?: string;
 
     // SMTP config
-    useSMTP?: boolean;
+    enableSMTP?: boolean;
     SMTPConfig?: string;
     webClientURL?: string;
 
@@ -342,7 +342,7 @@ declare global {
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
-    proofDeskAPIIsValid?: boolean;
+    enableProofDesk?: boolean;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -352,12 +352,14 @@ declare global {
     defaultKeyId: string;
     fallbackOnDefaultKey?: boolean;
     allowUserToSign?: boolean;
+
     // Open ID Connect config
-    useOpenIDConnect?: boolean;
+    enableOpenIDConnect?: boolean;
     openIDConnectURL?: string;
     openIDConnectClientId?: string;
     openIDConnectClientSecret?: string;
     openIDConnectClientRedirectURL?: string;
+
     // Open ID Connect Provider config
     OIDCPInterfaceURL?: string;
     OIDCPProviderURL?: string;
@@ -367,19 +369,23 @@ declare global {
 
     enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
+
     // SMTP config
-    useSMTP?: boolean;
+    enableSMTP?: boolean;
     SMTPConfig?: string;
     webClientURL?: string;
+
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
     mailKeyEnrollmentTemplate?: string;
+
     // TCU
     TCU?: {
       toDefault?: boolean;
       data?: string;
     }
+
     // Admin contact
     contact?: string;
 
@@ -388,7 +394,7 @@ declare global {
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
-    proofDeskAPIIsValid?: boolean;
+    enableProofDesk?: boolean;
   }
 
   /* Enrollment */

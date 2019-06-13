@@ -1,6 +1,6 @@
 <logo [logoURL]="config.logoURL"></logo>
 <html-frame [HTMLFrame]="config.HTMLFrame"></html-frame>
-<div class="form-container" *ngIf="(!redirect || !config.useOpenIDConnect)">
+<div class="form-container" *ngIf="(!redirect || !config.enableOpenIDConnect)">
   <form role="form" (submit)="login()" #f="ngForm">
     <div>
       <mat-form-field class="w-100">
@@ -23,11 +23,11 @@
     <button mat-raised-button color="primary" class="w-100" [disabled]="lock$ | async" (click)="login()">LOGIN</button>
   </form>
   <br>
-  <div *ngIf="config.useSMTP && config.webClientURL" class="mat-form-field">
+  <div *ngIf="config.enableSMTP && config.webClientURL" class="mat-form-field">
     <a [routerLink]="['/reset-password']">Forgot password?</a>
   </div>
   <br>
-  <button mat-raised-button color="primary" class="w-100" *ngIf="config.useOpenIDConnect" [disabled]="lock$ | async"
+  <button mat-raised-button color="primary" class="w-100" *ngIf="config.enableOpenIDConnect" [disabled]="lock$ | async"
     (click)="openid()">
     LOGIN WITH OPENID
   </button>

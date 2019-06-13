@@ -12,12 +12,12 @@ export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnIni
 
   formLocked$: Observable<boolean>;
   formValid$: BehaviorSubject<boolean>;
-  useOpenIDConnect$: BehaviorSubject<boolean>;
+  enableOpenIDConnect$: BehaviorSubject<boolean>;
 
   config$: Observable<ApiServerConfig>;
 
   form: FormGroup;
-  _useOpenIDConnect: boolean;
+  enableOpenIDConnect: boolean;
   reveal = false;
   changed = false;
 
@@ -39,7 +39,7 @@ export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnIni
     const config$ = this.config$ = this.configService.getConfig();
 
     this.formLocked$ = this.configService.isDoingSomething();
-    this.useOpenIDConnect$ = new BehaviorSubject(true);
+    this.enableOpenIDConnect$ = new BehaviorSubject(true);
     this.formValid$ = new BehaviorSubject(false);
 
     this.registerSubscription(config$.subscribe((config) => {
@@ -49,7 +49,7 @@ export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnIni
 
       const url = `${window.location.origin}/oauth/callback`;
 
-      this.useOpenIDConnect$.next(config.useOpenIDConnect);
+      this.enableOpenIDConnect$.next(config.enableOpenIDConnect);
 
       this.form.get('openIDConnectURL').setValue(config.openIDConnectURL || '');
       this.form.get('openIDConnectClientId').setValue(config.openIDConnectClientId || '');
@@ -83,19 +83,19 @@ export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnIni
     const openIDConnectClientId = this.form.get('openIDConnectClientId').value || null;
     const openIDConnectClientSecret = this.form.get('openIDConnectClientSecret').value || null;
     const openIDConnectClientRedirectURL = this.form.get('openIDConnectClientRedirectURL').value || null;
-    const useOpenIDConnect = this._useOpenIDConnect;
+    const enableOpenIDConnect = this.enableOpenIDConnect;
     this.configService.update({
       openIDConnectURL,
-      useOpenIDConnect,
+      enableOpenIDConnect,
       openIDConnectClientId,
       openIDConnectClientSecret,
       openIDConnectClientRedirectURL
     });
   }
 
-  updateUseOpenIDConnectOption(useOpenIDConnect) {
-    this._useOpenIDConnect = useOpenIDConnect;
-    this.useOpenIDConnect$.next(useOpenIDConnect);
+  updateEnableOpenIDConnectOption(enableOpenIDConnect) {
+    this.enableOpenIDConnect = enableOpenIDConnect;
+    this.enableOpenIDConnect$.next(enableOpenIDConnect);
     this.formValid$.next(this.isFormValid());
     this.changed = true;
   }

@@ -1,4 +1,5 @@
-interface ServerConfig { }
+interface ServerConfig {
+}
 
 type uri = string;
 
@@ -19,7 +20,7 @@ interface ApiServerConfig {
   HTMLFrame?: string | null;
 
   // Open ID Connect config
-  useOpenIDConnect: boolean;
+  enableOpenIDConnect: boolean;
   openIDConnectURL: string | null;
   openIDConnectClientId: string | null;
   openIDConnectClientSecret: string | null;
@@ -36,7 +37,7 @@ interface ApiServerConfig {
   keyExpirationOffset?: string;
 
   // SMTP config
-  useSMTP: boolean;
+  enableSMTP: boolean;
   SMTPConfig: string | null;
   webClientURL: string | null;
 
@@ -59,7 +60,7 @@ interface ApiServerConfig {
   // ProofDesk config
   proofDeskAPIURL: string | null;
   proofDeskAPIToken: string | null;
-  proofDeskAPIIsValid: boolean | null;
+  enableProofDesk: boolean | null;
 }
 
 interface ApiServerConfigUpdate {
@@ -71,7 +72,7 @@ interface ApiServerConfigUpdate {
   allowUserToSign?: boolean;
 
   // Open ID Connect config
-  useOpenIDConnect?: boolean;
+  enableOpenIDConnect?: boolean;
   openIDConnectURL?: string;
   openIDConnectClientId?: string;
   openIDConnectClientSecret?: string;
@@ -88,7 +89,7 @@ interface ApiServerConfigUpdate {
   keyExpirationOffset?: string;
 
   // SMTP config
-  useSMTP?: boolean;
+  enableSMTP?: boolean;
   SMTPConfig?: string;
   webClientURL?: string;
 
@@ -111,5 +112,5 @@ interface ApiServerConfigUpdate {
   // ProofDesk config
   proofDeskAPIURL?: string;
   proofDeskAPIToken?: string;
-  proofDeskAPIIsValid?: boolean;
+  enableProofDesk?: boolean;
 }

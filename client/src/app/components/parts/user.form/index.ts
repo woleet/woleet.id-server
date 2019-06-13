@@ -60,7 +60,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   formLocked = false;
 
-  useSMTP: boolean;
+  enableSMTP: boolean;
   webClientURL: string;
 
   sendPasswordEmail = false;
@@ -141,7 +141,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       if (!config) {
         return;
       }
-      this.useSMTP = config.useSMTP;
+      this.enableSMTP = config.enableSMTP;
       this.webClientURL = config.webClientURL;
     }));
     if (this.mode === 'edit') {
@@ -233,6 +233,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   }
 
   canSendEmailToUser(): Boolean {
-    return this.useSMTP && this.webClientURL && this.form.get('email').valid;
+    return this.enableSMTP && this.webClientURL && this.form.get('email').valid;
   }
 }

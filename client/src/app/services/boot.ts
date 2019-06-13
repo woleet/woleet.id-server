@@ -19,12 +19,12 @@ export class AppConfigService {
 
   private _appConfig: {
     OIDCPProviderURL: string,
-    useOpenIDConnect: boolean,
+    enableOpenIDConnect: boolean,
     hasSession: boolean,
     logoURL: string,
     HTMLFrame: string
     user: ApiUserDTOObject,
-    useSMTP: boolean,
+    enableSMTP: boolean,
     webClientURL: string,
     TCU: {
       data: string
@@ -70,7 +70,7 @@ export class AppConfigService {
         const redirect = this.store.get(LOGIN_REDIRECT_KEY);
         if (!config.hasSession) {
           log.debug(`User has no session, clear localstorage`);
-          if (this.bootOnLogin && redirect && config.useOpenIDConnect) {
+          if (this.bootOnLogin && redirect && config.enableOpenIDConnect) {
             log.info(`Automatic use of OIDCP`);
             redirectForOIDC();
           }

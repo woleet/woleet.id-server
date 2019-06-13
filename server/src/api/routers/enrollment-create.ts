@@ -28,7 +28,7 @@ router.post('/enrollment', validate.body('createEnrollment'), async function (ct
   // Verify all settings required for enrollment
   // TODO: change this method with an end point to send the mail
   if (!enrollment.test) {
-    if (!getServerConfig().useSMTP) {
+    if (!getServerConfig().enableSMTP) {
       throw new MethodNotAllowed('SMTP Server not configured.');
     }
     if (!getServerConfig().contact) {
@@ -37,7 +37,7 @@ router.post('/enrollment', validate.body('createEnrollment'), async function (ct
     if (!getServerConfig().webClientURL) {
       throw new MethodNotAllowed('Web client URL not configured.');
     }
-    if (!getServerConfig().proofDeskAPIIsValid) {
+    if (!getServerConfig().enableProofDesk) {
       throw new MethodNotAllowed('ProofDesk account not configurated.');
     }
   }
