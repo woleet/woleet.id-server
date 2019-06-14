@@ -92,7 +92,7 @@ export async function getTCUHash(): Promise<string> {
 export async function createSignatureRequest(enrollmentId): Promise<any> {
   const config = getServerConfig();
   const user = await getOwner(enrollmentId);
-  const currentEnrollment = await getEnrollmentById(enrollmentId);
+  const enrollment = await getEnrollmentById(enrollmentId);
   const url = new URL(config.proofDeskAPIURL);
   const hashTCU = await getTCUHash();
   const httpsOptions: any = {
@@ -113,7 +113,7 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
       {
         "commonName": "${user.x500CommonName}",
         "email": "${user.email}",
-        "device": ${currentEnrollment.device ? '"' + currentEnrollment.device.toUpperCase() + '"' : null}
+        "device": ${enrollment.device ? '"' + enrollment.device.toUpperCase() + '"' : null}
       }],
       "name": "${getServerConfig().organizationName} Signature Service TCU.pdf",
       "hashToSign": "${hashTCU}"
@@ -189,12 +189,14 @@ export function monitorSignatureRequest(signatureRequestId: string, enrollmentId
 
 async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject, signatureRequest: any) {
   const publicKey = signatureRequest.anchors[0].pubKey;
-  const currentEnrollment = await getEnrollmentById(enrollmentId);
-  const name = currentEnrollment.name;
-  const userId = currentEnrollment.userId;
+  const enrollment = await getEnrollmentById(enrollmentId);
+  const name = enrollment.name;
+  const userId = enrollment.userId;
   // FIXME: the type of the device used to sign the TCU is retrieved first from the signature request,
   // then from the enrollment, or we fallback on mobile (until the mobile app is updated to register the device type)
-  const device = signatureRequest.authorizedSignees[0].device.toLowerCase() || currentEnrollment.device || 'mobile';
+  const signeeDevice = signatureRequest.authorizedSignees[0].device ?
+    signatureRequest.authorizedSignees[0].device.toLowerCase() : null;
+  const device = signeeDevice || enrollment.device || 'mobile';
   try {
 
     // Create new external key: this must be done before setting the identity URL on the signature anchor,
