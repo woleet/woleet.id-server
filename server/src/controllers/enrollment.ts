@@ -215,7 +215,7 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
     // Send a enrollment success email to the admin
     await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, true);
   } catch (error) {
-    log.error("Failed to finalize enrollment", error);
+    log.error('Failed to finalize enrollment', error);
 
     // Send a enrollment failure email to the admin
     await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, false);
