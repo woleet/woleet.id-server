@@ -6,10 +6,9 @@ import { router as serverEvent } from './routers/server-event';
 import { router as apiToken } from './routers/api-token';
 import { router as info } from './routers/info';
 import { router as enrollment } from './routers/enrollment';
-import { router as enrollmentCreate } from './routers/enrollment-create';
 import { router as user } from './routers/user';
 import { router as key } from './routers/key';
-import { router as passwordReset } from './routers/passwordReset';
+import { router as passwordReset } from './routers/password-reset';
 
 import { router as sign } from './routers/sign';
 import { router as identity } from './routers/identity';
@@ -17,7 +16,7 @@ import { router as discovery } from './routers/discovery';
 
 import { router as openid } from './routers/openid';
 
-import { user as userAuth, admin as adminAuth, session } from './authentication';
+import { admin as adminAuth, session, user as userAuth } from './authentication';
 
 import { production } from '../config';
 
@@ -47,7 +46,6 @@ apiRouter.use(key.routes());
 apiRouter.use(apiToken.routes());
 apiRouter.use(serverEvent.routes());
 apiRouter.use(serverConfig.routes());
-apiRouter.use(enrollmentCreate.routes());
 
 /**
  * Identity

@@ -1,7 +1,13 @@
 import * as Router from 'koa-router';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
-import { createSignatureRequest, getOwner, monitorSignatureRequest } from '../../controllers/enrollment';
+import {
+  createEnrollment, createSignatureRequest, deleteEnrollment, getAllEnrollment, getEnrollmentById, getOwner,
+  monitorSignatureRequest, putEnrollment
+} from '../../controllers/enrollment';
+import { validate } from "../schemas";
+import { getServerConfig } from "../../controllers/server-config";
+import { MethodNotAllowed } from "http-errors";
 
 /**
  * Key enrollment
@@ -50,6 +56,111 @@ router.post('/enrollment/:id/create-signature-request', async function (ctx) {
 
   // Return the identifier of the signature request
   ctx.body = JSON.stringify(signatureRequestId);
+});
+
+
+/**
+ * @route: /enrollment
+ * @swagger
+ *  operationId: createEnrollment
+ */
+router.post('/enrollment', validate.body('createEnrollment'), async function (ctx) {
+
+  // Get enrollment to create from body
+  const enrollment: ApiPostEnrollmentObject = ctx.request.body;
+
+  // Verify all settings required for enrollment
+  // TODO: change this method with an end point to send the mail
+  if (!enrollment.test) {
+    if (!getServerConfig().enableSMTP) {
+      throw new MethodNotAllowed('SMTP Server not configured.');
+    }
+    if (!getServerConfig().contact) {
+      throw new MethodNotAllowed('Admin contact not configured.');
+    }
+    if (!getServerConfig().webClientURL) {
+      throw new MethodNotAllowed('Web client URL not configured.');
+    }
+    if (!getServerConfig().enableProofDesk) {
+      throw new MethodNotAllowed('ProofDesk account not configured.');
+    }
+  }
+
+  // Create enrollment
+  const created = await createEnrollment(enrollment);
+
+  // Register enrollment creation event
+  event.register({
+    type: 'enrollment.create',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: created.userId,
+    associatedKeyId: null,
+    data: created.id
+  });
+
+  // Return created enrollment in body
+  ctx.body = created;
+});
+
+/**
+ * @route: /enrollment
+ * @swagger
+ *  operationId: updateEnrollment
+ */
+router.put('/enrollment/:id', async function (ctx) {
+  const enrollment: ApiPutEnrollmentObject = ctx.request.body;
+  const { id } = ctx.params;
+  const updated = await putEnrollment(id, enrollment);
+
+  event.register({
+    type: 'enrollment.edit',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: updated.userId,
+    associatedKeyId: null,
+    data: id
+  });
+
+  ctx.body = updated;
+});
+
+/**
+ * @route: /enrollment/list
+ * @swagger
+ *  operationId: getAllEnrollment
+ */
+router.get('/enrollment/list', async function (ctx) {
+  const enrollments = await getAllEnrollment();
+  ctx.body = enrollments;
+});
+
+router.delete('/enrollment/:id', async function (ctx) {
+  const { id } = ctx.params;
+  const deleted = await deleteEnrollment(id);
+
+  event.register({
+    type: 'enrollment.delete',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: deleted.userId,
+    associatedKeyId: null,
+    data: id
+  });
+
+  ctx.body = deleted;
+});
+
+/**
+ * @route: /enrollment/{id}
+ * @swagger
+ *  operationId: getEnrollment
+ */
+router.get('/enrollment/:id', async function (ctx) {
+  const { id } = ctx.params;
+  const get = await getEnrollmentById(id);
+
+  ctx.body = get;
 });
 
 export { router };

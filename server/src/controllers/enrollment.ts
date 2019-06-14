@@ -192,7 +192,9 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
   const currentEnrollment = await getEnrollmentById(enrollmentId);
   const name = currentEnrollment.name;
   const userId = currentEnrollment.userId;
-  const device = currentEnrollment.device;
+  // FIXME: the type of the device used to sign the TCU is retrieved first from the signature request,
+  // then from the enrollment, or we fallback on mobile (until the mobile app is updated to register the device type)
+  const device = signatureRequest.authorizedSignees[0].device.toLowerCase() || currentEnrollment.device || 'mobile';
   try {
 
     // Create new external key: this must be done before setting the identity URL on the signature anchor,
@@ -211,7 +213,7 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
     // Send a enrollment success email to the admin
     await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, true);
   } catch (error) {
-    log.error(error);
+    log.error("Failed to finalize enrollment", error);
 
     // Send a enrollment failure email to the admin
     await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, false);
