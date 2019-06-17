@@ -16,9 +16,6 @@ let inMemoryConfig: InternalServerConfigObject = null;
 const TCUPath = path.join(__dirname, '../../assets/custom_TCU.pdf');
 const defaultTCUPath = path.join(__dirname, '../../assets/default_TCU.pdf');
 
-let TCUdata: string = 'data:application/pdf;base64,' + readFileSync(
-  TCUPath, { encoding: 'base64' });
-
 function getInMemoryConfig(): InternalServerConfigObject {
   return inMemoryConfig;
 }
@@ -50,10 +47,9 @@ export async function updateTCU(file) {
 }
 
 export async function defaultTCU() {
-  TCUdata = 'data:application/pdf;base64,' + await readFileSync(
-    defaultTCUPath, { encoding: 'base64' });
-  const base64Image = TCUdata.split(';base64,').pop();
-  await writeFileSync(TCUPath, Buffer.from(base64Image, 'base64'));
+  const reader = createReadStream(defaultTCUPath);
+  const stream = createWriteStream(TCUPath);
+  reader.pipe(stream);
   log.info('Reset TCU file to default value');
 }
 
