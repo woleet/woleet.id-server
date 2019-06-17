@@ -22,12 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * API tests for EnrollmentApi
  */
-public class EnrollmentApiTest extends CRUDApiTest  {
+public class EnrollmentApiTest extends CRUDApiTest {
 
     class Api implements CRUDApiTest.Api {
 
@@ -45,7 +46,7 @@ public class EnrollmentApiTest extends CRUDApiTest  {
                 return new ArrayList<>();
 
             List<CRUDApiTest.ObjectGet> list = new ArrayList<>();
-            for (EnrollmentGet enrollmentGet : enrollmentApi.getAllEnrollment())
+            for (EnrollmentGet enrollmentGet : enrollmentApi.getAllEnrollments())
                 list.add(new EnrollmentApiTest.ObjectGet(enrollmentGet));
             return list;
         }

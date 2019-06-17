@@ -928,7 +928,7 @@ paths:
       tags:
         - Enrollment
       summary: Get all enrollment requests.
-      operationId: getAllEnrollment
+      operationId: getAllEnrollments
       responses:
         '200':
           description: Successful operation.
@@ -1010,16 +1010,13 @@ paths:
       tags:
         - Enrollment
       summary: Create and send the signature request of the TCU to the owner of the enrolled key.
+      security: []
       operationId: createSignatureRequest
       parameters:
         - $ref: '#/components/parameters/EnrollmentIdParameter'
       responses:
         '200':
           description: Successful operation.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/SignatureRequestIdGet'
         '400':
           description: Invalid object supplied / The signature request creation is not possible.
           content:
@@ -1031,6 +1028,7 @@ paths:
       tags:
         - Enrollment
       summary: Get the user of a key enrollment request.
+      security: []
       operationId: getEnrollmentUser
       parameters:
         - $ref: '#/components/parameters/EnrollmentIdParameter'
@@ -1637,9 +1635,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/EnrollmentGet'
-    SignatureRequestIdGet:
-      type: string
-      description: Id of the created signature request.
   parameters:
     UserIdParameter:
       name: userId
@@ -1854,8 +1849,6 @@ components:
       $ref: '#/components/schemas/EnrollmentGet'
     EnrollmentArray:
       $ref: '#/components/schemas/EnrollmentArray'
-    SignatureRequestIdGet:
-      $ref: '#/components/schemas/SignatureRequestIdGet'
   securitySchemes:
     BasicAuth:
       type: http

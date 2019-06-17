@@ -60,6 +60,8 @@ router.all('/logout', async function (ctx) {
     await delSession(ctx.session.id);
   }
   ctx.cookies.set('session' + sessionSuffix, null);
+
+  // Return an empty body
   ctx.body = null;
 });
 

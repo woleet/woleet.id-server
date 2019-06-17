@@ -6,6 +6,7 @@ import {
 import { validate } from '../schemas';
 import { getServerConfig } from '../../controllers/server-config';
 import { MethodNotAllowed } from 'http-errors';
+
 /**
  * Key enrollment admin
  * Request handlers for key enrollment with admin access.
@@ -83,7 +84,7 @@ router.put('/enrollment/:id', async function (ctx) {
 /**
  * @route: /enrollment/list
  * @swagger
- *  operationId: getAllEnrollment
+ *  operationId: getAllEnrollments
  */
 router.get('/enrollment/list', async function (ctx) {
   const enrollments = await getAllEnrollment();
