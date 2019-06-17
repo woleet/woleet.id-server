@@ -8,7 +8,7 @@ import { serializeUserDTO } from '../serialize/userDTO';
  * AppConfig
  */
 const router = new Router();
-const serveBase = path.join(__dirname, '../../..');
+const serverBase = path.join(__dirname, '../../..');
 
 router.get('/app-config', async function (ctx) {
   const user = ctx.session && ctx.session.user && serializeUserDTO(ctx.session.user.toJSON()) || null;
@@ -24,7 +24,7 @@ router.get('/app-config', async function (ctx) {
 });
 
 router.get('/assets/custom_TCU.pdf', async ctx => send(ctx, ctx.path, {
-  root: serveBase,
+  root: serverBase,
 }));
 
 export { router };

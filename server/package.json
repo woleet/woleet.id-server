@@ -21,7 +21,6 @@
     "@types/http-errors": "^1.6.1",
     "@types/joi": "^13.6.3",
     "@types/koa": "^2.0.48",
-    "@types/koa-bodyparser": "^4.2.2",
     "@types/koa-morgan": "^1.0.4",
     "@types/koa-router": "7.0.37",
     "@types/loglevel": "^1.5.4",
