@@ -23,6 +23,7 @@ router.get('/app-config', async function (ctx) {
   };
 });
 
+// serve the TCU file via the server assets
 router.get('/assets/custom_TCU.pdf', async ctx => send(ctx, ctx.path, {
   root: serverBase,
 }));
