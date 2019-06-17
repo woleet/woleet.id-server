@@ -48,6 +48,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-morgan": "^1.0.1",
     "koa-router": "^7.4.0",
+    "koa-send": "^5.0.0",
     "loglevel": "^1.6.1",
     "lru-cache": "^4.1.5",
     "mustache": "^3.0.1",

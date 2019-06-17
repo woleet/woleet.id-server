@@ -3,7 +3,6 @@ import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider } from '@components/util';
 import { Observable } from 'rxjs';
 import * as log from 'loglevel';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'config-tcu',
@@ -19,7 +18,6 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
   fileURL: any;
   fileInformation: string;
   errorMessage: string;
-  TCUURL: SafeUrl;
   organizationName: string;
 
   private onDestroy: EventEmitter<void>;
@@ -27,7 +25,7 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
   @ViewChild('fileInput')
   fileInput: ElementRef;
 
-  constructor(private configService: ConfigService, private sanitization: DomSanitizer) {
+  constructor(private configService: ConfigService) {
     super();
     this.onDestroy = new EventEmitter();
   }
@@ -42,7 +40,6 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
       if (!config) {
         return;
       }
-      this.TCUURL = this.sanitization.bypassSecurityTrustUrl(config.TCU.data);
       this.organizationName = config.organizationName;
     });
 
@@ -89,5 +86,9 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
     };
     log.debug('Set Terms and Conditions of Use to default');
     this.configService.update({ TCU });
+  }
+
+  getTCUURL() {
+    return this.configService.getTCUURL();
   }
 }

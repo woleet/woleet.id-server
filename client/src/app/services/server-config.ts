@@ -130,4 +130,8 @@ export class ServerConfigService {
   getDefaultKeyOwner(): Observable<ApiUserObject> {
     return this.defaultKeyOwner$.asObservable();
   }
+
+  getTCUURL() {
+    return `${serverURL}/assets/custom_TCU.pdf`;
+  }
 }

@@ -1,24 +1,30 @@
 import * as Router from 'koa-router';
+import * as send from 'koa-send';
+import * as path from 'path';
 import { getServerConfig } from '../../controllers/server-config';
 import { serializeUserDTO } from '../serialize/userDTO';
 
 /**
  * AppConfig
  */
+const router = new Router();
+const serveBase = path.join(__dirname, '../../..');
 
-const router = new Router({ prefix: '/app-config' });
-
-router.get('/', async function (ctx) {
+router.get('/app-config', async function (ctx) {
   const user = ctx.session && ctx.session.user && serializeUserDTO(ctx.session.user.toJSON()) || null;
   const hasSession = !!(ctx.session && ctx.session.user);
   const {
     enableOpenIDConnect, OIDCPProviderURL, logoURL,
-    HTMLFrame, enableSMTP, webClientURL, TCU, contact, organizationName
+    HTMLFrame, enableSMTP, webClientURL, contact, organizationName
   } = getServerConfig();
   ctx.body = {
     enableOpenIDConnect: enableOpenIDConnect, OIDCPProviderURL, hasSession, user, logoURL,
-    HTMLFrame, enableSMTP: enableSMTP, webClientURL, TCU, contact, organizationName
+    HTMLFrame, enableSMTP: enableSMTP, webClientURL, contact, organizationName
   };
 });
+
+router.get('/assets/custom_TCU.pdf', async ctx => send(ctx, ctx.path, {
+  root: serveBase,
+}));
 
 export { router };

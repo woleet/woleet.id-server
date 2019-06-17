@@ -37,10 +37,6 @@ export async function loadServerConfig(): Promise<InternalServerConfigObject> {
 
 export function getServerConfig(): InternalServerConfigObject {
   const config = getInMemoryConfig();
-  if (!config.TCU) {
-    config.TCU = {};
-  }
-  config.TCU.data = TCUdata;
   return config;
 }
 
