@@ -226,7 +226,7 @@ public class EnrollmentApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "CookieAuth" };
+        String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 
@@ -248,25 +248,22 @@ public class EnrollmentApi {
      * Create and send the signature request of the TCU to the owner of the enrolled key.
      * 
      * @param enrollmentId Identifier of the enrollment. (required)
-     * @return String
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public String createSignatureRequest(UUID enrollmentId) throws ApiException {
-        ApiResponse<String> resp = createSignatureRequestWithHttpInfo(enrollmentId);
-        return resp.getData();
+    public void createSignatureRequest(UUID enrollmentId) throws ApiException {
+        createSignatureRequestWithHttpInfo(enrollmentId);
     }
 
     /**
      * Create and send the signature request of the TCU to the owner of the enrolled key.
      * 
      * @param enrollmentId Identifier of the enrollment. (required)
-     * @return ApiResponse&lt;String&gt;
+     * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<String> createSignatureRequestWithHttpInfo(UUID enrollmentId) throws ApiException {
+    public ApiResponse<Void> createSignatureRequestWithHttpInfo(UUID enrollmentId) throws ApiException {
         com.squareup.okhttp.Call call = createSignatureRequestValidateBeforeCall(enrollmentId, null, null);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        return apiClient.execute(call, localVarReturnType);
+        return apiClient.execute(call);
     }
 
     /**
@@ -277,7 +274,7 @@ public class EnrollmentApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call createSignatureRequestAsync(UUID enrollmentId, final ApiCallback<String> callback) throws ApiException {
+    public com.squareup.okhttp.Call createSignatureRequestAsync(UUID enrollmentId, final ApiCallback<Void> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -299,8 +296,7 @@ public class EnrollmentApi {
         }
 
         com.squareup.okhttp.Call call = createSignatureRequestValidateBeforeCall(enrollmentId, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        apiClient.executeAsync(call, localVarReturnType, callback);
+        apiClient.executeAsync(call, callback);
         return call;
     }
     /**
@@ -426,13 +422,13 @@ public class EnrollmentApi {
         return call;
     }
     /**
-     * Build call for getAllEnrollment
+     * Build call for getAllEnrollments
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call getAllEnrollmentCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call getAllEnrollmentsCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = new Object();
 
         // create path and map variables
@@ -473,10 +469,10 @@ public class EnrollmentApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call getAllEnrollmentValidateBeforeCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call getAllEnrollmentsValidateBeforeCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
 
-        com.squareup.okhttp.Call call = getAllEnrollmentCall(progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllEnrollmentsCall(progressListener, progressRequestListener);
         return call;
 
     }
@@ -487,8 +483,8 @@ public class EnrollmentApi {
      * @return List&lt;EnrollmentGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public List<EnrollmentGet> getAllEnrollment() throws ApiException {
-        ApiResponse<List<EnrollmentGet>> resp = getAllEnrollmentWithHttpInfo();
+    public List<EnrollmentGet> getAllEnrollments() throws ApiException {
+        ApiResponse<List<EnrollmentGet>> resp = getAllEnrollmentsWithHttpInfo();
         return resp.getData();
     }
 
@@ -498,8 +494,8 @@ public class EnrollmentApi {
      * @return ApiResponse&lt;List&lt;EnrollmentGet&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<List<EnrollmentGet>> getAllEnrollmentWithHttpInfo() throws ApiException {
-        com.squareup.okhttp.Call call = getAllEnrollmentValidateBeforeCall(null, null);
+    public ApiResponse<List<EnrollmentGet>> getAllEnrollmentsWithHttpInfo() throws ApiException {
+        com.squareup.okhttp.Call call = getAllEnrollmentsValidateBeforeCall(null, null);
         Type localVarReturnType = new TypeToken<List<EnrollmentGet>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -511,7 +507,7 @@ public class EnrollmentApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getAllEnrollmentAsync(final ApiCallback<List<EnrollmentGet>> callback) throws ApiException {
+    public com.squareup.okhttp.Call getAllEnrollmentsAsync(final ApiCallback<List<EnrollmentGet>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -532,7 +528,7 @@ public class EnrollmentApi {
             };
         }
 
-        com.squareup.okhttp.Call call = getAllEnrollmentValidateBeforeCall(progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllEnrollmentsValidateBeforeCall(progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<List<EnrollmentGet>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
@@ -704,7 +700,7 @@ public class EnrollmentApi {
             });
         }
 
-        String[] localVarAuthNames = new String[] { "CookieAuth" };
+        String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
 

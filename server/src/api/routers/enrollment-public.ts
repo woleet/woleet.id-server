@@ -1,9 +1,7 @@
 import * as Router from 'koa-router';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
-import {
-  createSignatureRequest, getOwner, monitorSignatureRequest
-} from '../../controllers/enrollment';
+import { createSignatureRequest, getOwner, monitorSignatureRequest } from '../../controllers/enrollment';
 
 /**
  * Key enrollment public
@@ -19,8 +17,8 @@ const router = new Router();
  *  operationId: getEnrollmentUser
  */
 router.get('/enrollment/:id/user', async function (ctx) {
-  const { id } = ctx.params;
-  ctx.body = serializeUser(await getOwner(id));
+  const { id: enrollmentId } = ctx.params;
+  ctx.body = serializeUser(await getOwner(enrollmentId));
 });
 
 /**
@@ -50,8 +48,8 @@ router.post('/enrollment/:id/create-signature-request', async function (ctx) {
     data: signatureRequestId
   });
 
-  // Return the identifier of the signature request
-  ctx.body = JSON.stringify(signatureRequestId);
+  // Return an empty body
+  ctx.body = null;
 });
 
 export { router };

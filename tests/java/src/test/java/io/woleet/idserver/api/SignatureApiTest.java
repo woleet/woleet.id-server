@@ -204,5 +204,7 @@ public class SignatureApiTest {
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
+
+        // TODO: test signing using a blocked key
     }
 }
