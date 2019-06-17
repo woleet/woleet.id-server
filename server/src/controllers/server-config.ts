@@ -3,7 +3,7 @@ import { serverConfig } from '../config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { exit } from '../exit';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, createReadStream, createWriteStream } from 'fs';
 import * as path from 'path';
 import * as https from 'https';
 import { getAgent } from './utils/agent';
@@ -13,9 +13,11 @@ const debug = Debug('id:ctrl:config');
 const { CONFIG_ID } = serverConfig;
 
 let inMemoryConfig: InternalServerConfigObject = null;
+const TCUPath = path.join(__dirname, '../../assets/custom_TCU.pdf');
+const defaultTCUPath = path.join(__dirname, '../../assets/default_TCU.pdf');
 
 let TCUdata: string = 'data:application/pdf;base64,' + readFileSync(
-  path.join(__dirname, '../../assets/custom_TCU.pdf'), { encoding: 'base64' });
+  TCUPath, { encoding: 'base64' });
 
 function getInMemoryConfig(): InternalServerConfigObject {
   return inMemoryConfig;
@@ -40,26 +42,24 @@ export function getServerConfig(): InternalServerConfigObject {
   return config;
 }
 
+export async function updateTCU(file) {
+  const reader = createReadStream(file.path);
+  const stream = createWriteStream(TCUPath);
+  reader.pipe(stream);
+  console.log('uploading %s -> %s', file.name, stream.path);
+}
+
+export async function defaultTCU() {
+  TCUdata = 'data:application/pdf;base64,' + await readFileSync(
+    defaultTCUPath, { encoding: 'base64' });
+  const base64Image = TCUdata.split(';base64,').pop();
+  await writeFileSync(TCUPath, Buffer.from(base64Image, 'base64'));
+  log.info('Reset TCU file to default value');
+}
+
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   try {
     const config = Object.assign({}, getInMemoryConfig(), up);
-    if (up.TCU) {
-      if (up.TCU.data) {
-        TCUdata = up.TCU.data;
-        const base64Image = up.TCU.data.split(';base64,').pop();
-        await writeFileSync(path.join(__dirname, '../../assets/custom_TCU.pdf'), Buffer.from(base64Image, 'base64'));
-        log.info('Change TCU file');
-        up.TCU.data = null;
-      }
-      if (up.TCU.toDefault) {
-        TCUdata = 'data:application/pdf;base64,' + await readFileSync(
-          path.join(__dirname, '../../assets/default_TCU.pdf'), { encoding: 'base64' });
-        const base64Image = TCUdata.split(';base64,').pop();
-        await writeFileSync(path.join(__dirname, '../../assets/custom_TCU.pdf'), Buffer.from(base64Image, 'base64'));
-        log.info('Reset TCU file to default value');
-        up.TCU.toDefault = null;
-      }
-    }
     let cfg = await ServerConfig.update(CONFIG_ID, { config });
     if (!cfg) {
       debug('No config to update, will set', config);

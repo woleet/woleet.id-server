@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { serverURL } from '@services/config';
 import { KeyService } from '@services/key';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -133,5 +133,28 @@ export class ServerConfigService {
 
   getTCUURL() {
     return `${serverURL}/assets/custom_TCU.pdf`;
+  }
+
+  updateTCU(TCU: File) {
+    const formData = new FormData();
+    formData.append('file', TCU);
+    this.http.post(`${serverURL}/server-config/TCU`, formData, {
+      reportProgress: true,
+      observe: 'events'
+    })
+      .subscribe(events => {
+        if (events.type === HttpEventType.UploadProgress) {
+          log.debug('Upload progress: ', Math.round(events.loaded / events.total * 100) + '%');
+        } else if (events.type === HttpEventType.Response) {
+          log.debug(events);
+        }
+      });
+  }
+
+  defaultTCU() {
+    this.http.get(`${serverURL}/server-config/TCU/default`)
+    .subscribe(res => {
+      log.debug(res);
+    });
   }
 }

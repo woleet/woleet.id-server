@@ -14,8 +14,6 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
 
   config$: Observable<ApiServerConfig>;
 
-  file: any;
-  fileURL: any;
   fileInformation: string;
   errorMessage: string;
   organizationName: string;
@@ -50,26 +48,12 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
     this.onDestroy.emit();
   }
 
-  async submit() {
-    const TCU = {
-      data: this.fileURL
-    };
-    log.debug('Set Terms and Conditions of Use to', TCU);
-    this.configService.update({ TCU });
-  }
-
-  onSelectFile(event) {
+  async onSelectFile(event) {
     if (event.target.files && event.target.files.length > 0) {
-      if (event.target.files[0].size < 1000000) {
-        this.file = event.target.files[0];
-        const reader = new FileReader;
-        reader.readAsDataURL(this.file);
-        reader.onloadend = () => {
-          this.fileURL = reader.result;
-          this.submit();
-        };
-        this.fileInformation = null;
-        this.errorMessage = null;
+      if (event.target.files[0].size < 4000000) {
+        const file = <File>event.target.files[0];
+        await console.log(file);
+        this.configService.updateTCU(file);
       } else {
         this.errorMessage = 'This file is too large to be uploaded this way.';
       }
@@ -81,11 +65,7 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
   }
 
   reset(): void {
-    const TCU = {
-      toDefault: true
-    };
-    log.debug('Set Terms and Conditions of Use to default');
-    this.configService.update({ TCU });
+    this.configService.defaultTCU();
   }
 
   getTCUURL() {

@@ -1,10 +1,10 @@
 import * as Router from 'koa-router';
-
+import * as body from 'koa-body';
+import { BadRequest } from 'http-errors';
 import { validate } from '../schemas';
-import { getServerConfig, setServerConfig } from '../../controllers/server-config';
+import { getServerConfig, setServerConfig, updateTCU, defaultTCU } from '../../controllers/server-config';
 import { store as event } from '../../controllers/server-event';
 import { serializeServerConfig } from '../serialize/server-config';
-import { BadRequest } from 'http-errors';
 
 /**
  * ServerConfig
@@ -41,6 +41,43 @@ router.put('/', validate.body('updateConfig'), async function (ctx) {
   });
 
   ctx.body = serializeServerConfig(config);
+});
+
+router.post('/TCU', body({ multipart: true }), async function (ctx) {
+
+  const file = ctx.request.files.file;
+  try {
+    await updateTCU(file);
+  } catch {
+    throw new BadRequest('Cannot upload this file');
+  }
+
+  event.register({
+    type: 'config.edit',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: null,
+    associatedKeyId: null,
+    data: 'TCU updated'
+  });
+
+  ctx.body = { response: 'TCU updated' };
+});
+
+router.get('/TCU/default', async function (ctx) {
+
+  await defaultTCU();
+
+  event.register({
+    type: 'config.edit',
+    authorizedUserId: ctx.session.user.get('id'),
+    associatedTokenId: null,
+    associatedUserId: null,
+    associatedKeyId: null,
+    data: 'default TCU'
+  });
+
+  ctx.body = { response: 'default TCU' };
 });
 
 export { router };
