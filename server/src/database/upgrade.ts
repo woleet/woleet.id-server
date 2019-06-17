@@ -2,8 +2,8 @@ import { Sequelize } from 'sequelize';
 import * as log from 'loglevel';
 import * as read from 'read';
 import * as crypto from 'crypto';
-import { ServerConfig, Key, APIToken } from '.';
-import { serverConfig, secretEnvVariableName, secureModule, events } from '../config';
+import { APIToken, Key, ServerConfig } from '.';
+import { secretEnvVariableName, secureModule, serverConfig } from '../config';
 import { promisify } from 'util';
 
 const { CONFIG_ID } = serverConfig;
@@ -324,7 +324,6 @@ async function postUpgrade3() {
 }
 
 async function postUpgrade8() {
-  log.warn('');
 
   if (doPostUpgrade8 === true) {
     await Key.model.sync();
@@ -344,7 +343,6 @@ async function postUpgrade8() {
 }
 
 async function postUpgrade10() {
-  log.warn('');
 
   if (doPostUpgrade10 === true) {
     await Key.model.sync();
