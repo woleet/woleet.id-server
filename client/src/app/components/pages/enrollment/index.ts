@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppConfigService } from '@services/boot';
 import { MatDialog } from '@angular/material';
-import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { EnrollmentService } from '@services/enrollment';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -15,7 +15,7 @@ import * as log from 'loglevel';
   templateUrl: 'index.html',
   styleUrls: ['./style.scss'],
   providers: [{
-    provide: MAT_STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
+    provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
   }]
 })
 export class EnrollmentPageComponent implements OnInit {

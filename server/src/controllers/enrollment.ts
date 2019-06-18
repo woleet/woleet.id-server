@@ -227,8 +227,9 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
 }
 
 async function setAnchorIdentityURL(signatureRequest: any) {
-  if (!getServerConfig().identityURL)
+  if (!getServerConfig().identityURL) {
     return;
+  }
   const url = new URL(getServerConfig().proofDeskAPIURL);
   const httpsOptions: any = {
     host: url.host,
@@ -244,7 +245,8 @@ async function setAnchorIdentityURL(signatureRequest: any) {
     httpsOptions.agent = agent;
   }
   const body = `{
-         "identityURL": "${getServerConfig().identityURL}"
+         "identityURL": "${getServerConfig().identityURL}",
+         "public": false
          }`;
   const req = https.request(httpsOptions);
   req.on('error', (error) => {

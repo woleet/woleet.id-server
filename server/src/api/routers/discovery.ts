@@ -6,8 +6,8 @@ import { getAllKeysOfUser, getOwnerByPubKey } from '../../controllers/key';
 import { serializeUser } from '../serialize/user';
 import { getUserById, searchAllUsers } from '../../controllers/user';
 import { bearerAuth } from '../authentication';
-import { getServerConfig } from "../../controllers/server-config";
-import { serializeKey } from "../serialize/key";
+import { getServerConfig } from '../../controllers/server-config';
+import { serializeKey } from '../serialize/key';
 
 const vuid = validate.param('userId', 'uuid');
 const vaddr = validate.param('pubKey', 'address');

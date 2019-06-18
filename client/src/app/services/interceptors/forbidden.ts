@@ -14,7 +14,7 @@ export class ForbiddenInterceptor implements HttpInterceptor {
           // redirect to main page if forbidden
           if (err instanceof HttpErrorResponse && err.status === 403) {
             this.router.navigate(['main']);
-            return Observable.create(obs => obs.complete());
+            return new Observable(obs => obs.complete());
           }
 
           return throwError(err);
