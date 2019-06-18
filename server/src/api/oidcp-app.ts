@@ -1,17 +1,14 @@
 import * as Koa from 'koa';
-import * as cors from '@koa/cors';
 import * as URL from 'url';
 import * as Router from 'koa-router';
 import * as querystring from 'querystring';
 import { BadRequest } from 'http-errors';
-
 import * as log from 'loglevel';
 import * as Debug from 'debug';
 import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
 import { delSession } from '../controllers/authentication';
 import { sessionSuffix } from '../config';
 import { getProvider } from '../controllers/oidc-provider';
-
 import { session } from './authentication';
 import { getServerConfig } from '../controllers/server-config';
 
@@ -100,8 +97,6 @@ export function build(): Koa {
   });
 
   const app = <Koa>provider.app;
-
   provider.use(router.routes());
-  provider.use(cors());
   return app;
 }
