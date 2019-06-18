@@ -131,10 +131,6 @@ export class ServerConfigService {
     return this.defaultKeyOwner$.asObservable();
   }
 
-  getTCUURL() {
-    return `${serverURL}/assets/custom_TCU.pdf`;
-  }
-
   updateTCU(TCU: File) {
     const formData = new FormData();
     formData.append('file', TCU);
@@ -153,8 +149,30 @@ export class ServerConfigService {
 
   defaultTCU() {
     this.http.get(`${serverURL}/server-config/TCU/default`)
-    .subscribe(res => {
-      log.debug(res);
-    });
+      .subscribe(res => {
+        log.debug(res);
+      });
+  }
+
+  getTCU() {
+    this.http.get(`${serverURL}/assets/custom_TCU.pdf`, { responseType: 'arraybuffer' })
+      .subscribe(res => {
+        const blob = new Blob([res], { type: 'application/pdf' });
+        const blobURL = window.URL.createObjectURL(blob);
+        const tempLink = document.createElement('a');
+        tempLink.style.display = 'none';
+        tempLink.href = blobURL;
+        tempLink.setAttribute('download', 'TCU.pdf');
+        if (typeof tempLink.download === 'undefined') {
+          tempLink.setAttribute('target', '_blank');
+        }
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+      }, error => {
+        log.error('download error:', JSON.stringify(error));
+      }, () => {
+        log.info('Completed file download.');
+      });
   }
 }

@@ -79,9 +79,6 @@ export class EnrollmentPageComponent implements OnInit {
 
   download() {
     this.isDownloaded = true;
-  }
-
-  getTCUURL() {
-    return this.configService.getTCUURL();
+    this.configService.getTCU();
   }
 }

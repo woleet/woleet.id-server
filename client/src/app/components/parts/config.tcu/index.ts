@@ -68,7 +68,7 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
     this.configService.defaultTCU();
   }
 
-  getTCUURL() {
-    return this.configService.getTCUURL();
+  getTCU() {
+    return this.configService.getTCU();
   }
 }
