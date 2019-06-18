@@ -1,6 +1,5 @@
 import { loadServerConfig, setServerConfig } from './controllers/server-config';
 import * as log from 'loglevel';
-
 import * as Debug from 'debug';
 import { Key } from './database';
 import { randomBytes } from 'crypto';

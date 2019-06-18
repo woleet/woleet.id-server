@@ -1,22 +1,17 @@
 import * as log from 'loglevel';
-
 import { cookies, ports, server as config } from './config';
-// API servers dependencies
 import * as Koa from 'koa';
 import * as morgan from 'koa-morgan';
 import * as cors from '@koa/cors';
 import { errorHandler } from './api/error';
-
 import { build as oidcProviderAppFactory } from './api/oidcp-app';
 import {
   getActiveServer, isInitialized as isOIDCPInitialized, setActiveServer, stopOIDCProvider
 } from './controllers/oidc-provider';
 import { definitions } from './apps';
 import { exit } from './exit';
-
 import { createServer, ServerOptions } from 'https';
 import { Server } from 'net';
-
 import { setServerConfig } from './controllers/server-config';
 
 const apps: Dictionary<Server> = {};
@@ -73,7 +68,7 @@ export function bootServers(): Promise<void> {
 
       app.use(errorHandler);
       app.use(morgan('dev'));
-      app.use(cors({ credentials: true })); // TODO:
+      app.use(cors({ credentials: true }));
       app.use(router.routes());
 
       const server = startServer(app, port);
@@ -88,7 +83,6 @@ export function bootServers(): Promise<void> {
       apps[name] = server;
 
     });
-
   });
 
   const oidc = bootOIDCProvider();
@@ -98,14 +92,13 @@ export function bootServers(): Promise<void> {
 }
 
 export async function bootOIDCProvider(): Promise<void> {
-  const port = ports.oidcp;
 
   const activeServer: Server = getActiveServer();
-
   if (activeServer) {
     await stopOIDCProvider();
   }
 
+  const port = ports.oidcp;
   await new Promise((resolve) => {
     if (isOIDCPInitialized()) {
       log.info(`Starting OIDCP server on port ${port}...`);

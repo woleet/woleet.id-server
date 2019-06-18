@@ -42,14 +42,6 @@ public class ServerConfig {
   @SerializedName(SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY)
   private Boolean fallbackOnDefaultKey;
 
-  public static final String SERIALIZED_NAME_LOGO_U_R_L = "logoURL";
-  @SerializedName(SERIALIZED_NAME_LOGO_U_R_L)
-  private String logoURL;
-
-  public static final String SERIALIZED_NAME_HT_M_L_FRAME = "HTMLFrame";
-  @SerializedName(SERIALIZED_NAME_HT_M_L_FRAME)
-  private String htMLFrame;
-
   public ServerConfig identityURL(String identityURL) {
     this.identityURL = identityURL;
     return this;
@@ -104,42 +96,6 @@ public class ServerConfig {
     this.fallbackOnDefaultKey = fallbackOnDefaultKey;
   }
 
-  public ServerConfig logoURL(String logoURL) {
-    this.logoURL = logoURL;
-    return this;
-  }
-
-   /**
-   * The URL of the logo that will be displayed in the sign in page. 
-   * @return logoURL
-  **/
-  @ApiModelProperty(example = "https://mydomain.com/logo.svg", value = "The URL of the logo that will be displayed in the sign in page. ")
-  public String getLogoURL() {
-    return logoURL;
-  }
-
-  public void setLogoURL(String logoURL) {
-    this.logoURL = logoURL;
-  }
-
-  public ServerConfig htMLFrame(String htMLFrame) {
-    this.htMLFrame = htMLFrame;
-    return this;
-  }
-
-   /**
-   * The HTML frame that will be displayed in the sign in page. 
-   * @return htMLFrame
-  **/
-  @ApiModelProperty(example = "Hello World", value = "The HTML frame that will be displayed in the sign in page. ")
-  public String getHtMLFrame() {
-    return htMLFrame;
-  }
-
-  public void setHtMLFrame(String htMLFrame) {
-    this.htMLFrame = htMLFrame;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -152,14 +108,12 @@ public class ServerConfig {
     ServerConfig serverConfig = (ServerConfig) o;
     return Objects.equals(this.identityURL, serverConfig.identityURL) &&
         Objects.equals(this.defaultKeyId, serverConfig.defaultKeyId) &&
-        Objects.equals(this.fallbackOnDefaultKey, serverConfig.fallbackOnDefaultKey) &&
-        Objects.equals(this.logoURL, serverConfig.logoURL) &&
-        Objects.equals(this.htMLFrame, serverConfig.htMLFrame);
+        Objects.equals(this.fallbackOnDefaultKey, serverConfig.fallbackOnDefaultKey);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identityURL, defaultKeyId, fallbackOnDefaultKey, logoURL, htMLFrame);
+    return Objects.hash(identityURL, defaultKeyId, fallbackOnDefaultKey);
   }
 
 
@@ -171,8 +125,6 @@ public class ServerConfig {
     sb.append("    identityURL: ").append(toIndentedString(identityURL)).append("\n");
     sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("    fallbackOnDefaultKey: ").append(toIndentedString(fallbackOnDefaultKey)).append("\n");
-    sb.append("    logoURL: ").append(toIndentedString(logoURL)).append("\n");
-    sb.append("    htMLFrame: ").append(toIndentedString(htMLFrame)).append("\n");
     sb.append("}");
     return sb.toString();
   }
