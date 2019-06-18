@@ -4,11 +4,67 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**discoverConfig**](DiscoveryApi.md#discoverConfig) | **GET** /discover/config | Get the discovery server config.
 [**discoverUser**](DiscoveryApi.md#discoverUser) | **GET** /discover/user | Get information about the current user.
 [**discoverUserByPubKey**](DiscoveryApi.md#discoverUserByPubKey) | **GET** /discover/user/{pubKey} | Get the user associated to a public key.
 [**discoverUserKeys**](DiscoveryApi.md#discoverUserKeys) | **GET** /discover/keys/{userId} | Get all public keys of a user.
 [**discoverUsers**](DiscoveryApi.md#discoverUsers) | **GET** /discover/users | Get all users matching a search string.
 
+
+<a name="discoverConfig"></a>
+# **discoverConfig**
+> ConfigDisco discoverConfig()
+
+Get the discovery server config.
+
+Use this endpoint to get the server config needed for the other discorvery endpoint. 
+
+### Example
+```java
+// Import classes:
+//import io.woleet.idserver.ApiClient;
+//import io.woleet.idserver.ApiException;
+//import io.woleet.idserver.Configuration;
+//import io.woleet.idserver.auth.*;
+//import io.woleet.idserver.api.DiscoveryApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure HTTP basic authorization: APITokenAuth
+HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
+APITokenAuth.setUsername("YOUR USERNAME");
+APITokenAuth.setPassword("YOUR PASSWORD");
+
+// Configure HTTP basic authorization: OAuthTokenAuth
+HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+OAuthTokenAuth.setUsername("YOUR USERNAME");
+OAuthTokenAuth.setPassword("YOUR PASSWORD");
+
+DiscoveryApi apiInstance = new DiscoveryApi();
+try {
+    ConfigDisco result = apiInstance.discoverConfig();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DiscoveryApi#discoverConfig");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**ConfigDisco**](ConfigDisco.md)
+
+### Authorization
+
+[APITokenAuth](../README.md#APITokenAuth), [OAuthTokenAuth](../README.md#OAuthTokenAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 <a name="discoverUser"></a>
 # **discoverUser**
