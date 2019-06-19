@@ -42,7 +42,7 @@
       <button mat-raised-button color="primary" matStepperNext>NEXT</button>
     </div>
   </mat-step>
-  <mat-step label="Identity" state="identity" [completed]="isConfirmed">
+  <mat-step label="Identity" state="identity" [completed]="false">
     <h1>Acknowledge your identity information</h1>
     <div>
       <div>
@@ -61,18 +61,7 @@
       <a href="{{enrollmentRefusalEmailLink}}" class="black-link" target="_top">
         <button mat-button>REFUSE</button>
       </a>
-      <button mat-raised-button color="primary" (click)="confirm()">CONFIRM</button>
-    </div>
-    <div>
-      <br>
-      <mat-divider></mat-divider>
-      <br>
-      <button mat-button matStepperPrevious>BACK</button>
-      <span [matTooltipDisabled]="isConfirmed" matTooltip="Confirm your identity to continue.">
-        <button mat-raised-button color="primary" matStepperNext [disabled]="!isConfirmed">
-          NEXT
-        </button>
-      </span>
+      <button mat-raised-button color="primary" (click)="confirm(stepper)">CONFIRM</button>
     </div>
   </mat-step>
   <mat-step label="Signature key" state="createKey">
