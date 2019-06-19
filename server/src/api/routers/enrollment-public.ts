@@ -1,7 +1,7 @@
 import * as Router from 'koa-router';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
-import { createSignatureRequest, getOwner, monitorSignatureRequest } from '../../controllers/enrollment';
+import { createSignatureRequest, getEnrollmentUser, monitorSignatureRequest } from '../../controllers/enrollment';
 
 /**
  * Key enrollment public
@@ -18,7 +18,7 @@ const router = new Router();
  */
 router.get('/enrollment/:id/user', async function (ctx) {
   const { id: enrollmentId } = ctx.params;
-  ctx.body = serializeUser(await getOwner(enrollmentId));
+  ctx.body = serializeUser(await getEnrollmentUser(enrollmentId));
 });
 
 /**
@@ -30,7 +30,7 @@ router.post('/enrollment/:id/create-signature-request', async function (ctx) {
 
   // Get the user targeted by the enrollment
   const { id: enrollmentId } = ctx.params;
-  const user = await getOwner(enrollmentId);
+  const user = await getEnrollmentUser(enrollmentId);
 
   // Create a signature request of the TCU and send it to this user
   const { id: signatureRequestId } = await createSignatureRequest(enrollmentId);

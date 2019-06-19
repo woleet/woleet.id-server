@@ -1,5 +1,5 @@
 import { Enrollment, Key, User } from '../database';
-import { NotFoundEnrollmentError, NotFoundUserError } from '../errors';
+import { NotFoundEnrollmentError, NotFoundUserError, EnrollmentExpiredError } from '../errors';
 import * as crypto from 'crypto';
 import { readFileSync } from 'fs';
 import * as path from 'path';
@@ -48,12 +48,16 @@ export async function getEnrollmentById(id: string): Promise<InternalEnrollmentO
   return enrollment.toJSON();
 }
 
-export async function getOwner(id): Promise<InternalUserObject> {
+export async function getEnrollmentUser(id): Promise<InternalUserObject> {
 
   // Get enrollment
   const enrollment = await Enrollment.getById(id);
   if (!enrollment) {
     throw new NotFoundEnrollmentError();
+  }
+
+  if (enrollment.get('expiration') && (Date.now() > enrollment.get('expiration'))) {
+    throw new EnrollmentExpiredError();
   }
 
   // Return enrolled user
@@ -91,7 +95,7 @@ export async function getTCUHash(): Promise<string> {
 
 export async function createSignatureRequest(enrollmentId): Promise<any> {
   const config = getServerConfig();
-  const user = await getOwner(enrollmentId);
+  const user = await getEnrollmentUser(enrollmentId);
   const enrollment = await getEnrollmentById(enrollmentId);
   const url = new URL(config.proofDeskAPIURL);
   const hashTCU = await getTCUHash();

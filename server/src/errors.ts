@@ -50,14 +50,6 @@ export class NotFoundEnrollmentError extends NotFoundDBObjectError {
   name = 'NotFoundEnrollmentError';
 }
 
-export class EnrollmentExpiredError extends NotFoundDBObjectError {
-  constructor(m = 'Enrollment expired') {
-    super(m);
-  }
-
-  name = 'EnrollmentExpiredError';
-}
-
 export abstract class ForeignKeyDBError extends DBError {
 }
 
@@ -109,6 +101,14 @@ export class BlockedAPITokenError extends BlockedResourceError {
   }
 
   name = 'BlockedAPITokenError';
+}
+
+export class EnrollmentExpiredError extends BlockedResourceError {
+  constructor(m = 'Enrollment expired') {
+    super(m);
+  }
+
+  name = 'EnrollmentExpiredError';
 }
 
 export class NoDefaultKeyError extends Error {

@@ -75,7 +75,17 @@ export class EnrollmentPageComponent implements OnInit {
       .subscribe(() => {
         this.completed = true;
       }, (error) => {
-        log.error(error);
+          switch (error.error.message) {
+            case 'NotFoundEnrollmentError':
+              this.errorMessage = 'This page doesn\'t refer to an enrollment in progress.';
+              break;
+            case 'EnrollmentExpiredError':
+              this.errorMessage = 'This page refer to an enrollment that is expired.' +
+                ' Please contact the admin to begin a new enrollment process';
+              break;
+            default:
+              this.errorMessage = error.error.message;
+          }
       });
   }
 
