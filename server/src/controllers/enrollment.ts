@@ -121,8 +121,10 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
 
   return new Promise(async (resolve, reject) => {
     const req = https.request(httpsOptions, (res) => {
-      res.on('data', (data) => {
-        resolve(JSON.parse(data));
+      res.on('data', async (data) => {
+        const signatureRequest = JSON.parse(data);
+        await Enrollment.update(enrollmentId, {signatureRequestId: signatureRequest.id});
+        resolve(signatureRequest);
       });
     }).on('error', (err) => {
       reject(err);
@@ -133,7 +135,6 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
 }
 
 export function monitorSignatureRequest(signatureRequestId: string, enrollmentId: string, user: InternalUserObject) {
-  Enrollment.update(enrollmentId, {signatureRequestId});
   const url = new URL(getServerConfig().proofDeskAPIURL);
   const httpsOptions: any = {
     host: url.host,
