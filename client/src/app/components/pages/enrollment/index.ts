@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppConfigService } from '@services/boot';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatStepper } from '@angular/material';
 import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { EnrollmentService } from '@services/enrollment';
@@ -20,8 +19,6 @@ import * as log from 'loglevel';
 })
 export class EnrollmentPageComponent implements OnInit {
   isConfirmed = false;
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
   enrollmentId: string;
   user: ApiUserObject;
   enrollmentRefusalEmailLink: string;
@@ -31,8 +28,9 @@ export class EnrollmentPageComponent implements OnInit {
   isDownloaded = false;
   config: any;
 
-  constructor(private _formBuilder: FormBuilder, appConfigService: AppConfigService, public dialog: MatDialog,
-              private route: ActivatedRoute, private enrollmentService: EnrollmentService, sanitization: DomSanitizer) {
+  constructor(appConfigService: AppConfigService, public dialog: MatDialog,
+    private route: ActivatedRoute, private enrollmentService: EnrollmentService,
+    sanitization: DomSanitizer) {
     this.config = appConfigService.getConfig();
     this.enrollmentId = this.route.snapshot.params.id;
     this.enrollmentService.getUserByEnrollmentId(this.enrollmentId)
@@ -57,17 +55,18 @@ export class EnrollmentPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
     this.enrollmentRefusalEmailLink = 'mailto:' + this.config.contact + '?Subject=Enrollment Refusal&body=';
   }
 
-  confirm() {
-    this.isConfirmed = true;
+  confirm(stepper: MatStepper) {
+    const stepsArray = stepper.steps.toArray();
+    const currentStep = stepsArray[stepper.selectedIndex];
+    currentStep.completed = true;
+    stepper.next();
+  }
+
+  async setConfirm(value: boolean) {
+    this.isConfirmed = value;
   }
 
   signTCU(): void {
