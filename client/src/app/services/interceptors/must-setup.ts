@@ -15,7 +15,7 @@ export class SetupInterceptor implements HttpInterceptor {
         if (err instanceof HttpErrorResponse && err.status === 418) {
           this.config.isConfigured = false;
           this.router.navigate(['setup']);
-          return Observable.create(obs => obs.complete());
+          return new Observable(obs => obs.complete());
         }
 
         return throwError(err);

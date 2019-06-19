@@ -17,7 +17,7 @@ export class ForbiddenInterceptor implements HttpInterceptor {
               return throwError(err);
             }
             this.router.navigate(['main']);
-            return Observable.create(obs => obs.complete());
+            return new Observable(obs => obs.complete());
           }
 
           return throwError(err);

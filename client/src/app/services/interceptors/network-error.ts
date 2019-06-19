@@ -29,7 +29,7 @@ export class NetworkErrorInterceptor implements HttpInterceptor {
           log.error('Network error', err);
           this.errorService.setError(switchNetworkError(err), err);
           this.router.navigate(['error']);
-          return Observable.create(obs => obs.complete());
+          return new Observable(obs => obs.complete());
         }
 
         return throwError(err);
