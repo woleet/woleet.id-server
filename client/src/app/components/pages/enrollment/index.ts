@@ -4,7 +4,6 @@ import { MatDialog, MatStepper } from '@angular/material';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { EnrollmentService } from '@services/enrollment';
-import * as log from 'loglevel';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 
 /**
