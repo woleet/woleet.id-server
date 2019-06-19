@@ -7,6 +7,7 @@ interface ApiEnrollmentObject extends EnrollmentObject, ApiCommonProperties {
   expiration?: number;
   expired?: boolean;
   device?: KeyDeviceEnum;
+  signatureRequestId?: string;
 }
 
 interface ApiPostEnrollmentObject extends EnrollmentObject {

@@ -7,7 +7,8 @@ const EnrollmentModel = {
   userId: { type: UUID },
   expiration: { type: DATE },
   name: { type: STRING, allowNull: false },
-  device: { type: ENUM(['server', 'nano', 'mobile']), allowNull: true }
+  device: { type: ENUM(['server', 'nano', 'mobile']), allowNull: true },
+  signatureRequestId: {type: STRING, allowNull: true }
 };
 
 class EnrollmentAccess extends AbstractInstanceAccess<InternalEnrollmentObject, ApiPostEnrollmentObject> {

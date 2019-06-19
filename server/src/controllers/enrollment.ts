@@ -133,6 +133,7 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
 }
 
 export function monitorSignatureRequest(signatureRequestId: string, enrollmentId: string, user: InternalUserObject) {
+  Enrollment.update(enrollmentId, {signatureRequestId});
   const url = new URL(getServerConfig().proofDeskAPIURL);
   const httpsOptions: any = {
     host: url.host,
