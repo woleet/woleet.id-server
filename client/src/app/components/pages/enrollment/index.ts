@@ -5,8 +5,8 @@ import { MatDialog } from '@angular/material';
 import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { EnrollmentService } from '@services/enrollment';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import * as log from 'loglevel';
+import { ServerConfigService as ConfigService } from '@services/server-config';
 
 /**
  * @title Stepper overview
@@ -25,14 +25,13 @@ export class EnrollmentPageComponent implements OnInit {
   enrollmentId: string;
   user: ApiUserObject;
   enrollmentRefusalEmailLink: string;
-  TCUURL: SafeUrl;
   errorMessage = '';
   completed = false;
   isDownloaded = false;
   config: any;
 
   constructor(private _formBuilder: FormBuilder, appConfigService: AppConfigService, public dialog: MatDialog,
-              private route: ActivatedRoute, private enrollmentService: EnrollmentService, sanitization: DomSanitizer) {
+    private route: ActivatedRoute, private enrollmentService: EnrollmentService, private configService: ConfigService) {
     this.config = appConfigService.getConfig();
     this.enrollmentId = this.route.snapshot.params.id;
     this.enrollmentService.getUserByEnrollmentId(this.enrollmentId)
@@ -53,7 +52,6 @@ export class EnrollmentPageComponent implements OnInit {
               this.errorMessage = error.error.message;
           }
         });
-    this.TCUURL = sanitization.bypassSecurityTrustUrl(this.config.TCU.data);
   }
 
   ngOnInit() {
@@ -91,5 +89,6 @@ export class EnrollmentPageComponent implements OnInit {
 
   download() {
     this.isDownloaded = true;
+    this.configService.getTCU();
   }
 }

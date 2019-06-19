@@ -46,12 +46,6 @@ interface ApiServerConfig {
   mailOnboardingTemplate: string | null;
   mailKeyEnrollmentTemplate: string | null;
 
-  // TCU
-  TCU: {
-    toDefault?: boolean | null;
-    data?: string | null;
-  } | null;
-
   // Admin contact
   contact: string | null;
 
@@ -97,12 +91,6 @@ interface ApiServerConfigUpdate {
   mailResetPasswordTemplate?: string;
   mailOnboardingTemplate?: string;
   mailKeyEnrollmentTemplate?: string;
-
-  // TCU
-  TCU?: {
-    toDefault?: boolean;
-    data?: string;
-  }
 
   // Admin contact
   contact?: string;

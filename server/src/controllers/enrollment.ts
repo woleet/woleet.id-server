@@ -12,6 +12,8 @@ import * as timestring from 'timestring';
 import { getAgent } from './utils/agent';
 import * as log from 'loglevel';
 
+const TCUPath = path.join(__dirname, '../../assets/custom_TCU.pdf');
+
 /**
  * Enrollment
  * Request handlers for enrollment.
@@ -87,7 +89,7 @@ export async function putEnrollment(id: string, enrollment: ApiPutEnrollmentObje
 }
 
 export async function getTCUHash(): Promise<string> {
-  const TCU = readFileSync(path.join(__dirname, '../../assets/custom_TCU.pdf'), { encoding: 'base64' });
+  const TCU = readFileSync(TCUPath, { encoding: 'base64' });
   const hash = crypto.createHash('sha256');
   hash.update(Buffer.from(TCU, 'base64'));
   return hash.digest('hex');
