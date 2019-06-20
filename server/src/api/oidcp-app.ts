@@ -1,4 +1,5 @@
 import * as Koa from 'koa';
+import * as cors from '@koa/cors';
 import * as URL from 'url';
 import * as Router from 'koa-router';
 import * as querystring from 'querystring';
@@ -36,7 +37,6 @@ export function build(): Koa {
 
   router.get('/interaction/:grant', async (ctx, next) => {
     const details = await provider.interactionDetails(ctx.req);
-
     if (details.interaction.error === 'login_required') {
       throw new Error('Should not be called because we handle this case earlier in the process (#login-precondition)');
     } else if (details.interaction.error === 'consent_required') {
@@ -96,7 +96,9 @@ export function build(): Koa {
     await next();
   });
 
-  const app = <Koa>provider.app;
   provider.use(router.routes());
+  provider.use(cors());
+
+  const app = <Koa>provider.app;
   return app;
 }
