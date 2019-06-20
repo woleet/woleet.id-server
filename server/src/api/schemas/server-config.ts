@@ -40,10 +40,6 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   mailResetPasswordTemplate: Joi.string().allow(null),
   mailOnboardingTemplate: Joi.string().allow(null),
   mailKeyEnrollmentTemplate: Joi.string().allow(null),
-  TCU: Joi.object({
-    data: Joi.string().allow(null),
-    toDefault: Joi.boolean().allow(null),
-  }).allow(null),
   contact: Joi.string().allow(null),
   organizationName: Joi.string().allow(null),
 

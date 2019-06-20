@@ -15,19 +15,11 @@ package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.KeyDeviceEnum;
 import io.woleet.idserver.api.model.KeyGet;
 import io.woleet.idserver.api.model.KeyHolderEnum;
 import io.woleet.idserver.api.model.KeyStatusEnum;
 import io.woleet.idserver.api.model.KeyTypeEnum;
-import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -35,28 +27,6 @@ import java.util.UUID;
  */
 
 public class KeyDisco extends KeyGet {
-  public static final String SERIALIZED_NAME_IDENTITY_U_R_L = "identityURL";
-  @SerializedName(SERIALIZED_NAME_IDENTITY_U_R_L)
-  private String identityURL;
-
-  public KeyDisco identityURL(String identityURL) {
-    this.identityURL = identityURL;
-    return this;
-  }
-
-   /**
-   * The identity URL that the server returns with a signature. &lt;br&gt;Note that the server always expects to be called on the \&quot;/identity\&quot; endpoint, if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain) you must not forget it in your reverse proxy configuration. 
-   * @return identityURL
-  **/
-  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "The identity URL that the server returns with a signature. <br>Note that the server always expects to be called on the \"/identity\" endpoint, if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain) you must not forget it in your reverse proxy configuration. ")
-  public String getIdentityURL() {
-    return identityURL;
-  }
-
-  public void setIdentityURL(String identityURL) {
-    this.identityURL = identityURL;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -66,14 +36,12 @@ public class KeyDisco extends KeyGet {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    KeyDisco keyDisco = (KeyDisco) o;
-    return Objects.equals(this.identityURL, keyDisco.identityURL) &&
-        super.equals(o);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identityURL, super.hashCode());
+    return Objects.hash(super.hashCode());
   }
 
 
@@ -82,7 +50,6 @@ public class KeyDisco extends KeyGet {
     StringBuilder sb = new StringBuilder();
     sb.append("class KeyDisco {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    identityURL: ").append(toIndentedString(identityURL)).append("\n");
     sb.append("}");
     return sb.toString();
   }

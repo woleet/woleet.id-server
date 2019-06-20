@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { serverURL } from '@services/config';
 import { KeyService } from '@services/key';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -129,5 +129,50 @@ export class ServerConfigService {
 
   getDefaultKeyOwner(): Observable<ApiUserObject> {
     return this.defaultKeyOwner$.asObservable();
+  }
+
+  updateTCU(TCU: File) {
+    const formData = new FormData();
+    formData.append('file', TCU);
+    this.http.post(`${serverURL}/server-config/TCU`, formData, {
+      reportProgress: true,
+      observe: 'events'
+    })
+      .subscribe(events => {
+        if (events.type === HttpEventType.UploadProgress) {
+          log.debug('Upload progress: ', Math.round(events.loaded / events.total * 100) + '%');
+        } else if (events.type === HttpEventType.Response) {
+          log.debug(events);
+        }
+      });
+  }
+
+  defaultTCU() {
+    this.http.get(`${serverURL}/server-config/TCU/default`)
+      .subscribe(res => {
+        log.debug(res);
+      });
+  }
+
+  getTCU() {
+    this.http.get(`${serverURL}/assets/custom_TCU.pdf`, { responseType: 'arraybuffer' })
+      .subscribe(res => {
+        const blob = new Blob([res], { type: 'application/pdf' });
+        const blobURL = window.URL.createObjectURL(blob);
+        const tempLink = document.createElement('a');
+        tempLink.style.display = 'none';
+        tempLink.href = blobURL;
+        tempLink.setAttribute('download', 'TCU.pdf');
+        if (typeof tempLink.download === 'undefined') {
+          tempLink.setAttribute('target', '_blank');
+        }
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+      }, error => {
+        log.error('download error:', JSON.stringify(error));
+      }, () => {
+        log.info('Completed file download.');
+      });
   }
 }

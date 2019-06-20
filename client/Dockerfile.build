@@ -1,3 +1,0 @@
-FROM wid-client-builder
-
-RUN npm run postinstall && npm run build:prod && mv dist/client /tmp/client && rm -rf /tmp/build && rm -rf /tmp/types

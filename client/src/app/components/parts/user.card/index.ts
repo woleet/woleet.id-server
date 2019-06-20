@@ -20,13 +20,20 @@ export class UserCardComponent {
   @Input()
   user: ApiUserObject;
 
+  @Input()
+  hideAttribute?: ('username' | 'email' | 'phone')[];
+
   @Output()
   delete = new EventEmitter<ApiUserObject>();
 
   @Output()
   update = new EventEmitter<ApiUserObject>();
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {
+    if (!this.hideAttribute) {
+      this.hideAttribute = [];
+    }
+   }
 
   setEditMode(active) {
     this.editMode = active;

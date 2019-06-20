@@ -1,5 +1,5 @@
 import { Enrollment, Key, User } from '../database';
-import { NotFoundEnrollmentError, NotFoundUserError } from '../errors';
+import { EnrollmentExpiredError, NotFoundEnrollmentError, NotFoundUserError } from '../errors';
 import * as crypto from 'crypto';
 import { readFileSync } from 'fs';
 import * as path from 'path';
@@ -11,6 +11,8 @@ import { sendEnrollmentFinalizeEmail, sendKeyEnrollmentEmail } from './send-emai
 import * as timestring from 'timestring';
 import { getAgent } from './utils/agent';
 import * as log from 'loglevel';
+
+const TCUPath = path.join(__dirname, '../../assets/custom_TCU.pdf');
 
 /**
  * Enrollment
@@ -48,12 +50,17 @@ export async function getEnrollmentById(id: string): Promise<InternalEnrollmentO
   return enrollment.toJSON();
 }
 
-export async function getOwner(id): Promise<InternalUserObject> {
+export async function getEnrollmentUser(id): Promise<InternalUserObject> {
 
   // Get enrollment
   const enrollment = await Enrollment.getById(id);
   if (!enrollment) {
     throw new NotFoundEnrollmentError();
+  }
+
+  // Check expiration
+  if (enrollment.get('expiration') && (Date.now() > enrollment.get('expiration'))) {
+    throw new EnrollmentExpiredError();
   }
 
   // Return enrolled user
@@ -83,7 +90,7 @@ export async function putEnrollment(id: string, enrollment: ApiPutEnrollmentObje
 }
 
 export async function getTCUHash(): Promise<string> {
-  const TCU = readFileSync(path.join(__dirname, '../../assets/custom_TCU.pdf'), { encoding: 'base64' });
+  const TCU = readFileSync(TCUPath, { encoding: 'base64' });
   const hash = crypto.createHash('sha256');
   hash.update(Buffer.from(TCU, 'base64'));
   return hash.digest('hex');
@@ -91,7 +98,7 @@ export async function getTCUHash(): Promise<string> {
 
 export async function createSignatureRequest(enrollmentId): Promise<any> {
   const config = getServerConfig();
-  const user = await getOwner(enrollmentId);
+  const user = await getEnrollmentUser(enrollmentId);
   const enrollment = await getEnrollmentById(enrollmentId);
   const url = new URL(config.proofDeskAPIURL);
   const hashTCU = await getTCUHash();
@@ -194,14 +201,20 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
   const enrollment = await getEnrollmentById(enrollmentId);
   const name = enrollment.name;
   const userId = enrollment.userId;
+
+  // Guess the type of the device used to sign
   // FIXME: the type of the device used to sign the TCU is retrieved first from the signature request,
-  // then from the enrollment, or we fallback on mobile (until the mobile app is updated to register the device type)
+  //  then from the enrollment, or we fallback on mobile (until the mobile app is updated to register the device type)
   const signeeDevice = signatureRequest.authorizedSignees[0].device ?
     signatureRequest.authorizedSignees[0].device.toLowerCase() : null;
   const device = signeeDevice || enrollment.device || 'mobile';
+
   try {
 
-    // Create new external key: this must be done before setting the identity URL on the signature anchor,
+    // Ensure the signature anchor created by the signature request is private
+    await setAnchorProperties(signatureRequest, `{ "public": false }`);
+
+    // Create a new external key: this must be done before setting the identity URL on the signature anchor,
     // so that the public key can be resolved through the identity URL
     await Key.create(Object.assign({
       name,
@@ -212,7 +225,8 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
     }));
 
     // Set the identity URL on the signature anchor created by the signature request
-    await setAnchorIdentityURL(signatureRequest);
+    if (getServerConfig().identityURL)
+      await setAnchorProperties(signatureRequest, `{ "identityURL": "${getServerConfig().identityURL}" }`);
 
     // Send a enrollment success email to the admin
     await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, true);
@@ -228,9 +242,12 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
   }
 }
 
-async function setAnchorIdentityURL(signatureRequest: any) {
-  if (!getServerConfig().identityURL)
-    return;
+/**
+ * Set some properties on the signature anchor created by a signature request.
+ * @param signatureRequest the signature request
+ * @param properties anchor properties provided as a JSON string
+ */
+async function setAnchorProperties(signatureRequest: any, properties: string) {
   const url = new URL(getServerConfig().proofDeskAPIURL);
   const httpsOptions: any = {
     host: url.host,
@@ -245,9 +262,7 @@ async function setAnchorIdentityURL(signatureRequest: any) {
   if (agent) {
     httpsOptions.agent = agent;
   }
-  const body = `{
-         "identityURL": "${getServerConfig().identityURL}"
-         }`;
+  const body = properties;
   const req = https.request(httpsOptions);
   req.on('error', (error) => {
     log.error(error);

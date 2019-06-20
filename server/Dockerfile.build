@@ -1,8 +1,0 @@
-FROM wid-server-builder
-
-RUN npm run build \
-  && mkdir -p /tmp/app \
-  && mv dist /tmp/app \
-  && cp package.json /tmp/app \
-  && cp package-lock.json /tmp/app \
-  && cp -r  /tmp/server-prod/node_modules /tmp/app/node_modules

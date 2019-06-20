@@ -23,26 +23,17 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
-import java.util.UUID;
 
 /**
- * ServerConfig
+ * ConfigDisco
  */
 
-public class ServerConfig {
+public class ConfigDisco {
   public static final String SERIALIZED_NAME_IDENTITY_U_R_L = "identityURL";
   @SerializedName(SERIALIZED_NAME_IDENTITY_U_R_L)
   private String identityURL;
 
-  public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
-  @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
-  private UUID defaultKeyId;
-
-  public static final String SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY = "fallbackOnDefaultKey";
-  @SerializedName(SERIALIZED_NAME_FALLBACK_ON_DEFAULT_KEY)
-  private Boolean fallbackOnDefaultKey;
-
-  public ServerConfig identityURL(String identityURL) {
+  public ConfigDisco identityURL(String identityURL) {
     this.identityURL = identityURL;
     return this;
   }
@@ -60,42 +51,6 @@ public class ServerConfig {
     this.identityURL = identityURL;
   }
 
-  public ServerConfig defaultKeyId(UUID defaultKeyId) {
-    this.defaultKeyId = defaultKeyId;
-    return this;
-  }
-
-   /**
-   * Identifier of the default key to use when signing with no user and no key specified.
-   * @return defaultKeyId
-  **/
-  @ApiModelProperty(example = "7b8e5c49-18c6-4ef7-9dab-261a5e717b31", value = "Identifier of the default key to use when signing with no user and no key specified.")
-  public UUID getDefaultKeyId() {
-    return defaultKeyId;
-  }
-
-  public void setDefaultKeyId(UUID defaultKeyId) {
-    this.defaultKeyId = defaultKeyId;
-  }
-
-  public ServerConfig fallbackOnDefaultKey(Boolean fallbackOnDefaultKey) {
-    this.fallbackOnDefaultKey = fallbackOnDefaultKey;
-    return this;
-  }
-
-   /**
-   * True is the server must fallback on the default key (if any).
-   * @return fallbackOnDefaultKey
-  **/
-  @ApiModelProperty(value = "True is the server must fallback on the default key (if any).")
-  public Boolean getFallbackOnDefaultKey() {
-    return fallbackOnDefaultKey;
-  }
-
-  public void setFallbackOnDefaultKey(Boolean fallbackOnDefaultKey) {
-    this.fallbackOnDefaultKey = fallbackOnDefaultKey;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -105,26 +60,22 @@ public class ServerConfig {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ServerConfig serverConfig = (ServerConfig) o;
-    return Objects.equals(this.identityURL, serverConfig.identityURL) &&
-        Objects.equals(this.defaultKeyId, serverConfig.defaultKeyId) &&
-        Objects.equals(this.fallbackOnDefaultKey, serverConfig.fallbackOnDefaultKey);
+    ConfigDisco configDisco = (ConfigDisco) o;
+    return Objects.equals(this.identityURL, configDisco.identityURL);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identityURL, defaultKeyId, fallbackOnDefaultKey);
+    return Objects.hash(identityURL);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ServerConfig {\n");
+    sb.append("class ConfigDisco {\n");
     
     sb.append("    identityURL: ").append(toIndentedString(identityURL)).append("\n");
-    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
-    sb.append("    fallbackOnDefaultKey: ").append(toIndentedString(fallbackOnDefaultKey)).append("\n");
     sb.append("}");
     return sb.toString();
   }

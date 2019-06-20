@@ -39,7 +39,6 @@ import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
 import { ErrorPageComponent } from '@pages/error';
 import { SettingsPageComponent } from '@pages/settings';
-import { UserEditPageComponent } from '@pages/user.edit';
 import { UserListPageComponent } from '@pages/user.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
@@ -93,7 +92,6 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     UserPageComponent,
     UserListPageComponent,
     UserFormComponent,
-    UserEditPageComponent,
     UserDetailPageComponent,
     AboutPageComponent,
     EnrollmentPageComponent,

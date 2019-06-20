@@ -42,14 +42,14 @@
       <button mat-raised-button color="primary" matStepperNext>NEXT</button>
     </div>
   </mat-step>
-  <mat-step label="Identity" state="identity" [completed]="isConfirmed">
+  <mat-step label="Identity" state="identity" [completed]="false">
     <h1>Acknowledge your identity information</h1>
     <div>
       <div>
         <p>The following identity information will be associated to your signature key to identify you as a signatory:</p>
         <br>
         <div *ngIf="user; else loadingUser">
-          <app-user-card [user]="user" [modes]="['display']"></app-user-card>
+          <app-user-card [user]="user" [modes]="['display']" [hideAttribute]="['username']"></app-user-card>
         </div>
         <br>
         <p>Your personal information is stored by {{config.organizationName}} signature service and can be modified or deleted at any time,
@@ -61,18 +61,7 @@
       <a href="{{enrollmentRefusalEmailLink}}" class="black-link" target="_top">
         <button mat-button>REFUSE</button>
       </a>
-      <button mat-raised-button color="primary" (click)="confirm()">CONFIRM</button>
-    </div>
-    <div>
-      <br>
-      <mat-divider></mat-divider>
-      <br>
-      <button mat-button matStepperPrevious>BACK</button>
-      <span [matTooltipDisabled]="isConfirmed" matTooltip="Confirm your identity to continue.">
-        <button mat-raised-button color="primary" matStepperNext [disabled]="!isConfirmed">
-          NEXT
-        </button>
-      </span>
+      <button mat-raised-button color="primary" (click)="confirm(stepper)">CONFIRM</button>
     </div>
   </mat-step>
   <mat-step label="Signature key" state="createKey">
@@ -116,9 +105,7 @@
       </div>
     </div>
     <div>
-      <a [href]="TCUURL" download="TCU.pdf" class="black-link">
-        <button mat-raised-button color="primary" (click)="download()">DOWNLOAD TCU</button>
-      </a>
+      <button mat-raised-button color="primary" (click)="download()">DOWNLOAD TCU</button>
     </div>
     <div>
       <br>
@@ -132,7 +119,7 @@
 </mat-horizontal-stepper>
 <div *ngIf="errorMessage">
   <mat-card>
-    <mat-card-title>Key registration not available</mat-card-title>
+    <mat-card-title>Signature key registration error</mat-card-title>
     <mat-divider></mat-divider>
     <br>
     <mat-card-content>
