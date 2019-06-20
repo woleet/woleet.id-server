@@ -274,6 +274,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
+  /discover/config:
+    get:
+      operationId: discoverConfig
+      summary: Get the discovery server config.
+      security:
+        - APITokenAuth: []
+        - OAuthTokenAuth: []
+      tags:
+        - Discovery
+      description: >
+        Use this endpoint to get the server config needed for the other discorvery endpoint.
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ConfigDisco'
+        '401':
+          description: Missing or bad session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
   /key/{keyId}:
     get:
       tags:
@@ -1471,14 +1495,15 @@ components:
     KeyDisco:
       allOf:
         - $ref: '#/components/schemas/KeyGet'
-        - type: object
-          properties:
-            identityURL:
-              $ref: '#/components/schemas/IdentityURL'
     KeyDiscoArray:
       type: array
       items:
         $ref: '#/components/schemas/KeyDisco'
+    ConfigDisco:
+      type: object
+      properties:
+        identityURL:
+          $ref: '#/components/schemas/IdentityURL'
     ExternalKeyBase:
       type: object
       properties:
@@ -1819,6 +1844,8 @@ components:
       $ref: '#/components/schemas/KeyDiscoArray'
     UserDiscoArray:
       $ref: '#/components/schemas/UserDiscoArray'
+    ConfigDisco:
+      $ref: '#/components/schemas/ConfigDisco'
     APIError:
       $ref: '#/components/schemas/APIError'
     KeyGet:

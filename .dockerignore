@@ -1,0 +1,13 @@
+# Ignore everything
+**
+
+# Allow types
+!/types
+
+# Allow client and server files and directories
+!/client
+!/server
+
+# But ignore built ones
+**/node_modules
+**/dist

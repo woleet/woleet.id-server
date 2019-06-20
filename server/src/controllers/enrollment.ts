@@ -1,5 +1,5 @@
 import { Enrollment, Key, User } from '../database';
-import { NotFoundEnrollmentError, NotFoundUserError } from '../errors';
+import { NotFoundEnrollmentError, NotFoundUserError, EnrollmentExpiredError } from '../errors';
 import * as crypto from 'crypto';
 import { readFileSync } from 'fs';
 import * as path from 'path';
@@ -11,6 +11,8 @@ import { sendEnrollmentFinalizeEmail, sendKeyEnrollmentEmail } from './send-emai
 import * as timestring from 'timestring';
 import { getAgent } from './utils/agent';
 import * as log from 'loglevel';
+
+const TCUPath = path.join(__dirname, '../../assets/custom_TCU.pdf');
 
 /**
  * Enrollment
@@ -48,12 +50,16 @@ export async function getEnrollmentById(id: string): Promise<InternalEnrollmentO
   return enrollment.toJSON();
 }
 
-export async function getOwner(id): Promise<InternalUserObject> {
+export async function getEnrollmentUser(id): Promise<InternalUserObject> {
 
   // Get enrollment
   const enrollment = await Enrollment.getById(id);
   if (!enrollment) {
     throw new NotFoundEnrollmentError();
+  }
+
+  if (enrollment.get('expiration') && (Date.now() > enrollment.get('expiration'))) {
+    throw new EnrollmentExpiredError();
   }
 
   // Return enrolled user
@@ -83,7 +89,7 @@ export async function putEnrollment(id: string, enrollment: ApiPutEnrollmentObje
 }
 
 export async function getTCUHash(): Promise<string> {
-  const TCU = readFileSync(path.join(__dirname, '../../assets/custom_TCU.pdf'), { encoding: 'base64' });
+  const TCU = readFileSync(TCUPath, { encoding: 'base64' });
   const hash = crypto.createHash('sha256');
   hash.update(Buffer.from(TCU, 'base64'));
   return hash.digest('hex');
@@ -91,7 +97,7 @@ export async function getTCUHash(): Promise<string> {
 
 export async function createSignatureRequest(enrollmentId): Promise<any> {
   const config = getServerConfig();
-  const user = await getOwner(enrollmentId);
+  const user = await getEnrollmentUser(enrollmentId);
   const enrollment = await getEnrollmentById(enrollmentId);
   const url = new URL(config.proofDeskAPIURL);
   const hashTCU = await getTCUHash();
@@ -227,8 +233,9 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
 }
 
 async function setAnchorIdentityURL(signatureRequest: any) {
-  if (!getServerConfig().identityURL)
+  if (!getServerConfig().identityURL) {
     return;
+  }
   const url = new URL(getServerConfig().proofDeskAPIURL);
   const httpsOptions: any = {
     host: url.host,
@@ -244,7 +251,8 @@ async function setAnchorIdentityURL(signatureRequest: any) {
     httpsOptions.agent = agent;
   }
   const body = `{
-         "identityURL": "${getServerConfig().identityURL}"
+         "identityURL": "${getServerConfig().identityURL}",
+         "public": false
          }`;
   const req = https.request(httpsOptions);
   req.on('error', (error) => {

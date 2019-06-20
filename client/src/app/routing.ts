@@ -12,7 +12,6 @@ import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
 import { SettingsPageComponent } from '@pages/settings';
 import { UserListPageComponent } from '@pages/user.list';
-import { UserEditPageComponent } from '@pages/user.edit';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ErrorPageComponent } from '@components/pages/error';
 import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
@@ -69,11 +68,6 @@ const routes: Routes = [
     data: { title: 'OIDC Provider interaction', hideNav: true },
     component: OIDCProviderInteractionComponent,
     canActivate: [IsUser]
-  },
-  {
-    path: 'user/:id/edit', data: { title: 'Edit user' },
-    component: UserEditPageComponent,
-    canActivate: [IsAdmin]
   },
   {
     path: 'users',

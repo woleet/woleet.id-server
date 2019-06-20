@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpInterceptor, HTTP_INTERCEPTORS, HttpErrorResponse, HttpEvent } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable()
@@ -13,8 +13,11 @@ export class ForbiddenInterceptor implements HttpInterceptor {
 
           // redirect to main page if forbidden
           if (err instanceof HttpErrorResponse && err.status === 403) {
+            if (request.url.match(/.*\/enrollment\/.*/)) {
+              return throwError(err);
+            }
             this.router.navigate(['main']);
-            return Observable.create(obs => obs.complete());
+            return new Observable(obs => obs.complete());
           }
 
           return throwError(err);

@@ -10,8 +10,6 @@
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="selectFile()">CHANGE</button>
     <button mat-raised-button color="primary" (click)="reset()">RESET TO DEFAULT</button>
-    <a [href]="TCUURL" download="{{organizationName}} Signature Service TCU.pdf" class="black-link">
-      <button mat-raised-button color="primary">VIEW</button>
-    </a>
+    <button mat-raised-button color="primary" (click)="getTCU()">VIEW</button>
   </mat-card-actions>
 </mat-card>

@@ -10,8 +10,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class DiscoveryApiTest {
 
@@ -123,5 +122,11 @@ public class DiscoveryApiTest {
     @Test
     public void discoverUserTest() throws ApiException {
         // TODO: The API token created has a userId set to null, so it is not possible to discover the current user.
+    }
+
+    @Test
+    public void discoverConfigTest() throws ApiException {
+        ConfigDisco response = discoveryApi.discoverConfig();
+        assertNotNull(response.getIdentityURL());
     }
 }

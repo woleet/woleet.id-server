@@ -6,27 +6,6 @@ display_usage_app() {
   echo "usage: $0 [start|stop|restart|build|push|check|logs|backup|restore]"
 }
 
-tmp_client_dir=./client/tmp/
-tmp_server_dir=./server/tmp/
-
-prebuild() {
-  # Copy "types" folder into both server and client to make it accessible from each docker contexts
-  echo "Copying types..."
-  rm -rf $tmp_client_dir
-  rm -rf $tmp_server_dir
-
-  mkdir -p $tmp_client_dir
-  mkdir -p $tmp_server_dir
-
-  cp -R types $tmp_client_dir
-  cp -R types $tmp_server_dir
-}
-
-postbuild() {
-  rm -rf $tmp_client_dir
-  rm -rf $tmp_server_dir
-}
-
 start() {
   local old_server=$(docker ps | grep woleetid-server_wid-server_1 | cut -d' ' -f 1)
   docker-compose up -d
@@ -113,54 +92,14 @@ elif [ "$operation" == "check" ]; then
   cd ../client
   npm run lint
 elif [ "$operation" == "build" ]; then
-  prebuild
-
-  echo "Building client builder image (wid-client-builder)..."
-  cd client
-  docker build -f Dockerfile.builder -t wid-client-builder .
-  cd ..
-  echo "Done."
-
-  echo "Compiling client source (wid-client-build)..."
-  cd client
-  docker build -f Dockerfile.build -t wid-client-build .
-  cd ..
-  echo "Done."
-
-  echo "Copying client source to final image (wid-client)..."
-  cd client
-  docker build -f Dockerfile -t wid-client .
-  cd ..
-  echo "Done."
-
-  echo "Building server builder image (wid-server-builder)..."
-  cd server
-  docker build -f Dockerfile.builder -t wid-server-builder .
-  cd ..
-  echo "Done."
-
-  echo "Compiling server source (wid-server-build)..."
-  cd server
-  docker build -f Dockerfile.build -t wid-server-build .
-  cd ..
-  echo "Done."
-
-  echo "Copying server source to final image (wid-server)..."
-  cd server
-  docker build -f Dockerfile -t wid-server .
-  cd ..
-  echo "Done."
-
-  postbuild
-
   registry=${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}
 
-  echo "Successfully built all images, associating them to repository \"${registry}\""
+  echo "Build client image (${registry}:client)..."
+  docker build -f Dockerfile.client -t "${registry}:client" .
+  echo "Done."
 
-  docker tag wid-server ${registry}:server
-
-  docker tag wid-client ${registry}:client
-
+  echo "Building server image (${registry}:server)..."
+  docker build -f Dockerfile.server -t "${registry}:server" .
   echo "Done."
 elif [ "$operation" == "backup" ]; then
   backup "$@"

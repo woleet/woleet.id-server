@@ -3,7 +3,7 @@ import { AuthService } from '@services/auth';
 import { environment } from '@env/environment';
 import { PageDataService } from '@services/page-data';
 import { ErrorService } from '@services/error';
-import { AppConfigService } from "@services/boot";
+import { AppConfigService } from '@services/boot';
 
 @Component({
   selector: 'nav-bar',

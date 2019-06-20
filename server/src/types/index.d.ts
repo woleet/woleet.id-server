@@ -276,12 +276,6 @@ declare global {
     mailOnboardingTemplate?: string;
     mailKeyEnrollmentTemplate?: string;
 
-    // TCU
-    TCU?: {
-      toDefault?: boolean;
-      data?: string;
-    }
-
     // Admin contact
     contact?: string;
 
@@ -328,12 +322,6 @@ declare global {
     mailOnboardingTemplate?: string;
     mailKeyEnrollmentTemplate?: string;
 
-    // TCU
-    TCU?: {
-      toDefault?: boolean;
-      data?: string;
-    }
-
     // Admin contact
     contact?: string;
 
@@ -379,12 +367,6 @@ declare global {
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
     mailKeyEnrollmentTemplate?: string;
-
-    // TCU
-    TCU?: {
-      toDefault?: boolean;
-      data?: string;
-    }
 
     // Admin contact
     contact?: string;
