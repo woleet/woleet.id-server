@@ -115,8 +115,8 @@ public class DiscoveryApi {
     }
 
     /**
-     * Get the discovery server config.
-     * Use this endpoint to get the server config needed for the other discorvery endpoint. 
+     * Get the server configuration.
+     * Use this endpoint to get the server configuration. 
      * @return ConfigDisco
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -126,8 +126,8 @@ public class DiscoveryApi {
     }
 
     /**
-     * Get the discovery server config.
-     * Use this endpoint to get the server config needed for the other discorvery endpoint. 
+     * Get the server configuration.
+     * Use this endpoint to get the server configuration. 
      * @return ApiResponse&lt;ConfigDisco&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -138,8 +138,8 @@ public class DiscoveryApi {
     }
 
     /**
-     * Get the discovery server config. (asynchronously)
-     * Use this endpoint to get the server config needed for the other discorvery endpoint. 
+     * Get the server configuration. (asynchronously)
+     * Use this endpoint to get the server configuration. 
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -227,8 +227,8 @@ public class DiscoveryApi {
     }
 
     /**
-     * Get information about the current user.
-     * Use this endpoint to get information about the current user. 
+     * Get the current logged user.
+     * Use this endpoint to get the current logged user. 
      * @return UserDisco
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -238,8 +238,8 @@ public class DiscoveryApi {
     }
 
     /**
-     * Get information about the current user.
-     * Use this endpoint to get information about the current user. 
+     * Get the current logged user.
+     * Use this endpoint to get the current logged user. 
      * @return ApiResponse&lt;UserDisco&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -250,8 +250,8 @@ public class DiscoveryApi {
     }
 
     /**
-     * Get information about the current user. (asynchronously)
-     * Use this endpoint to get information about the current user. 
+     * Get the current logged user. (asynchronously)
+     * Use this endpoint to get the current logged user. 
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -347,7 +347,7 @@ public class DiscoveryApi {
 
     /**
      * Get the user associated to a public key.
-     * Use this endpoint to get the user owning a given public key. 
+     * Use this endpoint to get the user owning a public key. 
      * @param pubKey Public key (bitcoin address when using BIP39 keys). (required)
      * @return UserDisco
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -359,7 +359,7 @@ public class DiscoveryApi {
 
     /**
      * Get the user associated to a public key.
-     * Use this endpoint to get the user owning a given public key. 
+     * Use this endpoint to get the user owning a public key. 
      * @param pubKey Public key (bitcoin address when using BIP39 keys). (required)
      * @return ApiResponse&lt;UserDisco&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -372,7 +372,7 @@ public class DiscoveryApi {
 
     /**
      * Get the user associated to a public key. (asynchronously)
-     * Use this endpoint to get the user owning a given public key. 
+     * Use this endpoint to get the user owning a public key. 
      * @param pubKey Public key (bitcoin address when using BIP39 keys). (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
@@ -469,7 +469,7 @@ public class DiscoveryApi {
 
     /**
      * Get all public keys of a user.
-     * Use this endpoint to get all public keys owned by a given user. 
+     * Use this endpoint to get all public keys owned by a user. 
      * @param userId Identifier of the user. (required)
      * @return List&lt;KeyDisco&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -481,7 +481,7 @@ public class DiscoveryApi {
 
     /**
      * Get all public keys of a user.
-     * Use this endpoint to get all public keys owned by a given user. 
+     * Use this endpoint to get all public keys owned by a user. 
      * @param userId Identifier of the user. (required)
      * @return ApiResponse&lt;List&lt;KeyDisco&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -494,7 +494,7 @@ public class DiscoveryApi {
 
     /**
      * Get all public keys of a user. (asynchronously)
-     * Use this endpoint to get all public keys owned by a given user. 
+     * Use this endpoint to get all public keys owned by a user. 
      * @param userId Identifier of the user. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call

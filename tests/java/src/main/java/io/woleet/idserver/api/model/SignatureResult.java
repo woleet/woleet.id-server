@@ -105,10 +105,10 @@ public class SignatureResult {
   }
 
    /**
-   * Public URL of the &#x60;/identity&#x60; endpoint (ie. a URL that anyone can use to prove and verify the identity associated with the public key).
+   * Public URL of the &#x60;/identity&#x60; endpoint (ie. the URL that anyone can use to get the identity associated with a public key). 
    * @return identityURL
   **/
-  @ApiModelProperty(example = "https://woleetidserver.acme.com/v1/identity", value = "Public URL of the `/identity` endpoint (ie. a URL that anyone can use to prove and verify the identity associated with the public key).")
+  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "Public URL of the `/identity` endpoint (ie. the URL that anyone can use to get the identity associated with a public key). ")
   public String getIdentityURL() {
     return identityURL;
   }

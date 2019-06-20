@@ -1,5 +1,5 @@
-import { ForeignKeyConstraintError, UUID, UUIDV4, DATE, ENUM, STRING } from 'sequelize';
-import { InvalidUserTargetedKeyError } from '../../errors';
+import { DATE, ENUM, ForeignKeyConstraintError, STRING, UUID, UUIDV4 } from 'sequelize';
+import { InvalidForeignUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 
 const EnrollmentModel = {
@@ -23,10 +23,9 @@ class EnrollmentAccess extends AbstractInstanceAccess<InternalEnrollmentObject, 
 
   handleError(err: any) {
     if (err instanceof ForeignKeyConstraintError) {
-      throw new InvalidUserTargetedKeyError('Invalid user id provided', err);
+      throw new InvalidForeignUserError();
     }
   }
-
 }
 
 export const Enrollment = new EnrollmentAccess();

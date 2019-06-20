@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppConfigService } from '@services/boot';
-import { MatDialog, MatStepper } from '@angular/material';
+import { MatStepper } from '@angular/material';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { EnrollmentService } from '@services/enrollment';
@@ -17,7 +17,6 @@ import { ServerConfigService as ConfigService } from '@services/server-config';
   }]
 })
 export class EnrollmentPageComponent implements OnInit {
-  isConfirmed = false;
   enrollmentId: string;
   user: ApiUserObject;
   enrollmentRefusalEmailLink: string;
@@ -26,8 +25,8 @@ export class EnrollmentPageComponent implements OnInit {
   isDownloaded = false;
   config: any;
 
-  constructor(appConfigService: AppConfigService, public dialog: MatDialog,
-    private route: ActivatedRoute, private enrollmentService: EnrollmentService, private configService: ConfigService) {
+  constructor(appConfigService: AppConfigService, private route: ActivatedRoute,
+              private enrollmentService: EnrollmentService, private configService: ConfigService) {
     this.config = appConfigService.getConfig();
     this.enrollmentId = this.route.snapshot.params.id;
     this.enrollmentService.getUserByEnrollmentId(this.enrollmentId)
@@ -36,13 +35,13 @@ export class EnrollmentPageComponent implements OnInit {
           return this.user = user;
         },
         (error) => {
-          switch (error.error.message) {
+          switch (error.error.name) {
             case 'NotFoundEnrollmentError':
-              this.errorMessage = 'This page doesn\'t refer to an enrollment in progress.';
+              this.errorMessage = 'This page doesn\'t refer to a signature key registration in progress.';
               break;
             case 'EnrollmentExpiredError':
-              this.errorMessage = 'This page refer to an enrollment that is expired.' +
-                ' Please contact the admin to begin a new enrollment process';
+              this.errorMessage = 'This page refers to a signature key registration that is expired.' +
+                ' Please contact the admin to begin a new signature key registration process.';
               break;
             default:
               this.errorMessage = error.error.message;
@@ -61,27 +60,25 @@ export class EnrollmentPageComponent implements OnInit {
     stepper.next();
   }
 
-  async setConfirm(value: boolean) {
-    this.isConfirmed = value;
-  }
-
   signTCU(): void {
     this.enrollmentService.createTCUSignatureRequest(this.enrollmentId, this.user.email)
-      .subscribe(() => {
-        this.completed = true;
-      }, (error) => {
-          switch (error.error.message) {
+      .subscribe(
+        () => {
+          this.completed = true;
+        },
+        (error) => {
+          switch (error.error.name) {
             case 'NotFoundEnrollmentError':
-              this.errorMessage = 'This page doesn\'t refer to an enrollment in progress.';
+              this.errorMessage = 'This page doesn\'t refer to a signature key registration in progress.';
               break;
             case 'EnrollmentExpiredError':
-              this.errorMessage = 'This page refer to an enrollment that is expired.' +
-                ' Please contact the admin to begin a new enrollment process';
+              this.errorMessage = 'This page refers to a signature key registration that is expired.' +
+                ' Please contact the admin to begin a new a signature key registration process.';
               break;
             default:
               this.errorMessage = error.error.message;
           }
-      });
+        });
   }
 
   download() {

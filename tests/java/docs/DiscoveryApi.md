@@ -4,8 +4,8 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**discoverConfig**](DiscoveryApi.md#discoverConfig) | **GET** /discover/config | Get the discovery server config.
-[**discoverUser**](DiscoveryApi.md#discoverUser) | **GET** /discover/user | Get information about the current user.
+[**discoverConfig**](DiscoveryApi.md#discoverConfig) | **GET** /discover/config | Get the server configuration.
+[**discoverUser**](DiscoveryApi.md#discoverUser) | **GET** /discover/user | Get the current logged user.
 [**discoverUserByPubKey**](DiscoveryApi.md#discoverUserByPubKey) | **GET** /discover/user/{pubKey} | Get the user associated to a public key.
 [**discoverUserKeys**](DiscoveryApi.md#discoverUserKeys) | **GET** /discover/keys/{userId} | Get all public keys of a user.
 [**discoverUsers**](DiscoveryApi.md#discoverUsers) | **GET** /discover/users | Get all users matching a search string.
@@ -15,9 +15,9 @@ Method | HTTP request | Description
 # **discoverConfig**
 > ConfigDisco discoverConfig()
 
-Get the discovery server config.
+Get the server configuration.
 
-Use this endpoint to get the server config needed for the other discorvery endpoint. 
+Use this endpoint to get the server configuration. 
 
 ### Example
 ```java
@@ -70,9 +70,9 @@ This endpoint does not need any parameter.
 # **discoverUser**
 > UserDisco discoverUser()
 
-Get information about the current user.
+Get the current logged user.
 
-Use this endpoint to get information about the current user. 
+Use this endpoint to get the current logged user. 
 
 ### Example
 ```java
@@ -127,7 +127,7 @@ This endpoint does not need any parameter.
 
 Get the user associated to a public key.
 
-Use this endpoint to get the user owning a given public key. 
+Use this endpoint to get the user owning a public key. 
 
 ### Example
 ```java
@@ -186,7 +186,7 @@ Name | Type | Description  | Notes
 
 Get all public keys of a user.
 
-Use this endpoint to get all public keys owned by a given user. 
+Use this endpoint to get all public keys owned by a user. 
 
 ### Example
 ```java

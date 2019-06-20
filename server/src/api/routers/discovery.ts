@@ -72,7 +72,6 @@ router.get('/users', async function (ctx) {
   if (!search) {
     throw new BadRequest('Missing "search" parameter');
   }
-
   const users = await searchAllUsers(search);
   ctx.body = users.map((user) => serializeUser(user, false));
 });

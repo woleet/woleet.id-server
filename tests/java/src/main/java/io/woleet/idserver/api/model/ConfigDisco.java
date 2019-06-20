@@ -39,10 +39,10 @@ public class ConfigDisco {
   }
 
    /**
-   * The identity URL that the server returns with a signature. &lt;br&gt;Note that the server always expects to be called on the \&quot;/identity\&quot; endpoint, if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain) you must not forget it in your reverse proxy configuration. 
+   * Public URL of the &#x60;/identity&#x60; endpoint (ie. the URL that anyone can use to get the identity associated with a public key). 
    * @return identityURL
   **/
-  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "The identity URL that the server returns with a signature. <br>Note that the server always expects to be called on the \"/identity\" endpoint, if you want to map it to another one (like in the example, where it is linked to a dedicated subdomain) you must not forget it in your reverse proxy configuration. ")
+  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "Public URL of the `/identity` endpoint (ie. the URL that anyone can use to get the identity associated with a public key). ")
   public String getIdentityURL() {
     return identityURL;
   }

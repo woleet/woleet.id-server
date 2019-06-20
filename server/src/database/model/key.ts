@@ -1,6 +1,5 @@
 import { BOOLEAN, CHAR, DATE, ENUM, ForeignKeyConstraintError, STRING, UUID, UUIDV4 } from 'sequelize';
-import { InvalidUserTargetedKeyError } from '../../errors';
-
+import { InvalidForeignUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 import { User } from '..';
 
@@ -35,14 +34,11 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
     return this.model.findAll({ where: { userId }, order: [['createdAt', 'DESC']], paranoid: !full });
   }
 
-  async getAny(): Promise<SequelizeKeyObject> {
-    return this.model.findOne();
-  }
-
   /**
    * @description Returns a key by its public key (bitcoin address)
    * @param publicKey: the requested public key
    * @param userId: optional parameter for extra check
+   * @param loadUser true is the user model must be loaded
    */
   async getByPubKey(publicKey: string, userId?: string, loadUser = false): Promise<SequelizeKeyObject> {
     const query = { where: { publicKey } };
@@ -67,7 +63,7 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
 
   handleError(err: any) {
     if (err instanceof ForeignKeyConstraintError) {
-      throw new InvalidUserTargetedKeyError('Invalid user id provided', err);
+      throw new InvalidForeignUserError();
     }
   }
 }

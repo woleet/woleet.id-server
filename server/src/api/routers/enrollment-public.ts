@@ -17,6 +17,8 @@ const router = new Router();
  *  operationId: getEnrollmentUser
  */
 router.get('/enrollment/:id/user', async function (ctx) {
+
+  // Return the user targeted by the enrollment
   const { id: enrollmentId } = ctx.params;
   ctx.body = serializeUser(await getEnrollmentUser(enrollmentId));
 });
