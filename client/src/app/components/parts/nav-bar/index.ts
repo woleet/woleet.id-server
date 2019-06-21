@@ -1,8 +1,9 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '@services/auth';
 import { environment } from '@env/environment';
 import { PageDataService } from '@services/page-data';
 import { ErrorService } from '@services/error';
+import { AppConfigService } from '@services/boot';
 
 @Component({
   selector: 'nav-bar',
@@ -14,15 +15,17 @@ export class NavBarComponent {
   lock$;
   mode = 'side';
   opened = true;
+  config: any;
 
   constructor(
     private authService: AuthService,
     private pageDataService: PageDataService,
     private errorService: ErrorService,
-    private ref: ChangeDetectorRef
+    private appConfigService: AppConfigService
   ) {
     this.production = environment.production;
     this.lock$ = authService.lock$;
+    this.config = appConfigService.getConfig();
   }
 
   logout() {

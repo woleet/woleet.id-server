@@ -1,4 +1,4 @@
-<logo [logoURL]="serverPublicInfo.logoURL"></logo>
+<logo [logoURL]="config.logoURL"></logo>
 <br>
 <mat-horizontal-stepper *ngIf="!errorMessage && !completed" #stepper linear>
   <ng-template matStepperIcon="welcome">
@@ -20,18 +20,18 @@
     <mat-icon>done</mat-icon>
   </ng-template>
   <mat-step label="Welcome" state="welcome">
-    <h1>Welcome to Woleet Signature Service</h1>
+    <h1>Welcome to {{config.organizationName}} Signature Service</h1>
     <div>
       <div>
         <p>Electronic signature consists in approving the content of an electronic document and fulfilling its
           commitment as a responsible person.</p>
       </div>
       <div>
-        <p>To be ready to use Woleet signature service, you need to:</p>
+        <p>To be ready to use {{config.organizationName}} signature service, you need to:</p>
         <ul>
           <li>Acknowledge your identity information.</li>
           <li>Create a signature key (that stays under your control).</li>
-          <li>Accept and sign Woleet Signature Service Terms and Conditions of Use using this key.</li>
+          <li>Accept and sign {{config.organizationName}} Signature Service Terms and Conditions of Use using this key.</li>
         </ul>
       </div>
     </div>
@@ -42,17 +42,17 @@
       <button mat-raised-button color="primary" matStepperNext>NEXT</button>
     </div>
   </mat-step>
-  <mat-step label="Identity" state="identity" [completed]="isConfirmed">
+  <mat-step label="Identity" state="identity" [completed]="false">
     <h1>Acknowledge your identity information</h1>
     <div>
       <div>
         <p>The following identity information will be associated to your signature key to identify you as a signatory:</p>
         <br>
         <div *ngIf="user; else loadingUser">
-          <app-user-card [user]="user" [modes]="['display']"></app-user-card>
+          <app-user-card [user]="user" [modes]="['display']" [hideAttribute]="['username']"></app-user-card>
         </div>
         <br>
-        <p>Your personal information is stored by Woleet signature service and can be modified or deleted at any time,
+        <p>Your personal information is stored by {{config.organizationName}} signature service and can be modified or deleted at any time,
           upon simple request to <a [href]="'mailto:' + config.contact" target="_top">{{config.contact}}</a>.</p>
         <br>
       </div>
@@ -61,18 +61,7 @@
       <a href="{{enrollmentRefusalEmailLink}}" class="black-link" target="_top">
         <button mat-button>REFUSE</button>
       </a>
-      <button mat-raised-button color="primary" (click)="confirm()">CONFIRM</button>
-    </div>
-    <div>
-      <br>
-      <mat-divider></mat-divider>
-      <br>
-      <button mat-button matStepperPrevious>BACK</button>
-      <span [matTooltipDisabled]="isConfirmed" matTooltip="Confirm your identity to continue.">
-        <button mat-raised-button color="primary" matStepperNext [disabled]="!isConfirmed">
-          NEXT
-        </button>
-      </span>
+      <button mat-raised-button color="primary" (click)="confirm(stepper)">CONFIRM</button>
     </div>
   </mat-step>
   <mat-step label="Signature key" state="createKey">
@@ -109,16 +98,14 @@
     <h1>Accept and sign our Terms and Conditions of Use</h1>
     <div>
       <div>
-        <p>Click on the button bellow to download and review the Woleet Signature Service Terms and Conditions of Use.
+        <p>Click on the button bellow to download and review the {{config.organizationName}} Signature Service Terms and Conditions of Use.
         </p>
         <p>If you agree, please click on the <strong>Get signature invitation email</strong> button below
-          to sign Woleet Signature Service Terms and Conditions of Use.</p>
+          to sign {{config.organizationName}} Signature Service Terms and Conditions of Use.</p>
       </div>
     </div>
     <div>
-      <a [href]="TCUURL" download="TCU.pdf" class="black-link">
-        <button mat-raised-button color="primary" (click)="download()">DOWNLOAD TCU</button>
-      </a>
+      <button mat-raised-button color="primary" (click)="download()">DOWNLOAD TCU</button>
     </div>
     <div>
       <br>
@@ -132,7 +119,7 @@
 </mat-horizontal-stepper>
 <div *ngIf="errorMessage">
   <mat-card>
-    <mat-card-title>Key registration not available</mat-card-title>
+    <mat-card-title>Signature key registration error</mat-card-title>
     <mat-divider></mat-divider>
     <br>
     <mat-card-content>

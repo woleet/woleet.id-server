@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider, secureUrlValidator } from '@components/util';
-import { HttpClient } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -15,13 +14,13 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
 
   config$: Observable<ApiServerConfig>;
 
-  proofDeskAPIIsValid;
+  enableProofDesk: boolean;
 
   form: FormGroup;
 
   private onDestroy: EventEmitter<void>;
 
-  constructor(private configService: ConfigService, private http: HttpClient) {
+  constructor(private configService: ConfigService) {
     super();
     this.onDestroy = new EventEmitter();
   }
@@ -42,6 +41,7 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
       }
       this.form.get('proofDeskAPIURL').setValue(config.proofDeskAPIURL || 'https://api.woleet.io/v1');
       this.form.get('proofDeskAPIToken').setValue(config.proofDeskAPIToken || '');
+      this.enableProofDesk = config.enableProofDesk;
     }));
 
     this.registerSubscription(this.formLocked$.subscribe((locked) => {
@@ -64,15 +64,16 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
   async update() {
     const proofDeskAPIURL = this.form.get('proofDeskAPIURL').value || null;
     const proofDeskAPIToken = this.form.get('proofDeskAPIToken').value || null;
+    const enableProofDesk = this.enableProofDesk;
     this.configService.update({
       proofDeskAPIURL,
-      proofDeskAPIToken
+      proofDeskAPIToken,
+      enableProofDesk: enableProofDesk,
     });
     this.registerSubscription(this.config$.subscribe((config) => {
       if (!config) {
         return;
       }
-      this.proofDeskAPIIsValid = config.proofDeskAPIIsValid;
     }));
   }
 }

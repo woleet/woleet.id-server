@@ -1,4 +1,5 @@
-interface ServerConfig { }
+interface ServerConfig {
+}
 
 type uri = string;
 
@@ -15,12 +16,11 @@ interface ApiServerConfig {
   defaultKeyId: string;
   fallbackOnDefaultKey: boolean;
   allowUserToSign: boolean;
-  publicInfo: {
-    logoURL?: string | null;
-    HTMLFrame?: string | null;
-  }
+  logoURL?: string | null;
+  HTMLFrame?: string | null;
+
   // Open ID Connect config
-  useOpenIDConnect: boolean;
+  enableOpenIDConnect: boolean;
   openIDConnectURL: string | null;
   openIDConnectClientId: string | null;
   openIDConnectClientSecret: string | null;
@@ -37,7 +37,7 @@ interface ApiServerConfig {
   keyExpirationOffset?: string;
 
   // SMTP config
-  useSMTP: boolean;
+  enableSMTP: boolean;
   SMTPConfig: string | null;
   webClientURL: string | null;
 
@@ -46,33 +46,27 @@ interface ApiServerConfig {
   mailOnboardingTemplate: string | null;
   mailKeyEnrollmentTemplate: string | null;
 
-  // TCU
-  TCU: {
-    toDefault?: boolean | null;
-    data?: string | null;
-  } | null;
-
   // Admin contact
   contact: string | null;
+
+  organizationName: string | null;
 
   // ProofDesk config
   proofDeskAPIURL: string | null;
   proofDeskAPIToken: string | null;
-  proofDeskAPIIsValid: number | null;
+  enableProofDesk: boolean | null;
 }
 
 interface ApiServerConfigUpdate {
   identityURL?: string;
   defaultKeyId?: string;
-  publicInfo?: {
-    logoURL?: string;
-    HTMLFrame?: string;
-  }
+  logoURL?: string;
+  HTMLFrame?: string;
   fallbackOnDefaultKey?: boolean;
   allowUserToSign?: boolean;
 
   // Open ID Connect config
-  useOpenIDConnect?: boolean;
+  enableOpenIDConnect?: boolean;
   openIDConnectURL?: string;
   openIDConnectClientId?: string;
   openIDConnectClientSecret?: string;
@@ -89,7 +83,7 @@ interface ApiServerConfigUpdate {
   keyExpirationOffset?: string;
 
   // SMTP config
-  useSMTP?: boolean;
+  enableSMTP?: boolean;
   SMTPConfig?: string;
   webClientURL?: string;
 
@@ -98,17 +92,13 @@ interface ApiServerConfigUpdate {
   mailOnboardingTemplate?: string;
   mailKeyEnrollmentTemplate?: string;
 
-  // TCU
-  TCU?: {
-    toDefault?: boolean;
-    data?: string;
-  }
-
   // Admin contact
   contact?: string;
+
+  organizationName?: string;
 
   // ProofDesk config
   proofDeskAPIURL?: string;
   proofDeskAPIToken?: string;
-  proofDeskAPIIsValid?: number;
+  enableProofDesk?: boolean;
 }

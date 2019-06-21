@@ -37,7 +37,7 @@ initdb()
     } catch (err) {
       log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
     }
-    return setServerConfig({ useOpenIDConnect: false });
+    return setServerConfig({ enableOpenIDConnect: false });
   })
   .then(async () => {
     try {
@@ -54,7 +54,7 @@ initdb()
     } catch (err) {
       log.error('Failed to initialize SMTP, it will be automatically disabled!', err);
     }
-    return setServerConfig({ useSMTP: false });
+    return setServerConfig({ enableSMTP: false });
   })
   .catch((err) => exit(`Failed to update server config: ${err.message}`, err))
   .then(() => bootServers())

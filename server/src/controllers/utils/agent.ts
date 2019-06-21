@@ -1,4 +1,3 @@
-
 import * as https from 'https';
 
 export function getAgent(url, apiPath): https.Agent {
@@ -9,9 +8,6 @@ export function getAgent(url, apiPath): https.Agent {
       path: url.pathname + apiPath,
       rejectUnauthorized: false
     };
-    const agent = new https.Agent(agentOptions);
-    return agent;
-  } else {
-    return;
+    return new https.Agent(agentOptions);
   }
 }

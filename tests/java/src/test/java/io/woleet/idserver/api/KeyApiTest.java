@@ -154,6 +154,8 @@ public class KeyApiTest extends CRUDApiTest {
         assertNotNull(key.getPubKey());
         assertNotNull(key.getType());
         assertNotNull(key.getStatus());
+        assertEquals(key.getHolder(), KeyHolderEnum.SERVER);
+        assertEquals(key.getDevice(), KeyDeviceEnum.SERVER);
     }
 
     @Override

@@ -22,7 +22,7 @@ export class ErrorPageComponent implements OnInit {
         this.tip = 'Try to reload this page later';
         break;
       case 'server-error':
-        this.message = `The server encountred an error (code=${error.code})`;
+        this.message = `The server encountered an error:\n${error.message}`;
         break;
       case 'network':
         this.message = 'Network error';
@@ -30,7 +30,7 @@ export class ErrorPageComponent implements OnInit {
         break;
       case 'redirect-parameter':
         this.message = 'Failed to decode redirect parameter';
-        this.tip = 'Please report this error to this website owner with the following:\n' + error.message;
+        this.tip = `Please report this error to this website owner with the following:\n${error.message}`;
         break;
       case 'unknown':
       default:

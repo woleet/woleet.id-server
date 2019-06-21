@@ -23,11 +23,11 @@ router.get('/identity', async function (ctx) {
   const { pubKey, leftData } = ctx.query;
 
   if (!pubKey) {
-    throw new BadRequest('Missing mandatory "pubKey" parameter');
+    throw new BadRequest('Missing "pubKey" parameter');
   }
 
   if (!(await vaddr(pubKey))) {
-    throw new BadRequest('Invalid query parameter "pubKey"');
+    throw new BadRequest('Invalid "pubKey" parameter');
   }
 
   ctx.body = await getIdentity(leftData, pubKey);

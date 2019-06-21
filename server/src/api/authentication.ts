@@ -21,10 +21,9 @@ export async function bearerAuth(ctx: Context, next) {
   if (header && header.authorization) {
     const parts = header.authorization.split(' ');
 
-    // Check if apiToken exists
+    // Check if API token exists
     if (parts.length === 2 && parts[0] === 'Bearer') {
-      const token: InternalTokenObject = (
-          await apiTokenStore.getByValue(parts[1]))
+      const token: InternalTokenObject = (await apiTokenStore.getByValue(parts[1]))
         || (isInitialized() && await oauthAccessTokenStore.get(parts[1]));
 
       if (token) {

@@ -1,5 +1,5 @@
 import * as nodemailer from 'nodemailer';
-import { getServerConfig, setServerConfig } from './server-config';
+import { getServerConfig } from './server-config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 
@@ -11,13 +11,13 @@ export const getTransporter = () => transporter;
 async function configure() {
   const config = getServerConfig();
 
-  if (!config.useSMTP) {
-    debug('useSMTP=false, skipping configuration');
+  if (!config.enableSMTP) {
+    debug('Skipping SMTP configuration');
     return;
   }
 
   if (!config.SMTPConfig) {
-    debug('no SMTPConfig set, skipping configuration');
+    debug('No SMTPConfig set, skipping configuration');
     log.warn('No SMTPConfig set while SMTP is enabled, skipping configuration');
     return;
   }

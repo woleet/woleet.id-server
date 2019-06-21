@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 import { Key } from '../database';
-import { NotFoundKeyError, BlockedKeyError } from '../errors';
+import { BlockedKeyError, NotFoundKeyError } from '../errors';
 
 import { serializeIdentity } from '../api/serialize/identity';
 import { getServerConfig } from './server-config';
@@ -9,7 +9,6 @@ import { signMessage } from './sign';
 export async function getIdentity(leftData: string, pubKey: string) {
 
   const key = await Key.getByPubKey(pubKey, undefined, true);
-
   if (!key) {
     throw new NotFoundKeyError();
   }

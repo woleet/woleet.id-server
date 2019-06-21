@@ -20,20 +20,20 @@ export const getClient = () => client;
 async function configure() {
   const config = getServerConfig();
 
-  if (!config.useOpenIDConnect) {
-    debug('useOpenIDConnect=false, skipping configuration');
+  if (!config.enableOpenIDConnect) {
+    debug('Skipping OpenID Connect configuration');
     client = null;
     return;
   }
 
   if (!config.openIDConnectURL) {
-    debug('no openIDConnectURL set, skipping configuration');
+    debug('No openIDConnectURL set, skipping configuration');
     log.warn('No openIDConnectURL set while Open ID Connect is enabled, skipping configuration');
     return;
   }
 
   if (!config.openIDConnectClientRedirectURL) {
-    debug('no openIDConnectClientRedirectURL set, skipping configuration');
+    debug('No openIDConnectClientRedirectURL set, skipping configuration');
     log.warn('No openIDConnectClientRedirectURL set while Open ID Connect is enabled, skipping configuration');
     return;
   }
@@ -59,8 +59,8 @@ export function updateOIDC() {
 
 export async function createOAuthUser(user: ApiPostUserObject): Promise<{ token: string, user: InternalUserObject }> {
   const config = getServerConfig();
-  if (!config.useOpenIDConnect) {
-    throw new Error('createOAuthUser called while openID connect is disabled');
+  if (!config.enableOpenIDConnect) {
+    throw new Error('createOAuthUser called while OpenID connect is disabled');
   }
   const identity = serializeIdentity(user.identity);
   delete user.identity;
@@ -81,11 +81,11 @@ export async function createOAuthUser(user: ApiPostUserObject): Promise<{ token:
 
 export async function createOAuthSession(email: string): Promise<{ token: string, user: InternalUserObject }> {
   const config = getServerConfig();
-  if (!config.useOpenIDConnect) {
-    throw new Error('createOAuthUser called while openID connect is disabled');
+  if (!config.enableOpenIDConnect) {
+    throw new Error('createOAuthUser called while OpenID connect is disabled');
   }
-  const user = await lookForUser(email);
 
+  const user = await lookForUser(email);
   if (!user) {
     return null;
   }

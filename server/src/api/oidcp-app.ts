@@ -4,14 +4,12 @@ import * as URL from 'url';
 import * as Router from 'koa-router';
 import * as querystring from 'querystring';
 import { BadRequest } from 'http-errors';
-
 import * as log from 'loglevel';
 import * as Debug from 'debug';
 import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
 import { delSession } from '../controllers/authentication';
 import { sessionSuffix } from '../config';
 import { getProvider } from '../controllers/oidc-provider';
-
 import { session } from './authentication';
 import { getServerConfig } from '../controllers/server-config';
 
@@ -31,7 +29,7 @@ export function build(): Koa {
         ctx.status = err.status;
         throw new BadRequest(err.message);
       } else {
-        log.error('OIDCERR', err);
+        log.error('OIDC error', err);
         throw err;
       }
     }
@@ -39,7 +37,6 @@ export function build(): Koa {
 
   router.get('/interaction/:grant', async (ctx, next) => {
     const details = await provider.interactionDetails(ctx.req);
-
     if (details.interaction.error === 'login_required') {
       throw new Error('Should not be called because we handle this case earlier in the process (#login-precondition)');
     } else if (details.interaction.error === 'consent_required') {
@@ -99,9 +96,9 @@ export function build(): Koa {
     await next();
   });
 
-  const app = <Koa>provider.app;
-
   provider.use(router.routes());
   provider.use(cors());
+
+  const app = <Koa>provider.app;
   return app;
 }

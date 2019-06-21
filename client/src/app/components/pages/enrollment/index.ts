@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppConfigService } from '@services/boot';
-import { MatDialog } from '@angular/material';
-import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { MatStepper } from '@angular/material';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { EnrollmentService } from '@services/enrollment';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import * as log from 'loglevel';
+import { ServerConfigService as ConfigService } from '@services/server-config';
 
 /**
  * @title Stepper overview
@@ -15,83 +13,76 @@ import * as log from 'loglevel';
   templateUrl: 'index.html',
   styleUrls: ['./style.scss'],
   providers: [{
-    provide: MAT_STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
+    provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
   }]
 })
 export class EnrollmentPageComponent implements OnInit {
-  isConfirmed = false;
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
   enrollmentId: string;
   user: ApiUserObject;
   enrollmentRefusalEmailLink: string;
-  TCUURL: SafeUrl;
   errorMessage = '';
   completed = false;
   isDownloaded = false;
+  config: any;
 
-  config: {
-    publicInfo: {
-      logoURL: string,
-      HTMLFrame: string
-    },
-    TCU: {
-      data: string
-    },
-    contact: string
-  };
-  serverPublicInfo: ApiServerConfig['publicInfo'];
-
-  constructor(private _formBuilder: FormBuilder, appConfigService: AppConfigService, public dialog: MatDialog,
-    private route: ActivatedRoute, private enrollmentService: EnrollmentService, sanitization: DomSanitizer) {
-    this.config = appConfigService.getStartupConfig();
-    this.serverPublicInfo = this.config.publicInfo || null;
+  constructor(appConfigService: AppConfigService, private route: ActivatedRoute,
+              private enrollmentService: EnrollmentService, private configService: ConfigService) {
+    this.config = appConfigService.getConfig();
     this.enrollmentId = this.route.snapshot.params.id;
     this.enrollmentService.getUserByEnrollmentId(this.enrollmentId)
       .subscribe(
         (user) => {
           return this.user = user;
-        }
-        , (error) => {
-          switch (error.error.message) {
+        },
+        (error) => {
+          switch (error.error.name) {
             case 'NotFoundEnrollmentError':
-              this.errorMessage = 'This page doesn\'t refer to an enrollment in progress.';
+              this.errorMessage = 'This page doesn\'t refer to a signature key registration in progress.';
               break;
             case 'EnrollmentExpiredError':
-              this.errorMessage = 'This page refer to an enrollment that is expired.' +
-                ' Please contact the admin to begin a new enrollment process';
+              this.errorMessage = 'This page refers to a signature key registration that is expired.' +
+                ' Please contact the admin to begin a new signature key registration process.';
               break;
             default:
               this.errorMessage = error.error.message;
           }
         });
-    this.TCUURL = sanitization.bypassSecurityTrustUrl(this.config.TCU.data);
   }
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
     this.enrollmentRefusalEmailLink = 'mailto:' + this.config.contact + '?Subject=Enrollment Refusal&body=';
   }
 
-  confirm() {
-    this.isConfirmed = true;
+  confirm(stepper: MatStepper) {
+    const stepsArray = stepper.steps.toArray();
+    const currentStep = stepsArray[stepper.selectedIndex];
+    currentStep.completed = true;
+    stepper.next();
   }
 
   signTCU(): void {
     this.enrollmentService.createTCUSignatureRequest(this.enrollmentId, this.user.email)
-      .subscribe(() => {
-        this.completed = true;
-      }, (error) => {
-        log.error(error);
-      });
+      .subscribe(
+        () => {
+          this.completed = true;
+        },
+        (error) => {
+          switch (error.error.name) {
+            case 'NotFoundEnrollmentError':
+              this.errorMessage = 'This page doesn\'t refer to a signature key registration in progress.';
+              break;
+            case 'EnrollmentExpiredError':
+              this.errorMessage = 'This page refers to a signature key registration that is expired.' +
+                ' Please contact the admin to begin a new a signature key registration process.';
+              break;
+            default:
+              this.errorMessage = error.error.message;
+          }
+        });
   }
 
-  download () {
+  download() {
     this.isDownloaded = true;
+    this.configService.getTCU();
   }
 }

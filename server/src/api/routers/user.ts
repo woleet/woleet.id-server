@@ -2,10 +2,10 @@ import * as Router from 'koa-router';
 
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
-import { createUser, getUserById, updateUser, getAllUsers, deleteUser } from '../../controllers/user';
+import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '../../controllers/user';
 import { serializeUser } from '../serialize/user';
 import { store as event } from '../../controllers/server-event';
-import { isKeyHoldedByServer } from '../../controllers/key';
+import { isKeyHeldByServer } from '../../controllers/key';
 import { BadRequest } from 'http-errors';
 
 const vid = validate.param('id', 'uuid');
@@ -80,7 +80,7 @@ router.get('/:id', vid, async function (ctx) {
 router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const { id } = ctx.params;
   const update = ctx.request.body;
-  if (!isKeyHoldedByServer(update.defaultKeyId)) {
+  if (!isKeyHeldByServer(update.defaultKeyId)) {
     throw new BadRequest('User holded key cannot be the default key.');
   }
   const user = await updateUser(id, copy(update));

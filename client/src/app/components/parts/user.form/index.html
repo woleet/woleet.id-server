@@ -20,7 +20,7 @@
           <input matInput type="email" placeholder="Email" formControlName="email" autocomplete="off" required>
           <mat-error *ngIf="form.get('email').invalid">{{ getErrorMessage(form.get('email')) }}</mat-error>
         </mat-form-field>
-        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!useSMTP || !webClientURL"
+        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!enableSMTP || !webClientURL"
           [matTooltipDisabled]="canSendEmailToUser()"
           [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL'"
           (change)="sendPasswordEmailCheck()">
@@ -91,12 +91,6 @@
   <div *ngIf="mode === 'create'">
     <mat-checkbox matInput [(ngModel)]="createDefaultKey">
       Create a default key pair
-    </mat-checkbox>
-    <br>
-    <mat-checkbox matInput [disabled]="!canEnroll()" [matTooltipDisabled]="canEnroll()"
-      [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL\n- Organization / Admin contact\n- ProofDesk account / API configuration'"
-      [(ngModel)]="sendEnrollmentEmail">
-      Send public key registration request
     </mat-checkbox>
     <br>
     <br>

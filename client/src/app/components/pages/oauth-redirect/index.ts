@@ -25,7 +25,7 @@ export class OAuthRedirectComponent {
     router: Router,
     store: LocalStorageService) {
     activatedRoute.queryParams.subscribe(async (params) => {
-      const config = configService.getStartupConfig();
+      const config = configService.getConfig();
 
       log.debug('Forward oauth parameters', params);
       try {

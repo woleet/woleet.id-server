@@ -1,21 +1,23 @@
-class DBError extends Error {
-  original: Error;
+class WIDSError extends Error {
 
-  constructor(message, original: Error = null) {
+  original: Error; // the original error triggered
+
+  constructor(message: string, error: Error = null) {
     super(message);
-    this.name = 'WidError';
-    this.original = original;
+    this.original = error;
   }
+
+  name = 'WIDSError';
 }
 
-export abstract class DuplicatedDBObjectError extends DBError {
+export abstract class DuplicatedDBObjectError extends WIDSError {
 }
 
 export class DuplicatedUserError extends DuplicatedDBObjectError {
   name = 'DuplicatedUserError';
 }
 
-export abstract class NotFoundDBObjectError extends DBError {
+export abstract class NotFoundDBObjectError extends WIDSError {
 }
 
 export class NotFoundUserError extends NotFoundDBObjectError {
@@ -50,25 +52,18 @@ export class NotFoundEnrollmentError extends NotFoundDBObjectError {
   name = 'NotFoundEnrollmentError';
 }
 
-export class EnrollmentExpiredError extends NotFoundDBObjectError {
-  constructor(m = 'Enrollment expired') {
+export abstract class ForeignKeyDBError extends WIDSError {
+}
+
+export class InvalidForeignUserError extends ForeignKeyDBError {
+  constructor(m = 'Invalid foreign user') {
     super(m);
   }
 
-  name = 'EnrollmentExpiredError';
+  name = 'InvalidForeignUserError';
 }
 
-export abstract class ForeignKeyDBError extends DBError {
-}
-
-export class InvalidUserTargetedKeyError extends ForeignKeyDBError {
-}
-
-export class ProtectedUserError extends DBError {
-  name = 'ProtectedUserError';
-}
-
-export abstract class BlockedResourceError extends Error {
+export abstract class BlockedResourceError extends WIDSError {
 }
 
 export class BlockedUserError extends BlockedResourceError {
@@ -87,6 +82,14 @@ export class BlockedKeyError extends BlockedResourceError {
   name = 'BlockedKeyError';
 }
 
+export class KeyNotHeldByServerError extends BlockedResourceError {
+  constructor(m = 'The private key is not held by the server') {
+    super(m);
+  }
+
+  name = 'KeyNotHeldByServerError';
+}
+
 export class ExpiredKeyError extends BlockedResourceError {
   constructor(m = 'Key expired') {
     super(m);
@@ -95,15 +98,15 @@ export class ExpiredKeyError extends BlockedResourceError {
   name = 'ExpiredKeyError';
 }
 
-export class BlockedAPITokenError extends BlockedResourceError {
-  constructor(m = 'API token is blocked') {
+export class EnrollmentExpiredError extends BlockedResourceError {
+  constructor(m = 'Enrollment expired') {
     super(m);
   }
 
-  name = 'BlockedAPITokenError';
+  name = 'EnrollmentExpiredError';
 }
 
-export class NoDefaultKeyError extends Error {
+export class NoDefaultKeyError extends WIDSError {
   constructor(m = 'No default key is set') {
     super(m);
   }
@@ -111,7 +114,7 @@ export class NoDefaultKeyError extends Error {
   name = 'NoDefaultKeyError';
 }
 
-export class KeyOwnerMismatchError extends Error {
+export class KeyOwnerMismatchError extends WIDSError {
   constructor(m = 'Specified user does not match specified key') {
     super(m);
   }
@@ -119,7 +122,7 @@ export class KeyOwnerMismatchError extends Error {
   name = 'KeyOwnerMismatchError';
 }
 
-export class ServerNotReadyError extends Error {
+export class ServerNotReadyError extends WIDSError {
   constructor(m = 'Server not ready') {
     super(m);
   }
@@ -127,8 +130,8 @@ export class ServerNotReadyError extends Error {
   name = 'ServerNotReadyError';
 }
 
-export class TokenResetPasswordInvalid extends Error {
-  constructor(m = 'Password reset token is invalid.') {
+export class TokenResetPasswordInvalid extends WIDSError {
+  constructor(m = 'Password reset token is invalid') {
     super(m);
   }
 

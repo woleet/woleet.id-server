@@ -30,7 +30,7 @@
   <ng-template #loading>Loading...<br></ng-template>
   <mat-card-actions *ngIf="(config$ | async) as config; else loading">
     <button mat-raised-button color="primary" (click)="submit()"
-      [disabled]="(formLocked$ | async) || (config.websClientURL == form.value) || (form.invalid)">
+      [disabled]="(formLocked$ | async) || (config.webClientURL == form.value) || (form.invalid)">
       SAVE
     </button>
     <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>

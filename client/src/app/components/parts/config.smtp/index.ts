@@ -12,13 +12,12 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
 
   formLocked$: Observable<boolean>;
   formValid$: BehaviorSubject<boolean>;
-  useSMTP$: BehaviorSubject<boolean>;
+  enableSMTP$: BehaviorSubject<boolean>;
 
   config$: Observable<ApiServerConfig>;
 
   formSMTP: FormGroup;
-  _useSMTP: boolean;
-  reveal = false;
+  enableSMTP: boolean;
   changed = false;
 
   private onDestroy: EventEmitter<void>;
@@ -35,7 +34,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
     const config$ = this.config$ = this.configService.getConfig();
 
     this.formLocked$ = this.configService.isDoingSomething();
-    this.useSMTP$ = new BehaviorSubject(true);
+    this.enableSMTP$ = new BehaviorSubject(true);
     this.formValid$ = new BehaviorSubject(false);
 
     this.registerSubscription(config$.subscribe((config) => {
@@ -43,7 +42,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
         return;
       }
 
-      this.useSMTP$.next(config.useSMTP);
+      this.enableSMTP$.next(config.enableSMTP);
 
       this.formSMTP.get('SMTPConfig').setValue(config.SMTPConfig || '');
 
@@ -69,18 +68,15 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
   }
 
   update() {
-    const useSMTP = this._useSMTP;
+    const enableSMTP = this.enableSMTP;
 
     const SMTPConfig = this.formSMTP.get('SMTPConfig').value || null;
-    this.configService.update({
-      useSMTP,
-      SMTPConfig
-    });
+    this.configService.update({ enableSMTP, SMTPConfig });
   }
 
-  updateSMTPOption(useSMTP) {
-    this._useSMTP = useSMTP;
-    this.useSMTP$.next(useSMTP);
+  updateSMTPOption(enableSMTP) {
+    this.enableSMTP = enableSMTP;
+    this.enableSMTP$.next(enableSMTP);
     this.formValid$.next(this.isFormValid());
     this.changed = true;
   }

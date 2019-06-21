@@ -32,8 +32,8 @@ class ServerEventAccess extends AbstractInstanceAccess<InternalServerEventObject
   handleError(err: any) {
   }
 
-  async createMany(evts: ServerEventCreate[]): Promise<Instance<InternalServerEventObject>[]> {
-    return this.model.bulkCreate(evts);
+  async createMany(events: ServerEventCreate[]): Promise<Instance<InternalServerEventObject>[]> {
+    return this.model.bulkCreate(events);
   }
 
   async getByType(type, opt: ListOptions): Promise<Instance<InternalServerEventObject>[]> {
@@ -45,7 +45,6 @@ class ServerEventAccess extends AbstractInstanceAccess<InternalServerEventObject
       paranoid: !opt.full
     });
   }
-
 }
 
 export const ServerEvent = new ServerEventAccess();

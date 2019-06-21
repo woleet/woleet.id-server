@@ -5,7 +5,6 @@ import { TrackById } from '../../util';
 import { UserService } from '@services/user';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { Subscription } from 'rxjs';
-import { DialogEnrolMailComponent } from '@components/parts/dialog-enrol-mail';
 import { MatDialog } from '@angular/material';
 
 @Component({
@@ -21,19 +20,22 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
 
   formOpened = false;
   externalFormOpened = false;
+  enrollFormOpened = false;
 
+  enableSMTP: boolean;
   contactAvailable: boolean;
-  useSMTP: boolean;
+  proofDeskAvailable: boolean;
   webClientURL: string;
+
   email: string;
+
   errorMsg: string;
-  isProofDeskAvailable = false;
 
   private onDestroy: EventEmitter<void>;
 
   constructor(private keyService: KeyService, private userService: UserService,
-    private route: ActivatedRoute, private configService: ConfigService,
-    public dialog: MatDialog) {
+              private route: ActivatedRoute, private configService: ConfigService,
+              public dialog: MatDialog) {
     super();
     this.userId = this.route.snapshot.params.id;
     this.user$ = this.userService.getById(this.userId);
@@ -46,9 +48,9 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
       if (!config) {
         return;
       }
-      this.useSMTP = config.useSMTP;
-      this.isProofDeskAvailable = (!!config.proofDeskAPIToken || !!config.proofDeskAPIURL);
-      config.contact ? this.contactAvailable = true : this.contactAvailable = false;
+      this.enableSMTP = config.enableSMTP;
+      this.contactAvailable = !!config.contact;
+      this.proofDeskAvailable = config.enableProofDesk;
       this.webClientURL = config.webClientURL;
     }));
     this.user$.then((user) => {
@@ -69,18 +71,7 @@ export class UserDetailPageComponent extends TrackById implements OnInit {
     this.user$ = this.userService.getById(this.userId);
   }
 
-  async sendEnrollmentMail() {
-    try {
-      await this.userService.keyEnrollment(this.email);
-    } catch (err) {
-      this.errorMsg = err.error.message;
-    }
-    this.dialog.open(DialogEnrolMailComponent, {
-      width: '250px'
-    });
-  }
-
   canEnroll(): Boolean {
-    return (this.useSMTP && this.webClientURL && this.contactAvailable && this.isProofDeskAvailable);
+    return (this.enableSMTP && this.webClientURL && this.contactAvailable && this.proofDeskAvailable);
   }
 }

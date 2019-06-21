@@ -1,0 +1,22 @@
+FROM node:10.9.0-alpine
+
+RUN mkdir -p /build/client
+
+COPY client/package.json /build/client
+COPY client/package-lock.json /build/client
+
+RUN cd /build/client && npm i
+
+COPY client /build/client
+COPY types /build/types
+
+RUN cd /build/client && \
+    npm run postinstall && \
+    npm run build:prod
+
+
+# https://docs.docker.com/develop/develop-images/multistage-build/
+FROM nginx:mainline-alpine
+
+COPY --from=0 /build/client/dist/client /usr/share/nginx/html
+COPY --from=0 /build/client/nginx /etc/nginx

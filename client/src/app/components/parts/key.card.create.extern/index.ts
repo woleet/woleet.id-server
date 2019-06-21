@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { ExternalKeyService } from '@services/key';
+import { Device, ExternalKeyService } from '@services/key';
 import { addressValidator, ErrorMessageProvider, nextYear } from '@components/util';
 
 @Component({
@@ -11,7 +11,7 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
 
   formLocked = false;
   errorMsgs: any[];
-  publicKeyFocused: Boolean;
+  deviceSelected: KeyDeviceEnum | null;
 
   @Input()
   userId: string;
@@ -30,7 +30,11 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
 
   expiration = new FormControl('', []);
 
-  setAsDefault = false;
+  devices: Device[] = [
+    { value: null, viewValue: 'Any' },
+    { value: 'nano', viewValue: 'Ledger Nano S' },
+    { value: 'mobile', viewValue: 'Mobile Device' }
+  ];
 
   constructor(private keyService: ExternalKeyService) {
     super();
@@ -41,10 +45,11 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
     const name = this.keyName.value;
     const publicKey = this.publicKey.value;
     const expiration = +this.expiration.value || undefined;
+    const device = this.deviceSelected;
     let newKey;
 
     try {
-      newKey = await this.keyService.create(this.userId, { name, publicKey, expiration });
+      newKey = await this.keyService.create(this.userId, { name, publicKey, expiration, device });
       this.formLocked = false;
       this.keyName.reset();
       this.reset.emit();

@@ -3,6 +3,7 @@ import { BadRequest } from 'http-errors';
 import { IMiddleware } from 'koa-router';
 
 import * as keySchemas from './key';
+import * as enrollmentSchemas from './enrollment';
 import * as userSchemas from './user';
 import * as miscSchemas from './misc';
 import * as apiTokenSchemas from './api-token';
@@ -10,6 +11,7 @@ import * as serverConfigSchemas from './server-config';
 
 const schemas: { [id: string]: ObjectSchema } = (<any>Object).assign({},
   keySchemas,
+  enrollmentSchemas,
   userSchemas,
   miscSchemas,
   apiTokenSchemas,

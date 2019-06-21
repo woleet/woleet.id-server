@@ -12,6 +12,14 @@
         <mat-error *ngIf="publicKey.invalid">{{ getErrorMessage(publicKey) }}</mat-error>
       </mat-form-field>
     </div>
+    <mat-form-field class="w-100">
+      <mat-label>Hosting device</mat-label>
+      <mat-select [(value)]="deviceSelected">
+        <mat-option *ngFor="let device of devices" [value]="device.value">
+          {{device.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
     <mat-form-field>
       <input matInput [matDatepicker]="picker" [formControl]="expiration" placeholder="Expiration date" disabled>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -21,7 +29,9 @@
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="createKey()"
-      [disabled]="formLocked || keyName.invalid || publicKey.invalid">CREATE</button>
+      [disabled]="formLocked || keyName.invalid || publicKey.invalid">
+      CREATE
+    </button>
     <button mat-button [disabled]="formLocked" (click)="cancelKey()">CANCEL</button>
   </mat-card-actions>
 </mat-card>

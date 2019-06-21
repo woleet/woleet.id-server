@@ -1,4 +1,3 @@
-import { ServerConfigService as ConfigService } from '@services/server-config';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -9,16 +8,16 @@ import { Component, Input, OnInit } from '@angular/core';
 export class LogoComponent implements OnInit {
 
   @Input()
-  logoURL: ApiServerConfig['publicInfo']['logoURL'];
+  logoURL: ApiServerConfig['logoURL'];
 
-  logo: string;
-  defaultLogo: string;
+  currentLogoURL: string;
+  defaultLogoURL: string;
 
-  constructor(private configService: ConfigService) {
+  constructor() {
   }
 
   ngOnInit() {
-    this.defaultLogo = '/assets/logo.svg';
-    this.logo = this.logoURL || this.defaultLogo;
+    this.defaultLogoURL = '/assets/logo.svg';
+    this.currentLogoURL = this.logoURL || this.defaultLogoURL;
   }
 }

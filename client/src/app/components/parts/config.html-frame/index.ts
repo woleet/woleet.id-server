@@ -2,7 +2,6 @@ import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider } from '@components/util';
 import { Observable } from 'rxjs';
-import * as log from 'loglevel';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -40,10 +39,10 @@ export class ConfigHTMLFrameUrlComponent extends ErrorMessageProvider implements
       }
 
       this.editMode = false;
-      this.form.setValue(config.publicInfo.HTMLFrame);
+      this.form.setValue(config.HTMLFrame);
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => subscription.unsubscribe());
   }
 
   ngOnDestroy() {
@@ -52,8 +51,7 @@ export class ConfigHTMLFrameUrlComponent extends ErrorMessageProvider implements
 
   async submit() {
     const HTMLFrame = this.form.value || null;
-    const publicInfo = { HTMLFrame: HTMLFrame };
-    this.configService.update({ publicInfo });
+    this.configService.update({ HTMLFrame });
   }
 
   cancelEdit() {

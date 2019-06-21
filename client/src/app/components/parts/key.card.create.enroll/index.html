@@ -1,0 +1,35 @@
+<mat-card>
+  <mat-card-content>
+    <div>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Key name" [formControl]="enrollmentName" required>
+        <mat-error *ngIf="enrollmentName.invalid">{{ getErrorMessage(enrollmentName) }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row">
+      <mat-form-field class="w-100">
+        <mat-label>Hosting device</mat-label>
+        <mat-select [(value)]="deviceSelected">
+          <mat-option *ngFor="let device of devices" [value]="device.value">
+            {{device.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" [formControl]="expiration" placeholder="Expiration date" disabled>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker startView="year" [startAt]="startDate" disabled="false"></mat-datepicker>
+      <mat-error *ngIf="expiration.invalid">{{ getErrorMessage(expiration) }}</mat-error>
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="createEnrollment()"
+      [disabled]="formLocked || enrollmentName.invalid">CREATE</button>
+    <button mat-button [disabled]="formLocked" (click)="cancelEnrollment()">CANCEL</button>
+  </mat-card-actions>
+</mat-card>
+<div *ngFor="let errorMsg of errorMsgs;">
+  <br>
+  <mat-card *ngIf="errorMsg" class="error-card">{{ errorMsg.message }}</mat-card>
+</div>

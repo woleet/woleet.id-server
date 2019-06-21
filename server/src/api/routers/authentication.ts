@@ -10,7 +10,7 @@ import { cookies, sessionSuffix } from '../../config';
 import { setProviderSession } from '../../controllers/oidc-provider';
 
 /**
- * Authentification
+ * Authentication
  * Request handlers for authentication.
  * @swagger
  *  tags: [authentication]
@@ -25,14 +25,12 @@ const router = new Router();
  */
 router.get('/login', async function (ctx) {
   const basic = auth(ctx.req);
-
   if (!basic) {
     throw new BadRequest();
   }
 
   const { name, pass } = basic;
   const authorization = await createSession(name, pass);
-
   if (!authorization) {
     throw new Unauthorized();
   }
@@ -62,7 +60,9 @@ router.all('/logout', async function (ctx) {
     await delSession(ctx.session.id);
   }
   ctx.cookies.set('session' + sessionSuffix, null);
-  ctx.body = '';
+
+  // Return an empty body
+  ctx.body = null;
 });
 
 export { router };

@@ -44,7 +44,7 @@ export class ConfigKeyExpirationComponent extends ErrorMessageProvider implement
       this.form.setValue(config.keyExpirationOffset);
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsubscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => subscription.unsubscribe());
   }
 
   ngOnDestroy() {
@@ -55,7 +55,7 @@ export class ConfigKeyExpirationComponent extends ErrorMessageProvider implement
     const keyExpirationOffset = this.form.value || null;
     keyExpirationOffset ?
       log.debug('Set default key expiration to', keyExpirationOffset, timestring(keyExpirationOffset))
-      : log.debug('Unset default key expiration.');
+      : log.debug('Unset default key expiration');
     this.configService.update({ keyExpirationOffset });
   }
 

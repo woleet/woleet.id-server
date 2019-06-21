@@ -105,22 +105,23 @@ declare global {
     status: KeyStatusEnum;
     expiration: number;
 
-    /** Hexadecimal represention of the mnemonic phrase */
+    /** Hexadecimal representation of the mnemonic phrase */
     mnemonicEntropy?: string;
-    /** Hexadecimal represention of the mnemonic's initialization vector */
+    /** Hexadecimal representation of the mnemonic's initialization vector */
     mnemonicEntropyIV?: string;
-    /** Hexadecimal represention of the private key */
+    /** Hexadecimal representation of the private key */
     privateKey?: string;
-    /** Hexadecimal represention of the private key's initialization vector */
+    /** Hexadecimal representation of the private key's initialization vector */
     privateKeyIV?: string;
-    /** Boolean to indicate weither the privatekey is compresssed or not */
+    /** Boolean to indicate whether the private key is compressed or not */
     compressed?: boolean;
-    /** Base 58 represention of the public key */
+    /** Base 58 representation of the public key */
     publicKey: string;
 
     userId: string;
     user?: InternalUserObject;
-    holder: 'server' | 'user';
+    holder: KeyHolderEnum;
+    device?: KeyDeviceEnum;
   }
 
   interface ApiFullPostKeyObject extends KeyObject {
@@ -128,15 +129,16 @@ declare global {
     type?: KeyTypeEnum;
     status?: KeyStatusEnum;
     expiration?: number;
-    holder: 'server' | 'user';
+    holder: KeyHolderEnum;
+    device?: KeyDeviceEnum;
 
-    /** Hexadecimal represention of the mnemonic phrase */
+    /** Hexadecimal representation of the mnemonic phrase */
     mnemonicEntropy?: string;
-    /** Hexadecimal represention of the private key */
+    /** Hexadecimal representation of the private key */
     privateKey?: string;
-    /** Boolean to indicate weither the privatekey is compresssed or not */
+    /** Boolean to indicate whether the private key is compressed or not */
     compressed?: boolean;
-    /** Base 58 represention of the public key */
+    /** Base 58 representation of the public key */
     publicKey: string;
     /** Reference to the owner of the key */
     userId: string;
@@ -235,25 +237,25 @@ declare global {
     occurredAt?: Date;
   }
 
-  /* Config */
+  /* Server config */
 
   interface InternalServerConfigObject extends ServerConfig {
     version: number;
     identityURL: string;
-    publicInfo?: {
-      logoURL?: string;
-      HTMLFrame?: string;
-    }
+    logoURL?: string;
+    HTMLFrame?: string;
     defaultKeyId: string;
     defaultKey?: InternalKeyObject;
     fallbackOnDefaultKey: boolean;
     allowUserToSign: boolean;
+
     // Open ID Connect config
-    useOpenIDConnect: boolean;
+    enableOpenIDConnect: boolean;
     openIDConnectURL?: string;
     openIDConnectClientId?: string;
     openIDConnectClientSecret?: string;
     openIDConnectClientRedirectURL?: string;
+
     // Open ID Connect Provider config
     OIDCPInterfaceURL?: string;
     OIDCPProviderURL?: string;
@@ -263,42 +265,43 @@ declare global {
 
     enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
+
     // SMTP config
-    useSMTP?: boolean;
+    enableSMTP?: boolean;
     SMTPConfig?: string;
     webClientURL?: string;
+
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
     mailKeyEnrollmentTemplate?: string;
-    // TCU
-    TCU?: {
-      toDefault?: boolean;
-      data?: string;
-    }
+
     // Admin contact
     contact?: string;
+
+    organizationName?: string;
+
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
-    proofDeskAPIIsValid?: number;
+    enableProofDesk?: boolean;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
     identityURL?: string;
-    publicInfo?: {
-      logoURL?: string;
-      HTMLFrame?: string;
-    }
+    logoURL?: string;
+    HTMLFrame?: string;
     defaultKeyId?: string;
     fallbackOnDefaultKey?: boolean;
     allowUserToSign?: boolean;
+
     // Open ID Connect config
-    useOpenIDConnect?: boolean;
+    enableOpenIDConnect?: boolean;
     openIDConnectURL?: string;
     openIDConnectClientId?: string;
     openIDConnectClientSecret?: string;
     openIDConnectClientRedirectURL?: string;
+
     // Open ID Connect Provider config
     OIDCPInterfaceURL?: string;
     OIDCPProviderURL?: string;
@@ -308,42 +311,43 @@ declare global {
 
     enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
+
     // SMTP config
-    useSMTP?: boolean;
+    enableSMTP?: boolean;
     SMTPConfig?: string;
     webClientURL?: string;
+
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
     mailKeyEnrollmentTemplate?: string;
-    // TCU
-    TCU?: {
-      toDefault?: boolean;
-      data?: string;
-    }
+
     // Admin contact
     contact?: string;
+
+    organizationName?: string;
+
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
-    proofDeskAPIIsValid?: number;
+    enableProofDesk?: boolean;
   }
 
   interface ServerConfigCreate extends ServerConfig {
     identityURL: string;
-    publicInfo?: {
-      logoURL?: string;
-      HTMLFrame?: string;
-    }
+    logoURL?: string;
+    HTMLFrame?: string;
     defaultKeyId: string;
     fallbackOnDefaultKey?: boolean;
     allowUserToSign?: boolean;
+
     // Open ID Connect config
-    useOpenIDConnect?: boolean;
+    enableOpenIDConnect?: boolean;
     openIDConnectURL?: string;
     openIDConnectClientId?: string;
     openIDConnectClientSecret?: string;
     openIDConnectClientRedirectURL?: string;
+
     // Open ID Connect Provider config
     OIDCPInterfaceURL?: string;
     OIDCPProviderURL?: string;
@@ -353,39 +357,38 @@ declare global {
 
     enrollmentExpirationOffset?: string;
     keyExpirationOffset?: string;
+
     // SMTP config
-    useSMTP?: boolean;
+    enableSMTP?: boolean;
     SMTPConfig?: string;
     webClientURL?: string;
+
     // Mail template
     mailResetPasswordTemplate?: string;
     mailOnboardingTemplate?: string;
     mailKeyEnrollmentTemplate?: string;
-    // TCU
-    TCU?: {
-      toDefault?: boolean;
-      data?: string;
-    }
+
     // Admin contact
     contact?: string;
+
+    organizationName?: string;
+
     // ProofDesk config
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
-    proofDeskAPIIsValid?: number;
+    enableProofDesk?: boolean;
   }
 
   /* Enrollment */
 
-  interface InternalEnrollmentObject extends EnrollmentObject {
-    id: string;
+  interface InternalEnrollmentObject extends EnrollmentObject, CommonInternalProperties {
     userId: string;
     expiration: number;
+    name: string;
+    device?: KeyDeviceEnum;
   }
 
   interface SequelizeEnrollmentObject extends Instance<InternalEnrollmentObject> {
-  }
-
-  interface ApiPostEnrollmentObject extends EnrollmentObject {
   }
 
   /* OIDC Provider */

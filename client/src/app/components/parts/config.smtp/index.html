@@ -2,9 +2,9 @@
   <mat-card-title>SMTP configuration</mat-card-title>
   <mat-divider></mat-divider>
   <br>
-  <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="config.useSMTP"
-    (change)="updateSMTPOption(config.useSMTP)" [disabled]="(formLocked$ | async)">
-    Use SMTP
+  <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="config.enableSMTP"
+    (change)="updateSMTPOption(config.enableSMTP)" [disabled]="(formLocked$ | async)">
+    Enable SMTP
   </mat-checkbox>
   <br>
   <br>
@@ -13,14 +13,15 @@
   <form [formGroup]="formSMTP">
     <mat-form-field class="w-100" *ngIf="formSMTP.get('SMTPConfig')  as f">
       <textarea matInput matTooltip="Use JSON format" placeholder="SMTP transport configuration"
-        formControlName="SMTPConfig" (input)="change()" [required]="useSMTP$ | async"></textarea>
+        formControlName="SMTPConfig" (input)="change()" [required]="enableSMTP$ | async"></textarea>
       <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
     </mat-form-field>
     <a href="https://nodemailer.com/smtp/" target="_blank">About SMTP transport configuration</a>
   </form>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="update()"
-      [disabled]="(!changed) || (formLocked$ | async)|| ((useSMTP$ | async) && !(formValid$ | async))">SAVE
+      [disabled]="(!changed) || (formLocked$ | async)|| ((enableSMTP$ | async) && !(formValid$ | async))">
+      SAVE
     </button>
   </mat-card-actions>
 </mat-card>

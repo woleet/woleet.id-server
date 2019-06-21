@@ -3,7 +3,7 @@ import { serverConfig } from '../config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { exit } from '../exit';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, createReadStream, createWriteStream } from 'fs';
 import * as path from 'path';
 import * as https from 'https';
 import { getAgent } from './utils/agent';
@@ -13,9 +13,8 @@ const debug = Debug('id:ctrl:config');
 const { CONFIG_ID } = serverConfig;
 
 let inMemoryConfig: InternalServerConfigObject = null;
-
-let TCUdata: string = 'data:application/pdf;base64,' + readFileSync(
-  path.join(__dirname, '../../assets/custom_TCU.pdf'), { encoding: 'base64' });
+const TCUPath = path.join(__dirname, '../../assets/custom_TCU.pdf');
+const defaultTCUPath = path.join(__dirname, '../../assets/default_TCU.pdf');
 
 function getInMemoryConfig(): InternalServerConfigObject {
   return inMemoryConfig;
@@ -37,55 +36,28 @@ export async function loadServerConfig(): Promise<InternalServerConfigObject> {
 
 export function getServerConfig(): InternalServerConfigObject {
   const config = getInMemoryConfig();
-  if (!config.TCU) {
-    config.TCU = {};
-  }
-  config.TCU.data = TCUdata;
   return config;
+}
+
+// Create a stream to overwrite the current TCU pdf with the new TCU pdf.
+export async function updateTCU(file) {
+  const reader = createReadStream(file.path);
+  const stream = createWriteStream(TCUPath);
+  reader.pipe(stream);
+  console.log('uploading %s -> %s', file.name, stream.path);
+}
+
+// Create a stream to overwrite the current TCU pdf with the default TCU pdf.
+export async function defaultTCU() {
+  const reader = createReadStream(defaultTCUPath);
+  const stream = createWriteStream(TCUPath);
+  reader.pipe(stream);
+  log.info('Reset TCU file to default value');
 }
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   try {
-    up = await checkProofDeskConfigChange(up)
-      // if the verification pass continue with the config update
-      .then(() => up)
-      // else replace the update with the corresponding error (0: for URL error; 1: for token error)
-      // the URL error just verify if the response is a json
-      // TO IMPROVE
-      .catch((err) => {
-        log.error(err);
-        switch (err) {
-          case 0:
-            return { proofDeskAPIIsValid: 0 };
-          case 1:
-            return { proofDeskAPIIsValid: 1 };
-          default:
-            throw err;
-        }
-      });
-  } catch (err) {
-    log.error(err);
-    up = { proofDeskAPIIsValid: 0 };
-  }
-  try {
     const config = Object.assign({}, getInMemoryConfig(), up);
-    if (up.TCU) {
-      if (up.TCU.data) {
-        TCUdata = up.TCU.data;
-        const base64Image = up.TCU.data.split(';base64,').pop();
-        await writeFileSync(path.join(__dirname, '../../assets/custom_TCU.pdf'), Buffer.from(base64Image, 'base64'));
-        log.info('Change TCU file');
-        up.TCU.data = null;
-      }
-      if (up.TCU.toDefault) {
-        TCUdata = 'data:application/pdf;base64,' + await readFileSync(
-          path.join(__dirname, '../../assets/default_TCU.pdf'), { encoding: 'base64' });
-        const base64Image = TCUdata.split(';base64,').pop();
-        await writeFileSync(path.join(__dirname, '../../assets/custom_TCU.pdf'), Buffer.from(base64Image, 'base64'));
-        log.info('Reset TCU file to default value');
-        up.TCU.toDefault = null;
-      }
-    }
     let cfg = await ServerConfig.update(CONFIG_ID, { config });
     if (!cfg) {
       debug('No config to update, will set', config);
@@ -96,6 +68,7 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
     await checkOIDCConfigChange(up);
     await checkOIDCPConfigChange(up);
     await checkSMTPConfigChange(up);
+    await checkProofDeskConfigChange(up);
     return getServerConfig();
   } catch (err) {
     exit('FATAL: Failed update the server configuration.', err);
@@ -133,7 +106,7 @@ function registrationFunctionFactory(name) {
 }
 
 async function checkOIDCConfigChange(up: ServerConfigUpdate) {
-  if (up.useOpenIDConnect !== undefined
+  if (up.enableOpenIDConnect !== undefined
     || up.openIDConnectURL
     || up.openIDConnectClientId
     || up.openIDConnectClientSecret
@@ -144,7 +117,7 @@ async function checkOIDCConfigChange(up: ServerConfigUpdate) {
       await fns.updateOIDCClient();
     } catch (err) {
       log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
-      return setServerConfig({ useOpenIDConnect: false });
+      return setServerConfig({ enableOpenIDConnect: false });
     }
   }
 }
@@ -175,13 +148,13 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
       await OIDCPSafeReboot();
     } catch (err) {
       log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
-      return setServerConfig({ useOpenIDConnect: false });
+      return setServerConfig({ enableOpenIDConnect: false });
     }
   }
 }
 
 async function checkSMTPConfigChange(up: ServerConfigUpdate) {
-  if (up.useSMTP !== undefined
+  if (up.enableSMTP !== undefined
     || up.SMTPConfig
   ) {
     debug('Update SMTP with', { up });
@@ -189,13 +162,13 @@ async function checkSMTPConfigChange(up: ServerConfigUpdate) {
       await fns.updateSMTP();
     } catch (err) {
       log.error('Failed to initialize SMTP, it will be automatically disabled!', err);
-      return setServerConfig({ useSMTP: false });
+      return setServerConfig({ enableSMTP: false });
     }
   }
 }
 
 async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
-  if (up.proofDeskAPIURL || up.proofDeskAPIToken) {
+  if ((up.proofDeskAPIURL || up.proofDeskAPIToken) && up.enableProofDesk) {
     debug('Update ProofDesk Config with', { up });
     const url = new URL(up.proofDeskAPIURL || getServerConfig().proofDeskAPIURL);
     const httpsOptions: any = {
@@ -211,28 +184,32 @@ async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
     if (agent) {
       httpsOptions.agent = agent;
     }
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       https.get(httpsOptions, (res) => {
         let data = '';
         res.on('data', (chunk) => {
           data += chunk;
         });
-        res.on('end', () => {
+        res.on('end', async () => {
           try {
             const json = JSON.parse(data);
             if (!json.error) {
-              resolve(setServerConfig({ proofDeskAPIIsValid: 2 }));
+              resolve();
             } else {
-              log.error('Bad token authentification impossible.');
-              reject(1);
+              log.error(json.error);
+              await setServerConfig({ enableProofDesk: false });
+              resolve();
             }
           } catch (err) {
             log.error('Response is not a JSON, bad URL.');
-            reject(0);
+            await setServerConfig({ enableProofDesk: false });
+            resolve();
           }
         });
-      }).on('error', (err) => {
-        reject(err.message);
+      }).on('error', async (err) => {
+        log.error(err.message);
+        await setServerConfig({ enableProofDesk: false });
+        resolve();
       });
     });
   }

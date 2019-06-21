@@ -18,16 +18,16 @@ const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 export class AppConfigService {
 
   private _appConfig: {
-    OIDCPProviderURL: string, useOpenIDConnect: boolean, hasSession: boolean,
-    publicInfo: {
-      logoURL: string,
-      HTMLFrame: string
-    },
-    user: ApiUserDTOObject, useSMTP: boolean, webClientURL: string,
-    TCU: {
-      data: string
-    },
-    contact: string
+    OIDCPProviderURL: string,
+    enableOpenIDConnect: boolean,
+    hasSession: boolean,
+    logoURL: string,
+    HTMLFrame: string
+    user: ApiUserDTOObject,
+    enableSMTP: boolean,
+    webClientURL: string,
+    contact: string,
+    organizationName: string
   };
   bootOnLogin = false;
 
@@ -39,21 +39,22 @@ export class AppConfigService {
     const params = parse(location.search.substring(1));
     log.debug(`Boot on ${location.href}`);
 
-    if (this.bootOnLogin = location.pathname === '/login') {
+    this.bootOnLogin = location.pathname === '/login';
+    if (this.bootOnLogin) {
       log.debug('Forwarded login parameters', params);
       if (params.origin && params.origin.startsWith('oidcp') && params.redirect) {
         try {
           const redirect = atob(params.redirect);
           store.set(LOGIN_REDIRECT_KEY, redirect);
         } catch {
-          log.warn(`failed to decode`, params.redirect);
+          log.warn(`Failed to decode`, params.redirect);
           errorService.setError('redirect-parameter', new Error(params.redirect));
         }
       }
     }
   }
 
-  async load() {
+  async loadConfig() {
     this._appConfig = null;
 
     log.debug(`Load on ${location.href}`);
@@ -66,7 +67,7 @@ export class AppConfigService {
         const redirect = this.store.get(LOGIN_REDIRECT_KEY);
         if (!config.hasSession) {
           log.debug(`User has no session, clear localstorage`);
-          if (this.bootOnLogin && redirect && config.useOpenIDConnect) {
+          if (this.bootOnLogin && redirect && config.enableOpenIDConnect) {
             log.info(`Automatic use of OIDCP`);
             redirectForOIDC();
           }
@@ -89,16 +90,18 @@ export class AppConfigService {
       ;
   }
 
-  getStartupConfig() {
+  getConfig() {
     return this._appConfig;
   }
 }
 
 const reboot: Subject<void> = new Subject();
+
 @Injectable({ providedIn: 'root' })
 export class BootService {
 
-  constructor(private ngZone: NgZone) { }
+  constructor(private ngZone: NgZone) {
+  }
 
   public static getBootControl() {
     return reboot.asObservable();

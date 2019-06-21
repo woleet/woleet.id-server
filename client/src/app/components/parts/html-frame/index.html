@@ -1,3 +1,3 @@
 <div class="htmlFrameDiv">
-  <div [innerHTML]="frame"></div>
+  <div [innerHTML]="currentHTMLFrame | safeHtml"></div>
 </div>

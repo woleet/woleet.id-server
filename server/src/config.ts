@@ -107,7 +107,7 @@ export const events = {
   typesEnum: [
     'error',
     'signature', 'login', 'config.edit',
-    'enrollment.create',
+    'enrollment.create', 'enrollment.delete', 'enrollment.edit',
     'key.create', 'key.edit', 'key.delete',
     'enrollment.create-signature-request',
     'user.create', 'user.edit', 'user.delete',
@@ -117,10 +117,10 @@ export const events = {
 
 export const serverConfig = {
   default: {
-    version: 9, // datamodel version
+    version: 11, // datamodel version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true,
-    publicInfo: {},
+    organizationName: 'Woleet',
     mailOnboardingTemplate: readFileSync(
       path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), { encoding: 'ascii' }),
     mailResetPasswordTemplate: readFileSync(

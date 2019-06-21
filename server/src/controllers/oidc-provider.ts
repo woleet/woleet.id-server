@@ -50,19 +50,19 @@ async function configure(): Promise<void> {
   debug('Init OIDCP with:\n' + JSON.stringify({ enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL }, null, 2));
 
   if (!enableOIDCP) {
-    return abortInit('enableOIDCP=false, skipping configuration');
+    return abortInit('Skipping OpenID Connect Provider configuration');
   }
 
   if (!OIDCPIssuerURL) {
-    return abortInit('No OIDCPIssuerURL set while Open ID Connect is enabled, skipping configuration');
+    return abortInit('No OIDCPIssuerURL set while OIDCP is enabled, skipping configuration');
   }
 
   if (!OIDCPClients || OIDCPClients.length === 0) {
-    return abortInit('No OIDCPClients set while Open ID Connect is enabled, skipping configuration');
+    return abortInit('No OIDCPClients set while OIDCP is enabled, skipping configuration');
   }
 
   if (!OIDCPInterfaceURL) {
-    return abortInit('No OIDCPInterfaceURL set while Open ID Connect is enabled, skipping configuration');
+    return abortInit('No OIDCPInterfaceURL set while OIDCP is enabled, skipping configuration');
   }
 
   const clients = OIDCPClients.map((client) => Object.assign({}, client, {

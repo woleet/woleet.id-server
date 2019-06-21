@@ -1,0 +1,44 @@
+FROM node:10.9.0-alpine
+
+RUN apk add --no-cache python gcc g++ make bash --virtual .build-deps
+
+# Build
+
+RUN node -v
+RUN npm -v
+
+RUN mkdir -p /build/server-runtime
+COPY server/package.json /build/server-runtime/
+COPY server/package-lock.json /build/server-runtime/
+# Install runtime dependencies only
+RUN cd /build/server-runtime && npm i --production
+
+RUN mkdir -p /build/server
+# Copy dev package.json
+COPY server/package.json /build/server/
+COPY server/package-lock.json /build/server/
+# Install runtime and dev dependencies
+RUN cd /build/server && npm i --ignore-scripts
+
+# Copy sources
+COPY server /build/server
+COPY types /build/types
+
+RUN cd /build/server && npm run build && \
+  mkdir -p /build/app && \
+  mv dist /build/app && \
+  cp package.json /build/app && \
+  cp package-lock.json /build/app && \
+  mv /build/server-runtime/node_modules /build/app/node_modules
+
+
+# https://docs.docker.com/develop/develop-images/multistage-build/
+FROM node:10.9.0-alpine
+
+COPY --from=0 /build/app /usr/src/app
+
+WORKDIR /usr/src/app
+
+EXPOSE 3000
+
+CMD [ "npm", "start" ]

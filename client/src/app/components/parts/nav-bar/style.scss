@@ -5,10 +5,6 @@ $nav-bg: #1d2939;
 $nav-border: 1px solid #e0e0e0;
 
 .logo {
-  background: url('/assets/logo.svg');
-  background-repeat: no-repeat;
-  background-attachment: initial;
-  background-position: center;
   width: 120px;
   height: 28px;
   margin-right: 68px;
@@ -20,32 +16,29 @@ $nav-border: 1px solid #e0e0e0;
 }
 
 mat-toolbar {
-    position: fixed;
-    z-index: 10;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    border-bottom: $nav-border;
-    justify-content: space-between;
-    padding: 0 12px;
-    height: $nav-top-height;
-    min-width: 100%;
-    width: fit-content;
+  position: fixed;
+  z-index: 10;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  border-bottom: $nav-border;
+  justify-content: space-between;
+  padding: 0 12px;
+  height: $nav-top-height;
+  min-width: 100%;
+  width: fit-content;
 }
 
 #main-container {
   padding-top: $nav-top-height;
 }
 
-mat-sidenav-container{
+mat-sidenav-container {
   background-color: #e4e7ea;
   height: 100%;
 }
 
 .sidenav {
-  // $nav-transition: width cubic-bezier(0.4, 0, 0.2, 1) .2s;
-  // transition: $nav-transition;
-
   width: $side-nav-width;
   padding-top: $nav-top-height;
   background-color: $nav-bg;
@@ -91,7 +84,6 @@ mat-sidenav-container{
 .collapse {
   width: 0px;
 }
-
 
 .collapse-button {
   height: 28px;

@@ -67,7 +67,6 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
       throw new DuplicatedUserError(`Duplicated field ${field}`, err);
     }
   }
-
 }
 
 export const User = new UserAccess();

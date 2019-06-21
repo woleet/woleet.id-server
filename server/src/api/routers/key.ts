@@ -2,9 +2,8 @@ import { validate } from '../schemas';
 import * as Router from 'koa-router';
 
 import {
-  createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, getOwner, updateKey
+  createExternalKey, createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, getOwner, updateKey
 } from '../../controllers/key';
-import { externalCreateKey } from '../../controllers/key';
 import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
@@ -35,7 +34,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
     if (key.phrase.split(' ').length < 12) {
       throw new BadRequest('The phrase length must be at least 12 words.');
     } else if (key.phrase.split(' ').length > 50) {
-      throw new BadRequest('the phrase length cannot exceed 50 words.');
+      throw new BadRequest('The phrase length cannot exceed 50 words.');
     }
   }
 
@@ -44,7 +43,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
   try {
     created = await createKey(userId, key);
   } catch (error) {
-    throw new BadRequest(error.toString());
+    throw new BadRequest(error);
   }
 
   event.register({
@@ -64,14 +63,14 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
  * @swagger
  *  operationId: createExternal-key
  */
-router.post('/user/:userId/extern-key', vuid, validate.body('createKey'), async function (ctx) {
+router.post('/user/:userId/extern-key', vuid, validate.body('createExternKey'), async function (ctx) {
   const { userId } = ctx.params;
-  const key: ApiPostKeyObject = ctx.request.body;
+  const key: ApiPostExternalKeyObject = ctx.request.body;
 
   let created;
 
   try {
-    created = await externalCreateKey(userId, key);
+    created = await createExternalKey(userId, key);
   } catch (error) {
     throw new BadRequest(error);
   }

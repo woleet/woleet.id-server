@@ -1,6 +1,5 @@
 import { loadServerConfig, setServerConfig } from './controllers/server-config';
 import * as log from 'loglevel';
-
 import * as Debug from 'debug';
 import { Key } from './database';
 import { randomBytes } from 'crypto';
@@ -19,10 +18,9 @@ export async function initServerConfig() {
     log.info(`Server configuration successfully restored`);
     debug(JSON.stringify(config, null, 2));
 
-    const key = await Key.getAny();
-
+    const key = await Key.model.findOne({ where: { holder: 'server' } });
     if (!key) {
-      log.warn('Not any key in database, cannot check secret restoration');
+      log.warn('No private key in the database, cannot check secret restoration');
       return;
     }
 
@@ -32,10 +30,6 @@ export async function initServerConfig() {
     } catch (err) {
       log.warn(err.message);
       throw new Error('Secret is not the same that the previously set one');
-    }
-    if (!config.publicInfo) {
-      log.warn('the public information is set as an empty object.');
-      config.publicInfo = {};
     }
     if (!config.mailOnboardingTemplate) {
       log.warn('The onboarding template is set to default.');
@@ -51,6 +45,10 @@ export async function initServerConfig() {
       log.warn('The key enrollment mail template is set to default.');
       config.mailKeyEnrollmentTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultKeyEnrollmentMailTemplate.html'), { encoding: 'ascii' });
+    }
+    if (!config.organizationName) {
+      log.warn('The organization name is set as Woleet.');
+      config.organizationName = 'Woleet';
     }
   } else {
     log.warn('No configuration found in database, creating a new one along with a default admin user...');

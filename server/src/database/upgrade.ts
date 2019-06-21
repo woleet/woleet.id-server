@@ -2,14 +2,15 @@ import { Sequelize } from 'sequelize';
 import * as log from 'loglevel';
 import * as read from 'read';
 import * as crypto from 'crypto';
-import { ServerConfig, Key, APIToken } from '.';
-import { serverConfig, secretEnvVariableName, secureModule } from '../config';
+import { APIToken, Key, ServerConfig } from '.';
+import { secretEnvVariableName, secureModule, serverConfig } from '../config';
 import { promisify } from 'util';
 
 const { CONFIG_ID } = serverConfig;
 let doPostUpgrade3 = false;
 let doPostUpgrade5 = false;
 let doPostUpgrade8 = false;
+let doPostUpgrade10 = false;
 
 async function getConfig() {
   await ServerConfig.model.sync();
@@ -27,7 +28,6 @@ async function upgrade1(sequelize) {
     const [model] = await sequelize.query(`SELECT * FROM "ServerConfigs" AS config WHERE config.id = '${serverConfig.CONFIG_ID}';`);
     old = model[0];
   } catch {
-
   }
 
   if (old) {
@@ -45,12 +45,13 @@ async function upgrade1(sequelize) {
     await ServerConfig.create({ config, createdAt, updatedAt });
 
     log.warn('Dropping old configuration table...');
-    const [drop] = await sequelize.query('Drop TABLE "ServerConfigs";');
+    await sequelize.query('DROP TABLE "ServerConfigs";');
   }
 }
 
 async function upgrade2(sequelize) {
   log.warn('Checking for update of the "keys" model...');
+
   const config = await getConfig();
   if (config && !config.version) {
     log.warn('Need to add "expiration" column to the "keys" table');
@@ -133,7 +134,6 @@ async function upgrade7(sequelize) {
   }
 
   const { config } = cfg.toJSON();
-  log.info({ config });
   if (config.version < 7) {
     log.warn('Need to add "tokenResetPassword" column to the "users" table');
     const tokenResetPassword = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "tokenResetPassword" VARCHAR;`);
@@ -180,12 +180,60 @@ async function upgrade9(sequelize) {
   try {
     old = await sequelize.query(`SELECT * FROM "Onboarding";`);
   } catch {
-
   }
 
   if (old) {
     log.warn('Rename Onboarding table to Enrollment...');
     const [rename] = await sequelize.query('ALTER TABLE "Onboarding" RENAME TO "Enrollment";');
+  }
+}
+
+async function upgrade10(sequelize) {
+  log.warn('Checking for update 5 of the "keys" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 10) {
+    doPostUpgrade10 = true;
+    log.warn('Need to add "device" column to the "key" table');
+    const deviceKey = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "device" VARCHAR;`);
+    log.debug(deviceKey);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 10 }) });
+  }
+}
+
+async function upgrade11(sequelize) {
+  log.warn('Checking for  update 1 of the "enrollment" model and server-event type...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  let enrollmentExist = false;
+  if (!cfg) {
+    return;
+  }
+  try {
+    await sequelize.query(`SELECT * FROM "Enrollment";`);
+    enrollmentExist = true;
+  } catch { }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 11) {
+    if (enrollmentExist) {
+      log.warn('Need to add "device" and "name" column to the "enrollments" table');
+      const deviceEnroll = await sequelize.query(`ALTER TABLE "Enrollments" ADD COLUMN "device" VARCHAR;`);
+      log.debug(deviceEnroll);
+      const nameEnroll = await sequelize.query(`ALTER TABLE "Enrollments" ADD COLUMN "name" VARCHAR;`);
+      log.debug(nameEnroll);
+    }
+    log.warn('Need to add "enrollment.edit" and "enrollment.delete" type to the "serverEvent" table');
+    const deleteEnrollmentServerEvent = await sequelize.query(`ALTER TYPE "enum_serverEvents_type" ADD VALUE 'enrollment.delete';`);
+    log.debug(deleteEnrollmentServerEvent);
+    const editEnrollmentServerEvent = await sequelize.query(`ALTER TYPE "enum_serverEvents_type" ADD VALUE 'enrollment.edit';`);
+    log.debug(editEnrollmentServerEvent);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 11 }) });
   }
 }
 
@@ -199,6 +247,8 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade7(sequelize);
   await upgrade8(sequelize);
   await upgrade9(sequelize);
+  await upgrade10(sequelize);
+  await upgrade11(sequelize);
 }
 
 async function postUpgrade3() {
@@ -274,7 +324,6 @@ async function postUpgrade3() {
 }
 
 async function postUpgrade8() {
-  log.warn('');
 
   if (doPostUpgrade8 === true) {
     await Key.model.sync();
@@ -286,6 +335,25 @@ async function postUpgrade8() {
       log.warn(`Updating key ${key.get('id')} ...`);
       {
         key.set('holder', 'server');
+      }
+      await key.save();
+      log.debug(`Updated key ${key.get('id')}`);
+    }
+  }
+}
+
+async function postUpgrade10() {
+
+  if (doPostUpgrade10 === true) {
+    await Key.model.sync();
+    const keys = await Key.model.findAll({ paranoid: false });
+
+    log.warn(`${keys.length} keys to update...`);
+
+    for (const key of keys) {
+      log.warn(`Updating key ${key.get('id')} ...`);
+      if (key.get('holder') === 'server') {
+        key.set('device', 'server');
       }
       await key.save();
       log.debug(`Updated key ${key.get('id')}`);
@@ -333,6 +401,7 @@ async function afterInitUpgrade5() {
 export async function postUpgrade(sequelize: Sequelize) {
   await postUpgrade3();
   await postUpgrade8();
+  await postUpgrade10();
 }
 
 /**

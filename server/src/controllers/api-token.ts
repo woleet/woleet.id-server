@@ -34,7 +34,7 @@ export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject): P
 }
 
 export async function getAPITokenById(id: string): Promise<InternalAPITokenObject> {
-  debug('Get apiToken' + id);
+  debug('Get apiToken', id);
 
   const apiToken = await APIToken.getById(id);
 

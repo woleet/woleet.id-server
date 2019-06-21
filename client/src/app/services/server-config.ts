@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { serverURL } from '@services/config';
 import { KeyService } from '@services/key';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -9,10 +9,9 @@ import * as log from 'loglevel';
 export class ServerConfigService {
 
   private _lock = 0;
-  private _lastChecked = 0;
   private isDoingSomething$: BehaviorSubject<boolean>;
 
-  private config$: BehaviorSubject<ApiServerConfig> = null;
+  private config$: BehaviorSubject<ApiServerConfig>;
 
   private defaultKeyId: string;
   private defaultKey$: BehaviorSubject<ApiKeyObject>;
@@ -24,31 +23,9 @@ export class ServerConfigService {
     private http: HttpClient,
     private keyService: KeyService
   ) {
-    this.config$ = new BehaviorSubject(null);
-    this.config$.subscribe((cfg) => {
-      if (cfg) {
-        this.setDefaultKey(cfg.defaultKeyId);
-        this.setDefaultKeyOwner(cfg.defaultKeyId);
-      }
-    });
-
     this.isDoingSomething$ = new BehaviorSubject(false);
     this.defaultKey$ = new BehaviorSubject(null);
     this.defaultKeyOwner$ = new BehaviorSubject(null);
-  }
-
-  getConfig(): Observable<ApiServerConfig> {
-    if (this._lastChecked < (+new Date - 3 * 1000)) {
-      this.incrLock();
-      this._lastChecked = +new Date;
-      this.http.get<ApiServerConfig>(`${serverURL}/server-config`)
-        .subscribe((up) => {
-          log.debug('initialised', up);
-          this.decrLock();
-          this.config$.next(up);
-        });
-    }
-    return this.config$.asObservable();
   }
 
   private setDefaultKey(defaultKeyId) {
@@ -97,6 +74,41 @@ export class ServerConfigService {
     }
   }
 
+  private incrLock() {
+    this.isDoingSomething$.next(++this._lock !== 0);
+  }
+
+  private decrLock() {
+    this.isDoingSomething$.next(--this._lock !== 0);
+  }
+
+  /**
+   * Get a observable singleton on the server configuration.
+   * Automatically trigger the loading of the server configuration at first get.
+   */
+  getConfig(): Observable<ApiServerConfig> {
+
+    // Initialize the singleton used to observe the server configuration
+    if (!this.config$) {
+
+      this.config$ = new BehaviorSubject(null);
+
+      this.config$.subscribe((config) => {
+        if (config) {
+          this.setDefaultKey(config.defaultKeyId);
+          this.setDefaultKeyOwner(config.defaultKeyId);
+        }
+      });
+
+      this.http.get<ApiServerConfig>(`${serverURL}/server-config`)
+        .subscribe((config) => {
+          log.debug('Configuration service initialized');
+          this.config$.next(config);
+        });
+    }
+    return this.config$;
+  }
+
   update(config: ApiServerConfigUpdate): void {
     this.incrLock();
     this.http.put<ApiServerConfig>(`${serverURL}/server-config`, config)
@@ -119,11 +131,48 @@ export class ServerConfigService {
     return this.defaultKeyOwner$.asObservable();
   }
 
-  private incrLock() {
-    this.isDoingSomething$.next(++this._lock !== 0);
+  updateTCU(TCU: File) {
+    const formData = new FormData();
+    formData.append('file', TCU);
+    this.http.post(`${serverURL}/server-config/TCU`, formData, {
+      reportProgress: true,
+      observe: 'events'
+    })
+      .subscribe(events => {
+        if (events.type === HttpEventType.UploadProgress) {
+          log.debug('Upload progress: ', Math.round(events.loaded / events.total * 100) + '%');
+        } else if (events.type === HttpEventType.Response) {
+          log.debug(events);
+        }
+      });
   }
 
-  private decrLock() {
-    this.isDoingSomething$.next(--this._lock !== 0);
+  defaultTCU() {
+    this.http.get(`${serverURL}/server-config/TCU/default`)
+      .subscribe(res => {
+        log.debug(res);
+      });
+  }
+
+  getTCU() {
+    this.http.get(`${serverURL}/assets/custom_TCU.pdf`, { responseType: 'arraybuffer' })
+      .subscribe(res => {
+        const blob = new Blob([res], { type: 'application/pdf' });
+        const blobURL = window.URL.createObjectURL(blob);
+        const tempLink = document.createElement('a');
+        tempLink.style.display = 'none';
+        tempLink.href = blobURL;
+        tempLink.setAttribute('download', 'TCU.pdf');
+        if (typeof tempLink.download === 'undefined') {
+          tempLink.setAttribute('target', '_blank');
+        }
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+      }, error => {
+        log.error('download error:', JSON.stringify(error));
+      }, () => {
+        log.info('Completed file download.');
+      });
   }
 }

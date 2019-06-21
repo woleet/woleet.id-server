@@ -1,11 +1,13 @@
-import { UniqueConstraintError, UUID, UUIDV4, DATE } from 'sequelize';
-import { DuplicatedUserError } from '../../errors';
+import { DATE, ENUM, ForeignKeyConstraintError, STRING, UUID, UUIDV4 } from 'sequelize';
+import { InvalidForeignUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 
 const EnrollmentModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
   userId: { type: UUID },
-  expiration: { type: DATE }
+  expiration: { type: DATE },
+  name: { type: STRING, allowNull: false },
+  device: { type: ENUM(['server', 'nano', 'mobile']), allowNull: true }
 };
 
 class EnrollmentAccess extends AbstractInstanceAccess<InternalEnrollmentObject, ApiPostEnrollmentObject> {
@@ -20,12 +22,10 @@ class EnrollmentAccess extends AbstractInstanceAccess<InternalEnrollmentObject, 
   }
 
   handleError(err: any) {
-    if (err instanceof UniqueConstraintError) {
-      const field = Object.keys(err['fields']);
-      throw new DuplicatedUserError(`Duplicated field ${field}`, err);
+    if (err instanceof ForeignKeyConstraintError) {
+      throw new InvalidForeignUserError();
     }
   }
-
 }
 
 export const Enrollment = new EnrollmentAccess();
