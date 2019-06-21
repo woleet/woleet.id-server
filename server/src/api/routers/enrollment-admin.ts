@@ -6,6 +6,7 @@ import {
 import { validate } from '../schemas';
 import { getServerConfig } from '../../controllers/server-config';
 import { MethodNotAllowed } from 'http-errors';
+import { serializeEnrollment } from '../serialize/enrollment';
 
 /**
  * Key enrollment admin
@@ -56,7 +57,7 @@ router.post('/enrollment', validate.body('createEnrollment'), async function (ct
   });
 
   // Return created enrollment in body
-  ctx.body = created;
+  ctx.body = serializeEnrollment(created);
 });
 
 /**
@@ -78,7 +79,7 @@ router.put('/enrollment/:id', async function (ctx) {
     data: id
   });
 
-  ctx.body = updated;
+  ctx.body = serializeEnrollment(updated);
 });
 
 /**
@@ -88,7 +89,7 @@ router.put('/enrollment/:id', async function (ctx) {
  */
 router.get('/enrollment/list', async function (ctx) {
   const enrollments = await getAllEnrollment();
-  ctx.body = enrollments;
+  ctx.body = enrollments.map(serializeEnrollment);
 });
 
 router.delete('/enrollment/:id', async function (ctx) {
@@ -104,7 +105,7 @@ router.delete('/enrollment/:id', async function (ctx) {
     data: id
   });
 
-  ctx.body = deleted;
+  ctx.body = serializeEnrollment(deleted);
 });
 
 /**
@@ -116,7 +117,7 @@ router.get('/enrollment/:id', async function (ctx) {
   const { id } = ctx.params;
   const get = await getEnrollmentById(id);
 
-  ctx.body = get;
+  ctx.body = serializeEnrollment(get);
 });
 
 export { router };

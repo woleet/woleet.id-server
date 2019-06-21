@@ -5,10 +5,11 @@ import { AbstractInstanceAccess } from './abstract';
 const EnrollmentModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
   userId: { type: UUID },
-  expiration: { type: DATE },
+  expiration: { type: DATE, allowNull: true },
   name: { type: STRING, allowNull: false },
   device: { type: ENUM(['server', 'nano', 'mobile']), allowNull: true },
-  signatureRequestId: {type: STRING, allowNull: true }
+  signatureRequestId: {type: STRING, allowNull: true },
+  keyExpiration: { type: DATE, allowNull: true },
 };
 
 class EnrollmentAccess extends AbstractInstanceAccess<InternalEnrollmentObject, ApiPostEnrollmentObject> {

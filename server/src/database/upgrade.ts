@@ -247,9 +247,11 @@ async function upgrade12(sequelize) {
 
   const { config } = cfg.toJSON();
   if (config.version < 12) {
-    log.warn('Need to add "signatureRequestId" column to the "enrollments" table');
+    log.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
     const signatureRequestIdEnroll = await sequelize.query(`ALTER TABLE "enrollments" ADD COLUMN "signatureRequestId" VARCHAR;`);
     log.debug(signatureRequestIdEnroll);
+    const keyExpiration = await sequelize.query(`ALTER TABLE "enrollments" ADD COLUMN "keyExpiration" TIMESTAMPTZ;`);
+    log.debug(keyExpiration);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 12 }) });
   }
 }

@@ -28,7 +28,7 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
 
   publicKey = new FormControl('', [Validators.required, Validators.minLength(26), Validators.maxLength(35), addressValidator]);
 
-  expiration = new FormControl('', []);
+  expiration = new FormControl({ value: '', disabled: true }, []);
 
   devices: Device[] = [
     { value: null, viewValue: 'Any' },

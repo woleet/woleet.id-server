@@ -33,7 +33,8 @@ export class KeyCreateCardEnrollComponent extends ErrorMessageProvider {
     { value: 'mobile', viewValue: 'Mobile device' }
   ];
 
-  expiration = new FormControl('', []);
+  expiration = new FormControl({ value: '', disabled: true }, []);
+  expirationKey = new FormControl({ value: '', disabled: true }, []);
 
   constructor(private userService: UserService) {
     super();
@@ -44,7 +45,8 @@ export class KeyCreateCardEnrollComponent extends ErrorMessageProvider {
     const name = this.enrollmentName.value;
     const device = this.deviceSelected;
     const expiration = +this.expiration.value || undefined;
-    const enrollment: ApiPostEnrollmentObject = { name, expiration, device, userId: this.userId };
+    const keyExpiration = +this.expirationKey.value || undefined;
+    const enrollment: ApiPostEnrollmentObject = { name, expiration, device, userId: this.userId, keyExpiration };
     let newEnrollment;
 
     try {
