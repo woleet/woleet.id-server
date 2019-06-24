@@ -18,7 +18,7 @@ services:
     volumes:
       - ${WOLEET_ID_SERVER_DATA_DIR:-./db}:/var/lib/postgresql/data:rw
   wid-client:
-    image: ${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}:client
+    image: ${WOLEET_ID_SERVER_REGISTRY:-wids}/client:${WOLEET_ID_SERVER_VERSION:-latest}
     ports:
       # Calls to the server goes through the client's NGINX reverse proxy
       - ${WOLEET_ID_SERVER_API_PORT:-3000}:3000 # client web app + main server API endpoints port
@@ -34,7 +34,7 @@ services:
     networks:
       - client-server
   wid-server:
-    image: ${WOLEET_ID_SERVER_REGISTRY:-woleet-id-server}:server
+    image: ${WOLEET_ID_SERVER_REGISTRY:-wids}/server:${WOLEET_ID_SERVER_VERSION:-latest}
     restart: on-failure
     stdin_open: true
     tty: true
