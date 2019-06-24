@@ -56,6 +56,8 @@ export class AppConfigService {
 
     log.debug(`Load on ${location.href}`);
 
+    // Must use the native way to handle request because this call is done during
+    // the application boot and is used by the authentification service.
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', `${serverURL}/app-config`);
@@ -65,7 +67,6 @@ export class AppConfigService {
       xhr.addEventListener('readystatechange', () => {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
           const config = JSON.parse(xhr.responseText);
-          console.log(config);
           this._appConfig = config;
           const redirect = this.store.get(LOGIN_REDIRECT_KEY);
           if (!config.hasSession) {
