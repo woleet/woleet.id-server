@@ -252,7 +252,12 @@ async function upgrade12(sequelize) {
     log.debug(signatureRequestIdEnroll);
     const keyExpiration = await sequelize.query(`ALTER TABLE "enrollments" ADD COLUMN "keyExpiration" TIMESTAMPTZ;`);
     log.debug(keyExpiration);
-    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 12 }) });
+
+    const configTCUUpdate: any = config;
+    if (configTCUUpdate.TCU) {
+      delete configTCUUpdate.TCU;
+    }
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(configTCUUpdate, { version: 12 }) });
   }
 }
 
