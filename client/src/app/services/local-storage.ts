@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as log from 'loglevel';
 
 @Injectable({ providedIn: 'root' })
 export class LocalStorageService {

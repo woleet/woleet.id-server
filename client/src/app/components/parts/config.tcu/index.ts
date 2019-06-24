@@ -2,7 +2,6 @@ import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, ViewChild } fro
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider } from '@components/util';
 import { Observable } from 'rxjs';
-import * as log from 'loglevel';
 
 @Component({
   selector: 'config-tcu',

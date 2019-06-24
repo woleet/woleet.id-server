@@ -16,7 +16,6 @@ export class ServerConfigService {
   private defaultKeyId: string;
   private defaultKey$: BehaviorSubject<ApiKeyObject>;
 
-  private defaultKeyOwnerId: string;
   private defaultKeyOwner$: BehaviorSubject<ApiUserObject>;
 
   constructor(
@@ -64,11 +63,9 @@ export class ServerConfigService {
       this.keyService.getOwner(defaultKeyId)
         .then((user) => {
           this.defaultKeyOwner$.next(user);
-          this.defaultKeyOwnerId = user.id;
         })
         .catch(() => {
           this.defaultKeyOwner$.next(null);
-          this.defaultKeyOwnerId = null;
         })
         .then(() => this.decrLock());
     }

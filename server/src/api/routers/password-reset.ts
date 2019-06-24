@@ -1,14 +1,11 @@
 import * as Router from 'koa-router';
 
 import { copy } from '../../controllers/utils/copy';
-import { validate } from '../schemas';
 import { serializeUser } from '../serialize/user';
 import { updatePassword } from '../../controllers/user';
 import { sendResetPasswordEmail } from '../../controllers/send-email';
 import { store as event } from '../../controllers/server-event';
 import { BadRequest, NotFound, Unauthorized } from 'http-errors';
-
-const vid = validate.param('id', 'uuid');
 
 function hidePassword(user) {
   if (user.password) {

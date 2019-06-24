@@ -3,7 +3,7 @@ import { serverConfig } from '../config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { exit } from '../exit';
-import { readFileSync, writeFileSync, createReadStream, createWriteStream } from 'fs';
+import { createReadStream, createWriteStream } from 'fs';
 import * as path from 'path';
 import * as https from 'https';
 import { getAgent } from './utils/agent';
@@ -167,7 +167,9 @@ async function checkSMTPConfigChange(up: ServerConfigUpdate) {
   }
 }
 
+// Check the ProofDesk configuration validity.
 async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
+  // Check the configuration changed.
   if ((up.proofDeskAPIURL || up.proofDeskAPIToken) && up.enableProofDesk) {
     debug('Update ProofDesk Config with', { up });
     const url = new URL(up.proofDeskAPIURL || getServerConfig().proofDeskAPIURL);

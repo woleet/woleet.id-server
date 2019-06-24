@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '@services/auth';
+import { ActivatedRoute } from '@angular/router';
 
 import * as log from 'loglevel';
 
@@ -9,7 +8,7 @@ export class OIDCProviderInteractionComponent {
 
   errorMsg: string = null;
 
-  constructor(activatedRoute: ActivatedRoute, authService: AuthService, router: Router) {
+  constructor(activatedRoute: ActivatedRoute) {
     activatedRoute.queryParams.subscribe(async (params) => {
       log.debug('Forward oauth parameters', params);
     });

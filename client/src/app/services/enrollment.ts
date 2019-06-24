@@ -13,7 +13,7 @@ export class EnrollmentService {
     return this.http.get<ApiUserObject>(`${serverURL}/enrollment/${enrollmentId}/user`);
   }
 
-  createTCUSignatureRequest(enrollmentId: string, email: string): Observable<Object> {
+  createTCUSignatureRequest(enrollmentId: string): Observable<Object> {
     return this.http.post<boolean>(`${serverURL}/enrollment/${enrollmentId}/create-signature-request`, null);
   }
 }

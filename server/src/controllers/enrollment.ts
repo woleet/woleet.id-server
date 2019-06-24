@@ -95,6 +95,10 @@ export async function getTCUHash(): Promise<string> {
   return hash.digest('hex');
 }
 
+/**
+ * Create a signature request in ProofDesk with the current TCU hash and the enrolled user as the only authorized signee
+ * @param enrollmentId the enrollment identifiant
+ */
 export async function createSignatureRequest(enrollmentId): Promise<any> {
   const config = getServerConfig();
   const user = await getEnrollmentUser(enrollmentId);
@@ -119,6 +123,8 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
       {
         "commonName": "${user.x500CommonName}",
         "email": "${user.email}",
+        "phone": ${user.phone ? '"' + user.phone + '"' : null},
+        "countryCallingCode": ${user.countryCallingCode ? '"' + user.countryCallingCode + '"' : null},
         "device": ${enrollment.device ? '"' + enrollment.device.toUpperCase() + '"' : null}
       }],
       "public": false,
