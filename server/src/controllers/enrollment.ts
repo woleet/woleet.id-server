@@ -121,6 +121,7 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
         "email": "${user.email}",
         "device": ${enrollment.device ? '"' + enrollment.device.toUpperCase() + '"' : null}
       }],
+      "public": false,
       "name": "${getServerConfig().organizationName} Signature Service TCU.pdf",
       "hashToSign": "${hashTCU}"
     }`;
@@ -219,9 +220,6 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
   const device = signeeDevice || enrollment.device || 'mobile';
   const expiration = enrollment.keyExpiration;
   try {
-
-    // Ensure the signature anchor created by the signature request is private
-    await setAnchorProperties(signatureRequest, `{ "public": false }`);
 
     // Create a new external key: this must be done before setting the identity URL on the signature anchor,
     // so that the public key can be resolved through the identity URL
