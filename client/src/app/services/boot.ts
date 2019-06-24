@@ -1,7 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Http, Response } from '@angular/http';
-import { map } from 'rxjs/operators';
 
 import * as log from 'loglevel';
 import { serverURL } from './config';
@@ -32,7 +30,6 @@ export class AppConfigService {
   bootOnLogin = false;
 
   constructor(
-    private http: Http,
     private errorService: ErrorService,
     private store: LocalStorageService) {
 
@@ -59,35 +56,43 @@ export class AppConfigService {
 
     log.debug(`Load on ${location.href}`);
 
-    return this.http.get(`${serverURL}/app-config`, { withCredentials: true })
-      .pipe(map((res: Response) => res.json()))
-      .toPromise()
-      .then(async (config: any) => {
-        this._appConfig = config;
-        const redirect = this.store.get(LOGIN_REDIRECT_KEY);
-        if (!config.hasSession) {
-          log.debug(`User has no session, clear localstorage`);
-          if (this.bootOnLogin && redirect && config.enableOpenIDConnect) {
-            log.info(`Automatic use of OIDCP`);
-            redirectForOIDC();
-          }
-        } else {
-          log.debug('User has a session, checking for redirect request...');
-          if (this.bootOnLogin && redirect) {
-            redirectForOIDCProvider(this.store, config, redirect);
-          }
-        }
-      })
-      .catch((err: any) => {
-        if (err.status === 0 || err.status > 499) {
-          this.errorService.setError(switchNetworkError(err), err);
-          return Promise.resolve();
-        }
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', `${serverURL}/app-config`);
 
-        log.error('Failed to get initial configuration', err);
-        return Promise.reject();
-      })
-      ;
+      xhr.withCredentials = true;
+
+      xhr.addEventListener('readystatechange', () => {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          const config = JSON.parse(xhr.responseText);
+          console.log(config);
+          this._appConfig = config;
+          const redirect = this.store.get(LOGIN_REDIRECT_KEY);
+          if (!config.hasSession) {
+            log.debug(`User has no session, clear localstorage`);
+            if (this.bootOnLogin && redirect && config.enableOpenIDConnect) {
+              log.info(`Automatic use of OIDCP`);
+              redirectForOIDC();
+            }
+          } else {
+            log.debug('User has a session, checking for redirect request...');
+            if (this.bootOnLogin && redirect) {
+              redirectForOIDCProvider(this.store, config, redirect);
+            }
+          }
+          resolve(this._appConfig);
+        } else if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 0 || xhr.status > 499) {
+            this.errorService.setError(switchNetworkError(xhr.response), xhr.response);
+            resolve();
+          }
+
+          log.error('Failed to get initial configuration', xhr.response);
+          reject();
+        }
+      });
+      xhr.send(null);
+    });
   }
 
   getConfig() {
