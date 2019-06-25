@@ -15,7 +15,7 @@ start() {
   docker-compose up -d
 
   # If WOLEET_ID_SERVER_ENCRYPTION_SECRET it not set, attaching to the server's container to enter it via CLI
-  if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]
+  if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
   then
     local server
     server=$(docker ps | grep woleetid-server_wid-server_1 | cut -d' ' -f 1)
