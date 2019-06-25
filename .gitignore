@@ -30,3 +30,6 @@ db
 
 # Dump
 dump*
+
+# env file
+env.sh

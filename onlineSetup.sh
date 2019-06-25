@@ -211,18 +211,34 @@ installDockerCompose() {
 }
 
 installWids() {
-  install_dir="${HOME}/wids"
   echo "Wids will be installed in $install_dir"
   if [ ! -d "$install_dir" ]
   then
     git clone https://github.com/woleet/woleet.id-server.git "$install_dir"
     cd "$install_dir"
   else
-    cd "$install_dir"
-    git fetch
+    if git -C "$install_dir" config --get remote.origin.url | grep "github.com/woleet/woleet.id-server" > /dev/null 2>&1
+    then
+      cd "$install_dir"
+      git fetch
+    else
+      echo "Your already have a non empty directory $install_dir"
+      echo "It does not contains our github repo, and this script is not able to handles that"
+      echo "To fix this issue, either delete or rename your current $install_dir directory"
+      exit 1
+    fi
   fi
   LATEST_TAG=$(git tag | grep -E '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sort | tail -n 1)
   git checkout "$LATEST_TAG"
+  touch env.sh
+  sed -i '/WOLEET_ID_SERVER_VERSION/d' env.sh
+  #TODO
+  printf "%s\n" "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> env.sh
+}
+
+getCheckSSLCerts() {
+  export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE="$HOME/ssl/woleet.crt"
+  export WOLEET_ID_SERVER_HTTP_TLS_KEY="$HOME/ssl/woleet.key"
 }
 
 install() {
@@ -250,16 +266,22 @@ install() {
     installPackage git
   fi
 
+    if ! command_exists openssl
+  then
+    installPackage openssl
+  fi
+
   if ! command_exists docker
   then
     installDocker
     startEnableDocker
-    (
-      set -x
-      $sh_c "usermod -aG docker $USER"
-    )
-    # TODO (Creates a new shell T_T)
-    # newgrp docker
+    if [ "$user" != 'root' ]
+    then
+      (
+        set -x
+        $sh_c "usermod -aG docker $user"
+      )
+    fi
   elif ! isVersionOK "$(docker version --format '{{.Server.Version}}' | grep -E '([[:digit:]]\.?)+' )" "17.09.0"
   then
     echo "Please upgrade your docker version to at least 17.09.0+ before rerunning this script"
@@ -277,20 +299,23 @@ install() {
 
   exit 0
 
+  install_dir="${HOME}/wids"
   installWids
   # Configure
-  export WOLEET_ID_SERVER_ENCRYPTION_SECRET='secret'
-  #export WOLEET_ID_SERVER_DATA_DIR
-  export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE="$HOME/ssl/woleet.crt"
-  export WOLEET_ID_SERVER_HTTP_TLS_KEY="$HOME/ssl/woleet.key"
-  export WOLEET_ID_SERVER_VERSION="latest"
+  getCheckSSLCerts
   # Start
   (
     set -x
     $sh_c "./app.sh start"
   )
 
-  echo "You will have to log out and back to be able to interact with app.sh and docker"
+  if [ "$user" != 'root' ]
+  then
+    echo "Your user: $user has been added to the docker group so that you can user app.sh without sudo"
+    echo "WARNING! depending on your configuration you may not want it as it can provides root access as described here:"
+    echo "https://docs.docker.com/engine/security/security/#docker-daemon-attack-surface"
+    echo "You will have to log out and back to be able to interact with app.sh and docker without sudo"
+  fi
 }
 
 # wrapped up in a function so that we have some protection against only getting

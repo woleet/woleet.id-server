@@ -2,11 +2,16 @@
 
 set -e
 
+if [[ -f env.sh ]]
+then
+  source env.sh
+fi
+
 CLIENT_IMAGE="${WOLEET_ID_SERVER_REGISTRY:-wids}/client:${WOLEET_ID_SERVER_VERSION:-latest}"
 SERVER_IMAGE="${WOLEET_ID_SERVER_REGISTRY:-wids}/server:${WOLEET_ID_SERVER_VERSION:-latest}"
 
 display_usage_app() {
-  echo "usage: $0 [start|stop|restart|build|push|check|logs|backup|restore]"
+  echo "usage: $0 [start|stop|restart|build|push|check|logs|backup|restore|upgrade]"
 }
 
 start() {
@@ -124,6 +129,9 @@ then
 elif [[ "$operation" == "restore" ]]
 then
   restore "$@"
+elif [[ "$operation" == "upgrade" ]]
+then
+
 else
   display_usage_app
   exit 1
