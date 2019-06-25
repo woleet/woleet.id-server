@@ -17,11 +17,11 @@
       </mat-form-field>
     </div>
     <mat-form-field>
-      <input matInput [matDatepicker]="pickerKey" [formControl]="expirationKey" placeholder="Key expiration date"
+      <input matInput [matDatepicker]="pickerKey" [formControl]="keyExpiration" placeholder="Key expiration date"
         disabled>
       <mat-datepicker-toggle matSuffix [for]="pickerKey"></mat-datepicker-toggle>
       <mat-datepicker #pickerKey startView="year" [startAt]="startDate" disabled="false"></mat-datepicker>
-      <mat-error *ngIf="expirationKey.invalid">{{ getErrorMessage(expiration) }}</mat-error>
+      <mat-error *ngIf="keyExpiration.invalid">{{ getErrorMessage(expiration) }}</mat-error>
     </mat-form-field>
     <br>
     <mat-form-field>
