@@ -203,9 +203,8 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
 
   observable
     .subscribe(async (res) => {
-      log.debug(res);
-      return;
-    },
+        return;
+      },
       (error) => {
         log.error(error);
       }
@@ -293,10 +292,12 @@ async function setAnchorProperties(signatureRequest: any, properties: string) {
  * @param user the enrolled user
  */
 async function testEnrollmentExpiration(enrollmentId: string, user: InternalUserObject) {
+
   // Check enrollment expiration date
   const enrollment = await Enrollment.getById(enrollmentId);
   const expiration = enrollment.get('expiration');
   if (expiration && (Date.now() > expiration)) {
+
     // Send a enrollment failure email to the admin and delete the enrollment
     sendEnrollmentFinalizeEmail(user.x500CommonName, null, false);
     deleteEnrollment(enrollmentId);

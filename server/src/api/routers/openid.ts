@@ -105,7 +105,6 @@ router.get('/callback', async function (ctx) {
 
     if (session.user.x500CommonName !== info.name) {
       const user = session.user;
-      log.debug(`User name changed from "${user.x500CommonName}" to "${info.name}"`);
       await updateUser(user.id, { identity: { commonName: info.name } });
       user.x500CommonName = info.name;
     }

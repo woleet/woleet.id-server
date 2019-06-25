@@ -138,7 +138,7 @@ export async function bootOIDCProvider(): Promise<void> {
 }
 
 /**
- * Get all monitored enrollment (the enrollment with an associated signature request), and relaunch them
+ * Restart the monitoring of enrollments' signature requests.
  */
 export async function rebootAllEnrollmentMonitor() {
   Enrollment.getAll().then((enrollments) => {
@@ -146,7 +146,7 @@ export async function rebootAllEnrollmentMonitor() {
       if (enrollment.get('signatureRequestId')) {
         const enrollmentId = enrollment.get('id');
         monitorSignatureRequest(enrollment.get('signatureRequestId'), enrollmentId, enrollmentId);
-        log.info('reboot monitor enrollment id: ', enrollmentId, 'name: ', enrollment.get('name'));
+        log.info('Monitoring enrollment id:', enrollmentId, 'name:', enrollment.get('name'));
       }
     });
   });
