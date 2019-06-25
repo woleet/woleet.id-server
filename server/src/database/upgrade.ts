@@ -178,13 +178,13 @@ async function upgrade9(sequelize) {
 
   let old;
   try {
-    old = await sequelize.query(`SELECT * FROM "Onboarding";`);
+    old = await sequelize.query(`SELECT * FROM "onboardings";`);
   } catch {
   }
 
   if (old) {
-    log.warn('Rename Onboarding table to Enrollment...');
-    const [rename] = await sequelize.query('ALTER TABLE "Onboarding" RENAME TO "Enrollment";');
+    log.warn('Rename onboardings table to enrollments...');
+    const [rename] = await sequelize.query('ALTER TABLE "onboardings" RENAME TO "enrollments";');
   }
 }
 
@@ -215,7 +215,7 @@ async function upgrade11(sequelize) {
     return;
   }
   try {
-    await sequelize.query(`SELECT * FROM "Enrollment";`);
+    await sequelize.query(`SELECT * FROM "enrollments";`);
     enrollmentExist = true;
   } catch { }
 
@@ -223,9 +223,9 @@ async function upgrade11(sequelize) {
   if (config.version < 11) {
     if (enrollmentExist) {
       log.warn('Need to add "device" and "name" column to the "enrollments" table');
-      const deviceEnroll = await sequelize.query(`ALTER TABLE "Enrollments" ADD COLUMN "device" VARCHAR;`);
+      const deviceEnroll = await sequelize.query(`ALTER TABLE "enrollments" ADD COLUMN "device" VARCHAR;`);
       log.debug(deviceEnroll);
-      const nameEnroll = await sequelize.query(`ALTER TABLE "Enrollments" ADD COLUMN "name" VARCHAR;`);
+      const nameEnroll = await sequelize.query(`ALTER TABLE "enrollments" ADD COLUMN "name" VARCHAR;`);
       log.debug(nameEnroll);
     }
     log.warn('Need to add "enrollment.edit" and "enrollment.delete" type to the "serverEvent" table');
@@ -234,6 +234,41 @@ async function upgrade11(sequelize) {
     const editEnrollmentServerEvent = await sequelize.query(`ALTER TYPE "enum_serverEvents_type" ADD VALUE 'enrollment.edit';`);
     log.debug(editEnrollmentServerEvent);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 11 }) });
+  }
+}
+
+async function upgrade12(sequelize) {
+  log.warn('Checking for  update 2 of the "enrollment" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  let enrollmentExist = false;
+  if (!cfg) {
+    return;
+  }
+  try {
+    await sequelize.query(`SELECT * FROM "enrollments";`);
+    enrollmentExist = true;
+  } catch { }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 12) {
+    if (enrollmentExist) {
+      log.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
+      const signatureRequestIdEnroll = await sequelize.query(`ALTER TABLE "enrollments" ADD COLUMN "signatureRequestId" VARCHAR;`);
+      log.debug(signatureRequestIdEnroll);
+      const keyExpiration = await sequelize.query(`ALTER TABLE "enrollments" ADD COLUMN "keyExpiration" TIMESTAMPTZ;`);
+      log.debug(keyExpiration);
+    }
+
+    const configTCUUpdate: any = config;
+    if (configTCUUpdate.TCU) {
+      delete configTCUUpdate.TCU;
+    }
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(configTCUUpdate, { version: 12 }) });
   }
 }
 
@@ -249,6 +284,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade9(sequelize);
   await upgrade10(sequelize);
   await upgrade11(sequelize);
+  await upgrade12(sequelize);
 }
 
 async function postUpgrade3() {

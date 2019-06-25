@@ -9,13 +9,14 @@
     <div fxLayout="row" fxLayoutAlign="space-between start">
       <div fxLayout="column">
         <br>
-        <mat-checkbox matInput placeholder="Set as default key" (checked)="setAsDefault" (change)="setAsDefault=!setAsDefault">
+        <mat-checkbox matInput placeholder="Set as default key" (checked)="setAsDefault"
+          (change)="setAsDefault=!setAsDefault">
           Set as default
         </mat-checkbox>
       </div>
       <div fxLayout="column">
         <mat-form-field>
-          <input matInput [matDatepicker]="picker" [formControl]="expiration" placeholder="Expiration date">
+          <input matInput [matDatepicker]="picker" [formControl]="expiration" placeholder="Key expiration date">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker startView="year" [startAt]="startDate" disabled="false"></mat-datepicker>
           <mat-error *ngIf="expiration.invalid">{{ getErrorMessage(expiration) }}</mat-error>
@@ -24,7 +25,8 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="createKey()" [disabled]="formLocked || keyName.invalid">CREATE</button>
+    <button mat-raised-button color="primary" (click)="createKey()" [disabled]="formLocked || keyName.invalid">CREATE
+    </button>
     <button mat-button [disabled]="formLocked" (click)="cancelKey()">CANCEL</button>
   </mat-card-actions>
 </mat-card>

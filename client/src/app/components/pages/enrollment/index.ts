@@ -5,6 +5,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { EnrollmentService } from '@services/enrollment';
 import { ServerConfigService as ConfigService } from '@services/server-config';
+import { first } from 'rxjs/operators';
 
 /**
  * @title Stepper overview
@@ -23,6 +24,7 @@ export class EnrollmentPageComponent implements OnInit {
   errorMessage = '';
   completed = false;
   isDownloaded = false;
+  isSendingSignatureRequest = false;
   config: any;
 
   constructor(appConfigService: AppConfigService, private route: ActivatedRoute,
@@ -61,12 +63,16 @@ export class EnrollmentPageComponent implements OnInit {
   }
 
   signTCU(): void {
-    this.enrollmentService.createTCUSignatureRequest(this.enrollmentId, this.user.email)
+    this.isSendingSignatureRequest = true;
+    this.enrollmentService.createTCUSignatureRequest(this.enrollmentId)
+    .pipe(first())
       .subscribe(
         () => {
+          this.isSendingSignatureRequest = false;
           this.completed = true;
         },
         (error) => {
+          this.isSendingSignatureRequest = false;
           switch (error.error.name) {
             case 'NotFoundEnrollmentError':
               this.errorMessage = 'This page doesn\'t refer to a signature key registration in progress.';

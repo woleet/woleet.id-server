@@ -1,5 +1,5 @@
 <mat-card *ngIf="!editMode">
-    <mat-card-title>Default key expiration</mat-card-title>
+    <mat-card-title>Default key registration request expiration</mat-card-title>
     <mat-divider></mat-divider>
     <br>
     <div *ngIf="(config$ | async) as config; else loading">
@@ -20,7 +20,7 @@
     <ng-template #loading>Loading...<br></ng-template>
   </mat-card>
   <mat-card *ngIf="editMode">
-    <mat-card-title>Set default key expiration</mat-card-title>
+    <mat-card-title>Set default key registration request expiration</mat-card-title>
     <mat-divider></mat-divider>
     <br>
     <br>
@@ -36,4 +36,3 @@
       <button mat-button (click)="cancelEdit()" [disabled]="(formLocked$ | async)">CANCEL</button>
     </mat-card-actions>
   </mat-card>
-  

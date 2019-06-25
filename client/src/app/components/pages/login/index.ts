@@ -23,10 +23,10 @@ export class LoginPageComponent {
 
   constructor(private authService: AuthService,
               private router: Router,
-              private activatedRoute: ActivatedRoute,
+              activatedRoute: ActivatedRoute,
               private store: LocalStorageService,
-              private errorService: ErrorService,
-              private appConfigService: AppConfigService) {
+              errorService: ErrorService,
+              appConfigService: AppConfigService) {
     this.user = { username: '', password: '' };
     this.lock$ = authService.lock$;
     activatedRoute.queryParams.subscribe(async (params) => {

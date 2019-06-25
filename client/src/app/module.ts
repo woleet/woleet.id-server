@@ -66,7 +66,6 @@ import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagat
 import { OAuthRedirectComponent } from '@pages/oauth-redirect';
 import { OIDCProviderInteractionComponent } from '@pages/oidcp-interaction';
 import { AppConfigService } from '@services/boot';
-import { Http, HttpModule } from '@angular/http';
 import { ConfigOpenIDComponent } from '@components/parts/config.openid';
 import { ConfigOIDCPComponent } from '@components/parts/config.oidcp';
 import { ConfigOIDCPClientComponent } from '@components/parts/config.oidcp-client';
@@ -151,7 +150,6 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
 
     // http
     HttpClientModule,
-    HttpModule,
 
     // nav
     LayoutModule,
@@ -183,7 +181,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
       // Provider for APP_INITIALIZER
       provide: APP_INITIALIZER,
       useFactory: startupServiceFactory,
-      deps: [AppConfigService, Http],
+      deps: [AppConfigService],
       multi: true
     },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },

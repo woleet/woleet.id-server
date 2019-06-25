@@ -386,6 +386,8 @@ declare global {
     expiration: number;
     name: string;
     device?: KeyDeviceEnum;
+    signatureRequestId?: string;
+    keyExpiration?: number;
   }
 
   interface SequelizeEnrollmentObject extends Instance<InternalEnrollmentObject> {

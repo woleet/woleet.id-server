@@ -2,7 +2,6 @@ import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, ViewChild } fro
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { ErrorMessageProvider } from '@components/util';
 import { Observable } from 'rxjs';
-import * as log from 'loglevel';
 
 @Component({
   selector: 'config-tcu',
@@ -52,7 +51,6 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
     if (event.target.files && event.target.files.length > 0) {
       if (event.target.files[0].size < 4000000) {
         const file = <File>event.target.files[0];
-        await console.log(file);
         this.configService.updateTCU(file);
       } else {
         this.errorMessage = 'This file is too large to be uploaded this way.';

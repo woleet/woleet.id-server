@@ -42,7 +42,7 @@ export class ConfigOrganizationNameComponent extends ErrorMessageProvider implem
       this.form.setValue(config.organizationName);
     });
 
-    this.onDestroy.subscribe(() => log.debug('Unsuscribe', subscription.unsubscribe()));
+    this.onDestroy.subscribe(() => subscription.unsubscribe());
   }
 
   ngOnDestroy() {

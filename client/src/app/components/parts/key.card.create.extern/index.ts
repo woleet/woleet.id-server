@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Device, ExternalKeyService } from '@services/key';
 import { addressValidator, ErrorMessageProvider, nextYear } from '@components/util';
+import { ServerConfigService } from '@services/server-config';
+import * as timestring from 'timestring';
+import * as log from 'loglevel';
 
 @Component({
   selector: 'key-card-create-extern',
@@ -28,7 +31,7 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
 
   publicKey = new FormControl('', [Validators.required, Validators.minLength(26), Validators.maxLength(35), addressValidator]);
 
-  expiration = new FormControl('', []);
+  expiration = new FormControl({ value: '', disabled: true }, []);
 
   devices: Device[] = [
     { value: null, viewValue: 'Any' },
@@ -36,8 +39,18 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
     { value: 'mobile', viewValue: 'Mobile Device' }
   ];
 
-  constructor(private keyService: ExternalKeyService) {
+  constructor(private keyService: ExternalKeyService, configService: ServerConfigService) {
     super();
+    configService.getConfig().subscribe((config) => {
+      if (!config || !config.keyExpirationOffset) {
+        return;
+      }
+
+      const now = +new Date;
+
+
+      this.expiration.setValue(new Date(timestring(config.keyExpirationOffset) * 1000 + now));
+    });
   }
 
   async createKey() {

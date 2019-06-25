@@ -8,7 +8,8 @@ const createEnrollment = Joi.object().keys({
   expiration: Joi.number().allow(null),
   userId: Joi.string().required(),
   device: Joi.string().valid(keyDeviceEnum).allow(null),
-  test: Joi.boolean().allow(null)
+  test: Joi.boolean().allow(null),
+  keyExpiration: Joi.number().allow(null),
 });
 
 export { createEnrollment };

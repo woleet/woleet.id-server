@@ -951,7 +951,7 @@ paths:
     get:
       tags:
         - Enrollment
-      summary: Get all enrollment requests.
+      summary: List all key enrollment requests.
       operationId: getAllEnrollments
       responses:
         '200':
@@ -1615,7 +1615,7 @@ components:
             id:
               type: string
               format: uuid
-              description: Added enrollment id
+              description: Enrollment identifier (allocated by the server).
               example: "feb37e23-d04e-4e71-bf53-1f1a75ba3a68"
             userId:
               type: string

@@ -52,7 +52,6 @@ export async function initServerConfig() {
     }
   } else {
     log.warn('No configuration found in database, creating a new one along with a default admin user...');
-    log.debug('Creating an admin user');
     let admin;
     try {
       admin = await createUser({
