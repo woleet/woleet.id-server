@@ -44,7 +44,7 @@ export async function updateTCU(file) {
   const reader = createReadStream(file.path);
   const stream = createWriteStream(TCUPath);
   reader.pipe(stream);
-  console.log('uploading %s -> %s', file.name, stream.path);
+  log.debug('uploading %s -> %s', file.name, stream.path);
 }
 
 // Create a stream to overwrite the current TCU pdf with the default TCU pdf.

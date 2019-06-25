@@ -51,7 +51,6 @@ export class ConfigTCUComponent extends ErrorMessageProvider implements OnInit, 
     if (event.target.files && event.target.files.length > 0) {
       if (event.target.files[0].size < 4000000) {
         const file = <File>event.target.files[0];
-        await console.log(file);
         this.configService.updateTCU(file);
       } else {
         this.errorMessage = 'This file is too large to be uploaded this way.';
