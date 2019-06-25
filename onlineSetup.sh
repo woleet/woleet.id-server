@@ -61,7 +61,7 @@ We are unable to find either "sudo" or "su" available to make this happen.'
   fi
 }
 
-installDocker() {
+setLsbVersionDist() {
   # perform some very rudimentary platform detection
   lsb_dist=""
   # Every system that we officially support has /etc/os-release
@@ -97,26 +97,67 @@ installDocker() {
           ;;
         esac
       fi
+      ;;
+    centos|fedora)
+      ;;
+      *)
+        echo "this script is not available on this OS"
+        exit 1
+      ;;
+  esac
+}
 
+installPackage() {
+  package=$1
+  case "$lsb_dist" in
+    ubuntu|debian)
+      (
+        set -x
+        $sh_c 'apt-get update -qq > /dev/null 2>&1'
+        $sh_c "apt-get install -y -qq $package > /dev/null 2>&1"
+      )
+      ;;
+    centos|fedora)
+      if [ "$lsb_dist" = "fedora" ]
+      then
+        pkg_manager="dnf"
+      else
+        pkg_manager="yum"
+      fi
+      (
+        set -x
+        $sh_c "$pkg_manager install -y -q $package"
+      )
+      ;;
+      *)
+        echo "this script is not available on this OS"
+        exit 1
+      ;;
+  esac
+}
+
+installDocker() {
+  case "$lsb_dist" in
+    ubuntu|debian)
       pre_reqs="apt-transport-https ca-certificates"
-      if ! command -v gpg > /dev/null
+      if ! command -v gpg > /dev/null 2>&1
       then
         pre_reqs="$pre_reqs gnupg"
       fi
       apt_repo="deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$lsb_dist $dist_version stable"
       (
         set -x
-        $sh_c 'apt-get update -qq >/dev/null'
-        $sh_c "apt-get install -y -qq $pre_reqs >/dev/null"
-        $sh_c "curl -fsSL \"https://download.docker.com/linux/$lsb_dist/gpg\" | apt-key add -qq - >/dev/null"
+        $sh_c 'apt-get update -qq > /dev/null 2>&1'
+        $sh_c "apt-get install -y -qq $pre_reqs > /dev/null 2>&1"
+        $sh_c "curl -fsSL \"https://download.docker.com/linux/$lsb_dist/gpg\" | apt-key add -qq - > /dev/null 2>&1"
         $sh_c "echo \"$apt_repo\" > /etc/apt/sources.list.d/docker.list"
-        $sh_c 'apt-get update -qq >/dev/null'
-        $sh_c "apt-get install -y -qq --no-install-recommends docker-ce >/dev/null"
+        $sh_c 'apt-get update -qq > /dev/null 2>&1'
+        $sh_c "apt-get install -y -qq --no-install-recommends docker-ce > /dev/null 2>&1"
       )
       ;;
     centos|fedora)
       yum_repo="https://download.docker.com/linux/$lsb_dist/docker-ce.repo"
-      if ! curl -Ifs "$yum_repo" > /dev/null
+      if ! curl -Ifs "$yum_repo" > /dev/null 2>&1
       then
         echo "Error: Unable to curl repository file $yum_repo, is it valid?"
         exit 1
@@ -192,23 +233,21 @@ install() {
   fi
 
   setShC
+  setLsbVersionDist
 
   if ! command_exists bash
   then
-    echo "Please install git before rerunning this scipt"
-    exit 1
+    installPackage bash
   fi
 
   if ! command_exists curl
   then
-    echo "Please install curl before rerunning this scipt"
-    exit 1
+    installPackage curl
   fi
 
   if ! command_exists git
   then
-    echo "Please install git before rerunning this scipt"
-    exit 1
+    installPackage git
   fi
 
   if ! command_exists docker
