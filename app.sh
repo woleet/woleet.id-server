@@ -131,6 +131,23 @@ then
   restore "$@"
 elif [[ "$operation" == "upgrade" ]]
 then
+  git fetch
+  if git describe --exact-match HEAD > /dev/null 2>&1
+  then
+    LATEST_TAG=$(git tag | grep -E '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sort | tail -n 1)
+    git checkout "$LATEST_TAG"
+    touch env.sh
+    if cat env.sh | grep "WOLEET_ID_SERVER_VERSION" > /dev/null 2>&1
+    then
+      ex +g/WOLEET_ID_SERVER_VERSION/d -cwq env.sh
+    fi
+    printf "%s\n" "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> env.sh
+  else
+    echo "No tag match your actual commit"
+    echo "if you want to use the upgrade script is it necessary to checkout a tagged commit"
+    echo "if not, you will always use the 'latest' docker image available on your computer"
+    exit 1
+  fi
 
 else
   display_usage_app

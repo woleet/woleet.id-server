@@ -231,12 +231,17 @@ installWids() {
   LATEST_TAG=$(git tag | grep -E '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sort | tail -n 1)
   git checkout "$LATEST_TAG"
   touch env.sh
-  sed -i '/WOLEET_ID_SERVER_VERSION/d' env.sh
-  #TODO
+
+  if cat env.sh | grep "WOLEET_ID_SERVER_VERSION" > /dev/null 2>&1
+  then
+    ex +g/WOLEET_ID_SERVER_VERSION/d -cwq env.sh
+  fi
   printf "%s\n" "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> env.sh
+
 }
 
 getCheckSSLCerts() {
+  # TODO
   export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE="$HOME/ssl/woleet.crt"
   export WOLEET_ID_SERVER_HTTP_TLS_KEY="$HOME/ssl/woleet.key"
 }
