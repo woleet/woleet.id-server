@@ -1,4 +1,4 @@
-import { Component, Input, ContentChild, ViewChild, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, ValidationErrors, AbstractControl } from '@angular/forms';
 import { parsePhoneNumberFromString, AsYouType } from 'libphonenumber-js';
 import { ErrorMessageProvider } from '@components/util';

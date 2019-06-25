@@ -8,6 +8,10 @@ import { readFileSync } from 'fs';
 import * as path from 'path';
 import * as log from 'loglevel';
 
+/**
+ * Get the logo url from the server configuration if it's unset, get the Woleet logo.
+ * @param config Server configuration
+ */
 function getLogo(config: InternalServerConfigObject): String {
   if (config.logoURL) {
     return config.logoURL;
@@ -40,6 +44,7 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
   let html;
   const logo = getLogo(config);
 
+  // If the password is not set send an onboarding mail
   if (user.getDataValue('passwordHash') === null) {
     html = mustache.render(config.mailOnboardingTemplate, {
       resetPasswordURL: link,
@@ -48,6 +53,7 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
       userName: user.getDataValue('x500CommonName')
     });
     subject = 'Onboarding';
+  // If the password is set send an reset password mail
   } else {
     html = mustache.render(config.mailResetPasswordTemplate, {
       resetPasswordURL: link,
@@ -125,6 +131,12 @@ export async function sendEmail(email: string, subject: string, html: any) {
   });
 }
 
+/**
+ * Generate the transporter parameter to send the mail.
+ * @param email The user email
+ * @param subject The mail subject
+ * @param html The mail body
+ */
 function MailTemplate(email: string, subject: string, html: any): object {
   const organizationName = getServerConfig().organizationName;
   return {

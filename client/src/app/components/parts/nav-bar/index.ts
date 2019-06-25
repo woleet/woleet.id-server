@@ -21,7 +21,7 @@ export class NavBarComponent {
     private authService: AuthService,
     private pageDataService: PageDataService,
     private errorService: ErrorService,
-    private appConfigService: AppConfigService
+    appConfigService: AppConfigService
   ) {
     this.production = environment.production;
     this.lock$ = authService.lock$;

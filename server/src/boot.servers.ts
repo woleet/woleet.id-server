@@ -13,6 +13,8 @@ import { exit } from './exit';
 import { createServer, ServerOptions } from 'https';
 import { Server } from 'net';
 import { setServerConfig } from './controllers/server-config';
+import { Enrollment } from './database';
+import { monitorSignatureRequest } from './controllers/enrollment';
 
 const apps: Dictionary<Server> = {};
 
@@ -86,6 +88,7 @@ export function bootServers(): Promise<void> {
   });
 
   const oidc = bootOIDCProvider();
+  rebootAllEnrollmentMonitor();
 
   return Promise.all(promises.concat(oidc)).then(() => {
   });
@@ -131,5 +134,20 @@ export async function bootOIDCProvider(): Promise<void> {
     } else {
       resolve();
     }
+  });
+}
+
+/**
+ * Get all monitored enrollment (the enrollment with an associated signature request), and relaunch them
+ */
+export async function rebootAllEnrollmentMonitor() {
+  Enrollment.getAll().then((enrollments) => {
+    enrollments.forEach(enrollment => {
+      if (enrollment.get('signatureRequestId')) {
+        const enrollmentId = enrollment.get('id');
+        monitorSignatureRequest(enrollment.get('signatureRequestId'), enrollmentId, enrollmentId);
+        log.info('reboot monitor enrollment id: ', enrollmentId, 'name: ', enrollment.get('name'));
+      }
+    });
   });
 }
