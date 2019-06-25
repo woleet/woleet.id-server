@@ -245,13 +245,24 @@ async function upgrade12(sequelize) {
     return;
   }
 
+  let enrollmentExist = false;
+  if (!cfg) {
+    return;
+  }
+  try {
+    await sequelize.query(`SELECT * FROM "enrollments";`);
+    enrollmentExist = true;
+  } catch { }
+
   const { config } = cfg.toJSON();
   if (config.version < 12) {
-    log.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
-    const signatureRequestIdEnroll = await sequelize.query(`ALTER TABLE "enrollments" ADD COLUMN "signatureRequestId" VARCHAR;`);
-    log.debug(signatureRequestIdEnroll);
-    const keyExpiration = await sequelize.query(`ALTER TABLE "enrollments" ADD COLUMN "keyExpiration" TIMESTAMPTZ;`);
-    log.debug(keyExpiration);
+    if (enrollmentExist) {
+      log.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
+      const signatureRequestIdEnroll = await sequelize.query(`ALTER TABLE "enrollments" ADD COLUMN "signatureRequestId" VARCHAR;`);
+      log.debug(signatureRequestIdEnroll);
+      const keyExpiration = await sequelize.query(`ALTER TABLE "enrollments" ADD COLUMN "keyExpiration" TIMESTAMPTZ;`);
+      log.debug(keyExpiration);
+    }
 
     const configTCUUpdate: any = config;
     if (configTCUUpdate.TCU) {
