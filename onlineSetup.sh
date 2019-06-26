@@ -241,11 +241,58 @@ installWids() {
 }
 
 getCheckSSLCerts() {
-  # TODO
-  WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE=$(dialog --title "Select your certificate" --stdout --fselect $HOME 14 48)
-  WOLEET_ID_SERVER_HTTP_TLS_KEY=$(dialog --title "Delete a file" --stdout --title "Please choose a file to delete" --fselect $HOME 14 48)
-  export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE="$HOME/ssl/woleet.crt"
-  export WOLEET_ID_SERVER_HTTP_TLS_KEY="$HOME/ssl/woleet.key"
+  local cerOK=false
+  local keyOK=false
+  local md5Checked=false
+
+  while [ "$md5Checked" == "false" ]
+  do
+    while [ "$cerOK" == "false" ]
+    do
+      read -r -e -p "Enter certificate filename, use tab for completion: " WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE
+      if openssl x509 -noout -in "$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE" > /dev/null 2>&1
+      then
+        cerOK=true
+      else
+        echo "The selected file is not a valid certificate, please select a valid certificate"
+      fi
+    done
+
+    while [ "$keyOK" == "false" ]
+    do
+      read -r -e -p "Enter certificate key filename, use tab for completion: " WOLEET_ID_SERVER_HTTP_TLS_KEY
+      if openssl rsa -noout -in "$WOLEET_ID_SERVER_HTTP_TLS_KEY" > /dev/null 2>&1
+      then
+        keyOK=true
+      else
+        echo "The selected file is not a valid certificate key, please select a valid certificate key"
+      fi
+    done
+
+    md5Cert=$(openssl x509 -modulus -noout -in "$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE" | openssl md5)
+    md5Key=$(openssl -modulus rsa -noout -in "$WOLEET_ID_SERVER_HTTP_TLS_KEY" | openssl md5)
+
+    if [ "$md5Cert" == "$md5Key" ]
+    then
+      md5Checked=true
+    else
+      echo "The provided certificate and key does not match, please reselect a valid pair"
+      cerOK=false
+      keyOK=false
+    fi
+  done
+
+  if cat configuration.sh | grep "WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE" > /dev/null 2>&1
+  then
+    ex +g/WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE/d -cwq configuration.sh
+  fi
+  printf "%s\n" "export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE='$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE'" >> configuration.sh
+
+  if cat configuration.sh | grep "WOLEET_ID_SERVER_HTTP_TLS_KEY" > /dev/null 2>&1
+  then
+    ex +g/WOLEET_ID_SERVER_HTTP_TLS_KEY/d -cwq configuration.sh
+  fi
+  printf "%s\n" "export WOLEET_ID_SERVER_HTTP_TLS_KEY='$WOLEET_ID_SERVER_HTTP_TLS_KEY'" >> configuration.sh
 }
 
 install() {
