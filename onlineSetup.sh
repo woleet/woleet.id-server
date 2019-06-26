@@ -193,6 +193,18 @@ installDocker() {
       exit 1
       ;;
   esac
+
+  if [ "$user" != 'root' ]
+  then
+    (
+      set -x
+      $sh_c "usermod -aG docker $user"
+    )
+    echo "Your user: $user has been added to the docker group so that you can user app.sh without sudo"
+    echo "WARNING! depending on your configuration you may not want it as it can provides root access as described here:"
+    echo "https://docs.docker.com/engine/security/security/#docker-daemon-attack-surface"
+    echo "You will have to log out and back to be able to interact with app.sh and docker without sudo"
+  fi
 }
 
 startEnableDocker() {
@@ -270,7 +282,7 @@ getCheckSSLCerts() {
     done
 
     md5Cert=$(openssl x509 -modulus -noout -in "$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE" | openssl md5)
-    md5Key=$(openssl -modulus rsa -noout -in "$WOLEET_ID_SERVER_HTTP_TLS_KEY" | openssl md5)
+    md5Key=$(openssl rsa -modulus -noout -in "$WOLEET_ID_SERVER_HTTP_TLS_KEY" | openssl md5)
 
     if [ "$md5Cert" == "$md5Key" ]
     then
@@ -329,13 +341,6 @@ install() {
   then
     installDocker
     startEnableDocker
-    if [ "$user" != 'root' ]
-    then
-      (
-        set -x
-        $sh_c "usermod -aG docker $user"
-      )
-    fi
   elif ! isVersionOK "$(docker version --format '{{.Server.Version}}' | grep -E '([[:digit:]]\.?)+' )" "17.09.0"
   then
     echo "Please upgrade your docker version to at least 17.09.0+ before rerunning this script"
@@ -350,7 +355,7 @@ install() {
     echo "Please upgrade your docker-compose version to at least 1.17+ before rerunning this script"
     exit 1
   fi
-
+  getCheckSSLCerts
   exit 0
 
   install_dir="${HOME}/wids"
@@ -362,14 +367,6 @@ install() {
     set -x
     $sh_c "./app.sh start"
   )
-
-  if [ "$user" != 'root' ]
-  then
-    echo "Your user: $user has been added to the docker group so that you can user app.sh without sudo"
-    echo "WARNING! depending on your configuration you may not want it as it can provides root access as described here:"
-    echo "https://docs.docker.com/engine/security/security/#docker-daemon-attack-surface"
-    echo "You will have to log out and back to be able to interact with app.sh and docker without sudo"
-  fi
 }
 
 # wrapped up in a function so that we have some protection against only getting
