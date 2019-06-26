@@ -2,9 +2,9 @@
 
 set -e
 
-if [[ -f env.sh ]]
+if [[ -f configuration.sh ]]
 then
-  source env.sh
+  source configuration.sh
 fi
 
 CLIENT_IMAGE="${WOLEET_ID_SERVER_REGISTRY:-wids}/client:${WOLEET_ID_SERVER_VERSION:-latest}"
@@ -136,12 +136,12 @@ then
   then
     LATEST_TAG=$(git tag | grep -E '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sort | tail -n 1)
     git checkout "$LATEST_TAG"
-    touch env.sh
-    if cat env.sh | grep "WOLEET_ID_SERVER_VERSION" > /dev/null 2>&1
+    touch configuration.sh
+    if cat configuration.sh | grep "WOLEET_ID_SERVER_VERSION" > /dev/null 2>&1
     then
-      ex +g/WOLEET_ID_SERVER_VERSION/d -cwq env.sh
+      ex +g/WOLEET_ID_SERVER_VERSION/d -cwq configuration.sh
     fi
-    printf "%s\n" "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> env.sh
+    printf "%s\n" "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> configuration.sh
   else
     echo "No tag match your actual commit"
     echo "if you want to use the upgrade script is it necessary to checkout a tagged commit"

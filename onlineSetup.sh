@@ -230,13 +230,13 @@ installWids() {
   fi
   LATEST_TAG=$(git tag | grep -E '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sort | tail -n 1)
   git checkout "$LATEST_TAG"
-  touch env.sh
+  touch configuration.sh
 
-  if cat env.sh | grep "WOLEET_ID_SERVER_VERSION" > /dev/null 2>&1
+  if cat configuration.sh | grep "WOLEET_ID_SERVER_VERSION" > /dev/null 2>&1
   then
-    ex +g/WOLEET_ID_SERVER_VERSION/d -cwq env.sh
+    ex +g/WOLEET_ID_SERVER_VERSION/d -cwq configuration.sh
   fi
-  printf "%s\n" "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> env.sh
+  printf "%s\n" "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> configuration.sh
 
 }
 

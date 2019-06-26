@@ -31,5 +31,5 @@ db
 # Dump
 dump*
 
-# env file
-env.sh
+# configuration file
+configuration.sh
