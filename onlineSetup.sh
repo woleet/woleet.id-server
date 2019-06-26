@@ -129,9 +129,9 @@ installPackage() {
         $sh_c "$pkg_manager install -y -q $package"
       )
       ;;
-      *)
-        echo "this script is not available on this OS"
-        exit 1
+    *)
+      echo "this script is not available on this OS"
+      exit 1
       ;;
   esac
 }
@@ -188,9 +188,9 @@ installDocker() {
         $sh_c "$pkg_manager install -y -q docker-ce"
       )
       ;;
-      *)
-        echo "this script is not available on this OS"
-        exit 1
+    *)
+      echo "this script is not available on this OS"
+      exit 1
       ;;
   esac
 }
@@ -242,6 +242,8 @@ installWids() {
 
 getCheckSSLCerts() {
   # TODO
+  WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE=$(dialog --title "Select your certificate" --stdout --fselect $HOME 14 48)
+  WOLEET_ID_SERVER_HTTP_TLS_KEY=$(dialog --title "Delete a file" --stdout --title "Please choose a file to delete" --fselect $HOME 14 48)
   export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE="$HOME/ssl/woleet.crt"
   export WOLEET_ID_SERVER_HTTP_TLS_KEY="$HOME/ssl/woleet.key"
 }
@@ -271,7 +273,7 @@ install() {
     installPackage git
   fi
 
-    if ! command_exists openssl
+  if ! command_exists openssl
   then
     installPackage openssl
   fi
