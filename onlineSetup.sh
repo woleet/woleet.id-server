@@ -2,6 +2,19 @@
 
 set -e
 
+printPrerequisites() {
+  echo "Before installing wids, please ensure that you have an ssl certificate and its key on this machine"
+  echo "If you don't have one, please copy one"
+  while true; do
+    read -r -n 1 -p "Would you like to continue? [y/n]" yn
+    case $yn in
+        [Yy]* ) echo ""; break;;
+        [Nn]* ) echo ""; exit 0;;
+        * ) echo "Please answer y or n.";;
+    esac
+  done
+}
+
 command_exists() {
   command -v "$@" > /dev/null 2>&1
 }
@@ -53,9 +66,8 @@ setShC() {
     then
       sh_c='su -c'
     else
-  printf '%s\n' '
-Error: this installer needs the ability to run commands as root.
-We are unable to find either "sudo" or "su" available to make this happen.'
+      echo 'Error: this installer needs the ability to run commands as root.'
+      echo 'We are unable to find either "sudo" or "su" available to make this happen.'
       exit 1
     fi
   fi
@@ -248,7 +260,7 @@ installWids() {
   then
     ex +g/WOLEET_ID_SERVER_VERSION/d -cwq configuration.sh
   fi
-  printf "%s\n" "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> configuration.sh
+  echo "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> configuration.sh
 
 }
 
@@ -298,13 +310,13 @@ getCheckSSLCerts() {
   then
     ex +g/WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE/d -cwq configuration.sh
   fi
-  printf "%s\n" "export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE='$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE'" >> configuration.sh
+  echo "export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE='$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE'" >> configuration.sh
 
   if cat configuration.sh | grep "WOLEET_ID_SERVER_HTTP_TLS_KEY" > /dev/null 2>&1
   then
     ex +g/WOLEET_ID_SERVER_HTTP_TLS_KEY/d -cwq configuration.sh
   fi
-  printf "%s\n" "export WOLEET_ID_SERVER_HTTP_TLS_KEY='$WOLEET_ID_SERVER_HTTP_TLS_KEY'" >> configuration.sh
+  echo "export WOLEET_ID_SERVER_HTTP_TLS_KEY='$WOLEET_ID_SERVER_HTTP_TLS_KEY'" >> configuration.sh
 }
 
 install() {
@@ -313,6 +325,8 @@ install() {
     echo "WIDS is not available on this architecture"
     exit 1
   fi
+
+  printPrerequisites
 
   setShC
   setLsbVersionDist
@@ -355,8 +369,6 @@ install() {
     echo "Please upgrade your docker-compose version to at least 1.17+ before rerunning this script"
     exit 1
   fi
-  getCheckSSLCerts
-  exit 0
 
   install_dir="${HOME}/wids"
   installWids
