@@ -89,13 +89,11 @@ public class ExternalKeyApiTest extends CRUDApiTest {
         @Override
         CRUDApiTest.ObjectPost setFullAttributes() {
             ExternalKeyPost keyPost = (ExternalKeyPost) objectBase;
-
-            // Set status and name
-            keyPost.setStatus(KeyStatusEnum.ACTIVE);
             keyPost.setName(Config.randomName());
             keyPost.setPublicKey(Config.randomAddress());
-            keyPost.setDevice(KeyDeviceEnum.MOBILE);
-
+            keyPost.setStatus(Config.randomBoolean() ? KeyStatusEnum.BLOCKED : KeyStatusEnum.ACTIVE);
+            keyPost.setDevice(Config.randomBoolean() ? KeyDeviceEnum.MOBILE : KeyDeviceEnum.NANO);
+            keyPost.setExpiration(Config.randomTimestamp());
             return new ObjectPost(keyPost);
         }
     }
@@ -110,11 +108,13 @@ public class ExternalKeyApiTest extends CRUDApiTest {
         public void update() {
             KeyPut keyPut = (KeyPut) objectBase;
             if (Config.randomBoolean())
-                keyPut.setStatus(KeyStatusEnum.BLOCKED);
-            if (Config.randomBoolean())
                 keyPut.setName(Config.randomName());
             if (Config.randomBoolean())
-                keyPut.setDevice(null);
+                keyPut.setStatus(Config.randomBoolean() ? KeyStatusEnum.BLOCKED : KeyStatusEnum.ACTIVE);
+            if (Config.randomBoolean())
+                keyPut.setDevice(Config.randomBoolean() ? KeyDeviceEnum.MOBILE : KeyDeviceEnum.NANO);
+            if (Config.randomBoolean())
+                keyPut.setExpiration(Config.randomTimestamp());
         }
     }
 
@@ -166,8 +166,11 @@ public class ExternalKeyApiTest extends CRUDApiTest {
     void verifyObjectsEquals(CRUDApiTest.ObjectPost pExpected, CRUDApiTest.ObjectGet pActual) {
         ExternalKeyPost expected = (ExternalKeyPost) pExpected.get();
         KeyGet actual = (KeyGet) pActual.get();
-        assertEquals(expected.getPublicKey(), actual.getPubKey());
         assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getPublicKey(), actual.getPubKey());
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getDevice(), actual.getDevice());
+        assertEquals(expected.getExpiration(), actual.getExpiration());
     }
 
     @Override
@@ -175,7 +178,12 @@ public class ExternalKeyApiTest extends CRUDApiTest {
         KeyPut put = (KeyPut) pPut.get();
         ExternalKeyPost post = (ExternalKeyPost) pPost.get();
         KeyGet get = (KeyGet) pGet.get();
-        assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
         assertEquals(put.getName() != null ? put.getName() : post.getName(), get.getName());
+        // FIXME: because external keys are updated using the key API, which doesn't allow to modify the public key
+        //  at least in the swagger doc, we cannot test this).
+        //assertEquals(put.getPublicKey() != null ? put.getPublicKey() : post.getPublicKey(), get.getPublicKey());
+        assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
+        assertEquals(put.getDevice() != null ? put.getDevice() : post.getDevice(), get.getDevice());
+        assertEquals(put.getExpiration() != null ? put.getExpiration() : post.getExpiration(), get.getExpiration());
     }
 }

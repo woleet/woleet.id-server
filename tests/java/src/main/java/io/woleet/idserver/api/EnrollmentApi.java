@@ -478,7 +478,7 @@ public class EnrollmentApi {
     }
 
     /**
-     * Get all enrollment requests.
+     * List all key enrollment requests.
      * 
      * @return List&lt;EnrollmentGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -489,7 +489,7 @@ public class EnrollmentApi {
     }
 
     /**
-     * Get all enrollment requests.
+     * List all key enrollment requests.
      * 
      * @return ApiResponse&lt;List&lt;EnrollmentGet&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -501,7 +501,7 @@ public class EnrollmentApi {
     }
 
     /**
-     * Get all enrollment requests. (asynchronously)
+     * List all key enrollment requests. (asynchronously)
      * 
      * @param callback The callback to be executed when the API call finishes
      * @return The request call

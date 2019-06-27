@@ -127,7 +127,7 @@ This endpoint does not need any parameter.
 
 Get the user associated to a public key.
 
-Use this endpoint to get the user owning a public key. 
+Use this endpoint to get the user associated to a public key. 
 
 ### Example
 ```java
@@ -186,7 +186,7 @@ Name | Type | Description  | Notes
 
 Get all public keys of a user.
 
-Use this endpoint to get all public keys owned by a user. 
+Use this endpoint to get all public keys associated to a user. 
 
 ### Example
 ```java

@@ -88,11 +88,9 @@ public class KeyApiTest extends CRUDApiTest {
         @Override
         CRUDApiTest.ObjectPost setFullAttributes() {
             KeyPost keyPost = (KeyPost) objectBase;
-
-            // Set status and name
-            keyPost.setStatus(KeyStatusEnum.ACTIVE);
             keyPost.setName(Config.randomName());
-
+            keyPost.setStatus(Config.randomBoolean() ? KeyStatusEnum.BLOCKED : KeyStatusEnum.ACTIVE);
+            keyPost.setExpiration(Config.randomTimestamp());
             return new ObjectPost(keyPost);
         }
     }
@@ -107,9 +105,11 @@ public class KeyApiTest extends CRUDApiTest {
         public void update() {
             KeyPut keyPut = (KeyPut) objectBase;
             if (Config.randomBoolean())
-                keyPut.setStatus(KeyStatusEnum.BLOCKED);
-            if (Config.randomBoolean())
                 keyPut.setName(Config.randomName());
+            if (Config.randomBoolean())
+                keyPut.setStatus(Config.randomBoolean() ? KeyStatusEnum.BLOCKED : KeyStatusEnum.ACTIVE);
+            if (Config.randomBoolean())
+                keyPut.setExpiration(Config.randomTimestamp());
         }
     }
 
@@ -164,6 +164,8 @@ public class KeyApiTest extends CRUDApiTest {
         KeyGet actual = (KeyGet) pActual.get();
         assertEquals(expected.getStatus(), actual.getStatus());
         assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getExpiration(), actual.getExpiration());
     }
 
     @Override
@@ -171,7 +173,8 @@ public class KeyApiTest extends CRUDApiTest {
         KeyPut put = (KeyPut) pPut.get();
         KeyPost post = (KeyPost) pPost.get();
         KeyGet get = (KeyGet) pGet.get();
-        assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
         assertEquals(put.getName() != null ? put.getName() : post.getName(), get.getName());
+        assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
+        assertEquals(put.getExpiration() != null ? put.getExpiration() : post.getExpiration(), get.getExpiration());
     }
 }

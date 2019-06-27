@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**createEnrollment**](EnrollmentApi.md#createEnrollment) | **POST** /enrollment | Create a key enrollment request.
 [**createSignatureRequest**](EnrollmentApi.md#createSignatureRequest) | **POST** /enrollment/{EnrollmentId}/create-signature-request | Create and send the signature request of the TCU to the owner of the enrolled key.
 [**deleteEnrollment**](EnrollmentApi.md#deleteEnrollment) | **DELETE** /enrollment/{EnrollmentId} | Delete a key enrollment request.
-[**getAllEnrollments**](EnrollmentApi.md#getAllEnrollments) | **GET** /enrollment/list | Get all enrollment requests.
+[**getAllEnrollments**](EnrollmentApi.md#getAllEnrollments) | **GET** /enrollment/list | List all key enrollment requests.
 [**getEnrollment**](EnrollmentApi.md#getEnrollment) | **GET** /enrollment/{EnrollmentId} | Get a key enrollment request.
 [**getEnrollmentUser**](EnrollmentApi.md#getEnrollmentUser) | **GET** /enrollment/{EnrollmentId}/user | Get the user of a key enrollment request.
 [**updateEnrollment**](EnrollmentApi.md#updateEnrollment) | **PUT** /enrollment/{EnrollmentId} | Update a key enrollment request.
@@ -165,7 +165,7 @@ Name | Type | Description  | Notes
 # **getAllEnrollments**
 > List&lt;EnrollmentGet&gt; getAllEnrollments()
 
-Get all enrollment requests.
+List all key enrollment requests.
 
 ### Example
 ```java
