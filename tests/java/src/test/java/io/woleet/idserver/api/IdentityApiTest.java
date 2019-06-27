@@ -56,12 +56,15 @@ public class IdentityApiTest {
         assertNotNull(identityResult.getIdentity().getCommonName());
         assertNotNull(identityResult.getRightData());
         assertNotNull(identityResult.getSignature());
+        // TODO: verify getExpiration() getExpired() and getKey()
         assertTrue(
                 "Expected " + identityResult.getRightData()
-                + "to start with \"" + serverConfig.getIdentityURL()
-                + "\" but got \"" + identityResult.getRightData() + "\"",
+                        + "to start with \"" + serverConfig.getIdentityURL()
+                        + "\" but got \"" + identityResult.getRightData() + "\"",
                 identityResult.getRightData().startsWith(serverConfig.getIdentityURL())
         );
-        Config.isValidSignature(pubKey, identityResult.getSignature(), leftData + identityResult.getRightData());
+        assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(), leftData + identityResult.getRightData()));
+
+        // TODO: verify identity related to external keys
     }
 }
