@@ -274,6 +274,7 @@ getCheckSSLCerts() {
     while [ "$cerOK" == "false" ]
     do
       read -r -e -p "Enter certificate filename, use tab for completion: " WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE
+      WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE=$(readlink -f "$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE")
       if openssl x509 -noout -in "$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE" > /dev/null 2>&1
       then
         cerOK=true
@@ -285,6 +286,7 @@ getCheckSSLCerts() {
     while [ "$keyOK" == "false" ]
     do
       read -r -e -p "Enter certificate key filename, use tab for completion: " WOLEET_ID_SERVER_HTTP_TLS_KEY
+      WOLEET_ID_SERVER_HTTP_TLS_KEY=$(readlink -f "$WOLEET_ID_SERVER_HTTP_TLS_KEY")
       if openssl rsa -noout -in "$WOLEET_ID_SERVER_HTTP_TLS_KEY" > /dev/null 2>&1
       then
         keyOK=true
@@ -330,6 +332,11 @@ install() {
 
   setShC
   setLsbVersionDist
+
+  if ! command_exists readlink
+  then
+    installPackage coreutils
+  fi
 
   if ! command_exists bash
   then
