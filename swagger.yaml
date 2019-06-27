@@ -1137,12 +1137,6 @@ components:
       readOnly: true
       description: Date of last modification (Unix ms timestamp).
       example: 1529052551419
-    DeletedAt:
-      type: integer
-      format: int64
-      readOnly: true
-      description: Date of deletion (Unix ms timestamp) (`null` if not deleted).
-      example: 1529052551419
     LastUsed:
       type: integer
       format: int64
@@ -1302,8 +1296,6 @@ components:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:
               $ref: '#/components/schemas/UpdatedAt'
-            deletedAt:
-              $ref: '#/components/schemas/DeletedAt'
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
     APITokenPost:
@@ -1473,8 +1465,6 @@ components:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:
               $ref: '#/components/schemas/UpdatedAt'
-            deletedAt:
-              $ref: '#/components/schemas/DeletedAt'
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
     KeyPost:

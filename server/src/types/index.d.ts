@@ -31,7 +31,6 @@ declare global {
     id: string;
     updatedAt: Date;
     createdAt: Date;
-    deletedAt: Date;
   }
 
   interface ListOptions {

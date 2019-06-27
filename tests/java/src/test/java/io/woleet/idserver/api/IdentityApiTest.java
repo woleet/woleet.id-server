@@ -15,7 +15,7 @@ public class IdentityApiTest {
 
     static {
         if (WOLEET_ID_SERVER_IDENTITY_BASEPATH == null)
-            WOLEET_ID_SERVER_IDENTITY_BASEPATH = "https://localhost:3001";
+            WOLEET_ID_SERVER_IDENTITY_BASEPATH = "https://localhost:3000";
     }
 
     @Test

@@ -134,8 +134,6 @@ public class ApiTokenApiTest extends CRUDApiTest {
         assertNotNull(apiToken.getId());
         assertNotNull(apiToken.getCreatedAt());
         assertTrue(apiToken.getCreatedAt() <= apiToken.getUpdatedAt());
-        assertNull(apiToken.getDeletedAt());
-
         assertNotNull(apiToken.getName());
         assertNull(apiToken.getLastUsed());
         assertNotNull(apiToken.getValue());

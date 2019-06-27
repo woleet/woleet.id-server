@@ -147,8 +147,6 @@ public class KeyApiTest extends CRUDApiTest {
         assertNotNull(key.getId());
         assertNotNull(key.getCreatedAt());
         assertTrue(key.getCreatedAt() <= key.getUpdatedAt());
-        assertNull(key.getDeletedAt());
-
         assertNotNull(key.getName());
         assertNull(key.getLastUsed());
         assertNotNull(key.getPubKey());

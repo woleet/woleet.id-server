@@ -1,4 +1,3 @@
-import * as request from 'supertest';
 import agents from './agents';
 import * as assert from 'assert';
 import './before';
@@ -38,7 +37,7 @@ describe('/user', () => {
     const userProperties = [
       'id', 'role', 'defaultKeyId', 'identity',
       'status', 'lastLogin', 'username', 'email',
-      'deletedAt', 'updatedAt', 'createdAt',
+      'updatedAt', 'createdAt',
       'countryCallingCode', 'phone'
     ];
 

@@ -67,10 +67,6 @@ public class KeyGet extends KeyBase {
   @SerializedName(SERIALIZED_NAME_UPDATED_AT)
   private Long updatedAt;
 
-  public static final String SERIALIZED_NAME_DELETED_AT = "deletedAt";
-  @SerializedName(SERIALIZED_NAME_DELETED_AT)
-  private Long deletedAt;
-
   public static final String SERIALIZED_NAME_LAST_USED = "lastUsed";
   @SerializedName(SERIALIZED_NAME_LAST_USED)
   private Long lastUsed;
@@ -193,15 +189,6 @@ public class KeyGet extends KeyBase {
   }
 
    /**
-   * Date of deletion (Unix ms timestamp) (&#x60;null&#x60; if not deleted).
-   * @return deletedAt
-  **/
-  @ApiModelProperty(example = "1529052551419", value = "Date of deletion (Unix ms timestamp) (`null` if not deleted).")
-  public Long getDeletedAt() {
-    return deletedAt;
-  }
-
-   /**
    * Date of last usage (Unix ms timestamp).
    * @return lastUsed
   **/
@@ -228,14 +215,13 @@ public class KeyGet extends KeyBase {
         Objects.equals(this.expired, keyGet.expired) &&
         Objects.equals(this.createdAt, keyGet.createdAt) &&
         Objects.equals(this.updatedAt, keyGet.updatedAt) &&
-        Objects.equals(this.deletedAt, keyGet.deletedAt) &&
         Objects.equals(this.lastUsed, keyGet.lastUsed) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, pubKey, type, holder, device, expired, createdAt, updatedAt, deletedAt, lastUsed, super.hashCode());
+    return Objects.hash(id, pubKey, type, holder, device, expired, createdAt, updatedAt, lastUsed, super.hashCode());
   }
 
 
@@ -252,7 +238,6 @@ public class KeyGet extends KeyBase {
     sb.append("    expired: ").append(toIndentedString(expired)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
-    sb.append("    deletedAt: ").append(toIndentedString(deletedAt)).append("\n");
     sb.append("    lastUsed: ").append(toIndentedString(lastUsed)).append("\n");
     sb.append("}");
     return sb.toString();

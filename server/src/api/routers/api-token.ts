@@ -5,7 +5,7 @@ import { validate } from '../schemas';
 import {
   createAPIToken, deleteAPIToken, getAllAPITokens, getAPITokenById, updateAPIToken
 } from '../../controllers/api-token';
-import { serializeapiToken } from '../serialize/api-token';
+import { serializeAPIToken } from '../serialize/api-token';
 import { store as event } from '../../controllers/server-event';
 
 const vid = validate.param('id', 'uuid');
@@ -47,7 +47,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
     data: hideTokenValue(token)
   });
 
-  ctx.body = await serializeapiToken(created);
+  ctx.body = await serializeAPIToken(created);
 });
 
 /**
@@ -57,7 +57,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
  */
 router.get('/list', async function (ctx) {
   const users = await getAllAPITokens();
-  ctx.body = await Promise.all(users.map(serializeapiToken));
+  ctx.body = await Promise.all(users.map(serializeAPIToken));
 });
 
 /**
@@ -68,7 +68,7 @@ router.get('/list', async function (ctx) {
 router.get('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const apiToken = await getAPITokenById(id);
-  ctx.body = await serializeapiToken(apiToken);
+  ctx.body = await serializeAPIToken(apiToken);
 });
 
 /**
@@ -92,7 +92,7 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
     data: update
   });
 
-  ctx.body = await serializeapiToken(apiToken);
+  ctx.body = await serializeAPIToken(apiToken);
 });
 
 /**
@@ -114,7 +114,7 @@ router.delete('/:id', vid, async function (ctx) {
     data: null
   });
 
-  ctx.body = await serializeapiToken(apiToken);
+  ctx.body = await serializeAPIToken(apiToken);
 });
 
 export { router };
