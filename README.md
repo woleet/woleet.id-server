@@ -50,6 +50,28 @@ Woleet.ID Server can be built and run using Docker (tested on Linux and  macOS),
 Here we only document building and running Woleet.ID Server using Docker.
 If you want to build or run without Docker, you can find detailed information about how to build and run Woleet.ID Server in [client's](client/README.md) and [server's](server/README.md) README files.
 
+## Easy install
+
+If you run a fairly recent version of debian, ubuntu, centos or fedora you can install Woleet.ID Server by running:
+
+```bash
+curl -o- https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh | sh
+```
+
+You will need a certificate and its key, as described below, on the computer you execute this script.
+
+By default it will install docker and other tolls needed and clone the project on you $HOME/wids directory, store the emplacement of your certificate and key in the file configuration.sh.
+
+## configuration.sh
+
+If you want to override some of the environnement variables you can do so in a configuration.sh file, if it exists its content will be sourced in app.sh.
+
+For example to fix a version for Woleet.ID Server (related to release tab) add this in configuration.sh:
+
+```bash
+export WOLEET_ID_SERVER_VERSION=x.x.x
+```
+
 # Prerequisites and configuration
 
 ## TLS certificate
