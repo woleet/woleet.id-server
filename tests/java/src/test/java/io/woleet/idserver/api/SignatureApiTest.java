@@ -17,7 +17,7 @@ public class SignatureApiTest {
 
     static {
         if (WOLEET_ID_SERVER_SIGNATURE_BASEPATH == null)
-            WOLEET_ID_SERVER_SIGNATURE_BASEPATH = "https://localhost:3002";
+            WOLEET_ID_SERVER_SIGNATURE_BASEPATH = "https://localhost:3000";
     }
 
     private UserGet user;
@@ -27,8 +27,10 @@ public class SignatureApiTest {
     private ApiTokenApi apiTokenApi;
     private APITokenGet apiTokenGet;
 
-    private void verifySignatureValid(String hashToSign, SignatureResult signatureResult, ServerConfig serverConfig) {
+    private void verifySignatureValid(String hashToSign, SignatureResult signatureResult) throws ApiException {
         assertNotNull(signatureResult.getIdentityURL());
+        ServerConfigApi serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
+        ServerConfig serverConfig = serverConfigApi.getServerConfig();
         assertEquals(serverConfig.getIdentityURL(), signatureResult.getIdentityURL());
         assertTrue(Config.isValidPubKey(signatureResult.getPubKey()));
         assertEquals(hashToSign, signatureResult.getSignedHash());
@@ -146,8 +148,12 @@ public class SignatureApiTest {
         assertNotNull(signatureResult.getIdentityURL());
         assertTrue(Config.isValidPubKey(signatureResult.getPubKey()));
         assertEquals(hashToSign, signatureResult.getSignedHash());
-        assertTrue(Config.isValidSignature(signatureResult.getPubKey(), signatureResult.getSignature(), signatureResult
-                .getSignedHash()));
+        verifySignatureValid(signatureResult.getSignedHash(), signatureResult);
+
+        // FIXME: WOLEET-1141: Since we just used the API token to sign, its last used should be close to current time
+//        apiTokenGet = apiTokenApi.getAPITokenById(apiTokenGet.getId());
+//        assertTrue(apiTokenGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
+//                && apiTokenGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
 
         // Change server config not to fallback on default key
         ServerConfigApi serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
@@ -168,12 +174,12 @@ public class SignatureApiTest {
         // Sign using user's default key (userId)
         hashToSign = Config.randomHash();
         signatureResult = tokenAuthApi.getSignature(hashToSign, user.getId(), null, null);
-        verifySignatureValid(hashToSign, signatureResult, serverConfig);
+        verifySignatureValid(hashToSign, signatureResult);
 
         // Sign using user's default key (customUserId)
         hashToSign = Config.randomHash();
         signatureResult = tokenAuthApi.getSignature(hashToSign, null, user.getIdentity().getUserId(), null);
-        verifySignatureValid(hashToSign, signatureResult, serverConfig);
+        verifySignatureValid(hashToSign, signatureResult);
 
         // Sign using user's default key (pubKey)
         KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
@@ -181,7 +187,14 @@ public class SignatureApiTest {
         KeyGet keyGet = keyApi.getKeyById(user.getDefaultKeyId());
         String pubKey = keyGet.getPubKey();
         signatureResult = tokenAuthApi.getSignature(hashToSign, null, null, pubKey);
-        verifySignatureValid(hashToSign, signatureResult, serverConfig);
+        verifySignatureValid(hashToSign, signatureResult);
+
+        // FIXME: WOLEET-1141: Since we just used the key to sign, its last used should be close to current time
+//        keyGet = keyApi.getKeyById(user.getDefaultKeyId());
+//        assertTrue(keyGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
+//                && keyGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
+
+        // TODO: test signing using a blocked key
 
         // Delete user's default key
         keyApi.deleteKey(keyGet.getId());
@@ -204,7 +217,5 @@ public class SignatureApiTest {
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
-
-        // TODO: test signing using a blocked key
     }
 }

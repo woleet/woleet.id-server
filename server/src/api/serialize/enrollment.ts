@@ -2,8 +2,7 @@ export function serializeEnrollment(enrollment: InternalEnrollmentObject): ApiEn
   const dates = {
     expiration: +enrollment.expiration || null,
     createdAt: +enrollment.createdAt || null,
-    updatedAt: +enrollment.updatedAt || null,
-    deletedAt: +enrollment.deletedAt || null
+    updatedAt: +enrollment.updatedAt || null
   };
 
   const { id, name, userId, device, signatureRequestId, keyExpiration } = enrollment;

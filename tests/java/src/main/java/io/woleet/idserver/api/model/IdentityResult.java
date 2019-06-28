@@ -61,10 +61,10 @@ public class IdentityResult {
   }
 
    /**
-   * The right part of the signed data (generated randomly). &lt;br&gt;To prevent man-in-the-middle attacks, the data start with the server&#39;s identity URL and this should be verified by the caller. 
+   * The right part of the signed data (generated randomly). &lt;br&gt;To prevent man-in-the-middle attacks, the data starts with the server&#39;s identity URL and this should be verified by the caller. 
    * @return rightData
   **/
-  @ApiModelProperty(value = "The right part of the signed data (generated randomly). <br>To prevent man-in-the-middle attacks, the data start with the server's identity URL and this should be verified by the caller. ")
+  @ApiModelProperty(value = "The right part of the signed data (generated randomly). <br>To prevent man-in-the-middle attacks, the data starts with the server's identity URL and this should be verified by the caller. ")
   public String getRightData() {
     return rightData;
   }
@@ -79,10 +79,10 @@ public class IdentityResult {
   }
 
    /**
-   * The signature of the concatenation of &#x60;leftData&#x60; and &#x60;rightData&#x60; using the public key &#x60;pubKey&#x60;.
+   * The signature of the concatenation of &#x60;leftData&#x60; and &#x60;rightData&#x60; using the public key &#x60;pubKey&#x60;. 
    * @return signature
   **/
-  @ApiModelProperty(example = "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=", value = "The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.")
+  @ApiModelProperty(example = "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=", value = "The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`. ")
   public String getSignature() {
     return signature;
   }
@@ -115,10 +115,10 @@ public class IdentityResult {
   }
 
    /**
-   * Indicates whether the key has expired or not. &lt;br&gt;Note that the field is not returned if the key has no expiration date. 
+   * Indicates whether the key has expired or not. &lt;br&gt;Note that the field is not returned if the key has not expired. 
    * @return expired
   **/
-  @ApiModelProperty(value = "Indicates whether the key has expired or not. <br>Note that the field is not returned if the key has no expiration date. ")
+  @ApiModelProperty(value = "Indicates whether the key has expired or not. <br>Note that the field is not returned if the key has not expired. ")
   public Boolean getExpired() {
     return expired;
   }

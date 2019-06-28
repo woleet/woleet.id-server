@@ -48,10 +48,6 @@ public class APITokenGet extends APITokenBase {
   @SerializedName(SERIALIZED_NAME_UPDATED_AT)
   private Long updatedAt;
 
-  public static final String SERIALIZED_NAME_DELETED_AT = "deletedAt";
-  @SerializedName(SERIALIZED_NAME_DELETED_AT)
-  private Long deletedAt;
-
   public static final String SERIALIZED_NAME_LAST_USED = "lastUsed";
   @SerializedName(SERIALIZED_NAME_LAST_USED)
   private Long lastUsed;
@@ -93,15 +89,6 @@ public class APITokenGet extends APITokenBase {
   }
 
    /**
-   * Date of deletion (Unix ms timestamp) (&#x60;null&#x60; if not deleted).
-   * @return deletedAt
-  **/
-  @ApiModelProperty(example = "1529052551419", value = "Date of deletion (Unix ms timestamp) (`null` if not deleted).")
-  public Long getDeletedAt() {
-    return deletedAt;
-  }
-
-   /**
    * Date of last usage (Unix ms timestamp).
    * @return lastUsed
   **/
@@ -124,14 +111,13 @@ public class APITokenGet extends APITokenBase {
         Objects.equals(this.value, apITokenGet.value) &&
         Objects.equals(this.createdAt, apITokenGet.createdAt) &&
         Objects.equals(this.updatedAt, apITokenGet.updatedAt) &&
-        Objects.equals(this.deletedAt, apITokenGet.deletedAt) &&
         Objects.equals(this.lastUsed, apITokenGet.lastUsed) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, value, createdAt, updatedAt, deletedAt, lastUsed, super.hashCode());
+    return Objects.hash(id, value, createdAt, updatedAt, lastUsed, super.hashCode());
   }
 
 
@@ -144,7 +130,6 @@ public class APITokenGet extends APITokenBase {
     sb.append("    value: ").append(toIndentedString(value)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
-    sb.append("    deletedAt: ").append(toIndentedString(deletedAt)).append("\n");
     sb.append("    lastUsed: ").append(toIndentedString(lastUsed)).append("\n");
     sb.append("}");
     return sb.toString();

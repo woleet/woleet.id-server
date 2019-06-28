@@ -28,7 +28,6 @@ import java.io.IOException;
 
 
 import io.woleet.idserver.api.model.APIError;
-import io.woleet.idserver.api.model.ExternalKeyBase;
 import io.woleet.idserver.api.model.ExternalKeyPost;
 import io.woleet.idserver.api.model.KeyBase;
 import io.woleet.idserver.api.model.KeyGet;
