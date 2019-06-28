@@ -107,6 +107,28 @@ export WOLEET_ID_SERVER_POSTGRES_USER={PostgreSQL user, default: pguser}
 export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pass}
 ```
 
+## Version
+
+Woleet.ID Server have prebuilt images on dockerhub:  
+<https://hub.docker.com/r/wids/client>  
+<https://hub.docker.com/r/wids/server>
+
+If the environnement variable:
+
+```bash
+export WOLEET_ID_SERVER_VERSION=x.x.x
+```
+
+app.sh and docker-compose.yml will use the specified version (> 0.5.0), if you want to see differences between versions, you can go to the release tab of github.
+
+If you have this project cloned and checkouted to a commit that match with a tag (for example, when using onlineSetup.sh to install the project) you can use
+
+```bash
+./app.sh upgrade
+```
+
+To upgrade the repo to the latest tagged version, it will also set the WOLEET_ID_SERVER_VERSION environnement variable to the latest one in the file configuration.sh
+
 ## Docker
 
 Woleet.ID Server requires a recent Docker version:
@@ -162,6 +184,10 @@ export WOLEET_ID_SERVER_SIGNATURE_PORT={port to use for the /sign and /discover 
 # Restore the server
 
     ./app.sh restore <your_backup_file>
+
+# Upgrade the server
+
+[See the documentation](##Version)
 
 # Test the server
 
