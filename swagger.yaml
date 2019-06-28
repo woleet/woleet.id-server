@@ -1067,12 +1067,16 @@ components:
   schemas:
     Identity:
       type: object
-      description: User identity provided as a set of X.500 attributes (see https://www.ietf.org/rfc/rfc4519.txt).
+      description: User identity provided as a set of X500 Distinguished Name attributes (see https://www.ietf.org/rfc/rfc4519.txt).
       properties:
         commonName:
           type: string
           description: Common name (CN) (2.5.4.3)
           example: "Jim Smith"
+        emailAddress:
+          type: string
+          description: Email Address (EMAILADDRESS) (1.2.840.113549.1.9.1)
+          example: "jim.smith@woleet.com"
         organization:
           type: string
           description: Organization name (O) (2.5.4.10)
@@ -1132,12 +1136,6 @@ components:
       format: int64
       readOnly: true
       description: Date of last modification (Unix ms timestamp).
-      example: 1529052551419
-    DeletedAt:
-      type: integer
-      format: int64
-      readOnly: true
-      description: Date of deletion (Unix ms timestamp) (`null` if not deleted).
       example: 1529052551419
     LastUsed:
       type: integer
@@ -1298,8 +1296,6 @@ components:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:
               $ref: '#/components/schemas/UpdatedAt'
-            deletedAt:
-              $ref: '#/components/schemas/DeletedAt'
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
     APITokenPost:
@@ -1429,6 +1425,13 @@ components:
           type: string
           description: Key name.
           example: "Jim Smith's key"
+        expiration:
+          type: integer
+          format: int64
+          example: 1569542400000
+          description: >
+            Key expiration date (Unix ms timestamp).
+            <br>Note that the field is not returned if the key has no expiration date.
         status:
           $ref: '#/components/schemas/KeyStatusEnum'
     KeyGet:
@@ -1452,25 +1455,16 @@ components:
               $ref: '#/components/schemas/KeyHolderEnum'
             device:
               $ref: '#/components/schemas/KeyDeviceEnum'
-            expiration:
-              type: integer
-              format: int64
-              example: 1569542400000
-              description: >
-                Key expiration date (Unix ms timestamp).
-                <br>Note that the field is not returned if the key has no expiration date.
             expired:
               type: boolean
               example: false
               description: >
                 Indicates whether the key has expired or not.
-                <br>Note that the field is not returned if the key has no expiration date.
+                <br>Note that the field is not returned if the key has not expired.
             createdAt:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:
               $ref: '#/components/schemas/UpdatedAt'
-            deletedAt:
-              $ref: '#/components/schemas/DeletedAt'
             lastUsed:
               $ref: '#/components/schemas/LastUsed'
     KeyPost:
@@ -1502,7 +1496,7 @@ components:
       properties:
         identityURL:
           $ref: '#/components/schemas/IdentityURL'
-    ExternalKeyBase:
+    ExternalKeyPost:
       type: object
       properties:
         name:
@@ -1517,13 +1511,15 @@ components:
           $ref: '#/components/schemas/KeyDeviceEnum'
         status:
           $ref: '#/components/schemas/KeyStatusEnum'
-    ExternalKeyPost:
-      allOf:
-        - $ref: '#/components/schemas/ExternalKeyBase'
-        - type: object
-          required:
-            - name
-            - publicKey
+        expiration:
+          type: integer
+          format: int64
+          example: 1569542400000
+          description: >
+            Key expiration date (Unix ms timestamp).
+      required:
+        - name
+        - publicKey
     SignatureResult:
       type: object
       properties:
@@ -1552,12 +1548,13 @@ components:
               type: string
               description: >
                 The right part of the signed data (generated randomly).
-                <br>To prevent man-in-the-middle attacks, the data start with the server's identity URL and this should be verified by the caller.
+                <br>To prevent man-in-the-middle attacks, the data starts with the server's identity URL and this should be verified by the caller.
             signature:
               type: string
               format: base64
               example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
-              description: The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
+              description: >
+                The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
             expiration:
               type: integer
               format: int64
@@ -1570,7 +1567,7 @@ components:
               example: false
               description: >
                 Indicates whether the key has expired or not.
-                <br>Note that the field is not returned if the key has no expiration date.
+                <br>Note that the field is not returned if the key has not expired.
             identity:
               $ref: '#/components/schemas/Identity'
             key:

@@ -46,10 +46,10 @@ public class EnrollmentGet extends EnrollmentBase {
   }
 
    /**
-   * Added enrollment id
+   * Enrollment identifier (allocated by the server).
    * @return id
   **/
-  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Added enrollment id")
+  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Enrollment identifier (allocated by the server).")
   public UUID getId() {
     return id;
   }

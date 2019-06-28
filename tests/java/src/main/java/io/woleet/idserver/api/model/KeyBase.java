@@ -34,6 +34,10 @@ public class KeyBase {
   @SerializedName(SERIALIZED_NAME_NAME)
   private String name;
 
+  public static final String SERIALIZED_NAME_EXPIRATION = "expiration";
+  @SerializedName(SERIALIZED_NAME_EXPIRATION)
+  private Long expiration;
+
   public static final String SERIALIZED_NAME_STATUS = "status";
   @SerializedName(SERIALIZED_NAME_STATUS)
   private KeyStatusEnum status = null;
@@ -54,6 +58,24 @@ public class KeyBase {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public KeyBase expiration(Long expiration) {
+    this.expiration = expiration;
+    return this;
+  }
+
+   /**
+   * Key expiration date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no expiration date. 
+   * @return expiration
+  **/
+  @ApiModelProperty(example = "1569542400000", value = "Key expiration date (Unix ms timestamp). <br>Note that the field is not returned if the key has no expiration date. ")
+  public Long getExpiration() {
+    return expiration;
+  }
+
+  public void setExpiration(Long expiration) {
+    this.expiration = expiration;
   }
 
   public KeyBase status(KeyStatusEnum status) {
@@ -85,12 +107,13 @@ public class KeyBase {
     }
     KeyBase keyBase = (KeyBase) o;
     return Objects.equals(this.name, keyBase.name) &&
+        Objects.equals(this.expiration, keyBase.expiration) &&
         Objects.equals(this.status, keyBase.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, status);
+    return Objects.hash(name, expiration, status);
   }
 
 
@@ -100,6 +123,7 @@ public class KeyBase {
     sb.append("class KeyBase {\n");
     
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();

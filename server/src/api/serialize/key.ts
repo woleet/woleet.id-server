@@ -3,7 +3,6 @@ export function serializeKey(key: InternalKeyObject): ApiKeyObject {
     expiration: +key.expiration || null,
     createdAt: +key.createdAt || null,
     updatedAt: +key.updatedAt || null,
-    deletedAt: +key.deletedAt || null,
     lastUsed: +key.lastUsed || null
   };
 

@@ -1,10 +1,9 @@
 import { secureModule } from "../../config";
 
-export async function serializeapiToken(token: InternalAPITokenObject): Promise<ApiAPITokenObject> {
+export async function serializeAPIToken(token: InternalAPITokenObject): Promise<ApiAPITokenObject> {
   const dates = {
     createdAt: +token.createdAt || null,
     updatedAt: +token.updatedAt || null,
-    deletedAt: +token.deletedAt || null,
     lastUsed: +token.lastUsed || null
   };
 
