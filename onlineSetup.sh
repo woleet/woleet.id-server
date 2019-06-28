@@ -115,6 +115,7 @@ setLsbVersionDist() {
 }
 
 installPackage() {
+  setShC
   package=$1
   case "$lsb_dist" in
     ubuntu|debian)
@@ -144,6 +145,7 @@ installPackage() {
 }
 
 installDocker() {
+  setShC
   case "$lsb_dist" in
     ubuntu|debian)
       pre_reqs="apt-transport-https ca-certificates"
@@ -215,6 +217,7 @@ installDocker() {
 }
 
 startEnableDocker() {
+  setShC
   (
     set -x
     $sh_c 'systemctl daemon-reload; systemctl start docker; systemctl enable docker'
@@ -222,6 +225,7 @@ startEnableDocker() {
 }
 
 installDockerCompose() {
+  setShC
   (
     set -x
     $sh_c "curl -fsSL \"https://github.com/docker/compose/releases/download/1.24.0/docker-compose-Linux-x86_64\" -o /usr/local/bin/docker-compose"
@@ -325,7 +329,6 @@ install() {
 
   printPrerequisites
 
-  setShC
   setLsbVersionDist
 
   if ! command_exists readlink
@@ -375,14 +378,16 @@ install() {
   install_dir="${HOME}/wids"
   installWids
   getCheckSSLCerts
+
   if docker ps > /dev/null 2>&1
   then
     ./app.sh start
   else
-  (
-    set -x
-    $sh_c "./app.sh start"
-  )
+    setShC
+    (
+      set -x
+      $sh_c "./app.sh start"
+    )
   fi
 }
 
