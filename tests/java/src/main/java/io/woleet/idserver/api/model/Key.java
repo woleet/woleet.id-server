@@ -38,6 +38,57 @@ public class Key {
   @SerializedName(SERIALIZED_NAME_PUB_KEY)
   private String pubKey;
 
+  /**
+   * Gets or Sets status
+   */
+  @JsonAdapter(StatusEnum.Adapter.class)
+  public enum StatusEnum {
+    VALID("valid"),
+    
+    EXPIRED("expired");
+
+    private String value;
+
+    StatusEnum(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static StatusEnum fromValue(String text) {
+      for (StatusEnum b : StatusEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + text + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<StatusEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final StatusEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public StatusEnum read(final JsonReader jsonReader) throws IOException {
+        String value = jsonReader.nextString();
+        return StatusEnum.fromValue(String.valueOf(value));
+      }
+    }
+  }
+
+  public static final String SERIALIZED_NAME_STATUS = "status";
+  @SerializedName(SERIALIZED_NAME_STATUS)
+  private StatusEnum status;
+
   public Key name(String name) {
     this.name = name;
     return this;
@@ -74,6 +125,24 @@ public class Key {
     this.pubKey = pubKey;
   }
 
+  public Key status(StatusEnum status) {
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @ApiModelProperty(value = "")
+  public StatusEnum getStatus() {
+    return status;
+  }
+
+  public void setStatus(StatusEnum status) {
+    this.status = status;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -85,12 +154,13 @@ public class Key {
     }
     Key key = (Key) o;
     return Objects.equals(this.name, key.name) &&
-        Objects.equals(this.pubKey, key.pubKey);
+        Objects.equals(this.pubKey, key.pubKey) &&
+        Objects.equals(this.status, key.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, pubKey);
+    return Objects.hash(name, pubKey, status);
   }
 
 
@@ -101,6 +171,7 @@ public class Key {
     
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    pubKey: ").append(toIndentedString(pubKey)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
   }

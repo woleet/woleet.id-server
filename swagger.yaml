@@ -1103,6 +1103,11 @@ components:
           type: string
           description: Public key (bitcoin address when using BIP39 keys).
           example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
+        status:
+          type: string
+          enum:
+            - valid
+            - expired
     FullIdentity:
       allOf:
         - $ref: '#/components/schemas/Identity'
