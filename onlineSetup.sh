@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Based on https://get.docker.com/
 
 set -e
 
@@ -21,13 +22,10 @@ command_exists() {
 
 get_distribution() {
   lsb_dist=""
-  # Every system that we officially support has /etc/os-release
   if [ -r /etc/os-release ]
   then
     lsb_dist="$(. /etc/os-release && echo "$ID")"
   fi
-  # Returning an empty string here should be alright since the
-  # case statements don't act unless you provide an actual value
   echo "$lsb_dist"
 }
 
@@ -74,15 +72,12 @@ setShC() {
 }
 
 setLsbVersionDist() {
-  # perform some very rudimentary platform detection
   lsb_dist=""
-  # Every system that we officially support has /etc/os-release
   if [ -r /etc/os-release ]
   then
     lsb_dist="$(. /etc/os-release && echo "$ID" | tr '[:upper:]' '[:lower:]' )"
   fi
 
-  # Run setup for each distro accordingly
   case "$lsb_dist" in
     ubuntu|debian)
       if [ "$lsb_dist" = "ubuntu" ]
@@ -379,15 +374,16 @@ install() {
 
   install_dir="${HOME}/wids"
   installWids
-  # Configure
   getCheckSSLCerts
-  # Start
+  if docker ps > /dev/null 2>&1
+  then
+    ./app.sh start
+  else
   (
     set -x
     $sh_c "./app.sh start"
   )
+  fi
 }
 
-# wrapped up in a function so that we have some protection against only getting
-# half the file during "curl | sh"
 install
