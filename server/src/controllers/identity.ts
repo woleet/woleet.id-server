@@ -1,6 +1,7 @@
 import * as crypto from 'crypto';
 import { Key } from '../database';
 import { NotFoundKeyError } from '../errors';
+import * as timestring from 'timestring';
 
 import { serializeIdentity } from '../api/serialize/identity';
 import { getServerConfig } from './server-config';
@@ -26,8 +27,9 @@ export async function getIdentity(leftData: string, pubKey: string) {
     status
   };
 
+  // add expiration field if the expiration date is set, transform the Date string type into timestamp format.
   if (key.get('expiration')) {
-    identityKey.expiration = key.get('expiration');
+    identityKey.expiration = +key.get('expiration');
   }
 
   if ((key.get('holder') === 'server') && leftData !== undefined) {

@@ -2,8 +2,7 @@ package io.woleet.idserver.api;
 
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
-import io.woleet.idserver.api.model.IdentityResult;
-import io.woleet.idserver.api.model.ServerConfig;
+import io.woleet.idserver.api.model.*;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 
@@ -18,11 +17,23 @@ public class IdentityApiTest {
             WOLEET_ID_SERVER_IDENTITY_BASEPATH = "https://localhost:3000";
     }
 
+    private UserGet user;
+
+    {
+        try {
+            user = Config.createTestUser();
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void getIdentityTest() throws ApiException {
 
         IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
                 .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
+
+        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
 
         try {
             identityApi.getIdentity("invalid pubKey", Config.randomString(32));
@@ -44,13 +55,24 @@ public class IdentityApiTest {
         assertNotNull(serverConfig.getIdentityURL());
         assertNotNull(serverConfig.getDefaultKeyId());
 
+        String leftData = Config.randomString(32);
+
+        // Create expired key
+        KeyPost keyPost = new KeyPost();
+        keyPost.setName(Config.randomName());
+        keyPost.setExpiration(Config.randomTimestamp()/10);
+        KeyGet expiredKey = keyApi.createKey(user.getId(), keyPost);
+
+        // Test if the created expired key status is expired
+        IdentityResult expiredIdentity = identityApi.getIdentity(expiredKey.getPubKey(), leftData);
+        assertEquals(expiredIdentity.getKey().getStatus(),Key.StatusEnum.EXPIRED);
+
         // Get server's default public key
-        String pubKey = new KeyApi(Config.getAdminAuthApiClient()).getKeyById(serverConfig.getDefaultKeyId())
+        String pubKey = keyApi.getKeyById(serverConfig.getDefaultKeyId())
                 .getPubKey();
         assertNotNull(pubKey);
 
         // Get and verify server's default identity
-        String leftData = Config.randomString(32);
         IdentityResult identityResult = identityApi.getIdentity(pubKey, leftData);
         assertNotNull(identityResult.getIdentity());
         assertNotNull(identityResult.getIdentity().getCommonName());
@@ -67,6 +89,23 @@ public class IdentityApiTest {
         );
         assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(), leftData + identityResult.getRightData()));
 
-        // TODO: verify identity related to external keys
+        // Create External key
+        ExternalKeyPost externalKeyPost = new ExternalKeyPost();
+        externalKeyPost.setName(Config.randomName());
+        externalKeyPost.setPublicKey(Config.randomAddress());
+        KeyGet externalIdentityKey = keyApi.createExternalKey(user.getId(), externalKeyPost);
+
+
+        // Test the external key
+        IdentityResult externalIdentity = identityApi.getIdentity(externalIdentityKey.getPubKey(), null);
+        assertNull(externalIdentity.getSignature());
+        assertNotNull(externalIdentity.getKey().getStatus());
+        assertNotNull(externalIdentity.getKey());
+        assertNotNull(externalIdentity.getIdentity());
+        assertNotNull(externalIdentity.getIdentity().getCommonName());
+        assertEquals(externalIdentity.getKey().getPubKey(), externalKeyPost.getPublicKey());
+
+        keyApi.deleteKey(expiredKey.getId());
+        keyApi.deleteKey(externalIdentityKey.getId());
     }
 }
