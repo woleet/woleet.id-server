@@ -71,14 +71,63 @@ public class IdentityApiTest {
         // Create an expired key
         KeyPost keyPost = new KeyPost();
         keyPost.setName(Config.randomName());
-        keyPost.setExpiration(Config.randomTimestamp() - (3600L * 1000L));
+        Long expiration = Config.randomTimestamp() - (3600L * 1000L);
+        keyPost.setExpiration(expiration);
         KeyGet expiredKey = keyApi.createKey(user.getId(), keyPost);
 
-        // Check that the key is expired
+        // Test expired key identity
         IdentityResult expiredIdentity = identityApi.getIdentity(expiredKey.getPubKey(), leftData);
         assertNotNull(expiredIdentity.getSignature());
+        assertNotNull(expiredIdentity.getRightData());
         assertNotNull(expiredIdentity.getIdentity());
-        assertEquals(expiredIdentity.getKey().getStatus(), Key.StatusEnum.EXPIRED);
+        assertEquals(user.getIdentity().getCommonName(), expiredIdentity.getIdentity().getCommonName());
+        assertNotNull(expiredIdentity.getKey());
+        assertEquals(keyPost.getName(), expiredIdentity.getKey().getName());
+        assertNotNull(expiredIdentity.getKey().getPubKey());
+        assertEquals(expiration, expiredIdentity.getKey().getExpiration());
+        assertEquals(Key.StatusEnum.EXPIRED, expiredIdentity.getKey().getStatus());
+
+        // Create a blocked key
+        keyPost = new KeyPost();
+        keyPost.setName(Config.randomName());
+        keyPost.setStatus(KeyStatusEnum.BLOCKED);
+        KeyGet blockedKey = keyApi.createKey(user.getId(), keyPost);
+
+        // Test the blocked key identity
+        IdentityResult blockedIdentity = identityApi.getIdentity(blockedKey.getPubKey(), leftData);
+        assertNotNull(blockedIdentity.getSignature());
+        assertNotNull(blockedIdentity.getRightData());
+        assertNotNull(blockedIdentity.getIdentity());
+        assertEquals(user.getIdentity().getCommonName(), blockedIdentity.getIdentity().getCommonName());
+        assertNotNull(blockedIdentity.getKey());
+        assertEquals(keyPost.getName(), blockedIdentity.getKey().getName());
+        assertNotNull(blockedIdentity.getKey().getPubKey());
+        assertNull(blockedIdentity.getKey().getExpiration());
+        assertEquals(Key.StatusEnum.VALID, blockedIdentity.getKey().getStatus());
+
+        // Delete blocked key
+        keyApi.deleteKey(blockedKey.getId());
+
+        // Create an external key
+        ExternalKeyPost externalKeyPost = new ExternalKeyPost();
+        externalKeyPost.setName(Config.randomName());
+        externalKeyPost.setPublicKey(Config.randomAddress());
+        KeyGet externalKey = keyApi.createExternalKey(user.getId(), externalKeyPost);
+
+        // Test external key identity
+        IdentityResult externalIdentity = identityApi.getIdentity(externalKey.getPubKey(), null);
+        assertNull(externalIdentity.getSignature());
+        assertNull(externalIdentity.getRightData());
+        assertNotNull(externalIdentity.getIdentity());
+        assertNotNull(externalIdentity.getIdentity().getCommonName());
+        assertNotNull(externalIdentity.getKey());
+        assertEquals(externalKeyPost.getName(), externalIdentity.getKey().getName());
+        assertEquals(externalKeyPost.getPublicKey(), externalIdentity.getKey().getPubKey());
+        assertNull(externalIdentity.getKey().getExpiration());
+        assertEquals(Key.StatusEnum.VALID, externalIdentity.getKey().getStatus());
+
+        // Delete external key
+        keyApi.deleteKey(externalKey.getId());
 
         // Get server's default public key
         String pubKey = keyApi.getKeyById(serverConfig.getDefaultKeyId()).getPubKey();
@@ -89,13 +138,13 @@ public class IdentityApiTest {
 
         // Get and verify server's default identity
         IdentityResult identityResult = identityApi.getIdentity(pubKey, leftData);
+        assertNotNull(identityResult.getSignature());
         assertNotNull(identityResult.getIdentity());
         assertNotNull(identityResult.getIdentity().getCommonName());
-        assertNotNull(identityResult.getRightData());
-        assertNotNull(identityResult.getSignature());
         assertNotNull(identityResult.getKey());
+        assertNotNull(identityResult.getKey().getName());
         assertEquals(identityResult.getKey().getPubKey(), pubKey);
-        assertNotNull(identityResult.getKey().getStatus());
+        assertEquals(Key.StatusEnum.VALID, identityResult.getKey().getStatus());
         assertTrue(
                 "Expected " + identityResult.getRightData()
                         + "to start with \"" + serverConfig.getIdentityURL()
@@ -103,23 +152,5 @@ public class IdentityApiTest {
                 identityResult.getRightData().startsWith(serverConfig.getIdentityURL())
         );
         assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(), leftData + identityResult.getRightData()));
-
-        // Create an external key
-        ExternalKeyPost externalKeyPost = new ExternalKeyPost();
-        externalKeyPost.setName(Config.randomName());
-        externalKeyPost.setPublicKey(Config.randomAddress());
-        KeyGet externalIdentityKey = keyApi.createExternalKey(user.getId(), externalKeyPost);
-
-        // Test external key identity
-        IdentityResult externalIdentity = identityApi.getIdentity(externalIdentityKey.getPubKey(), null);
-        assertNull(externalIdentity.getSignature());
-        assertNotNull(externalIdentity.getKey());
-        assertEquals(Key.StatusEnum.VALID, externalIdentity.getKey().getStatus());
-        assertEquals(externalKeyPost.getPublicKey(), externalIdentity.getKey().getPubKey());
-        assertNotNull(externalIdentity.getIdentity());
-        assertNotNull(externalIdentity.getIdentity().getCommonName());
-
-        // Delete external key
-        keyApi.deleteKey(externalIdentityKey.getId());
     }
 }
