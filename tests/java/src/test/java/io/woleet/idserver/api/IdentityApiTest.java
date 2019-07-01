@@ -4,6 +4,8 @@ import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
 import org.apache.http.HttpStatus;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -19,12 +21,19 @@ public class IdentityApiTest {
 
     private UserGet user;
 
-    {
-        try {
-            user = Config.createTestUser();
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
+    @Before
+    public void setUp() throws Exception {
+
+        // Start from a clean state
+        tearDown();
+
+        // Create test user
+        user = Config.createTestUser();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        Config.deleteAllTestUsers();
     }
 
     @Test
@@ -35,15 +44,19 @@ public class IdentityApiTest {
 
         KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
 
+        String leftData = Config.randomString(32);
+
+        // Check that we cannot get an identity from an invalid public key
         try {
-            identityApi.getIdentity("invalid pubKey", Config.randomString(32));
+            identityApi.getIdentity("invalid pubKey", null);
             fail("Should not be able to get an identity with an invalid key");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
+        // Check that we cannot get an identity from a public key that does not exist
         try {
-            identityApi.getIdentity("1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG", Config.randomString(32));
+            identityApi.getIdentity("1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG", null);
             fail("Should not be able to get an identity with an non existing key");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
@@ -55,22 +68,24 @@ public class IdentityApiTest {
         assertNotNull(serverConfig.getIdentityURL());
         assertNotNull(serverConfig.getDefaultKeyId());
 
-        String leftData = Config.randomString(32);
-
-        // Create expired key
+        // Create an expired key
         KeyPost keyPost = new KeyPost();
         keyPost.setName(Config.randomName());
-        keyPost.setExpiration(Config.randomTimestamp()/10);
+        keyPost.setExpiration(Config.randomTimestamp() - (3600L * 1000L));
         KeyGet expiredKey = keyApi.createKey(user.getId(), keyPost);
 
-        // Test if the created expired key status is expired
+        // Check that the key is expired
         IdentityResult expiredIdentity = identityApi.getIdentity(expiredKey.getPubKey(), leftData);
-        assertEquals(expiredIdentity.getKey().getStatus(),Key.StatusEnum.EXPIRED);
+        assertNotNull(expiredIdentity.getSignature());
+        assertNotNull(expiredIdentity.getIdentity());
+        assertEquals(expiredIdentity.getKey().getStatus(), Key.StatusEnum.EXPIRED);
 
         // Get server's default public key
-        String pubKey = keyApi.getKeyById(serverConfig.getDefaultKeyId())
-                .getPubKey();
+        String pubKey = keyApi.getKeyById(serverConfig.getDefaultKeyId()).getPubKey();
         assertNotNull(pubKey);
+
+        // Delete expired key
+        keyApi.deleteKey(expiredKey.getId());
 
         // Get and verify server's default identity
         IdentityResult identityResult = identityApi.getIdentity(pubKey, leftData);
@@ -89,23 +104,22 @@ public class IdentityApiTest {
         );
         assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(), leftData + identityResult.getRightData()));
 
-        // Create External key
+        // Create an external key
         ExternalKeyPost externalKeyPost = new ExternalKeyPost();
         externalKeyPost.setName(Config.randomName());
         externalKeyPost.setPublicKey(Config.randomAddress());
         KeyGet externalIdentityKey = keyApi.createExternalKey(user.getId(), externalKeyPost);
 
-
-        // Test the external key
+        // Test external key identity
         IdentityResult externalIdentity = identityApi.getIdentity(externalIdentityKey.getPubKey(), null);
         assertNull(externalIdentity.getSignature());
-        assertNotNull(externalIdentity.getKey().getStatus());
         assertNotNull(externalIdentity.getKey());
+        assertEquals(Key.StatusEnum.VALID, externalIdentity.getKey().getStatus());
+        assertEquals(externalKeyPost.getPublicKey(), externalIdentity.getKey().getPubKey());
         assertNotNull(externalIdentity.getIdentity());
         assertNotNull(externalIdentity.getIdentity().getCommonName());
-        assertEquals(externalIdentity.getKey().getPubKey(), externalKeyPost.getPublicKey());
 
-        keyApi.deleteKey(expiredKey.getId());
+        // Delete external key
         keyApi.deleteKey(externalIdentityKey.getId());
     }
 }
