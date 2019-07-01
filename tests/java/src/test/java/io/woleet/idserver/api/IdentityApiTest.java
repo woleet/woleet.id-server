@@ -56,7 +56,9 @@ public class IdentityApiTest {
         assertNotNull(identityResult.getIdentity().getCommonName());
         assertNotNull(identityResult.getRightData());
         assertNotNull(identityResult.getSignature());
-        // TODO: verify getExpiration() getExpired() and getKey()
+        assertNotNull(identityResult.getKey());
+        assertEquals(identityResult.getKey().getPubKey(), pubKey);
+        assertNotNull(identityResult.getKey().getStatus());
         assertTrue(
                 "Expected " + identityResult.getRightData()
                         + "to start with \"" + serverConfig.getIdentityURL()

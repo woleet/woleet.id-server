@@ -89,6 +89,10 @@ public class Key {
   @SerializedName(SERIALIZED_NAME_STATUS)
   private StatusEnum status;
 
+  public static final String SERIALIZED_NAME_EXPIRATION = "expiration";
+  @SerializedName(SERIALIZED_NAME_EXPIRATION)
+  private Long expiration;
+
   public Key name(String name) {
     this.name = name;
     return this;
@@ -143,6 +147,24 @@ public class Key {
     this.status = status;
   }
 
+  public Key expiration(Long expiration) {
+    this.expiration = expiration;
+    return this;
+  }
+
+   /**
+   * Key expiration date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no expiration date. 
+   * @return expiration
+  **/
+  @ApiModelProperty(example = "1569542400000", value = "Key expiration date (Unix ms timestamp). <br>Note that the field is not returned if the key has no expiration date. ")
+  public Long getExpiration() {
+    return expiration;
+  }
+
+  public void setExpiration(Long expiration) {
+    this.expiration = expiration;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -155,12 +177,13 @@ public class Key {
     Key key = (Key) o;
     return Objects.equals(this.name, key.name) &&
         Objects.equals(this.pubKey, key.pubKey) &&
-        Objects.equals(this.status, key.status);
+        Objects.equals(this.status, key.status) &&
+        Objects.equals(this.expiration, key.expiration);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, pubKey, status);
+    return Objects.hash(name, pubKey, status, expiration);
   }
 
 
@@ -172,6 +195,7 @@ public class Key {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    pubKey: ").append(toIndentedString(pubKey)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");
     sb.append("}");
     return sb.toString();
   }

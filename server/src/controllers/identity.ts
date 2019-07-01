@@ -20,6 +20,16 @@ export async function getIdentity(leftData: string, pubKey: string) {
   const status = expired && key.get('status') === 'active' ?
     'expired' : 'valid';
 
+  const identityKey: ApiIndentityKeyObject = {
+    name: key.get('name'),
+    pubKey: key.get('publicKey'),
+    status
+  };
+
+  if (key.get('expiration')) {
+    identityKey.expiration = key.get('expiration');
+  }
+
   if ((key.get('holder') === 'server') && leftData !== undefined) {
     const rightData = getServerConfig().identityURL + '.' + crypto.randomBytes(16).toString('hex');
 
@@ -29,20 +39,12 @@ export async function getIdentity(leftData: string, pubKey: string) {
       rightData,
       signature,
       identity: serializeIdentity(identity, true),
-      key: {
-        name: key.get('name'),
-        pubKey: key.get('publicKey'),
-        status
-      }
+      key: identityKey
     };
   } else {
     return {
       identity: serializeIdentity(identity, true),
-      key: {
-        name: key.get('name'),
-        pubKey: key.get('publicKey'),
-        status
-      }
+      key: identityKey
     };
   }
 }

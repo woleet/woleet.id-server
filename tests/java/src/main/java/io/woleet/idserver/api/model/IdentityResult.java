@@ -39,14 +39,6 @@ public class IdentityResult {
   @SerializedName(SERIALIZED_NAME_SIGNATURE)
   private String signature;
 
-  public static final String SERIALIZED_NAME_EXPIRATION = "expiration";
-  @SerializedName(SERIALIZED_NAME_EXPIRATION)
-  private Long expiration;
-
-  public static final String SERIALIZED_NAME_EXPIRED = "expired";
-  @SerializedName(SERIALIZED_NAME_EXPIRED)
-  private Boolean expired;
-
   public static final String SERIALIZED_NAME_IDENTITY = "identity";
   @SerializedName(SERIALIZED_NAME_IDENTITY)
   private Identity identity = null;
@@ -89,42 +81,6 @@ public class IdentityResult {
 
   public void setSignature(String signature) {
     this.signature = signature;
-  }
-
-  public IdentityResult expiration(Long expiration) {
-    this.expiration = expiration;
-    return this;
-  }
-
-   /**
-   * Key expiration date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no expiration date. 
-   * @return expiration
-  **/
-  @ApiModelProperty(example = "1569542400000", value = "Key expiration date (Unix ms timestamp). <br>Note that the field is not returned if the key has no expiration date. ")
-  public Long getExpiration() {
-    return expiration;
-  }
-
-  public void setExpiration(Long expiration) {
-    this.expiration = expiration;
-  }
-
-  public IdentityResult expired(Boolean expired) {
-    this.expired = expired;
-    return this;
-  }
-
-   /**
-   * Indicates whether the key has expired or not. &lt;br&gt;Note that the field is not returned if the key has not expired. 
-   * @return expired
-  **/
-  @ApiModelProperty(value = "Indicates whether the key has expired or not. <br>Note that the field is not returned if the key has not expired. ")
-  public Boolean getExpired() {
-    return expired;
-  }
-
-  public void setExpired(Boolean expired) {
-    this.expired = expired;
   }
 
   public IdentityResult identity(Identity identity) {
@@ -175,15 +131,13 @@ public class IdentityResult {
     IdentityResult identityResult = (IdentityResult) o;
     return Objects.equals(this.rightData, identityResult.rightData) &&
         Objects.equals(this.signature, identityResult.signature) &&
-        Objects.equals(this.expiration, identityResult.expiration) &&
-        Objects.equals(this.expired, identityResult.expired) &&
         Objects.equals(this.identity, identityResult.identity) &&
         Objects.equals(this.key, identityResult.key);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(rightData, signature, expiration, expired, identity, key);
+    return Objects.hash(rightData, signature, identity, key);
   }
 
 
@@ -194,8 +148,6 @@ public class IdentityResult {
     
     sb.append("    rightData: ").append(toIndentedString(rightData)).append("\n");
     sb.append("    signature: ").append(toIndentedString(signature)).append("\n");
-    sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");
-    sb.append("    expired: ").append(toIndentedString(expired)).append("\n");
     sb.append("    identity: ").append(toIndentedString(identity)).append("\n");
     sb.append("    key: ").append(toIndentedString(key)).append("\n");
     sb.append("}");

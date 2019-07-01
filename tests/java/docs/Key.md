@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **name** | **String** | Key name. |  [optional]
 **pubKey** | **String** | Public key (bitcoin address when using BIP39 keys). |  [optional]
 **status** | [**StatusEnum**](#StatusEnum) |  |  [optional]
+**expiration** | **Long** | Key expiration date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no expiration date.  |  [optional]
 
 
 <a name="StatusEnum"></a>
