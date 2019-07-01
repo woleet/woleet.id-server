@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 # Based on https://get.docker.com/
 
 set -e
@@ -381,11 +381,15 @@ install() {
 
   if docker ps > /dev/null 2>&1
   then
+  (
+    cd "$install_dir"
     ./app.sh start
+  )
   else
     setShC
     (
       set -x
+      cd "$install_dir"
       $sh_c "./app.sh start"
     )
   fi
