@@ -16,17 +16,8 @@ printPrerequisites() {
   done
 }
 
-command_exists() {
+commandExists() {
   command -v "$@" > /dev/null 2>&1
-}
-
-get_distribution() {
-  lsb_dist=""
-  if [ -r /etc/os-release ]
-  then
-    lsb_dist="$(. /etc/os-release && echo "$ID")"
-  fi
-  echo "$lsb_dist"
 }
 
 isVersionOK() {
@@ -57,10 +48,10 @@ setShC() {
   sh_c='sh -c'
   if [ "$user" != 'root' ]
   then
-    if command_exists sudo
+    if commandExists sudo
     then
       sh_c='sudo -E sh -c'
-    elif command_exists su
+    elif commandExists su
     then
       sh_c='su -c'
     else
@@ -82,7 +73,7 @@ setLsbVersionDist() {
     ubuntu|debian)
       if [ "$lsb_dist" = "ubuntu" ]
       then
-        if command_exists lsb_release
+        if commandExists lsb_release
         then
           dist_version="$(lsb_release --codename | cut -f2)"
         fi
@@ -209,10 +200,6 @@ installDocker() {
       set -x
       $sh_c "usermod -aG docker $user"
     )
-    echo "Your user: $user has been added to the docker group so that you can user app.sh without sudo"
-    echo "WARNING! depending on your configuration you may not want it as it can provides root access as described here:"
-    echo "https://docs.docker.com/engine/security/security/#docker-daemon-attack-surface"
-    echo "You will have to log out and back to be able to interact with app.sh and docker without sudo"
   fi
 }
 
@@ -331,42 +318,65 @@ install() {
 
   setLsbVersionDist
 
-  if ! command_exists readlink
+  if ! commandExists readlink
   then
     installPackage coreutils
   fi
 
-  if ! command_exists bash
+  if ! commandExists bash
   then
     installPackage bash
   fi
 
-  if ! command_exists curl
+  if ! commandExists curl
   then
     installPackage curl
   fi
 
-  if ! command_exists git
+  if ! commandExists git
   then
     installPackage git
   fi
 
-  if ! command_exists openssl
+  if ! commandExists openssl
   then
     installPackage openssl
   fi
 
-  if ! command_exists docker
+  if [ "$user" != 'root' ]
+  then
+    if ! commandExists sg
+    then
+      case "$lsb_dist" in
+        ubuntu|debian)
+          installPackage login
+          ;;
+        centos|fedora)
+          installPackage shadow-utils
+          ;;
+      esac
+    fi
+  fi
+
+  if ! commandExists docker
   then
     installDocker
     startEnableDocker
-  elif ! isVersionOK "$(docker version --format '{{.Server.Version}}' | grep -E '([[:digit:]]\.?)+' )" "17.09.0"
-  then
-    echo "Please upgrade your docker version to at least 17.09.0+ before rerunning this script"
-    exit 1
+  else
+    if docker ps > /dev/null 2>&1
+    then
+      dockerVersion="$(docker version --format '{{.Server.Version}}' 2> /dev/null | grep -oE '([[:digit:]]\.?)+')"
+    else
+      dockerVersion="$(sg docker "docker version --format '{{.Server.Version}}'" 2> /dev/null | grep -oE '([[:digit:]]\.?)+')"
+    fi
+    if ! isVersionOK "$dockerVersion" "17.09.0"
+    then
+      echo "Please upgrade your docker version to at least 17.09.0+ before rerunning this script"
+      exit 1
+    fi
   fi
 
-  if ! command_exists docker-compose
+  if ! commandExists docker-compose
   then
     installDockerCompose
   elif ! isVersionOK "$(docker-compose version --short)" "1.17"
@@ -386,12 +396,15 @@ install() {
     ./app.sh start
   )
   else
-    setShC
-    (
-      set -x
-      cd "$install_dir"
-      $sh_c "./app.sh start"
-    )
+  (
+    cd "$install_dir"
+    sg docker "./app.sh start"
+
+    echo "Your user: $user has been added to the docker group so that you can user app.sh without sudo"
+    echo "WARNING! depending on your configuration you may not want it as it can provides root access as described here:"
+    echo "https://docs.docker.com/engine/security/security/#docker-daemon-attack-surface"
+    echo "You will have to log out and back to be able to interact with app.sh and docker without sudo or sg"
+  )
   fi
 }
 
