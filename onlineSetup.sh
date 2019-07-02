@@ -205,19 +205,19 @@ installDocker() {
     (
       set -x
       $sh_c "usermod -aG docker $user"
-      echo "Your user: $user has been added to the docker group so that you can user app.sh without sudo"
-      echo "WARNING! depending on your configuration you may not want it as it can provides root access as described here:"
-      echo "https://docs.docker.com/engine/security/security/#docker-daemon-attack-surface"
-      echo "You will have to log out and back to be able to interact with app.sh and docker without sudo or sg"
-      while true
-      do
-        read -r -n 1 -p "Please type [y] to continue after reading the warning abobe " confirm
-        case $confirm in
-            [Yy]* ) echo ""; break;;
-            * ) echo "Please type y";;
-        esac
-      done
     )
+    echo "Your user: $user has been added to the docker group so that you can user app.sh without sudo"
+    echo "WARNING! depending on your configuration you may not want it as it can provides root access as described here:"
+    echo "https://docs.docker.com/engine/security/security/#docker-daemon-attack-surface"
+    echo "You will have to log out and back to be able to interact with app.sh and docker without sudo or sg"
+    while true
+    do
+      read -r -n 1 -p "Please type [y] to continue after reading the warning abobe " confirm
+      case $confirm in
+          [Yy]* ) echo ""; break;;
+          * ) echo "Please type y";;
+      esac
+    done
   fi
 }
 
