@@ -10,7 +10,7 @@ printPrerequisites() {
     exit 1
   fi
   echo "Before installing wids, please ensure that you have an ssl certificate and its key on this machine"
-  echo "If you don't have one, please copy one"
+  echo "If you don't have one, please copy one and restart this installation script"
   while true
   do
     read -r -n 1 -p "Would you like to continue? [y/n]" yn
