@@ -17,7 +17,7 @@ display_usage_app() {
 start() {
   local old_server
   old_server=$(docker ps | grep woleetid-server_wid-server_1 | cut -d' ' -f 1)
-  docker-compose up -d
+  docker-compose --project-name woleetid-server up -d
 
   # If WOLEET_ID_SERVER_ENCRYPTION_SECRET it not set, attaching to the server's container to enter it via CLI
   if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
@@ -95,13 +95,13 @@ then
   start
 elif [[ "$operation" == "logs" ]]
 then
-  docker-compose logs -f --tail 50
+  docker-compose --project-name woleetid-server logs -f --tail 50
 elif [[ "$operation" == "stop" ]]
 then
-  docker-compose down
+  docker-compose --project-name woleetid-server down
 elif [[ "$operation" == "restart" ]]
 then
-  docker-compose down
+  docker-compose --project-name woleetid-server down
   start
 elif [[ "$operation" == "push" ]]
 then
