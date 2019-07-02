@@ -1,9 +1,14 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # Based on https://get.docker.com/
 
 set -e
 
 printPrerequisites() {
+  if ! commandExists bash
+  then
+    echo "Please install bash before running this script"
+    exit 1
+  fi
   echo "Before installing wids, please ensure that you have an ssl certificate and its key on this machine"
   echo "If you don't have one, please copy one"
   while true; do
@@ -71,7 +76,7 @@ setLsbVersionDist() {
 
   case "$lsb_dist" in
     ubuntu|debian)
-      if [ "$lsb_dist" = "ubuntu" ]
+      if [ "$lsb_dist" == "ubuntu" ]
       then
         if commandExists lsb_release
         then
@@ -83,7 +88,7 @@ setLsbVersionDist() {
         fi
       fi
 
-      if [ "$lsb_dist" = "debian" ]
+      if [ "$lsb_dist" == "debian" ]
       then
         dist_version="$(sed 's/\/.*//' /etc/debian_version | sed 's/\..*//')"
         case "$dist_version" in
@@ -117,7 +122,7 @@ installPackage() {
       )
       ;;
     centos|fedora)
-      if [ "$lsb_dist" = "fedora" ]
+      if [ "$lsb_dist" == "fedora" ]
       then
         pkg_manager="dnf"
       else
@@ -162,7 +167,7 @@ installDocker() {
         echo "Error: Unable to curl repository file $yum_repo, is it valid?"
         exit 1
       fi
-      if [ "$lsb_dist" = "fedora" ]
+      if [ "$lsb_dist" == "fedora" ]
       then
         pkg_manager="dnf"
         config_manager="dnf config-manager"
@@ -321,11 +326,6 @@ install() {
   if ! commandExists readlink
   then
     installPackage coreutils
-  fi
-
-  if ! commandExists bash
-  then
-    installPackage bash
   fi
 
   if ! commandExists curl
