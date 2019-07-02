@@ -52,10 +52,18 @@ If you want to build or run without Docker, you can find detailed information ab
 
 ## Easy install
 
-If you run a fairly recent version of debian, ubuntu, centos or fedora you can install Woleet.ID Server by running:
+OS Supported:
+
+- CentOS 7
+- Debian 9
+- Ubuntu 16.04
+- Ubuntu 18.04
+- Fedora 30
+
+If you run one of these linux version you can install Woleet.ID Server by running:
 
 ```bash
-curl -o- https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh | sh
+curl -o- https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh | bash
 ```
 
 You will need a certificate and its key, as described below, on the computer you execute this script.

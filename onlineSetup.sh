@@ -18,7 +18,7 @@ printPrerequisites() {
     case $yn in
         [Yy]* ) echo ""; break;;
         [Nn]* ) echo ""; exit 0;;
-        * ) echo "Please answer y or n.";;
+        * ) echo ""; echo "Please answer y or n.";;
     esac
   done
 }
@@ -217,7 +217,7 @@ installDocker() {
       read -r -n 1 -p "Please type [y] to continue after reading the warning abobe " confirm
       case $confirm in
           [Yy]* ) echo ""; break;;
-          * ) echo "Please type y";;
+          * ) echo ""; echo "Please type y";;
       esac
     done
   fi
