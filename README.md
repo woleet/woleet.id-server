@@ -58,7 +58,8 @@ OS Supported:
 - Debian 9
 - Ubuntu 16.04
 - Ubuntu 18.04
-- Fedora 30
+- Fedora 29
+- Fedora 28
 
 If you run one of these linux version you can install Woleet.ID Server by running:
 
