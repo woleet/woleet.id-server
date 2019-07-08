@@ -173,7 +173,7 @@ async function upgrade8(sequelize) {
 }
 
 async function upgrade9(sequelize) {
-  log.warn('Rename "onboarding" table...');
+  log.warn('Rename "onboardings" table...');
   await ServerConfig.model.sync();
 
   let old;
@@ -207,7 +207,7 @@ async function upgrade10(sequelize) {
 }
 
 async function upgrade11(sequelize) {
-  log.warn('Checking for  update 1 of the "enrollment" model and server-event type...');
+  log.warn('Checking for  update 1 of the "enrollments" model and server-event type...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   let enrollmentExist = false;
@@ -238,7 +238,7 @@ async function upgrade11(sequelize) {
 }
 
 async function upgrade12(sequelize) {
-  log.warn('Checking for  update 2 of the "enrollment" model...');
+  log.warn('Checking for  update 2 of the "enrollments" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {

@@ -51,7 +51,7 @@ export async function initServerConfig() {
       config.organizationName = 'Woleet';
     }
   } else {
-    log.warn('No configuration found in database, creating a new one along with a default admin user...');
+    log.warn('Creating a new one along with a default admin user...');
     let admin;
     try {
       admin = await createUser({
@@ -69,6 +69,10 @@ export async function initServerConfig() {
     log.info(`Created user "admin" with id ${admin.id}`);
 
     const conf = await setServerConfig(Object.assign({}, serverConfig.default, { defaultKeyId: admin.defaultKeyId }));
-    log.info(`Created new server configuration with defaults: ${JSON.stringify(conf, null, 2)}`);
+    const printedConf = conf;
+    delete printedConf.mailKeyEnrollmentTemplate;
+    delete printedConf.mailOnboardingTemplate;
+    delete printedConf.mailResetPasswordTemplate;
+    log.info(`Created new server configuration with defaults: ${JSON.stringify(printedConf, null, 2)}`);
   }
 }
