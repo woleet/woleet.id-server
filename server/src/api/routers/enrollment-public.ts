@@ -2,6 +2,7 @@ import * as Router from 'koa-router';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
 import { createSignatureRequest, getEnrollmentUser, monitorSignatureRequest } from '../../controllers/enrollment';
+import log = require('loglevel');
 
 /**
  * Key enrollment public
@@ -35,10 +36,16 @@ router.post('/enrollment/:id/create-signature-request', async function (ctx) {
   const user = await getEnrollmentUser(enrollmentId);
 
   // Create a signature request of the TCU and send it to this user
-  const { id: signatureRequestId } = await createSignatureRequest(enrollmentId);
+  let signatureRequestId;
+  try {
+    const { id: signatureReqId } = await createSignatureRequest(enrollmentId);
+    signatureRequestId = signatureReqId;
 
-  // Start monitoring this signature request
-  monitorSignatureRequest(signatureRequestId, enrollmentId, user);
+    // Start monitoring this signature request
+    monitorSignatureRequest(signatureRequestId, enrollmentId, user);
+  } catch (err) {
+    log.error(err);
+  }
 
   // Register signature request creation event
   event.register({

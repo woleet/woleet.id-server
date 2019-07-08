@@ -118,31 +118,41 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
   if (agent) {
     httpsOptions.agent = agent;
   }
-  const body = `{
-    "authorizedSignees": [
+  const body = {
+    authorizedSignees: [
       {
-        "commonName": "${user.x500CommonName}",
-        "email": "${user.email}",
-        "phone": ${user.phone ? '"' + user.phone + '"' : null},
-        "countryCallingCode": ${user.countryCallingCode ? '"' + user.countryCallingCode + '"' : null},
-        "device": ${enrollment.device ? '"' + enrollment.device.toUpperCase() + '"' : null}
+        commonName: user.x500CommonName,
+        email: user.email,
+        phone: user.phone ? '"' + user.phone + '"' : null,
+        countryCallingCode: user.countryCallingCode ? '"' + user.countryCallingCode + '"' : null,
+        device: enrollment.device ? '"' + enrollment.device.toUpperCase() + '"' : null
       }],
-      "public": false,
-      "name": "${getServerConfig().organizationName} Signature Service TCU.pdf",
-      "hashToSign": "${hashTCU}"
-    }`;
-
+    public: false,
+    name: getServerConfig().organizationName + 'Signature Service TCU.pdf',
+    hashToSign: hashTCU
+  };
   return new Promise(async (resolve, reject) => {
     const req = https.request(httpsOptions, (res) => {
-      res.on('data', async (data) => {
-        const signatureRequest = JSON.parse(data);
-        await Enrollment.update(enrollmentId, { signatureRequestId: signatureRequest.id });
-        resolve(signatureRequest);
+      let data;
+      res.on('data', async (chunk) => {
+        data = JSON.parse(chunk);
+      });
+
+      res.on('end', async () => {
+        switch (res.statusCode) {
+          case 200:
+            await Enrollment.update(enrollmentId, { signatureRequestId: data.id });
+            resolve(data);
+            break;
+          default:
+            reject({ code: res.statusCode, data });
+            break;
+        }
       });
     }).on('error', (err) => {
       reject(err);
     });
-    req.write(body);
+    req.write(JSON.stringify(body));
     req.end();
   });
 }
@@ -179,18 +189,24 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
           data += chunk;
         });
         res.on('end', async () => {
-          signatureRequest = JSON.parse(data);
-          subscriber.next(signatureRequest);
-          try {
-            await testEnrollmentExpiration(enrollmentId, user);
-          } catch (error) {
-            subscriber.error(error);
-            subscriber.unsubscribe();
-          }
-          if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
-            // Once the signature request is fulfilled, finalize the enrollment
-            await finalizeEnrollment(enrollmentId, user, signatureRequest);
-            subscriber.complete();
+          switch (res.statusCode) {
+            case 200:
+              signatureRequest = JSON.parse(data);
+              subscriber.next(signatureRequest);
+              try {
+                await testEnrollmentExpiration(enrollmentId, user);
+              } catch (error) {
+                subscriber.error(error);
+                subscriber.unsubscribe();
+              }
+              if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
+                // Once the signature request is fulfilled, finalize the enrollment
+                await finalizeEnrollment(enrollmentId, user, signatureRequest);
+                subscriber.complete();
+              }
+              break;
+            default:
+              throw ({ code: res.statusCode, data });
           }
         });
       }).on('error', (error) => {
@@ -203,8 +219,8 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
 
   observable
     .subscribe(async (res) => {
-        return;
-      },
+      return;
+    },
       (error) => {
         log.error(error);
       }
@@ -277,7 +293,23 @@ async function setAnchorProperties(signatureRequest: any, properties: string) {
     httpsOptions.agent = agent;
   }
   const body = properties;
-  const req = https.request(httpsOptions);
+  const req = https.request(httpsOptions, (res) => {
+    let data;
+    res.on('data', async (chunk) => {
+      data = JSON.parse(chunk);
+    });
+
+    res.on('end', async () => {
+      switch (res.statusCode) {
+        case 200:
+          log.debug(data);
+          break;
+        default:
+          log.error({ code: res.statusCode, data });
+          break;
+      }
+    });
+  });
   req.on('error', (error) => {
     log.error(error);
   });
@@ -317,7 +349,22 @@ async function testEnrollmentExpiration(enrollmentId: string, user: InternalUser
     if (agent) {
       httpsOptions.agent = agent;
     }
-    const req = https.request(httpsOptions);
+    const req = https.request(httpsOptions, (res) => {
+      let data;
+      res.on('data', async (chunk) => {
+        data = JSON.parse(chunk);
+      });
+      res.on('end', async () => {
+        switch (res.statusCode) {
+          case 200:
+            log.debug(data);
+            break;
+          default:
+            log.error({ code: res.statusCode, data });
+            break;
+        }
+      });
+    });
     req.end();
     throw new EnrollmentExpiredError();
   }
