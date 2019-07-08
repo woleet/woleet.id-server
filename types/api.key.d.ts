@@ -2,6 +2,7 @@
 
 type KeyTypeEnum = 'bip39';
 type KeyStatusEnum = 'active' | 'blocked';
+type IdentityKeyStatusEnum = 'valid' | 'expired';
 type KeyHolderEnum = 'server' | 'user';
 type KeyDeviceEnum = 'server' | 'mobile' | 'nano';
 
@@ -53,4 +54,11 @@ interface ApiPutKeyObject extends KeyObject {
   device?: KeyDeviceEnum;
   status?: KeyStatusEnum;
   expiration?: number;
+}
+
+interface ApiIndentityKeyObject extends KeyObject {
+  name: string;
+  pubKey: string;
+  expiration?: number;
+  status: IdentityKeyStatusEnum;
 }

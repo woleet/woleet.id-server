@@ -1107,6 +1107,18 @@ components:
           type: string
           description: Public key (bitcoin address when using BIP39 keys).
           example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
+        status:
+          type: string
+          enum:
+            - valid
+            - expired
+        expiration:
+          type: integer
+          format: int64
+          example: 1569542400000
+          description: >
+            Key expiration date (Unix ms timestamp).
+            <br>Note that the field is not returned if the key has no expiration date.
     FullIdentity:
       allOf:
         - $ref: '#/components/schemas/Identity'
@@ -1555,19 +1567,6 @@ components:
               example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
               description: >
                 The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
-            expiration:
-              type: integer
-              format: int64
-              example: 1569542400000
-              description: >
-                Key expiration date (Unix ms timestamp).
-                <br>Note that the field is not returned if the key has no expiration date.
-            expired:
-              type: boolean
-              example: false
-              description: >
-                Indicates whether the key has expired or not.
-                <br>Note that the field is not returned if the key has not expired.
             identity:
               $ref: '#/components/schemas/Identity'
             key:
@@ -1745,7 +1744,7 @@ components:
       name: leftData
       in: query
       description: Left part of the random data to sign (should be generated randomly).
-      required: true
+      required: false
       schema:
         type: string
         example: '00c8a2b0c373050e7f2abbb2e4c631a42c10d402'

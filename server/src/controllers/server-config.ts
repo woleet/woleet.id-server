@@ -60,10 +60,11 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
     const config = Object.assign({}, getInMemoryConfig(), up);
     let cfg = await ServerConfig.update(CONFIG_ID, { config });
     if (!cfg) {
-      debug('No config to update, will set', config);
+      debug('Create config with', up);
       cfg = await ServerConfig.create({ config });
+    } else {
+      debug('Updated with', up);
     }
-    debug('Updated with', up);
     setInMemoryConfig(cfg.toJSON().config);
     await checkOIDCConfigChange(up);
     await checkOIDCPConfigChange(up);

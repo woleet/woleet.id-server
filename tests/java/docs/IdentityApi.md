@@ -39,7 +39,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **pubKey** | **String**| Public key to verify. |
- **leftData** | **String**| Left part of the random data to sign (should be generated randomly). |
+ **leftData** | **String**| Left part of the random data to sign (should be generated randomly). | [optional]
 
 ### Return type
 
