@@ -16,6 +16,13 @@ import { exit } from './exit';
 
 initdb()
   .catch((err) => exit(`Failed to init database: ${err.message}`, err))
+  .then((isFirst) => {
+    if (isFirst) {
+      log.warn(`${secretEnvVariableName} secret is used to encrypt your keys. ` +
+        `You can set it as an environmental variable or enter it each time you restart Woleet.ID Server. ` +
+        `Without this secret you cannot recover your keys.`);
+    }
+  })
   .then(() => secureModule.init(secretEnvVariableName))
   .then(() => {
     log.info('Secure module successfully initialized');
