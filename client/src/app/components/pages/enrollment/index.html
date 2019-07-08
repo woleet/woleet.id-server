@@ -112,7 +112,7 @@
       <mat-divider></mat-divider>
       <br>
       <button mat-button matStepperPrevious>BACK</button>
-      <button mat-raised-button color="primary" (click)="signTCU()" [disabled]="!isDownloaded && isSendingSignatureRequest">GET SIGNATURE
+      <button mat-raised-button color="primary" (click)="signTCU()" [disabled]="!isDownloaded || isSendingSignatureRequest">GET SIGNATURE
         INVITATION EMAIL</button>
     </div>
   </mat-step>
