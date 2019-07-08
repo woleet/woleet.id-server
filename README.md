@@ -69,7 +69,7 @@ curl -o- https://raw.githubusercontent.com/woleet/woleet.id-server/master/online
 
 You will need a certificate and its key, as described below, on the computer you execute this script.
 
-By default it will install docker and other tolls needed and clone the project on you $HOME/wids directory, store the emplacement of your certificate and key in the file configuration.sh.
+By default it will install docker and other tools needed and clone the project on you $HOME/wids directory, store the emplacement of your certificate and key in the file configuration.sh.
 
 ## configuration.sh
 
@@ -87,7 +87,7 @@ export WOLEET_ID_SERVER_VERSION=x.x.x
 
 Woleet.ID Server requires a TLS certificate.
 It can be [self signed](https://www.digitalocean.com/community/tutorials/how-to-create-an-ssl-certificate-on-nginx-for-ubuntu-14-04)
-but it is highly recommended to use an Organization Validation (OV) certificate, since your organization's identity information will be extracted from this certificate during the identity verification process).
+but it is highly recommended to use an Organization Validation (OV) certificate, since your organization's identity information will be extracted from this certificate during the identity verification process.
 
 You need to set two environment variables pointing to the certificate and its associate key:
 

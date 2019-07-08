@@ -214,7 +214,7 @@ installDocker() {
     local confirm
     while true
     do
-      read -r -n 1 -p "Please type [y] to continue after reading the warning abobe " confirm
+      read -r -n 1 -p "Please type [y] to continue after reading the warning above " confirm
       case $confirm in
           [Yy]* ) echo ""; break;;
           * ) echo ""; echo "Please type y";;
