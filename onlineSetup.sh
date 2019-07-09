@@ -9,7 +9,7 @@ printPrerequisites() {
     echo "Please install bash before running this script"
     exit 1
   fi
-  echo "Before installing wids, please ensure that you have an ssl certificate and its key on this machine"
+  echo "Before installing Woleet.ID Server, please ensure that you have an SSL certificate and its key on this machine"
   echo "If you don't have one, please copy one and restart this installation script"
   local yn
   while true
@@ -241,7 +241,7 @@ installDockerCompose() {
 }
 
 installWids() {
-  echo "Wids will be installed in $install_dir"
+  echo "Woleet.ID Server will be installed in $install_dir"
   if [ ! -d "$install_dir" ]
   then
     git clone https://github.com/woleet/woleet.id-server.git "$install_dir"
@@ -330,7 +330,7 @@ getCheckSSLCerts() {
 install() {
   if [ "$(uname -m)" != 'x86_64' ]
   then
-    echo "WIDS is not available on this architecture"
+    echo "Woleet.ID Server is not available on this architecture"
     exit 1
   fi
 
