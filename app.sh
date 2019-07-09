@@ -132,16 +132,31 @@ then
 elif [[ "$operation" == "upgrade" ]]
 then
   git fetch
-  if git describe --exact-match HEAD > /dev/null 2>&1
+  if git describe --tags --exact-match HEAD > /dev/null 2>&1
   then
+    CURRENT_TAG=$(git describe --tags --exact-match HEAD)
     LATEST_TAG=$(git tag | grep -E '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sort | tail -n 1)
-    git checkout "$LATEST_TAG"
-    touch configuration.sh
-    if cat configuration.sh | grep "WOLEET_ID_SERVER_VERSION" > /dev/null 2>&1
+    if [[ "$CURRENT_TAG" != "$LATEST_TAG" ]]
     then
-      ex +g/WOLEET_ID_SERVER_VERSION/d -cwq configuration.sh
+      CLIENT_STATUS="$(curl --silent -f -lSL "https://hub.docker.com/v2/repositories/${WOLEET_ID_SERVER_REGISTRY:-wids}/client/tags/${LATEST_TAG}" > /dev/null 2>&1; echo "$?")"
+      SERVER_STATUS="$(curl --silent -f -lSL "https://hub.docker.com/v2/repositories/${WOLEET_ID_SERVER_REGISTRY:-wids}/server/tags/${LATEST_TAG}" > /dev/null 2>&1; echo "$?")"
+      if [[ "$CLIENT_STATUS" == "0" ]] && [[ "$SERVER_STATUS" == "0" ]]
+      then
+        git checkout "$LATEST_TAG"
+        touch configuration.sh
+        if cat configuration.sh | grep "WOLEET_ID_SERVER_VERSION" > /dev/null 2>&1
+        then
+          ex +g/WOLEET_ID_SERVER_VERSION/d -cwq configuration.sh
+        fi
+        printf "%s\n" "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> configuration.sh
+      else
+        echo "Images linked to the latest version are not built/pushed yet, please wait before attending to upograde again"
+        exit 0
+      fi
+    else
+      echo "You are already on the latest version"
+      exit 0
     fi
-    printf "%s\n" "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> configuration.sh
   else
     echo "No tag match your actual commit"
     echo "if you want to use the upgrade script is it necessary to checkout a tagged commit"
