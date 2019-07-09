@@ -249,8 +249,8 @@ installWids() {
   else
     if git -C "$install_dir" config --get remote.origin.url | grep "github.com/woleet/woleet.id-server" > /dev/null 2>&1
     then
-      cd "$install_dir"
-      git fetch
+      echo "You already have wids installed, if you want to upgrade it, please use ./app.sh upgrade"
+      exit 0
     else
       echo "Your already have a non empty directory $install_dir"
       echo "It does not contains our github repo, and this script is not able to handles that"
@@ -258,7 +258,26 @@ installWids() {
       exit 1
     fi
   fi
-  LATEST_TAG=$(git tag | grep -E '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sort | tail -n 1)
+
+  LATEST_TAG="0.0.0"
+  TAGS=($(git tag | grep -E '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sort -r))
+  for TAG in "${TAGS[@]}"
+  do
+    CLIENT_STATUS="$(curl --silent -f -lSL "https://hub.docker.com/v2/repositories/${WOLEET_ID_SERVER_REGISTRY:-wids}/client/tags/${TAG}" > /dev/null 2>&1; echo "$?")"
+    SERVER_STATUS="$(curl --silent -f -lSL "https://hub.docker.com/v2/repositories/${WOLEET_ID_SERVER_REGISTRY:-wids}/server/tags/${TAG}" > /dev/null 2>&1; echo "$?")"
+    if [[ "$CLIENT_STATUS" == "0" ]] && [[ "$SERVER_STATUS" == "0" ]]
+    then
+      LATEST_TAG="$TAG"
+      break
+    fi
+  done
+
+  if [[ "$LATEST_TAG" == "0.0.0" ]]
+  then
+    echo "There was an issue with the tag detection please rerun this script later"
+    exit 1
+  fi
+
   git checkout "$LATEST_TAG"
   touch configuration.sh
 
@@ -394,10 +413,19 @@ install() {
   if ! commandExists docker-compose
   then
     installDockerCompose
-  elif ! isVersionOK "$(docker-compose version --short)" "1.17"
-  then
-    echo "Please upgrade your docker-compose version to at least 1.17+ before rerunning this script"
-    exit 1
+  else
+    if docker ps > /dev/null 2>&1
+    then
+      composeVersion="$(docker-compose version --short)"
+    else
+      composeVersion="$(sg docker "docker-compose version --short")"
+    fi
+
+    if ! isVersionOK "$composeVersion" "1.17"
+    then
+      echo "Please upgrade your docker-compose version to at least 1.17+ before rerunning this script"
+      exit 1
+    fi
   fi
 
   install_dir="${HOME}/wids"
