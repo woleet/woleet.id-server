@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
+import { FindOptions, Instance } from 'sequelize';
 import { sequelize } from '../sequelize';
-import { Instance, FindOptions } from 'sequelize';
 
 export abstract class AbstractInstanceAccess<TInstance, TPost> {
   client: Sequelize.Sequelize;
@@ -92,5 +92,4 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
       throw err;
     }
   }
-
 }
