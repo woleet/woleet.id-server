@@ -34,8 +34,7 @@
           </button>
         </div>
         <mat-form-field class="w-100">
-          <input matInput type="password" placeholder="Password" formControlName="password" autocomplete="off"
-            [required]="mode === 'create' && !sendPasswordEmail">
+          <input matInput type="password" placeholder="Password" formControlName="password" autocomplete="off">
           <mat-error *ngIf="form.get('password').invalid">{{ getErrorMessage(form.get('password')) }}</mat-error>
         </mat-form-field>
         <intl-tel-input [user]="user" (inputUnfocus)="savePhone($event)"></intl-tel-input>

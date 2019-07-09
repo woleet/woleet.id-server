@@ -193,36 +193,36 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
             case 200:
               signatureRequest = JSON.parse(data);
               subscriber.next(signatureRequest);
-              try {
-                await testEnrollmentExpiration(enrollmentId, user);
-              } catch (error) {
-                subscriber.error(error);
-                subscriber.unsubscribe();
-              }
-              if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
-                // Once the signature request is fulfilled, finalize the enrollment
-                await finalizeEnrollment(enrollmentId, user, signatureRequest);
-                subscriber.complete();
-              }
               break;
             default:
-              throw ({ code: res.statusCode, data });
+            subscriber.error({ code: res.statusCode, data });
           }
         });
       }).on('error', (error) => {
         subscriber.error(error);
-        subscriber.unsubscribe();
       });
     }, 1000 * 30);
     return () => clearInterval(interval);
   });
 
-  observable
-    .subscribe(async (res) => {
+  const signatureRequestSubscriber = observable
+    .subscribe(async (signatureRequest) => {
+      try {
+        await testEnrollmentExpiration(enrollmentId, user);
+      } catch (error) {
+        log.error(error);
+        signatureRequestSubscriber.unsubscribe();
+      }
+      if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
+        // Once the signature request is fulfilled, finalize the enrollment
+        await finalizeEnrollment(enrollmentId, user, signatureRequest);
+        signatureRequestSubscriber.unsubscribe();
+      }
       return;
     },
       (error) => {
         log.error(error);
+        signatureRequestSubscriber.unsubscribe();
       }
     );
 }

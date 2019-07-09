@@ -1,4 +1,4 @@
-import { secureModule } from "../../config";
+import { secureModule } from '../../config';
 
 export async function serializeAPIToken(token: InternalAPITokenObject): Promise<ApiAPITokenObject> {
   const dates = {
