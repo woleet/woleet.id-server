@@ -321,5 +321,4 @@ async function testEnrollmentExpiration(enrollmentId: string, user: InternalUser
     req.end();
     throw new EnrollmentExpiredError();
   }
-  return;
 }
