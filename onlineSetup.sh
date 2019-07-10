@@ -247,7 +247,8 @@ installWids() {
     git clone https://github.com/woleet/woleet.id-server.git "$install_dir"
     cd "$install_dir"
   else
-    if git -C "$install_dir" config --get remote.origin.url | grep "github.com/woleet/woleet.id-server" > /dev/null 2>&1
+    cd "$install_dir"
+    if git config --get remote.origin.url | grep "github.com/woleet/woleet.id-server" > /dev/null 2>&1
     then
       echo "You already have wids installed, if you want to upgrade it, please use ./app.sh upgrade"
       exit 0
