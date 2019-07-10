@@ -248,11 +248,8 @@ installWids() {
     cd "$install_dir"
   else
     cd "$install_dir"
-    if git config --get remote.origin.url | grep "github.com/woleet/woleet.id-server" > /dev/null 2>&1
+    if ! git config --get remote.origin.url | grep "github.com/woleet/woleet.id-server" > /dev/null 2>&1
     then
-      echo "You already have wids installed, if you want to upgrade it, please use ./app.sh upgrade"
-      exit 0
-    else
       echo "Your already have a non empty directory $install_dir"
       echo "It does not contains our github repo, and this script is not able to handles that"
       echo "To fix this issue, either delete or rename your current $install_dir directory"
