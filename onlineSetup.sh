@@ -412,14 +412,7 @@ install() {
   then
     installDockerCompose
   else
-    if docker ps > /dev/null 2>&1
-    then
-      composeVersion="$(docker-compose version --short)"
-    else
-      composeVersion="$(sg docker "docker-compose version --short")"
-    fi
-
-    if ! isVersionOK "$composeVersion" "1.17"
+    if ! isVersionOK "$(docker-compose version --short)" "1.17"
     then
       echo "Please upgrade your docker-compose version to at least 1.17+ before rerunning this script"
       exit 1
