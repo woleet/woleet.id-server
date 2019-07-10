@@ -235,7 +235,7 @@ installDockerCompose() {
   setShC
   (
     set -x
-    $sh_c "curl -fsSL \"https://github.com/docker/compose/releases/download/1.24.0/docker-compose-Linux-x86_64\" -o /usr/local/bin/docker-compose"
+    $sh_c "curl -fsSL \"https://github.com/docker/compose/releases/download/1.22.0/docker-compose-Linux-x86_64\" -o /usr/local/bin/docker-compose"
     $sh_c "chmod +x /usr/local/bin/docker-compose"
   )
 }
