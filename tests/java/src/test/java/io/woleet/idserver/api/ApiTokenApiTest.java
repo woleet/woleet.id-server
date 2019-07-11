@@ -87,6 +87,7 @@ public class ApiTokenApiTest extends CRUDApiTest {
             // Set status and name
             apiTokenPost.setStatus(APITokenStatusEnum.ACTIVE);
             apiTokenPost.setName(Config.randomName());
+            apiTokenPost.setUserId(user.getId());
 
             return new ObjectPost(apiTokenPost);
         }
@@ -106,6 +107,14 @@ public class ApiTokenApiTest extends CRUDApiTest {
             if (Config.randomBoolean())
                 apiTokenPut.name(Config.randomName());
         }
+    }
+
+    private UserGet user;
+
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        user = Config.createTestUser();
     }
 
     @Override

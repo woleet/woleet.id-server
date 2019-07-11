@@ -5,6 +5,7 @@ import { AbstractInstanceAccess } from './abstract';
 const APITokenModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
+  userId: { type: UUID },
   name: { type: STRING, allowNull: false },
   hash: { type: CHAR(32 * 2), unique: true, allowNull: false },
   value: { type: STRING, allowNull: false },

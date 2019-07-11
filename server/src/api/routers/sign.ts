@@ -46,7 +46,7 @@ async function getSignature(ctx: Context) {
   }
 
   let _userId = null;
-  if (token.type === 'oauth') {
+  if (token.userId) {
     _userId = token.userId;
   } else if (query.userId) {
     _userId = query.userId;

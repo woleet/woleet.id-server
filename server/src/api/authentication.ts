@@ -34,6 +34,12 @@ export async function bearerAuth(ctx: Context, next) {
             throw new Unauthorized('Missing signature scope');
           }
 
+          if (token.userId) {
+            if (ctx.query.userId && ctx.query.userId !== token.userId) {
+              throw new Unauthorized('Mismatch userId');
+            }
+          }
+
           switch (token.status) {
             case 'active':
               return next();

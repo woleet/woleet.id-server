@@ -7,7 +7,7 @@ export async function serializeAPIToken(token: InternalAPITokenObject): Promise<
     lastUsed: +token.lastUsed || null
   };
 
-  const { id, name, status } = token;
+  const { id, name, status, userId } = token;
 
   const value = (
     await secureModule.decrypt(
@@ -16,5 +16,5 @@ export async function serializeAPIToken(token: InternalAPITokenObject): Promise<
     )
   ).toString('base64');
 
-  return Object.assign({ id, name, status, value }, dates);
+  return Object.assign({ id, name, status, value, userId }, dates);
 }

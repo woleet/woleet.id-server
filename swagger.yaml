@@ -1304,6 +1304,11 @@ components:
               type: string
               description: Token to use for the signature endpoint.
               example: "b9PXEeMpSCyeaPpQiZ3Bvw=="
+            userId:
+              type: string
+              format: uuid
+              description: Id of the authorized user.
+              example: 'feb37e23-d04e-4e71-bf53-1f1a75ba3a68'
             createdAt:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:
@@ -1316,6 +1321,12 @@ components:
         - type: object
           required:
             - name
+          properties:
+            userId:
+              type: string
+              format: uuid
+              description: Id of the authorized user.
+              example: 'feb37e23-d04e-4e71-bf53-1f1a75ba3a68'
     APITokenPut:
       allOf:
         - $ref: '#/components/schemas/APITokenBase'

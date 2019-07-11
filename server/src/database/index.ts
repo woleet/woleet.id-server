@@ -19,11 +19,15 @@ User.model.hasMany(Key.model, { onDelete: 'cascade', hooks: true });
 
 User.model.hasMany(Enrollment.model, { onDelete: 'cascade', hooks: true });
 
+User.model.hasMany(APIToken.model, { onDelete: 'cascade', hooks: true });
+
 User.model.belongsTo(Key.model, { as: 'defaultKey', constraints: false, hooks: true });
 
 Key.model.belongsTo(User.model, { foreignKey: { allowNull: false } });
 
 Enrollment.model.belongsTo(User.model, { foreignKey: { allowNull: false } });
+
+APIToken.model.belongsTo(User.model, { foreignKey: { allowNull: false } });
 
 Key.model.beforeDelete(async (key) => {
   debug(`delete key ${key.get('id')}`);
