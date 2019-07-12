@@ -291,6 +291,8 @@ getCheckSSLCerts() {
   local cerOK=false
   local keyOK=false
   local md5Checked=false
+  local WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE
+  local WOLEET_ID_SERVER_HTTP_TLS_KEY
 
   while [ "$md5Checked" == "false" ]
   do
