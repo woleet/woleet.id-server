@@ -1,13 +1,13 @@
 # Ignore everything
-**
+*
 
 # Allow types
-!/types
+!types
 
 # Allow client and server files and directories
-!/client
-!/server
+!client
+!server
 
 # But ignore built ones
-**/node_modules
-**/dist
+**node_modules
+**dist

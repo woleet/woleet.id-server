@@ -50,13 +50,44 @@ Woleet.ID Server can be built and run using Docker (tested on Linux and  macOS),
 Here we only document building and running Woleet.ID Server using Docker.
 If you want to build or run without Docker, you can find detailed information about how to build and run Woleet.ID Server in [client's](client/README.md) and [server's](server/README.md) README files.
 
+## Easy install
+
+OS Supported:
+
+- CentOS 7
+- Debian 9
+- Ubuntu 16.04
+- Ubuntu 18.04
+- Fedora 29
+- Fedora 28
+
+If you run one of these linux version you can install Woleet.ID Server by running:
+
+```bash
+bash <(curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh)
+```
+
+You will need a certificate and its key, as described below, on the computer you execute this script.
+
+By default it will install docker and other tools needed and clone the project on you $HOME/wids directory, store the emplacement of your certificate and key in the file configuration.sh.
+
+## configuration.sh
+
+If you want to override some of the environnement variables you can do so in a configuration.sh file, if it exists its content will be sourced in app.sh.
+
+For example to fix a version for Woleet.ID Server (related to release tab) add this in configuration.sh:
+
+```bash
+export WOLEET_ID_SERVER_VERSION=x.x.x
+```
+
 # Prerequisites and configuration
 
 ## TLS certificate
 
 Woleet.ID Server requires a TLS certificate.
 It can be [self signed](https://www.digitalocean.com/community/tutorials/how-to-create-an-ssl-certificate-on-nginx-for-ubuntu-14-04)
-but it is highly recommended to use an Organization Validation (OV) certificate, since your organization's identity information will be extracted from this certificate during the identity verification process).
+but it is highly recommended to use an Organization Validation (OV) certificate, since your organization's identity information will be extracted from this certificate during the identity verification process.
 
 You need to set two environment variables pointing to the certificate and its associate key:
 
@@ -84,6 +115,28 @@ export WOLEET_ID_SERVER_POSTGRES_DB={PostgreSQL database, default: wid}
 export WOLEET_ID_SERVER_POSTGRES_USER={PostgreSQL user, default: pguser}
 export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pass}
 ```
+
+## Version
+
+Woleet.ID Server have prebuilt images on dockerhub:  
+<https://hub.docker.com/r/wids/client>  
+<https://hub.docker.com/r/wids/server>
+
+If the environnement variable:
+
+```bash
+export WOLEET_ID_SERVER_VERSION=x.x.x
+```
+
+app.sh and docker-compose.yml will use the specified version (> 0.5.0), if you want to see differences between versions, you can go to the release tab of github.
+
+If you have this project cloned and checkouted to a commit that match with a tag (for example, when using onlineSetup.sh to install the project) you can use
+
+```bash
+./app.sh upgrade
+```
+
+To upgrade the repo to the latest tagged version, it will also set the WOLEET_ID_SERVER_VERSION environnement variable to the latest one in the file configuration.sh
 
 ## Docker
 
@@ -140,6 +193,10 @@ export WOLEET_ID_SERVER_SIGNATURE_PORT={port to use for the /sign and /discover 
 # Restore the server
 
     ./app.sh restore <your_backup_file>
+
+# Upgrade the server
+
+[See the documentation](##Version)
 
 # Test the server
 

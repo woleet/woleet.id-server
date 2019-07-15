@@ -30,3 +30,6 @@ db
 
 # Dump
 dump*
+
+# configuration file
+configuration.sh

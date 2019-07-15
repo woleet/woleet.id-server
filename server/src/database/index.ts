@@ -64,7 +64,8 @@ export async function init() {
       await sequelize.sync(/* { force: true } */);
       debug('Synchronized db model');
       debug('Ready');
-      return;
+      const keys = await Key.getAll();
+      return !keys.length;
     } catch (err) {
       if (attempts && err instanceof ConnectionError) {
         log.warn(`Failed to connect to database, retrying in ${db.retryDelay}ms`);
