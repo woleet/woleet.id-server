@@ -299,9 +299,9 @@ getCheckSSLCerts() {
     while [ "$cerOK" == "false" ]
     do
       read -r -e -p "Enter certificate filename, use tab for completion: " WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE
-      WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE=$(readlink -f "$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE")
-      if openssl x509 -noout -in "$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE" > /dev/null 2>&1
+      if openssl x509 -noout -in "$(readlink -f "$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE")" > /dev/null 2>&1
       then
+        WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE=$(readlink -f "$WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE")
         cerOK=true
       else
         echo "The selected file is not a valid certificate, please select a valid certificate"
@@ -311,9 +311,9 @@ getCheckSSLCerts() {
     while [ "$keyOK" == "false" ]
     do
       read -r -e -p "Enter certificate key filename, use tab for completion: " WOLEET_ID_SERVER_HTTP_TLS_KEY
-      WOLEET_ID_SERVER_HTTP_TLS_KEY=$(readlink -f "$WOLEET_ID_SERVER_HTTP_TLS_KEY")
-      if openssl rsa -noout -in "$WOLEET_ID_SERVER_HTTP_TLS_KEY" > /dev/null 2>&1
+      if openssl rsa -noout -in "$(readlink -f "$WOLEET_ID_SERVER_HTTP_TLS_KEY")" > /dev/null 2>&1
       then
+        WOLEET_ID_SERVER_HTTP_TLS_KEY=$(readlink -f "$WOLEET_ID_SERVER_HTTP_TLS_KEY")
         keyOK=true
       else
         echo "The selected file is not a valid certificate key, please select a valid certificate key"
