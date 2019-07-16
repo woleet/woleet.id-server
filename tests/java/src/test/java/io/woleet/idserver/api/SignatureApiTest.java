@@ -61,12 +61,12 @@ public class SignatureApiTest {
         apiTokenUser.setName("test-user");
         apiTokenUser.setUserId(user.getId());
         apiTokenUserGet = apiTokenApi.createAPIToken(apiTokenUser);
-        ApiClient apiClient = Config.getNoAuthApiClient();
-        ApiClient apiClient2 = Config.getNoAuthApiClient();
-        apiClient.addDefaultHeader("Authorization", "Bearer " + apiTokenNoUserGet.getValue());
-        tokenAuthNoUserApi = new SignatureApi(apiClient);
-        apiClient2.addDefaultHeader("Authorization", "Bearer " + apiTokenUserGet.getValue());
-        tokenAuthUserApi = new SignatureApi(apiClient2);
+        ApiClient apiClientNoUser = Config.getNoAuthApiClient();
+        ApiClient apiClientUser = Config.getNoAuthApiClient();
+        apiClientNoUser.addDefaultHeader("Authorization", "Bearer " + apiTokenNoUserGet.getValue());
+        tokenAuthNoUserApi = new SignatureApi(apiClientNoUser);
+        apiClientUser.addDefaultHeader("Authorization", "Bearer " + apiTokenUserGet.getValue());
+        tokenAuthUserApi = new SignatureApi(apiClientUser);
     }
 
     @After
