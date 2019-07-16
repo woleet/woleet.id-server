@@ -11,8 +11,8 @@ function serialize(token: SequelizeAPITokenObject): InternalTokenObject {
     status: t.status,
     scope: ['signature'],
     type: 'api',
-    role: 'admin',
-    userId: null
+    role: t.userId ? 'user' : 'admin',
+    userId: t.userId
   };
 }
 

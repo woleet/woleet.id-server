@@ -52,7 +52,6 @@ export async function createExternalKey(userId: string, key: ApiPostKeyObject): 
  *  operationId: logout
  */
 export async function updateKey(id: string, attrs: ApiPutKeyObject) {
-  console.log(attrs.expiration);
   const key = await Key.update(id, attrs);
   if (!key) {
     throw new NotFoundKeyError();

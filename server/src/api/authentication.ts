@@ -25,7 +25,6 @@ export async function bearerAuth(ctx: Context, next) {
     if (parts.length === 2 && parts[0] === 'Bearer') {
       const token: InternalTokenObject = (await apiTokenStore.getByValue(parts[1]))
         || (isInitialized() && await oauthAccessTokenStore.get(parts[1]));
-
       if (token) {
         ctx.token = token;
 

@@ -18,21 +18,6 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
   let user: SequelizeUserObject;
   let key: SequelizeKeyObject;
 
-  if (!(userId || pubKey || customUserId)) {
-    const config = getServerConfig();
-    if (!config) {
-      throw new ServerNotReadyError();
-    }
-    if (!config.fallbackOnDefaultKey || !config.defaultKeyId) {
-      throw new NoDefaultKeyError();
-    }
-    key = await Key.getByIdAndPullUser(config.defaultKeyId);
-    if (!key) {
-      throw new Error(`Cannot find default key (${config.defaultKeyId})`);
-    }
-    user = key.get('user');
-  }
-
   if (userId) {
     user = await User.getById(userId);
   } else if (customUserId) {
@@ -56,8 +41,36 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     }
   }
 
-  if (!user) {
+  if ((userId || customUserId) && !user) {
     throw new NotFoundUserError();
+  }
+
+  if (!(userId || customUserId) || !pubKey) {
+    let defaultKeyId;
+    if (userId || customUserId) {
+      defaultKeyId = user.get('defaultKeyId');
+      if (!defaultKeyId) {
+        throw new NoDefaultKeyError();
+      }
+    } else {
+      const config = getServerConfig();
+      if (!config) {
+        throw new ServerNotReadyError();
+      }
+      if (!config.fallbackOnDefaultKey || !config.defaultKeyId) {
+        throw new NoDefaultKeyError();
+      }
+      defaultKeyId = config.defaultKeyId;
+    }
+    if (!pubKey) {
+      key = await Key.getByIdAndPullUser(defaultKeyId);
+      if (!key) {
+        throw new Error(`Cannot find default key (${defaultKeyId})`);
+      }
+      if (!user) {
+        user = key.get('user');
+      }
+    }
   }
 
   // A blocked user cannot sign

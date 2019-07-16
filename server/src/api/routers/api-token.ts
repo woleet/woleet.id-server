@@ -56,12 +56,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
  *  operationId: getAPITokenList
  */
 router.get('/list', async function (ctx) {
-  let users;
-  try {
-    users = await getAllAPITokens();
-  } catch (err) {
-    console.log(err);
-  }
+  const users = await getAllAPITokens();
   ctx.body = await Promise.all(users.map(serializeAPIToken));
 });
 
