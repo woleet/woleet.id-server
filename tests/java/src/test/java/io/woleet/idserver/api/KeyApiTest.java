@@ -4,6 +4,9 @@ import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
+import org.apache.http.HttpStatus;
+import org.junit.After;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,5 +177,35 @@ public class KeyApiTest extends CRUDApiTest {
         assertEquals(put.getName() != null ? put.getName() : post.getName(), get.getName());
         assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
         assertEquals(put.getExpiration() != null ? put.getExpiration() : post.getExpiration(), get.getExpiration());
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        Config.deleteAllTestUsers();
+    }
+
+    @Test
+    public void testRevocation() throws ApiException {
+        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
+        KeyPut keyPut = new KeyPut();
+
+        keyPut.setStatus(KeyStatusEnum.REVOKED);
+
+        KeyGet keyGet = keyApi.updateKey(user.getDefaultKeyId(), keyPut);
+        assertEquals(KeyStatusEnum.REVOKED, keyGet.getStatus());
+
+        try {
+            keyApi.updateKey(user.getDefaultKeyId(), keyPut);
+            fail("Should not be able to update a revoked key");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        try {
+            keyApi.deleteKey(user.getDefaultKeyId());
+            fail("Should not be able to delete a revoked key");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
     }
 }

@@ -32,7 +32,9 @@ public enum KeyStatusEnum {
   
   ACTIVE("active"),
   
-  BLOCKED("blocked");
+  BLOCKED("blocked"),
+  
+  REVOKED("revoked");
 
   private String value;
 

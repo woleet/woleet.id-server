@@ -272,6 +272,26 @@ async function upgrade12(sequelize) {
   }
 }
 
+async function upgrade13(sequelize) {
+  log.warn('Checking for  update 5 of the "keys" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 13) {
+    log.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
+    const editKeysStatusEvent = await sequelize.query(`ALTER TYPE "enum_keys_status" ADD VALUE 'revoked';`);
+    log.debug(editKeysStatusEvent);
+    const keyRevokedAt = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "revokedAt" TIMESTAMPTZ;`);
+    log.debug(keyRevokedAt);
+
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 13 }) });
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
@@ -285,6 +305,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade10(sequelize);
   await upgrade11(sequelize);
   await upgrade12(sequelize);
+  await upgrade13(sequelize);
 }
 
 async function postUpgrade3() {

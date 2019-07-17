@@ -103,6 +103,7 @@ declare global {
     type: KeyTypeEnum;
     status: KeyStatusEnum;
     expiration: number;
+    revokedAt?: number;
 
     /** Hexadecimal representation of the mnemonic phrase */
     mnemonicEntropy?: string;

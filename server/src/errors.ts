@@ -98,6 +98,14 @@ export class ExpiredKeyError extends BlockedResourceError {
   name = 'ExpiredKeyError';
 }
 
+export class RevokedKeyError extends BlockedResourceError {
+  constructor(m = 'Key revoked') {
+    super(m);
+  }
+
+  name = 'RevokedKeyError';
+}
+
 export class EnrollmentExpiredError extends BlockedResourceError {
   constructor(m = 'Enrollment expired') {
     super(m);

@@ -1,7 +1,7 @@
 /* Key */
 
 type KeyTypeEnum = 'bip39';
-type KeyStatusEnum = 'active' | 'blocked';
+type KeyStatusEnum = 'active' | 'blocked' | 'revoked';
 type IdentityKeyStatusEnum = 'valid' | 'expired';
 type KeyHolderEnum = 'server' | 'user';
 type KeyDeviceEnum = 'server' | 'mobile' | 'nano';
@@ -27,6 +27,7 @@ interface ApiKeyObject extends KeyObject, ApiCommonProperties {
   status: KeyStatusEnum;
 
   expiration: number;
+  revokedAt?: number;
   expired: boolean;
 }
 
