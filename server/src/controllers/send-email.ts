@@ -139,9 +139,10 @@ export async function sendEmail(email: string, subject: string, html: any) {
  */
 function MailTemplate(email: string, subject: string, html: any): object {
   const organizationName = getServerConfig().organizationName;
+  const contactDomain = getServerConfig().contact ?
+  getServerConfig().contact.split('@')[1] : 'Woleet';
   return {
-    from: organizationName + ' no-reply@' + getServerConfig().contact ?
-      getServerConfig().contact.split('@')[1] : 'Woleet',
+    from: organizationName + ' no-reply@' + contactDomain,
     to: email,
     subject: subject,
     html: html
