@@ -1,6 +1,7 @@
 import { Key, User } from '../database';
 import { NotFoundKeyError, NotFoundUserError, RevokedKeyError } from '../errors';
 import { secureModule } from '../config';
+import { sendKeyRevocationEmail } from './send-email';
 
 /**
  * Key
@@ -59,6 +60,9 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
     throw new RevokedKeyError();
   }
   if (attrs.status === 'revoked') {
+    const userId = await keyUpdated.get('userId');
+    const user = await User.getById(userId);
+    sendKeyRevocationEmail(user.toJSON(), keyUpdated.toJSON());
     update.revokedAt = Date.now();
   }
   const key = await Key.update(id, update);

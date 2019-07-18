@@ -193,6 +193,7 @@ public class KeyApiTest extends CRUDApiTest {
 
         KeyGet keyGet = keyApi.updateKey(user.getDefaultKeyId(), keyPut);
         assertEquals(KeyStatusEnum.REVOKED, keyGet.getStatus());
+        assertNotNull(keyGet.getRevokedAt());
 
         try {
             keyApi.updateKey(user.getDefaultKeyId(), keyPut);
