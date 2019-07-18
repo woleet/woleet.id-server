@@ -40,6 +40,10 @@ public class APITokenGet extends APITokenBase {
   @SerializedName(SERIALIZED_NAME_VALUE)
   private String value;
 
+  public static final String SERIALIZED_NAME_USER_ID = "userId";
+  @SerializedName(SERIALIZED_NAME_USER_ID)
+  private UUID userId;
+
   public static final String SERIALIZED_NAME_CREATED_AT = "createdAt";
   @SerializedName(SERIALIZED_NAME_CREATED_AT)
   private Long createdAt;
@@ -68,6 +72,24 @@ public class APITokenGet extends APITokenBase {
   @ApiModelProperty(example = "b9PXEeMpSCyeaPpQiZ3Bvw==", value = "Token to use for the signature endpoint.")
   public String getValue() {
     return value;
+  }
+
+  public APITokenGet userId(UUID userId) {
+    this.userId = userId;
+    return this;
+  }
+
+   /**
+   * Id of the authorized user.
+   * @return userId
+  **/
+  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Id of the authorized user.")
+  public UUID getUserId() {
+    return userId;
+  }
+
+  public void setUserId(UUID userId) {
+    this.userId = userId;
   }
 
    /**
@@ -109,6 +131,7 @@ public class APITokenGet extends APITokenBase {
     APITokenGet apITokenGet = (APITokenGet) o;
     return Objects.equals(this.id, apITokenGet.id) &&
         Objects.equals(this.value, apITokenGet.value) &&
+        Objects.equals(this.userId, apITokenGet.userId) &&
         Objects.equals(this.createdAt, apITokenGet.createdAt) &&
         Objects.equals(this.updatedAt, apITokenGet.updatedAt) &&
         Objects.equals(this.lastUsed, apITokenGet.lastUsed) &&
@@ -117,7 +140,7 @@ public class APITokenGet extends APITokenBase {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, value, createdAt, updatedAt, lastUsed, super.hashCode());
+    return Objects.hash(id, value, userId, createdAt, updatedAt, lastUsed, super.hashCode());
   }
 
 
@@ -128,6 +151,7 @@ public class APITokenGet extends APITokenBase {
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    value: ").append(toIndentedString(value)).append("\n");
+    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    lastUsed: ").append(toIndentedString(lastUsed)).append("\n");

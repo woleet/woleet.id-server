@@ -15,14 +15,45 @@ package io.woleet.idserver.api.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.APITokenBase;
 import io.woleet.idserver.api.model.APITokenStatusEnum;
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * APITokenPost
  */
 
 public class APITokenPost extends APITokenBase {
+  public static final String SERIALIZED_NAME_USER_ID = "userId";
+  @SerializedName(SERIALIZED_NAME_USER_ID)
+  private UUID userId;
+
+  public APITokenPost userId(UUID userId) {
+    this.userId = userId;
+    return this;
+  }
+
+   /**
+   * Id of the authorized user.
+   * @return userId
+  **/
+  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Id of the authorized user.")
+  public UUID getUserId() {
+    return userId;
+  }
+
+  public void setUserId(UUID userId) {
+    this.userId = userId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -32,12 +63,14 @@ public class APITokenPost extends APITokenBase {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return super.equals(o);
+    APITokenPost apITokenPost = (APITokenPost) o;
+    return Objects.equals(this.userId, apITokenPost.userId) &&
+        super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode());
+    return Objects.hash(userId, super.hashCode());
   }
 
 
@@ -46,6 +79,7 @@ public class APITokenPost extends APITokenBase {
     StringBuilder sb = new StringBuilder();
     sb.append("class APITokenPost {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

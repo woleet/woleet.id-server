@@ -42,7 +42,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
     type: 'token.create',
     authorizedUserId: ctx.session.user.get('id'),
     associatedTokenId: created.id,
-    associatedUserId: null,
+    associatedUserId: token.userId || null,
     associatedKeyId: null,
     data: hideTokenValue(token)
   });
@@ -87,7 +87,7 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
     type: 'token.edit',
     authorizedUserId: ctx.session.user.get('id'),
     associatedTokenId: apiToken.id,
-    associatedUserId: null,
+    associatedUserId: apiToken.userId || null,
     associatedKeyId: null,
     data: update
   });

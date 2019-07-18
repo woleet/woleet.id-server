@@ -179,6 +179,7 @@ declare global {
 
     name: string;
     status: APITokenStatusEnum;
+    userId?: string;
 
     hash: string;
     value: string;
@@ -191,6 +192,7 @@ declare global {
     name: string;
     type?: KeyTypeEnum;
     status?: KeyStatusEnum;
+    userId?: string;
 
     hash: string;
     value: string;
