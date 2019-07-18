@@ -11,6 +11,9 @@ interface ApiAPITokenObject extends APITokenObject, ApiCommonProperties {
   /** Token to use to call the sign endpoint */
   value: string;
 
+  /** Authorized user */
+  userId?: string;
+
   /** Unix timestamp (ms) */
   lastUsed: number;
 
@@ -19,6 +22,7 @@ interface ApiAPITokenObject extends APITokenObject, ApiCommonProperties {
 
 interface ApiPostAPITokenObject extends APITokenObject {
   name: string;
+  userId?: string;
   status?: APITokenStatusEnum;
 }
 

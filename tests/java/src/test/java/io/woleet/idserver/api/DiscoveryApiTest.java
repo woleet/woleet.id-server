@@ -67,7 +67,8 @@ public class DiscoveryApiTest {
         try {
             discoveryApi.discoverUserByPubKey("invalid pubKey");
             fail("Should not be able to discover a user using an invalid key");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", 400, e.getCode());
             return;
         }
@@ -76,7 +77,8 @@ public class DiscoveryApiTest {
         try {
             discoveryApi.discoverUserByPubKey("3Beer3irc1vgs76ENA4coqsEQpGZeM5CTd");
             fail("Should not be able to discover a user using an unknown key");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", 404, e.getCode());
             return;
         }
@@ -94,7 +96,8 @@ public class DiscoveryApiTest {
         try {
             discoveryApi.discoverUserKeys(Config.randomUUID());
             fail("Should not be able to discover user's key using an unknown identifier");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", 404, e.getCode());
             return;
         }

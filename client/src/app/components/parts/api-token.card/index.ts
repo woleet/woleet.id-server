@@ -1,20 +1,25 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { APITokenService } from '@services/api-token';
 import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider } from '@components/util';
 import { confirm } from '../../util';
+import { UserService } from '@services/user';
 
 @Component({
   selector: 'api-token-card',
   templateUrl: './index.html'
 })
-export class APITokenCardComponent extends ErrorMessageProvider {
+export class APITokenCardComponent extends ErrorMessageProvider implements OnInit {
 
   editMode = false;
 
   apiTokenName: FormControl;
 
-  constructor(private apiTokenService: APITokenService) {
+  user$: Promise<ApiUserObject>;
+
+  constructor(
+    private userService: UserService,
+    private apiTokenService: APITokenService) {
     super();
   }
 
@@ -28,6 +33,12 @@ export class APITokenCardComponent extends ErrorMessageProvider {
   update = new EventEmitter<ApiAPITokenObject>();
 
   displayApiToken = false;
+
+  ngOnInit() {
+    if (this.apiToken.userId) {
+      this.user$ = this.userService.getById(this.apiToken.userId);
+    }
+  }
 
   setEditMode(active) {
     this.editMode = active;

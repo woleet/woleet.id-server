@@ -14,16 +14,12 @@
 package io.woleet.idserver.api;
 
 import io.woleet.idserver.ApiException;
-import io.woleet.idserver.api.model.APIError;
 import io.woleet.idserver.api.model.ServerEventGet;
-import java.util.UUID;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
 /**
  * API tests for ServerEventApi
@@ -33,14 +29,11 @@ public class ServerEventApiTest {
 
     private final ServerEventApi api = new ServerEventApi();
 
-    
+
     /**
      * Get a server event by its identifier.
      *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
+     * @throws ApiException if the Api call fails
      */
     @Test
     public void getServerEventByIdTest() throws ApiException {
@@ -49,14 +42,11 @@ public class ServerEventApiTest {
 
         // TODO: test validations
     }
-    
+
     /**
      * List all server events.
      *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
+     * @throws ApiException if the Api call fails
      */
     @Test
     public void getServerEventListTest() throws ApiException {
@@ -64,5 +54,5 @@ public class ServerEventApiTest {
 
         // TODO: test validations
     }
-    
+
 }

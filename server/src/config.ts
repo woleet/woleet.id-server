@@ -117,7 +117,7 @@ export const events = {
 
 export const serverConfig = {
   default: {
-    version: 13, // datamodel version
+    version: 14, // datamodel version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     fallbackOnDefaultKey: true,
     organizationName: 'Woleet',

@@ -6,9 +6,20 @@
         <mat-error *ngIf="apiTokenName.invalid">{{ getErrorMessage(apiTokenName) }}</mat-error>
       </mat-form-field>
     </div>
+    <div>
+      <div *ngIf="(userList$ | async) as users; else loading">
+        <mat-form-field class="w-100">
+          <mat-select type="text" name="userId" placeholder="Select a user (to limit token to user's keys)" [formControl]="apiTokenUserId">
+            <mat-option *ngFor="let user of users" [value]="user.id">{{ user.identity.commonName }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="createAPIToken()" [disabled]="apiTokenName.invalid || formLocked">CREATE</button>
+    <button mat-raised-button color="primary" (click)="createAPIToken()"
+      [disabled]="apiTokenName.invalid || formLocked">CREATE</button>
     <button mat-button (click)="cancelAPIToken()">CANCEL</button>
   </mat-card-actions>
 </mat-card>
+<ng-template #loading>Loading...<br></ng-template>

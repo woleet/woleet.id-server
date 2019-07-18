@@ -1,38 +1,50 @@
 <mat-card>
-  <mat-card-content *ngIf="!editMode" fxLayout="row" fxLayoutAlign="space-between start">
-    <div fxLayout="column">
-      <div fxLayout="row">
-        <div fxLayout="column" class="card-icon">
-          <mat-icon>lock_outline</mat-icon>
+  <mat-card-content *ngIf="!editMode" fxLayout="row">
+    <div fxLayout="column" class="card-icon">
+      <mat-icon>
+        verified_user
+      </mat-icon>
+      <mat-icon *ngIf="apiToken.userId" style="font-size: 30px; height: 26px;margin: -8px 0 0 27px;">
+        account_box</mat-icon>
+    </div>
+    <div fxLayout="column" fxFlex fxLayoutGap="5px">
+      <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div fxLayout="column">
+          <div fxLayout="row">
+            <div fxLayout="column">
+              <div fxLayout="row" style="margin-bottom: 10px">
+                <strong>{{ apiToken.name }}</strong>
+              </div>
+              <div fxLayout="row" fxLayoutGap="5px">
+                <div fxLayout="column" class="label" dir="rtl">created on</div>
+                <div fxLayout="column">{{ apiToken.createdAt | date }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="column">
+          <button mat-button color="warn" (click)="reveal()" *ngIf="!displayApiToken">REVEAL</button>
+          <pre *ngIf="displayApiToken" class="token-val"><code>{{ apiToken.value }}</code></pre>
         </div>
         <div fxLayout="column">
           <div>
-            <strong>{{ apiToken.name }}</strong>
-          </div>
-          <div class="text-gray text-slim">
-            <span>Created on </span><span>{{ apiToken.createdAt | date }}</span>
+            <button mat-icon-button color="primary" (click)="setEditMode(true)">
+              <mat-icon matTooltip="Edit API token" aria-label="Edit token button">edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" *ngIf="apiToken.status !== 'blocked'" (click)="blockToken()">
+              <mat-icon matTooltip="Block API token" aria-label="Block token button">pause_circle_outline</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" *ngIf="apiToken.status === 'blocked'" (click)="unblockToken()">
+              <mat-icon matTooltip="Unblock API token" aria-label="Unblock token button">play_circle_outline</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteToken()">
+              <mat-icon matTooltip="Delete API token" aria-label="Delete token button">delete</mat-icon>
+            </button>
           </div>
         </div>
       </div>
-    </div>
-    <div fxLayout="column">
-      <button mat-button color="warn" (click)="reveal()" *ngIf="!displayApiToken">REVEAL</button>
-      <pre *ngIf="displayApiToken" class="token-val"><code>{{ apiToken.value }}</code></pre>
-    </div>
-    <div fxLayout="column">
-      <div>
-        <button mat-icon-button color="primary" (click)="setEditMode(true)">
-          <mat-icon matTooltip="Edit API token" aria-label="Edit token button">edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" *ngIf="apiToken.status !== 'blocked'" (click)="blockToken()">
-          <mat-icon matTooltip="Block API token" aria-label="Block token button">pause_circle_outline</mat-icon>
-        </button>
-        <button mat-icon-button color="primary" *ngIf="apiToken.status === 'blocked'" (click)="unblockToken()">
-          <mat-icon matTooltip="Unblock API token" aria-label="Unblock token button">play_circle_outline</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="deleteToken()">
-          <mat-icon matTooltip="Delete API token" aria-label="Delete token button">delete</mat-icon>
-        </button>
+      <div *ngIf="(user$ | async) as user" fxLayout="row" fxFlex>
+        <app-user-card [user]="user" [modes]="['display']" [hideAttribute]="['username']"></app-user-card>
       </div>
     </div>
   </mat-card-content>

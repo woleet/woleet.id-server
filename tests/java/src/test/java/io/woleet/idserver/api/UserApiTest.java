@@ -233,7 +233,8 @@ public class UserApiTest extends CRUDApiTest {
         assertEquals(put.getRole() != null ? put.getRole() : post.getRole(), get.getRole());
         assertEquals(put.getUsername() != null ? put.getUsername() : post.getUsername(), get.getUsername());
         assertEquals(put.getEmail() != null ? put.getEmail() : post.getEmail(), get.getEmail());
-        assertEquals(put.getCountryCallingCode() != null ? put.getCountryCallingCode() : post.getCountryCallingCode(), get.getCountryCallingCode());
+        assertEquals(put.getCountryCallingCode() != null ? put.getCountryCallingCode() : post.getCountryCallingCode(),
+                get.getCountryCallingCode());
         assertEquals(put.getPhone() != null ? put.getPhone() : post.getPhone(), get.getPhone());
         if (put.getIdentity() != null) {
             FullIdentity d = put.getIdentity();

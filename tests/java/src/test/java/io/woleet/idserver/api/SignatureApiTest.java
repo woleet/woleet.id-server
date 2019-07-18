@@ -20,12 +20,12 @@ public class SignatureApiTest {
             WOLEET_ID_SERVER_SIGNATURE_BASEPATH = "https://localhost:3000";
     }
 
-    private UserGet user;
+    private UserGet user, user2;
 
-    private SignatureApi adminAuthApi, userAuthApi, noAuthApi, tokenAuthApi;
+    private SignatureApi adminAuthApi, userAuthApi, noAuthApi, tokenAuthNoUserApi, tokenAuthUserApi;
 
     private ApiTokenApi apiTokenApi;
-    private APITokenGet apiTokenGet;
+    private APITokenGet apiTokenNoUserGet, apiTokenUserGet;
 
     private void verifySignatureValid(String hashToSign, SignatureResult signatureResult) throws ApiException {
         assertNotNull(signatureResult.getIdentityURL());
@@ -48,6 +48,7 @@ public class SignatureApiTest {
         adminAuthApi = new SignatureApi(Config.getAdminAuthApiClient()
                 .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
         user = Config.createTestUser();
+        user2 = Config.createTestUser();
         userAuthApi = new SignatureApi(Config.getAuthApiClient(user.getUsername(), "pass")
                 .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
         noAuthApi = new SignatureApi(Config.getNoAuthApiClient()
@@ -55,11 +56,17 @@ public class SignatureApiTest {
 
         // Create an helper API with API token authentication
         apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
-        apiTokenGet = apiTokenApi.createAPIToken((APITokenPost) new APITokenPost().name("test"));
-        ApiClient apiClient = Config.getNoAuthApiClient();
-        apiClient.setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
-        apiClient.addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue());
-        tokenAuthApi = new SignatureApi(apiClient);
+        apiTokenNoUserGet = apiTokenApi.createAPIToken((APITokenPost) new APITokenPost().name("test"));
+        APITokenPost apiTokenUser = new APITokenPost();
+        apiTokenUser.setName("test-user");
+        apiTokenUser.setUserId(user.getId());
+        apiTokenUserGet = apiTokenApi.createAPIToken(apiTokenUser);
+        ApiClient apiClientNoUser = Config.getNoAuthApiClient();
+        ApiClient apiClientUser = Config.getNoAuthApiClient();
+        apiClientNoUser.addDefaultHeader("Authorization", "Bearer " + apiTokenNoUserGet.getValue());
+        tokenAuthNoUserApi = new SignatureApi(apiClientNoUser);
+        apiClientUser.addDefaultHeader("Authorization", "Bearer " + apiTokenUserGet.getValue());
+        tokenAuthUserApi = new SignatureApi(apiClientUser);
     }
 
     @After
@@ -67,8 +74,8 @@ public class SignatureApiTest {
         Config.deleteAllTestUsers();
 
         // This code is called before setUp() is called, so API token can be null
-        if (apiTokenGet != null)
-            apiTokenApi.deleteAPIToken(apiTokenGet.getId());
+        if (apiTokenNoUserGet != null)
+            apiTokenApi.deleteAPIToken(apiTokenNoUserGet.getId());
     }
 
     @Test
@@ -78,7 +85,8 @@ public class SignatureApiTest {
         try {
             noAuthApi.getSignature(Config.randomHash(), null, null, null);
             fail("Should not be able to get a signature with no credentials");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
@@ -86,7 +94,8 @@ public class SignatureApiTest {
         try {
             userAuthApi.getSignature(Config.randomHash(), null, null, null);
             fail("Should not be able to sign with user credentials");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
@@ -94,66 +103,106 @@ public class SignatureApiTest {
         try {
             adminAuthApi.getSignature(Config.randomHash(), null, null, null);
             fail("Should not be able to sign with admin credentials");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
         // Try to sign an invalid hash
         try {
-            tokenAuthApi.getSignature("invalid hash", null, null, null);
+            tokenAuthNoUserApi.getSignature("invalid hash", null, null, null);
             fail("Should not be able to sign an invalid hash");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Try to sign using an invalid key
         try {
             String hashToSign = Config.randomHash();
-            tokenAuthApi.getSignature(hashToSign, null, null, "invalid pubKey");
+            tokenAuthNoUserApi.getSignature(hashToSign, null, null, "invalid pubKey");
             fail("Should not be able to sign using an invalid key");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Try to sign using a non existing user (userId)
         try {
             String hashToSign = Config.randomHash();
-            tokenAuthApi.getSignature(hashToSign, Config.randomUUID(), null, null);
+            tokenAuthNoUserApi.getSignature(hashToSign, Config.randomUUID(), null, null);
             fail("Should not be able to sign using a non existing user");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Try to sign using a non existing user (customUserId)
         try {
             String hashToSign = Config.randomHash();
-            tokenAuthApi.getSignature(hashToSign, null, "non existing customUserId", null);
+            tokenAuthNoUserApi.getSignature(hashToSign, null, "non existing customUserId", null);
             fail("Should not be able to sign using a non existing user");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Try to sign using a non existing key
         try {
             String hashToSign = Config.randomHash();
-            tokenAuthApi.getSignature(hashToSign, null, null, "1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG");
+            tokenAuthNoUserApi.getSignature(hashToSign, null, null, "1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG");
             fail("Should not be able to sign using a non existing key");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+        }
+
+        // Try to sign with as a different user
+        try {
+            KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
+            String hashToSign = Config.randomHash();
+            KeyGet keyGet = keyApi.getKeyById(user.getDefaultKeyId());
+            String pubKey = keyGet.getPubKey();
+            tokenAuthUserApi.getSignature(hashToSign, user2.getId(), null, pubKey);
+            fail("Should not be able to sign as a different user");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+        }
+
+        // Try to sign with a non owned key
+        try {
+            KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
+            String hashToSign = Config.randomHash();
+            KeyGet keyGet = keyApi.getKeyById(user2.getDefaultKeyId());
+            String pubKey = keyGet.getPubKey();
+            tokenAuthUserApi.getSignature(hashToSign, null, null, pubKey);
+            fail("Should not be able to find a non owned key");
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Sign using the server's default key
         String hashToSign = Config.randomHash();
-        SignatureResult signatureResult = tokenAuthApi.getSignature(hashToSign, null, null, null);
+        SignatureResult signatureResult = tokenAuthNoUserApi.getSignature(hashToSign, null, null, null);
+        assertNotNull(signatureResult.getIdentityURL());
+        assertTrue(Config.isValidPubKey(signatureResult.getPubKey()));
+        assertEquals(hashToSign, signatureResult.getSignedHash());
+        verifySignatureValid(signatureResult.getSignedHash(), signatureResult);
+
+        // Sign using the user's default key with an assigned token
+        hashToSign = Config.randomHash();
+        signatureResult = tokenAuthUserApi.getSignature(hashToSign, null, null, null);
         assertNotNull(signatureResult.getIdentityURL());
         assertTrue(Config.isValidPubKey(signatureResult.getPubKey()));
         assertEquals(hashToSign, signatureResult.getSignedHash());
         verifySignatureValid(signatureResult.getSignedHash(), signatureResult);
 
         // FIXME: WOLEET-1141: Since we just used the API token to sign, its last used should be close to current time
-//        apiTokenGet = apiTokenApi.getAPITokenById(apiTokenGet.getId());
-//        assertTrue(apiTokenGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
-//                && apiTokenGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
+//        apiTokenNoUserGet = apiTokenApi.getAPITokenById(apiTokenNoUserGet.getId());
+//        assertTrue(apiTokenNoUserGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
+//                && apiTokenNoUserGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
 
         // Change server config not to fallback on default key
         ServerConfigApi serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
@@ -162,9 +211,10 @@ public class SignatureApiTest {
 
         // Try to sign using a non existing server's default key
         try {
-            tokenAuthApi.getSignature(hashToSign, null, null, null);
+            tokenAuthNoUserApi.getSignature(hashToSign, null, null, null);
             fail("Should not be able to sign using a non existing server's default key");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
@@ -173,12 +223,22 @@ public class SignatureApiTest {
 
         // Sign using user's default key (userId)
         hashToSign = Config.randomHash();
-        signatureResult = tokenAuthApi.getSignature(hashToSign, user.getId(), null, null);
+        signatureResult = tokenAuthNoUserApi.getSignature(hashToSign, user.getId(), null, null);
+        verifySignatureValid(hashToSign, signatureResult);
+
+        // Sign using user's default key (userId) with an assigned token
+        hashToSign = Config.randomHash();
+        signatureResult = tokenAuthUserApi.getSignature(hashToSign, user.getId(), null, null);
         verifySignatureValid(hashToSign, signatureResult);
 
         // Sign using user's default key (customUserId)
         hashToSign = Config.randomHash();
-        signatureResult = tokenAuthApi.getSignature(hashToSign, null, user.getIdentity().getUserId(), null);
+        signatureResult = tokenAuthNoUserApi.getSignature(hashToSign, null, user.getIdentity().getUserId(), null);
+        verifySignatureValid(hashToSign, signatureResult);
+
+        // Sign using user's default key (customUserId) with an assigned token
+        hashToSign = Config.randomHash();
+        signatureResult = tokenAuthUserApi.getSignature(hashToSign, null, user.getIdentity().getUserId(), null);
         verifySignatureValid(hashToSign, signatureResult);
 
         // Sign using user's default key (pubKey)
@@ -186,7 +246,12 @@ public class SignatureApiTest {
         hashToSign = Config.randomHash();
         KeyGet keyGet = keyApi.getKeyById(user.getDefaultKeyId());
         String pubKey = keyGet.getPubKey();
-        signatureResult = tokenAuthApi.getSignature(hashToSign, null, null, pubKey);
+        signatureResult = tokenAuthNoUserApi.getSignature(hashToSign, null, null, pubKey);
+        verifySignatureValid(hashToSign, signatureResult);
+
+        // Sign using user's default key (pubKey) with an assigned token
+        hashToSign = Config.randomHash();
+        signatureResult = tokenAuthUserApi.getSignature(hashToSign, null, null, pubKey);
         verifySignatureValid(hashToSign, signatureResult);
 
         // FIXME: WOLEET-1141: Since we just used the key to sign, its last used should be close to current time
@@ -194,7 +259,18 @@ public class SignatureApiTest {
 //        assertTrue(keyGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
 //                && keyGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
 
-        // TODO: test signing using a blocked key
+        // Try to sign with a blocked key
+        try {
+            KeyPut keyPut = new KeyPut();
+            keyPut.setStatus(KeyStatusEnum.BLOCKED);
+            KeyGet blockedKey = keyApi.updateKey(keyGet.getId(), keyPut);
+            pubKey = blockedKey.getPubKey();
+            tokenAuthNoUserApi.getSignature(hashToSign, null, null, pubKey);
+            fail("Should not be able to sign as a different user");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
 
         // Delete user's default key
         keyApi.deleteKey(keyGet.getId());
@@ -204,17 +280,37 @@ public class SignatureApiTest {
 
         // Try to sign using a non existing user's default key
         try {
-            tokenAuthApi.getSignature(hashToSign, user.getId(), null, null);
+            tokenAuthNoUserApi.getSignature(hashToSign, user.getId(), null, null);
             fail("Should not be able to sign using a non existing user's default key");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        // Try to sign using a non existing user's default key with an assigned token
+        try {
+            tokenAuthUserApi.getSignature(hashToSign, user.getId(), null, null);
+            fail("Should not be able to sign using a non existing user's default key");
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Try to sign using a non existing user's default key
         try {
-            tokenAuthApi.getSignature(hashToSign, null, null, pubKey);
+            tokenAuthNoUserApi.getSignature(hashToSign, null, null, pubKey);
             fail("Should not be able to sign using a non existing user's default key");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+        }
+
+        // Try to sign using a non existing user's default key with an assigned token
+        try {
+            tokenAuthUserApi.getSignature(hashToSign, null, null, pubKey);
+            fail("Should not be able to sign using a non existing user's default key");
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
     }

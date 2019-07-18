@@ -78,7 +78,8 @@ paths:
         <br>- set the `pubKey` parameter only: the referred key is used
         <br>- set the `userId` (or the `customUserId`) parameter only: the default key of the referred user is used (if any).
         <br>- set none of the 3 parameters: the default key of the server is used (if any).
-        <br>When authenticated using an OAuth token, the key to use must be one of the authenticated user's keys and can be specified using the `pubKey`. If not specified, the authenticated user's default key is used (if any).
+        <br>When authenticated using an OAuth token, the key to use must be one of the authenticated user's keys and can be specified using the `pubKey`.
+        If not specified, the authenticated user's default key is used (if any).
       parameters:
         - $ref: '#/components/parameters/HashToSignQueryParameter'
         - $ref: '#/components/parameters/UserIdQueryParameter'
@@ -1305,6 +1306,11 @@ components:
               type: string
               description: Token to use for the signature endpoint.
               example: "b9PXEeMpSCyeaPpQiZ3Bvw=="
+            userId:
+              type: string
+              format: uuid
+              description: Id of the authorized user.
+              example: 'feb37e23-d04e-4e71-bf53-1f1a75ba3a68'
             createdAt:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:
@@ -1317,6 +1323,12 @@ components:
         - type: object
           required:
             - name
+          properties:
+            userId:
+              type: string
+              format: uuid
+              description: Id of the authorized user.
+              example: 'feb37e23-d04e-4e71-bf53-1f1a75ba3a68'
     APITokenPut:
       allOf:
         - $ref: '#/components/schemas/APITokenBase'

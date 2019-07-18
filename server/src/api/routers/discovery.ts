@@ -34,6 +34,11 @@ router.get('/keys/:userId', vuid, async function (ctx) {
   ctx.body = keys.map(serializeKey);
 });
 
+/**
+ * @route: /discover/config
+ * @swagger
+ *  operationId: discoverConfig
+ */
 router.get('/config', async function (ctx) {
   const { identityURL } = await getServerConfig();
   ctx.body = { identityURL };

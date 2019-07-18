@@ -50,7 +50,8 @@ public class IdentityApiTest {
         try {
             identityApi.getIdentity("invalid pubKey", null);
             fail("Should not be able to get an identity with an invalid key");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
@@ -58,7 +59,8 @@ public class IdentityApiTest {
         try {
             identityApi.getIdentity("1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG", null);
             fail("Should not be able to get an identity with an non existing key");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
@@ -147,10 +149,11 @@ public class IdentityApiTest {
         assertEquals(Key.StatusEnum.VALID, identityResult.getKey().getStatus());
         assertTrue(
                 "Expected " + identityResult.getRightData()
-                        + "to start with \"" + serverConfig.getIdentityURL()
-                        + "\" but got \"" + identityResult.getRightData() + "\"",
+                + "to start with \"" + serverConfig.getIdentityURL()
+                + "\" but got \"" + identityResult.getRightData() + "\"",
                 identityResult.getRightData().startsWith(serverConfig.getIdentityURL())
         );
-        assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(), leftData + identityResult.getRightData()));
+        assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(),
+                leftData + identityResult.getRightData()));
     }
 }

@@ -217,7 +217,8 @@ async function upgrade11(sequelize) {
   try {
     await sequelize.query(`SELECT * FROM "enrollments";`);
     enrollmentExist = true;
-  } catch { }
+  } catch {
+  }
 
   const { config } = cfg.toJSON();
   if (config.version < 11) {
@@ -238,7 +239,7 @@ async function upgrade11(sequelize) {
 }
 
 async function upgrade12(sequelize) {
-  log.warn('Checking for  update 2 of the "enrollments" model...');
+  log.warn('Checking for update 2 of the "enrollments" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -246,13 +247,11 @@ async function upgrade12(sequelize) {
   }
 
   let enrollmentExist = false;
-  if (!cfg) {
-    return;
-  }
   try {
     await sequelize.query(`SELECT * FROM "enrollments";`);
     enrollmentExist = true;
-  } catch { }
+  } catch {
+  }
 
   const { config } = cfg.toJSON();
   if (config.version < 12) {
@@ -273,7 +272,7 @@ async function upgrade12(sequelize) {
 }
 
 async function upgrade13(sequelize) {
-  log.warn('Checking for  update 5 of the "keys" model...');
+  log.warn('Checking for update 2 of the "apiTokens" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -282,13 +281,28 @@ async function upgrade13(sequelize) {
 
   const { config } = cfg.toJSON();
   if (config.version < 13) {
+    log.warn('Need to add "userId" column to the "apiToken" table');
+    const userId = await sequelize.query(`ALTER TABLE "apiTokens" ADD COLUMN "userId" UUID;`);
+    log.debug(userId);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 13 }) });
+  }
+}
+
+async function upgrade14(sequelize) {
+  log.warn('Checking for  update 5 of the "keys" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+  const { config } = cfg.toJSON();
+  if (config.version < 14) {
     log.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
     const editKeysStatusEvent = await sequelize.query(`ALTER TYPE "enum_keys_status" ADD VALUE 'revoked';`);
     log.debug(editKeysStatusEvent);
     const keyRevokedAt = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "revokedAt" TIMESTAMPTZ;`);
     log.debug(keyRevokedAt);
-
-    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 13 }) });
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 14 }) });
   }
 }
 
@@ -306,6 +320,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade11(sequelize);
   await upgrade12(sequelize);
   await upgrade13(sequelize);
+  await upgrade14(sequelize);
 }
 
 async function postUpgrade3() {
