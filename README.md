@@ -36,10 +36,12 @@ The Node.js server exposes several endpoints:
 
 The source code can be found in the `server/` directory.
 
-**Documentation and tests**
+# Documentation
 
-All endpoints, including those dedicated to the client web app, are specified and documented using OpenAPI (see the `swagger.yaml` file).
+All endpoints of the Woleet.ID Server API, including those dedicated to the client web app, are specified and documented using OpenAPI (see the `swagger.yaml` file).
 From this specification, test code (written in Java) is generated inside the `test/java` directory using the OpenAPI client code generator.
+
+The Woleet.ID Server API documentation is published on [SwaggerHub](https://app.swaggerhub.com/apis-docs/Woleet/WoleetIDServerAPI).
 
 # Deployment
 
