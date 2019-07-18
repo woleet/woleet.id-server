@@ -16,6 +16,10 @@ export async function initServerConfig() {
   const config = await loadServerConfig();
   if (config) {
     log.info(`Server configuration successfully restored`);
+    const printedConf = config;
+    delete printedConf.mailKeyEnrollmentTemplate;
+    delete printedConf.mailOnboardingTemplate;
+    delete printedConf.mailResetPasswordTemplate;
     debug(JSON.stringify(config, null, 2));
 
     const key = await Key.model.findOne({ where: { holder: 'server' } });
