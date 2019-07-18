@@ -53,7 +53,7 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
       userName: user.getDataValue('x500CommonName')
     });
     subject = 'Onboarding';
-  // If the password is set send an reset password mail
+    // If the password is set send an reset password mail
   } else {
     html = mustache.render(config.mailResetPasswordTemplate, {
       resetPasswordURL: link,
@@ -139,8 +139,10 @@ export async function sendEmail(email: string, subject: string, html: any) {
  */
 function MailTemplate(email: string, subject: string, html: any): object {
   const organizationName = getServerConfig().organizationName;
+  const contactDomain = getServerConfig().contact ?
+  getServerConfig().contact.split('@')[1] : 'Woleet';
   return {
-    from: organizationName + ' no-reply@' + getServerConfig().contact.split('@')[1],
+    from: organizationName + ' no-reply@' + contactDomain,
     to: email,
     subject: subject,
     html: html
