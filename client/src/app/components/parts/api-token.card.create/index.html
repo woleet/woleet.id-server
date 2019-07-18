@@ -9,7 +9,7 @@
     <div>
       <div *ngIf="(userList$ | async) as users; else loading">
         <mat-form-field class="w-100">
-          <mat-select type="text" name="userId" placeholder="Select a user" [formControl]="apiTokenUserId">
+          <mat-select type="text" name="userId" placeholder="Select a user (to limit token to user's keys)" [formControl]="apiTokenUserId">
             <mat-option *ngFor="let user of users" [value]="user.id">{{ user.identity.commonName }}</mat-option>
           </mat-select>
         </mat-form-field>

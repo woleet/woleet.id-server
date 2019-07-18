@@ -23,7 +23,6 @@ public class Config {
     // Initialize data needed to test users
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
     private static final String TEST_USERS_USERNAME_PREFIX = "tester_";
-    private static final String TEST_USERS_ADDRESS_PREFIX = "00";
 
     // Get API base path from the environment
     public static String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
@@ -61,10 +60,10 @@ public class Config {
         // Login and set the session cookie for future calls
         AuthenticationApi authenticationApi = new AuthenticationApi(apiClient);
         ApiResponse<UserInfo> apiResponse = authenticationApi.loginWithHttpInfo();
-        String cookies = new String();
+        StringBuilder cookies = new StringBuilder();
         for (String cookie : apiResponse.getHeaders().get("Set-Cookie"))
-            cookies += cookie + ";";
-        apiClient.addDefaultHeader("Cookie", cookies);
+            cookies.append(cookie).append(";");
+        apiClient.addDefaultHeader("Cookie", cookies.toString());
         return apiClient;
     }
 
@@ -134,7 +133,7 @@ public class Config {
      * Create a new random address (for keys).
      */
     public static String randomAddress() {
-        byte[] a = new byte[] {(byte)0x00};
+        byte[] a = new byte[]{(byte) 0x00};
         byte[] b = new byte[24];
         new Random().nextBytes(b);
         byte[] c = new byte[a.length + b.length];
@@ -172,8 +171,6 @@ public class Config {
         UserPost userPost = new UserPost();
         String USERNAME = randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
-        String COUNTRYCALLINGCODE = "33";
-        String PHONE = "123456789";
         userPost.email(EMAIL).username(USERNAME).role(UserRoleEnum.USER).status(UserStatusEnum.ACTIVE);
         userPost.password("pass");
         FullIdentity fullIdentity = new FullIdentity();
@@ -198,7 +195,8 @@ public class Config {
         try {
             return ECKey.signedMessageToKey(message, signature).toAddress(Address.fromBase58(null, address)
                     .getParameters()).toString().equals(address);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return false;
         }
     }
@@ -213,7 +211,8 @@ public class Config {
         try {
             Base58.decodeChecked(address);
             return true;
-        } catch (AddressFormatException e) {
+        }
+        catch (AddressFormatException e) {
             return false;
         }
     }

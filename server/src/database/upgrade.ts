@@ -217,7 +217,8 @@ async function upgrade11(sequelize) {
   try {
     await sequelize.query(`SELECT * FROM "enrollments";`);
     enrollmentExist = true;
-  } catch { }
+  } catch {
+  }
 
   const { config } = cfg.toJSON();
   if (config.version < 11) {
@@ -249,7 +250,8 @@ async function upgrade12(sequelize) {
   try {
     await sequelize.query(`SELECT * FROM "enrollments";`);
     enrollmentExist = true;
-  } catch { }
+  } catch {
+  }
 
   const { config } = cfg.toJSON();
   if (config.version < 12) {
@@ -281,7 +283,6 @@ async function upgrade13(sequelize) {
   if (config.version < 13) {
     log.warn('Need to add "userId" column to the "apiToken" table');
     const userId = await sequelize.query(`ALTER TABLE "apiTokens" ADD COLUMN "userId" UUID;`);
-    log.debug(userId);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 13 }) });
   }
 }
