@@ -28,7 +28,7 @@ export class EnrollmentPageComponent implements OnInit {
   config: any;
 
   constructor(appConfigService: AppConfigService, private route: ActivatedRoute,
-              private enrollmentService: EnrollmentService, private configService: ConfigService) {
+    private enrollmentService: EnrollmentService, private configService: ConfigService) {
     this.config = appConfigService.getConfig();
     this.enrollmentId = this.route.snapshot.params.id;
     this.enrollmentService.getUserByEnrollmentId(this.enrollmentId)
@@ -65,7 +65,7 @@ export class EnrollmentPageComponent implements OnInit {
   signTCU(): void {
     this.isSendingSignatureRequest = true;
     this.enrollmentService.createTCUSignatureRequest(this.enrollmentId)
-    .pipe(first())
+      .pipe(first())
       .subscribe(
         () => {
           this.isSendingSignatureRequest = false;
@@ -79,6 +79,10 @@ export class EnrollmentPageComponent implements OnInit {
               break;
             case 'EnrollmentExpiredError':
               this.errorMessage = 'This page refers to a signature key registration that is expired.' +
+                ' Please contact the admin to begin a new a signature key registration process.';
+              break;
+            case 'SignatureRequestCreationError':
+              this.errorMessage = 'The signature request creation failed.' +
                 ' Please contact the admin to begin a new a signature key registration process.';
               break;
             default:

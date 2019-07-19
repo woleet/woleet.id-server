@@ -2,6 +2,7 @@ import * as Router from 'koa-router';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
 import { createSignatureRequest, getEnrollmentUser, monitorSignatureRequest } from '../../controllers/enrollment';
+import { BadRequest } from 'http-errors';
 import log = require('loglevel');
 
 /**
@@ -44,7 +45,7 @@ router.post('/enrollment/:id/create-signature-request', async function (ctx) {
     // Start monitoring this signature request
     monitorSignatureRequest(signatureRequestId, enrollmentId, user);
   } catch (err) {
-    log.error(err);
+    throw new BadRequest('SignatureRequestCreationError');
   }
 
   // Register signature request creation event
