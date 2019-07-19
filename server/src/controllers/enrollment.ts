@@ -123,9 +123,9 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
       {
         commonName: user.x500CommonName,
         email: user.email,
-        phone: user.phone ? '"' + user.phone + '"' : null,
-        countryCallingCode: user.countryCallingCode ? '"' + user.countryCallingCode + '"' : null,
-        device: enrollment.device ? '"' + enrollment.device.toUpperCase() + '"' : null
+        phone: user.phone ? user.phone : null,
+        countryCallingCode: user.countryCallingCode ? user.countryCallingCode : null,
+        device: enrollment.device ? enrollment.device.toUpperCase() : null
       }],
     public: false,
     name: getServerConfig().organizationName + 'Signature Service TCU.pdf',
@@ -221,8 +221,8 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
       return;
     },
       (error) => {
-        log.error(error);
         signatureRequestSubscriber.unsubscribe();
+        throw error(error);
       }
     );
 }
