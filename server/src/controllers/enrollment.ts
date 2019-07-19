@@ -123,8 +123,8 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
       {
         commonName: user.x500CommonName,
         email: user.email,
-        phone: user.phone ? user.phone : null,
-        countryCallingCode: user.countryCallingCode ? user.countryCallingCode : null,
+        phone: user.phone,
+        countryCallingCode: user.countryCallingCode,
         device: enrollment.device ? enrollment.device.toUpperCase() : null
       }],
     public: false,
@@ -222,7 +222,7 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
     },
       (error) => {
         signatureRequestSubscriber.unsubscribe();
-        throw error(error);
+        throw error;
       }
     );
 }
