@@ -99,7 +99,7 @@ public class SignatureApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to sign with admin attributes
+        // Try to sign with admin credentials
         try {
             adminAuthApi.getSignature(Config.randomHash(), null, null, null);
             fail("Should not be able to sign with admin credentials");
@@ -125,6 +125,16 @@ public class SignatureApiTest {
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+        }
+
+        // Try to sign using a non existing key
+        try {
+            String hashToSign = Config.randomHash();
+            tokenAuthNoUserApi.getSignature(hashToSign, null, null, "1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG");
+            fail("Should not be able to sign using a non existing key");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Try to sign using a non existing user (userId)
