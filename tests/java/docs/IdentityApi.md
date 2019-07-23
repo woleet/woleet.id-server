@@ -24,7 +24,7 @@ Use this endpoint to verify that the server knows a public key and to get the id
 
 IdentityApi apiInstance = new IdentityApi();
 String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | Public key to verify.
-String leftData = 00c8a2b0c373050e7f2abbb2e4c631a42c10d402; // String | Left part of the random data to sign (should be generated randomly).
+String leftData = 00c8a2b0c373050e7f2abbb2e4c631a42c10d402; // String | Left part of the random data to sign (should be generated randomly). <br>When not provided, the server does not return a signature, even if it controls the key. 
 try {
     IdentityResult result = apiInstance.getIdentity(pubKey, leftData);
     System.out.println(result);
@@ -39,7 +39,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **pubKey** | **String**| Public key to verify. |
- **leftData** | **String**| Left part of the random data to sign (should be generated randomly). | [optional]
+ **leftData** | **String**| Left part of the random data to sign (should be generated randomly). &lt;br&gt;When not provided, the server does not return a signature, even if it controls the key.  | [optional]
 
 ### Return type
 
