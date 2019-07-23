@@ -210,13 +210,13 @@ You should see the sign in page.
 
 You should get:
 
-    { "message": "Missing mandatory \"pubKey\" parameter", "status": 400 }
+    { "message": "Missing \"pubKey\" parameter", "status": 400 }
 
 [Signature endpoint](https://localhost:3002/sign)
 
 You should get:
 
-    { "message": "Invalid or missing API token", "status": 401 }
+    { "message": "Missing token", "status": 401 }
 
 # Change administrator account password
 
