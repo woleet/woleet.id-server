@@ -46,7 +46,7 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
   }
 
   // If the pubkey is not specified, need to put the value by default.
-  if (!(userId || customUserId) && !pubKey) {
+  if (!pubKey) {
     let defaultKeyId;
     if (userId || customUserId) {
       defaultKeyId = user.get('defaultKeyId');
