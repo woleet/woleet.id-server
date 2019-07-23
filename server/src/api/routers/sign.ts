@@ -26,7 +26,7 @@ async function getSignature(ctx: Context) {
   const token = ctx.token;
 
   if (!query.hashToSign) {
-    throw new BadRequest('Missign mandatory "hashToSign" query parameter');
+    throw new BadRequest('Missing mandatory "hashToSign" query parameter');
   }
 
   if (!(await vhash(query.hashToSign))) {
@@ -38,7 +38,7 @@ async function getSignature(ctx: Context) {
   }
 
   if (token.type === 'oauth' && query.userId && token.userId !== query.userId) {
-    throw new Unauthorized('Cannot sign for an other user with an oauth token');
+    throw new Unauthorized('Cannot sign for another user with an OAuth token');
   }
 
   if (query.pubKey && !(await vaddr(query.pubKey))) {
