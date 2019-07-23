@@ -58,7 +58,7 @@ public class SignatureApiTest {
 
         // Create a helper API with API token authentication (with admin right)
         apiTokenAdminGet = apiTokenApi.createAPIToken((APITokenPost) new APITokenPost().name("test-admin"));
-        ApiClient apiClientAdmin = Config.getNoAuthApiClient();
+        ApiClient apiClientAdmin = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
         apiClientAdmin.addDefaultHeader("Authorization", "Bearer " + apiTokenAdminGet.getValue());
         tokenAuthAdminApi = new SignatureApi(apiClientAdmin);
 
@@ -67,7 +67,7 @@ public class SignatureApiTest {
         apiTokenUser.setName("test-user");
         apiTokenUser.setUserId(user.getId());
         apiTokenUserGet = apiTokenApi.createAPIToken(apiTokenUser);
-        ApiClient apiClientUser = Config.getNoAuthApiClient();
+        ApiClient apiClientUser = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
         apiClientUser.addDefaultHeader("Authorization", "Bearer " + apiTokenUserGet.getValue());
         tokenAuthUserApi = new SignatureApi(apiClientUser);
     }
