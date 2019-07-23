@@ -1755,7 +1755,9 @@ components:
     LeftDataQueryParameter:
       name: leftData
       in: query
-      description: Left part of the random data to sign (should be generated randomly).
+      description: >
+        Left part of the random data to sign (should be generated randomly).
+        <br>When not provided, the server does not return a signature, even if it controls the key.
       required: false
       schema:
         type: string
