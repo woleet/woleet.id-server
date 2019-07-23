@@ -24,13 +24,6 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     user = await User.getByCustomUserId(customUserId);
   }
 
-  // Key and user are specified, need to check that the user is the owner of a key.
-  if (key && user) {
-    if (key.get('userId') !== user.get('id')) {
-      throw new KeyOwnerMismatchError();
-    }
-  }
-
   if (pubKey) {
     key = await Key.getByPubKey(pubKey, user && user.get('id'), !user);
     if (!key) {
@@ -45,7 +38,15 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     throw new NotFoundUserError();
   }
 
-  if (!(userId || customUserId) || !pubKey) {
+  // Key and user are specified, need to check that the user is the owner of a key.
+  if (key && user) {
+    if (key.get('userId') !== user.get('id')) {
+      throw new KeyOwnerMismatchError();
+    }
+  }
+
+  // If the pubkey is not specified, need to put the value by default.
+  if (!(userId || customUserId) && !pubKey) {
     let defaultKeyId;
     if (userId || customUserId) {
       defaultKeyId = user.get('defaultKeyId');
@@ -62,24 +63,18 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
       }
       defaultKeyId = config.defaultKeyId;
     }
-    if (!pubKey) {
-      key = await Key.getByIdAndPullUser(defaultKeyId);
-      if (!key) {
-        throw new Error(`Cannot find default key (${defaultKeyId})`);
-      }
-      if (!user) {
-        user = key.get('user');
-      }
+    key = await Key.getByIdAndPullUser(defaultKeyId);
+    if (!key) {
+      throw new Error(`Cannot find default key (${defaultKeyId})`);
+    }
+    if (!user) {
+      user = key.get('user');
     }
   }
 
   // A blocked user cannot sign
   if (user.getDataValue('status') === 'blocked') {
     throw new BlockedUserError();
-  }
-
-  if (!key && user.getDataValue('defaultKeyId')) {
-    key = await Key.getById(user.getDataValue('defaultKeyId'));
   }
 
   if (!key) {
