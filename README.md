@@ -63,7 +63,7 @@ OS Supported:
 - Fedora 29
 - Fedora 28
 
-If you run one of these linux version you can install Woleet.ID Server by running:
+If you run one of these Linux version you can install Woleet.ID Server by running:
 
 ```bash
 bash <(curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh)
