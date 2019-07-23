@@ -71,11 +71,11 @@ bash <(curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/ma
 
 You will need a certificate and its key, as described below, on the computer you execute this script.
 
-By default it will install docker and other tools needed and clone the project on you $HOME/wids directory, store the emplacement of your certificate and key in the file configuration.sh.
+By default it will install Docker and other tools needed and clone the project on you $HOME/wids directory, store the emplacement of your certificate and key in the file configuration.sh.
 
 ## configuration.sh
 
-If you want to override some of the environnement variables you can do so in a configuration.sh file, if it exists its content will be sourced in app.sh.
+If you want to override some of the environment variables you can do so in a configuration.sh file, if it exists its content will be sourced in app.sh.
 
 For example to fix a version for Woleet.ID Server (related to release tab) add this in configuration.sh:
 
@@ -120,7 +120,7 @@ export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pa
 
 ## Version
 
-Woleet.ID Server have prebuilt images on dockerhub:  
+Woleet.ID Server have prebuilt images on DockerHub:  
 <https://hub.docker.com/r/wids/client>  
 <https://hub.docker.com/r/wids/server>
 
@@ -146,7 +146,7 @@ Woleet.ID Server requires a recent Docker version:
  - docker 18.09+
  - docker-compose 1.22+
 
- To check your docker and docker-compose versions use `docker -v` and `docker-compose -v`.
+To check your docker and docker-compose versions use `docker -v` and `docker-compose -v`.
 
 ## Encryption secret
 
