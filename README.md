@@ -24,21 +24,28 @@ Woleet.ID Server is made of a Node.js server and a Angular/Material client web a
 **Angular/Material client web app**
 
 The web app is intended for the server administrator only. It allows to configure the server and to manage users and their keys.
+By default, it is exposed at [https://localhost:3000]().
 
 The source code can be found in the `client/` directory.
 
 **Node.js server**
 
-The Node.js server exposes several endpoints:
-- a `/sign` endpoint exposed internally and allowing to sign using the organization's default key or one of the user's keys
-- an `/identity` endpoint exposed externally and allowing to retrieve and verify users' identity.
-- a set of API endpoints dedicated to the client web app.
+The Node.js server exposes several API endpoints:
+
+- A `/sign` endpoint allowing to sign using the keys managed by the server.
+By default, it is exposed at [https://localhost:3002/sign]().
+  
+- An `/identity` endpoint allowing to retrieve and verify the user identity associated to a key. This endpoint need to be exposed to the internet.
+By default, it is exposed at [https://localhost:3001/identity]().
+
+- Other API endpoints dedicated to the client web app, but that can also be used by customer apps.
+By default, they are exposed at [https://localhost:3000/api/]().
 
 The source code can be found in the `server/` directory.
 
 # Documentation
 
-All endpoints of the Woleet.ID Server API, including those dedicated to the client web app, are specified and documented using OpenAPI (see the `swagger.yaml` file).
+All endpoints of Woleet.ID Server, including those dedicated to the client web app, are specified and documented using OpenAPI (see the `swagger.yaml` file).
 From this specification, test code (written in Java) is generated inside the `test/java` directory using the OpenAPI client code generator.
 
 The Woleet.ID Server API documentation is published on [SwaggerHub](https://app.swaggerhub.com/apis-docs/Woleet/WoleetIDServerAPI).
@@ -163,7 +170,7 @@ export WOLEET_ID_SERVER_ENCRYPTION_SECRET={encryption secret, default: 'secret'}
 You can define the ports on which Woleet.ID Server listens by setting the following environment variables:
 
 ```bash
-export WOLEET_ID_SERVER_API_PORT={port to use for the client web app and the server main API endpoints dedicated to the client web app, default: 3000}
+export WOLEET_ID_SERVER_API_PORT={port to use for the client web app and the server API endpoints dedicated to the client web app, default: 3000}
 export WOLEET_ID_SERVER_IDENTITY_PORT={port to use for the /identity endpoint, default: 3001}
 export WOLEET_ID_SERVER_SIGNATURE_PORT={port to use for the /sign and /discover endpoints, default 3002}
 ```
