@@ -55,6 +55,7 @@ declare global {
 
     role: UserRoleEnum;
     status: UserStatusEnum;
+    mode: UserModeEnum;
     countryCallingCode: string;
     phone: string;
     email: string | null;
@@ -81,6 +82,7 @@ declare global {
   interface ApiFullPostUserObject extends UserObject, InternalIdentityObject {
     role?: UserRoleEnum;
     status?: UserStatusEnum;
+    mode?: UserModeEnum;
     email?: string;
     countryCallingCode?: string;
     phone?: string;

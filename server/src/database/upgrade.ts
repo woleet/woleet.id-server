@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize';
 import * as log from 'loglevel';
 import * as read from 'read';
 import * as crypto from 'crypto';
-import { APIToken, Key, ServerConfig } from '.';
+import { APIToken, Key, User, ServerConfig } from '.';
 import { secretEnvVariableName, secureModule, serverConfig } from '../config';
 import { promisify } from 'util';
 
@@ -283,7 +283,39 @@ async function upgrade13(sequelize) {
   if (config.version < 13) {
     log.warn('Need to add "userId" column to the "apiToken" table');
     const userId = await sequelize.query(`ALTER TABLE "apiTokens" ADD COLUMN "userId" UUID;`);
+    log.debug(userId);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 13 }) });
+  }
+}
+
+async function upgrade15(sequelize) {
+  log.warn('Checking for update 3 of the "users" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 15) {
+    log.warn('Need to add the mode enum in "users" table');
+    const enum_users_type = await sequelize.query(`CREATE TYPE "enum_users_mode" AS ENUM ('seal', 'e-signature');`);
+    log.debug(enum_users_type);
+    log.warn('Need to add "type" column to the "users" table');
+    const users_type = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "type" enum_users_type;`);
+    log.debug(users_type);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 15 }) });
+    await Key.model.sync();
+    const users = await User.model.findAll({ paranoid: false });
+
+    log.warn(`${users.length} users to update...`);
+
+    for (const user of users) {
+      log.warn(`Updating key ${user.get('id')} ...`);
+      user.set('mode', 'seal');
+      await user.save();
+      log.debug(`Updated key ${user.get('id')}`);
+    }
   }
 }
 
@@ -301,6 +333,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade11(sequelize);
   await upgrade12(sequelize);
   await upgrade13(sequelize);
+  await upgrade15(sequelize);
 }
 
 async function postUpgrade3() {
