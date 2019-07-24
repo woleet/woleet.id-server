@@ -218,6 +218,12 @@ You should get:
 
     { "message": "Missing token", "status": 401 }
 
+[API endpoints](https://localhost:3000/api/info)
+
+You should get:
+
+    { "message": "Unauthorized", "status":401 }
+
 # Change administrator account password
 
 When you run it for the first time, Woleet.ID Server creates an administrator account with login `admin` and password `pass`.
