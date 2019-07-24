@@ -93,7 +93,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
             keyPost.setPublicKey(Config.randomAddress());
             keyPost.setStatus(Config.randomBoolean() ? KeyStatusEnum.BLOCKED : KeyStatusEnum.ACTIVE);
             keyPost.setDevice(Config.randomBoolean() ? KeyDeviceEnum.MOBILE : KeyDeviceEnum.NANO);
-            keyPost.setExpiration(Config.randomTimestamp());
+            keyPost.setExpiration(Config.currentTimestamp());
             return new ObjectPost(keyPost);
         }
     }
@@ -114,7 +114,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
             if (Config.randomBoolean())
                 keyPut.setDevice(Config.randomBoolean() ? KeyDeviceEnum.MOBILE : KeyDeviceEnum.NANO);
             if (Config.randomBoolean())
-                keyPut.setExpiration(Config.randomTimestamp());
+                keyPut.setExpiration(Config.currentTimestamp());
         }
     }
 

@@ -90,7 +90,7 @@ public class KeyApiTest extends CRUDApiTest {
             KeyPost keyPost = (KeyPost) objectBase;
             keyPost.setName(Config.randomName());
             keyPost.setStatus(Config.randomBoolean() ? KeyStatusEnum.BLOCKED : KeyStatusEnum.ACTIVE);
-            keyPost.setExpiration(Config.randomTimestamp());
+            keyPost.setExpiration(Config.currentTimestamp());
             return new ObjectPost(keyPost);
         }
     }
@@ -109,7 +109,7 @@ public class KeyApiTest extends CRUDApiTest {
             if (Config.randomBoolean())
                 keyPut.setStatus(Config.randomBoolean() ? KeyStatusEnum.BLOCKED : KeyStatusEnum.ACTIVE);
             if (Config.randomBoolean())
-                keyPut.setExpiration(Config.randomTimestamp());
+                keyPut.setExpiration(Config.currentTimestamp());
         }
     }
 

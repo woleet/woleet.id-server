@@ -49,7 +49,7 @@ export async function createExternalKey(userId: string, key: ApiPostKeyObject): 
 
 /**
  * @swagger
- *  operationId: logout
+ *  operationId: updateKey
  */
 export async function updateKey(id: string, attrs: ApiPutKeyObject) {
   const key = await Key.update(id, attrs);

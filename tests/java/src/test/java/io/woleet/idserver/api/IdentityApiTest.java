@@ -73,7 +73,7 @@ public class IdentityApiTest {
         // Create an expired key
         KeyPost keyPost = new KeyPost();
         keyPost.setName(Config.randomName());
-        Long expiration = Config.randomTimestamp() - (3600L * 1000L);
+        Long expiration = Config.currentTimestamp() - (3600L * 1000L);
         keyPost.setExpiration(expiration);
         KeyGet expiredKey = keyApi.createKey(user.getId(), keyPost);
 
