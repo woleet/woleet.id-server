@@ -143,9 +143,9 @@ public class Config {
     }
 
     /**
-     * Create a new random timestamp.
+     * Get the current timestamp.
      */
-    public static Long randomTimestamp() {
+    public static Long currentTimestamp() {
         return System.currentTimeMillis();
     }
 
