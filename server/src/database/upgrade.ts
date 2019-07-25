@@ -320,7 +320,7 @@ async function upgrade15(sequelize) {
     const enum_users_type = await sequelize.query(`CREATE TYPE "enum_users_mode" AS ENUM ('seal', 'e-signature');`);
     log.debug(enum_users_type);
     log.warn('Need to add "type" column to the "users" table');
-    const users_type = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "type" enum_users_type;`);
+    const users_type = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "mode" enum_users_mode;`);
     log.debug(users_type);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 15 }) });
     await Key.model.sync();

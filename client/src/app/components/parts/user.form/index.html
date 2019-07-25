@@ -17,7 +17,7 @@
           <mat-hint *ngIf="usernameFocused">Alias used to login</mat-hint>
         </mat-form-field>
         <mat-form-field class="w-100">
-          <input matInput type="email" placeholder="Email" formControlName="email" autocomplete="off" required>
+          <input matInput type="email" placeholder="Email" formControlName="email" autocomplete="off" [required]="this.userMode !== 'seal'">
           <mat-error *ngIf="form.get('email').invalid">{{ getErrorMessage(form.get('email')) }}</mat-error>
         </mat-form-field>
         <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!enableSMTP || !webClientURL"
@@ -50,7 +50,7 @@
           <mat-hint *ngIf="commonNameFocused">Full user name (CN)</mat-hint>
         </mat-form-field>
         <mat-form-field class="w-100">
-          <input matInput type="text" placeholder="Organization" formControlName="organization">
+          <input matInput type="text" placeholder="Organization" formControlName="organization" [required]="this.userMode === 'seal'">
           <mat-error *ngIf="form.get('identity').get('organization').invalid">
             {{ getErrorMessage(form.get('identity').get('organization')) }}
           </mat-error>
@@ -93,7 +93,7 @@
         Create a default key pair
       </mat-checkbox>
       <mat-radio-group aria-label="Choose the user mode" fxLayout="column" fxLayoutGap="10px" [(ngModel)]="userMode">
-          <mat-radio-button fxLayout="column" [matTooltip]="'This mode will allow the server to use the private key to automatically sign and proove the ownership of this key'" value="seal">
+          <mat-radio-button fxLayout="column" [matTooltip]="'This mode will allow the server to use the private key to automatically sign and prove the ownership of this key'" value="seal">
             Seal
           </mat-radio-button>
           <mat-radio-button fxLayout="column" [matTooltip]="'This mode will prevent the server to use the private key without this user consent'" value="e-signature">

@@ -222,6 +222,7 @@ public class UserApiTest extends CRUDApiTest {
         assertEquals(expected.getIdentity(), actual.getIdentity());
         assertEquals(expected.getCountryCallingCode(), actual.getCountryCallingCode());
         assertEquals(expected.getPhone(), actual.getPhone());
+        assertEquals(expected.getMode(), actual.getMode());
     }
 
     @Override

@@ -61,5 +61,6 @@ interface ApiIndentityKeyObject extends KeyObject {
   name: string;
   pubKey: string;
   expiration?: number;
+  revokedAt?: number;
   status: IdentityKeyStatusEnum;
 }

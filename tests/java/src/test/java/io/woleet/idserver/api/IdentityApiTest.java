@@ -19,7 +19,7 @@ public class IdentityApiTest {
             WOLEET_ID_SERVER_IDENTITY_BASEPATH = "https://localhost:3000";
     }
 
-    private UserGet user;
+    private UserGet user, userESignature;
 
     @Before
     public void setUp() throws Exception {
@@ -110,6 +110,26 @@ public class IdentityApiTest {
         // Delete blocked key
         keyApi.deleteKey(blockedKey.getId());
 
+        // Create a revoked key
+        keyPost = new KeyPost();
+        keyPost.setName(Config.randomName());
+        KeyPut keyPut = new KeyPut();
+        keyPut.setStatus(KeyStatusEnum.REVOKED);
+        KeyGet CreatedRevokedKey = keyApi.createKey(user.getId(), keyPost);
+        KeyGet revokedKey = keyApi.updateKey(CreatedRevokedKey.getId(), keyPut);
+
+        // Test the revoked key identity
+        IdentityResult revokedIdentity = identityApi.getIdentity(revokedKey.getPubKey(), leftData);
+        assertNotNull(revokedIdentity.getSignature());
+        assertNotNull(revokedIdentity.getRightData());
+        assertNotNull(revokedIdentity.getIdentity());
+        assertEquals(user.getIdentity().getCommonName(), revokedIdentity.getIdentity().getCommonName());
+        assertNotNull(revokedIdentity.getKey());
+        assertEquals(keyPost.getName(), revokedIdentity.getKey().getName());
+        assertNotNull(revokedIdentity.getKey().getPubKey());
+        assertNotNull(revokedIdentity.getKey().getRevokedAt());
+        assertEquals(Key.StatusEnum.REVOKED, revokedIdentity.getKey().getStatus());
+
         // Create an external key
         ExternalKeyPost externalKeyPost = new ExternalKeyPost();
         externalKeyPost.setName(Config.randomName());
@@ -137,6 +157,26 @@ public class IdentityApiTest {
 
         // Delete expired key
         keyApi.deleteKey(expiredKey.getId());
+
+        // Create E-Signature user and key
+        userESignature = Config.createTestESignatureUser();
+        keyPost = new KeyPost();
+        keyPost.setName(Config.randomName());
+        KeyGet eSignatureKey = keyApi.createKey(userESignature.getId(), keyPost);
+
+        // Test E-Signature key
+        IdentityResult eSignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null);
+        assertNull(eSignatureIdentity.getSignature());
+        assertNull(eSignatureIdentity.getRightData());
+        assertNotNull(eSignatureIdentity.getIdentity());
+        assertNotNull(eSignatureIdentity.getIdentity().getCommonName());
+        assertNotNull(eSignatureIdentity.getKey());
+        assertEquals(userESignature.getIdentity().getCommonName(), eSignatureIdentity.getIdentity().getCommonName());
+        assertNotNull(eSignatureIdentity.getKey());
+        assertEquals(keyPost.getName(), eSignatureIdentity.getKey().getName());
+        assertNotNull(eSignatureIdentity.getKey().getPubKey());
+        assertNull(eSignatureIdentity.getKey().getExpiration());
+        assertEquals(Key.StatusEnum.VALID, eSignatureIdentity.getKey().getStatus());
 
         // Get and verify server's default identity
         IdentityResult identityResult = identityApi.getIdentity(pubKey, leftData);

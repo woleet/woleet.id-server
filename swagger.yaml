@@ -1113,6 +1113,7 @@ components:
           enum:
             - valid
             - expired
+            - revoked
         expiration:
           type: integer
           format: int64
@@ -1120,6 +1121,13 @@ components:
           description: >
             Key expiration date (Unix ms timestamp).
             <br>Note that the field is not returned if the key has no expiration date.
+        revokedAt:
+          type: integer
+          format: int64
+          example: 1569542400000
+          description: >
+            Key revocation date (Unix ms timestamp).
+            <br>Note that the field is not returned if the key has no revocation date.
     FullIdentity:
       allOf:
         - $ref: '#/components/schemas/Identity'
@@ -1184,6 +1192,14 @@ components:
       default: "active"
       description: User status (a `blocked` user cannot sign).
       example: "active"
+    UserModeEnum:
+      type: string
+      enum:
+        - seal
+        - e-signature
+      default: "seal"
+      description: User status (a `blocked` user cannot sign).
+      example: "seal"
     KeyStatusEnum:
       type: string
       enum:
@@ -1241,6 +1257,8 @@ components:
               $ref: '#/components/schemas/UpdatedAt'
             lastLogin:
               $ref: '#/components/schemas/LastLogin'
+            mode:
+              $ref: '#/components/schemas/UserModeEnum'
     UserPost:
       allOf:
         - $ref: '#/components/schemas/UserPut'
@@ -1249,9 +1267,11 @@ components:
             - identity
             - createDefaultKey
           properties:
-              createDefaultKey:
-                type: boolean
-                description: If true create a key holded by the server when this user is created.
+            createDefaultKey:
+              type: boolean
+              description: If true create a key holded by the server when this user is created.
+            mode:
+              $ref: '#/components/schemas/UserModeEnum'
     UserPut:
       allOf:
         - $ref: '#/components/schemas/UserBase'

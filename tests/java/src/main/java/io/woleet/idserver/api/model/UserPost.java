@@ -23,6 +23,7 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.FullIdentity;
+import io.woleet.idserver.api.model.UserModeEnum;
 import io.woleet.idserver.api.model.UserPut;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
@@ -37,6 +38,10 @@ public class UserPost extends UserPut {
   public static final String SERIALIZED_NAME_CREATE_DEFAULT_KEY = "createDefaultKey";
   @SerializedName(SERIALIZED_NAME_CREATE_DEFAULT_KEY)
   private Boolean createDefaultKey;
+
+  public static final String SERIALIZED_NAME_MODE = "mode";
+  @SerializedName(SERIALIZED_NAME_MODE)
+  private UserModeEnum mode = null;
 
   public UserPost createDefaultKey(Boolean createDefaultKey) {
     this.createDefaultKey = createDefaultKey;
@@ -56,6 +61,24 @@ public class UserPost extends UserPut {
     this.createDefaultKey = createDefaultKey;
   }
 
+  public UserPost mode(UserModeEnum mode) {
+    this.mode = mode;
+    return this;
+  }
+
+   /**
+   * Get mode
+   * @return mode
+  **/
+  @ApiModelProperty(value = "")
+  public UserModeEnum getMode() {
+    return mode;
+  }
+
+  public void setMode(UserModeEnum mode) {
+    this.mode = mode;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -67,12 +90,13 @@ public class UserPost extends UserPut {
     }
     UserPost userPost = (UserPost) o;
     return Objects.equals(this.createDefaultKey, userPost.createDefaultKey) &&
+        Objects.equals(this.mode, userPost.mode) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(createDefaultKey, super.hashCode());
+    return Objects.hash(createDefaultKey, mode, super.hashCode());
   }
 
 
@@ -82,6 +106,7 @@ public class UserPost extends UserPut {
     sb.append("class UserPost {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    createDefaultKey: ").append(toIndentedString(createDefaultKey)).append("\n");
+    sb.append("    mode: ").append(toIndentedString(mode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

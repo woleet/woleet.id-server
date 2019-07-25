@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.FullIdentity;
 import io.woleet.idserver.api.model.UserBase;
+import io.woleet.idserver.api.model.UserModeEnum;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
 import java.io.IOException;
@@ -45,6 +46,10 @@ public class UserGet extends UserBase {
   public static final String SERIALIZED_NAME_LAST_LOGIN = "lastLogin";
   @SerializedName(SERIALIZED_NAME_LAST_LOGIN)
   private Long lastLogin;
+
+  public static final String SERIALIZED_NAME_MODE = "mode";
+  @SerializedName(SERIALIZED_NAME_MODE)
+  private UserModeEnum mode = null;
 
    /**
    * Date of creation (Unix ms timestamp).
@@ -73,6 +78,24 @@ public class UserGet extends UserBase {
     return lastLogin;
   }
 
+  public UserGet mode(UserModeEnum mode) {
+    this.mode = mode;
+    return this;
+  }
+
+   /**
+   * Get mode
+   * @return mode
+  **/
+  @ApiModelProperty(value = "")
+  public UserModeEnum getMode() {
+    return mode;
+  }
+
+  public void setMode(UserModeEnum mode) {
+    this.mode = mode;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -86,12 +109,13 @@ public class UserGet extends UserBase {
     return Objects.equals(this.createdAt, userGet.createdAt) &&
         Objects.equals(this.updatedAt, userGet.updatedAt) &&
         Objects.equals(this.lastLogin, userGet.lastLogin) &&
+        Objects.equals(this.mode, userGet.mode) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(createdAt, updatedAt, lastLogin, super.hashCode());
+    return Objects.hash(createdAt, updatedAt, lastLogin, mode, super.hashCode());
   }
 
 
@@ -103,6 +127,7 @@ public class UserGet extends UserBase {
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");
+    sb.append("    mode: ").append(toIndentedString(mode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

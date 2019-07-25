@@ -12,8 +12,8 @@
   <div fxLayout="column" *ngIf="user.identity as i">
     <div fxLayout="row" fxFill>
       <div fxLayout="column" class="card-icon">
-        <mat-icon *ngIf="user.userMode === 'e-signature'">account_box_outline</mat-icon>
-        <div *ngIf="user.userMode === 'seal'"><i class="fa fa-certificate"></i></div>
+        <mat-icon *ngIf="user.mode === 'e-signature'">account_box_outline</mat-icon>
+        <mat-icon *ngIf="user.mode === 'seal'"><img style="width: inherit" src="/assets/certificate.svg"></mat-icon>
       </div>
       <div fxLayout="column" fxLayoutGap="10px">
         <div fxLayout="row">

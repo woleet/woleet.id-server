@@ -6,7 +6,7 @@ const UserModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
   role: { type: ENUM(['user', 'admin']), defaultValue: 'user' },
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
-  type: { type: ENUM(['seal', 'e-signature']), defaultValue: 'seal'},
+  mode: { type: ENUM(['seal', 'e-signature']), defaultValue: 'seal'},
   email: { type: STRING, unique: true },
   tokenResetPassword: { type: STRING, unique: true, allowNull: true },
   username: { type: STRING, unique: true, allowNull: true /* allowNull: false */ }, // step 1

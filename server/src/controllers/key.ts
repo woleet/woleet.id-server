@@ -64,6 +64,12 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
     const user = await User.getById(userId);
     sendKeyRevocationEmail(user.toJSON(), keyUpdated.toJSON());
     update.revokedAt = Date.now();
+    if (user.get('mode') !== 'seal') {
+      update.privateKey = null;
+      update.privateKeyIV = null;
+      update.mnemonicEntropy = null;
+      update.mnemonicEntropyIV = null;
+    }
   }
   const key = await Key.update(id, update);
   if (!key) {
