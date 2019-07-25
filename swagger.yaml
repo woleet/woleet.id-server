@@ -1189,6 +1189,7 @@ components:
       enum:
         - active
         - blocked
+        - revoked
       default: "active"
       description: Key status (a `blocked` key cannot be used to sign).
       example: "active"
@@ -1485,6 +1486,13 @@ components:
               description: >
                 Indicates whether the key has expired or not.
                 <br>Note that the field is not returned if the key has not expired.
+            revokedAt:
+              type: integer
+              format: int64
+              example: 1569542400000
+              description: >
+                Key expiration date (Unix ms timestamp).
+                <br>Note that the field is not returned if the key has no expiration date.
             createdAt:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:

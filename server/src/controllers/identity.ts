@@ -18,8 +18,15 @@ export async function getIdentity(leftData: string, pubKey: string) {
 
   const expired = key.get('expiration') ? (+key.get('expiration') < Date.now()) : false;
 
-  const status = expired && key.get('status') === 'active' ?
-    'expired' : 'valid';
+  let status;
+
+  if (expired) {
+    status = 'expired';
+  } else if (key.get('status') === 'revoked') {
+    status = 'revoked';
+  } else {
+    status = 'valid';
+  }
 
   const identityKey: ApiIndentityKeyObject = {
     name: key.get('name'),

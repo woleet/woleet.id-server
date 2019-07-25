@@ -8,5 +8,7 @@
 
 * `BLOCKED` (value: `"blocked"`)
 
+* `REVOKED` (value: `"revoked"`)
+
 
 

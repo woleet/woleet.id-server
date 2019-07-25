@@ -120,6 +120,45 @@ export async function sendEnrollmentFinalizeEmail(userName: string, address: str
   }
 }
 
+export async function sendKeyRevocationEmail(user: InternalUserObject, key: InternalKeyObject) {
+  const config = getServerConfig();
+  const logo = getLogo(config);
+  const subject = 'Key revocation';
+  const template = readFileSync(
+    path.join(__dirname, '../../assets/defaultKeyRevocationTemplate.html'),
+    { encoding: 'ascii' }
+  );
+  const htmlUser = mustache.render(template, {
+    organizationName: config.organizationName,
+    logoURL: logo,
+    username: user.x500CommonName,
+    keyName: key.name,
+    admin: false
+  });
+
+  const admins = await User.getAll({ where: { role: 'admin' } });
+
+  try {
+    await sendEmail(user.email, subject, htmlUser);
+    admins.forEach(async (admin) => {
+      if (admin.get('email')) {
+        const htmlAdmin = mustache.render(template, {
+          organizationName: config.organizationName,
+          logoURL: logo,
+          username: admin.get('x500CommonName'),
+          admin: true,
+          keyId: key.id,
+          ownerName: user.x500CommonName,
+          userId: user.id
+        });
+        await sendEmail(admin.get('email'), subject, htmlAdmin);
+      }
+    });
+  } catch (err) {
+    log.error(err);
+  }
+}
+
 export async function sendEmail(email: string, subject: string, html: any) {
   const transporter = getTransporter();
   await transporter.sendMail(MailTemplate(email, subject, html), function (err, info) {
