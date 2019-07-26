@@ -69,7 +69,7 @@ export function bootServers(): Promise<void> {
       });
 
       app.use(errorHandler);
-      app.use(morgan('dev'));
+      app.use(morgan(':date[iso] :method :url :status (:res[content-length] b, :response-time ms, IP :remote-addr, ref. :referrer)'));
       app.use(cors({ credentials: true }));
       app.use(router.routes());
 
