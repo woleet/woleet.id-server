@@ -17,8 +17,6 @@ Method | HTTP request | Description
 
 Create an API token.
 
-Create an API token suitable to call the /sign endpoint (this can only be done by an admin).
-
 ### Example
 ```java
 // Import classes:

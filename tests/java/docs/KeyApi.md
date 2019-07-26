@@ -37,7 +37,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 
 KeyApi apiInstance = new KeyApi();
 UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
-ExternalKeyPost externalKeyPost = new ExternalKeyPost(); // ExternalKeyPost | External Key object to add.
+ExternalKeyPost externalKeyPost = new ExternalKeyPost(); // ExternalKeyPost | External key object to add.
 try {
     KeyGet result = apiInstance.createExternalKey(userId, externalKeyPost);
     System.out.println(result);
@@ -52,7 +52,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **userId** | [**UUID**](.md)| Identifier of the user. |
- **externalKeyPost** | [**ExternalKeyPost**](ExternalKeyPost.md)| External Key object to add. |
+ **externalKeyPost** | [**ExternalKeyPost**](ExternalKeyPost.md)| External key object to add. |
 
 ### Return type
 

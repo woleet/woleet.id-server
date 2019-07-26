@@ -63,7 +63,7 @@ public class KeyApi {
     /**
      * Build call for createExternalKey
      * @param userId Identifier of the user. (required)
-     * @param externalKeyPost External Key object to add. (required)
+     * @param externalKeyPost External key object to add. (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -133,7 +133,7 @@ public class KeyApi {
      * Create a new external key for a user.
      * 
      * @param userId Identifier of the user. (required)
-     * @param externalKeyPost External Key object to add. (required)
+     * @param externalKeyPost External key object to add. (required)
      * @return KeyGet
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -146,7 +146,7 @@ public class KeyApi {
      * Create a new external key for a user.
      * 
      * @param userId Identifier of the user. (required)
-     * @param externalKeyPost External Key object to add. (required)
+     * @param externalKeyPost External key object to add. (required)
      * @return ApiResponse&lt;KeyGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -160,7 +160,7 @@ public class KeyApi {
      * Create a new external key for a user. (asynchronously)
      * 
      * @param userId Identifier of the user. (required)
-     * @param externalKeyPost External Key object to add. (required)
+     * @param externalKeyPost External key object to add. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
