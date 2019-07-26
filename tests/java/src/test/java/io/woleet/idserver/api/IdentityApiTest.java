@@ -135,7 +135,6 @@ public class IdentityApiTest {
         ExternalKeyPost externalKeyPost = new ExternalKeyPost();
         externalKeyPost.setName(Config.randomName());
         externalKeyPost.setPublicKey(Config.randomAddress());
-        System.out.println(userESignature.getId());
         KeyGet externalKey = keyApi.createExternalKey(userESignature.getId(), externalKeyPost);
 
         // Test external key identity

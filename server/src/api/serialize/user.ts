@@ -12,8 +12,6 @@ export function serializeUser(user: InternalUserObject, withDates = true): ApiUs
 
   const identity = serializeIdentity(user);
 
-  console.log(user);
-
   const { id, role, mode, status, countryCallingCode, phone, email, username, defaultKeyId } = user;
 
   return Object.assign({ id, role, mode, username, status, countryCallingCode, phone, email, defaultKeyId, identity }, dates);
