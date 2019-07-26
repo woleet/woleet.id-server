@@ -29,6 +29,7 @@ public class IdentityApiTest {
 
         // Create test user
         user = Config.createTestUser();
+        userESignature = Config.createTestESignatureUser();
     }
 
     @After
@@ -134,7 +135,8 @@ public class IdentityApiTest {
         ExternalKeyPost externalKeyPost = new ExternalKeyPost();
         externalKeyPost.setName(Config.randomName());
         externalKeyPost.setPublicKey(Config.randomAddress());
-        KeyGet externalKey = keyApi.createExternalKey(user.getId(), externalKeyPost);
+        System.out.println(userESignature.getId());
+        KeyGet externalKey = keyApi.createExternalKey(userESignature.getId(), externalKeyPost);
 
         // Test external key identity
         IdentityResult externalIdentity = identityApi.getIdentity(externalKey.getPubKey(), null);

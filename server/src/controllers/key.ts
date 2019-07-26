@@ -39,6 +39,12 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
  *  operationId: createExternalKey
  */
 export async function createExternalKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
+  const user = await User.getById(userId);
+
+  if (user.get('mode') === 'seal') {
+    throw new Error('Cannot affect external key to a seal mode user.');
+  }
+
   const holder: KeyHolderEnum = 'user';
   const newKey = await Key.create(Object.assign({}, key, {
     publicKey: key.publicKey,

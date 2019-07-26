@@ -203,7 +203,7 @@ public class Config {
     }
 
     public static UserGet createTestESignatureUser() throws ApiException {
-        return createTestUser(new UserApi(getAdminAuthApiClient()));
+        return createTestESignatureUser(new UserApi(getAdminAuthApiClient()));
     }
 
     /**
