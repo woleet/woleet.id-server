@@ -175,6 +175,7 @@ public class Config {
         userPost.password("pass");
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity.commonName(randomCommonName());
+        fullIdentity.organization("WOLEET SAS");
         userPost.setCreateDefaultKey(true);
         return userApi.createUser((UserPost) userPost.identity(fullIdentity));
     }

@@ -36,6 +36,14 @@ const router = new Router({ prefix: '/user' });
 router.post('/', validate.body('createUser'), async function (ctx) {
   const user: ApiPostUserObject = ctx.request.body;
 
+  if (user.mode === 'e-signature' && !user.email) {
+    throw new BadRequest('The email is mandatory to user e-signature');
+  }
+
+  if ((user.mode === 'seal' || !user.mode) && !user.identity.organization) {
+    throw new BadRequest('The organization is mandatory to use seal');
+  }
+
   const created = await createUser(copy(user));
 
   event.register({
