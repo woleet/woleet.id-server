@@ -7,7 +7,8 @@ import {
 import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
-import { BadRequest } from 'http-errors';
+import { BadRequest, Forbidden } from 'http-errors';
+import { production } from '../../config';
 
 const vkid = validate.param('id', 'uuid');
 const vuid = validate.param('userId', 'uuid');
@@ -31,6 +32,9 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
   const key: ApiPostKeyObject = ctx.request.body;
 
   if (key.phrase) {
+    if (production) {
+      throw new Forbidden('Cannot create key this way in production.');
+    }
     if (key.phrase.split(' ').length < 12) {
       throw new BadRequest('The phrase length must be at least 12 words.');
     } else if (key.phrase.split(' ').length > 50) {
@@ -105,6 +109,9 @@ router.get('/user/:userId/key/list', vuid, async function (ctx) {
  */
 router.get('/key/:id/export', vkid, async function (ctx) {
   const { id } = ctx.params;
+  if (production) {
+    throw new Forbidden('Cannot access this endpoint in production.');
+  }
   const phrase = await exportKey(id);
   ctx.body = { phrase };
 });
