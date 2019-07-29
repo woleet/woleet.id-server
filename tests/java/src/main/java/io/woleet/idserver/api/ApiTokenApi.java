@@ -123,7 +123,7 @@ public class ApiTokenApi {
 
     /**
      * Create an API token.
-     * Create an API token suitable to call the /sign endpoint (this can only be done by an admin).
+     * 
      * @param apITokenPost API token object to create. (required)
      * @return APITokenGet
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -135,7 +135,7 @@ public class ApiTokenApi {
 
     /**
      * Create an API token.
-     * Create an API token suitable to call the /sign endpoint (this can only be done by an admin).
+     * 
      * @param apITokenPost API token object to create. (required)
      * @return ApiResponse&lt;APITokenGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -148,7 +148,7 @@ public class ApiTokenApi {
 
     /**
      * Create an API token. (asynchronously)
-     * Create an API token suitable to call the /sign endpoint (this can only be done by an admin).
+     * 
      * @param apITokenPost API token object to create. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
