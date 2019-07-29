@@ -347,7 +347,7 @@ public class DiscoveryApi {
 
     /**
      * Get the user associated to a public key.
-     * Use this endpoint to get the user associated to a public key. 
+     * Use this endpoint to get the user owning a public key. 
      * @param pubKey Public key (bitcoin address when using BIP39 keys). (required)
      * @return UserDisco
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -359,7 +359,7 @@ public class DiscoveryApi {
 
     /**
      * Get the user associated to a public key.
-     * Use this endpoint to get the user associated to a public key. 
+     * Use this endpoint to get the user owning a public key. 
      * @param pubKey Public key (bitcoin address when using BIP39 keys). (required)
      * @return ApiResponse&lt;UserDisco&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -372,7 +372,7 @@ public class DiscoveryApi {
 
     /**
      * Get the user associated to a public key. (asynchronously)
-     * Use this endpoint to get the user associated to a public key. 
+     * Use this endpoint to get the user owning a public key. 
      * @param pubKey Public key (bitcoin address when using BIP39 keys). (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
@@ -469,7 +469,7 @@ public class DiscoveryApi {
 
     /**
      * Get all public keys of a user.
-     * Use this endpoint to get all public keys associated to a user. 
+     * Use this endpoint to get all public keys owned by a user. 
      * @param userId Identifier of the user. (required)
      * @return List&lt;KeyDisco&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -481,7 +481,7 @@ public class DiscoveryApi {
 
     /**
      * Get all public keys of a user.
-     * Use this endpoint to get all public keys associated to a user. 
+     * Use this endpoint to get all public keys owned by a user. 
      * @param userId Identifier of the user. (required)
      * @return ApiResponse&lt;List&lt;KeyDisco&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -494,7 +494,7 @@ public class DiscoveryApi {
 
     /**
      * Get all public keys of a user. (asynchronously)
-     * Use this endpoint to get all public keys associated to a user. 
+     * Use this endpoint to get all public keys owned by a user. 
      * @param userId Identifier of the user. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
@@ -594,7 +594,7 @@ public class DiscoveryApi {
 
     /**
      * Get all users matching a search string.
-     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; or &#x60;x500OrganizationalUnit&#x60; contains the search string. 
+     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string. 
      * @param search A string used to search users through the fields &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; and &#x60;x500OrganizationalUnit&#x60;. (required)
      * @return List&lt;UserDisco&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -606,7 +606,7 @@ public class DiscoveryApi {
 
     /**
      * Get all users matching a search string.
-     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; or &#x60;x500OrganizationalUnit&#x60; contains the search string. 
+     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string. 
      * @param search A string used to search users through the fields &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; and &#x60;x500OrganizationalUnit&#x60;. (required)
      * @return ApiResponse&lt;List&lt;UserDisco&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -619,7 +619,7 @@ public class DiscoveryApi {
 
     /**
      * Get all users matching a search string. (asynchronously)
-     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; or &#x60;x500OrganizationalUnit&#x60; contains the search string. 
+     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string. 
      * @param search A string used to search users through the fields &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; and &#x60;x500OrganizationalUnit&#x60;. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
