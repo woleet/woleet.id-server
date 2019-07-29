@@ -7,6 +7,7 @@ import { validate } from '../schemas';
 import { getServerConfig } from '../../controllers/server-config';
 import { MethodNotAllowed } from 'http-errors';
 import { serializeEnrollment } from '../serialize/enrollment';
+import { BadRequest } from 'http-errors';
 
 /**
  * Key enrollment admin
@@ -41,6 +42,14 @@ router.post('/enrollment', validate.body('createEnrollment'), async function (ct
     if (!getServerConfig().enableProofDesk) {
       throw new MethodNotAllowed('ProofDesk account not configured.');
     }
+  }
+
+  // Verify that the expiration date is not set in the past
+  if (!!enrollment.expiration && (enrollment.expiration < Date.now())) {
+    throw new BadRequest('Cannot set expiration date in the past.');
+  }
+  if (!!enrollment.keyExpiration && (enrollment.keyExpiration < Date.now())) {
+    throw new BadRequest('Cannot set expiration date in the past.');
   }
 
   // Create enrollment
