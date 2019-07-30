@@ -71,13 +71,13 @@ public class IdentityApiTest {
         assertNotNull(serverConfig.getIdentityURL());
         assertNotNull(serverConfig.getDefaultKeyId());
 
-        // Create an expired key
+        // Create a key that expired in 500ms
         KeyPost keyPost = new KeyPost();
         keyPost.setName(Config.randomName());
-        Long expiration = Config.currentTimestamp() + 500;
+        Long expiration = Config.currentTimestamp() + 500L;
         keyPost.setExpiration(expiration);
         KeyGet expiredKey = keyApi.createKey(user.getId(), keyPost);
-        TimeUnit.MILLISECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(1000L);
 
         // Test expired key identity
         IdentityResult expiredIdentity = identityApi.getIdentity(expiredKey.getPubKey(), leftData);

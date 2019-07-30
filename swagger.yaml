@@ -1651,7 +1651,7 @@ components:
               example: 'feb37e23-d04e-4e71-bf53-1f1a75ba3a68'
             test:
               type: boolean
-              description: True if it's a test.
+              description: Used only for test purpose.
     EnrollmentPut:
       allOf:
         - $ref: '#/components/schemas/EnrollmentBase'

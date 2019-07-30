@@ -29,7 +29,7 @@ public class Config {
 
     static {
         if (WOLEET_ID_SERVER_API_BASEPATH == null)
-            WOLEET_ID_SERVER_API_BASEPATH = "https://localhost:3000/api";
+            WOLEET_ID_SERVER_API_BASEPATH = "https://localhost:3000";
     }
 
     /**

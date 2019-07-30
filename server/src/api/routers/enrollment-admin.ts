@@ -5,9 +5,8 @@ import {
 } from '../../controllers/enrollment';
 import { validate } from '../schemas';
 import { getServerConfig } from '../../controllers/server-config';
-import { MethodNotAllowed } from 'http-errors';
+import { BadRequest, MethodNotAllowed } from 'http-errors';
 import { serializeEnrollment } from '../serialize/enrollment';
-import { BadRequest } from 'http-errors';
 
 /**
  * Key enrollment admin
@@ -28,7 +27,7 @@ router.post('/enrollment', validate.body('createEnrollment'), async function (ct
   const enrollment: ApiPostEnrollmentObject = ctx.request.body;
 
   // Verify all settings required for enrollment
-  // TODO: change this method with an end point to send the mail
+  // TODO: change the test boolean by a new end point allowing to send the mail
   if (!enrollment.test) {
     if (!getServerConfig().enableSMTP) {
       throw new MethodNotAllowed('SMTP Server not configured.');
@@ -45,11 +44,13 @@ router.post('/enrollment', validate.body('createEnrollment'), async function (ct
   }
 
   // Verify that the expiration date is not set in the past
-  if (!!enrollment.expiration && (enrollment.expiration < Date.now())) {
+  if (enrollment.expiration != null && enrollment.expiration < Date.now()) {
     throw new BadRequest('Cannot set expiration date in the past.');
   }
-  if (!!enrollment.keyExpiration && (enrollment.keyExpiration < Date.now())) {
-    throw new BadRequest('Cannot set expiration date in the past.');
+
+  // Verify that the key expiration date is not set in the past
+  if (enrollment.keyExpiration != null && enrollment.keyExpiration < Date.now()) {
+    throw new BadRequest('Cannot set key expiration date in the past.');
   }
 
   // Create enrollment

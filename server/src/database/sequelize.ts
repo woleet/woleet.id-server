@@ -1,6 +1,5 @@
 import * as Sequelize from 'sequelize';
 import { db } from '../config';
-import * as log from 'loglevel';
 
 const DATABASE = db.database;
 const PASSWORD = db.password;
