@@ -64,10 +64,10 @@ public class EnrollmentPost extends EnrollmentBase {
   }
 
    /**
-   * True if it&#39;s a test.
+   * Used only for test purpose.
    * @return test
   **/
-  @ApiModelProperty(value = "True if it's a test.")
+  @ApiModelProperty(value = "Used only for test purpose.")
   public Boolean getTest() {
     return test;
   }
