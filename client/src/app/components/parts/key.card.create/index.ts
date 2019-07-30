@@ -14,6 +14,7 @@ import * as log from 'loglevel';
 export class KeyCreateCardComponent extends ErrorMessageProvider {
 
   formLocked = false;
+  minDate = new Date();
 
   @Input()
   userId: string;
@@ -28,7 +29,7 @@ export class KeyCreateCardComponent extends ErrorMessageProvider {
 
   startDate = nextYear();
 
-  expiration = new FormControl({value: '', disabled: true}, []);
+  expiration = new FormControl({ value: '', disabled: true }, []);
 
   setAsDefault = false;
 

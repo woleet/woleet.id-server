@@ -93,7 +93,7 @@ public class KeyApiTest extends CRUDApiTest {
             KeyPost keyPost = (KeyPost) objectBase;
             keyPost.setName(Config.randomName());
             keyPost.setStatus(Config.randomBoolean() ? KeyStatusEnum.BLOCKED : KeyStatusEnum.ACTIVE);
-            keyPost.setExpiration(Config.currentTimestamp());
+            keyPost.setExpiration(Config.currentTimestamp() + 1000 * 60);
             return new ObjectPost(keyPost);
         }
     }
@@ -206,6 +206,24 @@ public class KeyApiTest extends CRUDApiTest {
             fail("Should not be able to delete a revoked key");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+    }
+
+    @Test
+    public void createExpiredKeyTest() throws ApiException {
+        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
+
+        KeyPost keyPost = new KeyPost();
+        keyPost.setName(Config.randomName());
+        keyPost.setExpiration(System.currentTimeMillis() - 1000);
+
+        // Check that we cannot create an already expired key
+        try {
+            keyApi.createKey(user.getId(), keyPost);
+            fail("Should not be able to create an already expired key");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
     }
 }

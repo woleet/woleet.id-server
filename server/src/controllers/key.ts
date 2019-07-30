@@ -16,16 +16,16 @@ import { sendKeyRevocationEmail } from './send-email';
  *  operationId: createKey
  */
 export async function createKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
-  const _newKey = key.phrase ? await secureModule.importPhrase(key.phrase) : await secureModule.createKey();
+  const secureKey = key.phrase ? await secureModule.importPhrase(key.phrase) : await secureModule.createKey();
   const holder: KeyHolderEnum = 'server';
   const device: KeyDeviceEnum = 'server';
   const newKey = await Key.create(Object.assign({}, key, {
-    mnemonicEntropy: _newKey.entropy.toString('hex'),
-    mnemonicEntropyIV: _newKey.entropyIV.toString('hex'),
-    privateKey: _newKey.privateKey.toString('hex'),
-    privateKeyIV: _newKey.privateKeyIV.toString('hex'),
-    compressed: _newKey.compressed,
-    publicKey: _newKey.publicKey,
+    mnemonicEntropy: secureKey.entropy.toString('hex'),
+    mnemonicEntropyIV: secureKey.entropyIV.toString('hex'),
+    privateKey: secureKey.privateKey.toString('hex'),
+    privateKeyIV: secureKey.privateKeyIV.toString('hex'),
+    compressed: secureKey.compressed,
+    publicKey: secureKey.publicKey,
     holder,
     device,
     userId
@@ -150,7 +150,6 @@ export async function deleteKey(id: string): Promise<InternalKeyObject> {
 }
 
 export async function isKeyHeldByServer(id: string): Promise<Boolean> {
-
   const key = await Key.getById(id);
   if (!key) {
     throw new NotFoundKeyError();

@@ -4,6 +4,7 @@ import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
 import org.apache.http.HttpStatus;
+import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class IdentityApiTest {
     }
 
     @Test
-    public void getIdentityTest() throws ApiException {
+    public void getIdentityTest() throws ApiException, InterruptedException {
 
         IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
                 .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
@@ -71,12 +72,13 @@ public class IdentityApiTest {
         assertNotNull(serverConfig.getIdentityURL());
         assertNotNull(serverConfig.getDefaultKeyId());
 
-        // Create an expired key
+        // Create a key that expired in 500ms
         KeyPost keyPost = new KeyPost();
         keyPost.setName(Config.randomName());
-        Long expiration = Config.currentTimestamp() - (3600L * 1000L);
+        Long expiration = Config.currentTimestamp() + 500L;
         keyPost.setExpiration(expiration);
         KeyGet expiredKey = keyApi.createKey(user.getId(), keyPost);
+        TimeUnit.MILLISECONDS.sleep(1000L);
 
         // Test expired key identity
         IdentityResult expiredIdentity = identityApi.getIdentity(expiredKey.getPubKey(), leftData);

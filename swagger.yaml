@@ -1642,6 +1642,13 @@ components:
           description: >
             Enrollment expiration date (Unix ms timestamp).
             <br>Note that the field is not returned if the enrollment has no expiration date.
+        keyExpiration:
+          type: integer
+          format: int64
+          example: 1569542400000
+          description: >
+            Enrolled key expiration date (Unix ms timestamp).
+            <br>Note that the field is not returned if the enrollment has no expiration date.
     EnrollmentGet:
       allOf:
         - $ref: '#/components/schemas/EnrollmentBase'
@@ -1672,7 +1679,7 @@ components:
               example: 'feb37e23-d04e-4e71-bf53-1f1a75ba3a68'
             test:
               type: boolean
-              description: True if it's a test.
+              description: Used only for test purpose.
     EnrollmentPut:
       allOf:
         - $ref: '#/components/schemas/EnrollmentBase'

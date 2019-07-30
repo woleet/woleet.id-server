@@ -1,5 +1,5 @@
 import * as log from 'loglevel';
-import { cookies, ports, server as config } from './config';
+import { cookies, ports, production, server as config } from './config';
 import * as Koa from 'koa';
 import * as morgan from 'koa-morgan';
 import * as cors from '@koa/cors';
@@ -69,7 +69,11 @@ export function bootServers(): Promise<void> {
       });
 
       app.use(errorHandler);
-      app.use(morgan(':date[iso] :method :url :status (:res[content-length] b, :response-time ms, IP :remote-addr, ref. :referrer)'));
+      if (production) {
+        app.use(morgan(':date[iso] :method :url :status (:res[content-length] b, :response-time ms, IP :remote-addr, ref. :referrer)'));
+      } else {
+        app.use(morgan('dev'));
+      }
       app.use(cors({ credentials: true }));
       app.use(router.routes());
 

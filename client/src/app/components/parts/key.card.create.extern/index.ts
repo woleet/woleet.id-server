@@ -4,7 +4,6 @@ import { Device, ExternalKeyService } from '@services/key';
 import { addressValidator, ErrorMessageProvider, nextYear } from '@components/util';
 import { ServerConfigService } from '@services/server-config';
 import * as timestring from 'timestring';
-import * as log from 'loglevel';
 
 @Component({
   selector: 'key-card-create-extern',
@@ -15,6 +14,7 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
   formLocked = false;
   errorMsgs: any[];
   deviceSelected: KeyDeviceEnum | null;
+  minDate = new Date();
 
   @Input()
   userId: string;

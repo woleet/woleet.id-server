@@ -16,6 +16,7 @@ export class KeyCreateCardEnrollComponent extends ErrorMessageProvider {
   formLocked = false;
   errorMsgs: any[];
   deviceSelected: KeyDeviceEnum | null;
+  minDate = new Date();
 
   @Input()
   userId: string;

@@ -7,7 +7,8 @@ import {
 import { serializeKey } from '../serialize/key';
 import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
-import { BadRequest } from 'http-errors';
+import { BadRequest, Forbidden } from 'http-errors';
+import { production } from '../../config';
 
 const vkid = validate.param('id', 'uuid');
 const vuid = validate.param('userId', 'uuid');
@@ -30,6 +31,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
   const { userId } = ctx.params;
   const key: ApiPostKeyObject = ctx.request.body;
 
+  // Verify mnemonic phrase if provided
   if (key.phrase) {
     if (key.phrase.split(' ').length < 12) {
       throw new BadRequest('The phrase length must be at least 12 words.');
@@ -38,8 +40,13 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
     }
   }
 
-  let created;
+  // Verify that the expiration date is not set in the past
+  if (key.expiration != null && key.expiration < Date.now()) {
+    throw new BadRequest('Cannot set expiration date in the past.');
+  }
 
+  // Create the key
+  let created;
   try {
     created = await createKey(userId, key);
   } catch (error) {
@@ -67,8 +74,13 @@ router.post('/user/:userId/extern-key', vuid, validate.body('createExternKey'), 
   const { userId } = ctx.params;
   const key: ApiPostExternalKeyObject = ctx.request.body;
 
-  let created;
+  // Verify that the expiration date is not set in the past
+  if (key.expiration != null && key.expiration < Date.now()) {
+    throw new BadRequest('Cannot set expiration date in the past.');
+  }
 
+  // Verify that the expiration date is not set in the past
+  let created;
   try {
     created = await createExternalKey(userId, key);
   } catch (error) {
@@ -105,6 +117,9 @@ router.get('/user/:userId/key/list', vuid, async function (ctx) {
  */
 router.get('/key/:id/export', vkid, async function (ctx) {
   const { id } = ctx.params;
+  if (production) {
+    throw new Forbidden('Cannot export a key in production mode.');
+  }
   const phrase = await exportKey(id);
   ctx.body = { phrase };
 });
