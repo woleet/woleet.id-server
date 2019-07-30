@@ -20,7 +20,8 @@
           <input matInput type="email" placeholder="Email" formControlName="email" autocomplete="off" [required]="this.userMode !== 'seal'">
           <mat-error *ngIf="form.get('email').invalid">{{ getErrorMessage(form.get('email')) }}</mat-error>
         </mat-form-field>
-        <mat-checkbox *ngIf="mode === 'create'" matInput [disabled]="!enableSMTP || !webClientURL"
+        <mat-checkbox *ngIf="mode === 'create'" matInput
+          [disabled]="!enableSMTP || !webClientURL || form.get('email').invalid || !form.get('email').value"
           [matTooltipDisabled]="canSendEmailToUser()"
           [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL'"
           (change)="sendPasswordEmailCheck()">

@@ -235,6 +235,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   }
 
   canSendEmailToUser(): Boolean {
-    return this.enableSMTP && this.webClientURL && this.form.get('email').valid;
+    return this.enableSMTP && this.webClientURL && this.form.get('email').valid && !!this.form.get('email').value;
   }
 }
