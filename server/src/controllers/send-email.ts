@@ -136,7 +136,7 @@ export async function sendKeyRevocationEmail(user: InternalUserObject, key: Inte
     admin: false
   });
 
-  const admins = await User.getAll({ where: { role: 'admin' } });
+  const admins = await User.getByRole('admin');
 
   try {
     await sendEmail(user.email, subject, htmlUser);
