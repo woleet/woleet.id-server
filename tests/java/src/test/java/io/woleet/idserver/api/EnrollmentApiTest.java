@@ -113,6 +113,8 @@ public class EnrollmentApiTest extends CRUDApiTest {
             enrollmentPost.setName(Config.randomName());
             enrollmentPost.setDevice(KeyDeviceEnum.NANO);
             enrollmentPost.setTest(true);
+            enrollmentPost.setExpiration(Config.currentTimestamp() + 1000 * 60);
+            enrollmentPost.setKeyExpiration(Config.currentTimestamp() + 1000 * 60);
 
             return new ObjectPost(enrollmentPost);
         }

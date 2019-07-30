@@ -16,6 +16,8 @@ export class KeyCreateCardExternComponent extends ErrorMessageProvider {
   errorMsgs: any[];
   deviceSelected: KeyDeviceEnum | null;
 
+  minDate = new Date(Date.now());
+
   @Input()
   userId: string;
 

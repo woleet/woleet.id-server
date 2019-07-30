@@ -4,6 +4,8 @@ import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
+import org.apache.http.HttpStatus;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +92,7 @@ public class KeyApiTest extends CRUDApiTest {
             KeyPost keyPost = (KeyPost) objectBase;
             keyPost.setName(Config.randomName());
             keyPost.setStatus(Config.randomBoolean() ? KeyStatusEnum.BLOCKED : KeyStatusEnum.ACTIVE);
-            keyPost.setExpiration(Config.currentTimestamp());
+            keyPost.setExpiration(Config.currentTimestamp() + 1000 * 60);
             return new ObjectPost(keyPost);
         }
     }
@@ -174,5 +176,23 @@ public class KeyApiTest extends CRUDApiTest {
         assertEquals(put.getName() != null ? put.getName() : post.getName(), get.getName());
         assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
         assertEquals(put.getExpiration() != null ? put.getExpiration() : post.getExpiration(), get.getExpiration());
+    }
+
+    @Test
+    public void createExpiredKeyTest() throws ApiException {
+        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
+
+        KeyPost keyPost = new KeyPost();
+        keyPost.setName(Config.randomName());
+        keyPost.setExpiration(System.currentTimeMillis() - 1000);
+
+        // Check that we cannot create an already expired key
+        try {
+            keyApi.createKey(user.getId(), keyPost);
+            fail("Should not be able to create an already expired key");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+        }
     }
 }

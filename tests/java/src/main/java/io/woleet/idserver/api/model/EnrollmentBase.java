@@ -42,6 +42,10 @@ public class EnrollmentBase {
   @SerializedName(SERIALIZED_NAME_EXPIRATION)
   private Long expiration;
 
+  public static final String SERIALIZED_NAME_KEY_EXPIRATION = "keyExpiration";
+  @SerializedName(SERIALIZED_NAME_KEY_EXPIRATION)
+  private Long keyExpiration;
+
   public EnrollmentBase name(String name) {
     this.name = name;
     return this;
@@ -96,6 +100,24 @@ public class EnrollmentBase {
     this.expiration = expiration;
   }
 
+  public EnrollmentBase keyExpiration(Long keyExpiration) {
+    this.keyExpiration = keyExpiration;
+    return this;
+  }
+
+   /**
+   * Enrolled key expiration date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the enrollment has no expiration date. 
+   * @return keyExpiration
+  **/
+  @ApiModelProperty(example = "1569542400000", value = "Enrolled key expiration date (Unix ms timestamp). <br>Note that the field is not returned if the enrollment has no expiration date. ")
+  public Long getKeyExpiration() {
+    return keyExpiration;
+  }
+
+  public void setKeyExpiration(Long keyExpiration) {
+    this.keyExpiration = keyExpiration;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -108,12 +130,13 @@ public class EnrollmentBase {
     EnrollmentBase enrollmentBase = (EnrollmentBase) o;
     return Objects.equals(this.name, enrollmentBase.name) &&
         Objects.equals(this.device, enrollmentBase.device) &&
-        Objects.equals(this.expiration, enrollmentBase.expiration);
+        Objects.equals(this.expiration, enrollmentBase.expiration) &&
+        Objects.equals(this.keyExpiration, enrollmentBase.keyExpiration);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, device, expiration);
+    return Objects.hash(name, device, expiration, keyExpiration);
   }
 
 
@@ -125,6 +148,7 @@ public class EnrollmentBase {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    device: ").append(toIndentedString(device)).append("\n");
     sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");
+    sb.append("    keyExpiration: ").append(toIndentedString(keyExpiration)).append("\n");
     sb.append("}");
     return sb.toString();
   }

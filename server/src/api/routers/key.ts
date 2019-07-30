@@ -38,6 +38,11 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
     }
   }
 
+  // Verify that the expiration date is not set in the past
+  if (key.expiration && (key.expiration < Date.now())) {
+    throw new BadRequest('Cannot set expiration date in the past.');
+  }
+
   let created;
 
   try {
@@ -69,6 +74,11 @@ router.post('/user/:userId/extern-key', vuid, validate.body('createExternKey'), 
 
   let created;
 
+  if (!!key.expiration && (key.expiration < Date.now())) {
+    throw new BadRequest('Cannot set expiration date in the past.');
+  }
+
+  // Verify that the expiration date is not set in the past
   try {
     created = await createExternalKey(userId, key);
   } catch (error) {
