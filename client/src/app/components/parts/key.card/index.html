@@ -24,9 +24,9 @@
             <div fxLayout="column">{{ key.expiration | date }}</div>
           </div>
           <div *ngIf="key.revokedAt" fxLayout="row" fxLayoutGap="5px">
-              <div fxLayout="column" class="label" dir="rtl">revoked at</div>
-              <div fxLayout="column">{{ key.revokedAt | date:'medium' }}</div>
-            </div>
+            <div fxLayout="column" class="label" dir="rtl">revoked at</div>
+            <div fxLayout="column">{{ key.revokedAt | date:'medium' }}</div>
+          </div>
           <div *ngIf="key.device" fxLayout="row" fxLayoutGap="5px">
             <div fxLayout="column" class="label" dir="rtl">hosting device</div>
             <div fxLayout="column">{{ key.device }}</div>
@@ -36,27 +36,32 @@
     </div>
     <div fxLayout="column">
       <div>
-        <button mat-icon-button color="primary" *ngIf="modes.includes('edit') && key.status !== 'revoked'" [disabled]="formLocked"
-          (click)="setEditMode(true)">
+        <button mat-icon-button color="primary" *ngIf="modes.includes('edit') && key.status !== 'revoked'"
+          [disabled]="formLocked" (click)="setEditMode(true)">
           <mat-icon matTooltip="Edit key" aria-label="Edit key button">edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="modes.includes('block') && key.status !== 'blocked' && key.status !== 'revoked'"
+        <button mat-icon-button color="warn"
+          *ngIf="modes.includes('block') && key.status !== 'blocked' && key.status !== 'revoked'"
           [disabled]="formLocked" (click)="blockKey()">
           <mat-icon matTooltip="Block key" aria-label="Block key button">pause_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="primary" *ngIf="modes.includes('block') && key.status === 'blocked' && key.status !== 'revoked'"
+        <button mat-icon-button color="primary"
+          *ngIf="modes.includes('block') && key.status === 'blocked' && key.status !== 'revoked'"
           [disabled]="formLocked" (click)="unblockKey()">
           <mat-icon matTooltip="Unblock key" aria-label="Unblock key button">play_circle_outline</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="modes.includes('revoke') && key.status !== 'revoked'" [disabled]="formLocked"
-          (click)="revokeKey()">
+        <button mat-icon-button color="warn" *ngIf="modes.includes('revoke') && key.status !== 'revoked'"
+          [disabled]="formLocked" (click)="revokeKey()">
           <mat-icon matTooltip="Revoke key" aria-label="Revoke key button">block</mat-icon>
         </button>
-        <button mat-icon-button color="warn" *ngIf="modes.includes('delete') && key.status !== 'revoked'" [disabled]="formLocked"
-          (click)="deleteKey()">
+        <button mat-icon-button color="warn" *ngIf="modes.includes('delete') && key.status !== 'revoked'"
+          [disabled]="formLocked" (click)="deleteKey()">
           <mat-icon matTooltip="Delete key" aria-label="Delete key button">delete</mat-icon>
         </button>
       </div>
+    </div>
+    <div fxLayout="column" class="revoked-icon" *ngIf="key.status === 'revoked'">
+      <mat-icon style="height: 32px;">block</mat-icon>
     </div>
   </mat-card-content>
   <!-- Edit mode -->

@@ -109,7 +109,7 @@ router.get('/callback', async function (ctx) {
       user.x500CommonName = info.name;
     }
   } else {
-    session = await createOAuthUser({ email: info.email, mode: 'e-signature', identity: { commonName: info.name }, createDefaultKey: true,
+    session = await createOAuthUser({ email: info.email, mode: 'esign', identity: { commonName: info.name }, createDefaultKey: true,
     sendKeyEnrollmentMail: false });
     ctx.cookies.set('session' + sessionSuffix, session.token, cookies.options);
   }

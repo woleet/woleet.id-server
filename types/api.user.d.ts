@@ -2,7 +2,7 @@
 
 type UserRoleEnum = 'user' | 'admin';
 type UserStatusEnum = 'active' | 'blocked';
-type UserModeEnum = 'seal' | 'e-signature';
+type UserModeEnum = 'seal' | 'esign';
 
 interface UserObject {
   username?: string // mandatory for step 2

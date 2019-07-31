@@ -180,10 +180,10 @@ public class KeyGet extends KeyBase {
   }
 
    /**
-   * Key expiration date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no expiration date. 
+   * Key revocation date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no revocation date. 
    * @return revokedAt
   **/
-  @ApiModelProperty(example = "1569542400000", value = "Key expiration date (Unix ms timestamp). <br>Note that the field is not returned if the key has no expiration date. ")
+  @ApiModelProperty(example = "1569542400000", value = "Key revocation date (Unix ms timestamp). <br>Note that the field is not returned if the key has no revocation date. ")
   public Long getRevokedAt() {
     return revokedAt;
   }

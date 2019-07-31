@@ -317,7 +317,7 @@ async function upgrade15(sequelize) {
   const { config } = cfg.toJSON();
   if (config.version < 15) {
     log.warn('Need to add the mode enum in "users" table');
-    const enum_users_type = await sequelize.query(`CREATE TYPE "enum_users_mode" AS ENUM ('seal', 'e-signature');`);
+    const enum_users_type = await sequelize.query(`CREATE TYPE "enum_users_mode" AS ENUM ('seal', 'esign');`);
     log.debug(enum_users_type);
     log.warn('Need to add "type" column to the "users" table');
     const users_type = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "mode" enum_users_mode;`);

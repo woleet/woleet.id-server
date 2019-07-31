@@ -25,14 +25,14 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * User status (a &#x60;blocked&#x60; user cannot sign).
+ * User mode, esign the user is a real user, and his keys are used to create electronic signatures. seal the user represents an organization, and his keys are used to create server seals. 
  */
 @JsonAdapter(UserModeEnum.Adapter.class)
 public enum UserModeEnum {
   
   SEAL("seal"),
   
-  E_SIGNATURE("e-signature");
+  ESIGN("esign");
 
   private String value;
 

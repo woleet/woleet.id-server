@@ -12,7 +12,7 @@
   <div fxLayout="column" *ngIf="user.identity as i">
     <div fxLayout="row" fxFill>
       <div fxLayout="column" class="card-icon">
-        <mat-icon *ngIf="user.mode === 'e-signature'">account_box_outline</mat-icon>
+        <mat-icon *ngIf="user.mode === 'esign'">account_box_outline</mat-icon>
         <mat-icon *ngIf="user.mode === 'seal'"><img style="width: inherit" src="/assets/certificate.svg"></mat-icon>
       </div>
       <div fxLayout="column" fxLayoutGap="10px">

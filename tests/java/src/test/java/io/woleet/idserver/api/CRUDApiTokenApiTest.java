@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-public class ApiTokenApiTest extends CRUDApiTest {
+public class CRUDApiTokenApiTest extends CRUDApiTest {
 
     class Api implements CRUDApiTest.Api {
 
