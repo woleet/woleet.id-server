@@ -28,7 +28,8 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     organizationName,
     proofDeskAPIURL,
     proofDeskAPIToken,
-    enableProofDesk
+    enableProofDesk,
+    blockPasswordInput
   } = config;
 
   return {
@@ -38,7 +39,7 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     logoURL,
     HTMLFrame,
     allowUserToSign,
-    enableOpenIDConnect: enableOpenIDConnect,
+    enableOpenIDConnect,
     openIDConnectURL,
     openIDConnectClientId,
     openIDConnectClientSecret,
@@ -60,6 +61,7 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     organizationName,
     proofDeskAPIURL,
     proofDeskAPIToken,
-    enableProofDesk: enableProofDesk
+    enableProofDesk,
+    blockPasswordInput
   };
 }

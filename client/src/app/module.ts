@@ -32,6 +32,7 @@ import { HtmlFrameComponent, SafeHtmlPipe } from '@parts/html-frame';
 import { ConfigContactComponent } from '@parts/config.contact';
 import { ConfigOrganizationNameComponent } from '@parts/config.organization-name';
 import { ConfigTCUComponent } from '@parts/config.tcu';
+import { ConfigBlockPasswordInputComponent } from '@parts/config.block-password-input';
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
 import { APITokensPageComponent } from '@pages/api-tokens';
@@ -127,6 +128,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     ConfigContactComponent,
     ConfigOrganizationNameComponent,
     ConfigTCUComponent,
+    ConfigBlockPasswordInputComponent,
     DialogResetPasswordComponent,
     DialogMailResetComponent
   ],

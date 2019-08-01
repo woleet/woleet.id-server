@@ -7,6 +7,7 @@ import { serializeUser } from '../serialize/user';
 import { store as event } from '../../controllers/server-event';
 import { isKeyHeldByServer } from '../../controllers/key';
 import { BadRequest } from 'http-errors';
+import { getServerConfig } from '../../controllers/server-config';
 
 const vid = validate.param('id', 'uuid');
 
@@ -35,6 +36,10 @@ const router = new Router({ prefix: '/user' });
  */
 router.post('/', validate.body('createUser'), async function (ctx) {
   const user: ApiPostUserObject = ctx.request.body;
+
+  if (getServerConfig().blockPasswordInput && user.password) {
+    throw new BadRequest('Cannot create a user with a preseted password with this server configutation.');
+  }
 
   const created = await createUser(copy(user));
 
@@ -80,6 +85,11 @@ router.get('/:id', vid, async function (ctx) {
 router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const { id } = ctx.params;
   const update = ctx.request.body;
+
+  if (getServerConfig().blockPasswordInput && update.password) {
+    throw new BadRequest('Cannot create a user with a preseted password with this server configutation.');
+  }
+
   if (!isKeyHeldByServer(update.defaultKeyId)) {
     throw new BadRequest('User holded key cannot be the default key.');
   }

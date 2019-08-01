@@ -46,7 +46,10 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   // ProofDesk config
   proofDeskAPIURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   proofDeskAPIToken: Joi.string().allow(null),
-  enableProofDesk: Joi.boolean().allow(null)
+  enableProofDesk: Joi.boolean().allow(null),
+
+  // Block Password input for admin
+  blockPasswordInput: Joi.boolean().allow(null),
 });
 
 export { updateConfig };

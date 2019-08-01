@@ -33,7 +33,7 @@
             Send password reset link
           </button>
         </div>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100" *ngIf="!blockPasswordInput">
           <input matInput type="password" placeholder="Password" formControlName="password" autocomplete="off">
           <mat-error *ngIf="form.get('password').invalid">{{ getErrorMessage(form.get('password')) }}</mat-error>
         </mat-form-field>

@@ -286,6 +286,9 @@ declare global {
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
     enableProofDesk?: boolean;
+
+    // Block Password input for admin
+    blockPasswordInput?: boolean;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -332,6 +335,9 @@ declare global {
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
     enableProofDesk?: boolean;
+
+    // Block Password input for admin
+    blockPasswordInput?: boolean;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -378,6 +384,9 @@ declare global {
     proofDeskAPIURL?: string;
     proofDeskAPIToken?: string;
     enableProofDesk?: boolean;
+
+    // Block Password input for admin
+    blockPasswordInput?: boolean;
   }
 
   /* Enrollment */

@@ -55,6 +55,9 @@ interface ApiServerConfig {
   proofDeskAPIURL: string | null;
   proofDeskAPIToken: string | null;
   enableProofDesk: boolean | null;
+
+  // Block Password input for admin
+  blockPasswordInput: boolean | null;
 }
 
 interface ApiServerConfigUpdate {
@@ -101,4 +104,7 @@ interface ApiServerConfigUpdate {
   proofDeskAPIURL?: string;
   proofDeskAPIToken?: string;
   enableProofDesk?: boolean;
+
+  // Block Password input for admin
+  blockPasswordInput?: boolean;
 }

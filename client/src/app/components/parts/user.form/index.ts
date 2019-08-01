@@ -61,6 +61,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   formLocked = false;
 
   enableSMTP: boolean;
+  blockPasswordInput: boolean;
   webClientURL: string;
 
   sendPasswordEmail = false;
@@ -143,6 +144,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       }
       this.enableSMTP = config.enableSMTP;
       this.webClientURL = config.webClientURL;
+      this.blockPasswordInput = config.blockPasswordInput;
     }));
     if (this.mode === 'edit') {
       this.form = this.setFormControl(copy<ApiUserObject>(this.user));

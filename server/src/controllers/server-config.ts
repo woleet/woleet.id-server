@@ -58,6 +58,9 @@ export async function defaultTCU() {
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
   try {
     const config = Object.assign({}, getInMemoryConfig(), up);
+    if (!config.enableSMTP) {
+      delete config.blockPasswordInput;
+    }
     let cfg = await ServerConfig.update(CONFIG_ID, { config });
     if (!cfg) {
       debug('Create config with', up);
