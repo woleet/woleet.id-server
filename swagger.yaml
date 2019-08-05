@@ -1172,6 +1172,7 @@ components:
       enum:
         - user
         - admin
+        - manager
       default: "user"
       description: User role.
       example: "user"
@@ -1247,9 +1248,9 @@ components:
             - identity
             - createDefaultKey
           properties:
-              createDefaultKey:
-                type: boolean
-                description: If true create a key holded by the server when this user is created.
+            createDefaultKey:
+              type: boolean
+              description: If true create a key holded by the server when this user is created.
     UserPut:
       allOf:
         - $ref: '#/components/schemas/UserBase'

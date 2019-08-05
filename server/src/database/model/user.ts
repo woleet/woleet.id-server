@@ -4,7 +4,7 @@ import { AbstractInstanceAccess } from './abstract';
 
 const UserModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
-  role: { type: ENUM(['user', 'admin']), defaultValue: 'user' },
+  role: { type: ENUM(['user', 'admin', 'manager']), defaultValue: 'user' },
   status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
   email: { type: STRING, unique: true },
   tokenResetPassword: { type: STRING, unique: true, allowNull: true },

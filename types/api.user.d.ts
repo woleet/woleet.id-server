@@ -1,6 +1,6 @@
 /* User */
 
-type UserRoleEnum = 'user' | 'admin';
+type UserRoleEnum = 'user' | 'admin' | 'manager';
 type UserStatusEnum = 'active' | 'blocked';
 
 interface UserObject {

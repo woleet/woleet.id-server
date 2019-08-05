@@ -287,6 +287,23 @@ async function upgrade13(sequelize) {
   }
 }
 
+async function upgrade16(sequelize) {
+  log.warn('Checking for update 4 of the "users" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 16) {
+    log.warn('Need to add "manager" enums to the "enum_users_role" table');
+    const userManager = await sequelize.query(`ALTER TYPE "enum_users_role" ADD VALUE 'manager';`);
+    log.debug(userManager);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 16 }) });
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
@@ -301,6 +318,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade11(sequelize);
   await upgrade12(sequelize);
   await upgrade13(sequelize);
+  await upgrade16(sequelize);
 }
 
 async function postUpgrade3() {
