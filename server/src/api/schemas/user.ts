@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import { CountryCode, Word, DirectoryString, uuid, Name, SafeWord } from './misc';
 
-const userRoleEnum = ['user', 'admin'];
+const userRoleEnum = ['user', 'admin', 'manager'];
 const userStatusEnum = ['active', 'blocked'];
 
 const createIdentity = Joi.object().keys(<DefineJoiModelAttributes<ApiIdentityObject>>{
