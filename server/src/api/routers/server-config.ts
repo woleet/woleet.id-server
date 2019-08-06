@@ -5,6 +5,7 @@ import { validate } from '../schemas';
 import { getServerConfig, setServerConfig, updateTCU, defaultTCU } from '../../controllers/server-config';
 import { store as event } from '../../controllers/server-event';
 import { serializeServerConfig } from '../serialize/server-config';
+import { admin } from '../authentication';
 
 /**
  * ServerConfig
@@ -20,6 +21,8 @@ const router = new Router({ prefix: '/server-config' });
 router.get('/', function (ctx) {
   ctx.body = serializeServerConfig(getServerConfig());
 });
+
+router.use(admin);
 
 /**
  * @route: /config
