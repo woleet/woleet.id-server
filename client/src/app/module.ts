@@ -46,7 +46,7 @@ import { EnrollmentPageComponent } from '@pages/enrollment';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
 import {
-  AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService
+  AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService, ManagerGuardService
 } from '@guards/auth';
 import { ExternalKeyService, KeyService } from '@services/key';
 import { UserService } from '@services/user';
@@ -185,7 +185,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
       multi: true
     },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },
-    AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
+    AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, ManagerGuardService,
     NeedConfigGuardService, KeyService, ExternalKeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, EnrollmentService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     NetworkErrorInterceptorService, AllowCredentialsInterceptorService, LocalStorageService

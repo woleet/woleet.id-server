@@ -2,6 +2,7 @@ import {
   AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output
 } from '@angular/core';
 import { UserService } from '@services/user';
+import { AuthService } from '@services/auth';
 import { Router } from '@angular/router';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -96,7 +97,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   private onDestroy: EventEmitter<void>;
 
-  constructor(private service: UserService, private router: Router, private configService: ConfigService, private cdr: ChangeDetectorRef) {
+  constructor(private service: UserService, private router: Router, private configService: ConfigService, private cdr: ChangeDetectorRef,
+    private authService: AuthService) {
     super();
     this.onDestroy = new EventEmitter();
   }
@@ -230,6 +232,10 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   sendPasswordEmailCheck() {
     this.sendPasswordEmail = !this.sendPasswordEmail;
+  }
+
+  isAdmin() {
+    return this.authService.isAdmin();
   }
 
   canSendEmailToUser(): Boolean {

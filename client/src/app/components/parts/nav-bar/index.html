@@ -18,7 +18,7 @@
   </div>
 </mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav *ngIf="isAdmin() && !hide()" class="sidenav dark-theme" fixedInViewport="true" role="navigation"
+  <mat-sidenav *ngIf="(isAdmin() || isManager()) && !hide()" class="sidenav dark-theme" fixedInViewport="true" role="navigation"
     mode="{{mode}}" opened="{{opened}}">
     <mat-nav-list>
       <mat-list-item routerLink="/users">
@@ -27,13 +27,13 @@
           <span>Users</span>
         </div>
       </mat-list-item>
-      <mat-list-item routerLink="/api-tokens">
+      <mat-list-item *ngIf="isAdmin()" routerLink="/api-tokens">
         <div mat-button>
           <i class="material-icons">lock_outline</i>
           <span>API tokens</span>
         </div>
       </mat-list-item>
-      <mat-list-item routerLink="/settings">
+      <mat-list-item *ngIf="isAdmin()" routerLink="/settings">
         <div mat-button>
           <i class="material-icons">settings</i>
           <span>Settings</span>

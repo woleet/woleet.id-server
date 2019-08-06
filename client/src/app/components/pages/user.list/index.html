@@ -4,14 +4,18 @@
       <button mat-raised-button color="primary" (click)="formOpened=true">ADD USER</button>
     </div>
     <div *ngIf="formOpened">
-      <create-edit-user mode="create" (create)="refreshUserList()" (submitSucceed)="formOpened=false; refreshUserList()" (cancel)="formOpened=false"></create-edit-user>
+      <create-edit-user mode="create" (create)="refreshUserList()" (submitSucceed)="formOpened=false; refreshUserList()"
+        (cancel)="formOpened=false"></create-edit-user>
     </div>
     <br>
     <mat-divider></mat-divider>
     <br>
     <div *ngFor="let user of users; trackBy: trackById;">
-      <app-user-card [user]="user" [modes]="['block', 'detail', 'delete', 'edit']" (delete)="refreshUserList()" ></app-user-card>
-      <br>
+      <div *ngIf="!(user.role === 'admin' && !isAdmin())">
+        <app-user-card [user]="user" [modes]="['block', 'detail', 'delete', 'edit']" (delete)="refreshUserList()">
+        </app-user-card>
+        <br>
+      </div>
     </div>
   </div>
   <ng-template #nousers>
@@ -20,7 +24,8 @@
       <button mat-raised-button color="primary" (click)="formOpened=true">ADD ONE</button>
     </mat-card>
     <div *ngIf="formOpened">
-      <create-edit-user mode="create" (create)="refreshUserList()" (submitSucceed)="refreshUserList()" (cancel)="formOpened=false"></create-edit-user>
+      <create-edit-user mode="create" (create)="refreshUserList()" (submitSucceed)="refreshUserList()"
+        (cancel)="formOpened=false"></create-edit-user>
     </div>
   </ng-template>
 </div>

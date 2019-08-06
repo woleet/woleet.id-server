@@ -42,6 +42,21 @@ export class AdminGuardService implements CanActivate {
   }
 }
 
+@Injectable()
+export class ManagerGuardService implements CanActivate {
+  constructor(private auth: AuthService, private router: Router) { }
+  canActivate(): boolean {
+    safe();
+
+    if (this.auth.isAuthenticated() && (this.auth.isManager() || this.auth.isAdmin())) {
+      return true;
+    }
+
+    this.router.navigate([mainRoute]);
+    return false;
+  }
+}
+
 /**
  * Return true if has error
  */

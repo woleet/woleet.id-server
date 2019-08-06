@@ -7,7 +7,8 @@
           <mat-select type="text" [value]="form.get('role').value" name="role" placeholder="Role"
             formControlName='role'>
             <mat-option value="user">user</mat-option>
-            <mat-option value="admin">admin</mat-option>
+            <mat-option value="manager">manager</mat-option>
+            <mat-option *ngIf="isAdmin()" value="admin">admin</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="w-100">

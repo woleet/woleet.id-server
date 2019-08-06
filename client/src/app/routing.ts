@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NeedConfigGuardService as NeedConfig } from '@guards/config';
 import {
-  AdminGuardService as IsAdmin, AnonymousGuardService as IsAnonymous, ErrorGuardService as HasError,
-  NoErrorGuardService as HasNoError, UserGuardService as IsUser
+  AdminGuardService as IsAdmin, AnonymousGuardService as IsAnonymous, ManagerGuardService as IsManager
+  , ErrorGuardService as HasError, NoErrorGuardService as HasNoError, UserGuardService as IsUser
 } from '@guards/auth';
 import { LoginPageComponent } from '@pages/login';
 import { SetupPageComponent } from '@pages/setup';
@@ -55,7 +55,7 @@ const routes: Routes = [
   {
     path: 'user/:id', data: { title: 'User keys' },
     component: UserDetailPageComponent,
-    canActivate: [IsAdmin]
+    canActivate: [IsManager]
   },
   {
     path: 'oauth/callback',
@@ -73,7 +73,7 @@ const routes: Routes = [
     path: 'users',
     data: { title: 'Users' },
     component: UserListPageComponent,
-    canActivate: [IsAdmin]
+    canActivate: [IsManager]
   },
   {
     path: 'settings', data: { title: 'Settings' },
