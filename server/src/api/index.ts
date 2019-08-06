@@ -33,10 +33,11 @@ apiRouter.use(info.routes());
 apiRouter.use(adminAuth);
 apiRouter.use(user.routes());
 apiRouter.use(key.routes());
-apiRouter.use(apiToken.routes());
-apiRouter.use(serverEvent.routes());
 apiRouter.use(serverConfig.routes());
 apiRouter.use(enrollmentAdmin.routes());
+apiRouter.use(adminAuth);
+apiRouter.use(apiToken.routes());
+apiRouter.use(serverEvent.routes());
 
 /**
  * Identity
