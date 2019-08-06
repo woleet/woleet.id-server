@@ -76,3 +76,15 @@ export async function admin(ctx: Context, next) {
 
   return next();
 }
+
+export async function manager(ctx: Context, next) {
+  if (!(ctx.session && ctx.session.user)) {
+    throw new Unauthorized();
+  }
+
+  if (ctx.session.user.getDataValue('role') !== 'manager' || ctx.session.user.getDataValue('role') !== 'admin') {
+    throw new Forbidden('Invalid user level');
+  }
+
+  return next();
+}

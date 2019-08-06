@@ -6,7 +6,7 @@ import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '..
 import { serializeUser } from '../serialize/user';
 import { store as event } from '../../controllers/server-event';
 import { isKeyHeldByServer } from '../../controllers/key';
-import { BadRequest } from 'http-errors';
+import { BadRequest, Unauthorized } from 'http-errors';
 
 const vid = validate.param('id', 'uuid');
 
@@ -35,6 +35,11 @@ const router = new Router({ prefix: '/user' });
  */
 router.post('/', validate.body('createUser'), async function (ctx) {
   const user: ApiPostUserObject = ctx.request.body;
+
+  const authorizedUser = await getUserById(ctx.session.user.get('id'));
+  if (user.role === 'admin' && authorizedUser.role !== 'admin') {
+    throw new Unauthorized('Only admin can create other admin.');
+  }
 
   const created = await createUser(copy(user));
 
@@ -82,6 +87,11 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const update = ctx.request.body;
   if (!isKeyHeldByServer(update.defaultKeyId)) {
     throw new BadRequest('User holded key cannot be the default key.');
+  }
+
+  const authorizedUser = await getUserById(ctx.session.user.get('id'));
+  if (update.role === 'admin' && authorizedUser.role !== 'admin') {
+    throw new Unauthorized('Only admin can create other admin.');
   }
   const user = await updateUser(id, copy(update));
 
