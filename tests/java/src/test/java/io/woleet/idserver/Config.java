@@ -1,6 +1,7 @@
 package io.woleet.idserver;
 
 import io.woleet.idserver.api.AuthenticationApi;
+import io.woleet.idserver.api.EnrollmentApi;
 import io.woleet.idserver.api.UserApi;
 import io.woleet.idserver.api.model.*;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -167,11 +168,11 @@ public class Config {
      * @param userApi User API to use to create the user
      * @return a user
      */
-    private static UserGet createTestUser(UserApi userApi) throws ApiException {
+    public static UserGet createTestUser(UserApi userApi, UserRoleEnum userRoleEnum) throws ApiException {
         UserPost userPost = new UserPost();
         String USERNAME = randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
-        userPost.email(EMAIL).username(USERNAME).role(UserRoleEnum.USER).status(UserStatusEnum.ACTIVE);
+        userPost.email(EMAIL).username(USERNAME).role(userRoleEnum).status(UserStatusEnum.ACTIVE);
         userPost.password("pass");
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity.commonName(randomCommonName());
@@ -180,7 +181,11 @@ public class Config {
     }
 
     public static UserGet createTestUser() throws ApiException {
-        return createTestUser(new UserApi(getAdminAuthApiClient()));
+        return createTestUser(new UserApi(getAdminAuthApiClient()), UserRoleEnum.USER);
+    }
+
+    public static UserGet createTestUser(UserRoleEnum userRoleEnum) throws ApiException {
+        return createTestUser(new UserApi(getAdminAuthApiClient()), userRoleEnum);
     }
 
     /**

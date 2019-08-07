@@ -8,5 +8,7 @@
 
 * `ADMIN` (value: `"admin"`)
 
+* `MANAGER` (value: `"manager"`)
+
 
 
