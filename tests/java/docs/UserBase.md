@@ -12,7 +12,6 @@ Name | Type | Description | Notes
 **status** | [**UserStatusEnum**](UserStatusEnum.md) |  |  [optional]
 **role** | [**UserRoleEnum**](UserRoleEnum.md) |  |  [optional]
 **identity** | [**FullIdentity**](FullIdentity.md) |  |  [optional]
-**defaultKeyId** | [**UUID**](UUID.md) | Identifier of the default key to use to sign for this user (cannot be the an external key). |  [optional]
 
 
 

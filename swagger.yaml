@@ -1237,15 +1237,17 @@ components:
               example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
     UserPost:
       allOf:
-        - $ref: '#/components/schemas/UserPut'
+        - $ref: '#/components/schemas/UserBase'
         - type: object
           required:
             - identity
             - createDefaultKey
           properties:
-              createDefaultKey:
-                type: boolean
-                description: If true create a key holded by the server when this user is created.
+            password:
+              $ref: '#/components/schemas/Password'
+            createDefaultKey:
+              type: boolean
+              description: If true create a key holded by the server when this user is created.
     UserPut:
       allOf:
         - $ref: '#/components/schemas/UserBase'
