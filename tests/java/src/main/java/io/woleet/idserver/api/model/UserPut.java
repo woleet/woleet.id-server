@@ -38,6 +38,10 @@ public class UserPut extends UserBase {
   @SerializedName(SERIALIZED_NAME_PASSWORD)
   private String password;
 
+  public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
+  @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
+  private UUID defaultKeyId;
+
   public UserPut password(String password) {
     this.password = password;
     return this;
@@ -56,6 +60,24 @@ public class UserPut extends UserBase {
     this.password = password;
   }
 
+  public UserPut defaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
+    return this;
+  }
+
+   /**
+   * Identifier of the default key to use to sign for this user (cannot be the an external key).
+   * @return defaultKeyId
+  **/
+  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use to sign for this user (cannot be the an external key).")
+  public UUID getDefaultKeyId() {
+    return defaultKeyId;
+  }
+
+  public void setDefaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -67,12 +89,13 @@ public class UserPut extends UserBase {
     }
     UserPut userPut = (UserPut) o;
     return Objects.equals(this.password, userPut.password) &&
+        Objects.equals(this.defaultKeyId, userPut.defaultKeyId) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(password, super.hashCode());
+    return Objects.hash(password, defaultKeyId, super.hashCode());
   }
 
 
@@ -82,6 +105,7 @@ public class UserPut extends UserBase {
     sb.append("class UserPut {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

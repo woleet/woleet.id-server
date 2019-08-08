@@ -47,9 +47,15 @@ public class UserGet extends UserBase {
   @SerializedName(SERIALIZED_NAME_LAST_LOGIN)
   private Long lastLogin;
 
+<<<<<<< HEAD
   public static final String SERIALIZED_NAME_MODE = "mode";
   @SerializedName(SERIALIZED_NAME_MODE)
   private UserModeEnum mode = null;
+=======
+  public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
+  @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
+  private UUID defaultKeyId;
+>>>>>>> master
 
    /**
    * Date of creation (Unix ms timestamp).
@@ -78,12 +84,18 @@ public class UserGet extends UserBase {
     return lastLogin;
   }
 
+<<<<<<< HEAD
   public UserGet mode(UserModeEnum mode) {
     this.mode = mode;
+=======
+  public UserGet defaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
+>>>>>>> master
     return this;
   }
 
    /**
+<<<<<<< HEAD
    * Get mode
    * @return mode
   **/
@@ -94,6 +106,18 @@ public class UserGet extends UserBase {
 
   public void setMode(UserModeEnum mode) {
     this.mode = mode;
+=======
+   * Identifier of the default key to use to sign for this user (cannot be the an external key).
+   * @return defaultKeyId
+  **/
+  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use to sign for this user (cannot be the an external key).")
+  public UUID getDefaultKeyId() {
+    return defaultKeyId;
+  }
+
+  public void setDefaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
+>>>>>>> master
   }
 
 
@@ -109,13 +133,21 @@ public class UserGet extends UserBase {
     return Objects.equals(this.createdAt, userGet.createdAt) &&
         Objects.equals(this.updatedAt, userGet.updatedAt) &&
         Objects.equals(this.lastLogin, userGet.lastLogin) &&
+<<<<<<< HEAD
         Objects.equals(this.mode, userGet.mode) &&
+=======
+        Objects.equals(this.defaultKeyId, userGet.defaultKeyId) &&
+>>>>>>> master
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
+<<<<<<< HEAD
     return Objects.hash(createdAt, updatedAt, lastLogin, mode, super.hashCode());
+=======
+    return Objects.hash(createdAt, updatedAt, lastLogin, defaultKeyId, super.hashCode());
+>>>>>>> master
   }
 
 
@@ -127,7 +159,11 @@ public class UserGet extends UserBase {
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");
+<<<<<<< HEAD
     sb.append("    mode: ").append(toIndentedString(mode)).append("\n");
+=======
+    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
+>>>>>>> master
     sb.append("}");
     return sb.toString();
   }
