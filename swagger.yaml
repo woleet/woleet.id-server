@@ -237,6 +237,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
   /discover/keys/{userId}:
     get:
       operationId: discoverUserKeys
