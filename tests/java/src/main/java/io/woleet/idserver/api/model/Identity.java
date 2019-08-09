@@ -34,10 +34,6 @@ public class Identity {
   @SerializedName(SERIALIZED_NAME_COMMON_NAME)
   private String commonName;
 
-  public static final String SERIALIZED_NAME_EMAIL_ADDRESS = "emailAddress";
-  @SerializedName(SERIALIZED_NAME_EMAIL_ADDRESS)
-  private String emailAddress;
-
   public static final String SERIALIZED_NAME_ORGANIZATION = "organization";
   @SerializedName(SERIALIZED_NAME_ORGANIZATION)
   private String organization;
@@ -70,24 +66,6 @@ public class Identity {
 
   public void setCommonName(String commonName) {
     this.commonName = commonName;
-  }
-
-  public Identity emailAddress(String emailAddress) {
-    this.emailAddress = emailAddress;
-    return this;
-  }
-
-   /**
-   * Email Address (EMAILADDRESS) (1.2.840.113549.1.9.1)
-   * @return emailAddress
-  **/
-  @ApiModelProperty(example = "jim.smith@woleet.com", value = "Email Address (EMAILADDRESS) (1.2.840.113549.1.9.1)")
-  public String getEmailAddress() {
-    return emailAddress;
-  }
-
-  public void setEmailAddress(String emailAddress) {
-    this.emailAddress = emailAddress;
   }
 
   public Identity organization(String organization) {
@@ -173,7 +151,6 @@ public class Identity {
     }
     Identity identity = (Identity) o;
     return Objects.equals(this.commonName, identity.commonName) &&
-        Objects.equals(this.emailAddress, identity.emailAddress) &&
         Objects.equals(this.organization, identity.organization) &&
         Objects.equals(this.organizationalUnit, identity.organizationalUnit) &&
         Objects.equals(this.locality, identity.locality) &&
@@ -182,7 +159,7 @@ public class Identity {
 
   @Override
   public int hashCode() {
-    return Objects.hash(commonName, emailAddress, organization, organizationalUnit, locality, country);
+    return Objects.hash(commonName, organization, organizationalUnit, locality, country);
   }
 
 
@@ -192,7 +169,6 @@ public class Identity {
     sb.append("class Identity {\n");
     
     sb.append("    commonName: ").append(toIndentedString(commonName)).append("\n");
-    sb.append("    emailAddress: ").append(toIndentedString(emailAddress)).append("\n");
     sb.append("    organization: ").append(toIndentedString(organization)).append("\n");
     sb.append("    organizationalUnit: ").append(toIndentedString(organizationalUnit)).append("\n");
     sb.append("    locality: ").append(toIndentedString(locality)).append("\n");

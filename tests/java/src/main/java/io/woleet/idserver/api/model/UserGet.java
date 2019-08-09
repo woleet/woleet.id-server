@@ -46,6 +46,10 @@ public class UserGet extends UserBase {
   @SerializedName(SERIALIZED_NAME_LAST_LOGIN)
   private Long lastLogin;
 
+  public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
+  @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
+  private UUID defaultKeyId;
+
    /**
    * Date of creation (Unix ms timestamp).
    * @return createdAt
@@ -73,6 +77,24 @@ public class UserGet extends UserBase {
     return lastLogin;
   }
 
+  public UserGet defaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
+    return this;
+  }
+
+   /**
+   * Identifier of the default key to use to sign for this user (cannot be the an external key).
+   * @return defaultKeyId
+  **/
+  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use to sign for this user (cannot be the an external key).")
+  public UUID getDefaultKeyId() {
+    return defaultKeyId;
+  }
+
+  public void setDefaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -86,12 +108,13 @@ public class UserGet extends UserBase {
     return Objects.equals(this.createdAt, userGet.createdAt) &&
         Objects.equals(this.updatedAt, userGet.updatedAt) &&
         Objects.equals(this.lastLogin, userGet.lastLogin) &&
+        Objects.equals(this.defaultKeyId, userGet.defaultKeyId) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(createdAt, updatedAt, lastLogin, super.hashCode());
+    return Objects.hash(createdAt, updatedAt, lastLogin, defaultKeyId, super.hashCode());
   }
 
 
@@ -103,6 +126,7 @@ public class UserGet extends UserBase {
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");
+    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -23,7 +23,7 @@ import com.google.gson.stream.JsonWriter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.FullIdentity;
-import io.woleet.idserver.api.model.UserPut;
+import io.woleet.idserver.api.model.UserBase;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
 import java.io.IOException;
@@ -33,10 +33,32 @@ import java.util.UUID;
  * UserPost
  */
 
-public class UserPost extends UserPut {
+public class UserPost extends UserBase {
+  public static final String SERIALIZED_NAME_PASSWORD = "password";
+  @SerializedName(SERIALIZED_NAME_PASSWORD)
+  private String password;
+
   public static final String SERIALIZED_NAME_CREATE_DEFAULT_KEY = "createDefaultKey";
   @SerializedName(SERIALIZED_NAME_CREATE_DEFAULT_KEY)
   private Boolean createDefaultKey;
+
+  public UserPost password(String password) {
+    this.password = password;
+    return this;
+  }
+
+   /**
+   * User password.
+   * @return password
+  **/
+  @ApiModelProperty(example = "nSBa+rV3%2/LpD", value = "User password.")
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
   public UserPost createDefaultKey(Boolean createDefaultKey) {
     this.createDefaultKey = createDefaultKey;
@@ -66,13 +88,14 @@ public class UserPost extends UserPut {
       return false;
     }
     UserPost userPost = (UserPost) o;
-    return Objects.equals(this.createDefaultKey, userPost.createDefaultKey) &&
+    return Objects.equals(this.password, userPost.password) &&
+        Objects.equals(this.createDefaultKey, userPost.createDefaultKey) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(createDefaultKey, super.hashCode());
+    return Objects.hash(password, createDefaultKey, super.hashCode());
   }
 
 
@@ -81,6 +104,7 @@ public class UserPost extends UserPut {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserPost {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("    createDefaultKey: ").append(toIndentedString(createDefaultKey)).append("\n");
     sb.append("}");
     return sb.toString();
