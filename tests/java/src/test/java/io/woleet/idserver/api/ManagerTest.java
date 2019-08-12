@@ -63,12 +63,12 @@ public class ManagerTest {
         userTest = managerUserApi.updateUser(userTest.getId(), userPut);
         assertEquals("Username Should be equal", userPut.getUsername(), userTest.getUsername());
 
-        userPut.setRole(UserRoleEnum.ADMIN);
+        userPut.setRole(UserRoleEnum.USER);
 
-        // Try to modify user role to admin role with manager right
+        // Try to modify role manager right
         try {
             managerUserApi.updateUser(userTest.getId(), userPut);
-            fail("Should not be able to modify user role to admin role with manager right");
+            fail("Should not be able to modify role with manager right");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
