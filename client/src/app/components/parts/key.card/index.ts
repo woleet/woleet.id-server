@@ -16,7 +16,7 @@ export class KeyCardComponent extends ErrorMessageProvider {
   editMode = false;
   formLocked = false;
   deviceSelected: KeyDeviceEnum | null;
-  minDate = new Date();
+  minDate = new Date(Date.now() + 1000 * 60 * 60 * 24);
 
   keyName: FormControl;
   setAsDefault = false;
