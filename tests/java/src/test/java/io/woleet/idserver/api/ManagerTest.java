@@ -19,6 +19,7 @@ public class ManagerTest {
     private EnrollmentApi managerEnrollmentApi;
     private UserApi managerUserApi;
     private ServerConfigApi managerServerConfigApi;
+    private ApiTokenApi managerApiTokenApi;
 
     @Before
     public void setUp() throws Exception {
@@ -179,5 +180,56 @@ public class ManagerTest {
         managerEnrollmentApi.deleteEnrollment(enrollmentGetManager.getId());
         managerEnrollmentApi.deleteEnrollment(enrollmentGetAdmin.getId());
 
+    }
+
+    @Test
+    public void managerRoleAPITokenTest() throws ApiException {
+
+        managerApiTokenApi = new ApiTokenApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
+        ApiTokenApi rootApiTokenApi = new ApiTokenApi(Config.getAuthApiClient("admin", "pass"));
+
+        UserGet userTest = Config.createTestUser(UserRoleEnum.ADMIN);
+
+        APITokenPost apiTokenPost = new APITokenPost();
+        apiTokenPost.setName(Config.randomName());
+
+        // Try to create an admin api token as an manager
+        try {
+            managerApiTokenApi.createAPIToken(apiTokenPost);
+            fail("Should not be able to create a user user with admin right");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        apiTokenPost.setUserId(userTest.getId());
+
+        // Try to create an user api token as an manager
+        try {
+            managerApiTokenApi.createAPIToken(apiTokenPost);
+            fail("Should not be able to create an api token as an manager");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        // Try to modify an api token as an manager
+        APITokenPut apiTokenPut = new APITokenPut();
+        apiTokenPut.setName("test");
+
+        APITokenGet apiTokenGet = rootApiTokenApi.createAPIToken(apiTokenPost);
+
+        try {
+            managerApiTokenApi.updateAPIToken(apiTokenGet.getId(), apiTokenPut);
+            fail("Should not be able to modify an api token as an manager");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        // Try to delete an api token as an manager
+        try {
+            managerApiTokenApi.deleteAPIToken(apiTokenGet.getId());
+            fail("Should not be able to delete an api token as an manager");
+        } catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
     }
 }
