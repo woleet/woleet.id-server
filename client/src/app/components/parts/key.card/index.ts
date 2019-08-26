@@ -22,7 +22,7 @@ export class KeyCardComponent extends ErrorMessageProvider {
   setAsDefault = false;
 
   @Input()
-  modes: ('block' | 'edit' | 'delete')[] = [];
+  modes: ('block' | 'edit' | 'delete' | 'revoke')[] = [];
 
   @Input()
   userId: string;
@@ -77,6 +77,24 @@ export class KeyCardComponent extends ErrorMessageProvider {
     this.key = del;
     this.formLocked = false;
     this.delete.emit(del);
+  }
+
+  async revokeKey() {
+    if (!confirm(`Revoke key ${this.key.name}?`)) {
+      return;
+    }
+    if (this.default) {
+      try {
+        await this.userService.update(this.userId, { defaultKeyId: null });
+      } catch (err) {
+        log.error(err);
+      }
+      this.updateUser.emit();
+    }
+    this.formLocked = true;
+    this.key = await this.keyService.update(this.key.id, { status: 'revoked' });
+    this.formLocked = false;
+    this.update.emit();
   }
 
   async editKey() {

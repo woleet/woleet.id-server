@@ -1,6 +1,7 @@
 import { Key, User } from '../database';
-import { NotFoundKeyError, NotFoundUserError } from '../errors';
+import { NotFoundKeyError, NotFoundUserError, RevokedKeyError } from '../errors';
 import { secureModule } from '../config';
+import { sendKeyRevocationEmail } from './send-email';
 
 /**
  * Key
@@ -52,7 +53,19 @@ export async function createExternalKey(userId: string, key: ApiPostKeyObject): 
  *  operationId: updateKey
  */
 export async function updateKey(id: string, attrs: ApiPutKeyObject) {
-  const key = await Key.update(id, attrs);
+  const update: any = attrs;
+  const keyUpdated = await Key.getById(id);
+
+  if (keyUpdated && keyUpdated.get('status') === 'revoked') {
+    throw new RevokedKeyError();
+  }
+  if (attrs.status === 'revoked') {
+    const userId = await keyUpdated.get('userId');
+    const user = await User.getById(userId);
+    sendKeyRevocationEmail(user.toJSON(), keyUpdated.toJSON());
+    update.revokedAt = Date.now();
+  }
+  const key = await Key.update(id, update);
   if (!key) {
     throw new NotFoundKeyError();
   }
@@ -110,6 +123,12 @@ export async function getAllKeysOfUser(userId: string, full = false): Promise<In
 }
 
 export async function deleteKey(id: string): Promise<InternalKeyObject> {
+
+  const keyDeleted = await Key.getById(id);
+  if (keyDeleted && keyDeleted.get('status') === 'revoked') {
+    throw new RevokedKeyError();
+  }
+
   const key = await Key.delete(id);
   if (!key) {
     throw new NotFoundKeyError();

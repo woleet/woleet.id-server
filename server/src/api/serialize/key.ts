@@ -3,7 +3,8 @@ export function serializeKey(key: InternalKeyObject): ApiKeyObject {
     expiration: +key.expiration || null,
     createdAt: +key.createdAt || null,
     updatedAt: +key.updatedAt || null,
-    lastUsed: +key.lastUsed || null
+    lastUsed: +key.lastUsed || null,
+    revokedAt: +key.revokedAt || null
   };
 
   const { id, name, status, type, publicKey, holder, device } = key;
