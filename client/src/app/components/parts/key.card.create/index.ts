@@ -14,7 +14,7 @@ import * as log from 'loglevel';
 export class KeyCreateCardComponent extends ErrorMessageProvider {
 
   formLocked = false;
-  minDate = new Date();
+  minDate = new Date(Date.now() + 1000 * 60 * 60 * 24);
 
   @Input()
   userId: string;

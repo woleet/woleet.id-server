@@ -237,6 +237,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
+        '404':
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
   /discover/keys/{userId}:
     get:
       operationId: discoverUserKeys
@@ -1073,10 +1079,6 @@ components:
           type: string
           description: Common name (CN) (2.5.4.3)
           example: "Jim Smith"
-        emailAddress:
-          type: string
-          description: Email Address (EMAILADDRESS) (1.2.840.113549.1.9.1)
-          example: "jim.smith@woleet.com"
         organization:
           type: string
           description: Organization name (O) (2.5.4.10)
@@ -1223,11 +1225,6 @@ components:
           $ref: '#/components/schemas/UserRoleEnum'
         identity:
           $ref: '#/components/schemas/FullIdentity'
-        defaultKeyId:
-          type: string
-          format: uuid
-          description: Identifier of the default key to use to sign for this user (cannot be the an external key).
-          example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
     UserGet:
       allOf:
         - $ref: '#/components/schemas/UserBase'
@@ -1239,17 +1236,24 @@ components:
               $ref: '#/components/schemas/UpdatedAt'
             lastLogin:
               $ref: '#/components/schemas/LastLogin'
+            defaultKeyId:
+              type: string
+              format: uuid
+              description: Identifier of the default key to use to sign for this user (cannot be the an external key).
+              example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
     UserPost:
       allOf:
-        - $ref: '#/components/schemas/UserPut'
+        - $ref: '#/components/schemas/UserBase'
         - type: object
           required:
             - identity
             - createDefaultKey
           properties:
-              createDefaultKey:
-                type: boolean
-                description: If true create a key holded by the server when this user is created.
+            password:
+              $ref: '#/components/schemas/Password'
+            createDefaultKey:
+              type: boolean
+              description: If true create a key holded by the server when this user is created.
     UserPut:
       allOf:
         - $ref: '#/components/schemas/UserBase'
@@ -1257,6 +1261,11 @@ components:
           properties:
             password:
               $ref: '#/components/schemas/Password'
+            defaultKeyId:
+              type: string
+              format: uuid
+              description: Identifier of the default key to use to sign for this user (cannot be the an external key).
+              example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
     UserArray:
       type: array
       items:
@@ -1266,7 +1275,7 @@ components:
         - $ref: '#/components/schemas/UserBase'
     UserDisco:
       allOf:
-        - $ref: '#/components/schemas/UserBase'
+        - $ref: '#/components/schemas/UserGet'
     UserDiscoArray:
       type: array
       items:
