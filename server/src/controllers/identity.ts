@@ -1,5 +1,5 @@
 import * as crypto from 'crypto';
-import { Key } from '../database';
+import { Key, User } from '../database';
 import { NotFoundKeyError } from '../errors';
 import * as timestring from 'timestring';
 
@@ -14,7 +14,11 @@ export async function getIdentity(leftData: string, pubKey: string) {
     throw new NotFoundKeyError();
   }
 
-  const identity = key.get('user');
+  const keyUserId = key.get('userId');
+
+  const user = await User.getById(keyUserId);
+
+  const identity = serializeIdentity(user.toJSON(), true);
 
   const expired = key.get('expiration') ? (+key.get('expiration') < Date.now()) : false;
 
@@ -39,7 +43,12 @@ export async function getIdentity(leftData: string, pubKey: string) {
     identityKey.expiration = +key.get('expiration');
   }
 
-  if ((key.get('holder') === 'server') && leftData !== undefined) {
+  // add revokedAt field if the revokedAt date is set, transform the Date string type into timestamp format.
+  if (key.get('revokedAt')) {
+    identityKey.revokedAt = +key.get('revokedAt');
+  }
+
+  if ((key.get('holder') === 'server') && (leftData !== undefined) && (user.get('mode') === 'seal')) {
     const rightData = getServerConfig().identityURL + '.' + crypto.randomBytes(16).toString('hex');
 
     const signature = await signMessage(key, leftData + rightData, key.get('compressed'));
@@ -47,12 +56,12 @@ export async function getIdentity(leftData: string, pubKey: string) {
     return {
       rightData,
       signature,
-      identity: serializeIdentity(identity, true),
+      identity,
       key: identityKey
     };
   } else {
     return {
-      identity: serializeIdentity(identity, true),
+      identity,
       key: identityKey
     };
   }

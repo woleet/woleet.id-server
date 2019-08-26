@@ -65,6 +65,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   sendPasswordEmail = false;
   createDefaultKey = true;
+  userMode: UserModeEnum = 'seal';
 
   @Input()
   mode: 'create' | 'edit';
@@ -188,6 +189,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         .then((up) => this.submitSucceed.emit(up));
     } else {
       user.createDefaultKey = this.createDefaultKey;
+      user.mode = this.userMode;
       const cleaned: any = addedDiff({}, cleanupObject(user));
       log.debug(cleaned, user);
 

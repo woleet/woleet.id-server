@@ -4,6 +4,8 @@ import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
+import org.apache.http.HttpStatus;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +125,7 @@ public class ExternalKeyApiTest extends CRUDApiTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        user = Config.createTestUser();
+        user = Config.createTestESignatureUser();
     }
 
     @Override
@@ -183,5 +185,23 @@ public class ExternalKeyApiTest extends CRUDApiTest {
         assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
         assertEquals(put.getDevice() != null ? put.getDevice() : post.getDevice(), get.getDevice());
         assertEquals(put.getExpiration() != null ? put.getExpiration() : post.getExpiration(), get.getExpiration());
+    }
+
+    @Test
+    public void createSealExternalKeyTest() throws ApiException {
+        UserGet sealUser = Config.createTestUser();
+
+        ExternalKeyPost externalKeyPost = new ExternalKeyPost();
+        externalKeyPost.setName(Config.randomName());
+        externalKeyPost.setPublicKey(Config.randomAddress());
+        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
+
+        try {
+            keyApi.createExternalKey(sealUser.getId(), externalKeyPost);
+            fail("Should not be able to assign a external key to a user in seal mode");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+        }
     }
 }

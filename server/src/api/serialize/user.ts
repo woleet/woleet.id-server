@@ -12,7 +12,7 @@ export function serializeUser(user: InternalUserObject, withDates = true): ApiUs
 
   const identity = serializeIdentity(user);
 
-  const { id, role, status, countryCallingCode, phone, email, username, defaultKeyId } = user;
+  const { id, role, mode, status, countryCallingCode, phone, email, username, defaultKeyId } = user;
 
-  return Object.assign({ id, role, username, status, countryCallingCode, phone, email, defaultKeyId, identity }, dates);
+  return Object.assign({ id, role, mode, username, status, countryCallingCode, phone, email, defaultKeyId, identity }, dates);
 }

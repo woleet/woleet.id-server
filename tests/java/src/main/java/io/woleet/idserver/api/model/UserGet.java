@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.FullIdentity;
 import io.woleet.idserver.api.model.UserBase;
+import io.woleet.idserver.api.model.UserModeEnum;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
 import java.io.IOException;
@@ -49,6 +50,10 @@ public class UserGet extends UserBase {
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
   private UUID defaultKeyId;
+
+  public static final String SERIALIZED_NAME_MODE = "mode";
+  @SerializedName(SERIALIZED_NAME_MODE)
+  private UserModeEnum mode = null;
 
    /**
    * Date of creation (Unix ms timestamp).
@@ -81,6 +86,10 @@ public class UserGet extends UserBase {
     this.defaultKeyId = defaultKeyId;
     return this;
   }
+  public UserGet mode(UserModeEnum mode) {
+    this.mode = mode;
+    return this;
+  }
 
    /**
    * Identifier of the default key to use to sign for this user (cannot be the an external key).
@@ -93,6 +102,20 @@ public class UserGet extends UserBase {
 
   public void setDefaultKeyId(UUID defaultKeyId) {
     this.defaultKeyId = defaultKeyId;
+  }
+
+
+   /**
+   * Get mode
+   * @return mode
+  **/
+  @ApiModelProperty(value = "")
+  public UserModeEnum getMode() {
+    return mode;
+  }
+
+  public void setMode(UserModeEnum mode) {
+    this.mode = mode;
   }
 
 
@@ -109,12 +132,13 @@ public class UserGet extends UserBase {
         Objects.equals(this.updatedAt, userGet.updatedAt) &&
         Objects.equals(this.lastLogin, userGet.lastLogin) &&
         Objects.equals(this.defaultKeyId, userGet.defaultKeyId) &&
+        Objects.equals(this.mode, userGet.mode) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(createdAt, updatedAt, lastLogin, defaultKeyId, super.hashCode());
+    return Objects.hash(createdAt, updatedAt, lastLogin, defaultKeyId, mode, super.hashCode());
   }
 
 
@@ -127,6 +151,7 @@ public class UserGet extends UserBase {
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");
     sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
+    sb.append("    mode: ").append(toIndentedString(mode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

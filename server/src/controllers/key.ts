@@ -39,6 +39,12 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
  *  operationId: createExternalKey
  */
 export async function createExternalKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
+  const user = await User.getById(userId);
+
+  if (user.get('mode') === 'seal') {
+    throw new Error('Cannot affect external key to a seal mode user.');
+  }
+
   const holder: KeyHolderEnum = 'user';
   const newKey = await Key.create(Object.assign({}, key, {
     publicKey: key.publicKey,
@@ -64,6 +70,12 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
     const user = await User.getById(userId);
     sendKeyRevocationEmail(user.toJSON(), keyUpdated.toJSON());
     update.revokedAt = Date.now();
+    if (user.get('mode') !== 'seal') {
+      update.privateKey = null;
+      update.privateKeyIV = null;
+      update.mnemonicEntropy = null;
+      update.mnemonicEntropyIV = null;
+    }
   }
   const key = await Key.update(id, update);
   if (!key) {

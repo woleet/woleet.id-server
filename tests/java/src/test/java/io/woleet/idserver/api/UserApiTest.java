@@ -101,6 +101,7 @@ public class UserApiTest extends CRUDApiTest {
             userPost.setCountryCallingCode(COUNTRYCALLINGCODE);
             String PHONE = "123456879";
             userPost.setPhone(PHONE);
+            userPost.setMode(UserModeEnum.SEAL);
 
             // Set identity information
             String COMMON_NAME = Config.randomCommonName();
@@ -222,6 +223,7 @@ public class UserApiTest extends CRUDApiTest {
         assertEquals(expected.getIdentity(), actual.getIdentity());
         assertEquals(expected.getCountryCallingCode(), actual.getCountryCallingCode());
         assertEquals(expected.getPhone(), actual.getPhone());
+        assertEquals(expected.getMode(), actual.getMode());
     }
 
     @Override

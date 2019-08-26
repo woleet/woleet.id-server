@@ -184,6 +184,29 @@ public class Config {
     }
 
     /**
+     * Create a user that can be used for testing.
+     *
+     * @param userApi User API to use to create the user
+     * @return a user
+     */
+    private static UserGet createTestESignatureUser(UserApi userApi) throws ApiException {
+        UserPost userPost = new UserPost();
+        String USERNAME = randomUsername();
+        String EMAIL = USERNAME + "@woleet.com";
+        userPost.email(EMAIL).username(USERNAME).role(UserRoleEnum.USER).status(UserStatusEnum.ACTIVE);
+        userPost.password("pass");
+        userPost.setMode(UserModeEnum.E_SIGNATURE);
+        FullIdentity fullIdentity = new FullIdentity();
+        fullIdentity.commonName(randomCommonName());
+        userPost.setCreateDefaultKey(true);
+        return userApi.createUser((UserPost) userPost.identity(fullIdentity));
+    }
+
+    public static UserGet createTestESignatureUser() throws ApiException {
+        return createTestESignatureUser(new UserApi(getAdminAuthApiClient()));
+    }
+
+    /**
      * Check if a signature is valid.
      *
      * @param address   bitcoin address

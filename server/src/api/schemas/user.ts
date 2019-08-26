@@ -3,6 +3,7 @@ import { CountryCode, Word, DirectoryString, uuid, Name, SafeWord } from './misc
 
 const userRoleEnum = ['user', 'admin'];
 const userStatusEnum = ['active', 'blocked'];
+const userModeEnum = ['seal', 'e-signature'];
 
 const createIdentity = Joi.object().keys(<DefineJoiModelAttributes<ApiIdentityObject>>{
   commonName: DirectoryString.required(),
@@ -24,6 +25,7 @@ const updateIdentity = Joi.object().keys(<DefineJoiModelAttributes<ApiIdentityOb
 
 const createUser = Joi.object().keys(<DefineJoiModelAttributes<ApiPostUserObject>>{
   role: Joi.string().valid(userRoleEnum).allow(null),
+  mode: Joi.string().valid(userModeEnum),
   status: Joi.string().valid(userStatusEnum).allow(null),
   countryCallingCode: Joi.string().allow(null),
   phone: Joi.string().allow(null),
