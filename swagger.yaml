@@ -231,6 +231,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/UserDisco'
+        '204':
+          description: Successful operation.
         '401':
           description: Missing or bad session cookie.
           content:
