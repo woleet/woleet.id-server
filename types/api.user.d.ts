@@ -2,6 +2,7 @@
 
 type UserRoleEnum = 'user' | 'admin';
 type UserStatusEnum = 'active' | 'blocked';
+type UserModeEnum = 'seal' | 'esign';
 
 interface UserObject {
   username?: string // mandatory for step 2
@@ -23,6 +24,7 @@ interface ApiUserObject extends UserObject, ApiCommonProperties {
 
   role: UserRoleEnum;
   status: UserStatusEnum;
+  mode: UserModeEnum;
   countryCallingCode: string | null;
   phone: string | null;
   email: string | null; // step 1: will be mandatory
@@ -33,6 +35,7 @@ interface ApiUserObject extends UserObject, ApiCommonProperties {
 
 interface ApiUserDTOObject extends UserObject {
   id: string;
+  mode: UserModeEnum;
   email: string | null;
   countryCallingCode: string | null;
   phone: string | null;
@@ -43,6 +46,7 @@ interface ApiUserDTOObject extends UserObject {
 interface ApiPostUserObject extends UserObject {
   role?: UserRoleEnum;
   status?: UserStatusEnum;
+  mode?: UserModeEnum;
   email?: string;
   password?: string;
   countryCallingCode?: string;

@@ -6,7 +6,7 @@ import { User } from '..';
 const KeyModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
   type: { type: ENUM(['bip39']), defaultValue: 'bip39' },
-  status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
+  status: { type: ENUM(['active', 'blocked', 'revoked']), defaultValue: 'active' },
   name: { type: STRING, allowNull: false },
   // encrypted
   mnemonicEntropy: { type: STRING, unique: true, allowNull: true },
@@ -18,6 +18,7 @@ const KeyModel = {
   compressed: { type: BOOLEAN },
   lastUsed: { type: DATE, defaultValue: null },
   expiration: { type: DATE },
+  revokedAt: { type: DATE },
   userId: { type: UUID },
   holder: { type: ENUM(['server', 'user']), defaultValue: 'server' },
   device: { type: ENUM(['server', 'nano', 'mobile']), allowNull: true }
