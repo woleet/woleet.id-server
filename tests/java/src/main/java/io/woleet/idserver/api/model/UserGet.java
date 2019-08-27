@@ -83,8 +83,21 @@ public class UserGet extends UserBase {
   }
 
   public UserGet mode(UserModeEnum mode) {
-      this.mode = mode;
-      return this;
+    this.mode = mode;
+    return this;
+  }
+
+   /**
+   * Get mode
+   * @return mode
+  **/
+  @ApiModelProperty(value = "")
+  public UserModeEnum getMode() {
+    return mode;
+  }
+
+  public void setMode(UserModeEnum mode) {
+    this.mode = mode;
   }
 
   public UserGet defaultKeyId(UUID defaultKeyId) {
@@ -106,19 +119,6 @@ public class UserGet extends UserBase {
   }
 
 
-   /**
-   * Get mode
-   * @return mode
-  **/
-  @ApiModelProperty(value = "")
-  public UserModeEnum getMode() {
-    return mode;
-  }
-
-  public void setMode(UserModeEnum mode) {
-    this.mode = mode;
-  }
-
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -138,7 +138,7 @@ public class UserGet extends UserBase {
 
   @Override
   public int hashCode() {
-    return Objects.hash(createdAt, updatedAt, lastLogin, defaultKeyId, mode, super.hashCode());
+    return Objects.hash(createdAt, updatedAt, lastLogin, mode, defaultKeyId, super.hashCode());
   }
 
 
@@ -150,8 +150,8 @@ public class UserGet extends UserBase {
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");
-    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("    mode: ").append(toIndentedString(mode)).append("\n");
+    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

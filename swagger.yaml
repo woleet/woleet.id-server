@@ -226,13 +226,13 @@ paths:
         Use this endpoint to get the current logged user.
       responses:
         '200':
-          description: Successful operation.
+          description: Successful operation. Send the user corresponding to the token.
           content:
             application/json:
               schema:
                 $ref: '#/components/responses/UserDisco'
         '204':
-          description: Successful operation.
+          description: Successful operation. This case happend when this endpoint is called with an admin token.
         '401':
           description: Missing or bad session cookie.
           content:
