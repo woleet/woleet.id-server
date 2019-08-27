@@ -188,6 +188,9 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         .then((up) => this.submitSucceed.emit(up));
     } else {
       user.createDefaultKey = this.createDefaultKey;
+      if (this.sendPasswordEmail) {
+        user.password = null;
+      }
       const cleaned: any = addedDiff({}, cleanupObject(user));
       log.debug(cleaned, user);
 
