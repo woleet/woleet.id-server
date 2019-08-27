@@ -42,7 +42,7 @@ export async function createExternalKey(userId: string, key: ApiPostKeyObject): 
   const user = await User.getById(userId);
 
   if (user.get('mode') === 'seal') {
-    throw new Error('Cannot affect external key to a seal mode user.');
+    throw new Error('Cannot create an external key for a user in seal mode.');
   }
 
   const holder: KeyHolderEnum = 'user';
@@ -62,9 +62,13 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
   const update: any = attrs;
   const keyUpdated = await Key.getById(id);
 
+  // If the get is revoked the update is not available.
   if (keyUpdated && keyUpdated.get('status') === 'revoked') {
     throw new RevokedKeyError();
   }
+  // During the revocation a new field with the revocation date should be added,
+  // the privatekey and the entropy is deleted if the user is a esign user.
+  // An email is sent to the admins.
   if (attrs.status === 'revoked') {
     const userId = await keyUpdated.get('userId');
     const user = await User.getById(userId);

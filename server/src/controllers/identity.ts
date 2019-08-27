@@ -22,12 +22,12 @@ export async function getIdentity(leftData: string, pubKey: string) {
 
   const expired = key.get('expiration') ? (+key.get('expiration') < Date.now()) : false;
 
+  // Compute key status
   let status;
-
-  if (expired) {
-    status = 'expired';
-  } else if (key.get('status') === 'revoked') {
+  if (key.get('status') === 'revoked') {
     status = 'revoked';
+  } else if (expired) {
+    status = 'expired';
   } else {
     status = 'valid';
   }
@@ -38,12 +38,12 @@ export async function getIdentity(leftData: string, pubKey: string) {
     status
   };
 
-  // add expiration field if the expiration date is set, transform the Date string type into timestamp format.
+  // Add expiration field if the expiration date is set, transform the Date string type into timestamp format.
   if (key.get('expiration')) {
     identityKey.expiration = +key.get('expiration');
   }
 
-  // add revokedAt field if the revokedAt date is set, transform the Date string type into timestamp format.
+  // Add the revocation date if set (transform the date string to a timestamp).
   if (key.get('revokedAt')) {
     identityKey.revokedAt = +key.get('revokedAt');
   }

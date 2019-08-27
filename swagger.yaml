@@ -1197,9 +1197,11 @@ components:
       type: string
       enum:
         - seal
-        - e-signature
+        - esign
       default: "seal"
-      description: User status (a `blocked` user cannot sign).
+      description: >
+        User mode, esign the user is a real user, and his keys are used to create electronic signatures.
+        seal the user represents an organization, and his keys are used to create server seals.
       example: "seal"
     KeyStatusEnum:
       type: string
@@ -1519,8 +1521,8 @@ components:
               format: int64
               example: 1569542400000
               description: >
-                Key expiration date (Unix ms timestamp).
-                <br>Note that the field is not returned if the key has no expiration date.
+                Key revocation date (Unix ms timestamp).
+                <br>Note that the field is not returned if the key has no revocation date.
             createdAt:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:

@@ -167,43 +167,26 @@ public class Config {
      * @param userApi User API to use to create the user
      * @return a user
      */
-    private static UserGet createTestUser(UserApi userApi) throws ApiException {
+    private static UserGet createTestUser(UserApi userApi, UserModeEnum userMoleEnum) throws ApiException {
         UserPost userPost = new UserPost();
         String USERNAME = randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
         userPost.email(EMAIL).username(USERNAME).role(UserRoleEnum.USER).status(UserStatusEnum.ACTIVE);
         userPost.password("pass");
+        userPost.setMode(userMoleEnum);
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity.commonName(randomCommonName());
+        fullIdentity.organization("WOLEET SAS");
         userPost.setCreateDefaultKey(true);
         return userApi.createUser((UserPost) userPost.identity(fullIdentity));
     }
 
     public static UserGet createTestUser() throws ApiException {
-        return createTestUser(new UserApi(getAdminAuthApiClient()));
+        return createTestUser(new UserApi(getAdminAuthApiClient()), UserModeEnum.SEAL);
     }
 
-    /**
-     * Create a user that can be used for testing.
-     *
-     * @param userApi User API to use to create the user
-     * @return a user
-     */
-    private static UserGet createTestESignatureUser(UserApi userApi) throws ApiException {
-        UserPost userPost = new UserPost();
-        String USERNAME = randomUsername();
-        String EMAIL = USERNAME + "@woleet.com";
-        userPost.email(EMAIL).username(USERNAME).role(UserRoleEnum.USER).status(UserStatusEnum.ACTIVE);
-        userPost.password("pass");
-        userPost.setMode(UserModeEnum.E_SIGNATURE);
-        FullIdentity fullIdentity = new FullIdentity();
-        fullIdentity.commonName(randomCommonName());
-        userPost.setCreateDefaultKey(true);
-        return userApi.createUser((UserPost) userPost.identity(fullIdentity));
-    }
-
-    public static UserGet createTestESignatureUser() throws ApiException {
-        return createTestESignatureUser(new UserApi(getAdminAuthApiClient()));
+    public static UserGet createTestUser(UserModeEnum userMoleEnum) throws ApiException {
+        return createTestUser(new UserApi(getAdminAuthApiClient()), userMoleEnum);
     }
 
     /**

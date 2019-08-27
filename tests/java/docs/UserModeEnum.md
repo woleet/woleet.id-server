@@ -6,7 +6,7 @@
 
 * `SEAL` (value: `"seal"`)
 
-* `E_SIGNATURE` (value: `"e-signature"`)
+* `ESIGN` (value: `"esign"`)
 
 
 

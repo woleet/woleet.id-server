@@ -47,13 +47,13 @@ public class UserGet extends UserBase {
   @SerializedName(SERIALIZED_NAME_LAST_LOGIN)
   private Long lastLogin;
 
-  public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
-  @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
-  private UUID defaultKeyId;
-
   public static final String SERIALIZED_NAME_MODE = "mode";
   @SerializedName(SERIALIZED_NAME_MODE)
   private UserModeEnum mode = null;
+
+  public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
+  @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
+  private UUID defaultKeyId;
 
    /**
    * Date of creation (Unix ms timestamp).
@@ -82,12 +82,13 @@ public class UserGet extends UserBase {
     return lastLogin;
   }
 
+  public UserGet mode(UserModeEnum mode) {
+      this.mode = mode;
+      return this;
+  }
+
   public UserGet defaultKeyId(UUID defaultKeyId) {
     this.defaultKeyId = defaultKeyId;
-    return this;
-  }
-  public UserGet mode(UserModeEnum mode) {
-    this.mode = mode;
     return this;
   }
 
@@ -118,7 +119,6 @@ public class UserGet extends UserBase {
     this.mode = mode;
   }
 
-
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -131,8 +131,8 @@ public class UserGet extends UserBase {
     return Objects.equals(this.createdAt, userGet.createdAt) &&
         Objects.equals(this.updatedAt, userGet.updatedAt) &&
         Objects.equals(this.lastLogin, userGet.lastLogin) &&
-        Objects.equals(this.defaultKeyId, userGet.defaultKeyId) &&
         Objects.equals(this.mode, userGet.mode) &&
+        Objects.equals(this.defaultKeyId, userGet.defaultKeyId) &&
         super.equals(o);
   }
 

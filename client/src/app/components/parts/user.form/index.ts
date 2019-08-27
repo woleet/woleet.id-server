@@ -147,6 +147,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     }));
     if (this.mode === 'edit') {
       this.form = this.setFormControl(copy<ApiUserObject>(this.user));
+      this.userMode = this.user.mode;
     } else {
       this.form = this.setFormControl({ role: 'user', identity: {} });
     }
@@ -238,6 +239,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   }
 
   canSendEmailToUser(): Boolean {
-    return this.enableSMTP && this.webClientURL && this.form.get('email').valid;
+    return this.enableSMTP && this.webClientURL && this.form.get('email').valid && !!this.form.get('email').value;
   }
 }

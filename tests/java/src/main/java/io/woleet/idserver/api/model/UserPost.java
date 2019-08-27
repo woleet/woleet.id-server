@@ -25,7 +25,6 @@ import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.FullIdentity;
 import io.woleet.idserver.api.model.UserBase;
 import io.woleet.idserver.api.model.UserModeEnum;
-import io.woleet.idserver.api.model.UserPut;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
 import java.io.IOException;
@@ -44,6 +43,10 @@ public class UserPost extends UserBase {
   @SerializedName(SERIALIZED_NAME_CREATE_DEFAULT_KEY)
   private Boolean createDefaultKey;
 
+  public static final String SERIALIZED_NAME_MODE = "mode";
+  @SerializedName(SERIALIZED_NAME_MODE)
+  private UserModeEnum mode = null;
+
   public UserPost password(String password) {
     this.password = password;
     return this;
@@ -61,10 +64,6 @@ public class UserPost extends UserBase {
   public void setPassword(String password) {
     this.password = password;
   }
-
-  public static final String SERIALIZED_NAME_MODE = "mode";
-  @SerializedName(SERIALIZED_NAME_MODE)
-  private UserModeEnum mode = null;
 
   public UserPost createDefaultKey(Boolean createDefaultKey) {
     this.createDefaultKey = createDefaultKey;

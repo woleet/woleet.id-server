@@ -2,7 +2,7 @@
 
 type KeyTypeEnum = 'bip39';
 type KeyStatusEnum = 'active' | 'blocked' | 'revoked';
-type IdentityKeyStatusEnum = 'valid' | 'expired';
+type IdentityKeyStatusEnum = 'valid' | 'expired' | 'revoked';
 type KeyHolderEnum = 'server' | 'user';
 type KeyDeviceEnum = 'server' | 'mobile' | 'nano';
 

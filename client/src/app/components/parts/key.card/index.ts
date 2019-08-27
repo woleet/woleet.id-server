@@ -69,7 +69,9 @@ export class KeyCardComponent extends ErrorMessageProvider {
   }
 
   async deleteKey() {
-    if (!confirm(`Delete key ${this.key.name}?`)) {
+    if (!confirm(`Delete key ${this.key.name}?\n`
+      + 'Warning: deleting a key is irreversible. Furthermore, signatures made with this key will no longer be linked to this identity,\n'
+      + 'and key ownership will no longer be provable by the identity server.')) {
       return;
     }
     this.formLocked = true;
@@ -80,15 +82,13 @@ export class KeyCardComponent extends ErrorMessageProvider {
   }
 
   async revokeKey() {
-    if (!confirm(`Revoke key ${this.key.name}?`)) {
+    if (!confirm(`Revoke key ${this.key.name}?\n`
+      + 'Warning: revoking a key is irreversible. A revoked key will be permanently unusable.\n'
+      + 'However, signatures made before the revocation date will still be linked to this identity.')) {
       return;
     }
     if (this.default) {
-      try {
-        await this.userService.update(this.userId, { defaultKeyId: null });
-      } catch (err) {
-        log.error(err);
-      }
+      await this.userService.update(this.userId, { defaultKeyId: null });
       this.updateUser.emit();
     }
     this.formLocked = true;
