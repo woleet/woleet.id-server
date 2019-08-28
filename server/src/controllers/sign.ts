@@ -1,6 +1,7 @@
 import { Key, User } from '../database';
 import { getServerConfig } from './server-config';
 import { secureModule } from '../config';
+import { Unauthorized } from 'http-errors';
 
 import {
   NotFoundUserError, NotFoundKeyError, BlockedUserError,
@@ -31,6 +32,9 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     }
     if (!user) {
       user = key.get('user');
+      if (user.get('mode') === 'esign') {
+        throw new Unauthorized('Cannot use e-signature with an admin token.');
+      }
     }
   }
 

@@ -96,19 +96,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/SignatureResult'
         '400':
-          description: Missing or invalid query parameter
+          description: Missing or invalid query parameter. More details are returned in the response body
           content:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad token.
+          description: Missing or bad token, try to sign as an e-signature user with a admin token or try to sign as an other user with a user token.
+                       More details are returned in the response body
           content:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
         '404':
-          description: Key not found.
+          description: Key or User not found.
           content:
             application/json:
               schema:
@@ -1260,7 +1261,7 @@ components:
             defaultKeyId:
               type: string
               format: uuid
-              description: Identifier of the default key to use to sign for this user (cannot be the an external key).
+              description: Identifier of the default key to use to sign for this user (cannot be the an external key nor a e-signature key).
               example: "c7c6e0de-2acb-4311-80b4-17dbf0b76806"
     UserPost:
       allOf:

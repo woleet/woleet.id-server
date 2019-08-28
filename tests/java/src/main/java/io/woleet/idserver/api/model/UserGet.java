@@ -83,28 +83,9 @@ public class UserGet extends UserBase {
   }
 
   public UserGet mode(UserModeEnum mode) {
-      this.mode = mode;
-      return this;
-  }
-
-  public UserGet defaultKeyId(UUID defaultKeyId) {
-    this.defaultKeyId = defaultKeyId;
+    this.mode = mode;
     return this;
   }
-
-   /**
-   * Identifier of the default key to use to sign for this user (cannot be the an external key).
-   * @return defaultKeyId
-  **/
-  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use to sign for this user (cannot be the an external key).")
-  public UUID getDefaultKeyId() {
-    return defaultKeyId;
-  }
-
-  public void setDefaultKeyId(UUID defaultKeyId) {
-    this.defaultKeyId = defaultKeyId;
-  }
-
 
    /**
    * Get mode
@@ -118,6 +99,25 @@ public class UserGet extends UserBase {
   public void setMode(UserModeEnum mode) {
     this.mode = mode;
   }
+
+  public UserGet defaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
+    return this;
+  }
+
+   /**
+   * Identifier of the default key to use to sign for this user (cannot be the an external key nor a e-signature key).
+   * @return defaultKeyId
+  **/
+  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use to sign for this user (cannot be the an external key nor a e-signature key).")
+  public UUID getDefaultKeyId() {
+    return defaultKeyId;
+  }
+
+  public void setDefaultKeyId(UUID defaultKeyId) {
+    this.defaultKeyId = defaultKeyId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -138,7 +138,7 @@ public class UserGet extends UserBase {
 
   @Override
   public int hashCode() {
-    return Objects.hash(createdAt, updatedAt, lastLogin, defaultKeyId, mode, super.hashCode());
+    return Objects.hash(createdAt, updatedAt, lastLogin, mode, defaultKeyId, super.hashCode());
   }
 
 
@@ -150,8 +150,8 @@ public class UserGet extends UserBase {
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");
-    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("    mode: ").append(toIndentedString(mode)).append("\n");
+    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
