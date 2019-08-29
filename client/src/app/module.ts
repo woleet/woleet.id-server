@@ -75,6 +75,7 @@ import { ConfigProofDeskComponent } from '@components/parts/config.proofdesk';
 import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 import { ConfigEnrollmentExpirationComponent } from '@parts/config.enrollment-expiration';
+import { UserFilterPipe } from '@services/pipe/userFilter';
 
 export function startupServiceFactory(appConfigService: AppConfigService): Function {
   return () => appConfigService.loadConfig();
@@ -128,7 +129,8 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     ConfigOrganizationNameComponent,
     ConfigTCUComponent,
     DialogResetPasswordComponent,
-    DialogMailResetComponent
+    DialogMailResetComponent,
+    UserFilterPipe
   ],
   entryComponents: [
     DialogResetPasswordComponent,

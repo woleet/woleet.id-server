@@ -106,10 +106,10 @@ public class UserGet extends UserBase {
   }
 
    /**
-   * Identifier of the default key to use to sign for this user (cannot be the an external key).
+   * Identifier of the default key to use to sign for this user (cannot be the an external key nor a e-signature key).
    * @return defaultKeyId
   **/
-  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use to sign for this user (cannot be the an external key).")
+  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use to sign for this user (cannot be the an external key nor a e-signature key).")
   public UUID getDefaultKeyId() {
     return defaultKeyId;
   }

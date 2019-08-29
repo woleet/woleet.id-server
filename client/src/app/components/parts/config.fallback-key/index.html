@@ -50,7 +50,8 @@
   <div *ngIf="(userList$ | async) as users; else loading">
     <mat-select type="text" (selectionChange)="newKeyId=null; loadUserKeys($event)" name="userId"
       placeholder="Select a user">
-      <mat-option *ngFor="let user of users" [value]="user.id">{{ user.identity.commonName }}</mat-option>
+      <mat-option *ngFor="let user of users | userfilter:filterUserSeal"
+        [value]="user.id">{{ user.identity.commonName }}</mat-option>
     </mat-select>
   </div>
   <br>
