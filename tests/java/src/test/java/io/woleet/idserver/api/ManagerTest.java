@@ -143,7 +143,7 @@ public class ManagerTest {
 
         managerEnrollmentApi = new EnrollmentApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
 
-        UserGet userTest = Config.createTestUser(UserRoleEnum.USER);
+        UserGet userTest = Config.createTestUser(UserRoleEnum.MANAGER, UserModeEnum.ESIGN);
 
         EnrollmentPost enrollmentPost = new EnrollmentPost();
         enrollmentPost.setName(Config.randomName());
@@ -154,14 +154,14 @@ public class ManagerTest {
         EnrollmentGet enrollmentGetUser = managerEnrollmentApi.createEnrollment(enrollmentPost);
         assertEquals("Name should be equal", enrollmentPost.getName(), enrollmentGetUser.getName());
 
-        UserGet managerTest = Config.createTestUser(UserRoleEnum.MANAGER);
+        UserGet managerTest = Config.createTestUser(UserRoleEnum.MANAGER, UserModeEnum.ESIGN);
         enrollmentPost.setUserId(managerTest.getId());
 
         // Try to create a key to a manager user
         EnrollmentGet enrollmentGetManager = managerEnrollmentApi.createEnrollment(enrollmentPost);
         assertEquals("Name should be equal", enrollmentPost.getName(), enrollmentGetManager.getName());
 
-        UserGet adminTest = Config.createTestUser(UserRoleEnum.ADMIN);
+        UserGet adminTest = Config.createTestUser(UserRoleEnum.MANAGER, UserModeEnum.ESIGN);
         enrollmentPost.setUserId(adminTest.getId());
 
         // Try to create a key to a admin user

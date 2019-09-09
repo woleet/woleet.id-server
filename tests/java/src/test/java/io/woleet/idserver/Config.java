@@ -194,6 +194,11 @@ public class Config {
         return createTestUser(new UserApi(getAdminAuthApiClient()), UserRoleEnum.USER, userMoleEnum);
     }
 
+    public static UserGet createTestUser(UserRoleEnum userRoleEnum, UserModeEnum userMoleEnum) throws ApiException {
+        return createTestUser(new UserApi(getAdminAuthApiClient()), userRoleEnum, userMoleEnum);
+    }
+
+
     /**
      * Check if a signature is valid.
      *
