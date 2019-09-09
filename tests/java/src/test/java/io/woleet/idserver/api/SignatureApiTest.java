@@ -20,12 +20,12 @@ public class SignatureApiTest {
             WOLEET_ID_SERVER_SIGNATURE_BASEPATH = "https://localhost:3000";
     }
 
-    private UserGet user, user2;
+    private UserGet userSeal, userESign;
 
-    private SignatureApi adminAuthApi, userAuthApi, noAuthApi, tokenAuthAdminApi, tokenAuthUserApi;
+    private SignatureApi adminAuthApi, userAuthApi, noAuthApi, tokenAuthAdminApi, tokenAuthUserSealApi, tokenAuthUserESignGet;
 
     private ApiTokenApi apiTokenApi;
-    private APITokenGet apiTokenAdminGet, apiTokenUserGet;
+    private APITokenGet apiTokenAdminGet, apiTokenUserSealGet, apiTokenUserESignGet;
 
     private void verifySignatureValid(String hashToSign, SignatureResult signatureResult) throws ApiException {
         assertNotNull(signatureResult.getIdentityURL());
@@ -47,9 +47,9 @@ public class SignatureApiTest {
         // Create 3 helper APIs: one with admin rights, one with user rights, one not authenticated
         adminAuthApi = new SignatureApi(Config.getAdminAuthApiClient()
                 .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
-        user = Config.createTestUser();
-        user2 = Config.createTestUser();
-        userAuthApi = new SignatureApi(Config.getAuthApiClient(user.getUsername(), "pass")
+        userSeal = Config.createTestUser();
+        userESign = Config.createTestUser(UserModeEnum.ESIGN);
+        userAuthApi = new SignatureApi(Config.getAuthApiClient(userSeal.getUsername(), "pass")
                 .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
         noAuthApi = new SignatureApi(Config.getNoAuthApiClient()
                 .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
@@ -65,11 +65,16 @@ public class SignatureApiTest {
         // Create a helper API with API token authentication (with user rights)
         APITokenPost apiTokenUser = new APITokenPost();
         apiTokenUser.setName("test-user");
-        apiTokenUser.setUserId(user.getId());
-        apiTokenUserGet = apiTokenApi.createAPIToken(apiTokenUser);
-        ApiClient apiClientUser = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
-        apiClientUser.addDefaultHeader("Authorization", "Bearer " + apiTokenUserGet.getValue());
-        tokenAuthUserApi = new SignatureApi(apiClientUser);
+        apiTokenUser.setUserId(userSeal.getId());
+        apiTokenUserSealGet = apiTokenApi.createAPIToken(apiTokenUser);
+        apiTokenUser.setUserId(userESign.getId());
+        apiTokenUserESignGet = apiTokenApi.createAPIToken(apiTokenUser);
+        ApiClient apiClientUserSeal = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
+        apiClientUserSeal.addDefaultHeader("Authorization", "Bearer " + apiTokenUserSealGet.getValue());
+        tokenAuthUserSealApi = new SignatureApi(apiClientUserSeal);
+        ApiClient apiClientUserESign = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
+        apiClientUserESign.addDefaultHeader("Authorization", "Bearer " + apiTokenUserESignGet.getValue());
+        tokenAuthUserESignGet = new SignatureApi(apiClientUserESign);
     }
 
     @After
@@ -80,9 +85,13 @@ public class SignatureApiTest {
             apiTokenApi.deleteAPIToken(apiTokenAdminGet.getId());
             apiTokenAdminGet = null;
         }
-        if (apiTokenUserGet != null) {
-            apiTokenApi.deleteAPIToken(apiTokenUserGet.getId());
-            apiTokenUserGet = null;
+        if (apiTokenUserSealGet != null) {
+            apiTokenApi.deleteAPIToken(apiTokenUserSealGet.getId());
+            apiTokenUserSealGet = null;
+        }
+        if (apiTokenUserESignGet != null) {
+            apiTokenApi.deleteAPIToken(apiTokenUserESignGet.getId());
+            apiTokenUserESignGet = null;
         }
 
         Config.deleteAllTestUsers();
@@ -181,9 +190,9 @@ public class SignatureApiTest {
         try {
             KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
             String hashToSign = Config.randomHash();
-            KeyGet keyGet = keyApi.getKeyById(user.getDefaultKeyId());
+            KeyGet keyGet = keyApi.getKeyById(userSeal.getDefaultKeyId());
             String pubKey = keyGet.getPubKey();
-            tokenAuthUserApi.getSignature(hashToSign, user2.getId(), null, pubKey);
+            tokenAuthUserSealApi.getSignature(hashToSign, userESign.getId(), null, pubKey);
             fail("Should not be able to sign as a different user");
         }
         catch (ApiException e) {
@@ -194,13 +203,36 @@ public class SignatureApiTest {
         try {
             KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
             String hashToSign = Config.randomHash();
-            KeyGet keyGet = keyApi.getKeyById(user2.getDefaultKeyId());
+            KeyGet keyGet = keyApi.getKeyById(Config.createTestUser(UserModeEnum.SEAL).getDefaultKeyId());
             String pubKey = keyGet.getPubKey();
-            tokenAuthUserApi.getSignature(hashToSign, null, null, pubKey);
+            tokenAuthUserSealApi.getSignature(hashToSign, null, null, pubKey);
             fail("Should not be able to find a non owned key");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+        }
+
+        // Try to sign as an e-signature user with an admin token
+        try {
+            KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
+            String hashToSign = Config.randomHash();
+            KeyGet keyGet = keyApi.getKeyById(userESign.getDefaultKeyId());
+            String pubKey = keyGet.getPubKey();
+            tokenAuthAdminApi.getSignature(hashToSign, null, null, pubKey);
+            fail("Should not be able to sign as an e-signature user with an admin token");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+        }
+
+        // Try to sign as an e-signature user with an admin token
+        try {
+            String hashToSign = Config.randomHash();
+            tokenAuthAdminApi.getSignature(hashToSign, userESign.getId(), null, null);
+            fail("Should not be able to sign as an e-signature user with an admin token");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
         // Sign using the server's default key
@@ -213,7 +245,7 @@ public class SignatureApiTest {
 
         // Sign using the user's default key with an assigned token
         hashToSign = Config.randomHash();
-        signatureResult = tokenAuthUserApi.getSignature(hashToSign, null, null, null);
+        signatureResult = tokenAuthUserSealApi.getSignature(hashToSign, null, null, null);
         assertNotNull(signatureResult.getIdentityURL());
         assertTrue(Config.isValidPubKey(signatureResult.getPubKey()));
         assertEquals(hashToSign, signatureResult.getSignedHash());
@@ -243,35 +275,47 @@ public class SignatureApiTest {
 
         // Sign using user's default key (userId)
         hashToSign = Config.randomHash();
-        signatureResult = tokenAuthAdminApi.getSignature(hashToSign, user.getId(), null, null);
+        signatureResult = tokenAuthAdminApi.getSignature(hashToSign, userSeal.getId(), null, null);
         verifySignatureValid(hashToSign, signatureResult);
 
         // Sign using user's default key (userId) with an assigned token
         hashToSign = Config.randomHash();
-        signatureResult = tokenAuthUserApi.getSignature(hashToSign, user.getId(), null, null);
+        signatureResult = tokenAuthUserSealApi.getSignature(hashToSign, userSeal.getId(), null, null);
         verifySignatureValid(hashToSign, signatureResult);
 
         // Sign using user's default key (customUserId)
         hashToSign = Config.randomHash();
-        signatureResult = tokenAuthAdminApi.getSignature(hashToSign, null, user.getIdentity().getUserId(), null);
+        signatureResult = tokenAuthAdminApi.getSignature(hashToSign, null, userSeal.getIdentity().getUserId(), null);
         verifySignatureValid(hashToSign, signatureResult);
 
         // Sign using user's default key (customUserId) with an assigned token
         hashToSign = Config.randomHash();
-        signatureResult = tokenAuthUserApi.getSignature(hashToSign, null, user.getIdentity().getUserId(), null);
+        signatureResult = tokenAuthUserSealApi.getSignature(hashToSign, null, userSeal.getIdentity().getUserId(), null);
+        verifySignatureValid(hashToSign, signatureResult);
+
+        // Sign using e-signature user's default key (pubKey) with an assigned token
+        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
+        hashToSign = Config.randomHash();
+        KeyGet keyGet = keyApi.getKeyById(userESign.getDefaultKeyId());
+        String pubKey = keyGet.getPubKey();
+        signatureResult = tokenAuthUserESignGet.getSignature(hashToSign, null, null, pubKey);
+        verifySignatureValid(hashToSign, signatureResult);
+
+        // Sign using e-signature user's id with an assigned token
+        hashToSign = Config.randomHash();
+        signatureResult = tokenAuthUserESignGet.getSignature(hashToSign, userESign.getId(), null, null);
         verifySignatureValid(hashToSign, signatureResult);
 
         // Sign using user's default key (pubKey)
-        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
         hashToSign = Config.randomHash();
-        KeyGet keyGet = keyApi.getKeyById(user.getDefaultKeyId());
-        String pubKey = keyGet.getPubKey();
+        keyGet = keyApi.getKeyById(userSeal.getDefaultKeyId());
+        pubKey = keyGet.getPubKey();
         signatureResult = tokenAuthAdminApi.getSignature(hashToSign, null, null, pubKey);
         verifySignatureValid(hashToSign, signatureResult);
 
         // Sign using user's default key (pubKey) with an assigned token
         hashToSign = Config.randomHash();
-        signatureResult = tokenAuthUserApi.getSignature(hashToSign, null, null, pubKey);
+        signatureResult = tokenAuthUserSealApi.getSignature(hashToSign, null, null, pubKey);
         verifySignatureValid(hashToSign, signatureResult);
 
         // FIXME: WOLEET-1141: Since we just used the key to sign, its last used should be close to current time
@@ -296,11 +340,11 @@ public class SignatureApiTest {
         keyApi.deleteKey(keyGet.getId());
 
         // Verify that the user's default key is unset after deletion
-        assertNull(new UserApi(Config.getAdminAuthApiClient()).getUserById(user.getId()).getDefaultKeyId());
+        assertNull(new UserApi(Config.getAdminAuthApiClient()).getUserById(userSeal.getId()).getDefaultKeyId());
 
         // Try to sign using a non existing user's default key
         try {
-            tokenAuthAdminApi.getSignature(hashToSign, user.getId(), null, null);
+            tokenAuthAdminApi.getSignature(hashToSign, userSeal.getId(), null, null);
             fail("Should not be able to sign using a non existing user's default key");
         }
         catch (ApiException e) {
@@ -309,7 +353,7 @@ public class SignatureApiTest {
 
         // Try to sign using a non existing user's default key with an assigned token
         try {
-            tokenAuthUserApi.getSignature(hashToSign, user.getId(), null, null);
+            tokenAuthUserSealApi.getSignature(hashToSign, userSeal.getId(), null, null);
             fail("Should not be able to sign using a non existing user's default key");
         }
         catch (ApiException e) {
@@ -327,7 +371,7 @@ public class SignatureApiTest {
 
         // Try to sign using a non existing user's default key with an assigned token
         try {
-            tokenAuthUserApi.getSignature(hashToSign, null, null, pubKey);
+            tokenAuthUserSealApi.getSignature(hashToSign, null, null, pubKey);
             fail("Should not be able to sign using a non existing user's default key");
         }
         catch (ApiException e) {

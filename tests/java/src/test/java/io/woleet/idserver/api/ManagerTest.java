@@ -42,16 +42,16 @@ public class ManagerTest {
         managerUserApi = new UserApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
 
         // Try user role creation with manager right
-        UserGet userTest = Config.createTestUser(managerUserApi, UserRoleEnum.USER);
+        UserGet userTest = Config.createTestUser(managerUserApi, UserRoleEnum.USER, UserModeEnum.SEAL);
         assertEquals("Role Should be user", UserRoleEnum.USER, userTest.getRole());
 
         // Try manager role creation with manager right
-        UserGet managerTest = Config.createTestUser(managerUserApi, UserRoleEnum.MANAGER);
+        UserGet managerTest = Config.createTestUser(managerUserApi, UserRoleEnum.MANAGER, UserModeEnum.SEAL);
         assertEquals("Role Should be manager", UserRoleEnum.MANAGER, managerTest.getRole());
 
         // Try admin role creation with manager right
         try {
-            Config.createTestUser(managerUserApi, UserRoleEnum.ADMIN);
+            Config.createTestUser(managerUserApi, UserRoleEnum.ADMIN, UserModeEnum.SEAL);
             fail("Should not be able to create a admin user with manager right");
         } catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());

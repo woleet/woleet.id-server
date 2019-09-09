@@ -1,11 +1,12 @@
 import { Key, User } from '../database';
 import { getServerConfig } from './server-config';
 import { secureModule } from '../config';
+import { Unauthorized } from 'http-errors';
 
 import {
   NotFoundUserError, NotFoundKeyError, BlockedUserError,
   BlockedKeyError, NoDefaultKeyError, ServerNotReadyError,
-  KeyOwnerMismatchError, ExpiredKeyError, KeyNotHeldByServerError
+  KeyOwnerMismatchError, ExpiredKeyError, KeyNotHeldByServerError, RevokedKeyError
 } from '../errors';
 
 export function signMessage(key: SequelizeKeyObject, message: string, compressed = true): Promise<string> {
@@ -31,6 +32,9 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     }
     if (!user) {
       user = key.get('user');
+      if (user.get('mode') === 'esign') {
+        throw new Unauthorized('Cannot use e-signature with an admin token.');
+      }
     }
   }
 
@@ -84,6 +88,11 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
   // A blocked key cannot sign
   if (key.getDataValue('status') === 'blocked') {
     throw new BlockedKeyError();
+  }
+
+   // A revoked key cannot sign
+   if (key.getDataValue('status') === 'revoked') {
+    throw new RevokedKeyError();
   }
 
   // Block the call if the private key is not held by the server

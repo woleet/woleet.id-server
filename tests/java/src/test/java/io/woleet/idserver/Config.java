@@ -168,24 +168,30 @@ public class Config {
      * @param userApi User API to use to create the user
      * @return a user
      */
-    public static UserGet createTestUser(UserApi userApi, UserRoleEnum userRoleEnum) throws ApiException {
+    public static UserGet createTestUser(UserApi userApi, UserRoleEnum userRoleEnum, UserModeEnum userMoleEnum) throws ApiException {
         UserPost userPost = new UserPost();
         String USERNAME = randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
         userPost.email(EMAIL).username(USERNAME).role(userRoleEnum).status(UserStatusEnum.ACTIVE);
         userPost.password("pass");
+        userPost.setMode(userMoleEnum);
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity.commonName(randomCommonName());
+        fullIdentity.organization("WOLEET SAS");
         userPost.setCreateDefaultKey(true);
         return userApi.createUser((UserPost) userPost.identity(fullIdentity));
     }
 
     public static UserGet createTestUser() throws ApiException {
-        return createTestUser(new UserApi(getAdminAuthApiClient()), UserRoleEnum.USER);
+        return createTestUser(new UserApi(getAdminAuthApiClient()), UserRoleEnum.USER, UserModeEnum.SEAL);
     }
 
     public static UserGet createTestUser(UserRoleEnum userRoleEnum) throws ApiException {
-        return createTestUser(new UserApi(getAdminAuthApiClient()), userRoleEnum);
+        return createTestUser(new UserApi(getAdminAuthApiClient()), userRoleEnum, UserModeEnum.SEAL);
+    }
+
+    public static UserGet createTestUser(UserModeEnum userMoleEnum) throws ApiException {
+        return createTestUser(new UserApi(getAdminAuthApiClient()), UserRoleEnum.USER, userMoleEnum);
     }
 
     /**
