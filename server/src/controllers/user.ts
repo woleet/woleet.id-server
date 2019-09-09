@@ -107,7 +107,9 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
 }
 
 export async function getAllUsers(): Promise<InternalUserObject[]> {
-  const users = await User.getAll();
+  const opt: any = [];
+  opt.order = [['x500CommonName']];
+  const users = await User.getAll(opt);
   return users.map((user) => user.toJSON());
 }
 
