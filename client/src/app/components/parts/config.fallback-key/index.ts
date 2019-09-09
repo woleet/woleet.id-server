@@ -25,6 +25,8 @@ export class ConfigFallbackKeyComponent implements OnInit, OnDestroy {
 
   newKeyId = null;
 
+  filterUserSeal = { mode: 'seal'};
+
   private onDestroy: EventEmitter<void>;
 
   constructor(

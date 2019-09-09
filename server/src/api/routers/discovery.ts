@@ -64,8 +64,12 @@ router.get('/user', async function (ctx) {
   const token = ctx.token;
 
   const userId = token.userId;
+  if (userId) {
   const user = await getUserById(userId);
   ctx.body = serializeUser(user, false);
+} else {
+  ctx.body = null;
+}
 });
 
 

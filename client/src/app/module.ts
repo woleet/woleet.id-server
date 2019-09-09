@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
   MatIconModule, MatInputModule, MatListModule, MatNativeDateModule, MatRippleModule, MatSelectModule, MatSidenavModule,
-  MatStepperModule, MatTabsModule, MatToolbarModule, MatTooltipModule
+  MatStepperModule, MatTabsModule, MatToolbarModule, MatTooltipModule, MatRadioModule
 } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { AppComponent } from '@parts/main';
@@ -75,6 +75,7 @@ import { ConfigProofDeskComponent } from '@components/parts/config.proofdesk';
 import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 import { ConfigEnrollmentExpirationComponent } from '@parts/config.enrollment-expiration';
+import { UserFilterPipe } from '@services/pipe/userFilter';
 
 export function startupServiceFactory(appConfigService: AppConfigService): Function {
   return () => appConfigService.loadConfig();
@@ -128,7 +129,8 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     ConfigOrganizationNameComponent,
     ConfigTCUComponent,
     DialogResetPasswordComponent,
-    DialogMailResetComponent
+    DialogMailResetComponent,
+    UserFilterPipe
   ],
   entryComponents: [
     DialogResetPasswordComponent,
@@ -147,6 +149,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     FormsModule,
     ReactiveFormsModule,
     MatTabsModule,
+    MatRadioModule,
 
     // http
     HttpClientModule,

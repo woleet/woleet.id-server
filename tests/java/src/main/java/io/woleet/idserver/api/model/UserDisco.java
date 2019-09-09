@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import io.woleet.idserver.api.model.FullIdentity;
 import io.woleet.idserver.api.model.UserGet;
+import io.woleet.idserver.api.model.UserModeEnum;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
 import java.util.UUID;

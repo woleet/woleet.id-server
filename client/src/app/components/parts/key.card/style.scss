@@ -4,4 +4,7 @@
   &.default {
     background-color: mat-color($mat-green, 50);
   }
+  &.revoked {
+    background-color: mat-color($mat-red, 50);
+  }
 }

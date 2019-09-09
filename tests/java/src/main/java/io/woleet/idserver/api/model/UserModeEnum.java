@@ -25,20 +25,18 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * Key status (a &#x60;blocked&#x60; key cannot be used to sign).
+ * User mode, esign the user is a real user, and his keys are used to create electronic signatures. seal the user represents an organization, and his keys are used to create server seals. 
  */
-@JsonAdapter(KeyStatusEnum.Adapter.class)
-public enum KeyStatusEnum {
+@JsonAdapter(UserModeEnum.Adapter.class)
+public enum UserModeEnum {
   
-  ACTIVE("active"),
+  SEAL("seal"),
   
-  BLOCKED("blocked"),
-  
-  REVOKED("revoked");
+  ESIGN("esign");
 
   private String value;
 
-  KeyStatusEnum(String value) {
+  UserModeEnum(String value) {
     this.value = value;
   }
 
@@ -51,8 +49,8 @@ public enum KeyStatusEnum {
     return String.valueOf(value);
   }
 
-  public static KeyStatusEnum fromValue(String text) {
-    for (KeyStatusEnum b : KeyStatusEnum.values()) {
+  public static UserModeEnum fromValue(String text) {
+    for (UserModeEnum b : UserModeEnum.values()) {
       if (String.valueOf(b.value).equals(text)) {
         return b;
       }
@@ -60,16 +58,16 @@ public enum KeyStatusEnum {
     throw new IllegalArgumentException("Unexpected value '" + text + "'");
   }
 
-  public static class Adapter extends TypeAdapter<KeyStatusEnum> {
+  public static class Adapter extends TypeAdapter<UserModeEnum> {
     @Override
-    public void write(final JsonWriter jsonWriter, final KeyStatusEnum enumeration) throws IOException {
+    public void write(final JsonWriter jsonWriter, final UserModeEnum enumeration) throws IOException {
       jsonWriter.value(enumeration.getValue());
     }
 
     @Override
-    public KeyStatusEnum read(final JsonReader jsonReader) throws IOException {
+    public UserModeEnum read(final JsonReader jsonReader) throws IOException {
       String value = jsonReader.nextString();
-      return KeyStatusEnum.fromValue(String.valueOf(value));
+      return UserModeEnum.fromValue(String.valueOf(value));
     }
   }
 }
