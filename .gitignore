@@ -29,7 +29,7 @@ Thumbs.db
 db
 
 # Dump
-dump*
+*.sql
 
 # configuration file
 configuration.sh
