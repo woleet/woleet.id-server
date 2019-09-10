@@ -167,9 +167,9 @@ export class ServerConfigService {
         tempLink.click();
         document.body.removeChild(tempLink);
       }, error => {
-        log.error('download error:', JSON.stringify(error));
+        log.error('File download error', JSON.stringify(error));
       }, () => {
-        log.info('Completed file download.');
+        log.info('File download completed');
       });
   }
 }
