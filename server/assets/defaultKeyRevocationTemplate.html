@@ -22,11 +22,11 @@
                   <span style="font-size: 24px;color: #aaa;">Key revocation</span><br><br>
                   <div style="font-size: 15px;line-height: 150%;">
                     {{#admin}}
-                    Hi {{username}},<br><br>
-                    The key named <b>{{keyName}}</b> ({{keyId}}) owned by <b>{{ownerName}}</b> ({{userId}}) has been revoked.
+                    Hi {{userName}},<br><br>
+                    The key named <b>{{keyName}}</b> ({{keyId}}) owned by <b>{{userName}}</b> ({{userId}}) has been revoked.
                     {{/admin}}
                     {{^admin}}
-                    Hi {{username}},<br><br>
+                    Hi {{userName}},<br><br>
                     Your key named <b>{{keyName}}</b> have been revoked.
                     <br><br>
                     A revocation is permanent: your key can no longer be used nor deleted, but signatures made
