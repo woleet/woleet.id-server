@@ -67,12 +67,8 @@ public class ManagerTest {
         userPut.setRole(UserRoleEnum.USER);
 
         // Try to modify role manager right
-        try {
-            managerUserApi.updateUser(userTest.getId(), userPut);
-            fail("Should not be able to modify role with manager right");
-        } catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
-        }
+        userTest = managerUserApi.updateUser(userTest.getId(), userPut);
+        assertEquals("Role Should be equal", userPut.getRole(), userTest.getRole());
 
         UserGet adminTest = Config.createTestUser(UserRoleEnum.ADMIN);
 

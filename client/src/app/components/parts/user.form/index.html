@@ -3,7 +3,7 @@
     <div *ngIf="form; else loading" fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="10px">
       <mat-card-content class="w-100">
         <mat-card-subtitle>Login</mat-card-subtitle>
-        <mat-form-field *ngIf="isAdmin() || mode === 'create'" class="w-100">
+        <mat-form-field class="w-100">
           <mat-select type="text" [value]="form.get('role').value" name="role" placeholder="Role"
             formControlName='role'>
             <mat-option value="user">user</mat-option>
