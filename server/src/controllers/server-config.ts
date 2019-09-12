@@ -204,7 +204,7 @@ async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
               resolve();
             }
           } catch (err) {
-            log.error('Response is not a JSON, bad URL.');
+            log.error('Response is not a JSON (bad URL?)');
             await setServerConfig({ enableProofDesk: false });
             resolve();
           }

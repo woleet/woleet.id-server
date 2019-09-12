@@ -93,8 +93,11 @@ router.get('/:id', vid, async function (ctx) {
 router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const { id } = ctx.params;
   const update = ctx.request.body;
-  if (!isKeyHeldByServer(update.defaultKeyId)) {
-    throw new BadRequest('User holded key cannot be the default key.');
+  if (update.defaultKeyId) {
+    const isPair = await isKeyHeldByServer(update.defaultKeyId);
+    if (!isPair) {
+      throw new BadRequest('User holded key cannot be the default key.');
+    }
   }
 
   let user = await getUserById(id);

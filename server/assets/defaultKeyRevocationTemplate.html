@@ -22,14 +22,17 @@
                   <span style="font-size: 24px;color: #aaa;">Key revocation</span><br><br>
                   <div style="font-size: 15px;line-height: 150%;">
                     {{#admin}}
-                      Hi {{username}},<br><br>
-                      The key {{keyId}} owned by {{userId}} (i.e. {{ownerName}}) have been revoked.
+                    Hi {{userName}},<br><br>
+                    The key named <b>{{keyName}}</b> ({{keyId}}) owned by <b>{{userName}}</b> ({{userId}}) has been revoked.
                     {{/admin}}
                     {{^admin}}
-                      Hi {{username}},<br><br>
-                      Your key named {{keyName}} have been revoked.
-                      A revocation is permanent and cannot be used or deleted in the future.
-                      If you want an other key please ask your manager or admin to create or begin an enrollment procedure.
+                    Hi {{userName}},<br><br>
+                    Your key named <b>{{keyName}}</b> have been revoked.
+                    <br><br>
+                    A revocation is permanent: your key can no longer be used nor deleted, but signatures made
+                    using this key before revocation are still valid.
+                    <br><br>
+                    If you need another key please ask your manager to create one or initiate a key registration.
                     {{/admin}}
                     <br><br>
                   </div>

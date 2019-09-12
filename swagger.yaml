@@ -60,7 +60,7 @@ paths:
               schema:
                 $ref: '#/components/responses/UserInfo'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -96,14 +96,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/SignatureResult'
         '400':
-          description: Missing or invalid query parameter. More details are returned in the response body
+          description: Missing or invalid query parameter. More details are returned in the response body.
           content:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad token, try to sign as an e-signature user with a admin token or try to sign as an other user with a user token.
-                       More details are returned in the response body
+          description: Missing or invalid token. More details are returned in the response body.
           content:
             application/json:
               schema:
@@ -177,7 +176,7 @@ paths:
               schema:
                 $ref: '#/components/responses/UserDiscoArray'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -203,7 +202,7 @@ paths:
               schema:
                 $ref: '#/components/responses/UserDisco'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -235,7 +234,7 @@ paths:
         '204':
           description: Successful operation. This case happend when this endpoint is called with an admin token.
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -273,7 +272,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -303,7 +302,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ConfigDisco'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -330,7 +329,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -364,7 +363,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -396,7 +395,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -431,7 +430,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -466,7 +465,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -499,7 +498,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -531,7 +530,7 @@ paths:
               schema:
                 $ref: '#/components/responses/UserGet'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -564,7 +563,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -603,7 +602,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -635,7 +634,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -686,7 +685,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -713,7 +712,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -752,7 +751,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -784,7 +783,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -809,7 +808,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APITokenArray'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -836,7 +835,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -861,7 +860,7 @@ paths:
               schema:
                 $ref: '#/components/responses/ServerEventArray'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -886,7 +885,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -918,7 +917,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -951,7 +950,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -1007,7 +1006,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:
@@ -1033,7 +1032,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '401':
-          description: Missing or bad session cookie.
+          description: Missing or invalid session cookie.
           content:
             application/json:
               schema:

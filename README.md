@@ -1,20 +1,21 @@
 # About
 
-Woleet.ID Server is a server (and an associated client web application) to be hosted inside your organization's IT.
-It allows you to **manage the identity of your users and the set of cryptographic keys** they can use to sign data.
+Woleet.ID Server is a lightweight web application to host inside your organization's IT.
+It allows you to **manage your users' identities and bitcoin key pairs**.
+It allows your users to **sign data using their bitcoin key pairs**.
+It allows third-parties to **retrieve your users' identities from their bitcoin addresses** and to **verify that your organization controls these addresses**.
 
-Woleet.ID Server identities are made of **X500 information** (like the common name, organization name, country code, etc.) 
-associated to one or several **bitcoin keys** (each being made of a public bitcoin address and of a private key securely stored encrypted in the server's database).
+Woleet.ID Server identities are made of **X500 information** (common name, organization name, country code, etc.).
+Each identity can be associated to one or several internal **bitcoin key pairs** made of a public bitcoin address and of a private key securely stored encrypted in the server's database.
+Each identity can also be associated to one or several external **bitcoin addresses** (controlled by the user) using a secure registration mechanism ensuring the user effectively controls these addresses.
 
-Woleet.ID Server provides a **private API** allowing your users to **sign data using their bitcoin addresses**,
-and a **public API** allowing third-parties to **get the identity of a signee** and **validate the ownership of the bitcoin addresses** by your organization.
+Basically, Woleet.ID Server provides a **private API** allowing your users to **sign data using their bitcoin key pairs**,
+and a **public API** allowing third-parties to **retrieve the identity of a signatory from his bitcoin address** and to **verify that your organization controls this addresses**.
 
 Basically, Woleet.ID Server enables you to integrate Woleet's [signature anchoring](https://doc.woleet.io/docs/signature-anchoring) into your organization workflow.
-
 Signature anchoring goes far beyond data anchoring: while data anchoring allows creating a timestamped proof of existence of data,
-signature anchoring allows creating a timestamped proof of signature of data, optionally embedding a proof of identity for the signee
+signature anchoring allows creating a timestamped proof of signature of data, optionally embedding a proof of identity for the signatory
 (in the form of an **identity URL** served by Woleet.ID Server).
-
 Using signature anchoring, new use cases like *document authentication* or *multi-signature workflow* are possible.
 
 # Architecture
@@ -35,17 +36,21 @@ The Node.js server exposes several API endpoints:
 - A `/sign` endpoint allowing to sign using the keys managed by the server.
 By default, it is exposed at [https://localhost:3002/sign]().
   
-- An `/identity` endpoint allowing to retrieve and verify the user identity associated to a key. This endpoint need to be exposed to the internet.
+- An `/identity` endpoint allowing to retrieve and verify the user identity associated to a key.
 By default, it is exposed at [https://localhost:3001/identity]().
+**This endpoint need to be exposed publicly on the internet.**
 
-- Other API endpoints dedicated to the client web app, but that can also be used by customer apps.
+- A set of API endpoints dedicated to the client web app, but that can also be used by your backend.
 By default, they are exposed at [https://localhost:3000/api/]().
+
+- A set of OpenID Connect endpoint used only when Woleet.ID Server is used as an OpenID Connect provider.
+By default, they are exposed at [https://localhost:3003/]().
 
 The source code can be found in the `server/` directory.
 
 # Documentation
 
-All endpoints of Woleet.ID Server, including those dedicated to the client web app, are specified and documented using OpenAPI (see the `swagger.yaml` file).
+All endpoints of Woleet.ID Server, including those dedicated to the client web app, are documented using OpenAPI/Swagger (see the `swagger.yaml` file).
 From this specification, test code (written in Java) is generated inside the `test/java` directory using the OpenAPI client code generator.
 
 The Woleet.ID Server API documentation is published on [SwaggerHub](https://app.swaggerhub.com/apis-docs/Woleet/WoleetIDServerAPI).
@@ -78,13 +83,16 @@ bash <(curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/ma
 
 You will need a certificate and its key, as described below, on the computer you execute this script.
 
-By default it will install Docker and other tools needed and clone the project on you $HOME/wids directory, store the emplacement of your certificate and key in the file configuration.sh.
+By default it will:
+- install Docker and other tools required
+- clone the GitHub project to $HOME/wids directory
+- store the path of your certificate and key files in the file `configuration.sh`
 
 ## configuration.sh
 
-If you want to override some of the environment variables you can do so in a configuration.sh file, if it exists its content will be sourced in app.sh.
+If you want to override some of the environment variables you can create a `configuration.sh` file: if it exists its content will be sourced in app.sh.
 
-For example to fix a version for Woleet.ID Server (related to release tab) add this in configuration.sh:
+For example to fix a version for Woleet.ID Server (related to release tab) add this in `configuration.sh`:
 
 ```bash
 export WOLEET_ID_SERVER_VERSION=x.x.x
@@ -131,13 +139,9 @@ Woleet.ID Server have prebuilt images on DockerHub:
 <https://hub.docker.com/r/wids/client>  
 <https://hub.docker.com/r/wids/server>
 
-If the environnement variable:
+If the WOLEET_ID_SERVER_VERSION` environment variable is set, app.sh and docker-compose.yml will use the specified version (> 0.5.0).
 
-```bash
-export WOLEET_ID_SERVER_VERSION=x.x.x
-```
-
-app.sh and docker-compose.yml will use the specified version (> 0.5.0), if you want to see differences between versions, you can go to the release tab of github.
+If you want to see the differences between versions, you can go to the Release tab of GitHub.
 
 If you have this project cloned and checkouted to a commit that match with a tag (for example, when using onlineSetup.sh to install the project) you can use
 
@@ -145,7 +149,7 @@ If you have this project cloned and checkouted to a commit that match with a tag
 ./app.sh upgrade
 ```
 
-To upgrade the repo to the latest tagged version, it will also set the WOLEET_ID_SERVER_VERSION environnement variable to the latest one in the file configuration.sh
+to upgrade the repo to the latest tagged version, it will also set the `WOLEET_ID_SERVER_VERSION` environment variable to the latest one in the file `configuration.sh`.
 
 ## Docker
 
@@ -170,12 +174,13 @@ export WOLEET_ID_SERVER_ENCRYPTION_SECRET={encryption secret, default: 'secret'}
 You can define the ports on which Woleet.ID Server listens by setting the following environment variables:
 
 ```bash
-export WOLEET_ID_SERVER_API_PORT={port to use for the client web app and the server API endpoints dedicated to the client web app, default: 3000}
-export WOLEET_ID_SERVER_IDENTITY_PORT={port to use for the /identity endpoint, default: 3001}
-export WOLEET_ID_SERVER_SIGNATURE_PORT={port to use for the /sign and /discover endpoints, default 3002}
+export WOLEET_ID_SERVER_API_PORT={port where to expose the client web app and the server API endpoints dedicated to the client web app, default: 3000}
+export WOLEET_ID_SERVER_IDENTITY_PORT={port where to expose the /identity endpoint, default: 3001}
+export WOLEET_ID_SERVER_SIGNATURE_PORT={port where to expose the /sign and /discover endpoints, default 3002}
+export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose the OpenID Connect Provicer endpoints, default 3003}
 ```
 
-> WARNING: the /sign endpoint (used to generate signature on behalf of users) and other API endpoints (used by the client web app) should never be exposed outside your organization's network, while the /identity endpoint needs to be exposed.
+> WARNING: these ports should never be exposed outside your organization's network, except for the /identity endpoint, which must be accessible publicly via the identity URL.
 
 # Build the server
 
@@ -285,3 +290,13 @@ Woleet.ID Server can be used as an OpenID Connect provider by 3rd party applicat
 > NOTE: The OpenID Connect Provider will not be effectively enabled without at least one specified OpenID client.
 
 You will be then able to get user information from your third party app. The associated OpenID client must request access to the `openid profile email` scope to get user information and `signature` to use the signature endpoint.
+
+# Secure the server
+
+By default, only the identity endpoint of Woleet.ID Server must be accessible publicly from the internet via its identity URL.
+All other endpoint can be firewalled to be only accessible from inside your organization intranet.
+
+If you plan to use your Woleet.ID Server as an authentication and signature server for Woleet's ProofDesk for Teams SaaS application,
+you will have to whitelist the IP addresses of Woleet's backend on the OpenID Connect and signature endpoints.
+Additionally, if you plan to allow you users to use ProofDesk for Teams from outside your organization network,
+you will have to expose Woleet.ID Server's client web app endpoint and OpenID Connect endpoint publicly.

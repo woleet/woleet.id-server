@@ -238,6 +238,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   sendPasswordEmailCheck() {
     this.sendPasswordEmail = !this.sendPasswordEmail;
+    this.sendPasswordEmail ? this.form.get('password').disable() : this.form.get('password').enable();
   }
 
   isAdmin() {

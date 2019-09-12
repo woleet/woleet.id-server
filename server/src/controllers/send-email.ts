@@ -131,7 +131,7 @@ export async function sendKeyRevocationEmail(user: InternalUserObject, key: Inte
   const htmlUser = mustache.render(template, {
     organizationName: config.organizationName,
     logoURL: logo,
-    username: user.x500CommonName,
+    userName: user.x500CommonName,
     keyName: key.name,
     admin: false
   });
@@ -145,9 +145,10 @@ export async function sendKeyRevocationEmail(user: InternalUserObject, key: Inte
         const htmlAdmin = mustache.render(template, {
           organizationName: config.organizationName,
           logoURL: logo,
-          username: admin.get('x500CommonName'),
+          userName: admin.get('x500CommonName'),
           admin: true,
           keyId: key.id,
+          keyName: key.name,
           ownerName: user.x500CommonName,
           userId: user.id
         });
