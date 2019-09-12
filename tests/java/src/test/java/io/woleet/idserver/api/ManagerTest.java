@@ -198,38 +198,25 @@ public class ManagerTest {
             managerApiTokenApi.createAPIToken(apiTokenPost);
             fail("Should not be able to create a user user with admin right");
         } catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
         apiTokenPost.setUserId(userTest.getId());
 
         // Try to create an user api token as an manager
-        try {
-            managerApiTokenApi.createAPIToken(apiTokenPost);
-            fail("Should not be able to create an api token as an manager");
-        } catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
-        }
+        APITokenGet apiTokenGet = managerApiTokenApi.createAPIToken(apiTokenPost);
+        assertEquals("User should be equals ", apiTokenPost.getUserId(), apiTokenGet.getUserId());
 
         // Try to modify an api token as an manager
         APITokenPut apiTokenPut = new APITokenPut();
         apiTokenPut.setName("test");
 
-        APITokenGet apiTokenGet = rootApiTokenApi.createAPIToken(apiTokenPost);
+        apiTokenGet = rootApiTokenApi.createAPIToken(apiTokenPost);
 
-        try {
-            managerApiTokenApi.updateAPIToken(apiTokenGet.getId(), apiTokenPut);
-            fail("Should not be able to modify an api token as an manager");
-        } catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
-        }
+        apiTokenGet = managerApiTokenApi.updateAPIToken(apiTokenGet.getId(), apiTokenPut);
+        assertEquals("User should be equals ", apiTokenPut.getName(), apiTokenGet.getName());
 
         // Try to delete an api token as an manager
-        try {
-            managerApiTokenApi.deleteAPIToken(apiTokenGet.getId());
-            fail("Should not be able to delete an api token as an manager");
-        } catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
-        }
+        managerApiTokenApi.deleteAPIToken(apiTokenGet.getId());
     }
 }

@@ -15,7 +15,7 @@
         [modes]="['block', 'detail', 'delete', 'edit']" (delete)="refreshUserList()">
       </app-user-card>
       <app-user-card *ngIf="(user.role === 'admin' && isManager())" [user]="user"
-        [modes]="['block', 'detail', 'delete']" (delete)="refreshUserList()">
+        [modes]="['detail']" (delete)="refreshUserList()">
       </app-user-card>
       <br>
     </div>
