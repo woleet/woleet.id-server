@@ -83,7 +83,7 @@ const routes: Routes = [
   {
     path: 'api-tokens', data: { title: 'API tokens' },
     component: APITokensPageComponent,
-    canActivate: [IsAdmin]
+    canActivate: [IsManager]
   },
   {
     path: 'about', data: { title: 'About' },

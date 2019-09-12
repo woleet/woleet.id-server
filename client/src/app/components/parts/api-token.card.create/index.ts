@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, ValidationErrors } from '@angular/forms';
 import { APITokenService } from '@services/api-token';
 import { ErrorMessageProvider } from '@components/util';
+import { AuthService } from '@services/auth';
 import { UserService } from '@services/user';
 
 @Component({
@@ -23,6 +24,7 @@ export class APITokenCreateCardComponent extends ErrorMessageProvider implements
   formLocked = false;
 
   constructor(
+    private authService: AuthService,
     private apiTokenService: APITokenService,
     private userService: UserService) { super(); }
 
@@ -57,5 +59,9 @@ export class APITokenCreateCardComponent extends ErrorMessageProvider implements
   cancelAPIToken() {
     this.apiTokenName.reset();
     this.reset.emit();
+  }
+
+  isAdmin() {
+    return this.authService.isAdmin();
   }
 }

@@ -35,8 +35,8 @@ apiRouter.use(user.routes());
 apiRouter.use(key.routes());
 apiRouter.use(enrollmentAdmin.routes());
 apiRouter.use(serverConfig.routes());
-apiRouter.use(adminAuth);
 apiRouter.use(apiToken.routes());
+apiRouter.use(adminAuth);
 apiRouter.use(serverEvent.routes());
 
 /**
