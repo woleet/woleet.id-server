@@ -5,6 +5,7 @@ import { NotFoundUserError, TokenResetPasswordInvalid } from '../errors';
 import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
+import * as Sequelize from 'sequelize';
 
 const debug = Debug('id:ctr');
 const RESET_PASSWORD_TOKEN_LIFETIME = 1000 * 60 * 30;
@@ -108,7 +109,7 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
 
 export async function getAllUsers(): Promise<InternalUserObject[]> {
   const opt: any = [];
-  opt.order = [['x500CommonName']];
+  opt.order = [[Sequelize.fn('lower', Sequelize.col('x500CommonName'))]];
   const users = await User.getAll(opt);
   return users.map((user) => user.toJSON());
 }
