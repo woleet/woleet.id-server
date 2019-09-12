@@ -97,11 +97,14 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
     throw new BadRequest('User holded key cannot be the default key.');
   }
 
+  let user = await getUserById(id);
+
   const authorizedUser = await getUserById(ctx.session.user.get('id'));
-  if (update.role === 'admin' && authorizedUser.role !== 'admin') {
+  if ((update.role && authorizedUser.role !== 'admin')
+    || (user.role === 'admin' && authorizedUser.role !== 'admin')) {
     throw new Unauthorized('Only admin can create other admin.');
   }
-  const user = await updateUser(id, copy(update));
+  user = await updateUser(id, copy(update));
 
   event.register({
     type: 'user.edit',
