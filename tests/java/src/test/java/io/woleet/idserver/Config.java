@@ -190,14 +190,13 @@ public class Config {
         return createTestUser(new UserApi(getAdminAuthApiClient()), userRoleEnum, UserModeEnum.SEAL);
     }
 
-    public static UserGet createTestUser(UserModeEnum userMoleEnum) throws ApiException {
-        return createTestUser(new UserApi(getAdminAuthApiClient()), UserRoleEnum.USER, userMoleEnum);
+    public static UserGet createTestUser(UserModeEnum userModeEnum) throws ApiException {
+        return createTestUser(new UserApi(getAdminAuthApiClient()), UserRoleEnum.USER, userModeEnum);
     }
 
     public static UserGet createTestUser(UserRoleEnum userRoleEnum, UserModeEnum userMoleEnum) throws ApiException {
         return createTestUser(new UserApi(getAdminAuthApiClient()), userRoleEnum, userMoleEnum);
     }
-
 
     /**
      * Check if a signature is valid.
@@ -210,7 +209,7 @@ public class Config {
     public static boolean isValidSignature(String address, String signature, String message) {
         try {
             return ECKey.signedMessageToKey(message, signature).toAddress(Address.fromBase58(null, address)
-                    .getParameters()).toString().equals(address);
+                .getParameters()).toString().equals(address);
         }
         catch (Exception e) {
             return false;

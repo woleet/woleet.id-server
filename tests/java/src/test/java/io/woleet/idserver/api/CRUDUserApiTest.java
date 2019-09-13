@@ -4,8 +4,6 @@ import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
-import org.apache.http.HttpStatus;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,12 +114,12 @@ public class CRUDUserApiTest extends CRUDApiTest {
             String USER_ID = Config.randomUUID().toString();
             FullIdentity fullIdentity = new FullIdentity();
             fullIdentity
-                    .userId(USER_ID)
-                    .commonName(COMMON_NAME)
-                    .organizationalUnit(ORGANIZATIONAL_UNIT)
-                    .locality(LOCALITY)
-                    .organization(ORGANIZATION)
-                    .country(COUNTRY);
+                .userId(USER_ID)
+                .commonName(COMMON_NAME)
+                .organizationalUnit(ORGANIZATIONAL_UNIT)
+                .locality(LOCALITY)
+                .organization(ORGANIZATION)
+                .country(COUNTRY);
             userPost.identity(fullIdentity);
 
             return new ObjectPost(userPost);
@@ -240,7 +238,7 @@ public class CRUDUserApiTest extends CRUDApiTest {
         assertEquals(put.getUsername() != null ? put.getUsername() : post.getUsername(), get.getUsername());
         assertEquals(put.getEmail() != null ? put.getEmail() : post.getEmail(), get.getEmail());
         assertEquals(put.getCountryCallingCode() != null ? put.getCountryCallingCode() : post.getCountryCallingCode(),
-                get.getCountryCallingCode());
+            get.getCountryCallingCode());
         assertEquals(put.getPhone() != null ? put.getPhone() : post.getPhone(), get.getPhone());
         if (put.getIdentity() != null) {
             FullIdentity d = put.getIdentity();
@@ -252,7 +250,7 @@ public class CRUDUserApiTest extends CRUDApiTest {
             assertEquals(d.getLocality() != null ? d.getLocality() : e.getLocality(), a.getLocality());
             assertEquals(d.getOrganization() != null ? d.getOrganization() : e.getOrganization(), a.getOrganization());
             assertEquals(d.getOrganizationalUnit() != null ? d.getOrganizationalUnit() : e.getOrganizationalUnit(),
-                    a.getOrganizationalUnit());
+                a.getOrganizationalUnit());
         } else
             assertEquals(post.getIdentity(), get.getIdentity());
     }

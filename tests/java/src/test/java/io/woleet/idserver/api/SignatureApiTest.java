@@ -35,7 +35,7 @@ public class SignatureApiTest {
         assertTrue(Config.isValidPubKey(signatureResult.getPubKey()));
         assertEquals(hashToSign, signatureResult.getSignedHash());
         assertTrue(Config.isValidSignature(signatureResult.getPubKey(), signatureResult.getSignature(),
-                signatureResult.getSignedHash()));
+            signatureResult.getSignedHash()));
     }
 
     @Before
@@ -46,13 +46,13 @@ public class SignatureApiTest {
 
         // Create 3 helper APIs: one with admin rights, one with user rights, one not authenticated
         adminAuthApi = new SignatureApi(Config.getAdminAuthApiClient()
-                .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
+            .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
         userSeal = Config.createTestUser();
         userESign = Config.createTestUser(UserModeEnum.ESIGN);
         userAuthApi = new SignatureApi(Config.getAuthApiClient(userSeal.getUsername(), "pass")
-                .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
+            .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
         noAuthApi = new SignatureApi(Config.getNoAuthApiClient()
-                .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
+            .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
 
         apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
 

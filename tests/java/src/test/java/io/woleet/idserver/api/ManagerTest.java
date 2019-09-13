@@ -15,19 +15,13 @@ public class ManagerTest {
 
     private UserGet manager;
 
-    private KeyApi managerKeyApi;
-    private EnrollmentApi managerEnrollmentApi;
-    private UserApi managerUserApi;
-    private ServerConfigApi managerServerConfigApi;
-    private ApiTokenApi managerApiTokenApi;
-
     @Before
     public void setUp() throws Exception {
 
         // Start from a clean state
         tearDown();
 
-        // Create test user
+        // Create a test manager
         manager = Config.createTestUser(UserRoleEnum.MANAGER);
     }
 
@@ -39,44 +33,48 @@ public class ManagerTest {
     @Test
     public void managerRoleUserTest() throws ApiException {
 
-        managerUserApi = new UserApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
+        UserApi managerUserApi = new UserApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
 
         // Try user role creation with manager right
         UserGet userTest = Config.createTestUser(managerUserApi, UserRoleEnum.USER, UserModeEnum.SEAL);
-        assertEquals("Role Should be user", UserRoleEnum.USER, userTest.getRole());
+        assertEquals("Role should be user", UserRoleEnum.USER, userTest.getRole());
 
         // Try manager role creation with manager right
         UserGet managerTest = Config.createTestUser(managerUserApi, UserRoleEnum.MANAGER, UserModeEnum.SEAL);
-        assertEquals("Role Should be manager", UserRoleEnum.MANAGER, managerTest.getRole());
+        assertEquals("Role should be manager", UserRoleEnum.MANAGER, managerTest.getRole());
 
         // Try admin role creation with manager right
         try {
             Config.createTestUser(managerUserApi, UserRoleEnum.ADMIN, UserModeEnum.SEAL);
             fail("Should not be able to create a admin user with manager right");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
+        // Try to modify user with manager right
         UserPut userPut = new UserPut();
         userPut.username("test");
-
-        // Try to modify user with manager right
         userTest = managerUserApi.updateUser(userTest.getId(), userPut);
-        assertEquals("Username Should be equal", userPut.getUsername(), userTest.getUsername());
+        assertEquals("Username should be equal", userPut.getUsername(), userTest.getUsername());
 
+        // Try to modify user role with manager right
+        userPut.setRole(UserRoleEnum.MANAGER);
+        userTest = managerUserApi.updateUser(userTest.getId(), userPut);
+        assertEquals("Role should be equal", userPut.getRole(), userTest.getRole());
+
+        // Try to modify manager role with manager right
         userPut.setRole(UserRoleEnum.USER);
-
-        // Try to modify role manager right
         userTest = managerUserApi.updateUser(userTest.getId(), userPut);
-        assertEquals("Role Should be equal", userPut.getRole(), userTest.getRole());
-
-        UserGet adminTest = Config.createTestUser(UserRoleEnum.ADMIN);
+        assertEquals("Role should be equal", userPut.getRole(), userTest.getRole());
 
         // Try to modify admin role with manager right
         try {
+            UserGet adminTest = Config.createTestUser(UserRoleEnum.ADMIN);
             managerUserApi.updateUser(adminTest.getId(), userPut);
             fail("Should not be able to modify admin role with manager right");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
     }
@@ -84,24 +82,18 @@ public class ManagerTest {
     @Test
     public void managerRoleKeyTest() throws ApiException {
 
-        managerKeyApi = new KeyApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
-
-        UserGet userTest = Config.createTestUser(UserRoleEnum.USER);
-
-        KeyPost keyPost = new KeyPost();
-        keyPost.setName(Config.randomName());
+        KeyApi managerKeyApi = new KeyApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
 
         // Try to create a key to a normal user
+        UserGet userTest = Config.createTestUser(UserRoleEnum.USER);
+        KeyPost keyPost = new KeyPost();
+        keyPost.setName(Config.randomName());
         KeyGet keyGetUser = managerKeyApi.createKey(userTest.getId(), keyPost);
         assertEquals("Name should be equal", keyPost.getName(), keyGetUser.getName());
-
-        UserGet managerTest = Config.createTestUser(UserRoleEnum.MANAGER);
 
         // Try to create a key to a manager user
         KeyGet keyGetManager = managerKeyApi.createKey(userTest.getId(), keyPost);
         assertEquals("Name should be equal", keyPost.getName(), keyGetManager.getName());
-
-        UserGet adminTest = Config.createTestUser(UserRoleEnum.ADMIN);
 
         // Try to create a key to a admin user
         KeyGet keyGetAdmin = managerKeyApi.createKey(userTest.getId(), keyPost);
@@ -110,7 +102,6 @@ public class ManagerTest {
         // Try to modify a key
         KeyPut keyPut = new KeyPut();
         keyPut.setName("test");
-
         keyGetUser = managerKeyApi.updateKey(keyGetUser.getId(), keyPut);
         assertEquals("Name should be equal", keyPut.getName(), keyGetUser.getName());
 
@@ -120,16 +111,18 @@ public class ManagerTest {
 
     @Test
     public void managerRoleServerConfigTest() throws ApiException {
-        managerServerConfigApi = new ServerConfigApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
 
-        ServerConfig serverConfig = new ServerConfig();
-        serverConfig.setIdentityURL("https://localhost:3000/identity");
+        ServerConfigApi managerServerConfigApi = new ServerConfigApi(Config
+            .getAuthApiClient(manager.getUsername(), "pass"));
 
         // Try to modify server configuration with manager right
         try {
+            ServerConfig serverConfig = new ServerConfig();
+            serverConfig.setIdentityURL("https://localhost:3000/identity");
             managerServerConfigApi.updateServerConfig(serverConfig);
             fail("Should not be able to modify server configuration with manager right");
-        } catch (ApiException e) {
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
@@ -137,82 +130,73 @@ public class ManagerTest {
     @Test
     public void managerRoleEnrollmentTest() throws ApiException {
 
-        managerEnrollmentApi = new EnrollmentApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
+        EnrollmentApi managerEnrollmentApi = new EnrollmentApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
 
         UserGet userTest = Config.createTestUser(UserRoleEnum.MANAGER, UserModeEnum.ESIGN);
 
+        // Try to create a key enrollment to a normal user
         EnrollmentPost enrollmentPost = new EnrollmentPost();
         enrollmentPost.setName(Config.randomName());
         enrollmentPost.setUserId(userTest.getId());
         enrollmentPost.setTest(true);
-
-        // Try to create a key to a normal user
         EnrollmentGet enrollmentGetUser = managerEnrollmentApi.createEnrollment(enrollmentPost);
         assertEquals("Name should be equal", enrollmentPost.getName(), enrollmentGetUser.getName());
 
+        // Try to create a key enrollment enrollment to a manager user
         UserGet managerTest = Config.createTestUser(UserRoleEnum.MANAGER, UserModeEnum.ESIGN);
         enrollmentPost.setUserId(managerTest.getId());
-
-        // Try to create a key to a manager user
         EnrollmentGet enrollmentGetManager = managerEnrollmentApi.createEnrollment(enrollmentPost);
         assertEquals("Name should be equal", enrollmentPost.getName(), enrollmentGetManager.getName());
 
+        // Try to create a key enrollment to a admin user
         UserGet adminTest = Config.createTestUser(UserRoleEnum.MANAGER, UserModeEnum.ESIGN);
         enrollmentPost.setUserId(adminTest.getId());
-
-        // Try to create a key to a admin user
         EnrollmentGet enrollmentGetAdmin = managerEnrollmentApi.createEnrollment(enrollmentPost);
         assertEquals("Name should be equal", enrollmentPost.getName(), enrollmentGetAdmin.getName());
 
-        // Try to modify a key
+        // Try to modify a key enrollment
         EnrollmentPut enrollmentPut = new EnrollmentPut();
         enrollmentPut.setName("test");
-
         enrollmentGetUser = managerEnrollmentApi.updateEnrollment(enrollmentGetUser.getId(), enrollmentPut);
         assertEquals("Name should be equal", enrollmentPut.getName(), enrollmentGetUser.getName());
 
-        // Try to delete a key
+        // Try to delete a key enrollment
         managerEnrollmentApi.deleteEnrollment(enrollmentGetUser.getId());
         managerEnrollmentApi.deleteEnrollment(enrollmentGetManager.getId());
         managerEnrollmentApi.deleteEnrollment(enrollmentGetAdmin.getId());
-
     }
 
     @Test
     public void managerRoleAPITokenTest() throws ApiException {
 
-        managerApiTokenApi = new ApiTokenApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
-        ApiTokenApi rootApiTokenApi = new ApiTokenApi(Config.getAuthApiClient("admin", "pass"));
+        ApiTokenApi managerApiTokenApi = new ApiTokenApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
 
         UserGet userTest = Config.createTestUser(UserRoleEnum.ADMIN);
 
         APITokenPost apiTokenPost = new APITokenPost();
         apiTokenPost.setName(Config.randomName());
 
-        // Try to create an admin api token as an manager
+        // Try to create an admin API token as an manager
         try {
             managerApiTokenApi.createAPIToken(apiTokenPost);
-            fail("Should not be able to create a user user with admin right");
-        } catch (ApiException e) {
+            fail("Should not be able to create an admin API token with manager right");
+        }
+        catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
+        // Try to create an user API token as an manager
         apiTokenPost.setUserId(userTest.getId());
-
-        // Try to create an user api token as an manager
         APITokenGet apiTokenGet = managerApiTokenApi.createAPIToken(apiTokenPost);
-        assertEquals("User should be equals ", apiTokenPost.getUserId(), apiTokenGet.getUserId());
+        assertEquals("User should be equals", apiTokenPost.getUserId(), apiTokenGet.getUserId());
 
-        // Try to modify an api token as an manager
+        // Try to modify an API token as an manager
         APITokenPut apiTokenPut = new APITokenPut();
         apiTokenPut.setName("test");
-
-        apiTokenGet = rootApiTokenApi.createAPIToken(apiTokenPost);
-
         apiTokenGet = managerApiTokenApi.updateAPIToken(apiTokenGet.getId(), apiTokenPut);
-        assertEquals("User should be equals ", apiTokenPut.getName(), apiTokenGet.getName());
+        assertEquals("Name should be equals", apiTokenPut.getName(), apiTokenGet.getName());
 
-        // Try to delete an api token as an manager
+        // Try to delete an API token as an manager
         managerApiTokenApi.deleteAPIToken(apiTokenGet.getId());
     }
 }

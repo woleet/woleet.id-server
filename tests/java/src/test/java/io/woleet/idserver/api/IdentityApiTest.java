@@ -4,10 +4,11 @@ import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
 import org.apache.http.HttpStatus;
-import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -42,7 +43,7 @@ public class IdentityApiTest {
     public void getIdentityTest() throws ApiException, InterruptedException {
 
         IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
-                .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
+            .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
 
         KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
 
@@ -191,12 +192,12 @@ public class IdentityApiTest {
         assertEquals(identityResult.getKey().getPubKey(), pubKey);
         assertEquals(Key.StatusEnum.VALID, identityResult.getKey().getStatus());
         assertTrue(
-                "Expected " + identityResult.getRightData()
-                + "to start with \"" + serverConfig.getIdentityURL()
-                + "\" but got \"" + identityResult.getRightData() + "\"",
-                identityResult.getRightData().startsWith(serverConfig.getIdentityURL())
+            "Expected " + identityResult.getRightData()
+            + "to start with \"" + serverConfig.getIdentityURL()
+            + "\" but got \"" + identityResult.getRightData() + "\"",
+            identityResult.getRightData().startsWith(serverConfig.getIdentityURL())
         );
         assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(),
-                leftData + identityResult.getRightData()));
+            leftData + identityResult.getRightData()));
     }
 }

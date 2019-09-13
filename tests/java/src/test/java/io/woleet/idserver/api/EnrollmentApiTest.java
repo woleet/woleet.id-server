@@ -3,7 +3,6 @@ package io.woleet.idserver.api;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.EnrollmentPost;
-import io.woleet.idserver.api.model.KeyPost;
 import io.woleet.idserver.api.model.UserGet;
 import io.woleet.idserver.api.model.UserModeEnum;
 import org.apache.http.HttpStatus;
@@ -16,8 +15,8 @@ import static org.junit.Assert.fail;
 
 public class EnrollmentApiTest {
 
-    UserGet userESign, userSeal;
-    EnrollmentPost enrollmentPost;
+    private UserGet userESign, userSeal;
+    private EnrollmentPost enrollmentPost;
 
     @Before
     public void setUp() throws Exception {

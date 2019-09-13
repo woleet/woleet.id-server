@@ -4,8 +4,6 @@ import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
-import org.apache.http.HttpStatus;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
