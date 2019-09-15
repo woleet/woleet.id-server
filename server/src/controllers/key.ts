@@ -39,12 +39,19 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
  *  operationId: createExternalKey
  */
 export async function createExternalKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
-  const user = await User.getById(userId);
 
+  // Check that user exists.
+  const user = await User.getById(userId);
+  if (!user) {
+    throw new NotFoundUserError();
+  }
+
+  // Check that user is a esign user
   if (user.get('mode') === 'seal') {
     throw new Error('Cannot create an external key for a user in seal mode.');
   }
 
+  // Create and return a new external key.
   const holder: KeyHolderEnum = 'user';
   const newKey = await Key.create(Object.assign({}, key, {
     publicKey: key.publicKey,
@@ -60,19 +67,24 @@ export async function createExternalKey(userId: string, key: ApiPostKeyObject): 
  */
 export async function updateKey(id: string, attrs: ApiPutKeyObject) {
   const update: any = attrs;
-  const keyUpdated = await Key.getById(id);
 
-  // If the get is revoked the update is not available.
+  // Check key existence.
+  const keyUpdated = await Key.getById(id);
+  if (!keyUpdated) {
+    throw new NotFoundKeyError();
+  }
+
+  // If the key is revoked the update is not available.
   if (keyUpdated && keyUpdated.get('status') === 'revoked') {
     throw new RevokedKeyError();
   }
-  // During the revocation a new field with the revocation date should be added,
-  // the privatekey and the entropy is deleted if the user is a esign user.
-  // An email is sent to the admins.
-  if (attrs.status === 'revoked') {
+
+  // Upon revocation the revocation date is added and
+  // the private key and the entropy is deleted if the user is a esign user.
+  let user;
+  if (update.status === 'revoked') {
     const userId = await keyUpdated.get('userId');
-    const user = await User.getById(userId);
-    sendKeyRevocationEmail(user.toJSON(), keyUpdated.toJSON());
+    user = await User.getById(userId);
     update.revokedAt = Date.now();
     if (user.get('mode') !== 'seal') {
       update.privateKey = null;
@@ -81,9 +93,13 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
       update.mnemonicEntropyIV = null;
     }
   }
+
+  // Update the key.
   const key = await Key.update(id, update);
-  if (!key) {
-    throw new NotFoundKeyError();
+
+  // If the key is revoked and the update succeeded, send an email to the admins.
+  if (update.status === 'revoked') {
+    sendKeyRevocationEmail(user.toJSON(), keyUpdated.toJSON());
   }
 
   return key.toJSON();
@@ -124,7 +140,6 @@ export async function exportKey(id: string): Promise<string> {
 
   const entropy = Buffer.from(key.get('mnemonicEntropy'), 'hex');
   const entropyIV = Buffer.from(key.get('mnemonicEntropyIV'), 'hex');
-
   return secureModule.exportPhrase(entropy, entropyIV);
 }
 
@@ -139,17 +154,16 @@ export async function getAllKeysOfUser(userId: string, full = false): Promise<In
 }
 
 export async function deleteKey(id: string): Promise<InternalKeyObject> {
-
   const keyDeleted = await Key.getById(id);
-  if (keyDeleted && keyDeleted.get('status') === 'revoked') {
+  if (!keyDeleted) {
+    throw new NotFoundKeyError();
+  }
+
+  if (keyDeleted.get('status') === 'revoked') {
     throw new RevokedKeyError();
   }
 
   const key = await Key.delete(id);
-  if (!key) {
-    throw new NotFoundKeyError();
-  }
-
   return key.toJSON();
 }
 

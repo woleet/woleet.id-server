@@ -32,13 +32,11 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
   async update(id: string, attrs): Promise<Instance<TInstance>> {
     try {
       const up = await this.model.findById(id);
-
       if (!up) {
         return null;
       }
 
       await up.update(attrs);
-
       return up;
     } catch (err) {
       this.handleError(err);
@@ -62,13 +60,11 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
   async delete(id: string): Promise<Instance<TInstance>> {
     try {
       const up = await this.model.findById(id);
-
       if (!up) {
         return null;
       }
 
       await up.destroy();
-
       return up;
     } catch (err) {
       this.handleError(err);
@@ -79,13 +75,11 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
   async restore(id: string): Promise<Instance<TInstance>> {
     try {
       const up = await this.model.findById(id, { paranoid: false });
-
       if (!up) {
         return null;
       }
 
       await up.restore();
-
       return up;
     } catch (err) {
       this.handleError(err);
