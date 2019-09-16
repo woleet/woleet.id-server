@@ -102,6 +102,7 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
     sendKeyRevocationEmail(user.toJSON(), keyUpdated.toJSON());
   }
 
+  // Return the key.
   return key.toJSON();
 }
 
