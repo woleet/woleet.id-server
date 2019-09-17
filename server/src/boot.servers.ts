@@ -73,7 +73,8 @@ export function bootServers(): Promise<void> {
 
       app.use(errorHandler);
       if (production) {
-        app.use(morgan(':date[iso] :method :url :status (:res[content-length] b, :response-time ms, IP:[:req[x-forwarded-for]], UA:[:req[user-agent]], ref:[:referrer])'));
+        app.use(morgan(':date[iso] :method :url :status - :res[content-length] b, :response-time ms, '
+          + 'IP:[:req[x-forwarded-for]], UA:[:req[user-agent]], REF:[:referrer]'));
       } else {
         app.use(morgan('dev'));
       }
