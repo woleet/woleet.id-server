@@ -1,0 +1,51 @@
+<center>
+  <table align="center" height="100%" width="100%" border="0" cellpadding="0" cellspacing="0"
+    style="border-collapse:collapse;margin:0;padding:0;background-color:#eee;height:100%!important;width:100%!important">
+    <tbody>
+    <tr>
+      <td align="center" valign="top"
+        style="margin:0;padding:0;border-top:0;height:100%!important;width:100%!important">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+          <tbody>
+          <tr>
+            <td align="center" valign="top" style="padding:10px">
+              <a href="https://www.woleet.io" target="_blank">
+                <img src={{logoURL}} width="230" style="max-width:230px;padding-top:10px">
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div style="padding:10px">
+                <div style="background-color:#fff;color:#606060!important;padding:18px;
+                      max-width:600px;margin: auto;font-family: Helvetica">
+                  <span style="font-size: 24px;color: #aaa;">Key revocation</span><br><br>
+                  <div style="font-size: 15px;line-height: 150%;">
+                    {{#admin}}
+                    Hi {{userName}},<br><br>
+                    The key named <b>{{keyName}}</b> ({{keyId}}) owned by <b>{{userName}}</b> ({{userId}}) has been revoked.
+                    {{/admin}}
+                    {{^admin}}
+                    Hi {{userName}},<br><br>
+                    Your key named <b>{{keyName}}</b> have been revoked.
+                    <br><br>
+                    A revocation is permanent: your key can no longer be used nor deleted, but signatures made
+                    using this key before revocation are still valid.
+                    <br><br>
+                    If you need another key please ask your manager to create one or initiate a key registration.
+                    {{/admin}}
+                    <br><br>
+                  </div>
+                  <div style="color:#999;font-size:13px;line-height:150%;">
+                    Best regards,<br>
+                    The {{organizationName}} team.
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+</center>

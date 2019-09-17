@@ -59,6 +59,10 @@ public class KeyGet extends KeyBase {
   @SerializedName(SERIALIZED_NAME_EXPIRED)
   private Boolean expired;
 
+  public static final String SERIALIZED_NAME_REVOKED_AT = "revokedAt";
+  @SerializedName(SERIALIZED_NAME_REVOKED_AT)
+  private Long revokedAt;
+
   public static final String SERIALIZED_NAME_CREATED_AT = "createdAt";
   @SerializedName(SERIALIZED_NAME_CREATED_AT)
   private Long createdAt;
@@ -170,6 +174,24 @@ public class KeyGet extends KeyBase {
     this.expired = expired;
   }
 
+  public KeyGet revokedAt(Long revokedAt) {
+    this.revokedAt = revokedAt;
+    return this;
+  }
+
+   /**
+   * Key revocation date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no revocation date. 
+   * @return revokedAt
+  **/
+  @ApiModelProperty(example = "1569542400000", value = "Key revocation date (Unix ms timestamp). <br>Note that the field is not returned if the key has no revocation date. ")
+  public Long getRevokedAt() {
+    return revokedAt;
+  }
+
+  public void setRevokedAt(Long revokedAt) {
+    this.revokedAt = revokedAt;
+  }
+
    /**
    * Date of creation (Unix ms timestamp).
    * @return createdAt
@@ -213,6 +235,7 @@ public class KeyGet extends KeyBase {
         Objects.equals(this.holder, keyGet.holder) &&
         Objects.equals(this.device, keyGet.device) &&
         Objects.equals(this.expired, keyGet.expired) &&
+        Objects.equals(this.revokedAt, keyGet.revokedAt) &&
         Objects.equals(this.createdAt, keyGet.createdAt) &&
         Objects.equals(this.updatedAt, keyGet.updatedAt) &&
         Objects.equals(this.lastUsed, keyGet.lastUsed) &&
@@ -221,7 +244,7 @@ public class KeyGet extends KeyBase {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, pubKey, type, holder, device, expired, createdAt, updatedAt, lastUsed, super.hashCode());
+    return Objects.hash(id, pubKey, type, holder, device, expired, revokedAt, createdAt, updatedAt, lastUsed, super.hashCode());
   }
 
 
@@ -236,6 +259,7 @@ public class KeyGet extends KeyBase {
     sb.append("    holder: ").append(toIndentedString(holder)).append("\n");
     sb.append("    device: ").append(toIndentedString(device)).append("\n");
     sb.append("    expired: ").append(toIndentedString(expired)).append("\n");
+    sb.append("    revokedAt: ").append(toIndentedString(revokedAt)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    lastUsed: ").append(toIndentedString(lastUsed)).append("\n");

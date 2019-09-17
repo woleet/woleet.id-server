@@ -71,6 +71,10 @@ export class AuthService {
     return this.isAuthenticated() && this.user.role === 'admin';
   }
 
+  isManager(): boolean {
+    return this.isAuthenticated() && this.user.role === 'manager';
+  }
+
   openid() {
     redirectForOIDC();
   }

@@ -9,7 +9,7 @@
     <div>
       <div *ngIf="(userList$ | async) as users; else loading">
         <mat-form-field class="w-100">
-          <mat-select type="text" name="userId" placeholder="Select a user (to limit token to user's keys)" [formControl]="apiTokenUserId">
+          <mat-select type="text" name="userId" placeholder="Select a user (to limit token to user's keys)" [formControl]="apiTokenUserId" [required]="!isAdmin()">
             <mat-option *ngFor="let user of users" [value]="user.id">{{ user.identity.commonName }}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -18,7 +18,7 @@
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="createAPIToken()"
-      [disabled]="apiTokenName.invalid || formLocked">CREATE</button>
+      [disabled]="apiTokenName.invalid || apiTokenUserId.invalid || formLocked">CREATE</button>
     <button mat-button (click)="cancelAPIToken()">CANCEL</button>
   </mat-card-actions>
 </mat-card>

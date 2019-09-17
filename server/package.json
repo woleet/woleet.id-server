@@ -33,7 +33,7 @@
     "mocha": "^5.2.0",
     "supertest": "^3.4.2",
     "ts-node": "^6.2.0",
-    "ts-node-dev": "^1.0.0-pre.32",
+    "ts-node-dev": "^1.0.0-pre.42",
     "tslint": "^5.14.0",
     "typescript": "^3.3.4000"
   },
@@ -59,7 +59,7 @@
     "pg-hstore": "^2.3.2",
     "read": "^1.0.7",
     "rxjs": "^6.5.2",
-    "sequelize": "^4.44.0",
+    "sequelize": "^4.44.3",
     "timestring": "^6.0.0"
   }
 }

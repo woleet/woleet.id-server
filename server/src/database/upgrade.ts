@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize';
 import * as log from 'loglevel';
 import * as read from 'read';
 import * as crypto from 'crypto';
-import { APIToken, Key, ServerConfig } from '.';
+import { APIToken, Key, User, ServerConfig } from '.';
 import { secretEnvVariableName, secureModule, serverConfig } from '../config';
 import { promisify } from 'util';
 
@@ -283,7 +283,74 @@ async function upgrade13(sequelize) {
   if (config.version < 13) {
     log.warn('Need to add "userId" column to the "apiToken" table');
     const userId = await sequelize.query(`ALTER TABLE "apiTokens" ADD COLUMN "userId" UUID;`);
+    log.debug(userId);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 13 }) });
+  }
+}
+
+async function upgrade14(sequelize) {
+  log.warn('Checking for  update 5 of the "keys" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+  const { config } = cfg.toJSON();
+  if (config.version < 14) {
+    log.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
+    const editKeysStatusEvent = await sequelize.query(`ALTER TYPE "enum_keys_status" ADD VALUE 'revoked';`);
+    log.debug(editKeysStatusEvent);
+    const keyRevokedAt = await sequelize.query(`ALTER TABLE "keys" ADD COLUMN "revokedAt" TIMESTAMPTZ;`);
+    log.debug(keyRevokedAt);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 14 }) });
+  }
+}
+
+async function upgrade15(sequelize) {
+  log.warn('Checking for update 3 of the "users" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 15) {
+    log.warn('Need to add the mode enum in "users" table');
+    const enum_users_type = await sequelize.query(`CREATE TYPE "enum_users_mode" AS ENUM ('seal', 'esign');`);
+    log.debug(enum_users_type);
+    log.warn('Need to add "type" column to the "users" table');
+    const users_type = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "mode" enum_users_mode;`);
+    log.debug(users_type);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 15 }) });
+    await Key.model.sync();
+    const users = await User.model.findAll({ paranoid: false });
+
+    log.warn(`${users.length} users to update...`);
+
+    for (const user of users) {
+      log.warn(`Updating key ${user.get('id')} ...`);
+      user.set('mode', 'seal');
+      await user.save();
+      log.debug(`Updated key ${user.get('id')}`);
+    }
+  }
+}
+
+async function upgrade16(sequelize) {
+  log.warn('Checking for update 4 of the "users" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const { config } = cfg.toJSON();
+  if (config.version < 16) {
+    log.warn('Need to add "manager" enums to the "enum_users_role" table');
+    const userManager = await sequelize.query(`ALTER TYPE "enum_users_role" ADD VALUE 'manager';`);
+    log.debug(userManager);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 16 }) });
   }
 }
 
@@ -301,6 +368,9 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade11(sequelize);
   await upgrade12(sequelize);
   await upgrade13(sequelize);
+  await upgrade14(sequelize);
+  await upgrade15(sequelize);
+  await upgrade16(sequelize);
 }
 
 async function postUpgrade3() {

@@ -61,9 +61,15 @@ router.get('/user/:pubKey', vaddr, async function (ctx) {
  *  operationId: discoverUser
  */
 router.get('/user', async function (ctx) {
-  const userId = ctx.token.userId;
+  const token = ctx.token;
+
+  const userId = token.userId;
+  if (userId) {
   const user = await getUserById(userId);
   ctx.body = serializeUser(user, false);
+} else {
+  ctx.body = null;
+}
 });
 
 

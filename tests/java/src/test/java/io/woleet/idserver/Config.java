@@ -1,6 +1,7 @@
 package io.woleet.idserver;
 
 import io.woleet.idserver.api.AuthenticationApi;
+import io.woleet.idserver.api.EnrollmentApi;
 import io.woleet.idserver.api.UserApi;
 import io.woleet.idserver.api.model.*;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -167,20 +168,34 @@ public class Config {
      * @param userApi User API to use to create the user
      * @return a user
      */
-    private static UserGet createTestUser(UserApi userApi) throws ApiException {
+    public static UserGet createTestUser(UserApi userApi, UserRoleEnum userRoleEnum, UserModeEnum userMoleEnum) throws ApiException {
         UserPost userPost = new UserPost();
         String USERNAME = randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
-        userPost.email(EMAIL).username(USERNAME).role(UserRoleEnum.USER).status(UserStatusEnum.ACTIVE);
+        userPost.email(EMAIL).username(USERNAME).role(userRoleEnum).status(UserStatusEnum.ACTIVE);
         userPost.password("pass");
+        userPost.setMode(userMoleEnum);
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity.commonName(randomCommonName());
+        fullIdentity.organization("WOLEET SAS");
         userPost.setCreateDefaultKey(true);
         return userApi.createUser((UserPost) userPost.identity(fullIdentity));
     }
 
     public static UserGet createTestUser() throws ApiException {
-        return createTestUser(new UserApi(getAdminAuthApiClient()));
+        return createTestUser(new UserApi(getAdminAuthApiClient()), UserRoleEnum.USER, UserModeEnum.SEAL);
+    }
+
+    public static UserGet createTestUser(UserRoleEnum userRoleEnum) throws ApiException {
+        return createTestUser(new UserApi(getAdminAuthApiClient()), userRoleEnum, UserModeEnum.SEAL);
+    }
+
+    public static UserGet createTestUser(UserModeEnum userModeEnum) throws ApiException {
+        return createTestUser(new UserApi(getAdminAuthApiClient()), UserRoleEnum.USER, userModeEnum);
+    }
+
+    public static UserGet createTestUser(UserRoleEnum userRoleEnum, UserModeEnum userMoleEnum) throws ApiException {
+        return createTestUser(new UserApi(getAdminAuthApiClient()), userRoleEnum, userMoleEnum);
     }
 
     /**
@@ -194,7 +209,7 @@ public class Config {
     public static boolean isValidSignature(String address, String signature, String message) {
         try {
             return ECKey.signedMessageToKey(message, signature).toAddress(Address.fromBase58(null, address)
-                    .getParameters()).toString().equals(address);
+                .getParameters()).toString().equals(address);
         }
         catch (Exception e) {
             return false;

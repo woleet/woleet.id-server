@@ -65,10 +65,6 @@ public class UserBase {
   @SerializedName(SERIALIZED_NAME_IDENTITY)
   private FullIdentity identity = null;
 
-  public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
-  @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
-  private UUID defaultKeyId;
-
    /**
    * User identifier (allocated by the server).
    * @return id
@@ -204,24 +200,6 @@ public class UserBase {
     this.identity = identity;
   }
 
-  public UserBase defaultKeyId(UUID defaultKeyId) {
-    this.defaultKeyId = defaultKeyId;
-    return this;
-  }
-
-   /**
-   * Identifier of the default key to use to sign for this user (cannot be the an external key).
-   * @return defaultKeyId
-  **/
-  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use to sign for this user (cannot be the an external key).")
-  public UUID getDefaultKeyId() {
-    return defaultKeyId;
-  }
-
-  public void setDefaultKeyId(UUID defaultKeyId) {
-    this.defaultKeyId = defaultKeyId;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -239,13 +217,12 @@ public class UserBase {
         Objects.equals(this.phone, userBase.phone) &&
         Objects.equals(this.status, userBase.status) &&
         Objects.equals(this.role, userBase.role) &&
-        Objects.equals(this.identity, userBase.identity) &&
-        Objects.equals(this.defaultKeyId, userBase.defaultKeyId);
+        Objects.equals(this.identity, userBase.identity);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, email, username, countryCallingCode, phone, status, role, identity, defaultKeyId);
+    return Objects.hash(id, email, username, countryCallingCode, phone, status, role, identity);
   }
 
 
@@ -262,7 +239,6 @@ public class UserBase {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("    identity: ").append(toIndentedString(identity)).append("\n");
-    sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -32,7 +32,9 @@ public enum UserRoleEnum {
   
   USER("user"),
   
-  ADMIN("admin");
+  ADMIN("admin"),
+  
+  MANAGER("manager");
 
   private String value;
 

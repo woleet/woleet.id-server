@@ -2,6 +2,7 @@ import {
   AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output
 } from '@angular/core';
 import { UserService } from '@services/user';
+import { AuthService } from '@services/auth';
 import { Router } from '@angular/router';
 import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -65,6 +66,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   sendPasswordEmail = false;
   createDefaultKey = true;
+  userMode: UserModeEnum = 'seal';
 
   @Input()
   mode: 'create' | 'edit';
@@ -96,7 +98,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   private onDestroy: EventEmitter<void>;
 
-  constructor(private service: UserService, private router: Router, private configService: ConfigService, private cdr: ChangeDetectorRef) {
+  constructor(private service: UserService, private router: Router, private configService: ConfigService, private cdr: ChangeDetectorRef,
+    private authService: AuthService) {
     super();
     this.onDestroy = new EventEmitter();
   }
@@ -146,6 +149,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     }));
     if (this.mode === 'edit') {
       this.form = this.setFormControl(copy<ApiUserObject>(this.user));
+      this.userMode = this.user.mode;
     } else {
       this.form = this.setFormControl({ role: 'user', identity: {} });
     }
@@ -188,6 +192,10 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         .then((up) => this.submitSucceed.emit(up));
     } else {
       user.createDefaultKey = this.createDefaultKey;
+      user.mode = this.userMode;
+      if (this.sendPasswordEmail) {
+        user.password = null;
+      }
       const cleaned: any = addedDiff({}, cleanupObject(user));
       log.debug(cleaned, user);
 
@@ -230,9 +238,14 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   sendPasswordEmailCheck() {
     this.sendPasswordEmail = !this.sendPasswordEmail;
+    this.sendPasswordEmail ? this.form.get('password').disable() : this.form.get('password').enable();
+  }
+
+  isAdmin() {
+    return this.authService.isAdmin();
   }
 
   canSendEmailToUser(): Boolean {
-    return this.enableSMTP && this.webClientURL && this.form.get('email').valid;
+    return this.enableSMTP && this.webClientURL && this.form.get('email').valid && !!this.form.get('email').value;
   }
 }

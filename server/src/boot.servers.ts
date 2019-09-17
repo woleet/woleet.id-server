@@ -124,7 +124,7 @@ export async function bootOIDCProvider(): Promise<void> {
       });
 
       server.on('error', (err) => {
-        log.error('OIDCP server encountered an error, it will be disabled as a precaution! Please check your configuration');
+        log.error('OIDCP server encountered an error, it will be disabled as a precaution! Please check your configuration.');
         if (resolved) {
           return exit(`Open ID Connect Provider's server encountered an error: ${err.message}`, err);
         } else {

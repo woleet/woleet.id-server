@@ -6,7 +6,9 @@ import {
   createAPIToken, deleteAPIToken, getAllAPITokens, getAPITokenById, updateAPIToken
 } from '../../controllers/api-token';
 import { serializeAPIToken } from '../serialize/api-token';
+import { getUserById } from '../../controllers/user';
 import { store as event } from '../../controllers/server-event';
+import { Unauthorized } from 'http-errors';
 
 const vid = validate.param('id', 'uuid');
 
@@ -35,6 +37,11 @@ const router = new Router({ prefix: '/api-token' });
  */
 router.post('/', validate.body('createApiToken'), async function (ctx) {
   const token: ApiPostAPITokenObject = ctx.request.body;
+
+  const authorizedUser = await getUserById(ctx.session.user.get('id'));
+  if (!token.userId && authorizedUser.role !== 'admin') {
+    throw new Unauthorized('Only admin can create other admin token.');
+  }
 
   const created = await createAPIToken(token);
 

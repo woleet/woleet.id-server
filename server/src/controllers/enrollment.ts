@@ -10,6 +10,7 @@ import { sendEnrollmentFinalizeEmail, sendKeyEnrollmentEmail } from './send-emai
 import * as timestring from 'timestring';
 import { getAgent } from './utils/agent';
 import * as log from 'loglevel';
+import { BadRequest } from 'http-errors';
 
 const TCUPath = path.join(__dirname, '../../assets/custom_TCU.pdf');
 
@@ -30,6 +31,12 @@ export async function createEnrollment(enrollment: ApiPostEnrollmentObject): Pro
   if (!user) {
     throw new NotFoundUserError();
   }
+
+  // Verify that the expiration date is not a seal user
+  if (user.get('mode') === 'seal') {
+    throw new BadRequest('Cannot enroll a seal user.');
+  }
+
   const expiration = !!getServerConfig().enrollmentExpirationOffset ?
     Date.now() + timestring(getServerConfig().enrollmentExpirationOffset) * 1000 :
     null;

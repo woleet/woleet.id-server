@@ -158,9 +158,9 @@ public abstract class CRUDApiTest {
         final MetricRegistry metricsRegistry = new MetricRegistry();
         final Meter rate = metricsRegistry.meter("rate");
         final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricsRegistry)
-                .convertRatesTo(TimeUnit.SECONDS)
-                .convertDurationsTo(TimeUnit.MILLISECONDS)
-                .build();
+            .convertRatesTo(TimeUnit.SECONDS)
+            .convertDurationsTo(TimeUnit.MILLISECONDS)
+            .build();
 
         // Start reporting metrics every second
         reporter.start(1, TimeUnit.SECONDS);
@@ -171,10 +171,10 @@ public abstract class CRUDApiTest {
         apiClient.getHttpClient().getDispatcher().setMaxRequestsPerHost(MAX_CONCURRENT_REQUESTS);
         apiClient.getHttpClient().getDispatcher().setMaxRequests(MAX_CONCURRENT_REQUESTS);
         ExecutorService executor = new ThreadPoolExecutor(
-                MAX_THREADS, MAX_THREADS,
-                1000L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(MAX_THREADS),
-                new ThreadPoolExecutor.CallerRunsPolicy());
+            MAX_THREADS, MAX_THREADS,
+            1000L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>(MAX_THREADS),
+            new ThreadPoolExecutor.CallerRunsPolicy());
 
         // Start benchmark
         long startTime = System.currentTimeMillis();
