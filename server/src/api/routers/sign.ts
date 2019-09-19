@@ -7,6 +7,7 @@ import { store as event } from '../../controllers/server-event';
 
 import { getServerConfig } from '../../controllers/server-config';
 import { Context } from 'koa';
+import { getUserById } from '../../controllers/user';
 
 const vuuid = validate.raw('uuid');
 const vhash = validate.raw('sha256');
@@ -37,8 +38,8 @@ async function getSignature(ctx: Context) {
     throw new BadRequest('Invalid query parameter "userId"');
   }
 
-  if (token.type === 'oauth' && query.userId && token.userId !== query.userId) {
-    throw new Unauthorized('Cannot sign for another user with an OAuth token');
+  if (query.userId && token.userId && (token.userId !== query.userId)) {
+    throw new Unauthorized('Cannot sign for another user.');
   }
 
   if (query.pubKey && !(await vaddr(query.pubKey))) {
@@ -50,6 +51,10 @@ async function getSignature(ctx: Context) {
     _userId = token.userId;
   } else if (query.userId) {
     _userId = query.userId;
+    const user = await getUserById(_userId);
+    if (user.mode === 'esign') {
+      throw new Unauthorized('Cannot use e-signature with an admin token.');
+    }
   }
 
   const { signature, pubKey, userId, keyId, signedHash } = await sign(Object.assign({}, query, { userId: _userId }));

@@ -45,7 +45,9 @@ public class Key {
   public enum StatusEnum {
     VALID("valid"),
     
-    EXPIRED("expired");
+    EXPIRED("expired"),
+    
+    REVOKED("revoked");
 
     private String value;
 
@@ -92,6 +94,10 @@ public class Key {
   public static final String SERIALIZED_NAME_EXPIRATION = "expiration";
   @SerializedName(SERIALIZED_NAME_EXPIRATION)
   private Long expiration;
+
+  public static final String SERIALIZED_NAME_REVOKED_AT = "revokedAt";
+  @SerializedName(SERIALIZED_NAME_REVOKED_AT)
+  private Long revokedAt;
 
   public Key name(String name) {
     this.name = name;
@@ -165,6 +171,24 @@ public class Key {
     this.expiration = expiration;
   }
 
+  public Key revokedAt(Long revokedAt) {
+    this.revokedAt = revokedAt;
+    return this;
+  }
+
+   /**
+   * Key revocation date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no revocation date. 
+   * @return revokedAt
+  **/
+  @ApiModelProperty(example = "1569542400000", value = "Key revocation date (Unix ms timestamp). <br>Note that the field is not returned if the key has no revocation date. ")
+  public Long getRevokedAt() {
+    return revokedAt;
+  }
+
+  public void setRevokedAt(Long revokedAt) {
+    this.revokedAt = revokedAt;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -178,12 +202,13 @@ public class Key {
     return Objects.equals(this.name, key.name) &&
         Objects.equals(this.pubKey, key.pubKey) &&
         Objects.equals(this.status, key.status) &&
-        Objects.equals(this.expiration, key.expiration);
+        Objects.equals(this.expiration, key.expiration) &&
+        Objects.equals(this.revokedAt, key.revokedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, pubKey, status, expiration);
+    return Objects.hash(name, pubKey, status, expiration, revokedAt);
   }
 
 
@@ -196,6 +221,7 @@ public class Key {
     sb.append("    pubKey: ").append(toIndentedString(pubKey)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    expiration: ").append(toIndentedString(expiration)).append("\n");
+    sb.append("    revokedAt: ").append(toIndentedString(revokedAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

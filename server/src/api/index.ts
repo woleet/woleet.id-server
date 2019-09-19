@@ -13,7 +13,7 @@ import { router as sign } from './routers/sign';
 import { router as identity } from './routers/identity';
 import { router as discovery } from './routers/discovery';
 import { router as openid } from './routers/openid';
-import { admin as adminAuth, session, user as userAuth } from './authentication';
+import { admin as adminAuth, session, user as userAuth, manager as managerAuth } from './authentication';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 
@@ -30,13 +30,14 @@ apiRouter.use(passwordReset.routes());
 apiRouter.use(enrollmentPublic.routes());
 apiRouter.use(userAuth);
 apiRouter.use(info.routes());
-apiRouter.use(adminAuth);
+apiRouter.use(managerAuth);
 apiRouter.use(user.routes());
 apiRouter.use(key.routes());
-apiRouter.use(apiToken.routes());
-apiRouter.use(serverEvent.routes());
-apiRouter.use(serverConfig.routes());
 apiRouter.use(enrollmentAdmin.routes());
+apiRouter.use(serverConfig.routes());
+apiRouter.use(apiToken.routes());
+apiRouter.use(adminAuth);
+apiRouter.use(serverEvent.routes());
 
 /**
  * Identity

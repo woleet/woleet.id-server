@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import { Name } from './misc';
 
-const keyStatusEnum = ['active', 'blocked'];
+const keyStatusEnum = ['active', 'blocked', 'revoked'];
 const keyDeviceEnum = ['server', 'mobile', 'nano'];
 
 const createKey = Joi.object().keys({

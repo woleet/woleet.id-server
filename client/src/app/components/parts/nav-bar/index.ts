@@ -52,6 +52,10 @@ export class NavBarComponent {
     return this.authService.isAdmin();
   }
 
+  isManager() {
+    return this.authService.isManager();
+  }
+
   collapseSideBar() {
     this.opened = !this.opened;
   }

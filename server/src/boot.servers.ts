@@ -6,7 +6,10 @@ import * as cors from '@koa/cors';
 import { errorHandler } from './api/error';
 import { build as oidcProviderAppFactory } from './api/oidcp-app';
 import {
-  getActiveServer, isInitialized as isOIDCPInitialized, setActiveServer, stopOIDCProvider
+  getActiveServer,
+  isInitialized as isOIDCPInitialized,
+  setActiveServer,
+  stopOIDCProvider
 } from './controllers/oidc-provider';
 import { definitions } from './apps';
 import { exit } from './exit';
@@ -70,7 +73,8 @@ export function bootServers(): Promise<void> {
 
       app.use(errorHandler);
       if (production) {
-        app.use(morgan(':date[iso] :method :url :status (:res[content-length] b, :response-time ms, IP :remote-addr, ref. :referrer)'));
+        app.use(morgan(':date[iso] :method :url :status - :res[content-length] b, :response-time ms, '
+          + 'IP:[:req[x-forwarded-for]], UA:[:req[user-agent]], REF:[:referrer]'));
       } else {
         app.use(morgan('dev'));
       }
@@ -124,7 +128,7 @@ export async function bootOIDCProvider(): Promise<void> {
       });
 
       server.on('error', (err) => {
-        log.error('OIDCP server encountered an error, it will be disabled as a precaution! Please check your configuration');
+        log.error('OIDCP server encountered an error, it will be disabled as a precaution! Please check your configuration.');
         if (resolved) {
           return exit(`Open ID Connect Provider's server encountered an error: ${err.message}`, err);
         } else {

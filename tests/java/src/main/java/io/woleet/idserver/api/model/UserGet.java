@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.woleet.idserver.api.model.FullIdentity;
 import io.woleet.idserver.api.model.UserBase;
+import io.woleet.idserver.api.model.UserModeEnum;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
 import java.io.IOException;
@@ -45,6 +46,10 @@ public class UserGet extends UserBase {
   public static final String SERIALIZED_NAME_LAST_LOGIN = "lastLogin";
   @SerializedName(SERIALIZED_NAME_LAST_LOGIN)
   private Long lastLogin;
+
+  public static final String SERIALIZED_NAME_MODE = "mode";
+  @SerializedName(SERIALIZED_NAME_MODE)
+  private UserModeEnum mode = null;
 
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
@@ -77,16 +82,34 @@ public class UserGet extends UserBase {
     return lastLogin;
   }
 
+  public UserGet mode(UserModeEnum mode) {
+    this.mode = mode;
+    return this;
+  }
+
+   /**
+   * Get mode
+   * @return mode
+  **/
+  @ApiModelProperty(value = "")
+  public UserModeEnum getMode() {
+    return mode;
+  }
+
+  public void setMode(UserModeEnum mode) {
+    this.mode = mode;
+  }
+
   public UserGet defaultKeyId(UUID defaultKeyId) {
     this.defaultKeyId = defaultKeyId;
     return this;
   }
 
    /**
-   * Identifier of the default key to use to sign for this user (cannot be the an external key).
+   * Identifier of the default key to use to sign for this user (cannot be the an external key nor a e-signature key).
    * @return defaultKeyId
   **/
-  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use to sign for this user (cannot be the an external key).")
+  @ApiModelProperty(example = "c7c6e0de-2acb-4311-80b4-17dbf0b76806", value = "Identifier of the default key to use to sign for this user (cannot be the an external key nor a e-signature key).")
   public UUID getDefaultKeyId() {
     return defaultKeyId;
   }
@@ -108,13 +131,14 @@ public class UserGet extends UserBase {
     return Objects.equals(this.createdAt, userGet.createdAt) &&
         Objects.equals(this.updatedAt, userGet.updatedAt) &&
         Objects.equals(this.lastLogin, userGet.lastLogin) &&
+        Objects.equals(this.mode, userGet.mode) &&
         Objects.equals(this.defaultKeyId, userGet.defaultKeyId) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(createdAt, updatedAt, lastLogin, defaultKeyId, super.hashCode());
+    return Objects.hash(createdAt, updatedAt, lastLogin, mode, defaultKeyId, super.hashCode());
   }
 
 
@@ -126,6 +150,7 @@ public class UserGet extends UserBase {
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");
+    sb.append("    mode: ").append(toIndentedString(mode)).append("\n");
     sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("}");
     return sb.toString();

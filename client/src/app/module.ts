@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MAT_DIALOG_DEFAULT_OPTIONS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
   MatIconModule, MatInputModule, MatListModule, MatNativeDateModule, MatRippleModule, MatSelectModule, MatSidenavModule,
-  MatStepperModule, MatTabsModule, MatToolbarModule, MatTooltipModule
+  MatStepperModule, MatTabsModule, MatToolbarModule, MatTooltipModule, MatRadioModule
 } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { AppComponent } from '@parts/main';
@@ -47,7 +47,7 @@ import { EnrollmentPageComponent } from '@pages/enrollment';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
 import {
-  AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService
+  AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService, ManagerGuardService
 } from '@guards/auth';
 import { ExternalKeyService, KeyService } from '@services/key';
 import { UserService } from '@services/user';
@@ -76,6 +76,7 @@ import { ConfigProofDeskComponent } from '@components/parts/config.proofdesk';
 import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 import { ConfigEnrollmentExpirationComponent } from '@parts/config.enrollment-expiration';
+import { UserFilterPipe } from '@services/pipe/userFilter';
 
 export function startupServiceFactory(appConfigService: AppConfigService): Function {
   return () => appConfigService.loadConfig();
@@ -130,7 +131,8 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     ConfigTCUComponent,
     ConfigBlockPasswordInputComponent,
     DialogResetPasswordComponent,
-    DialogMailResetComponent
+    DialogMailResetComponent,
+    UserFilterPipe
   ],
   entryComponents: [
     DialogResetPasswordComponent,
@@ -149,6 +151,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     FormsModule,
     ReactiveFormsModule,
     MatTabsModule,
+    MatRadioModule,
 
     // http
     HttpClientModule,
@@ -187,7 +190,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
       multi: true
     },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },
-    AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService,
+    AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, ManagerGuardService,
     NeedConfigGuardService, KeyService, ExternalKeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, EnrollmentService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
     NetworkErrorInterceptorService, AllowCredentialsInterceptorService, LocalStorageService

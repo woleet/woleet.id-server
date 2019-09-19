@@ -51,7 +51,7 @@ export class LoginPageComponent {
       if (this.redirect) {
         redirectForOIDCProvider(this.store, this.config, this.redirect);
       } else {
-        if (user.role === 'admin') {
+        if (user.role === 'admin' || user.role === 'manager') {
           this.router.navigate(['users']);
         } else {
           this.router.navigate([mainRoute]);
