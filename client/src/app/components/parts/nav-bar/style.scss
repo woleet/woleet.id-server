@@ -1,6 +1,6 @@
 $mat-list-item-height: 36px;
 $nav-top-height: 48px;
-$side-nav-width: 200px;
+$side-nav-width: 220px;
 $nav-bg: #1d2939;
 $nav-border: 1px solid #e0e0e0;
 
@@ -70,6 +70,12 @@ mat-sidenav-container {
     i {
       float: left;
       margin: 5px 15px 0;
+    }
+
+    img {
+      float: left;
+      margin: -5px 9px 0;
+      height: $mat-list-item-height;
     }
 
     span {

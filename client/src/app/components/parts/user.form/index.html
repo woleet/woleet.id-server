@@ -91,26 +91,6 @@
       </mat-card-content>
     </div>
   </form>
-  <div *ngIf="mode === 'create'">
-    <div *ngIf="form; else loading" fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="40px">
-      <mat-checkbox matInput [(ngModel)]="createDefaultKey">
-        Create a default key pair
-      </mat-checkbox>
-      <mat-radio-group aria-label="Choose the user mode" fxLayout="column" fxLayoutGap="10px" [(ngModel)]="userMode">
-        <mat-radio-button fxLayout="column"
-          [matTooltip]="'This mode allows the server to use the private key to automatically sign and prove the ownership of this key'"
-          value="seal">
-          Seal
-        </mat-radio-button>
-        <mat-radio-button fxLayout="column"
-          [matTooltip]="'This mode prevents the server from using the private key without the user consent'"
-          value="esign">
-          E-Signature
-        </mat-radio-button>
-      </mat-radio-group>
-    </div>
-    <br>
-  </div>
   <div *ngIf="helper">
     <mat-card class="error-card">{{ helper }}</mat-card>
     <br>

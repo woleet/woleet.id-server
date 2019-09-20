@@ -1,21 +1,30 @@
 <div *ngIf="(users$ | async) as users; else loadingusers">
   <div *ngIf="users.length; else nousers">
-    <div *ngIf="!formOpened">
-      <button mat-raised-button color="primary" (click)="formOpened=true">ADD USER</button>
+    <div *ngIf="!formOpened" fxLayout="row" fxLayoutGap="20px">
+      <div fxLayout="column">
+        <button mat-raised-button color="primary" (click)="formOpened=true">ADD SEAL</button>
+      </div>
+      <div fxLayout="column">
+        <span>
+          Seal identity serve to identify the origin (i.e. company, department, service, etc.) of an electronic
+          seal.<br>
+          An electronic seal is a signature performed by a technical entity or a legal person.
+        </span>
+      </div>
     </div>
     <div *ngIf="formOpened">
-      <create-edit-user mode="create" (create)="refreshUserList()" (submitSucceed)="formOpened=false; refreshUserList()"
-        (cancel)="formOpened=false"></create-edit-user>
+      <create-edit-user mode="create" userMode="seal" (create)="refreshUserList()"
+        (submitSucceed)="formOpened=false; refreshUserList()" (cancel)="formOpened=false"></create-edit-user>
     </div>
     <br>
     <mat-divider></mat-divider>
     <br>
-    <div *ngFor="let user of users; trackBy: trackById;">
+    <div *ngFor="let user of users  | userfilter:filterUserSeal; trackBy: trackById;">
       <app-user-card *ngIf="(user.role === 'admin' && isAdmin()) || user.role !== 'admin'" [user]="user"
         [modes]="['block', 'detail', 'delete', 'edit']" (delete)="refreshUserList()">
       </app-user-card>
-      <app-user-card *ngIf="(user.role === 'admin' && isManager())" [user]="user"
-        [modes]="['detail']" (delete)="refreshUserList()">
+      <app-user-card *ngIf="(user.role === 'admin' && isManager())" [user]="user" [modes]="['detail']"
+        (delete)="refreshUserList()">
       </app-user-card>
       <br>
     </div>

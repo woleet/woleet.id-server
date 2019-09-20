@@ -4,14 +4,15 @@ import { AuthService } from '@services/auth';
 import { TrackById } from '@components/util';
 
 @Component({
-  templateUrl: './index.html',
-  styleUrls: ['./style.scss']
+  templateUrl: './index.html'
 })
-export class UserListPageComponent extends TrackById implements OnInit {
+export class SealIdentityListPageComponent extends TrackById implements OnInit {
 
   formOpened = false;
 
   users$: Promise<ApiUserObject[]>;
+
+  filterUserSeal = { mode: 'seal' };
 
   constructor(private service: UserService, private authService: AuthService) {
     super();

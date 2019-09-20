@@ -67,7 +67,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   sendPasswordEmail = false;
   createDefaultKey = true;
-  userMode: UserModeEnum = 'seal';
 
   @Input()
   mode: 'create' | 'edit';
@@ -75,6 +74,9 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   // Only set for edition
   @Input()
   user: ApiUserObject;
+
+  @Input()
+  userMode: UserModeEnum;
 
   @Output()
   submitSucceed = new EventEmitter<ApiUserObject>();

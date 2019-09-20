@@ -11,7 +11,8 @@ import { APITokensPageComponent } from '@pages/api-tokens';
 import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
 import { SettingsPageComponent } from '@pages/settings';
-import { UserListPageComponent } from '@pages/user.list';
+import { UserIdentityListPageComponent } from '@pages/user-identity.list';
+import { SealIdentityListPageComponent } from '@pages/seal-identity.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ErrorPageComponent } from '@components/pages/error';
 import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
@@ -72,7 +73,13 @@ const routes: Routes = [
   {
     path: 'users',
     data: { title: 'Users' },
-    component: UserListPageComponent,
+    component: UserIdentityListPageComponent,
+    canActivate: [IsManager]
+  },
+  {
+    path: 'seals',
+    data: { title: 'Seals' },
+    component: SealIdentityListPageComponent,
     canActivate: [IsManager]
   },
   {
