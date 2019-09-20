@@ -1847,7 +1847,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/KeyPut'
-      description: Replacement key object.
+      description: Key object to update.
       required: true
     APITokenPost:
       content:
@@ -1861,14 +1861,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APITokenPut'
-      description: Replacement API token object.
+      description: API token object to update.
       required: true
     ServerConfig:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ServerConfig'
-      description: Replacement server config object.
+      description: Server config object.
       required: true
     EnrollmentPost:
       content:
