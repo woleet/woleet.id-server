@@ -213,7 +213,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
             }
           }
           return this.submitSucceed.emit(up);
-        }).then(() => this.router.navigate(['/users']));
+        });
     }
     await promise
       .catch((err: HttpErrorResponse) => {
