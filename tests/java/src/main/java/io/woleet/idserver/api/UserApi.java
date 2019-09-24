@@ -303,12 +303,24 @@ public class UserApi {
     }
     /**
      * Build call for getAllUsers
+     * @param mode Filter the user mode. (optional)
+     * @param role Filter the user role. (optional)
+     * @param commonName Filter the user X500 common name. (optional)
+     * @param organization Filter the user X500 organization. (optional)
+     * @param organizationalUnit Filter the user X500 organizational unit. (optional)
+     * @param locality Filter the user X500 locality. (optional)
+     * @param country Filter the user X500 country. (optional)
+     * @param userId Filter the user X500 organization. (optional)
+     * @param email Filter the user email. (optional)
+     * @param status Filter the user status. (optional)
+     * @param countryCallingCode Filter the user country calling code. (optional)
+     * @param phone Filter the user phone. (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call getAllUsersCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call getAllUsersCall(String mode, String role, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String email, String status, String countryCallingCode, String phone, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = new Object();
 
         // create path and map variables
@@ -316,6 +328,54 @@ public class UserApi {
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        if (mode != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("mode", mode));
+        }
+
+        if (role != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("role", role));
+        }
+
+        if (commonName != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("commonName", commonName));
+        }
+
+        if (organization != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("organization", organization));
+        }
+
+        if (organizationalUnit != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("organizationalUnit", organizationalUnit));
+        }
+
+        if (locality != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("locality", locality));
+        }
+
+        if (country != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("country", country));
+        }
+
+        if (userId != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("userId", userId));
+        }
+
+        if (email != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("email", email));
+        }
+
+        if (status != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("status", status));
+        }
+
+        if (countryCallingCode != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("countryCallingCode", countryCallingCode));
+        }
+
+        if (phone != null) {
+            localVarQueryParams.addAll(apiClient.parameterToPair("phone", phone));
+        }
+
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
         final String[] localVarAccepts = {
@@ -349,10 +409,10 @@ public class UserApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call getAllUsersValidateBeforeCall(final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call getAllUsersValidateBeforeCall(String mode, String role, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String email, String status, String countryCallingCode, String phone, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         
 
-        com.squareup.okhttp.Call call = getAllUsersCall(progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllUsersCall(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone, progressListener, progressRequestListener);
         return call;
 
     }
@@ -360,22 +420,46 @@ public class UserApi {
     /**
      * List all users.
      * 
+     * @param mode Filter the user mode. (optional)
+     * @param role Filter the user role. (optional)
+     * @param commonName Filter the user X500 common name. (optional)
+     * @param organization Filter the user X500 organization. (optional)
+     * @param organizationalUnit Filter the user X500 organizational unit. (optional)
+     * @param locality Filter the user X500 locality. (optional)
+     * @param country Filter the user X500 country. (optional)
+     * @param userId Filter the user X500 organization. (optional)
+     * @param email Filter the user email. (optional)
+     * @param status Filter the user status. (optional)
+     * @param countryCallingCode Filter the user country calling code. (optional)
+     * @param phone Filter the user phone. (optional)
      * @return List&lt;UserGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public List<UserGet> getAllUsers() throws ApiException {
-        ApiResponse<List<UserGet>> resp = getAllUsersWithHttpInfo();
+    public List<UserGet> getAllUsers(String mode, String role, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String email, String status, String countryCallingCode, String phone) throws ApiException {
+        ApiResponse<List<UserGet>> resp = getAllUsersWithHttpInfo(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone);
         return resp.getData();
     }
 
     /**
      * List all users.
      * 
+     * @param mode Filter the user mode. (optional)
+     * @param role Filter the user role. (optional)
+     * @param commonName Filter the user X500 common name. (optional)
+     * @param organization Filter the user X500 organization. (optional)
+     * @param organizationalUnit Filter the user X500 organizational unit. (optional)
+     * @param locality Filter the user X500 locality. (optional)
+     * @param country Filter the user X500 country. (optional)
+     * @param userId Filter the user X500 organization. (optional)
+     * @param email Filter the user email. (optional)
+     * @param status Filter the user status. (optional)
+     * @param countryCallingCode Filter the user country calling code. (optional)
+     * @param phone Filter the user phone. (optional)
      * @return ApiResponse&lt;List&lt;UserGet&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<List<UserGet>> getAllUsersWithHttpInfo() throws ApiException {
-        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(null, null);
+    public ApiResponse<List<UserGet>> getAllUsersWithHttpInfo(String mode, String role, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String email, String status, String countryCallingCode, String phone) throws ApiException {
+        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone, null, null);
         Type localVarReturnType = new TypeToken<List<UserGet>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -383,11 +467,23 @@ public class UserApi {
     /**
      * List all users. (asynchronously)
      * 
+     * @param mode Filter the user mode. (optional)
+     * @param role Filter the user role. (optional)
+     * @param commonName Filter the user X500 common name. (optional)
+     * @param organization Filter the user X500 organization. (optional)
+     * @param organizationalUnit Filter the user X500 organizational unit. (optional)
+     * @param locality Filter the user X500 locality. (optional)
+     * @param country Filter the user X500 country. (optional)
+     * @param userId Filter the user X500 organization. (optional)
+     * @param email Filter the user email. (optional)
+     * @param status Filter the user status. (optional)
+     * @param countryCallingCode Filter the user country calling code. (optional)
+     * @param phone Filter the user phone. (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getAllUsersAsync(final ApiCallback<List<UserGet>> callback) throws ApiException {
+    public com.squareup.okhttp.Call getAllUsersAsync(String mode, String role, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String email, String status, String countryCallingCode, String phone, final ApiCallback<List<UserGet>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -408,7 +504,7 @@ public class UserApi {
             };
         }
 
-        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = getAllUsersValidateBeforeCall(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<List<UserGet>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;

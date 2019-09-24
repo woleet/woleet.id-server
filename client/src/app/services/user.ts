@@ -11,8 +11,8 @@ export class UserService {
     return this.http.get<ApiUserObject>(`${serverURL}/user/${userId}/`).toPromise();
   }
 
-  async getAll(): Promise<ApiUserObject[]> {
-    return this.http.get<ApiUserObject[]>(`${serverURL}/user/list`).toPromise();
+  async getAll(where?: string): Promise<ApiUserObject[]> {
+    return this.http.get<ApiUserObject[]>(`${serverURL}/user/list?${where}`).toPromise();
   }
 
   async create(user: ApiPostUserObject): Promise<ApiUserObject> {

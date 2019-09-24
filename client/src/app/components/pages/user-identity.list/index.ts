@@ -13,8 +13,6 @@ export class UserIdentityListPageComponent extends TrackById implements OnInit {
 
   users$: Promise<ApiUserObject[]>;
 
-  filterUserSeal = { mode: 'esign' };
-
   constructor(private service: UserService, private authService: AuthService) {
     super();
   }
@@ -24,7 +22,7 @@ export class UserIdentityListPageComponent extends TrackById implements OnInit {
   }
 
   refreshUserList() {
-    this.users$ = this.service.getAll();
+    this.users$ = this.service.getAll('mode=esign');
   }
 
   isAdmin() {

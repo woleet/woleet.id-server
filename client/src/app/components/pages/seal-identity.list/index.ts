@@ -12,8 +12,6 @@ export class SealIdentityListPageComponent extends TrackById implements OnInit {
 
   users$: Promise<ApiUserObject[]>;
 
-  filterUserSeal = { mode: 'seal' };
-
   constructor(private service: UserService, private authService: AuthService) {
     super();
   }
@@ -23,7 +21,7 @@ export class SealIdentityListPageComponent extends TrackById implements OnInit {
   }
 
   refreshUserList() {
-    this.users$ = this.service.getAll();
+    this.users$ = this.service.getAll('mode=seal');
   }
 
   isAdmin() {

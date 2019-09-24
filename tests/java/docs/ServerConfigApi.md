@@ -81,7 +81,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 //CookieAuth.setApiKeyPrefix("Token");
 
 ServerConfigApi apiInstance = new ServerConfigApi();
-ServerConfig serverConfig = new ServerConfig(); // ServerConfig | Replacement server config object.
+ServerConfig serverConfig = new ServerConfig(); // ServerConfig | Server config object.
 try {
     ServerConfig result = apiInstance.updateServerConfig(serverConfig);
     System.out.println(result);
@@ -95,7 +95,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **serverConfig** | [**ServerConfig**](ServerConfig.md)| Replacement server config object. |
+ **serverConfig** | [**ServerConfig**](ServerConfig.md)| Server config object. |
 
 ### Return type
 

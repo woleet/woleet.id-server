@@ -17,7 +17,7 @@
   <br>
   <mat-divider></mat-divider>
   <br>
-  <div *ngFor="let user of users  | userfilter:filterUserSeal; trackBy: trackById;">
+  <div *ngFor="let user of users; trackBy: trackById;">
     <app-user-card *ngIf="(user.role === 'admin' && isAdmin()) || user.role !== 'admin'" [user]="user"
       [modes]="['block', 'detail', 'delete', 'edit']" (delete)="refreshUserList()">
     </app-user-card>

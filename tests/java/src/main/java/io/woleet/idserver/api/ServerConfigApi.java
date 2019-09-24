@@ -169,7 +169,7 @@ public class ServerConfigApi {
     }
     /**
      * Build call for updateServerConfig
-     * @param serverConfig Replacement server config object. (required)
+     * @param serverConfig Server config object. (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -232,7 +232,7 @@ public class ServerConfigApi {
     /**
      * Update the server configuration.
      * 
-     * @param serverConfig Replacement server config object. (required)
+     * @param serverConfig Server config object. (required)
      * @return ServerConfig
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -244,7 +244,7 @@ public class ServerConfigApi {
     /**
      * Update the server configuration.
      * 
-     * @param serverConfig Replacement server config object. (required)
+     * @param serverConfig Server config object. (required)
      * @return ApiResponse&lt;ServerConfig&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -257,7 +257,7 @@ public class ServerConfigApi {
     /**
      * Update the server configuration. (asynchronously)
      * 
-     * @param serverConfig Replacement server config object. (required)
+     * @param serverConfig Server config object. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
