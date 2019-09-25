@@ -34,7 +34,7 @@ export async function createEnrollment(enrollment: ApiPostEnrollmentObject): Pro
 
   // Verify that the expiration date is not a seal user
   if (user.get('mode') === 'seal') {
-    throw new BadRequest('Cannot enroll a seal user.');
+    throw new BadRequest('Cannot enroll a seal user');
   }
 
   const expiration = !!getServerConfig().enrollmentExpirationOffset ?
