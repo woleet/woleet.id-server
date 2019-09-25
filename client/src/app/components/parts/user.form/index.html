@@ -27,13 +27,13 @@
           [matTooltipDisabled]="canSendEmailToUser()"
           [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL'"
           (change)="sendPasswordEmailCheck()">
-          Send password initialization link
+          Send password initialization email
         </mat-checkbox>
         <div [matTooltipDisabled]="canSendEmailToUser()"
           [matTooltip]="'To activate this option, please setup:\n- Mailing / SMTP configuration\n- Server URLs / Web client URL'">
           <button mat-raised-button *ngIf="mode === 'edit'" matInput [disabled]="!canSendEmailToUser()"
             (click)="sendResetPasswordEmail(user)">
-            Send password reset link
+            Send password reset email
           </button>
         </div>
         <mat-form-field class="w-100" *ngIf="!blockPasswordInput">

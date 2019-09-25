@@ -5,7 +5,7 @@
   <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="config.blockPasswordInput"
     (change)="update(config.blockPasswordInput)" [disabled]="!config.enableSMTP || !config.webClientURL"
     matTooltip="You must enable SMTP and web client URL to block password input">
-    Disable password input (passwords can only be set by users)
+    Passwords can only be set by users
   </mat-checkbox>
 </mat-card>
 <ng-template #loading>Loading...<br></ng-template>
