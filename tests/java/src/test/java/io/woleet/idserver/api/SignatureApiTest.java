@@ -318,10 +318,13 @@ public class SignatureApiTest {
         signatureResult = tokenAuthUserSealApi.getSignature(hashToSign, null, null, pubKey);
         verifySignatureValid(hashToSign, signatureResult);
 
-        // FIXME: WOLEET-1141: Since we just used the key to sign, its last used should be close to current time
-//        keyGet = keyApi.getKeyById(user.getDefaultKeyId());
-//        assertTrue(keyGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
-//                && keyGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
+        keyGet = keyApi.getKeyById(userSeal.getDefaultKeyId());
+        assertTrue(keyGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
+               && keyGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
+
+        apiTokenUserSealGet = apiTokenApi.getAPITokenById(apiTokenUserSealGet.getId());
+        assertTrue(apiTokenUserSealGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
+                && apiTokenUserSealGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
 
         // Try to sign with a blocked key
         try {
