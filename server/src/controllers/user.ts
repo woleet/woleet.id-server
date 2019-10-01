@@ -109,6 +109,7 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
 
 export async function getAllUsers(): Promise<InternalUserObject[]> {
   const opt: any = [];
+  // Sorts users by common name ignoring the case
   opt.order = [[Sequelize.fn('lower', Sequelize.col('x500CommonName'))]];
   const users = await User.getAll(opt);
   return users.map((user) => user.toJSON());
