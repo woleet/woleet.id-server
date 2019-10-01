@@ -306,7 +306,7 @@ CookieAuth.setApiKey("YOUR API KEY");
 
 KeyApi apiInstance = new KeyApi();
 UUID keyId = 552aa3fd-3b5e-434f-bdd3-9b6c58c269c1; // UUID | Identifier of the key.
-KeyPut keyPut = new KeyPut(); // KeyPut | Replacement key object.
+KeyPut keyPut = new KeyPut(); // KeyPut | Key object to update.
 try {
     KeyGet result = apiInstance.updateKey(keyId, keyPut);
     System.out.println(result);
@@ -321,7 +321,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **keyId** | [**UUID**](.md)| Identifier of the key. |
- **keyPut** | [**KeyPut**](KeyPut.md)| Replacement key object. |
+ **keyPut** | [**KeyPut**](KeyPut.md)| Key object to update. |
 
 ### Return type
 
