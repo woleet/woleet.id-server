@@ -49,6 +49,8 @@ export class APITokenStore {
       return null;
     }
 
+    await this.updateLastUsed(apiToken.get('id'));
+
     token = serialize(apiToken);
 
     // Stock this token in the cache.
@@ -58,6 +60,11 @@ export class APITokenStore {
 
   async resetCache(hash: string) {
     this.lru.del(hash);
+  }
+
+  async updateLastUsed(id: string) {
+    const now = new Date();
+    APIToken.update(id, { lastUsed: now });
   }
 
 }

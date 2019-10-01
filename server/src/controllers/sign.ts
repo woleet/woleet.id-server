@@ -108,6 +108,10 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
 
   const signature = await signMessage(key, hashToSign);
 
+  const now = new Date();
+
+  await Key.update(key.get('id'), { lastUsed: now });
+
   return {
     userId: user.get('id'),
     keyId: key.get('id'),
