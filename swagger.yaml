@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: This is Woleet.ID Server API documentation.
-  version: 1.2.0
+  version: 1.2.1
   title: Woleet.ID Server
   contact:
     email: contact@woleet.com
