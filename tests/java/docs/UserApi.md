@@ -119,7 +119,7 @@ Name | Type | Description  | Notes
 
 <a name="getAllUsers"></a>
 # **getAllUsers**
-> List&lt;UserGet&gt; getAllUsers()
+> List&lt;UserGet&gt; getAllUsers(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone)
 
 List all users.
 
@@ -141,8 +141,20 @@ CookieAuth.setApiKey("YOUR API KEY");
 //CookieAuth.setApiKeyPrefix("Token");
 
 UserApi apiInstance = new UserApi();
+String mode = seal; // String | Filter the user mode.
+String role = user; // String | Filter the user role.
+String commonName = John Doe; // String | Filter the user X500 common name.
+String organization = Woleet; // String | Filter the user X500 organization.
+String organizationalUnit = Sales; // String | Filter the user X500 organizational unit.
+String locality = Rennes; // String | Filter the user X500 locality.
+String country = FR; // String | Filter the user X500 country.
+String userId = wol.jim-smith.01; // String | Filter the user X500 organization.
+String email = john.doe@acme.com; // String | Filter the user email.
+String status = active; // String | Filter the user status.
+String countryCallingCode = 33; // String | Filter the user country calling code.
+String phone = 123456789; // String | Filter the user phone.
 try {
-    List<UserGet> result = apiInstance.getAllUsers();
+    List<UserGet> result = apiInstance.getAllUsers(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserApi#getAllUsers");
@@ -151,7 +163,21 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **mode** | **String**| Filter the user mode. | [optional] [enum: seal, esign]
+ **role** | **String**| Filter the user role. | [optional] [enum: user, admin, manager]
+ **commonName** | **String**| Filter the user X500 common name. | [optional]
+ **organization** | **String**| Filter the user X500 organization. | [optional]
+ **organizationalUnit** | **String**| Filter the user X500 organizational unit. | [optional]
+ **locality** | **String**| Filter the user X500 locality. | [optional]
+ **country** | **String**| Filter the user X500 country. | [optional]
+ **userId** | **String**| Filter the user X500 organization. | [optional]
+ **email** | **String**| Filter the user email. | [optional]
+ **status** | **String**| Filter the user status. | [optional] [enum: active, blocked]
+ **countryCallingCode** | **String**| Filter the user country calling code. | [optional]
+ **phone** | **String**| Filter the user phone. | [optional]
 
 ### Return type
 

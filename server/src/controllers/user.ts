@@ -107,10 +107,11 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
   return user.toJSON();
 }
 
-export async function getAllUsers(): Promise<InternalUserObject[]> {
+export async function getAllUsers(where: ApiFilterUsersObject = null): Promise<InternalUserObject[]> {
   const opt: any = [];
+  // Sorts users by common name ignoring the case
   opt.order = [[Sequelize.fn('lower', Sequelize.col('x500CommonName'))]];
-  const users = await User.getAll(opt);
+  const users = await User.getAll(opt, where);
   return users.map((user) => user.toJSON());
 }
 

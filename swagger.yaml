@@ -651,6 +651,19 @@ paths:
         - User
       summary: List all users.
       operationId: getAllUsers
+      parameters:
+        - $ref: '#/components/parameters/FilterUserModeQueryParameter'
+        - $ref: '#/components/parameters/FilterUserRoleQueryParameter'
+        - $ref: '#/components/parameters/FilterUserCommonNameQueryParameter'
+        - $ref: '#/components/parameters/FilterUserOrganizationQueryParameter'
+        - $ref: '#/components/parameters/FilterUserOrganizationalUnitQueryParameter'
+        - $ref: '#/components/parameters/FilterUserLocalityQueryParameter'
+        - $ref: '#/components/parameters/FilterUserCountryQueryParameter'
+        - $ref: '#/components/parameters/FilterUserUserIdQueryParameter'
+        - $ref: '#/components/parameters/FilterUserEmailQueryParameter'
+        - $ref: '#/components/parameters/FilterUserStatusQueryParameter'
+        - $ref: '#/components/parameters/FilterUserCountryCallingCodeQueryParameter'
+        - $ref: '#/components/parameters/FilterUserPhoneQueryParameter'
       responses:
         '200':
           description: Array of users.
@@ -1818,6 +1831,112 @@ components:
       schema:
         type: string
         example: 'd8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975'
+    FilterUserModeQueryParameter:
+      name: mode
+      in: query
+      description: Filter the user mode.
+      required: false
+      schema:
+        type: string
+        enum:
+          - seal
+          - esign
+        example: 'seal'
+    FilterUserRoleQueryParameter:
+      name: role
+      in: query
+      description: Filter the user role.
+      required: false
+      schema:
+        type: string
+        enum:
+          - user
+          - admin
+          - manager
+        example: 'user'
+    FilterUserCommonNameQueryParameter:
+      name: commonName
+      in: query
+      description: Filter the user X500 common name.
+      required: false
+      schema:
+        type: string
+        example: 'John Doe'
+    FilterUserOrganizationQueryParameter:
+      name: organization
+      in: query
+      description: Filter the user X500 organization.
+      required: false
+      schema:
+        type: string
+        example: 'Woleet'
+    FilterUserOrganizationalUnitQueryParameter:
+      name: organizationalUnit
+      in: query
+      description: Filter the user X500 organizational unit.
+      required: false
+      schema:
+        type: string
+        example: 'Sales'
+    FilterUserLocalityQueryParameter:
+      name: locality
+      in: query
+      description: Filter the user X500 locality.
+      required: false
+      schema:
+        type: string
+        example: 'Rennes'
+    FilterUserCountryQueryParameter:
+      name: country
+      in: query
+      description: Filter the user X500 country.
+      required: false
+      schema:
+        type: string
+        example: 'FR'
+    FilterUserUserIdQueryParameter:
+      name: userId
+      in: query
+      description: Filter the user X500 organization.
+      required: false
+      schema:
+        type: string
+        example: 'wol.jim-smith.01'
+    FilterUserEmailQueryParameter:
+      name: email
+      in: query
+      description: Filter the user email.
+      required: false
+      schema:
+        type: string
+        example: 'john.doe@acme.com'
+    FilterUserStatusQueryParameter:
+      name: status
+      in: query
+      description: Filter the user status.
+      required: false
+      schema:
+        type: string
+        enum:
+          - active
+          - blocked
+        example: 'active'
+    FilterUserCountryCallingCodeQueryParameter:
+      name: countryCallingCode
+      in: query
+      description: Filter the user country calling code.
+      required: false
+      schema:
+        type: string
+        example: '33'
+    FilterUserPhoneQueryParameter:
+      name: phone
+      in: query
+      description: Filter the user phone.
+      required: false
+      schema:
+        type: string
+        example: '123456789'
     EnrollmentIdParameter:
       name: EnrollmentId
       in: path

@@ -24,7 +24,8 @@ public class CRUDUserApiTest extends CRUDApiTest {
         @Override
         public List<CRUDApiTest.ObjectGet> getAllObjects() throws ApiException {
             List<CRUDApiTest.ObjectGet> list = new ArrayList<>();
-            for (UserGet user : userApi.getAllUsers())
+            for (UserGet user : userApi.getAllUsers(null,null,null,null,null,
+                    null,null,null,null,null,null,null))
                 list.add(new CRUDUserApiTest.ObjectGet(user));
             return list;
         }

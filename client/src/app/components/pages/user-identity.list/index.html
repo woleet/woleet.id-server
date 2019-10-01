@@ -1,0 +1,32 @@
+<div *ngIf="(users$ | async) as users; else loadingusers">
+  <div *ngIf="!formOpened" fxLayout="row" fxLayoutGap="20px">
+    <div fxLayout="column">
+      <button mat-raised-button color="primary" (click)="formOpened=true">ADD USER IDENTITY</button>
+    </div>
+    <div style="font-family: Roboto, 'Helvetica Neue', sans-serif;" fxLayout="column">
+      <span>
+        A user identity serves to identify the signatory of an electronic signature.<br>
+        Electronic signatures engage the individual responsibility of the signatory.
+      </span>
+    </div>
+  </div>
+  <div *ngIf="formOpened">
+    <create-edit-user mode="create" userMode="esign" (create)="refreshUserList()"
+      (submitSucceed)="formOpened=false; refreshUserList()" (cancel)="formOpened=false"></create-edit-user>
+  </div>
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+  <div *ngFor="let user of users; trackBy: trackById;">
+    <app-user-card *ngIf="(user.role === 'admin' && isAdmin()) || user.role !== 'admin'" [user]="user"
+      [modes]="['block', 'detail', 'delete', 'edit']" (delete)="refreshUserList()">
+    </app-user-card>
+    <app-user-card *ngIf="(user.role === 'admin' && isManager())" [user]="user" [modes]="['detail']"
+      (delete)="refreshUserList()">
+    </app-user-card>
+    <br>
+  </div>
+</div>
+<ng-template #loadingusers>
+  <mat-card>Loading...</mat-card>
+</ng-template>
