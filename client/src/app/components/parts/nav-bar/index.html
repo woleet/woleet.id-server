@@ -21,31 +21,31 @@
   <mat-sidenav *ngIf="(isAdmin() || isManager()) && !hide()" class="sidenav dark-theme" fixedInViewport="true" role="navigation"
     mode="{{mode}}" opened="{{opened}}">
     <mat-nav-list>
-      <mat-list-item routerLink="/users">
+      <mat-list-item routerLink="/users" routerLinkActive="active-link">
         <div mat-button>
           <i class="material-icons">perm_identity</i>
           <span>Users</span>
         </div>
       </mat-list-item>
-      <mat-list-item routerLink="/seals">
+      <mat-list-item routerLink="/seals" routerLinkActive="active-link">
         <div mat-button>
           <img src="/assets/certificate.svg">
           <span>Seals</span>
         </div>
       </mat-list-item>
-      <mat-list-item routerLink="/api-tokens">
+      <mat-list-item routerLink="/api-tokens" routerLinkActive="active-link">
         <div mat-button>
           <i class="material-icons">lock_outline</i>
           <span>API tokens</span>
         </div>
       </mat-list-item>
-      <mat-list-item *ngIf="isAdmin()" routerLink="/settings">
+      <mat-list-item *ngIf="isAdmin()" routerLink="/settings" routerLinkActive="active-link">
         <div mat-button>
           <i class="material-icons">settings</i>
           <span>Settings</span>
         </div>
       </mat-list-item>
-      <mat-list-item routerLink="/about">
+      <mat-list-item routerLink="/about" routerLinkActive="active-link">
         <div mat-button>
           <i class="material-icons">info_outline</i>
           <span>About</span>
