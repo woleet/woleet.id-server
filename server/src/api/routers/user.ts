@@ -2,8 +2,8 @@ import * as Router from 'koa-router';
 
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
-import { createUser, deleteUser, getAllUsers, getUserById, updateUser, serializeIdentity } from '../../controllers/user';
-import { serializeUser, serializeFilter } from '../serialize/user';
+import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '../../controllers/user';
+import { serializeFilter, serializeUser } from '../serialize/user';
 import { store as event } from '../../controllers/server-event';
 import { isKeyHeldByServer } from '../../controllers/key';
 import { getServerConfig } from '../../controllers/server-config';
