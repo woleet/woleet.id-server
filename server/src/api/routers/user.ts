@@ -37,9 +37,8 @@ const router = new Router({ prefix: '/user' });
 router.post('/', validate.body('createUser'), async function (ctx) {
   const user: ApiPostUserObject = ctx.request.body;
 
-
   if (getServerConfig().blockPasswordInput && user.password) {
-    throw new BadRequest('Cannot create a user with a preseted password with this server configutation.');
+    throw new BadRequest('Cannot create a user with a preset password with this server configuration');
   }
 
   if (user.mode === 'esign' && !user.email) {
@@ -103,13 +102,13 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const update = ctx.request.body;
 
   if (getServerConfig().blockPasswordInput && update.password) {
-    throw new BadRequest('Cannot create a user with a preseted password with this server configutation.');
+    throw new BadRequest('Cannot create a user with a preset password with this server configuration');
   }
 
   if (update.defaultKeyId) {
     const isPair = await isKeyHeldByServer(update.defaultKeyId);
     if (!isPair) {
-      throw new BadRequest('User holded key cannot be the default key.');
+      throw new BadRequest('User held key cannot be the default key');
     }
   }
 

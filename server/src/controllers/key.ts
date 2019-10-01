@@ -139,6 +139,7 @@ export async function exportKey(id: string): Promise<string> {
     throw new NotFoundKeyError();
   }
 
+  // Get the entropy and its initialization vector to retrieve the mnemonic word.
   const entropy = Buffer.from(key.get('mnemonicEntropy'), 'hex');
   const entropyIV = Buffer.from(key.get('mnemonicEntropyIV'), 'hex');
   return secureModule.exportPhrase(entropy, entropyIV);

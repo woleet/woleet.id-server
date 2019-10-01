@@ -128,18 +128,20 @@ export async function sendKeyRevocationEmail(user: InternalUserObject, key: Inte
     path.join(__dirname, '../../assets/defaultKeyRevocationTemplate.html'),
     { encoding: 'ascii' }
   );
-  const htmlUser = mustache.render(template, {
-    organizationName: config.organizationName,
-    logoURL: logo,
-    userName: user.x500CommonName,
-    keyName: key.name,
-    admin: false
-  });
-
-  const admins = await User.getByRole('admin');
 
   try {
+    // Send a revocation email to the owner of the key
+    const htmlUser = mustache.render(template, {
+      organizationName: config.organizationName,
+      logoURL: logo,
+      userName: user.x500CommonName,
+      keyName: key.name,
+      admin: false
+    });
     await sendEmail(user.email, subject, htmlUser);
+
+    // Send a revocation email to all admins having an email
+    const admins = await User.getByRole('admin');
     admins.forEach(async (admin) => {
       if (admin.get('email')) {
         const htmlAdmin = mustache.render(template, {
@@ -150,7 +152,7 @@ export async function sendKeyRevocationEmail(user: InternalUserObject, key: Inte
           keyId: key.id,
           keyName: key.name,
           ownerName: user.x500CommonName,
-          userId: user.id
+          ownerId: user.id
         });
         await sendEmail(admin.get('email'), subject, htmlAdmin);
       }
