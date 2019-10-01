@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '../../controllers/user';
-import { serializeUser } from '../serialize/user';
+import { serializeFilter, serializeUser } from '../serialize/user';
 import { store as event } from '../../controllers/server-event';
 import { isKeyHeldByServer } from '../../controllers/key';
 import { getServerConfig } from '../../controllers/server-config';
@@ -74,7 +74,9 @@ router.post('/', validate.body('createUser'), async function (ctx) {
  *  operationId: getUserList
  */
 router.get('/list', async function (ctx) {
-  const users = await getAllUsers();
+  const query = ctx.query;
+  const where: ApiFilterUsersObject = serializeFilter(query);
+  const users = await getAllUsers(where);
   ctx.body = users.map((user) => serializeUser(user));
 });
 

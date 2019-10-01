@@ -72,6 +72,12 @@ mat-sidenav-container {
       margin: 5px 15px 0;
     }
 
+    img {
+      float: left;
+      margin: -5px 9px 0;
+      height: $mat-list-item-height;
+    }
+
     span {
       line-height: $mat-list-item-height;
       font-weight: lighter;
@@ -88,4 +94,8 @@ mat-sidenav-container {
 .collapse-button {
   height: 28px;
   background-position: center;
+}
+
+.active-link {
+  background-color: #ffffff09;
 }

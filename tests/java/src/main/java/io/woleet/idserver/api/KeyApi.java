@@ -691,7 +691,7 @@ public class KeyApi {
     /**
      * Build call for updateKey
      * @param keyId Identifier of the key. (required)
-     * @param keyPut Replacement key object. (required)
+     * @param keyPut Key object to update. (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
@@ -761,7 +761,7 @@ public class KeyApi {
      * Update a key.
      * 
      * @param keyId Identifier of the key. (required)
-     * @param keyPut Replacement key object. (required)
+     * @param keyPut Key object to update. (required)
      * @return KeyGet
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -774,7 +774,7 @@ public class KeyApi {
      * Update a key.
      * 
      * @param keyId Identifier of the key. (required)
-     * @param keyPut Replacement key object. (required)
+     * @param keyPut Key object to update. (required)
      * @return ApiResponse&lt;KeyGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
@@ -788,7 +788,7 @@ public class KeyApi {
      * Update a key. (asynchronously)
      * 
      * @param keyId Identifier of the key. (required)
-     * @param keyPut Replacement key object. (required)
+     * @param keyPut Key object to update. (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object

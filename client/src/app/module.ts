@@ -40,7 +40,8 @@ import { UserPageComponent } from '@pages/user';
 import { AboutPageComponent } from '@pages/about';
 import { ErrorPageComponent } from '@pages/error';
 import { SettingsPageComponent } from '@pages/settings';
-import { UserListPageComponent } from '@pages/user.list';
+import { UserIdentityListPageComponent } from '@pages/user-identity.list';
+import { SealIdentityListPageComponent } from '@pages/seal-identity.list';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { EnrollmentPageComponent } from '@pages/enrollment';
@@ -91,7 +92,8 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     SettingsPageComponent,
     APITokensPageComponent,
     UserPageComponent,
-    UserListPageComponent,
+    UserIdentityListPageComponent,
+    SealIdentityListPageComponent,
     UserFormComponent,
     UserDetailPageComponent,
     AboutPageComponent,

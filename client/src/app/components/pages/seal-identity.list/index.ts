@@ -4,10 +4,9 @@ import { AuthService } from '@services/auth';
 import { TrackById } from '@components/util';
 
 @Component({
-  templateUrl: './index.html',
-  styleUrls: ['./style.scss']
+  templateUrl: './index.html'
 })
-export class UserListPageComponent extends TrackById implements OnInit {
+export class SealIdentityListPageComponent extends TrackById implements OnInit {
 
   formOpened = false;
 
@@ -22,7 +21,7 @@ export class UserListPageComponent extends TrackById implements OnInit {
   }
 
   refreshUserList() {
-    this.users$ = this.service.getAll();
+    this.users$ = this.service.getAll('mode=seal');
   }
 
   isAdmin() {
