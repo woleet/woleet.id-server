@@ -1126,6 +1126,10 @@ components:
           example: "1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh"
         status:
           type: string
+          example: valid
+          description: >
+            Key status.
+            <br>Note that the field is not returned if the key has no expiration date.
           enum:
             - valid
             - expired
@@ -1143,7 +1147,7 @@ components:
           example: 1569542400000
           description: >
             Key revocation date (Unix ms timestamp).
-            <br>Note that the field is not returned if the key has no revocation date.
+            <br>Note that the field is not returned if the key is not yet revoked.
     FullIdentity:
       allOf:
         - $ref: '#/components/schemas/Identity'
@@ -1216,8 +1220,9 @@ components:
         - esign
       default: "seal"
       description: >
-        User mode, esign the user is a real user, and his keys are used to create electronic signatures.
-        seal the user represents an organization, and his keys are used to create server seals.
+        User mode.
+        <br>esign: the user is a regular user, and his keys are used to create electronic signatures.
+        <br>seal: the user represents a legal entity, and his keys are used to create server seals.
       example: "seal"
     KeyStatusEnum:
       type: string
