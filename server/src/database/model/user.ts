@@ -1,4 +1,4 @@
-import { CHAR, DATE, DOUBLE, ENUM, Op, STRING, UniqueConstraintError, UUID, UUIDV4 } from 'sequelize';
+import { CHAR, DATE, DOUBLE, ENUM, Op, STRING, UniqueConstraintError, UUID, UUIDV4, fn, col } from 'sequelize';
 import { DuplicatedUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 
@@ -40,7 +40,8 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
   }
 
   async getByEmail(email: string): Promise<SequelizeUserObject> {
-    return this.model.findOne({ where: { email } });
+    const emailCaseInsensitive = { [Op.iLike]: '%' + email + '%' };
+    return this.model.findOne({ where: { email : emailCaseInsensitive } });
   }
 
   async getByRole(role: string): Promise<SequelizeUserObject[]> {
