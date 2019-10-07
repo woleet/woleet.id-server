@@ -1,4 +1,4 @@
-import { CHAR, DATE, DOUBLE, ENUM, Op, STRING, UniqueConstraintError, UUID, UUIDV4, fn, col } from 'sequelize';
+import { CHAR, DATE, DOUBLE, ENUM, Op, STRING, UniqueConstraintError, UUID, UUIDV4 } from 'sequelize';
 import { DuplicatedUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 
