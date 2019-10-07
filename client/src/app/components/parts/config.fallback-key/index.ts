@@ -25,7 +25,7 @@ export class ConfigFallbackKeyComponent implements OnInit, OnDestroy {
 
   newKeyId = null;
 
-  filterUserSeal = { mode: 'seal'};
+  filterUserSeal = { mode: 'seal' };
 
   private onDestroy: EventEmitter<void>;
 
@@ -77,6 +77,7 @@ export class ConfigFallbackKeyComponent implements OnInit, OnDestroy {
     log.debug('Selected user', evt.value);
     this.keyListLoading = true;
     this.keyList$ = this.keyService.getByUser(evt.value)
+      .then((keys) => keys.filter((key) => !key.expired && (key.status !== 'revoked') && (key.holder === 'server')))
       .then((res) => {
         log.debug('Loaded key', res);
         this.keyListLoading = false;
