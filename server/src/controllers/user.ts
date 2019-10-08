@@ -45,12 +45,12 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
     delete user.password;
   }
 
-  // Email to lower case
+  // Ensure email is lower cased
   if (user.email) {
     user.email = user.email.toLowerCase();
   }
 
-  // Create user.
+  // Create user
   const newUser = await User.create(Object.assign(identity, user, password));
 
   // Create user default key if required.
@@ -82,7 +82,7 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
     Object.assign(update, key);
   }
 
-  // Email to lower case
+  // Ensure email is lower cased
   if (attrs.email) {
     attrs.email = attrs.email.toLowerCase();
   }
