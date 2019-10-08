@@ -31,14 +31,13 @@ const router = new Router({ prefix: '/password-reset' });
  *  operationId: passwordResetLink
  */
 router.post('/', async function (ctx) {
-  const { email } = ctx.request.body;
   const managerId = ctx.session ? ctx.session.user.get('id') : null;
-  let user;
-
+  const { email } = ctx.request.body;
   if (!email) {
     throw new BadRequest('Need to send the email address.');
   }
 
+  let user;
   try {
     user = await sendResetPasswordEmail(email, managerId);
   } catch {
