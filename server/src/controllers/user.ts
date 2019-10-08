@@ -45,6 +45,11 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
     delete user.password;
   }
 
+  // Email to lower case
+  if (user.email) {
+    user.email = user.email.toLowerCase();
+  }
+
   // Create user.
   const newUser = await User.create(Object.assign(identity, user, password));
 
@@ -75,6 +80,11 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
     const key = await serializeAndEncodePassword(attrs.password);
     delete update.password;
     Object.assign(update, key);
+  }
+
+  // Email to lower case
+  if (attrs.email) {
+    attrs.email = attrs.email.toLowerCase();
   }
 
   // Map identity format from API to DB.

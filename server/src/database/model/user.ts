@@ -40,7 +40,8 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
   }
 
   async getByEmail(email: string): Promise<SequelizeUserObject> {
-    return this.model.findOne({ where: { email } });
+    const emailCaseInsensitive = { [Op.iLike]: '%' + email + '%' };
+    return this.model.findOne({ where: { email : emailCaseInsensitive } });
   }
 
   async getByRole(role: string): Promise<SequelizeUserObject[]> {
