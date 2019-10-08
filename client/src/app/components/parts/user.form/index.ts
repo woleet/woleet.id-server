@@ -185,13 +185,14 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     const user = this.form.value;
     user.phone = this.tmpPhone;
     user.countryCallingCode = this.tmpCountryCallingCode;
+    user.mode = this.userMode;
 
     this.helper = null;
 
     let promise;
     if (this.mode === 'edit') {
       const cleaned = updatedDiff(Object.assign({ password: undefined }, this.user), replaceInObject(user, '', null));
-      const alreadyExist = await this.checkSealIdentity(this.user);
+      const alreadyExist = await this.checkSealIdentity(user);
       if (alreadyExist) {
         if (!confirm('This seal identity already exist.\n'
           + 'Do you still want to update it?')) {
@@ -204,7 +205,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         .then((up) => this.submitSucceed.emit(up));
     } else {
       user.createDefaultKey = this.createDefaultKey;
-      user.mode = this.userMode;
       if (this.sendPasswordEmail) {
         user.password = null;
       }
@@ -240,9 +240,9 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   async checkSealIdentity(user: ApiUserObject) {
     let alreadyExist = false;
     if (user.mode === 'seal') {
-      const query = 'commonName=' + user.identity.commonName + '&organization=' + user.identity.organization;
+      const query = 'commonName=' + user.identity.commonName + '&organization=' + user.identity.organization + '&mode=seal';
       alreadyExist = await this.service.getAll(query).then((users) => {
-        if ((this.mode !== 'edit' && users.length > 0) || (this.mode === 'edit' && users.length > 1)) {
+        if (users.length > 0) {
           return true;
         }
         return false;
