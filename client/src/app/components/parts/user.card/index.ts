@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UserService } from '@services/user';
 import { AsYouType } from 'libphonenumber-js';
 import { confirm } from '../../util';
@@ -9,10 +9,11 @@ import cc from '@components/cc';
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class UserCardComponent {
+export class UserCardComponent implements OnInit {
 
   formLocked = false;
   editMode = false;
+  userType: string;
 
   @Input()
   modes: ('block' | 'edit' | 'detail' | 'delete' | 'display')[];
@@ -35,15 +36,19 @@ export class UserCardComponent {
     }
   }
 
+  ngOnInit() {
+    this.userType = this.user.mode === 'esign' ? 'user' : 'seal';
+  }
+
   setEditMode(active) {
     this.editMode = active;
   }
 
   async deleteUser() {
-    if (!confirm(`Delete ${this.user.mode} ${this.user.identity.commonName}?\n`
-      + `Warning: deleting a ${this.user.mode} is irreversible. Furthermore, `
-      + `signatures made with this ${this.user.mode} keys will no longer be linked to this identity,\n`
-      + 'and keys ownership will no longer be provable by the identity server.')) {
+    if (!confirm(`Delete ${this.userType} ${this.user.identity.commonName}?\n\n`
+      + `Warning: deleting a ${this.userType} is irreversible, and also deletes all associated keys and API tokens.\n`
+      + `Consequently, signatures made with this ${this.userType}'s keys will no longer be linked to this identity, `
+      + `and keys ownership will no longer be provable by the identity server.`)) {
       return;
     }
     this.formLocked = true;
@@ -53,7 +58,7 @@ export class UserCardComponent {
   }
 
   async blockUser() {
-    if (!confirm(`Block user ${this.user.identity.commonName}?`)) {
+    if (!confirm(`Block ${this.userType} ${this.user.identity.commonName}?`)) {
       return;
     }
     this.formLocked = true;
@@ -71,12 +76,17 @@ export class UserCardComponent {
     this.update.emit(up);
   }
 
-  getCountry(code) {
+  /**
+   * Get country name from country code.
+   * @param code country code
+   * @return country name
+   */
+  getCountryName(code: string): string {
     const country = cc.find(({ code: c }) => c === code);
     return (country && country.name);
   }
 
-  getPhone(user) {
+  getPhone(user: ApiUserObject): string {
     return user.phone ? new AsYouType().input('+' + user.countryCallingCode + user.phone) : '-';
   }
 }

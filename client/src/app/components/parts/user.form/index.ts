@@ -8,7 +8,7 @@ import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import {
-  asciiValidator, cleanupObject, ErrorMessageProvider, passwordValidator, replaceInObject, confirm
+  asciiValidator, cleanupObject, confirm, ErrorMessageProvider, passwordValidator, replaceInObject
 } from '@components/util';
 import cc from '@components/cc';
 import { addedDiff, updatedDiff } from 'deep-object-diff';
@@ -101,8 +101,9 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   private onDestroy: EventEmitter<void>;
 
-  constructor(private service: UserService, private router: Router, private configService: ConfigService, private cdr: ChangeDetectorRef,
-    private authService: AuthService) {
+  constructor(private service: UserService, private router: Router, private configService: ConfigService,
+              private cdr: ChangeDetectorRef,
+              private authService: AuthService) {
     super();
     this.onDestroy = new EventEmitter();
   }
@@ -190,13 +191,11 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     let promise;
     if (this.mode === 'edit') {
       const cleaned = updatedDiff(Object.assign({ password: undefined }, this.user), replaceInObject(user, '', null));
-      log.debug(cleaned, user);
-
       const alreadyExist = await this.checkSealIdentity(this.user);
-
       if (alreadyExist) {
         if (!confirm('This seal identity already exist.\n'
           + 'Do you still want to update it?')) {
+          this.formLocked = false;
           return;
         }
       }
@@ -210,13 +209,11 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         user.password = null;
       }
       const cleaned: any = addedDiff({}, cleanupObject(user));
-      log.debug(cleaned, user);
-
       const alreadyExist = await this.checkSealIdentity(user);
-
       if (alreadyExist) {
         if (!confirm('This seal identity already exist.\n'
           + 'Do you still want to create it?')) {
+          this.formLocked = false;
           return;
         }
       }

@@ -1,8 +1,7 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormControl, ValidationErrors, AbstractControl } from '@angular/forms';
-import { parsePhoneNumberFromString, AsYouType } from 'libphonenumber-js';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormControl, ValidationErrors } from '@angular/forms';
+import { AsYouType, parsePhoneNumberFromString } from 'libphonenumber-js';
 import { ErrorMessageProvider } from '@components/util';
-import * as log from 'loglevel';
 
 function phoneNumberValidator(control: AbstractControl): ValidationErrors | null {
   if (control.value !== undefined && control.value !== '') {
@@ -50,7 +49,6 @@ export class IntlTelInputComponent extends ErrorMessageProvider implements OnIni
 
   onInputChange(phoneInput: string) {
     this.AYTPhone = new AsYouType().input(phoneInput);
-    log.debug(this.AYTPhone);
     if (phoneInput) {
       if (parsePhoneNumberFromString(this.AYTPhone)) {
         if (parsePhoneNumberFromString(this.AYTPhone).isValid()) {
