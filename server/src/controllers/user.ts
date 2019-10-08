@@ -9,8 +9,6 @@ import * as Sequelize from 'sequelize';
 
 const debug = Debug('id:ctr');
 
-const RESET_PASSWORD_TOKEN_LIFETIME = 7 * 24 * 3600 * 1000; // 7 days
-
 async function serializeAndEncodePassword(password: string) {
   const key = await encode(password);
 
@@ -160,7 +158,7 @@ export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject)
 
   // Check that password reset token is not expired.
   const timestamp = parseInt(user.toJSON().tokenResetPassword.split('_')[1], 10);
-  if ((Date.now() - timestamp) > RESET_PASSWORD_TOKEN_LIFETIME) {
+  if ((Date.now() - timestamp) > 0) {
     throw new TokenResetPasswordInvalid();
   }
 

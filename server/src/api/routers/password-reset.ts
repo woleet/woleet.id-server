@@ -32,6 +32,7 @@ const router = new Router({ prefix: '/password-reset' });
  */
 router.post('/', async function (ctx) {
   const { email } = ctx.request.body;
+  const managerId = ctx.session ? ctx.session.user.get('id') : null;
   let user;
 
   if (!email) {
@@ -39,14 +40,14 @@ router.post('/', async function (ctx) {
   }
 
   try {
-    user = await sendResetPasswordEmail(email);
+    user = await sendResetPasswordEmail(email, managerId);
   } catch {
     throw new NotFound(email + ' does not correspond to a user.');
   }
 
   event.register({
     type: 'user.edit',
-    authorizedUserId: null,
+    authorizedUserId: managerId,
     associatedTokenId: null,
     associatedUserId: user.id,
     associatedKeyId: null,

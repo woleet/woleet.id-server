@@ -8,6 +8,9 @@ import { readFileSync } from 'fs';
 import * as path from 'path';
 import * as log from 'loglevel';
 
+const MANAGER_RESET_PASSWORD_TOKEN_LIFETIME = 7 * 24 * 3600 * 1000;
+const USER_RESET_PASSWORD_TOKEN_LIFETIME = 3600 * 1000;
+
 /**
  * Get the logo url from the server configuration if it's unset, get the Woleet logo.
  * @param config Server configuration
@@ -20,7 +23,7 @@ function getLogo(config: InternalServerConfigObject): String {
   }
 }
 
-export async function sendResetPasswordEmail(email: string): Promise<InternalUserObject> {
+export async function sendResetPasswordEmail(email: string, managerId: string): Promise<InternalUserObject> {
   let user = await User.getByEmail(email);
   if (!user) {
     throw new NotFoundUserError();
@@ -30,7 +33,14 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
 
   const uuid = uuidV4();
 
-  const token = uuid + '_' + Date.now();
+  let token;
+
+  // If a manager initialized the reset password procedure the limite is 7 days, if it's the user the limite is 1 hour.
+  if (managerId && (user.get('id') !== managerId)) {
+    token = uuid + '_' + (Date.now() + MANAGER_RESET_PASSWORD_TOKEN_LIFETIME);
+  } else {
+    token = uuid + '_' + (Date.now() + USER_RESET_PASSWORD_TOKEN_LIFETIME);
+  }
 
   const update = Object.assign({}, { tokenResetPassword: token });
 
