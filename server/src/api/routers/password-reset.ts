@@ -31,22 +31,22 @@ const router = new Router({ prefix: '/password-reset' });
  *  operationId: passwordResetLink
  */
 router.post('/', async function (ctx) {
+  const managerId = ctx.session ? ctx.session.user.get('id') : null;
   const { email } = ctx.request.body;
-  let user;
-
   if (!email) {
     throw new BadRequest('Need to send the email address.');
   }
 
+  let user;
   try {
-    user = await sendResetPasswordEmail(email);
+    user = await sendResetPasswordEmail(email, managerId);
   } catch {
     throw new NotFound(email + ' does not correspond to a user.');
   }
 
   event.register({
     type: 'user.edit',
-    authorizedUserId: null,
+    authorizedUserId: managerId,
     associatedTokenId: null,
     associatedUserId: user.id,
     associatedKeyId: null,

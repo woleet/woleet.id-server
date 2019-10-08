@@ -8,6 +8,9 @@ import { readFileSync } from 'fs';
 import * as path from 'path';
 import * as log from 'loglevel';
 
+const MANAGER_RESET_PASSWORD_TOKEN_LIFETIME = 7 * 24 * 3600 * 1000;
+const USER_RESET_PASSWORD_TOKEN_LIFETIME = 3600 * 1000;
+
 /**
  * Get the logo url from the server configuration if it's unset, get the Woleet logo.
  * @param config Server configuration
@@ -20,31 +23,36 @@ function getLogo(config: InternalServerConfigObject): String {
   }
 }
 
-export async function sendResetPasswordEmail(email: string): Promise<InternalUserObject> {
+export async function sendResetPasswordEmail(email: string, managerId: string): Promise<InternalUserObject> {
+
+  // Check that user exists
   let user = await User.getByEmail(email);
   if (!user) {
     throw new NotFoundUserError();
   }
 
-  const config = getServerConfig();
-
+  // Build a password reset token: if a manager initiated the procedure, the token expires after 7 days,
+  // if it's the user himself, then the token expired 1 hour later
+  let token: string;
   const uuid = uuidV4();
+  if (managerId && (user.get('id') !== managerId)) {
+    token = uuid + '_' + (Date.now() + MANAGER_RESET_PASSWORD_TOKEN_LIFETIME);
+  } else {
+    token = uuid + '_' + (Date.now() + USER_RESET_PASSWORD_TOKEN_LIFETIME);
+  }
 
-  const token = uuid + '_' + Date.now();
-
+  // Remember the token
   const update = Object.assign({}, { tokenResetPassword: token });
-
   user = await User.update(user.getDataValue('id'), update);
 
+  // Build the password reset email
+  const config = getServerConfig();
   const webClientURL = config.webClientURL;
-
   const link = webClientURL + '/reset-password?token=' + token + '&email=' + email;
 
-  let subject;
-  let html;
+  // If the password is not set, send an onboarding mail
+  let subject, html: string;
   const logo = getLogo(config);
-
-  // If the password is not set send an onboarding mail
   if (user.getDataValue('passwordHash') === null) {
     html = mustache.render(config.mailOnboardingTemplate, {
       resetPasswordURL: link,
@@ -53,8 +61,10 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
       userName: user.getDataValue('x500CommonName')
     });
     subject = 'Onboarding';
-    // If the password is set send an reset password mail
-  } else {
+  }
+
+  // If the password is set send a password reset mail
+  else {
     html = mustache.render(config.mailResetPasswordTemplate, {
       resetPasswordURL: link,
       organizationName: config.organizationName,
@@ -64,6 +74,7 @@ export async function sendResetPasswordEmail(email: string): Promise<InternalUse
     subject = 'Password recovery';
   }
 
+  // Send the email
   try {
     await sendEmail(email, subject, html);
   } catch (err) {
