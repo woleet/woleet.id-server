@@ -8,7 +8,7 @@ import copy from 'deep-copy';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import {
-  asciiValidator, cleanupObject, ErrorMessageProvider, passwordValidator, replaceInObject
+  asciiValidator, cleanupObject, ErrorMessageProvider, passwordValidator, replaceInObject, confirm
 } from '@components/util';
 import cc from '@components/cc';
 import { addedDiff, updatedDiff } from 'deep-object-diff';
@@ -192,6 +192,15 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       const cleaned = updatedDiff(Object.assign({ password: undefined }, this.user), replaceInObject(user, '', null));
       log.debug(cleaned, user);
 
+      const alreadyExist = await this.checkSealIdentity(this.user);
+
+      if (alreadyExist) {
+        if (!confirm('This seal identity already exist.\n'
+          + 'Do you still want to update it?')) {
+          return;
+        }
+      }
+
       promise = this.service.update(this.user.id, cleaned)
         .then((up) => this.submitSucceed.emit(up));
     } else {
@@ -202,6 +211,15 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       }
       const cleaned: any = addedDiff({}, cleanupObject(user));
       log.debug(cleaned, user);
+
+      const alreadyExist = await this.checkSealIdentity(user);
+
+      if (alreadyExist) {
+        if (!confirm('This seal identity already exist.\n'
+          + 'Do you still want to create it?')) {
+          return;
+        }
+      }
 
       promise = this.service.create(cleaned)
         .then((up) => {
@@ -220,6 +238,20 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
         this.helper = err.error.message;
       });
     this.formLocked = false;
+  }
+
+  async checkSealIdentity(user: ApiUserObject) {
+    let alreadyExist = false;
+    if (user.mode === 'seal') {
+      const query = 'commonName=' + user.identity.commonName + '&organization=' + user.identity.organization;
+      alreadyExist = await this.service.getAll(query).then((users) => {
+        if ((this.mode !== 'edit' && users.length > 0) || (this.mode === 'edit' && users.length > 1)) {
+          return true;
+        }
+        return false;
+      });
+    }
+    return alreadyExist;
   }
 
   triggerCancel() {

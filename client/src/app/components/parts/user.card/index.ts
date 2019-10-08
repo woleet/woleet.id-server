@@ -33,14 +33,17 @@ export class UserCardComponent {
     if (!this.hideAttribute) {
       this.hideAttribute = [];
     }
-   }
+  }
 
   setEditMode(active) {
     this.editMode = active;
   }
 
   async deleteUser() {
-    if (!confirm(`Delete user ${this.user.identity.commonName}?`)) {
+    if (!confirm(`Delete ${this.user.mode} ${this.user.identity.commonName}?\n`
+      + `Warning: deleting a ${this.user.mode} is irreversible. Furthermore, `
+      + `signatures made with this ${this.user.mode} keys will no longer be linked to this identity,\n`
+      + 'and keys ownership will no longer be provable by the identity server.')) {
       return;
     }
     this.formLocked = true;
