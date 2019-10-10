@@ -50,6 +50,9 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
 
   // Block Password input for admin
   blockPasswordInput: Joi.boolean().allow(null),
+
+  // Block password reset for user
+  askForResetInput: Joi.boolean().allow(null),
 });
 
 export { updateConfig };

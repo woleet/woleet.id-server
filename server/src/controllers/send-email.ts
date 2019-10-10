@@ -23,6 +23,41 @@ function getLogo(config: InternalServerConfigObject): String {
   }
 }
 
+export async function askResetPasswordEmail(email: string): Promise<InternalUserObject> {
+
+  // Check that user exists
+  const user = await User.getByEmail(email);
+  if (!user) {
+    throw new NotFoundUserError();
+  }
+
+  // Build the password reset demand email
+  const config = getServerConfig();
+  const webClientURL = config.webClientURL;
+  const link = webClientURL + '/user/' + user.get('id');
+  const logo = getLogo(config);
+  const subject = 'Please validate password reset request';
+  const template = readFileSync(
+    path.join(__dirname, '../../assets/defaultAskForPasswordReset.html'),
+    { encoding: 'ascii' }
+  );
+  const managers = await User.getByRole('manager');
+  managers.forEach(async (manager) => {
+    if (manager.get('email')) {
+      const html = mustache.render(template, {
+        organizationName: config.organizationName,
+        logoURL: logo,
+        userName: manager.get('x500CommonName'),
+        requesterName: user.get('x500CommonName'),
+        link
+      });
+      await sendEmail(manager.get('email'), subject, html);
+    }
+  });
+
+  return user.toJSON();
+}
+
 export async function sendResetPasswordEmail(email: string, managerId: string): Promise<InternalUserObject> {
 
   // Check that user exists

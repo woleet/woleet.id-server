@@ -292,6 +292,9 @@ declare global {
 
     // Block Password input for admin
     blockPasswordInput?: boolean;
+
+    // Block password reset for user
+    askForResetInput?: boolean;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -341,6 +344,9 @@ declare global {
 
     // Block Password input for admin
     blockPasswordInput?: boolean;
+
+    // Block password reset for user
+    askForResetInput?: boolean;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -390,6 +396,9 @@ declare global {
 
     // Block Password input for admin
     blockPasswordInput?: boolean;
+
+    // Block password reset for user
+    askForResetInput?: boolean;
   }
 
   /* Enrollment */

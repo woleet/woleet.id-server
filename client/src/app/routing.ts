@@ -13,6 +13,7 @@ import { AboutPageComponent } from '@pages/about';
 import { SettingsPageComponent } from '@pages/settings';
 import { UserIdentityListPageComponent } from '@pages/user-identity.list';
 import { SealIdentityListPageComponent } from '@pages/seal-identity.list';
+import { UserKeyPageComponent } from '@pages/user.key';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ErrorPageComponent } from '@components/pages/error';
 import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
@@ -54,7 +55,12 @@ const routes: Routes = [
     canActivate: [IsUser]
   },
   {
-    path: 'user/:id', data: { title: 'User keys' },
+    path: 'user/:id/keys', data: { title: 'User keys' },
+    component: UserKeyPageComponent,
+    canActivate: [IsManager]
+  },
+  {
+    path: 'user/:id', data: { title: 'User detail' },
     component: UserDetailPageComponent,
     canActivate: [IsManager]
   },

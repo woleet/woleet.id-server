@@ -3,8 +3,9 @@ import * as Router from 'koa-router';
 import { copy } from '../../controllers/utils/copy';
 import { serializeUser } from '../serialize/user';
 import { updatePassword } from '../../controllers/user';
-import { sendResetPasswordEmail } from '../../controllers/send-email';
+import { sendResetPasswordEmail, askResetPasswordEmail } from '../../controllers/send-email';
 import { store as event } from '../../controllers/server-event';
+import { getServerConfig } from '../../controllers/server-config';
 import { BadRequest, NotFound, Unauthorized } from 'http-errors';
 
 function hidePassword(user) {
@@ -31,17 +32,27 @@ const router = new Router({ prefix: '/password-reset' });
  *  operationId: passwordResetLink
  */
 router.post('/', async function (ctx) {
-  const managerId = ctx.session ? ctx.session.user.get('id') : null;
   const { email } = ctx.request.body;
   if (!email) {
     throw new BadRequest('Need to send the email address.');
   }
 
+  const managerId = ctx.session &&
+    (ctx.session.user.getDataValue('role') === 'manager' || ctx.session.user.getDataValue('role') === 'admin')
+    ? ctx.session.user.get('id') : null;
   let user;
-  try {
-    user = await sendResetPasswordEmail(email, managerId);
-  } catch {
-    throw new NotFound(email + ' does not correspond to a user.');
+  if (getServerConfig().askForResetInput && !managerId) {
+    try {
+      user = await askResetPasswordEmail(email);
+    } catch {
+      throw new NotFound(email + ' does not correspond to a user.');
+    }
+  } else {
+    try {
+      user = await sendResetPasswordEmail(email, managerId);
+    } catch {
+      throw new NotFound(email + ' does not correspond to a user.');
+    }
   }
 
   event.register({

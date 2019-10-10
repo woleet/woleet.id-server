@@ -58,6 +58,9 @@ interface ApiServerConfig {
 
   // Block Password input for admin
   blockPasswordInput: boolean | null;
+
+  // Block password reset for user
+  askForResetInput: boolean | null;
 }
 
 interface ApiServerConfigUpdate {
@@ -107,4 +110,7 @@ interface ApiServerConfigUpdate {
 
   // Block Password input for admin
   blockPasswordInput?: boolean;
+
+  // Block password reset for user
+  askForResetInput?: boolean;
 }

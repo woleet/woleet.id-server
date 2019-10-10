@@ -8,6 +8,8 @@ import { UserService } from '@services/user';
 import { MatDialog } from '@angular/material';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
+import { DialogAskResetComponent } from '@parts/dialog-ask-reset';
+import { AppConfigService } from '@services/boot';
 
 export function confirmPasswordValidator(control: AbstractControl) {
   const str: string = control.value;
@@ -35,11 +37,9 @@ export function confirmPasswordValidator(control: AbstractControl) {
 export class ResetPasswordPageComponent extends ErrorMessageProvider implements OnInit {
 
   email: string;
-  lock$: boolean;
   validationStep: boolean;
   password: string;
   passwordConfirm: string;
-  redirect: string;
   userService: UserService;
   token: string;
   errorMsg: string;
@@ -47,9 +47,10 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
 
   formEmail: FormGroup;
   formValidate: FormGroup;
-  passwordControl: FormControl;
+  askForResetInput: boolean;
 
-  constructor(activatedRoute: ActivatedRoute, userConst: UserService, public dialog: MatDialog, private router: Router) {
+  constructor(activatedRoute: ActivatedRoute, userConst: UserService, public dialog: MatDialog, private router: Router,
+    appConfigService: AppConfigService) {
     super();
     this.userService = userConst;
     activatedRoute.queryParams.subscribe(async (params) => {
@@ -61,6 +62,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
       } else {
         this.validationStep = false;
       }
+    this.askForResetInput = appConfigService.getConfig().askForResetInput;
     });
   }
 
@@ -85,8 +87,12 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
   async resetPassword() {
     try {
       this.email = this.formEmail.get('email').value;
-      const success = await this.userService.resetPassword(this.email);
-      const dialogRef = this.dialog.open(DialogMailResetComponent, {
+      await this.userService.resetPassword(this.email);
+      const dialogRef = this.askForResetInput ?
+      this.dialog.open(DialogAskResetComponent, {
+        width: '250px'
+      })
+      : this.dialog.open(DialogMailResetComponent, {
         width: '250px'
       });
       dialogRef.afterClosed().subscribe(result => {

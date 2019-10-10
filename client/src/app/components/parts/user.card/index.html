@@ -1,6 +1,6 @@
 <mat-card *ngIf="!editMode && user.id" matRipple="!formLocked" fxLayout="row" fxLayoutAlign="space-between start"
   [ngClass]="{'clickable': ((!formLocked) && !modes.includes('display')), 'locked': formLocked}"
-  [routerLink]="(formLocked || modes.includes('display')) ? null : ['/user/', user.id]">
+  [routerLink]="(formLocked || modes.includes('display')) ? null : ['/user', user.id, 'keys']">
   <ng-container [ngTemplateOutlet]="userCardContent"></ng-container>
 </mat-card>
 

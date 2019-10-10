@@ -29,7 +29,8 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     proofDeskAPIURL,
     proofDeskAPIToken,
     enableProofDesk,
-    blockPasswordInput
+    blockPasswordInput,
+    askForResetInput,
   } = config;
 
   return {
@@ -62,6 +63,7 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     proofDeskAPIURL,
     proofDeskAPIToken,
     enableProofDesk,
-    blockPasswordInput
+    blockPasswordInput,
+    askForResetInput,
   };
 }

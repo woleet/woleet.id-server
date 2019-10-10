@@ -42,11 +42,13 @@ import { ErrorPageComponent } from '@pages/error';
 import { SettingsPageComponent } from '@pages/settings';
 import { UserIdentityListPageComponent } from '@pages/user-identity.list';
 import { SealIdentityListPageComponent } from '@pages/seal-identity.list';
+import { UserKeyPageComponent } from '@pages/user.key';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { EnrollmentPageComponent } from '@pages/enrollment';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
+import { DialogAskResetComponent } from '@parts/dialog-ask-reset';
 import {
   AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService, ManagerGuardService
 } from '@guards/auth';
@@ -74,6 +76,7 @@ import { ConfigOIDCPClientComponent } from '@components/parts/config.oidcp-clien
 import { ConfigSMTPComponent } from '@components/parts/config.smtp';
 import { ConfigMailTemplateComponent } from '@components/parts/config.mail';
 import { ConfigProofDeskComponent } from '@components/parts/config.proofdesk';
+import { ConfigAskResetPasswordInputComponent } from '@components/parts/config.ask-password-reset';
 import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 import { ConfigEnrollmentExpirationComponent } from '@parts/config.enrollment-expiration';
@@ -95,6 +98,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     UserIdentityListPageComponent,
     SealIdentityListPageComponent,
     UserFormComponent,
+    UserKeyPageComponent,
     UserDetailPageComponent,
     AboutPageComponent,
     EnrollmentPageComponent,
@@ -123,6 +127,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     ConfigLogoUrlComponent,
     ConfigHTMLFrameUrlComponent,
     ConfigMailTemplateComponent,
+    ConfigAskResetPasswordInputComponent,
     LogoComponent,
     HtmlFrameComponent,
     SafeHtmlPipe,
@@ -134,11 +139,13 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     ConfigBlockPasswordInputComponent,
     DialogResetPasswordComponent,
     DialogMailResetComponent,
+    DialogAskResetComponent,
     UserFilterPipe
   ],
   entryComponents: [
     DialogResetPasswordComponent,
-    DialogMailResetComponent
+    DialogMailResetComponent,
+    DialogAskResetComponent
   ],
   imports: [
     // angular

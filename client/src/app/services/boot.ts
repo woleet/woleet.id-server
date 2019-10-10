@@ -25,7 +25,8 @@ export class AppConfigService {
     enableSMTP: boolean,
     webClientURL: string,
     contact: string,
-    organizationName: string
+    organizationName: string,
+    askForResetInput: boolean
   };
   bootOnLogin = false;
 
