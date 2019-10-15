@@ -1,11 +1,11 @@
 <mat-card *ngIf="(config$ | async) as config; else loading">
-  <mat-card-title>Block password input</mat-card-title>
+  <mat-card-title>Prevent input and modification of user passwords</mat-card-title>
   <mat-divider></mat-divider>
   <br>
   <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="config.blockPasswordInput"
     (change)="update(config.blockPasswordInput)" [disabled]="!config.enableSMTP || !config.webClientURL"
     matTooltip="You must enable SMTP and web client URL to block password input">
-    Passwords can only be set by users
+    Only users can set and reset their password
   </mat-checkbox>
 </mat-card>
 <ng-template #loading>Loading...<br></ng-template>
