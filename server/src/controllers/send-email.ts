@@ -5,6 +5,7 @@ import * as uuidV4 from 'uuid/v4';
 import { getTransporter } from './smtp';
 import { getServerConfig } from './server-config';
 import { readFileSync } from 'fs';
+import { BadRequest } from 'http-errors';
 import * as path from 'path';
 import * as log from 'loglevel';
 
@@ -41,7 +42,31 @@ export async function askResetPasswordEmail(email: string): Promise<InternalUser
     path.join(__dirname, '../../assets/defaultAskForPasswordReset.html'),
     { encoding: 'ascii' }
   );
-  const managers = await User.getByRole('manager');
+
+  // Search all active manager except the requester.
+  let managers = await User.getByRole('manager');
+  managers = managers.filter((manager) => manager.get('email')
+    && user.get('id') !== manager.get('id')
+    && manager.get('status') === 'active');
+
+  // If manager are not found search all active admin except the requester.
+  if (!managers.length) {
+    managers = await User.getByRole('admin');
+    managers = managers.filter((admin) => admin.get('email')
+      && user.get('id') !== admin.get('id')
+      && admin.get('status') === 'active');
+
+    // If no admin are not found send an error message with the contact if it is configurated.
+    if (!managers.length) {
+      if (config.contact) {
+        throw new BadRequest('Impossible to contact a manager please contact ' + config.contact);
+      } else {
+        throw new BadRequest('Impossible to contact a manager');
+      }
+    }
+  }
+
+  // For all manager/admin send an email following the template.
   managers.forEach(async (manager) => {
     if (manager.get('email')) {
       const html = mustache.render(template, {

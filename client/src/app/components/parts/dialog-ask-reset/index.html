@@ -1,5 +1,8 @@
-<mat-dialog-content>
+<mat-dialog-content *ngIf='!data'>
   A reset link will be sent to your email address after approval by your manager.
+</mat-dialog-content>
+<mat-dialog-content *ngIf='data'>
+  {{data}}
 </mat-dialog-content>
 <mat-dialog-actions align="center">
   <button mat-button (click)="close()">Ok</button>

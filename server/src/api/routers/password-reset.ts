@@ -37,16 +37,15 @@ router.post('/', async function (ctx) {
     throw new BadRequest('Need to send the email address.');
   }
 
+  // Check if the requester is an authentified manager
   const managerId = ctx.session &&
     (ctx.session.user.getDataValue('role') === 'manager' || ctx.session.user.getDataValue('role') === 'admin')
     ? ctx.session.user.get('id') : null;
   let user;
+
+  // If the requester is not an authentified manager and the reset password fonction is blocked start warn the managers.
   if (getServerConfig().askForResetInput && !managerId) {
-    try {
-      user = await askResetPasswordEmail(email);
-    } catch {
-      throw new NotFound(email + ' does not correspond to a user.');
-    }
+    user = await askResetPasswordEmail(email);
   } else {
     try {
       user = await sendResetPasswordEmail(email, managerId);
