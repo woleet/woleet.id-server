@@ -56,12 +56,12 @@ export async function askResetPasswordEmail(email: string): Promise<InternalUser
       && user.get('id') !== admin.get('id')
       && admin.get('status') === 'active');
 
-    // If no admin are not found send an error message with the contact if it is configurated.
+    // If no admin are not found send an error message with the contact if it is configured.
     if (!managers.length) {
       if (config.contact) {
-        throw new BadRequest('Impossible to contact a manager please contact ' + config.contact);
+        throw new BadRequest('Unable to contact a manager please contact ' + config.contact);
       } else {
-        throw new BadRequest('Impossible to contact a manager');
+        throw new BadRequest('Unable to contact a manager');
       }
     }
   }
