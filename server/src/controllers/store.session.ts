@@ -20,7 +20,7 @@ export class SessionStore {
   uss: Map<string, Set<Session>>;
 
   constructor() {
-    this.uss = new Map;
+    this.uss = new Map<string, Set<Session>>();
     this.cache = new LRU({
       maxAge: config.maxAge,
       dispose: (sessionId, session) => {
@@ -40,7 +40,7 @@ export class SessionStore {
     if (this.uss.has(userId)) {
       this.uss.get(userId).add(session);
     } else {
-      const sessionSet = new Set();
+      const sessionSet = new Set<Session>();
       sessionSet.add(session);
       this.uss.set(userId, sessionSet);
     }
