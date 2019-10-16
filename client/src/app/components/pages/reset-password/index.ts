@@ -42,7 +42,6 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
   passwordConfirm: string;
   userService: UserService;
   token: string;
-  errorMsg: string;
   emailInputFocused: boolean;
 
   formEmail: FormGroup;
@@ -90,6 +89,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
       await this.userService.resetPassword(this.email);
       const dialogRef = this.askForResetInput ?
       this.dialog.open(DialogAskResetComponent, {
+        data: null,
         width: '250px'
       })
       : this.dialog.open(DialogMailResetComponent, {
@@ -99,7 +99,10 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
         this.router.navigate(['/login']);
       });
     } catch (err) {
-      this.errorMsg = err.error.message;
+      this.dialog.open(DialogAskResetComponent, {
+        width: '250px',
+        data: err.error.message
+      });
     }
   }
 
@@ -109,7 +112,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
       const success = await this.userService.validate(this.email, this.password, this.token);
       const dialogRef = this.dialog.open(DialogResetPasswordComponent, {
         width: '250px',
-        data: { success: false }
+        data: { success: true }
       });
       dialogRef.afterClosed().subscribe(result => {
         this.router.navigate(['/login']);

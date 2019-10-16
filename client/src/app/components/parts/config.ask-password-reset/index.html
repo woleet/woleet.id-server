@@ -2,9 +2,12 @@
   <mat-card-title>Validate password reset requests</mat-card-title>
   <mat-divider></mat-divider>
   <br>
-  <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="config.askForResetInput"
-    (change)="update(config.askForResetInput)">
-    Password reset requests require the validation of a manager
-  </mat-checkbox>
+  <div *ngIf="(userList$ | async) as users; else loading">
+    <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="config.askForResetInput"
+      (change)="update(config.askForResetInput)" [disabled]="!checkManagerAvailable(users)"
+      matTooltip="You must have at least one manager or admin with an email set to activate this">
+      Password reset requests require the validation of a manager
+    </mat-checkbox>
+  </div>
 </mat-card>
 <ng-template #loading>Loading...<br></ng-template>
