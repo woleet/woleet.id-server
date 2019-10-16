@@ -25,15 +25,6 @@ function noSpaceValidator(control: AbstractControl): ValidationErrors | null {
   return null;
 }
 
-function startsWithALetterValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
-  if (str && !/^[a-z].*$/i.test(str)) {
-    return ({ startsWithALetter: true });
-  }
-
-  return null;
-}
-
 function safeWordValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
   if (str && !/^[a-z0-9_\-]+$/i.test(str)) {
@@ -111,7 +102,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   private setFormControl(user) {
     return new FormGroup({
       username: new FormControl(user.username, [
-        startsWithALetterValidator,
         safeWordValidator,
         Validators.minLength(1),
         Validators.maxLength(32)
