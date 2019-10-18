@@ -27,7 +27,7 @@ public class UserApiTest {
     }
 
     @Test
-    public void creationUserTest() throws ApiException {
+    public void createUserTest() throws ApiException {
 
         UserApi userApi = new UserApi(Config.getAdminAuthApiClient());
 
