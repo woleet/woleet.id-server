@@ -1127,9 +1127,7 @@ components:
         status:
           type: string
           example: valid
-          description: >
-            Key status.
-            <br>Note that the field is not returned if the key has no expiration date.
+          description: Key status.
           enum:
             - valid
             - expired
