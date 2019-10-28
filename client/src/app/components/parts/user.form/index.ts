@@ -184,7 +184,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       const cleaned = updatedDiff(Object.assign({ password: undefined }, this.user), replaceInObject(user, '', null));
       const alreadyExist = await this.checkSealIdentity(user);
       if (alreadyExist) {
-        if (!confirm('This seal identity already exist.\n'
+        if (!confirm('This seal identity already exists.\n'
           + 'Do you still want to update it?')) {
           this.formLocked = false;
           return;
@@ -201,7 +201,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
       const cleaned: any = addedDiff({}, cleanupObject(user));
       const alreadyExist = await this.checkSealIdentity(user);
       if (alreadyExist) {
-        if (!confirm('This seal identity already exist.\n'
+        if (!confirm('This seal identity already exists.\n'
           + 'Do you still want to create it?')) {
           this.formLocked = false;
           return;
