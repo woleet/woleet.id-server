@@ -223,15 +223,6 @@ public abstract class CRUDApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to create an object with user credentials
-        try {
-            userAuthApi.createObject(newObjectPost());
-            fail("Should not be able to create an object with user credentials");
-        }
-        catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
-        }
-
         // Try to create an object without minimal attributes
         ObjectPost objectPost = newObjectPost();
         try {
@@ -271,15 +262,6 @@ public abstract class CRUDApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to delete an object with user credentials
-        try {
-            userAuthApi.deleteObject(objectGet.getId());
-            fail("Should not be able to delete an object with user credentials");
-        }
-        catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
-        }
-
         // Try to delete a non existing object
         try {
             adminAuthApi.deleteObject(Config.randomUUID());
@@ -314,15 +296,6 @@ public abstract class CRUDApiTest {
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
-        }
-
-        // Try to get all objects with user credentials
-        try {
-            userAuthApi.getAllObjects();
-            fail("Should not be able to get all objects with user credentials");
-        }
-        catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 

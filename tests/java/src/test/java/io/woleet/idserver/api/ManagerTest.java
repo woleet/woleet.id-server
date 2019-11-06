@@ -182,7 +182,7 @@ public class ManagerTest {
             fail("Should not be able to create an admin API token with manager right");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Try to create an user API token as an manager

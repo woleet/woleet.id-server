@@ -703,6 +703,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
+        '403':
+          description: A user with user role cannot create an API token for an other user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
   /api-token/{APITokenId}:
     get:
       tags:
@@ -726,6 +732,12 @@ paths:
                 $ref: '#/components/responses/APIError'
         '401':
           description: Missing or invalid session cookie.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+        '403':
+          description: A user with user role cannot get an API token owned by an other user.
           content:
             application/json:
               schema:
@@ -769,6 +781,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
+        '403':
+          description: A user with user role cannot modify an API token owned by an other user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
         '404':
           description: API token not found.
           content:
@@ -801,6 +819,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/APIError'
+        '403':
+          description: A user with user role cannot delete an API token owned by an other user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
         '404':
           description: API token not found.
           content:
@@ -811,7 +835,7 @@ paths:
     get:
       tags:
         - API Token
-      summary: List all API tokens.
+      summary: List all API tokens. A user with user role only get his token.
       operationId: getAllAPITokens
       responses:
         '200':

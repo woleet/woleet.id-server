@@ -145,3 +145,11 @@ export class TokenResetPasswordInvalid extends WIDSError {
 
   name = 'TokenResetPasswordInvalid';
 }
+
+export class APITokenOwnerMismatchError extends WIDSError {
+  constructor(m = 'Password reset token is invalid') {
+    super(m);
+  }
+
+  name = 'APITokenOwnerMismatchError';
+}

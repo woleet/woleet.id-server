@@ -481,7 +481,7 @@ public class ApiTokenApi {
     }
 
     /**
-     * List all API tokens.
+     * List all API tokens. A user with user role only get his token.
      * 
      * @return List&lt;APITokenGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -492,7 +492,7 @@ public class ApiTokenApi {
     }
 
     /**
-     * List all API tokens.
+     * List all API tokens. A user with user role only get his token.
      * 
      * @return ApiResponse&lt;List&lt;APITokenGet&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
@@ -504,7 +504,7 @@ public class ApiTokenApi {
     }
 
     /**
-     * List all API tokens. (asynchronously)
+     * List all API tokens. A user with user role only get his token. (asynchronously)
      * 
      * @param callback The callback to be executed when the API call finishes
      * @return The request call

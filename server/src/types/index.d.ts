@@ -246,6 +246,7 @@ declare global {
   interface InternalServerConfigObject extends ServerConfig {
     version: number;
     identityURL: string;
+    APIURL?: string;
     logoURL?: string;
     HTMLFrame?: string;
     defaultKeyId: string;
@@ -299,6 +300,7 @@ declare global {
 
   interface ServerConfigUpdate extends ServerConfig {
     identityURL?: string;
+    APIURL?: string;
     logoURL?: string;
     HTMLFrame?: string;
     defaultKeyId?: string;
@@ -351,6 +353,7 @@ declare global {
 
   interface ServerConfigCreate extends ServerConfig {
     identityURL: string;
+    APIURL?: string;
     logoURL?: string;
     HTMLFrame?: string;
     defaultKeyId: string;
