@@ -51,7 +51,6 @@ async function upgrade1(sequelize) {
 
 async function upgrade2(sequelize) {
   log.warn('Checking for update of the "keys" model...');
-
   const config = await getConfig();
   if (config && !config.version) {
     log.warn('Need to add "expiration" column to the "keys" table');
@@ -62,8 +61,7 @@ async function upgrade2(sequelize) {
 }
 
 async function upgrade3(sequelize) {
-  log.warn('Checking for update 2 of the "keys" model...');
-
+  log.warn('Checking for update of the "keys" model...');
   const config = await getConfig();
   if (config && config.version < 2) {
     doPostUpgrade3 = true;
@@ -78,7 +76,6 @@ async function upgrade3(sequelize) {
 
 async function upgrade4(sequelize) {
   log.warn('Checking for update of the "user" model...');
-
   const config = await getConfig();
   if (config && config.version < 4) {
     log.warn('Need to add "phone" and "countryCallingCode" column to the "users" table');
@@ -92,7 +89,6 @@ async function upgrade4(sequelize) {
 
 async function upgrade5(sequelize) {
   log.warn('Checking for update of the "apiToken" model...');
-
   const config = await getConfig();
   if (config && config.version < 5) {
     doPostUpgrade5 = true;
@@ -106,7 +102,7 @@ async function upgrade5(sequelize) {
 }
 
 async function upgrade6(sequelize) {
-  log.warn('Checking for update 3 of the "keys" model...');
+  log.warn('Checking for update of the "keys" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -126,7 +122,7 @@ async function upgrade6(sequelize) {
 }
 
 async function upgrade7(sequelize) {
-  log.warn('Checking for update 2 of the "users" model...');
+  log.warn('Checking for update of the "users" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -143,7 +139,7 @@ async function upgrade7(sequelize) {
 }
 
 async function upgrade8(sequelize) {
-  log.warn('Checking for update 4 of the "keys" model...');
+  log.warn('Checking for update of the "keys" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -173,7 +169,7 @@ async function upgrade8(sequelize) {
 }
 
 async function upgrade9(sequelize) {
-  log.warn('Rename "onboardings" table...');
+  log.warn('Checking for update of "onboardings" table...');
   await ServerConfig.model.sync();
 
   let old;
@@ -189,7 +185,7 @@ async function upgrade9(sequelize) {
 }
 
 async function upgrade10(sequelize) {
-  log.warn('Checking for update 5 of the "keys" model...');
+  log.warn('Checking for update of the "keys" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -207,7 +203,7 @@ async function upgrade10(sequelize) {
 }
 
 async function upgrade11(sequelize) {
-  log.warn('Checking for  update 1 of the "enrollments" model and server-event type...');
+  log.warn('Checking for  update of the "enrollments" model and server-event type...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   let enrollmentExist = false;
@@ -239,7 +235,7 @@ async function upgrade11(sequelize) {
 }
 
 async function upgrade12(sequelize) {
-  log.warn('Checking for update 2 of the "enrollments" model...');
+  log.warn('Checking for update of the "enrollments" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -272,7 +268,7 @@ async function upgrade12(sequelize) {
 }
 
 async function upgrade13(sequelize) {
-  log.warn('Checking for update 2 of the "apiTokens" model...');
+  log.warn('Checking for update of the "apiTokens" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -289,7 +285,7 @@ async function upgrade13(sequelize) {
 }
 
 async function upgrade14(sequelize) {
-  log.warn('Checking for  update 5 of the "keys" model...');
+  log.warn('Checking for update of the "keys" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -307,7 +303,7 @@ async function upgrade14(sequelize) {
 }
 
 async function upgrade15(sequelize) {
-  log.warn('Checking for update 3 of the "users" model...');
+  log.warn('Checking for update of the "users" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -338,7 +334,7 @@ async function upgrade15(sequelize) {
 }
 
 async function upgrade16(sequelize) {
-  log.warn('Checking for update 4 of the "users" model...');
+  log.warn('Checking for update of the "users" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -374,7 +370,7 @@ export async function upgrade(sequelize: Sequelize) {
 }
 
 async function postUpgrade3() {
-  log.warn('Checking for post-update 2 of the "keys" model...');
+  log.warn('Checking for post-update of the "keys" model...');
 
   if (doPostUpgrade3 === true) {
     await Key.model.sync();
