@@ -59,7 +59,7 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
    * @description Returns a key and the associated user by it's identifier
    */
   async getByIdAndPullUser(id: string): Promise<SequelizeKeyObject> {
-    return this.model.findById(id, { include: [{ model: User.model }] });
+    return this.model.findByPk(id, { include: [{ model: User.model }] });
   }
 
   handleError(err: any) {

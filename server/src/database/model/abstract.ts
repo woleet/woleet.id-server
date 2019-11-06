@@ -31,7 +31,7 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
 
   async update(id: string, attrs): Promise<Instance<TInstance>> {
     try {
-      const up = await this.model.findById(id);
+      const up = await this.model.findByPk(id);
       if (!up) {
         return null;
       }
@@ -55,12 +55,12 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
   }
 
   async getById(id: string): Promise<Instance<TInstance> | null> {
-    return this.model.findById(id);
+    return this.model.findByPk(id);
   }
 
   async delete(id: string): Promise<Instance<TInstance>> {
     try {
-      const up = await this.model.findById(id);
+      const up = await this.model.findByPk(id);
       if (!up) {
         return null;
       }
@@ -75,7 +75,7 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
 
   async restore(id: string): Promise<Instance<TInstance>> {
     try {
-      const up = await this.model.findById(id, { paranoid: false });
+      const up = await this.model.findByPk(id, { paranoid: false });
       if (!up) {
         return null;
       }

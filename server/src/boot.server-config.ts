@@ -22,7 +22,7 @@ export async function initServerConfig() {
     delete printedConf.mailResetPasswordTemplate;
     debug(JSON.stringify(config, null, 2));
 
-    const key = await Key.model.findOne({ where: { holder: 'server' } });
+    const key = await Key.model.findOne({ where: { holder: 'server', status: 'active' } });
     if (!key) {
       log.warn('No private key in the database, cannot check secret restoration');
       return;

@@ -29,11 +29,11 @@ Enrollment.model.belongsTo(User.model, { foreignKey: { allowNull: false } });
 
 APIToken.model.belongsTo(User.model, { foreignKey: { allowNull: false } });
 
-Key.model.beforeDelete(async (key) => {
+Key.model.beforeDestroy(async (key) => {
   debug(`delete key ${key.get('id')}`);
   const keyId: string = key.getDataValue('id');
   const userId: string = key.getDataValue('userId');
-  const user = await User.model.findById(userId);
+  const user = await User.model.findByPk(userId);
 
   const config = getServerConfig();
 
