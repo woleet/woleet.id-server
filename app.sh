@@ -16,14 +16,14 @@ display_usage_app() {
 
 start() {
   local old_server
-  old_server=$(docker ps | grep woleetid-server_wid-server_1 | cut -d' ' -f 1)
-  docker-compose --project-name woleetid-server up -d
+  old_server=$(docker ps | grep "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-server_1" | cut -d' ' -f 1)
+  docker-compose --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" up -d
 
   # If WOLEET_ID_SERVER_ENCRYPTION_SECRET it not set, attaching to the server's container to enter it via CLI
   if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
   then
     local server
-    server=$(docker ps | grep woleetid-server_wid-server_1 | cut -d' ' -f 1)
+    server=$(docker ps | grep "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-server_1" | cut -d' ' -f 1)
 
     if [ "$server" == "$old_server" ]
     then
@@ -47,7 +47,7 @@ backup() {
   if [[ -d $BACKUP_PATH ]]
   then
     echo "Create dump_$(date +%Y-%m-%d_%H_%M_%S).sql in $BACKUP_PATH."
-    docker exec woleetid-server_wid-postgres_1 pg_dumpall -c -U postgres -h /var/run/postgresql >"$BACKUP_PATH/dump_$(date +%Y-%m-%d_%H_%M_%S).sql"
+    docker exec "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" pg_dumpall -c -U postgres -h /var/run/postgresql >"$BACKUP_PATH/dump_$(date +%Y-%m-%d_%H_%M_%S).sql"
   else
     echo "This path does not exist!"
   fi
@@ -63,16 +63,16 @@ restore() {
   RESTORE_FILE="$1"
   if [[ ${RESTORE_FILE##*.} == sql ]]
   then
-    docker exec woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql -c "REVOKE CONNECT ON DATABASE wid FROM ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
-    docker exec woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql -c "SELECT pid, pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${WOLEET_ID_SERVER_POSTGRES_DB:-wid}' AND pid <> pg_backend_pid();"
-    docker exec -i woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql < "$RESTORE_FILE"
-    docker exec woleetid-server_wid-postgres_1 psql -U postgres -h /var/run/postgresql -c "GRANT CONNECT ON DATABASE wid TO ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
-    if [[ $(docker ps -q --filter name=woleetid-server_wid-server_1 --filter status=running | wc -w) -eq 1 ]]; then
-      docker restart woleetid-server_wid-server_1
+    docker exec "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" psql -U postgres -h /var/run/postgresql -c "REVOKE CONNECT ON DATABASE wid FROM ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
+    docker exec "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" psql -U postgres -h /var/run/postgresql -c "SELECT pid, pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${WOLEET_ID_SERVER_POSTGRES_DB:-wid}' AND pid <> pg_backend_pid();"
+    docker exec -i "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" psql -U postgres -h /var/run/postgresql < "$RESTORE_FILE"
+    docker exec "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" psql -U postgres -h /var/run/postgresql -c "GRANT CONNECT ON DATABASE wid TO ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
+    if [[ $(docker ps -q --filter name="${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" --filter status=running | wc -w) -eq 1 ]]; then
+      docker restart "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1"
       if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
       then
         echo "No WOLEET_ID_SERVER_ENCRYPTION_SECRET environment set, attaching to container ${server}..."
-        docker attach woleetid-server_wid-server_1 --detach-keys='ctrl-c'
+        docker attach "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-server_1" --detach-keys='ctrl-c'
       fi
     fi
   else
@@ -95,13 +95,13 @@ then
   start
 elif [[ "$operation" == "logs" ]]
 then
-  docker-compose --project-name woleetid-server logs -f --tail 50
+  docker-compose --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" logs -f --tail 50
 elif [[ "$operation" == "stop" ]]
 then
-  docker-compose --project-name woleetid-server down
+  docker-compose --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" down
 elif [[ "$operation" == "restart" ]]
 then
-  docker-compose --project-name woleetid-server down
+  docker-compose --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" down
   start
 elif [[ "$operation" == "push" ]]
 then
