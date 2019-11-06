@@ -22,7 +22,7 @@ async function getConfig() {
 }
 
 async function upgrade1(sequelize) {
-  log.warn('Checking for update of the configuration model...');
+  log.warn('Checking for update of the "serverConfig" model...');
   let old;
   try {
     const [model] = await sequelize.query(`SELECT * FROM "ServerConfigs" AS config WHERE config.id = '${serverConfig.CONFIG_ID}';`);
@@ -203,7 +203,7 @@ async function upgrade10(sequelize) {
 }
 
 async function upgrade11(sequelize) {
-  log.warn('Checking for  update of the "enrollments" model and server-event type...');
+  log.warn('Checking for update of the "enrollments" model and server-event type...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   let enrollmentExist = false;
