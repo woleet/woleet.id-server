@@ -14,12 +14,14 @@
 package io.woleet.idserver.api;
 
 import io.woleet.idserver.ApiException;
-import io.woleet.idserver.api.model.APIError;
-import io.woleet.idserver.api.model.APITokenBase;
-import io.woleet.idserver.api.model.APITokenGet;
-import io.woleet.idserver.api.model.APITokenPost;
-import io.woleet.idserver.api.model.APITokenPut;
+import io.woleet.idserver.Config;
+import io.woleet.idserver.api.model.*;
+
 import java.util.UUID;
+
+import org.apache.http.HttpStatus;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -28,93 +30,199 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * API tests for ApiTokenApi
- */
-@Ignore
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+
+
 public class ApiTokenApiTest {
 
-    private final ApiTokenApi api = new ApiTokenApi();
+    private UserGet user;
+    private APITokenPost apiTokenPost;
+    private ApiTokenApi userApiTokenApi;
 
-    
-    /**
-     * Create an API token.
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void createAPITokenTest() throws ApiException {
-        APITokenPost apITokenPost = null;
-        APITokenGet response = api.createAPIToken(apITokenPost);
+    @Before
+    public void setUp() throws Exception {
+        // Start form a clean state
+        tearDown();
 
-        // TODO: test validations
+        user = Config.createTestUser();
+        apiTokenPost = new APITokenPost();
+        apiTokenPost.setName(Config.randomName());
+        apiTokenPost.setUserId(user.getId());
+        userApiTokenApi = new ApiTokenApi(Config.getAuthApiClient(user.getUsername(), "pass"));
     }
-    
-    /**
-     * Delete an API token.
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void deleteAPITokenTest() throws ApiException {
-        UUID apITokenId = null;
-        APITokenGet response = api.deleteAPIToken(apITokenId);
 
-        // TODO: test validations
+    @After
+    public void tearDown() throws Exception {
+        Config.deleteAllTestUsers();
     }
-    
-    /**
-     * Get an API token by its identifier.
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getAPITokenByIdTest() throws ApiException {
-        UUID apITokenId = null;
-        APITokenGet response = api.getAPITokenById(apITokenId);
 
-        // TODO: test validations
+    // Try to create an API token with the user auth
+    @Test
+    public void userCreateAPITokenTest() throws ApiException {
+        APITokenGet apiToken = userApiTokenApi.createAPIToken(apiTokenPost);
+        assertNotNull(apiToken.getId());
+        assertEquals("Name should be equals", apiTokenPost.getName(), apiToken.getName());
+
+        // Try to create an admin token with the user auth
+        try {
+            APITokenPost adminApiTokenPost = new APITokenPost();
+            adminApiTokenPost.setName(Config.randomName());
+            userApiTokenApi.createAPIToken(adminApiTokenPost);
+            fail("Should not be able to create an admin api token with user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        // Try to create a token for on other user with the user auth
+        try {
+            UserGet userTest = Config.createTestUser();
+            APITokenPost userTestApiTokenPost = new APITokenPost();
+            userTestApiTokenPost.setName(Config.randomName());
+            userTestApiTokenPost.setUserId(userTest.getId());
+            userApiTokenApi.createAPIToken(userTestApiTokenPost);
+            fail("Should not be able to create a token for on other user with the user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
     }
-    
-    /**
-     * List all API tokens.
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
+
+    // Try to delete an API token with the user auth
+    @Test
+    public void userDeleteAPITokenTest() throws ApiException {
+        APITokenGet apiToken = userApiTokenApi.createAPIToken(apiTokenPost);
+        userApiTokenApi.deleteAPIToken(apiToken.getId());
+
+        // Try to delete admin api token with the user auth
+        ApiTokenApi adminApiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
+        APITokenPost adminApiTokenPost = new APITokenPost();
+        adminApiTokenPost.setName(Config.randomName());
+        APITokenGet adminApiTokenGet = adminApiTokenApi.createAPIToken(adminApiTokenPost);
+        try {
+            userApiTokenApi.deleteAPIToken(adminApiTokenGet.getId());
+            fail("Should not be able to delete an admin api token with user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        // Try to delete other user token with the user auth
+        try {
+            UserGet userTest = Config.createTestUser();
+            APITokenPost userTestApiTokenPost = new APITokenPost();
+            userTestApiTokenPost.setName(Config.randomName());
+            userTestApiTokenPost.setUserId(userTest.getId());
+            APITokenGet userTestApiTokenGet = adminApiTokenApi.createAPIToken(userTestApiTokenPost);
+            userApiTokenApi.deleteAPIToken(userTestApiTokenGet.getId());
+            fail("Should not be able to delete a token for on other user with the user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        adminApiTokenApi.deleteAPIToken(adminApiTokenGet.getId());
+    }
+
+    // Try to get an API token with the user auth
+    @Test
+    public void userGetAPITokenByIdTest() throws ApiException {
+        APITokenGet apiToken = userApiTokenApi.createAPIToken(apiTokenPost);
+        APITokenGet apiTokenGet = userApiTokenApi.getAPITokenById(apiToken.getId());
+        assertEquals("Id should be equals", apiToken.getId(), apiTokenGet.getId());
+
+        // Try to get admin api token with the user auth
+        ApiTokenApi adminApiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
+        APITokenPost adminApiTokenPost = new APITokenPost();
+        adminApiTokenPost.setName(Config.randomName());
+        APITokenGet adminApiTokenGet = adminApiTokenApi.createAPIToken(adminApiTokenPost);
+        try {
+            userApiTokenApi.getAPITokenById(adminApiTokenGet.getId());
+            fail("Should not be able to get an admin api token with user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        // Try to get other user token with the user auth
+        try {
+            UserGet userTest = Config.createTestUser();
+            APITokenPost userTestApiTokenPost = new APITokenPost();
+            userTestApiTokenPost.setName(Config.randomName());
+            userTestApiTokenPost.setUserId(userTest.getId());
+            APITokenGet userTestApiTokenGet = adminApiTokenApi.createAPIToken(userTestApiTokenPost);
+            userApiTokenApi.getAPITokenById(userTestApiTokenGet.getId());
+            fail("Should not be able to get an other user token with the user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        adminApiTokenApi.deleteAPIToken(adminApiTokenGet.getId());
+    }
+
+    // Try to get all API token with the user auth
     @Test
     public void getAllAPITokensTest() throws ApiException {
-        List<APITokenGet> response = api.getAllAPITokens();
+        // Create the 2 tokens owned by the user
+        userApiTokenApi.createAPIToken(apiTokenPost);
+        APITokenPost apiTokenPost2 = new APITokenPost();
+        apiTokenPost2.setName(Config.randomName());
+        apiTokenPost2.setUserId(user.getId());
+        userApiTokenApi.createAPIToken(apiTokenPost2);
 
-        // TODO: test validations
+        // Create a token owned by the admin
+        ApiTokenApi adminApiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
+        APITokenPost apiTokenPost3 = new APITokenPost();
+        apiTokenPost3.setName(Config.randomName());
+        APITokenGet adminApiTokenGet = adminApiTokenApi.createAPIToken(apiTokenPost3);
+
+        List<APITokenGet> apiTokenGetList = userApiTokenApi.getAllAPITokens();
+
+        for (APITokenGet apiTokenGet: apiTokenGetList) {
+            assertEquals("Should only get the user owned token", user.getId(), apiTokenGet.getUserId());
+        }
+        adminApiTokenApi.deleteAPIToken(adminApiTokenGet.getId());
     }
-    
-    /**
-     * Update an API token.
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void updateAPITokenTest() throws ApiException {
-        UUID apITokenId = null;
-        APITokenPut apITokenPut = null;
-        APITokenGet response = api.updateAPIToken(apITokenId, apITokenPut);
 
-        // TODO: test validations
+    // Try to update an API token with the user auth
+    @Test
+    public void userUpdateAPITokenTest() throws ApiException {
+        APITokenGet apiToken = userApiTokenApi.createAPIToken(apiTokenPost);
+        APITokenPut apiTokenPut = new APITokenPut();
+        apiTokenPut.setName(Config.randomName());
+        APITokenGet apiTokenGet = userApiTokenApi.updateAPIToken(apiToken.getId(), apiTokenPut);
+        assertEquals("Name should be equals", apiTokenPut.getName(), apiTokenGet.getName());
+
+        // Try to update admin api token with the user auth
+        ApiTokenApi adminApiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
+        APITokenPost adminApiTokenPost = new APITokenPost();
+        adminApiTokenPost.setName(Config.randomName());
+        APITokenGet adminApiTokenGet = adminApiTokenApi.createAPIToken(adminApiTokenPost);
+        try {
+            userApiTokenApi.updateAPIToken(adminApiTokenGet.getId(), apiTokenPut);
+            fail("Should not be able to update an admin api token with user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        // Try to update other user token with the user auth
+        try {
+            UserGet userTest = Config.createTestUser();
+            APITokenPost userTestApiTokenPost = new APITokenPost();
+            userTestApiTokenPost.setName(Config.randomName());
+            userTestApiTokenPost.setUserId(userTest.getId());
+            APITokenGet userTestApiTokenGet = adminApiTokenApi.createAPIToken(userTestApiTokenPost);
+            userApiTokenApi.updateAPIToken(userTestApiTokenGet.getId(), apiTokenPut);
+            fail("Should not be able to update an other user token with the user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        adminApiTokenApi.deleteAPIToken(adminApiTokenGet.getId());
     }
     
 }
