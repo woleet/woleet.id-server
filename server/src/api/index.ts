@@ -13,15 +13,18 @@ import { router as sign } from './routers/sign';
 import { router as identity } from './routers/identity';
 import { router as discovery } from './routers/discovery';
 import { router as openid } from './routers/openid';
+import { router as healthcheck } from './routers/healthcheck';
 import { admin as adminAuth, session, user as userAuth, manager as managerAuth } from './authentication';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
+import { from } from 'rxjs';
 
 /**
  * API
  */
 const apiRouter = new Router();
 apiRouter.use(bodyParser());
+apiRouter.use(healthcheck.routes());
 apiRouter.use(auth.routes());
 apiRouter.use(session);
 apiRouter.use(appConfig.routes());
