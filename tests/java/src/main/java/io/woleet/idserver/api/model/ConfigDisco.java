@@ -33,6 +33,10 @@ public class ConfigDisco {
   @SerializedName(SERIALIZED_NAME_IDENTITY_U_R_L)
   private String identityURL;
 
+  public static final String SERIALIZED_NAME_A_P_I_U_R_L = "APIURL";
+  @SerializedName(SERIALIZED_NAME_A_P_I_U_R_L)
+  private String APIURL;
+
   public ConfigDisco identityURL(String identityURL) {
     this.identityURL = identityURL;
     return this;
@@ -51,6 +55,24 @@ public class ConfigDisco {
     this.identityURL = identityURL;
   }
 
+  public ConfigDisco APIURL(String APIURL) {
+    this.APIURL = APIURL;
+    return this;
+  }
+
+   /**
+   * Public URL of the &#x60;/api&#x60; endpoint (ie. the URL that correspond to the Woleet.ID Server API). 
+   * @return APIURL
+  **/
+  @ApiModelProperty(example = "https://mydomain.com/api", value = "Public URL of the `/api` endpoint (ie. the URL that correspond to the Woleet.ID Server API). ")
+  public String getAPIURL() {
+    return APIURL;
+  }
+
+  public void setAPIURL(String APIURL) {
+    this.APIURL = APIURL;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -61,12 +83,13 @@ public class ConfigDisco {
       return false;
     }
     ConfigDisco configDisco = (ConfigDisco) o;
-    return Objects.equals(this.identityURL, configDisco.identityURL);
+    return Objects.equals(this.identityURL, configDisco.identityURL) &&
+        Objects.equals(this.APIURL, configDisco.APIURL);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identityURL);
+    return Objects.hash(identityURL, APIURL);
   }
 
 
@@ -76,6 +99,7 @@ public class ConfigDisco {
     sb.append("class ConfigDisco {\n");
     
     sb.append("    identityURL: ").append(toIndentedString(identityURL)).append("\n");
+    sb.append("    APIURL: ").append(toIndentedString(APIURL)).append("\n");
     sb.append("}");
     return sb.toString();
   }

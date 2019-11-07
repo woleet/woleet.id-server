@@ -1415,6 +1415,12 @@ components:
       example: "https://identity.mydomain.com/identity"
       description: >
         Public URL of the `/identity` endpoint (ie. the URL that anyone can use to get the identity associated with a public key).
+    APIURL:
+      type: string
+      format: url
+      example: "https://mydomain.com/api"
+      description: >
+        Public URL of the `/api` endpoint (ie. the URL that correspond to the Woleet.ID Server API).
     ServerConfig:
       type: object
       properties:
@@ -1601,6 +1607,8 @@ components:
       properties:
         identityURL:
           $ref: '#/components/schemas/IdentityURL'
+        APIURL:
+          $ref: '#/components/schemas/APIURL'
     ExternalKeyPost:
       type: object
       properties:
