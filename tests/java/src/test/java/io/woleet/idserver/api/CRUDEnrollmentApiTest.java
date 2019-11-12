@@ -80,7 +80,7 @@ public class CRUDEnrollmentApiTest extends CRUDApiTest {
 
         @Override
         public String getName() {
-            return ((EnrollmentBase) objectBase).getName();
+            return ((EnrollmentGet) objectBase).getName();
         }
 
         @Override

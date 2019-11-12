@@ -18,19 +18,31 @@ Use this endpoint to verify that the server knows a public key and to get the id
 ### Example
 ```java
 // Import classes:
-//import io.woleet.idserver.ApiException;
-//import io.woleet.idserver.api.IdentityApi;
+import io.woleet.idserver.ApiClient;
+import io.woleet.idserver.ApiException;
+import io.woleet.idserver.Configuration;
+import io.woleet.idserver.models.*;
+import io.woleet.idserver.api.IdentityApi;
 
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost");
 
-IdentityApi apiInstance = new IdentityApi();
-String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | Public key to verify.
-String leftData = 00c8a2b0c373050e7f2abbb2e4c631a42c10d402; // String | Left part of the random data to sign (should be generated randomly). <br>When not provided, the server does not return a signature, even if it controls the key. 
-try {
-    IdentityResult result = apiInstance.getIdentity(pubKey, leftData);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling IdentityApi#getIdentity");
-    e.printStackTrace();
+    IdentityApi apiInstance = new IdentityApi(defaultClient);
+    String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | Public key to verify.
+    String leftData = 00c8a2b0c373050e7f2abbb2e4c631a42c10d402; // String | Left part of the random data to sign (should be generated randomly). <br>When not provided, the server does not return a signature, even if it controls the key. 
+    try {
+      IdentityResult result = apiInstance.getIdentity(pubKey, leftData);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling IdentityApi#getIdentity");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
 }
 ```
 
@@ -53,4 +65,11 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful operation. |  -  |
+**400** | Missing or invalid query parameter. |  -  |
+**404** | Public key not found. |  -  |
 
