@@ -49,6 +49,7 @@ import { EnrollmentPageComponent } from '@pages/enrollment';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
 import { DialogAskResetComponent } from '@parts/dialog-ask-reset';
+import { DialogIdentityDeleteComponent } from '@parts/dialog-identity-delete';
 import {
   AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService, ManagerGuardService
 } from '@guards/auth';
@@ -140,12 +141,14 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     DialogResetPasswordComponent,
     DialogMailResetComponent,
     DialogAskResetComponent,
+    DialogIdentityDeleteComponent,
     UserFilterPipe
   ],
   entryComponents: [
     DialogResetPasswordComponent,
     DialogMailResetComponent,
-    DialogAskResetComponent
+    DialogAskResetComponent,
+    DialogIdentityDeleteComponent
   ],
   imports: [
     // angular

@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UserService } from '@services/user';
 import { AsYouType } from 'libphonenumber-js';
 import { confirm } from '../../util';
+import { MatDialog } from '@angular/material';
+import { DialogIdentityDeleteComponent } from '@parts/dialog-identity-delete';
 import cc from '@components/cc';
 
 @Component({
@@ -30,7 +32,8 @@ export class UserCardComponent implements OnInit {
   @Output()
   update = new EventEmitter<ApiUserObject>();
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService,
+    public dialog: MatDialog) {
     if (!this.hideAttribute) {
       this.hideAttribute = [];
     }
@@ -45,16 +48,25 @@ export class UserCardComponent implements OnInit {
   }
 
   async deleteUser() {
-    if (!confirm(`Delete ${this.userType} ${this.user.identity.commonName}?\n\n`
-      + `Warning: deleting a ${this.userType} is irreversible, and also deletes all associated keys and API tokens.\n`
-      + `Consequently, signatures made with this ${this.userType}'s keys will no longer be linked to this identity, `
-      + `and keys ownership will no longer be provable by the identity server.`)) {
-      return;
-    }
-    this.formLocked = true;
-    const del = await this.userService.delete(this.user.id);
-    this.formLocked = false;
-    this.delete.emit(del);
+    const dialogRef = this.userType === 'user' ?
+      this.dialog.open(DialogIdentityDeleteComponent, {
+        data: true,
+        width: '450px'
+      })
+      : this.dialog.open(DialogIdentityDeleteComponent, {
+        data: false,
+        width: '450px'
+      });
+
+    dialogRef.afterClosed().subscribe(async confirmDelete => {
+      if (confirmDelete) {
+        this.formLocked = true;
+        const del = await this.userService.delete(this.user.id);
+        this.formLocked = false;
+        this.delete.emit(del);
+      }
+    });
+
   }
 
   async blockUser() {
