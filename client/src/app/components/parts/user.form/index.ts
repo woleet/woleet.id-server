@@ -93,8 +93,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   private onDestroy: EventEmitter<void>;
 
   constructor(private service: UserService, private router: Router, private configService: ConfigService,
-    private cdr: ChangeDetectorRef,
-    private authService: AuthService) {
+              private cdr: ChangeDetectorRef,
+              private authService: AuthService) {
     super();
     this.onDestroy = new EventEmitter();
   }
