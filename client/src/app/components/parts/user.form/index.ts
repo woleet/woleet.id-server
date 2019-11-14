@@ -93,8 +93,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   private onDestroy: EventEmitter<void>;
 
   constructor(private service: UserService, private router: Router, private configService: ConfigService,
-              private cdr: ChangeDetectorRef,
-              private authService: AuthService) {
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService) {
     super();
     this.onDestroy = new EventEmitter();
   }
@@ -181,8 +181,9 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
     let promise;
     if (this.mode === 'edit') {
-      const cleaned = updatedDiff(Object.assign({ password: undefined }, this.user), replaceInObject(user, '', null));
-      const alreadyExist = await this.checkSealIdentity(user);
+      const cleaned: ApiPutUserObject = updatedDiff(Object.assign({ password: undefined }, this.user), replaceInObject(user, '', null));
+      const alreadyExist = cleaned.identity && (cleaned.identity.commonName || cleaned.identity.organization)
+        ? await this.checkSealIdentity(user) : false;
       if (alreadyExist) {
         if (!confirm('This seal identity already exists.\n'
           + 'Do you still want to update it?')) {
