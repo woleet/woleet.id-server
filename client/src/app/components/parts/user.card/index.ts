@@ -50,11 +50,11 @@ export class UserCardComponent implements OnInit {
   async deleteUser() {
     const dialogRef = this.userType === 'user' ?
       this.dialog.open(DialogIdentityDeleteComponent, {
-        data: true,
+        data: { isUser: true, commonName: this.user.identity.commonName },
         width: '450px'
       })
       : this.dialog.open(DialogIdentityDeleteComponent, {
-        data: false,
+        data: { isUser: false, commonName: this.user.identity.commonName },
         width: '450px'
       });
 

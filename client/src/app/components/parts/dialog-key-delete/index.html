@@ -1,0 +1,21 @@
+<mat-dialog-content *ngIf='data.isUser'>
+  <h3>Delete user key {{ data.name }}?</h3>
+
+  <p>Warning: deleting a user key is irreversible.</p>
+
+  <p>As a result, this key will no longer be usable for signing, and <em>identity verification of signatures using
+      this key will trigger a warning</em>.</p>
+</mat-dialog-content>
+<mat-dialog-content *ngIf='!data.isUser'>
+  <h3>Delete seal key {{ data.name }}?</h3>
+
+  <p>Warning: deleting a seal key is irreversible.</p>
+
+  <p>As a result, this key will no longer be usable for creating seals, and <em>identity verification of seals
+      using this key will trigger an error</em>.
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="warn" [mat-dialog-close]="true">DELETE</button>
+</mat-dialog-actions>
