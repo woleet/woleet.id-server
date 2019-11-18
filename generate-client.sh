@@ -2,7 +2,7 @@
 # Use this script to generate Java test/client code from Woleet.ID Server OpenAPI documentation.
 # ==============================================================================================
 
-OPENAPI_CODEGEN='npx --package @openapitools/openapi-generator-cli@cli-4.1.2 openapi-generator'
+OPENAPI_CODEGEN='npx --package @openapitools/openapi-generator-cli@cli-4.2.1 openapi-generator'
 
 # Clean previously generated code
 rm -rf tests/java/src/main

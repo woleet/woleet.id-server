@@ -101,7 +101,6 @@ public class APITokenGetAllOf {
   }
 
 
-
   public void setUserId(UUID userId) {
     this.userId = userId;
   }

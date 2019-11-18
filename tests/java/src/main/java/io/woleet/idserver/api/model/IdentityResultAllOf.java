@@ -66,7 +66,6 @@ public class IdentityResultAllOf {
   }
 
 
-
   public void setRightData(String rightData) {
     this.rightData = rightData;
   }
@@ -88,7 +87,6 @@ public class IdentityResultAllOf {
   public String getSignature() {
     return signature;
   }
-
 
 
   public void setSignature(String signature) {
@@ -114,7 +112,6 @@ public class IdentityResultAllOf {
   }
 
 
-
   public void setIdentity(Identity identity) {
     this.identity = identity;
   }
@@ -136,7 +133,6 @@ public class IdentityResultAllOf {
   public Key getKey() {
     return key;
   }
-
 
 
   public void setKey(Key key) {

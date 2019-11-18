@@ -52,7 +52,6 @@ public class FullIdentityAllOf {
   }
 
 
-
   public void setUserId(String userId) {
     this.userId = userId;
   }

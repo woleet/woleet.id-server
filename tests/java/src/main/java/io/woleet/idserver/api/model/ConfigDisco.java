@@ -52,7 +52,6 @@ public class ConfigDisco {
   }
 
 
-
   public void setIdentityURL(String identityURL) {
     this.identityURL = identityURL;
   }

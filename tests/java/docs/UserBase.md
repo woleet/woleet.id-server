@@ -6,7 +6,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | [**UUID**](UUID.md) | User identifier (allocated by the server). |  [optional]
+**id** | [**UUID**](UUID.md) | User identifier (allocated by the server). |  [optional] [readonly]
 **email** | **String** | User email (can be used for login). |  [optional]
 **username** | **String** | User name (can be used for login). |  [optional]
 **countryCallingCode** | **String** | User country calling code |  [optional]

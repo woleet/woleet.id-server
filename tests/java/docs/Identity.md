@@ -2,6 +2,7 @@
 
 # Identity
 
+User identity provided as a set of X500 Distinguished Name attributes (see https://www.ietf.org/rfc/rfc4519.txt).
 ## Properties
 
 Name | Type | Description | Notes

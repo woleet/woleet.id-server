@@ -84,7 +84,6 @@ public class ServerEventGet {
   }
 
 
-
   public void setType(ServerEventTypeEnum type) {
     this.type = type;
   }
@@ -122,7 +121,6 @@ public class ServerEventGet {
   }
 
 
-
   public void setAuthorizedUserId(UUID authorizedUserId) {
     this.authorizedUserId = authorizedUserId;
   }
@@ -144,7 +142,6 @@ public class ServerEventGet {
   public UUID getAuthorizedTokenId() {
     return authorizedTokenId;
   }
-
 
 
   public void setAuthorizedTokenId(UUID authorizedTokenId) {
@@ -170,7 +167,6 @@ public class ServerEventGet {
   }
 
 
-
   public void setAssociatedTokenId(UUID associatedTokenId) {
     this.associatedTokenId = associatedTokenId;
   }
@@ -192,7 +188,6 @@ public class ServerEventGet {
   public UUID getAssociatedUserId() {
     return associatedUserId;
   }
-
 
 
   public void setAssociatedUserId(UUID associatedUserId) {
@@ -218,7 +213,6 @@ public class ServerEventGet {
   }
 
 
-
   public void setAssociatedKeyId(UUID associatedKeyId) {
     this.associatedKeyId = associatedKeyId;
   }
@@ -240,7 +234,6 @@ public class ServerEventGet {
   public Object getData() {
     return data;
   }
-
 
 
   public void setData(Object data) {

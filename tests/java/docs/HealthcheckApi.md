@@ -16,16 +16,28 @@ Check the database availability.
 ### Example
 ```java
 // Import classes:
-//import io.woleet.idserver.ApiException;
-//import io.woleet.idserver.api.HealthcheckApi;
+import io.woleet.idserver.ApiClient;
+import io.woleet.idserver.ApiException;
+import io.woleet.idserver.Configuration;
+import io.woleet.idserver.models.*;
+import io.woleet.idserver.api.HealthcheckApi;
 
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost");
 
-HealthcheckApi apiInstance = new HealthcheckApi();
-try {
-    apiInstance.checkGet();
-} catch (ApiException e) {
-    System.err.println("Exception when calling HealthcheckApi#checkGet");
-    e.printStackTrace();
+    HealthcheckApi apiInstance = new HealthcheckApi(defaultClient);
+    try {
+      apiInstance.checkGet();
+    } catch (ApiException e) {
+      System.err.println("Exception when calling HealthcheckApi#checkGet");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
 }
 ```
 
@@ -44,4 +56,10 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful operation. |  -  |
+**503** | the database is unavailable. |  -  |
 

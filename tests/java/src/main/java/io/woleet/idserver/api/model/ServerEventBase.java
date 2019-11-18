@@ -78,7 +78,6 @@ public class ServerEventBase {
   }
 
 
-
   public void setType(ServerEventTypeEnum type) {
     this.type = type;
   }
@@ -116,7 +115,6 @@ public class ServerEventBase {
   }
 
 
-
   public void setAuthorizedUserId(UUID authorizedUserId) {
     this.authorizedUserId = authorizedUserId;
   }
@@ -138,7 +136,6 @@ public class ServerEventBase {
   public UUID getAuthorizedTokenId() {
     return authorizedTokenId;
   }
-
 
 
   public void setAuthorizedTokenId(UUID authorizedTokenId) {
@@ -164,7 +161,6 @@ public class ServerEventBase {
   }
 
 
-
   public void setAssociatedTokenId(UUID associatedTokenId) {
     this.associatedTokenId = associatedTokenId;
   }
@@ -188,7 +184,6 @@ public class ServerEventBase {
   }
 
 
-
   public void setAssociatedUserId(UUID associatedUserId) {
     this.associatedUserId = associatedUserId;
   }
@@ -210,7 +205,6 @@ public class ServerEventBase {
   public UUID getAssociatedKeyId() {
     return associatedKeyId;
   }
-
 
 
   public void setAssociatedKeyId(UUID associatedKeyId) {

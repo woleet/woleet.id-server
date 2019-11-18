@@ -108,7 +108,6 @@ public class UserPut {
   }
 
 
-
   public void setEmail(String email) {
     this.email = email;
   }
@@ -130,7 +129,6 @@ public class UserPut {
   public String getUsername() {
     return username;
   }
-
 
 
   public void setUsername(String username) {
@@ -156,7 +154,6 @@ public class UserPut {
   }
 
 
-
   public void setCountryCallingCode(String countryCallingCode) {
     this.countryCallingCode = countryCallingCode;
   }
@@ -178,7 +175,6 @@ public class UserPut {
   public String getPhone() {
     return phone;
   }
-
 
 
   public void setPhone(String phone) {
@@ -204,7 +200,6 @@ public class UserPut {
   }
 
 
-
   public void setStatus(UserStatusEnum status) {
     this.status = status;
   }
@@ -226,7 +221,6 @@ public class UserPut {
   public UserRoleEnum getRole() {
     return role;
   }
-
 
 
   public void setRole(UserRoleEnum role) {
@@ -252,7 +246,6 @@ public class UserPut {
   }
 
 
-
   public void setIdentity(FullIdentity identity) {
     this.identity = identity;
   }
@@ -276,7 +269,6 @@ public class UserPut {
   }
 
 
-
   public void setPassword(String password) {
     this.password = password;
   }
@@ -298,7 +290,6 @@ public class UserPut {
   public UUID getDefaultKeyId() {
     return defaultKeyId;
   }
-
 
 
   public void setDefaultKeyId(UUID defaultKeyId) {

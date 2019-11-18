@@ -63,7 +63,6 @@ public class APITokenPost {
   }
 
 
-
   public void setName(String name) {
     this.name = name;
   }
@@ -87,7 +86,6 @@ public class APITokenPost {
   }
 
 
-
   public void setStatus(APITokenStatusEnum status) {
     this.status = status;
   }
@@ -109,7 +107,6 @@ public class APITokenPost {
   public UUID getUserId() {
     return userId;
   }
-
 
 
   public void setUserId(UUID userId) {

@@ -73,7 +73,6 @@ public class FullIdentity {
   }
 
 
-
   public void setCommonName(String commonName) {
     this.commonName = commonName;
   }
@@ -95,7 +94,6 @@ public class FullIdentity {
   public String getOrganization() {
     return organization;
   }
-
 
 
   public void setOrganization(String organization) {
@@ -121,7 +119,6 @@ public class FullIdentity {
   }
 
 
-
   public void setOrganizationalUnit(String organizationalUnit) {
     this.organizationalUnit = organizationalUnit;
   }
@@ -143,7 +140,6 @@ public class FullIdentity {
   public String getLocality() {
     return locality;
   }
-
 
 
   public void setLocality(String locality) {
@@ -169,7 +165,6 @@ public class FullIdentity {
   }
 
 
-
   public void setCountry(String country) {
     this.country = country;
   }
@@ -191,7 +186,6 @@ public class FullIdentity {
   public String getUserId() {
     return userId;
   }
-
 
 
   public void setUserId(String userId) {

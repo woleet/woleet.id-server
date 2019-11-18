@@ -68,7 +68,6 @@ public class Identity {
   }
 
 
-
   public void setCommonName(String commonName) {
     this.commonName = commonName;
   }
@@ -90,7 +89,6 @@ public class Identity {
   public String getOrganization() {
     return organization;
   }
-
 
 
   public void setOrganization(String organization) {
@@ -116,7 +114,6 @@ public class Identity {
   }
 
 
-
   public void setOrganizationalUnit(String organizationalUnit) {
     this.organizationalUnit = organizationalUnit;
   }
@@ -140,7 +137,6 @@ public class Identity {
   }
 
 
-
   public void setLocality(String locality) {
     this.locality = locality;
   }
@@ -162,7 +158,6 @@ public class Identity {
   public String getCountry() {
     return country;
   }
-
 
 
   public void setCountry(String country) {

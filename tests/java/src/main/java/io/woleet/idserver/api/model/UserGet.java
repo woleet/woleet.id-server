@@ -121,7 +121,6 @@ public class UserGet {
   }
 
 
-
   public void setEmail(String email) {
     this.email = email;
   }
@@ -143,7 +142,6 @@ public class UserGet {
   public String getUsername() {
     return username;
   }
-
 
 
   public void setUsername(String username) {
@@ -169,7 +167,6 @@ public class UserGet {
   }
 
 
-
   public void setCountryCallingCode(String countryCallingCode) {
     this.countryCallingCode = countryCallingCode;
   }
@@ -191,7 +188,6 @@ public class UserGet {
   public String getPhone() {
     return phone;
   }
-
 
 
   public void setPhone(String phone) {
@@ -217,7 +213,6 @@ public class UserGet {
   }
 
 
-
   public void setStatus(UserStatusEnum status) {
     this.status = status;
   }
@@ -241,7 +236,6 @@ public class UserGet {
   }
 
 
-
   public void setRole(UserRoleEnum role) {
     this.role = role;
   }
@@ -263,7 +257,6 @@ public class UserGet {
   public FullIdentity getIdentity() {
     return identity;
   }
-
 
 
   public void setIdentity(FullIdentity identity) {
@@ -331,7 +324,6 @@ public class UserGet {
   }
 
 
-
   public void setMode(UserModeEnum mode) {
     this.mode = mode;
   }
@@ -353,7 +345,6 @@ public class UserGet {
   public UUID getDefaultKeyId() {
     return defaultKeyId;
   }
-
 
 
   public void setDefaultKeyId(UUID defaultKeyId) {

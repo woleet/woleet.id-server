@@ -55,7 +55,6 @@ public class APIErrorError {
   }
 
 
-
   public void setCode(Integer code) {
     this.code = code;
   }
@@ -76,7 +75,6 @@ public class APIErrorError {
   public String getMessage() {
     return message;
   }
-
 
 
   public void setMessage(String message) {

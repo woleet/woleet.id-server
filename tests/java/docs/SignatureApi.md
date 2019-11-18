@@ -30,15 +30,13 @@ public class Example {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost");
     
-    // Configure HTTP basic authorization: APITokenAuth
-    HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
-    APITokenAuth.setUsername("YOUR USERNAME");
-    APITokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: APITokenAuth
+    HttpBearerAuth APITokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("APITokenAuth");
+    APITokenAuth.setBearerToken("BEARER TOKEN");
 
-    // Configure HTTP basic authorization: OAuthTokenAuth
-    HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
-    OAuthTokenAuth.setUsername("YOUR USERNAME");
-    OAuthTokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: OAuthTokenAuth
+    HttpBearerAuth OAuthTokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+    OAuthTokenAuth.setBearerToken("BEARER TOKEN");
 
     SignatureApi apiInstance = new SignatureApi(defaultClient);
     String hashToSign = d8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975; // String | SHA256 hash to be signed (a string formatted like [a-f0-9]{64}).

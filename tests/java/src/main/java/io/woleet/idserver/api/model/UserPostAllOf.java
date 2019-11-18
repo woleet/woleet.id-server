@@ -61,7 +61,6 @@ public class UserPostAllOf {
   }
 
 
-
   public void setPassword(String password) {
     this.password = password;
   }
@@ -82,7 +81,6 @@ public class UserPostAllOf {
   public Boolean getCreateDefaultKey() {
     return createDefaultKey;
   }
-
 
 
   public void setCreateDefaultKey(Boolean createDefaultKey) {
@@ -106,7 +104,6 @@ public class UserPostAllOf {
   public UserModeEnum getMode() {
     return mode;
   }
-
 
 
   public void setMode(UserModeEnum mode) {

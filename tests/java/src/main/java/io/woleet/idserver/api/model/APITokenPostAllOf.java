@@ -53,7 +53,6 @@ public class APITokenPostAllOf {
   }
 
 
-
   public void setUserId(UUID userId) {
     this.userId = userId;
   }

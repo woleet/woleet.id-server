@@ -118,7 +118,6 @@ public class Key {
   }
 
 
-
   public void setName(String name) {
     this.name = name;
   }
@@ -140,7 +139,6 @@ public class Key {
   public String getPubKey() {
     return pubKey;
   }
-
 
 
   public void setPubKey(String pubKey) {
@@ -166,7 +164,6 @@ public class Key {
   }
 
 
-
   public void setStatus(StatusEnum status) {
     this.status = status;
   }
@@ -190,7 +187,6 @@ public class Key {
   }
 
 
-
   public void setExpiration(Long expiration) {
     this.expiration = expiration;
   }
@@ -212,7 +208,6 @@ public class Key {
   public Long getRevokedAt() {
     return revokedAt;
   }
-
 
 
   public void setRevokedAt(Long revokedAt) {

@@ -61,7 +61,6 @@ public class KeyBase {
   }
 
 
-
   public void setName(String name) {
     this.name = name;
   }
@@ -85,7 +84,6 @@ public class KeyBase {
   }
 
 
-
   public void setExpiration(Long expiration) {
     this.expiration = expiration;
   }
@@ -107,7 +105,6 @@ public class KeyBase {
   public KeyStatusEnum getStatus() {
     return status;
   }
-
 
 
   public void setStatus(KeyStatusEnum status) {

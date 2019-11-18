@@ -113,7 +113,6 @@ public class UserPost {
   }
 
 
-
   public void setEmail(String email) {
     this.email = email;
   }
@@ -135,7 +134,6 @@ public class UserPost {
   public String getUsername() {
     return username;
   }
-
 
 
   public void setUsername(String username) {
@@ -161,7 +159,6 @@ public class UserPost {
   }
 
 
-
   public void setCountryCallingCode(String countryCallingCode) {
     this.countryCallingCode = countryCallingCode;
   }
@@ -183,7 +180,6 @@ public class UserPost {
   public String getPhone() {
     return phone;
   }
-
 
 
   public void setPhone(String phone) {
@@ -209,7 +205,6 @@ public class UserPost {
   }
 
 
-
   public void setStatus(UserStatusEnum status) {
     this.status = status;
   }
@@ -233,7 +228,6 @@ public class UserPost {
   }
 
 
-
   public void setRole(UserRoleEnum role) {
     this.role = role;
   }
@@ -254,7 +248,6 @@ public class UserPost {
   public FullIdentity getIdentity() {
     return identity;
   }
-
 
 
   public void setIdentity(FullIdentity identity) {
@@ -280,7 +273,6 @@ public class UserPost {
   }
 
 
-
   public void setPassword(String password) {
     this.password = password;
   }
@@ -301,7 +293,6 @@ public class UserPost {
   public Boolean getCreateDefaultKey() {
     return createDefaultKey;
   }
-
 
 
   public void setCreateDefaultKey(Boolean createDefaultKey) {
@@ -325,7 +316,6 @@ public class UserPost {
   public UserModeEnum getMode() {
     return mode;
   }
-
 
 
   public void setMode(UserModeEnum mode) {

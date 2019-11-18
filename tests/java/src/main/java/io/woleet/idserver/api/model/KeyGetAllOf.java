@@ -106,7 +106,6 @@ public class KeyGetAllOf {
   }
 
 
-
   public void setPubKey(String pubKey) {
     this.pubKey = pubKey;
   }
@@ -128,7 +127,6 @@ public class KeyGetAllOf {
   public KeyTypeEnum getType() {
     return type;
   }
-
 
 
   public void setType(KeyTypeEnum type) {
@@ -154,7 +152,6 @@ public class KeyGetAllOf {
   }
 
 
-
   public void setHolder(KeyHolderEnum holder) {
     this.holder = holder;
   }
@@ -176,7 +173,6 @@ public class KeyGetAllOf {
   public KeyDeviceEnum getDevice() {
     return device;
   }
-
 
 
   public void setDevice(KeyDeviceEnum device) {
@@ -202,7 +198,6 @@ public class KeyGetAllOf {
   }
 
 
-
   public void setExpired(Boolean expired) {
     this.expired = expired;
   }
@@ -224,7 +219,6 @@ public class KeyGetAllOf {
   public Long getRevokedAt() {
     return revokedAt;
   }
-
 
 
   public void setRevokedAt(Long revokedAt) {

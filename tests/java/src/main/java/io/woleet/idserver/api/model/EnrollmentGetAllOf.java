@@ -57,7 +57,6 @@ public class EnrollmentGetAllOf {
   }
 
 
-
   public void setId(UUID id) {
     this.id = id;
   }
@@ -79,7 +78,6 @@ public class EnrollmentGetAllOf {
   public UUID getUserId() {
     return userId;
   }
-
 
 
   public void setUserId(UUID userId) {

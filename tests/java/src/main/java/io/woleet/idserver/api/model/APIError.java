@@ -53,7 +53,6 @@ public class APIError {
   }
 
 
-
   public void setError(APIErrorError error) {
     this.error = error;
   }

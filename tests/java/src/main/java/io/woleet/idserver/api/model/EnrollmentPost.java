@@ -75,7 +75,6 @@ public class EnrollmentPost {
   }
 
 
-
   public void setName(String name) {
     this.name = name;
   }
@@ -97,7 +96,6 @@ public class EnrollmentPost {
   public KeyDeviceEnum getDevice() {
     return device;
   }
-
 
 
   public void setDevice(KeyDeviceEnum device) {
@@ -123,7 +121,6 @@ public class EnrollmentPost {
   }
 
 
-
   public void setExpiration(Long expiration) {
     this.expiration = expiration;
   }
@@ -145,7 +142,6 @@ public class EnrollmentPost {
   public Long getKeyExpiration() {
     return keyExpiration;
   }
-
 
 
   public void setKeyExpiration(Long keyExpiration) {
@@ -170,7 +166,6 @@ public class EnrollmentPost {
   }
 
 
-
   public void setUserId(UUID userId) {
     this.userId = userId;
   }
@@ -192,7 +187,6 @@ public class EnrollmentPost {
   public Boolean getTest() {
     return test;
   }
-
 
 
   public void setTest(Boolean test) {

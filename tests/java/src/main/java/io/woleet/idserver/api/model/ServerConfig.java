@@ -61,7 +61,6 @@ public class ServerConfig {
   }
 
 
-
   public void setIdentityURL(String identityURL) {
     this.identityURL = identityURL;
   }
@@ -85,7 +84,6 @@ public class ServerConfig {
   }
 
 
-
   public void setDefaultKeyId(UUID defaultKeyId) {
     this.defaultKeyId = defaultKeyId;
   }
@@ -107,7 +105,6 @@ public class ServerConfig {
   public Boolean getFallbackOnDefaultKey() {
     return fallbackOnDefaultKey;
   }
-
 
 
   public void setFallbackOnDefaultKey(Boolean fallbackOnDefaultKey) {

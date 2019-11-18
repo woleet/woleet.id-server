@@ -65,7 +65,6 @@ public class EnrollmentBase {
   }
 
 
-
   public void setName(String name) {
     this.name = name;
   }
@@ -87,7 +86,6 @@ public class EnrollmentBase {
   public KeyDeviceEnum getDevice() {
     return device;
   }
-
 
 
   public void setDevice(KeyDeviceEnum device) {
@@ -113,7 +111,6 @@ public class EnrollmentBase {
   }
 
 
-
   public void setExpiration(Long expiration) {
     this.expiration = expiration;
   }
@@ -135,7 +132,6 @@ public class EnrollmentBase {
   public Long getKeyExpiration() {
     return keyExpiration;
   }
-
 
 
   public void setKeyExpiration(Long keyExpiration) {

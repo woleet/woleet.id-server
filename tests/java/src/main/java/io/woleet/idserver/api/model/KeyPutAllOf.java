@@ -53,7 +53,6 @@ public class KeyPutAllOf {
   }
 
 
-
   public void setDevice(KeyDeviceEnum device) {
     this.device = device;
   }

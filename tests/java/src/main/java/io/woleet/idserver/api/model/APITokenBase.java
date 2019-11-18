@@ -57,7 +57,6 @@ public class APITokenBase {
   }
 
 
-
   public void setName(String name) {
     this.name = name;
   }
@@ -79,7 +78,6 @@ public class APITokenBase {
   public APITokenStatusEnum getStatus() {
     return status;
   }
-
 
 
   public void setStatus(APITokenStatusEnum status) {

@@ -7,7 +7,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | [**ServerEventTypeEnum**](ServerEventTypeEnum.md) |  |  [optional]
-**occurredAt** | **Long** | Date on which an event occurred (Unix ms timestamp). |  [optional]
+**occurredAt** | **Long** | Date on which an event occurred (Unix ms timestamp). |  [optional] [readonly]
 **authorizedUserId** | [**UUID**](UUID.md) | Identifier of the user that triggered the event. |  [optional]
 **authorizedTokenId** | [**UUID**](UUID.md) | Identifier of the API token used to authentify. |  [optional]
 **associatedTokenId** | [**UUID**](UUID.md) | Identifier of the related API token. |  [optional]

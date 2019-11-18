@@ -34,15 +34,13 @@ public class Example {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost");
     
-    // Configure HTTP basic authorization: APITokenAuth
-    HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
-    APITokenAuth.setUsername("YOUR USERNAME");
-    APITokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: APITokenAuth
+    HttpBearerAuth APITokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("APITokenAuth");
+    APITokenAuth.setBearerToken("BEARER TOKEN");
 
-    // Configure HTTP basic authorization: OAuthTokenAuth
-    HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
-    OAuthTokenAuth.setUsername("YOUR USERNAME");
-    OAuthTokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: OAuthTokenAuth
+    HttpBearerAuth OAuthTokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+    OAuthTokenAuth.setBearerToken("BEARER TOKEN");
 
     DiscoveryApi apiInstance = new DiscoveryApi(defaultClient);
     try {
@@ -104,15 +102,13 @@ public class Example {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost");
     
-    // Configure HTTP basic authorization: APITokenAuth
-    HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
-    APITokenAuth.setUsername("YOUR USERNAME");
-    APITokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: APITokenAuth
+    HttpBearerAuth APITokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("APITokenAuth");
+    APITokenAuth.setBearerToken("BEARER TOKEN");
 
-    // Configure HTTP basic authorization: OAuthTokenAuth
-    HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
-    OAuthTokenAuth.setUsername("YOUR USERNAME");
-    OAuthTokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: OAuthTokenAuth
+    HttpBearerAuth OAuthTokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+    OAuthTokenAuth.setBearerToken("BEARER TOKEN");
 
     DiscoveryApi apiInstance = new DiscoveryApi(defaultClient);
     try {
@@ -176,15 +172,13 @@ public class Example {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost");
     
-    // Configure HTTP basic authorization: APITokenAuth
-    HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
-    APITokenAuth.setUsername("YOUR USERNAME");
-    APITokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: APITokenAuth
+    HttpBearerAuth APITokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("APITokenAuth");
+    APITokenAuth.setBearerToken("BEARER TOKEN");
 
-    // Configure HTTP basic authorization: OAuthTokenAuth
-    HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
-    OAuthTokenAuth.setUsername("YOUR USERNAME");
-    OAuthTokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: OAuthTokenAuth
+    HttpBearerAuth OAuthTokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+    OAuthTokenAuth.setBearerToken("BEARER TOKEN");
 
     DiscoveryApi apiInstance = new DiscoveryApi(defaultClient);
     String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | Public key (bitcoin address when using BIP39 keys).
@@ -251,15 +245,13 @@ public class Example {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost");
     
-    // Configure HTTP basic authorization: APITokenAuth
-    HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
-    APITokenAuth.setUsername("YOUR USERNAME");
-    APITokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: APITokenAuth
+    HttpBearerAuth APITokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("APITokenAuth");
+    APITokenAuth.setBearerToken("BEARER TOKEN");
 
-    // Configure HTTP basic authorization: OAuthTokenAuth
-    HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
-    OAuthTokenAuth.setUsername("YOUR USERNAME");
-    OAuthTokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: OAuthTokenAuth
+    HttpBearerAuth OAuthTokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+    OAuthTokenAuth.setBearerToken("BEARER TOKEN");
 
     DiscoveryApi apiInstance = new DiscoveryApi(defaultClient);
     UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
@@ -327,15 +319,13 @@ public class Example {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost");
     
-    // Configure HTTP basic authorization: APITokenAuth
-    HttpBasicAuth APITokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("APITokenAuth");
-    APITokenAuth.setUsername("YOUR USERNAME");
-    APITokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: APITokenAuth
+    HttpBearerAuth APITokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("APITokenAuth");
+    APITokenAuth.setBearerToken("BEARER TOKEN");
 
-    // Configure HTTP basic authorization: OAuthTokenAuth
-    HttpBasicAuth OAuthTokenAuth = (HttpBasicAuth) defaultClient.getAuthentication("OAuthTokenAuth");
-    OAuthTokenAuth.setUsername("YOUR USERNAME");
-    OAuthTokenAuth.setPassword("YOUR PASSWORD");
+    // Configure HTTP bearer authorization: OAuthTokenAuth
+    HttpBearerAuth OAuthTokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("OAuthTokenAuth");
+    OAuthTokenAuth.setBearerToken("BEARER TOKEN");
 
     DiscoveryApi apiInstance = new DiscoveryApi(defaultClient);
     String search = {"email":{"value":"john.doe@acme.com"},"username":{"value":"johndoe"},"x500CommonName":{"value":"John Doe"},"x500Organization":{"value":"Acme corp"},"x500OrganizationalUnit":{"value":"Business unit"}}; // String | A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.

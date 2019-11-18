@@ -106,7 +106,6 @@ public class KeyGet {
   }
 
 
-
   public void setName(String name) {
     this.name = name;
   }
@@ -130,7 +129,6 @@ public class KeyGet {
   }
 
 
-
   public void setExpiration(Long expiration) {
     this.expiration = expiration;
   }
@@ -152,7 +150,6 @@ public class KeyGet {
   public KeyStatusEnum getStatus() {
     return status;
   }
-
 
 
   public void setStatus(KeyStatusEnum status) {
@@ -192,7 +189,6 @@ public class KeyGet {
   }
 
 
-
   public void setPubKey(String pubKey) {
     this.pubKey = pubKey;
   }
@@ -214,7 +210,6 @@ public class KeyGet {
   public KeyTypeEnum getType() {
     return type;
   }
-
 
 
   public void setType(KeyTypeEnum type) {
@@ -240,7 +235,6 @@ public class KeyGet {
   }
 
 
-
   public void setHolder(KeyHolderEnum holder) {
     this.holder = holder;
   }
@@ -262,7 +256,6 @@ public class KeyGet {
   public KeyDeviceEnum getDevice() {
     return device;
   }
-
 
 
   public void setDevice(KeyDeviceEnum device) {
@@ -288,7 +281,6 @@ public class KeyGet {
   }
 
 
-
   public void setExpired(Boolean expired) {
     this.expired = expired;
   }
@@ -310,7 +302,6 @@ public class KeyGet {
   public Long getRevokedAt() {
     return revokedAt;
   }
-
 
 
   public void setRevokedAt(Long revokedAt) {

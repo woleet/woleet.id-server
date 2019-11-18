@@ -64,7 +64,6 @@ public class SignatureResult {
   }
 
 
-
   public void setPubKey(String pubKey) {
     this.pubKey = pubKey;
   }
@@ -86,7 +85,6 @@ public class SignatureResult {
   public String getSignedHash() {
     return signedHash;
   }
-
 
 
   public void setSignedHash(String signedHash) {
@@ -112,7 +110,6 @@ public class SignatureResult {
   }
 
 
-
   public void setSignature(String signature) {
     this.signature = signature;
   }
@@ -134,7 +131,6 @@ public class SignatureResult {
   public String getIdentityURL() {
     return identityURL;
   }
-
 
 
   public void setIdentityURL(String identityURL) {

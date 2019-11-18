@@ -112,7 +112,6 @@ public class UserGetAllOf {
   }
 
 
-
   public void setMode(UserModeEnum mode) {
     this.mode = mode;
   }
@@ -134,7 +133,6 @@ public class UserGetAllOf {
   public UUID getDefaultKeyId() {
     return defaultKeyId;
   }
-
 
 
   public void setDefaultKeyId(UUID defaultKeyId) {

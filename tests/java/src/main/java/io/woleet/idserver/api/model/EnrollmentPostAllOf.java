@@ -56,7 +56,6 @@ public class EnrollmentPostAllOf {
   }
 
 
-
   public void setUserId(UUID userId) {
     this.userId = userId;
   }
@@ -78,7 +77,6 @@ public class EnrollmentPostAllOf {
   public Boolean getTest() {
     return test;
   }
-
 
 
   public void setTest(Boolean test) {

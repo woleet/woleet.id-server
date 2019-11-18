@@ -68,7 +68,6 @@ public class KeyPut {
   }
 
 
-
   public void setName(String name) {
     this.name = name;
   }
@@ -90,7 +89,6 @@ public class KeyPut {
   public Long getExpiration() {
     return expiration;
   }
-
 
 
   public void setExpiration(Long expiration) {
@@ -116,7 +114,6 @@ public class KeyPut {
   }
 
 
-
   public void setStatus(KeyStatusEnum status) {
     this.status = status;
   }
@@ -138,7 +135,6 @@ public class KeyPut {
   public KeyDeviceEnum getDevice() {
     return device;
   }
-
 
 
   public void setDevice(KeyDeviceEnum device) {

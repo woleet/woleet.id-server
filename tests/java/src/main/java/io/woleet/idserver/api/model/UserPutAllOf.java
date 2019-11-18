@@ -57,7 +57,6 @@ public class UserPutAllOf {
   }
 
 
-
   public void setPassword(String password) {
     this.password = password;
   }
@@ -79,7 +78,6 @@ public class UserPutAllOf {
   public UUID getDefaultKeyId() {
     return defaultKeyId;
   }
-
 
 
   public void setDefaultKeyId(UUID defaultKeyId) {

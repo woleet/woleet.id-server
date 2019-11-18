@@ -69,7 +69,6 @@ public class ExternalKeyPost {
   }
 
 
-
   public void setName(String name) {
     this.name = name;
   }
@@ -90,7 +89,6 @@ public class ExternalKeyPost {
   public String getPublicKey() {
     return publicKey;
   }
-
 
 
   public void setPublicKey(String publicKey) {
@@ -116,7 +114,6 @@ public class ExternalKeyPost {
   }
 
 
-
   public void setDevice(KeyDeviceEnum device) {
     this.device = device;
   }
@@ -140,7 +137,6 @@ public class ExternalKeyPost {
   }
 
 
-
   public void setStatus(KeyStatusEnum status) {
     this.status = status;
   }
@@ -162,7 +158,6 @@ public class ExternalKeyPost {
   public Long getExpiration() {
     return expiration;
   }
-
 
 
   public void setExpiration(Long expiration) {

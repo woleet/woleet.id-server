@@ -84,7 +84,6 @@ public class APITokenGet {
   }
 
 
-
   public void setName(String name) {
     this.name = name;
   }
@@ -106,7 +105,6 @@ public class APITokenGet {
   public APITokenStatusEnum getStatus() {
     return status;
   }
-
 
 
   public void setStatus(APITokenStatusEnum status) {
@@ -158,7 +156,6 @@ public class APITokenGet {
   public UUID getUserId() {
     return userId;
   }
-
 
 
   public void setUserId(UUID userId) {

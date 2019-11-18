@@ -98,7 +98,6 @@ public class UserBase {
   }
 
 
-
   public void setEmail(String email) {
     this.email = email;
   }
@@ -120,7 +119,6 @@ public class UserBase {
   public String getUsername() {
     return username;
   }
-
 
 
   public void setUsername(String username) {
@@ -146,7 +144,6 @@ public class UserBase {
   }
 
 
-
   public void setCountryCallingCode(String countryCallingCode) {
     this.countryCallingCode = countryCallingCode;
   }
@@ -168,7 +165,6 @@ public class UserBase {
   public String getPhone() {
     return phone;
   }
-
 
 
   public void setPhone(String phone) {
@@ -194,7 +190,6 @@ public class UserBase {
   }
 
 
-
   public void setStatus(UserStatusEnum status) {
     this.status = status;
   }
@@ -218,7 +213,6 @@ public class UserBase {
   }
 
 
-
   public void setRole(UserRoleEnum role) {
     this.role = role;
   }
@@ -240,7 +234,6 @@ public class UserBase {
   public FullIdentity getIdentity() {
     return identity;
   }
-
 
 
   public void setIdentity(FullIdentity identity) {
