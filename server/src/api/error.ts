@@ -34,6 +34,9 @@ const errorHandler: IMiddleware = async function (ctx, next) {
     } else if (error instanceof errors.KeyOwnerMismatchError) {
       ctx.status = 400;
       ctx.body = { name: error.name, message: error.message, status: 400 };
+    } else if (error instanceof errors.APITokenOwnerMismatchError) {
+      ctx.status = 403;
+      ctx.body = { name: error.name, message: error.message, status: 403 };
     } else if (error instanceof errors.ServerNotReadyError) {
       ctx.status = 202;
       ctx.body = { name: error.name, message: error.message, status: 202 };

@@ -3,12 +3,11 @@ import * as Router from 'koa-router';
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import {
-  createAPIToken, deleteAPIToken, getAllAPITokens, getAPITokenById, updateAPIToken
+  createAPIToken, deleteAPIToken, getAllAPITokens, getAPITokenById, updateAPIToken, getAPITokensByUser
 } from '../../controllers/api-token';
 import { serializeAPIToken } from '../serialize/api-token';
-import { getUserById } from '../../controllers/user';
 import { store as event } from '../../controllers/server-event';
-import { Unauthorized } from 'http-errors';
+import { Forbidden } from 'http-errors';
 
 const vid = validate.param('id', 'uuid');
 
@@ -38,9 +37,13 @@ const router = new Router({ prefix: '/api-token' });
 router.post('/', validate.body('createApiToken'), async function (ctx) {
   const token: ApiPostAPITokenObject = ctx.request.body;
 
-  const authorizedUser = await getUserById(ctx.session.user.get('id'));
+  const authorizedUser = ctx.session.user.toJSON();
   if (!token.userId && authorizedUser.role !== 'admin') {
-    throw new Unauthorized('Only admin can create other admin token.');
+    throw new Forbidden('Only admin can create other admin token.');
+  }
+
+  if (authorizedUser.role === 'user' && (token.userId !== authorizedUser.id)) {
+    throw new Forbidden('User can only create token for themself.');
   }
 
   const created = await createAPIToken(token);
@@ -63,8 +66,9 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
  *  operationId: getAPITokenList
  */
 router.get('/list', async function (ctx) {
-  const users = await getAllAPITokens();
-  ctx.body = await Promise.all(users.map(serializeAPIToken));
+  const authorizedUser = ctx.session.user.toJSON();
+  const apiTokens = authorizedUser.role === 'user' ? await getAPITokensByUser(authorizedUser.id) : await getAllAPITokens();
+  ctx.body = await Promise.all(apiTokens.map(serializeAPIToken));
 });
 
 /**
@@ -75,6 +79,13 @@ router.get('/list', async function (ctx) {
 router.get('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const apiToken = await getAPITokenById(id);
+
+  const authorizedUser = ctx.session.user.toJSON();
+
+  if (authorizedUser.role === 'user' && (apiToken.userId !== authorizedUser.id)) {
+    throw new Forbidden('User can only get their own token.');
+  }
+
   ctx.body = await serializeAPIToken(apiToken);
 });
 
@@ -88,7 +99,8 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
   const { id } = ctx.params;
   const update: ApiPutAPITokenObject = ctx.request.body;
 
-  const apiToken = await updateAPIToken(id, update);
+  const authorizedUser = ctx.session.user.toJSON();
+  const apiToken = await updateAPIToken(id, update, authorizedUser);
 
   event.register({
     type: 'token.edit',
@@ -110,7 +122,8 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
  */
 router.delete('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
-  const apiToken = await deleteAPIToken(id);
+  const authorizedUser = ctx.session.user.toJSON();
+  const apiToken = await deleteAPIToken(id, authorizedUser);
 
   event.register({
     type: 'token.delete',
