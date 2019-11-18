@@ -1,7 +1,9 @@
 
+
 # UserBase
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | [**UUID**](UUID.md) | User identifier (allocated by the server). |  [optional]

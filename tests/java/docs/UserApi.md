@@ -20,28 +20,37 @@ Create a new user.
 ### Example
 ```java
 // Import classes:
-//import io.woleet.idserver.ApiClient;
-//import io.woleet.idserver.ApiException;
-//import io.woleet.idserver.Configuration;
-//import io.woleet.idserver.auth.*;
-//import io.woleet.idserver.api.UserApi;
+import io.woleet.idserver.ApiClient;
+import io.woleet.idserver.ApiException;
+import io.woleet.idserver.Configuration;
+import io.woleet.idserver.auth.*;
+import io.woleet.idserver.models.*;
+import io.woleet.idserver.api.UserApi;
 
-ApiClient defaultClient = Configuration.getDefaultApiClient();
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost");
+    
+    // Configure API key authorization: CookieAuth
+    ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+    CookieAuth.setApiKey("YOUR API KEY");
+    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+    //CookieAuth.setApiKeyPrefix("Token");
 
-// Configure API key authorization: CookieAuth
-ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-CookieAuth.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//CookieAuth.setApiKeyPrefix("Token");
-
-UserApi apiInstance = new UserApi();
-UserPost userPost = new UserPost(); // UserPost | User object to create.
-try {
-    UserGet result = apiInstance.createUser(userPost);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling UserApi#createUser");
-    e.printStackTrace();
+    UserApi apiInstance = new UserApi(defaultClient);
+    UserPost userPost = new UserPost(); // UserPost | User object to create.
+    try {
+      UserGet result = apiInstance.createUser(userPost);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling UserApi#createUser");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
 }
 ```
 
@@ -64,6 +73,13 @@ Name | Type | Description  | Notes
  - **Content-Type**: application/json
  - **Accept**: application/json
 
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful operation. |  -  |
+**401** | Missing or invalid session cookie. |  -  |
+**400** | Invalid object supplied. |  -  |
+
 <a name="deleteUser"></a>
 # **deleteUser**
 > UserGet deleteUser(userId)
@@ -73,28 +89,37 @@ Delete a user.
 ### Example
 ```java
 // Import classes:
-//import io.woleet.idserver.ApiClient;
-//import io.woleet.idserver.ApiException;
-//import io.woleet.idserver.Configuration;
-//import io.woleet.idserver.auth.*;
-//import io.woleet.idserver.api.UserApi;
+import io.woleet.idserver.ApiClient;
+import io.woleet.idserver.ApiException;
+import io.woleet.idserver.Configuration;
+import io.woleet.idserver.auth.*;
+import io.woleet.idserver.models.*;
+import io.woleet.idserver.api.UserApi;
 
-ApiClient defaultClient = Configuration.getDefaultApiClient();
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost");
+    
+    // Configure API key authorization: CookieAuth
+    ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+    CookieAuth.setApiKey("YOUR API KEY");
+    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+    //CookieAuth.setApiKeyPrefix("Token");
 
-// Configure API key authorization: CookieAuth
-ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-CookieAuth.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//CookieAuth.setApiKeyPrefix("Token");
-
-UserApi apiInstance = new UserApi();
-UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
-try {
-    UserGet result = apiInstance.deleteUser(userId);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling UserApi#deleteUser");
-    e.printStackTrace();
+    UserApi apiInstance = new UserApi(defaultClient);
+    UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
+    try {
+      UserGet result = apiInstance.deleteUser(userId);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling UserApi#deleteUser");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
 }
 ```
 
@@ -117,6 +142,14 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful operation. |  -  |
+**400** | Invalid user identifier. |  -  |
+**401** | Missing or invalid session cookie. |  -  |
+**404** | User not found. |  -  |
+
 <a name="getAllUsers"></a>
 # **getAllUsers**
 > List&lt;UserGet&gt; getAllUsers(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone)
@@ -126,39 +159,48 @@ List all users.
 ### Example
 ```java
 // Import classes:
-//import io.woleet.idserver.ApiClient;
-//import io.woleet.idserver.ApiException;
-//import io.woleet.idserver.Configuration;
-//import io.woleet.idserver.auth.*;
-//import io.woleet.idserver.api.UserApi;
+import io.woleet.idserver.ApiClient;
+import io.woleet.idserver.ApiException;
+import io.woleet.idserver.Configuration;
+import io.woleet.idserver.auth.*;
+import io.woleet.idserver.models.*;
+import io.woleet.idserver.api.UserApi;
 
-ApiClient defaultClient = Configuration.getDefaultApiClient();
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost");
+    
+    // Configure API key authorization: CookieAuth
+    ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+    CookieAuth.setApiKey("YOUR API KEY");
+    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+    //CookieAuth.setApiKeyPrefix("Token");
 
-// Configure API key authorization: CookieAuth
-ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-CookieAuth.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//CookieAuth.setApiKeyPrefix("Token");
-
-UserApi apiInstance = new UserApi();
-String mode = seal; // String | Filter the user mode.
-String role = user; // String | Filter the user role.
-String commonName = John Doe; // String | Filter the user X500 common name.
-String organization = Woleet; // String | Filter the user X500 organization.
-String organizationalUnit = Sales; // String | Filter the user X500 organizational unit.
-String locality = Rennes; // String | Filter the user X500 locality.
-String country = FR; // String | Filter the user X500 country.
-String userId = wol.jim-smith.01; // String | Filter the user X500 organization.
-String email = john.doe@acme.com; // String | Filter the user email.
-String status = active; // String | Filter the user status.
-String countryCallingCode = 33; // String | Filter the user country calling code.
-String phone = 123456789; // String | Filter the user phone.
-try {
-    List<UserGet> result = apiInstance.getAllUsers(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling UserApi#getAllUsers");
-    e.printStackTrace();
+    UserApi apiInstance = new UserApi(defaultClient);
+    String mode = seal; // String | Filter the user mode.
+    String role = user; // String | Filter the user role.
+    String commonName = John Doe; // String | Filter the user X500 common name.
+    String organization = Woleet; // String | Filter the user X500 organization.
+    String organizationalUnit = Sales; // String | Filter the user X500 organizational unit.
+    String locality = Rennes; // String | Filter the user X500 locality.
+    String country = FR; // String | Filter the user X500 country.
+    String userId = wol.jim-smith.01; // String | Filter the user X500 organization.
+    String email = john.doe@acme.com; // String | Filter the user email.
+    String status = active; // String | Filter the user status.
+    String countryCallingCode = 33; // String | Filter the user country calling code.
+    String phone = 123456789; // String | Filter the user phone.
+    try {
+      List<UserGet> result = apiInstance.getAllUsers(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling UserApi#getAllUsers");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
 }
 ```
 
@@ -192,6 +234,11 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Array of users. |  -  |
+
 <a name="getUserById"></a>
 # **getUserById**
 > UserGet getUserById(userId)
@@ -201,28 +248,37 @@ Get a user by his identifier.
 ### Example
 ```java
 // Import classes:
-//import io.woleet.idserver.ApiClient;
-//import io.woleet.idserver.ApiException;
-//import io.woleet.idserver.Configuration;
-//import io.woleet.idserver.auth.*;
-//import io.woleet.idserver.api.UserApi;
+import io.woleet.idserver.ApiClient;
+import io.woleet.idserver.ApiException;
+import io.woleet.idserver.Configuration;
+import io.woleet.idserver.auth.*;
+import io.woleet.idserver.models.*;
+import io.woleet.idserver.api.UserApi;
 
-ApiClient defaultClient = Configuration.getDefaultApiClient();
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost");
+    
+    // Configure API key authorization: CookieAuth
+    ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+    CookieAuth.setApiKey("YOUR API KEY");
+    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+    //CookieAuth.setApiKeyPrefix("Token");
 
-// Configure API key authorization: CookieAuth
-ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-CookieAuth.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//CookieAuth.setApiKeyPrefix("Token");
-
-UserApi apiInstance = new UserApi();
-UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
-try {
-    UserGet result = apiInstance.getUserById(userId);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling UserApi#getUserById");
-    e.printStackTrace();
+    UserApi apiInstance = new UserApi(defaultClient);
+    UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
+    try {
+      UserGet result = apiInstance.getUserById(userId);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling UserApi#getUserById");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
 }
 ```
 
@@ -245,6 +301,14 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful operation. |  -  |
+**400** | Invalid user identifier. |  -  |
+**401** | Missing or invalid session cookie. |  -  |
+**404** | User not found. |  -  |
+
 <a name="updateUser"></a>
 # **updateUser**
 > UserGet updateUser(userId, userPut)
@@ -254,29 +318,38 @@ Update a user.
 ### Example
 ```java
 // Import classes:
-//import io.woleet.idserver.ApiClient;
-//import io.woleet.idserver.ApiException;
-//import io.woleet.idserver.Configuration;
-//import io.woleet.idserver.auth.*;
-//import io.woleet.idserver.api.UserApi;
+import io.woleet.idserver.ApiClient;
+import io.woleet.idserver.ApiException;
+import io.woleet.idserver.Configuration;
+import io.woleet.idserver.auth.*;
+import io.woleet.idserver.models.*;
+import io.woleet.idserver.api.UserApi;
 
-ApiClient defaultClient = Configuration.getDefaultApiClient();
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost");
+    
+    // Configure API key authorization: CookieAuth
+    ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+    CookieAuth.setApiKey("YOUR API KEY");
+    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+    //CookieAuth.setApiKeyPrefix("Token");
 
-// Configure API key authorization: CookieAuth
-ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-CookieAuth.setApiKey("YOUR API KEY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//CookieAuth.setApiKeyPrefix("Token");
-
-UserApi apiInstance = new UserApi();
-UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
-UserPut userPut = new UserPut(); // UserPut | User object to update.
-try {
-    UserGet result = apiInstance.updateUser(userId, userPut);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling UserApi#updateUser");
-    e.printStackTrace();
+    UserApi apiInstance = new UserApi(defaultClient);
+    UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
+    UserPut userPut = new UserPut(); // UserPut | User object to update.
+    try {
+      UserGet result = apiInstance.updateUser(userId, userPut);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling UserApi#updateUser");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
 }
 ```
 
@@ -299,4 +372,12 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful operation. |  -  |
+**400** | Invalid object supplied / Invalid user identifier. |  -  |
+**401** | Missing or invalid session cookie. |  -  |
+**404** | User not found. |  -  |
 

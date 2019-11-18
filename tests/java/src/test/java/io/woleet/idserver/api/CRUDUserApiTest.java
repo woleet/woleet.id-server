@@ -59,7 +59,7 @@ public class CRUDUserApiTest extends CRUDApiTest {
 
         @Override
         public String getName() {
-            return ((UserBase) objectBase).getIdentity().getCommonName();
+            return ((UserGet) objectBase).getIdentity().getCommonName();
         }
 
         @Override

@@ -1,9 +1,13 @@
 
+
 # APITokenGet
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**name** | **String** | API token name. |  [optional]
+**status** | [**APITokenStatusEnum**](APITokenStatusEnum.md) |  |  [optional]
 **id** | [**UUID**](UUID.md) | API token identifier (allocated by the platform). |  [optional]
 **value** | **String** | Token to use for the signature endpoint. |  [optional]
 **userId** | [**UUID**](UUID.md) | Id of the authorized user. |  [optional]

@@ -58,7 +58,7 @@ public class CRUDApiTokenApiTest extends CRUDApiTest {
 
         @Override
         public String getName() {
-            return ((APITokenBase) objectBase).getName();
+            return ((APITokenGet) objectBase).getName();
         }
 
         @Override

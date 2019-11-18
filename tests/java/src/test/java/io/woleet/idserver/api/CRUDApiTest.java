@@ -168,8 +168,8 @@ public abstract class CRUDApiTest {
         // Configure concurrency
         ApiClient apiClient = Config.getAdminAuthApiClient();
         Api benchApi = newApi(apiClient);
-        apiClient.getHttpClient().getDispatcher().setMaxRequestsPerHost(MAX_CONCURRENT_REQUESTS);
-        apiClient.getHttpClient().getDispatcher().setMaxRequests(MAX_CONCURRENT_REQUESTS);
+        apiClient.getHttpClient().dispatcher().setMaxRequestsPerHost(MAX_CONCURRENT_REQUESTS);
+        apiClient.getHttpClient().dispatcher().setMaxRequests(MAX_CONCURRENT_REQUESTS);
         ExecutorService executor = new ThreadPoolExecutor(
             MAX_THREADS, MAX_THREADS,
             1000L, TimeUnit.MILLISECONDS,

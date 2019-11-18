@@ -63,7 +63,7 @@ public class CRUDKeyApiTest extends CRUDApiTest {
 
         @Override
         public String getName() {
-            return ((KeyBase) objectBase).getName();
+            return ((KeyGet) objectBase).getName();
         }
 
         @Override

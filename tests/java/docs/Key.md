@@ -1,7 +1,9 @@
 
+
 # Key
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** | Key name. |  [optional]
@@ -11,8 +13,9 @@ Name | Type | Description | Notes
 **revokedAt** | **Long** | Key revocation date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key is not yet revoked.  |  [optional]
 
 
-<a name="StatusEnum"></a>
+
 ## Enum: StatusEnum
+
 Name | Value
 ---- | -----
 VALID | &quot;valid&quot;

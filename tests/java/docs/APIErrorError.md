@@ -1,7 +1,9 @@
 
+
 # APIErrorError
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **code** | **Integer** |  | 

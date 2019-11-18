@@ -1,9 +1,19 @@
 
+
 # UserGet
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**id** | [**UUID**](UUID.md) | User identifier (allocated by the server). |  [optional]
+**email** | **String** | User email (can be used for login). |  [optional]
+**username** | **String** | User name (can be used for login). |  [optional]
+**countryCallingCode** | **String** | User country calling code |  [optional]
+**phone** | **String** | User phone number |  [optional]
+**status** | [**UserStatusEnum**](UserStatusEnum.md) |  |  [optional]
+**role** | [**UserRoleEnum**](UserRoleEnum.md) |  |  [optional]
+**identity** | [**FullIdentity**](FullIdentity.md) |  |  [optional]
 **createdAt** | **Long** | Date of creation (Unix ms timestamp). |  [optional]
 **updatedAt** | **Long** | Date of last modification (Unix ms timestamp). |  [optional]
 **lastLogin** | **Long** | Date of last login (Unix ms timestamp). |  [optional]

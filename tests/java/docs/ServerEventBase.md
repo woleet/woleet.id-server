@@ -1,7 +1,9 @@
 
+
 # ServerEventBase
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | [**ServerEventTypeEnum**](ServerEventTypeEnum.md) |  |  [optional]
