@@ -98,7 +98,7 @@ public class EnrollmentApiTest {
         // Try to get all enrollments with user credentials
         try {
             userAuthApi.getAllEnrollments();
-            fail("Should not be able to delete an enrollment object with user credentials");
+            fail("Should not be able to get all enrollments object with user credentials");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());

@@ -251,10 +251,10 @@ public class SignatureApiTest {
         assertEquals(hashToSign, signatureResult.getSignedHash());
         verifySignatureValid(signatureResult.getSignedHash(), signatureResult);
 
-        // FIXME: WOLEET-1141: Since we just used the API token to sign, its last used should be close to current time
-//        apiTokenAdminGet = apiTokenApi.getAPITokenById(apiTokenAdminGet.getId());
-//        assertTrue(apiTokenAdminGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
-//                && apiTokenAdminGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
+        // Check that API token's last used time is close to current time
+        apiTokenAdminGet = apiTokenApi.getAPITokenById(apiTokenAdminGet.getId());
+        assertTrue(apiTokenAdminGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
+                && apiTokenAdminGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
 
         // Change server config not to fallback on default key
         ServerConfigApi serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
@@ -335,7 +335,7 @@ public class SignatureApiTest {
             KeyGet blockedKey = keyApi.updateKey(keyGet.getId(), keyPut);
             pubKey = blockedKey.getPubKey();
             tokenAuthAdminApi.getSignature(hashToSign, null, null, pubKey);
-            fail("Should not be able to sign as a different user");
+            fail("Should not be able to sign with a blocked key");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -347,37 +347,37 @@ public class SignatureApiTest {
         // Verify that the user's default key is unset after deletion
         assertNull(new UserApi(Config.getAdminAuthApiClient()).getUserById(userSeal.getId()).getDefaultKeyId());
 
-        // Try to sign using a non existing user's default key
+        // Try to sign with a user which doesn't have a default key
         try {
             tokenAuthAdminApi.getSignature(hashToSign, userSeal.getId(), null, null);
-            fail("Should not be able to sign using a non existing user's default key");
+            fail("Should not be able to sign with a user which doesn't have a default key");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-        // Try to sign using a non existing user's default key with an assigned token
+        // Try to sign using as a user which doesn't have a default key with an assigned token
         try {
             tokenAuthUserSealApi.getSignature(hashToSign, userSeal.getId(), null, null);
-            fail("Should not be able to sign using a non existing user's default key");
+            fail("Should not be able to sign with as user which doesn't have a default key");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-        // Try to sign using a non existing user's default key
+        // Try to sign using a non existing key
         try {
             tokenAuthAdminApi.getSignature(hashToSign, null, null, pubKey);
-            fail("Should not be able to sign using a non existing user's default key");
+            fail("Should not be able to sign using a non existing key");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
-        // Try to sign using a non existing user's default key with an assigned token
+        // Try to sign using a non existing user's key with an assigned token
         try {
             tokenAuthUserSealApi.getSignature(hashToSign, null, null, pubKey);
-            fail("Should not be able to sign using a non existing user's default key");
+            fail("Should not be able to sign using a non user's default key");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());

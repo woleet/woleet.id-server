@@ -56,7 +56,7 @@ public class KeyApiTest {
             KeyPost keyPost = new KeyPost();
             keyPost.setName(Config.randomName());
             userAuthApi.createKey(userSeal.getId(), keyPost);
-            fail("Should not be able to create an enrollment object with user credentials");
+            fail("Should not be able to create a key object with user credentials");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -75,7 +75,7 @@ public class KeyApiTest {
             keyPost.setName(Config.randomName());
             KeyGet keyGet = keyApi.createKey(userSeal.getId(), keyPost);
             userAuthApi.deleteKey(keyGet.getId());
-            fail("Should not be able to create an enrollment object with user credentials");
+            fail("Should not be able to delete a key object with user credentials");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -90,7 +90,7 @@ public class KeyApiTest {
         // Try to get all keys with user credentials
         try {
             userAuthApi.getAllUserKeys(user.getId());
-            fail("Should not be able to create an enrollment object with user credentials");
+            fail("Should not be able to get all keys object with user credentials");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());

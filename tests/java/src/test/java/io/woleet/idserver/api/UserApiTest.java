@@ -96,7 +96,7 @@ public class UserApiTest {
         try {
             UserGet userGet = Config.createTestUser();
             userAuthApi.deleteUser(userGet.getId());
-            fail("Should not be able to create an enrollment object with user credentials");
+            fail("Should not be able to delete a user object with user credentials");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -112,7 +112,7 @@ public class UserApiTest {
         try {
             userAuthApi.getAllUsers(null, null, null, null, null,
                     null, null, null, null, null, null, null);
-            fail("Should not be able to create an enrollment object with user credentials");
+            fail("Should not be able to get all users object with user credentials");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
