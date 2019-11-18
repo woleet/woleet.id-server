@@ -4,6 +4,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider, nextYear } from '@components/util';
 import { UserService } from '@services/user';
 import { confirm } from '../../util';
+import { MatDialog } from '@angular/material';
+import { DialogKeyDeleteComponent } from '@parts/dialog-key-delete';
 import * as log from 'loglevel';
 
 @Component({
@@ -26,6 +28,9 @@ export class KeyCardComponent extends ErrorMessageProvider {
 
   @Input()
   userId: string;
+
+  @Input()
+  userMode: UserModeEnum;
 
   @Input()
   key: ApiKeyObject;
@@ -52,7 +57,8 @@ export class KeyCardComponent extends ErrorMessageProvider {
     { value: 'mobile', viewValue: 'Mobile device' }
   ];
 
-  constructor(private keyService: KeyService, private userService: UserService) {
+  constructor(private keyService: KeyService, private userService: UserService,
+    private dialog: MatDialog) {
     super();
     this.setAsDefault = this.default;
   }
@@ -69,16 +75,24 @@ export class KeyCardComponent extends ErrorMessageProvider {
   }
 
   async deleteKey() {
-    if (!confirm(`Delete key ${this.key.name}?\n`
-      + 'Warning: deleting a key is irreversible. Furthermore, signatures made with this key will no longer be linked to this identity,\n'
-      + 'and key ownership will no longer be provable by the identity server.')) {
-      return;
-    }
-    this.formLocked = true;
-    const del = await this.keyService.delete(this.key.id);
-    this.key = del;
-    this.formLocked = false;
-    this.delete.emit(del);
+    const dialogRef = this.userMode === 'esign' ?
+      this.dialog.open(DialogKeyDeleteComponent, {
+        data: { isUser: true, name: this.key.name },
+        width: '450px'
+      })
+      : this.dialog.open(DialogKeyDeleteComponent, {
+        data: { isUser: false, name: this.key.name },
+        width: '450px'
+      });
+
+    dialogRef.afterClosed().subscribe(async confirmDelete => {
+      if (confirmDelete) {
+        this.formLocked = true;
+        const del = await this.keyService.delete(this.key.id);
+        this.formLocked = false;
+        this.delete.emit(del);
+      }
+    });
   }
 
   async revokeKey() {

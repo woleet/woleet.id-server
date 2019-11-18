@@ -1,30 +1,21 @@
-<mat-dialog-content *ngIf='data'>
-  <h3>Delete user identity CommonName?</h3>
+<mat-dialog-content *ngIf='data.isUser'>
+  <h3>Delete user identity {{ data.commonName }}?</h3>
 
   <p>Warning: deleting a user identity is irreversible, and also deletes all associated keys and API tokens.</p>
 
-  <p>Consequently, the user won’t be able to sign anymore. The validation of signatures made precedently will be solely
-    based on the signature proof receipt information:</p>
-  <ul>
-    <li>The signatory's identity will be that of the signature proof receipt.</li>
-    <li>The verification of key expiration and revocation status will no longer be possible.</li>
-  </ul>
+  <p>As a result, this identity will no longer be usable for signing, and <em>identity verification of signatures using
+      this identity will trigger a warning</em>.</p>
 </mat-dialog-content>
-<mat-dialog-content *ngIf='!data'>
-  <h3>Delete seal identity CommonName?</h3>
+<mat-dialog-content *ngIf='!data.isUser'>
+  <h3>Delete seal identity {{ data.commonName }}?</h3>
 
   <p>Warning: deleting a seal identity is irreversible, and also deletes all associated keys and API tokens.</p>
 
-  <p>Consequently, seal creation won’t be possible anymore for this seal identity. The validation of seals made
-    precedently will be solely based on the seal proof receipt information:
+  <p>As a result, this identity will no longer be usable for creating seals, and <em>identity verification of seals
+      using this identity will trigger an error</em>.
   </p>
-  <ul>
-    <li>The seal's identity will be that of the seal proof receipt.</li>
-    <li>Key ownership will no longer be provable by the identity server.</li>
-    <li>The verification of key expiration and revocation status won’t be possible anymore.</li>
-  </ul>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="true">Ok</button>
+  <button mat-raised-button color="warn" [mat-dialog-close]="true">OK</button>
 </mat-dialog-actions>

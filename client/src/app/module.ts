@@ -50,6 +50,7 @@ import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
 import { DialogAskResetComponent } from '@parts/dialog-ask-reset';
 import { DialogIdentityDeleteComponent } from '@parts/dialog-identity-delete';
+import { DialogKeyDeleteComponent } from '@parts/dialog-key-delete';
 import {
   AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService, ManagerGuardService
 } from '@guards/auth';
@@ -142,13 +143,15 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     DialogMailResetComponent,
     DialogAskResetComponent,
     DialogIdentityDeleteComponent,
+    DialogKeyDeleteComponent,
     UserFilterPipe
   ],
   entryComponents: [
     DialogResetPasswordComponent,
     DialogMailResetComponent,
     DialogAskResetComponent,
-    DialogIdentityDeleteComponent
+    DialogIdentityDeleteComponent,
+    DialogKeyDeleteComponent
   ],
   imports: [
     // angular

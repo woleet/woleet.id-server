@@ -2,13 +2,13 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
-  selector: 'dialogIdentityDelete',
+  selector: 'dialogKeyDelete',
   templateUrl: 'index.html',
   styleUrls: ['style.scss']
 })
-export class DialogIdentityDeleteComponent {
+export class DialogKeyDeleteComponent {
 
   constructor(
-  public dialogRef: MatDialogRef<DialogIdentityDeleteComponent>,
+  public dialogRef: MatDialogRef<DialogKeyDeleteComponent>,
   @Inject(MAT_DIALOG_DATA) public data: any) {}
 }
