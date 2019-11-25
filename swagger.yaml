@@ -704,7 +704,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '403':
-          description: A user with user role cannot create an API token for an other user.
+          description: Users cannot manage other users' API tokens.
           content:
             application/json:
               schema:
@@ -737,7 +737,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '403':
-          description: A user with user role cannot get an API token owned by an other user.
+          description: Users cannot manage other users' API tokens.
           content:
             application/json:
               schema:
@@ -782,7 +782,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '403':
-          description: A user with user role cannot modify an API token owned by an other user.
+          description: Users cannot manage other users' API tokens.
           content:
             application/json:
               schema:
@@ -820,7 +820,7 @@ paths:
               schema:
                 $ref: '#/components/responses/APIError'
         '403':
-          description: A user with user role cannot delete an API token owned by an other user.
+          description: Users cannot manage other users' API tokens.
           content:
             application/json:
               schema:

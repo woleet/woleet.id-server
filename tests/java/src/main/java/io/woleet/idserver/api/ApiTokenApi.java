@@ -71,6 +71,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid object supplied. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createAPITokenCall(APITokenPost apITokenPost, final ApiCallback _callback) throws ApiException {
@@ -128,6 +129,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid object supplied. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
      </table>
      */
     public APITokenGet createAPIToken(APITokenPost apITokenPost) throws ApiException {
@@ -147,6 +149,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid object supplied. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<APITokenGet> createAPITokenWithHttpInfo(APITokenPost apITokenPost) throws ApiException {
@@ -168,6 +171,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid object supplied. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call createAPITokenAsync(APITokenPost apITokenPost, final ApiCallback<APITokenGet> _callback) throws ApiException {
@@ -189,6 +193,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid API token identifier. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */
@@ -248,6 +253,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid API token identifier. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */
@@ -268,6 +274,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid API token identifier. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */
@@ -290,6 +297,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid API token identifier. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */
@@ -312,6 +320,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid API token identifier. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */
@@ -371,6 +380,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid API token identifier. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */
@@ -391,6 +401,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid API token identifier. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */
@@ -413,6 +424,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid API token identifier. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */
@@ -541,6 +553,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid object supplied. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */
@@ -606,6 +619,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid object supplied. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */
@@ -627,6 +641,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid object supplied. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */
@@ -650,6 +665,7 @@ public class ApiTokenApi {
         <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
         <tr><td> 400 </td><td> Invalid object supplied. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> Users cannot manage other users&#39; API tokens. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> API token not found. </td><td>  -  </td></tr>
      </table>
      */

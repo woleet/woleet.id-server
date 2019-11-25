@@ -79,6 +79,7 @@ Name | Type | Description  | Notes
 **200** | Successful operation. |  -  |
 **400** | Invalid object supplied. |  -  |
 **401** | Missing or invalid session cookie. |  -  |
+**403** | Users cannot manage other users&#39; API tokens. |  -  |
 
 <a name="deleteAPIToken"></a>
 # **deleteAPIToken**
@@ -148,6 +149,7 @@ Name | Type | Description  | Notes
 **200** | Successful operation. |  -  |
 **400** | Invalid API token identifier. |  -  |
 **401** | Missing or invalid session cookie. |  -  |
+**403** | Users cannot manage other users&#39; API tokens. |  -  |
 **404** | API token not found. |  -  |
 
 <a name="getAPITokenById"></a>
@@ -218,6 +220,7 @@ Name | Type | Description  | Notes
 **200** | Successful operation. |  -  |
 **400** | Invalid API token identifier. |  -  |
 **401** | Missing or invalid session cookie. |  -  |
+**403** | Users cannot manage other users&#39; API tokens. |  -  |
 **404** | API token not found. |  -  |
 
 <a name="getAllAPITokens"></a>
@@ -354,5 +357,6 @@ Name | Type | Description  | Notes
 **200** | Successful operation. |  -  |
 **400** | Invalid object supplied. |  -  |
 **401** | Missing or invalid session cookie. |  -  |
+**403** | Users cannot manage other users&#39; API tokens. |  -  |
 **404** | API token not found. |  -  |
 

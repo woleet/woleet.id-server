@@ -37,6 +37,7 @@ public class ConfigDisco {
   @SerializedName(SERIALIZED_NAME_A_P_I_U_R_L)
   private String APIURL;
 
+
   public ConfigDisco identityURL(String identityURL) {
     
     this.identityURL = identityURL;
@@ -59,7 +60,9 @@ public class ConfigDisco {
     this.identityURL = identityURL;
   }
 
+
   public ConfigDisco APIURL(String APIURL) {
+    
     this.APIURL = APIURL;
     return this;
   }
@@ -68,10 +71,13 @@ public class ConfigDisco {
    * Public URL of the &#x60;/api&#x60; endpoint (ie. the URL that correspond to the Woleet.ID Server API). 
    * @return APIURL
   **/
+  @javax.annotation.Nullable
   @ApiModelProperty(example = "https://mydomain.com/api", value = "Public URL of the `/api` endpoint (ie. the URL that correspond to the Woleet.ID Server API). ")
+
   public String getAPIURL() {
     return APIURL;
   }
+
 
   public void setAPIURL(String APIURL) {
     this.APIURL = APIURL;
