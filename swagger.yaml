@@ -1138,11 +1138,15 @@ components:
         status:
           type: string
           example: valid
-          description: Key status.
           enum:
             - valid
             - expired
             - revoked
+          description: |
+            Key status:<br>
+            `valid`: the key is valid and can be used to sign<br>
+            `expired`: the key expired at `expiration`<br>
+            `revoked`: the key was revoked at `revokedAt`
         expiration:
           type: integer
           format: int64
@@ -1229,19 +1233,10 @@ components:
         - esign
       default: "seal"
       description: >
-        User mode.
-        <br>esign: the user is a regular user, and his keys are used to create electronic signatures.
-        <br>seal: the user represents a legal entity, and his keys are used to create server seals.
+        User mode.<br>
+        - `esign`: the user is a regular user, and his keys are used to create electronic signatures.<br>
+        - `seal`: the user represents a legal entity, and his keys are used to create server seals.
       example: "seal"
-    KeyStatusEnum:
-      type: string
-      enum:
-        - active
-        - blocked
-        - revoked
-      default: "active"
-      description: Key status (a `blocked` key cannot be used to sign).
-      example: "active"
     UserBase:
       type: object
       properties:
@@ -1356,14 +1351,14 @@ components:
         - type: object
           properties:
             id:
-              readOnly: true
               type: string
               format: uuid
+              readOnly: true
               description: API token identifier (allocated by the platform).
               example: "a35c9fee-3893-4eb7-adde-205e1be03209"
             value:
-              readOnly: true
               type: string
+              readOnly: true
               description: Token to use for the signature endpoint.
               example: "b9PXEeMpSCyeaPpQiZ3Bvw=="
             userId:
@@ -1482,11 +1477,26 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ServerEventGet'
+    KeyStatusEnum:
+      type: string
+      enum:
+        - active
+        - blocked
+        - revoked
+      default: "active"
+      description: >
+        The status of the key:<br>
+        - `active`: the key is active (can be used to sign)<br>
+        - `blocked`: the key is blocked (cannot be use to sign)<br>
+        - `revoked` the key was revoked (cannot be used to sign)
+      example: "active"
     KeyTypeEnum:
       type: string
       enum:
         - bip39
-      description: Key type.
+      description: >
+        The type of the key (only `bip39` is supported).<br>
+        - `bip39`: Bitcoin BIP39
       example: "bip39"
     KeyDeviceEnum:
       type: string
@@ -1494,14 +1504,21 @@ components:
         - server
         - nano
         - mobile
-      description: Key device.
+      description: >
+        The type of device storing the key.<br>
+        - `server`: Woleet.ID Server or equivalent<br>
+        - `nano`: Ledger Nano S or equivalent<br>
+        - `mobile`: Woleet.ID Mobile or equivalent
       example: "server"
     KeyHolderEnum:
       type: string
       enum:
         - server
         - user
-      description: The entity who hold the private key.
+      description: >
+        The type of entity holding the private key.<br>
+        - `server`: the server (Woleet.ID Server or equivalent)<br>
+        - `user`: the user (eg. by using a Ledger Nano S or Woleet.ID Mobile or equivalent)
       example: "server"
     KeyBase:
       type: object
@@ -1527,9 +1544,9 @@ components:
             - name
           properties:
             id:
-              readOnly: true
               type: string
               format: uuid
+              readOnly: true
               description: Key identifier (allocated by the platform).
               example: "a35c9fee-3893-4eb7-adde-205e1be03209"
             pubKey:
@@ -1633,24 +1650,23 @@ components:
         identityURL:
           $ref: '#/components/schemas/IdentityURL'
     IdentityResult:
-      allOf:
-        - type: object
-          properties:
-            rightData:
-              type: string
-              description: >
-                The right part of the signed data (generated randomly).
-                <br>To prevent man-in-the-middle attacks, the data starts with the server's identity URL and this should be verified by the caller.
-            signature:
-              type: string
-              format: base64
-              example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
-              description: >
-                The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
-            identity:
-              $ref: '#/components/schemas/Identity'
-            key:
-              $ref: '#/components/schemas/Key'
+      type: object
+      properties:
+        rightData:
+          type: string
+          description: >
+            The right part of the signed data (generated randomly).
+            <br>To prevent man-in-the-middle attacks, the data starts with the server's identity URL and this should be verified by the caller.
+        signature:
+          type: string
+          format: base64
+          example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
+          description: >
+            The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
+        identity:
+          $ref: '#/components/schemas/Identity'
+        key:
+          $ref: '#/components/schemas/Key'
     APIError:
       type: object
       properties:

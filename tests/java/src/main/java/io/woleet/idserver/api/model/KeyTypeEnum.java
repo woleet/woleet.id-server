@@ -25,7 +25,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * Key type.
+ * The type of the key (only &#x60;bip39&#x60; is supported).&lt;br&gt; - &#x60;bip39&#x60;: Bitcoin BIP39 
  */
 @JsonAdapter(KeyTypeEnum.Adapter.class)
 public enum KeyTypeEnum {

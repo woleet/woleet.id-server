@@ -25,7 +25,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * User mode. &lt;br&gt;esign: the user is a regular user, and his keys are used to create electronic signatures. &lt;br&gt;seal: the user represents a legal entity, and his keys are used to create server seals. 
+ * User mode.&lt;br&gt; - &#x60;esign&#x60;: the user is a regular user, and his keys are used to create electronic signatures.&lt;br&gt; - &#x60;seal&#x60;: the user represents a legal entity, and his keys are used to create server seals. 
  */
 @JsonAdapter(UserModeEnum.Adapter.class)
 public enum UserModeEnum {

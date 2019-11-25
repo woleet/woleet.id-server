@@ -17,6 +17,7 @@ public class KeyApiTest {
 
     @Before
     public void setUp() throws Exception {
+
         // Start form a clean state
         tearDown();
 
@@ -44,6 +45,9 @@ public class KeyApiTest {
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
+
+        // TODO: get the key and check that the expiration and expired are ok
+        // TODO: check that we cannot use an expired key to sign
     }
 
     @Test
@@ -74,5 +78,8 @@ public class KeyApiTest {
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
+
+        // TODO: get the key and check that the revokedAt is ok
+        // TODO: check that we cannot use a revoked key to sign
     }
 }

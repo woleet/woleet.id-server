@@ -25,7 +25,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * The entity who hold the private key.
+ * The type of entity holding the private key.&lt;br&gt; - &#x60;server&#x60;: the server (Woleet.ID Server or equivalent)&lt;br&gt; - &#x60;user&#x60;: the user (eg. by using a Ledger Nano S or Woleet.ID Mobile or equivalent) 
  */
 @JsonAdapter(KeyHolderEnum.Adapter.class)
 public enum KeyHolderEnum {

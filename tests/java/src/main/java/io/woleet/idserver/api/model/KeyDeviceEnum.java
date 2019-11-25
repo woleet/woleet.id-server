@@ -25,7 +25,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * Key device.
+ * The type of device storing the key.&lt;br&gt; - &#x60;server&#x60;: Woleet.ID Server or equivalent&lt;br&gt; - &#x60;nano&#x60;: Ledger Nano S or equivalent&lt;br&gt; - &#x60;mobile&#x60;: Woleet.ID Mobile or equivalent 
  */
 @JsonAdapter(KeyDeviceEnum.Adapter.class)
 public enum KeyDeviceEnum {
