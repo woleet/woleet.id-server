@@ -25,7 +25,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * API token status (a &#x60;blocked&#x60; API token cannot be used).
+ * API token status:&lt;br&gt; - &#x60;active&#x60;: the token is active: it can be used to sign&lt;br&gt; - &#x60;blocked&#x60;: the token is blocked: it cannot be used to sign 
  */
 @JsonAdapter(APITokenStatusEnum.Adapter.class)
 public enum APITokenStatusEnum {

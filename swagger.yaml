@@ -1213,10 +1213,14 @@ components:
       type: string
       enum:
         - user
-        - admin
         - manager
+        - admin
       default: "user"
-      description: User role.
+      description: >
+        User role.<br>
+        - `user`: a user can sign using his keys<br>
+        - `manager`: a manager can manage user and seal identities and keys<br>
+        - `admin`: an administrator can do everything on the server
       example: "user"
     UserStatusEnum:
       type: string
@@ -1224,7 +1228,10 @@ components:
         - active
         - blocked
       default: "active"
-      description: User status (a `blocked` user cannot sign).
+      description: >
+        User status:<br>
+        - `active`: the user is active: he can use his keys to sign<br>
+        - `blocked`: the user is blocked: he cannot use his keys to sign
       example: "active"
     UserModeEnum:
       type: string
@@ -1334,7 +1341,10 @@ components:
         - active
         - blocked
       default: "active"
-      description: API token status (a `blocked` API token cannot be used).
+      description: >
+        API token status:<br>
+        - `active`: the token is active: it can be used to sign<br>
+        - `blocked`: the token is blocked: it cannot be used to sign
       example: "active"
     APITokenBase:
       type: object
@@ -1486,9 +1496,9 @@ components:
       default: "active"
       description: >
         The status of the key:<br>
-        - `active`: the key is active (can be used to sign)<br>
-        - `blocked`: the key is blocked (cannot be use to sign)<br>
-        - `revoked` the key was revoked (cannot be used to sign)
+        - `active`: the key is active: it can be used to sign<br>
+        - `blocked`: the key is blocked: it cannot be used to sign<br>
+        - `revoked` the key is revoked: it will no longer be used to sign
       example: "active"
     KeyTypeEnum:
       type: string
@@ -1881,8 +1891,8 @@ components:
         type: string
         enum:
           - user
-          - admin
           - manager
+          - admin
         example: 'user'
     FilterUserCommonNameQueryParameter:
       name: commonName

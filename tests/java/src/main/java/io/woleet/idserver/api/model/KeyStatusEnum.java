@@ -25,7 +25,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * The status of the key:&lt;br&gt; - &#x60;active&#x60;: the key is active (can be used to sign)&lt;br&gt; - &#x60;blocked&#x60;: the key is blocked (cannot be use to sign)&lt;br&gt; - &#x60;revoked&#x60; the key was revoked (cannot be used to sign) 
+ * The status of the key:&lt;br&gt; - &#x60;active&#x60;: the key is active: it can be used to sign&lt;br&gt; - &#x60;blocked&#x60;: the key is blocked: it cannot be used to sign&lt;br&gt; - &#x60;revoked&#x60; the key is revoked: it will no longer be used to sign 
  */
 @JsonAdapter(KeyStatusEnum.Adapter.class)
 public enum KeyStatusEnum {

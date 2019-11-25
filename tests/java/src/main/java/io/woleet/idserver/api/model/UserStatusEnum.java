@@ -25,7 +25,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * User status (a &#x60;blocked&#x60; user cannot sign).
+ * User status:&lt;br&gt; - &#x60;active&#x60;: the user is active: he can use his keys to sign&lt;br&gt; - &#x60;blocked&#x60;: the user is blocked: he cannot use his keys to sign 
  */
 @JsonAdapter(UserStatusEnum.Adapter.class)
 public enum UserStatusEnum {

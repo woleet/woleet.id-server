@@ -7,9 +7,9 @@
 
 * `USER` (value: `"user"`)
 
-* `ADMIN` (value: `"admin"`)
-
 * `MANAGER` (value: `"manager"`)
+
+* `ADMIN` (value: `"admin"`)
 
 
 

@@ -209,7 +209,7 @@ public class Example {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **mode** | **String**| Filter the user mode. | [optional] [enum: seal, esign]
- **role** | **String**| Filter the user role. | [optional] [enum: user, admin, manager]
+ **role** | **String**| Filter the user role. | [optional] [enum: user, manager, admin]
  **commonName** | **String**| Filter the user X500 common name. | [optional]
  **organization** | **String**| Filter the user X500 organization. | [optional]
  **organizationalUnit** | **String**| Filter the user X500 organizational unit. | [optional]

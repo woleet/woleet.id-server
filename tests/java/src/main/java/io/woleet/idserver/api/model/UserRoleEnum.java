@@ -25,16 +25,16 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * User role.
+ * User role.&lt;br&gt; - &#x60;user&#x60;: a user can sign using his keys&lt;br&gt; - &#x60;manager&#x60;: a manager can manage user and seal identities and keys&lt;br&gt; - &#x60;admin&#x60;: an administrator can do everything on the server 
  */
 @JsonAdapter(UserRoleEnum.Adapter.class)
 public enum UserRoleEnum {
   
   USER("user"),
   
-  ADMIN("admin"),
+  MANAGER("manager"),
   
-  MANAGER("manager");
+  ADMIN("admin");
 
   private String value;
 
