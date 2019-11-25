@@ -32,13 +32,13 @@ apiRouter.use(openid.routes());
 apiRouter.use(passwordReset.routes());
 apiRouter.use(enrollmentPublic.routes());
 apiRouter.use(userAuth);
+apiRouter.use(apiToken.routes());
 apiRouter.use(info.routes());
 apiRouter.use(managerAuth);
 apiRouter.use(user.routes());
 apiRouter.use(key.routes());
 apiRouter.use(enrollmentAdmin.routes());
 apiRouter.use(serverConfig.routes());
-apiRouter.use(apiToken.routes());
 apiRouter.use(adminAuth);
 apiRouter.use(serverEvent.routes());
 

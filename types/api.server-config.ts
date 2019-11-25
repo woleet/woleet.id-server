@@ -13,6 +13,7 @@ interface ApiOIDCPClient {
 
 interface ApiServerConfig {
   identityURL: string;
+  APIURL?: string;
   defaultKeyId: string;
   fallbackOnDefaultKey: boolean;
   allowUserToSign: boolean;
@@ -65,6 +66,7 @@ interface ApiServerConfig {
 
 interface ApiServerConfigUpdate {
   identityURL?: string;
+  APIURL?: string;
   defaultKeyId?: string;
   logoURL?: string;
   HTMLFrame?: string;

@@ -51,6 +51,57 @@ public class KeyApiTest {
     }
 
     @Test
+    public void userCreateKeyTest() throws ApiException {
+        UserGet user = Config.createTestUser();
+        KeyApi userAuthApi = new KeyApi(Config.getAuthApiClient(user.getUsername(), "pass"));
+
+        // Try to create a key with user credentials
+        try {
+            KeyPost keyPost = new KeyPost();
+            keyPost.setName(Config.randomName());
+            userAuthApi.createKey(userSeal.getId(), keyPost);
+            fail("Should not be able to create a key object with user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+    }
+
+    @Test
+    public void userDeleteKeyTest() throws ApiException {
+        UserGet user = Config.createTestUser();
+        KeyApi userAuthApi = new KeyApi(Config.getAuthApiClient(user.getUsername(), "pass"));
+        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
+
+        // Try to delete a key with user credentials
+        try {
+            KeyPost keyPost = new KeyPost();
+            keyPost.setName(Config.randomName());
+            KeyGet keyGet = keyApi.createKey(userSeal.getId(), keyPost);
+            userAuthApi.deleteKey(keyGet.getId());
+            fail("Should not be able to delete a key object with user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+    }
+
+    @Test
+    public void userGetAllKeyTest() throws ApiException {
+        UserGet user = Config.createTestUser();
+        KeyApi userAuthApi = new KeyApi(Config.getAuthApiClient(user.getUsername(), "pass"));
+
+        // Try to get all keys with user credentials
+        try {
+            userAuthApi.getAllUserKeys(user.getId());
+            fail("Should not be able to get all keys object with user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+    }
+
+    @Test
     public void keyRevocationTest() throws ApiException {
 
         KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());

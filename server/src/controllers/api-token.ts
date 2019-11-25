@@ -2,7 +2,7 @@ import { APIToken } from '../database';
 
 import * as crypto from 'crypto';
 import * as Debug from 'debug';
-import { NotFoundAPITokenError } from '../errors';
+import { NotFoundAPITokenError, APITokenOwnerMismatchError } from '../errors';
 import { store } from './store.api-token';
 import { secureModule } from '../config';
 
@@ -21,16 +21,20 @@ export async function createAPIToken(apiToken: ApiPostAPITokenObject): Promise<I
   return newApiToken.toJSON();
 }
 
-export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject): Promise<InternalAPITokenObject> {
+export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject, user: InternalUserObject): Promise<InternalAPITokenObject> {
   debug('Update apiToken', attrs);
-  const updatedApiToken = await APIToken.update(id, attrs);
 
-  if (!updatedApiToken) {
+  let apiToken = await APIToken.getById(id);
+  if (!apiToken) {
     throw new NotFoundAPITokenError();
   }
+  if (user.role === 'user' && apiToken.get('userId') !== user.id) {
+    throw new APITokenOwnerMismatchError();
+  }
+  apiToken = await APIToken.update(id, attrs);
 
-  store.resetCache(updatedApiToken.get('hash'));
-  return updatedApiToken.toJSON();
+  store.resetCache(apiToken.get('hash'));
+  return apiToken.toJSON();
 }
 
 export async function getAPITokenById(id: string): Promise<InternalAPITokenObject> {
@@ -51,12 +55,22 @@ export async function getAllAPITokens(full = false): Promise<InternalAPITokenObj
   return apiTokens.map((apiToken) => apiToken.toJSON());
 }
 
-export async function deleteAPIToken(id: string): Promise<InternalAPITokenObject> {
-  const apiToken = await APIToken.delete(id);
+export async function getAPITokensByUser(userId: string): Promise<InternalAPITokenObject[]> {
+  const apiTokens = await APIToken.getByUserId(userId);
+  return apiTokens.map((apiToken) => apiToken.toJSON());
+}
 
+export async function deleteAPIToken(id: string, user: InternalUserObject): Promise<InternalAPITokenObject> {
+
+  const apiToken = await APIToken.getById(id);
   if (!apiToken) {
     throw new NotFoundAPITokenError();
   }
+  if (user.role === 'user' && apiToken.get('userId') !== user.id) {
+    throw new APITokenOwnerMismatchError();
+  }
+
+  await APIToken.delete(id);
 
   store.resetCache(apiToken.getDataValue('value'));
 

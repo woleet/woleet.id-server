@@ -3,6 +3,7 @@ package io.woleet.idserver.api;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.FullIdentity;
+import io.woleet.idserver.api.model.UserGet;
 import io.woleet.idserver.api.model.UserModeEnum;
 import io.woleet.idserver.api.model.UserPost;
 import org.apache.http.HttpStatus;
@@ -40,6 +41,18 @@ public class UserApiTest {
         fullIdentity.commonName(COMMON_NAME);
         userESign.setIdentity(fullIdentity);
 
+        // Try to create a user with user credentials
+        try {
+            UserGet user = Config.createTestUser();
+            UserApi userAuthApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
+            userAuthApi.createUser(userESign);
+            fail("Should not be able to create an user object with user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+
         // Check that we cannot create an e-signature user without an email
         try {
             userApi.createUser(userESign);
@@ -71,6 +84,38 @@ public class UserApiTest {
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+        }
+    }
+
+    @Test
+    public void userDeleteUserTest() throws ApiException {
+        UserGet user = Config.createTestUser();
+        UserApi userAuthApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
+
+        // Try to delete a user with user credentials
+        try {
+            UserGet userGet = Config.createTestUser();
+            userAuthApi.deleteUser(userGet.getId());
+            fail("Should not be able to delete a user object with user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+    }
+
+    @Test
+    public void userGetAllUserTest() throws ApiException {
+        UserGet user = Config.createTestUser();
+        UserApi userAuthApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
+
+        // Try to get all users with user credentials
+        try {
+            userAuthApi.getAllUsers(null, null, null, null, null,
+                    null, null, null, null, null, null, null);
+            fail("Should not be able to get all users object with user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 }

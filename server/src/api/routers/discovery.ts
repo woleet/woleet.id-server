@@ -21,6 +21,16 @@ const vaddr = validate.param('pubKey', 'address');
 
 const router = new Router({ prefix: '/discover' });
 
+/**
+ * @route: /discover/config
+ * @swagger
+ *  operationId: discoverConfig
+ */
+router.get('/config', async function (ctx) {
+  const { identityURL, APIURL } = await getServerConfig();
+  ctx.body = { identityURL, APIURL };
+});
+
 router.use(bearerAuth);
 
 /**
@@ -32,16 +42,6 @@ router.get('/keys/:userId', vuid, async function (ctx) {
   const { userId } = ctx.params;
   const keys = await getAllKeysOfUser(userId);
   ctx.body = keys.map(serializeKey);
-});
-
-/**
- * @route: /discover/config
- * @swagger
- *  operationId: discoverConfig
- */
-router.get('/config', async function (ctx) {
-  const { identityURL } = await getServerConfig();
-  ctx.body = { identityURL };
 });
 
 /**

@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**createAPIToken**](ApiTokenApi.md#createAPIToken) | **POST** /api-token | Create an API token.
 [**deleteAPIToken**](ApiTokenApi.md#deleteAPIToken) | **DELETE** /api-token/{APITokenId} | Delete an API token.
 [**getAPITokenById**](ApiTokenApi.md#getAPITokenById) | **GET** /api-token/{APITokenId} | Get an API token by its identifier.
-[**getAllAPITokens**](ApiTokenApi.md#getAllAPITokens) | **GET** /api-token/list | List all API tokens.
+[**getAllAPITokens**](ApiTokenApi.md#getAllAPITokens) | **GET** /api-token/list | List all API tokens. A user with user role only get his token.
 [**updateAPIToken**](ApiTokenApi.md#updateAPIToken) | **PUT** /api-token/{APITokenId} | Update an API token.
 
 
@@ -224,7 +224,7 @@ Name | Type | Description  | Notes
 # **getAllAPITokens**
 > List&lt;APITokenGet&gt; getAllAPITokens()
 
-List all API tokens.
+List all API tokens. A user with user role only get his token.
 
 ### Example
 ```java
