@@ -1547,8 +1547,8 @@ components:
       description: >
         The type of device storing the key.<br>
         - `server`: Woleet.ID Server or equivalent<br>
-        - `mobile`: Woleet.ID Mobile or equivalent<br>
-        - `nano`: Ledger Nano S or equivalent
+        - `mobile`: Woleet.ID Mobile or equivalent
+        - `nano`: Ledger Nano S or equivalent<br>
       example: "server"
     KeyHolderEnum:
       type: string
