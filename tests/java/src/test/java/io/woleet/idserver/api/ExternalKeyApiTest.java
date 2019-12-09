@@ -16,6 +16,7 @@ public class ExternalKeyApiTest {
 
     @Before
     public void setUp() throws Exception {
+
         // Start form a clean state
         tearDown();
     }

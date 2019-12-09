@@ -21,11 +21,15 @@ public class EnrollmentApiTest {
 
     @Before
     public void setUp() throws Exception {
+
         // Start form a clean state
         tearDown();
 
+        // Create 2 users
         userESign = Config.createTestUser(UserModeEnum.ESIGN);
         userSeal = Config.createTestUser(UserModeEnum.SEAL);
+
+        // Prepare an enrollment
         enrollmentPost = new EnrollmentPost();
         enrollmentPost.setTest(true);
     }

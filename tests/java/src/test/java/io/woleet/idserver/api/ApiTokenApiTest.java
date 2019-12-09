@@ -42,9 +42,11 @@ public class ApiTokenApiTest {
 
     @Before
     public void setUp() throws Exception {
+
         // Start form a clean state
         tearDown();
 
+        // Create a user and his API token
         user = Config.createTestUser();
         apiTokenPost = new APITokenPost();
         apiTokenPost.setName(Config.randomName());
@@ -224,5 +226,5 @@ public class ApiTokenApiTest {
 
         adminApiTokenApi.deleteAPIToken(adminApiTokenGet.getId());
     }
-    
+
 }

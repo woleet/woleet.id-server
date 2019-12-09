@@ -18,6 +18,7 @@ public class UserApiTest {
 
     @Before
     public void setUp() throws Exception {
+
         // Start form a clean state
         tearDown();
     }
@@ -111,7 +112,7 @@ public class UserApiTest {
         // Try to get all users with user credentials
         try {
             userAuthApi.getAllUsers(null, null, null, null, null,
-                    null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null);
             fail("Should not be able to get all users object with user credentials");
         }
         catch (ApiException e) {
