@@ -133,6 +133,21 @@ export WOLEET_ID_SERVER_POSTGRES_USER={PostgreSQL user, default: pguser}
 export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pass}
 ```
 
+## Restart policy
+
+By default Woleet.ID Server will restart if one of its container exits with a non-zero exit.  
+If you set the encryption secret by typing it when using ./app.sh start, the server will not be able to properly restart and you will probably need to use ./app.sh restart to recover.  
+You can choose between 4 type of restart policies:
+
+- no (Containers will never restart)
+- on-failure (By default)
+- unless-stopped (Always restart unless explicitly stopped, or if Docker itself is stopped or restarted)
+- always (Docker will always try to restart the containers)
+
+```bash
+export WOLEET_ID_SERVER_RESTART_POLICY="always"
+```
+
 ## Version
 
 Woleet.ID Server have prebuilt images on DockerHub:  

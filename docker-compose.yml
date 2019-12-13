@@ -1,45 +1,27 @@
 version: '3.4'
 
-networks:
-  client-server:
-    driver: bridge
-  postgres-server:
-    driver: bridge
-
 services:
-  wid-postgres:
-    image: postgres:10.4-alpine
-    networks:
-      - postgres-server
-    environment:
-      POSTGRES_DB: ${WOLEET_ID_SERVER_POSTGRES_DB:-wid}
-      POSTGRES_USER: ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser}
-      POSTGRES_PASSWORD: ${WOLEET_ID_SERVER_POSTGRES_PASSWORD:-pass}
-    volumes:
-      - ${WOLEET_ID_SERVER_DATA_DIR:-./db}:/var/lib/postgresql/data:rw
   wid-client:
     image: ${WOLEET_ID_SERVER_REGISTRY:-wids}/client:${WOLEET_ID_SERVER_VERSION:-latest}
+    volumes:
+      - ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}:/etc/nginx/ssl/certificate.crt:ro
+      - ${WOLEET_ID_SERVER_HTTP_TLS_KEY:?Undefined WOLEET_ID_SERVER_HTTP_TLS_KEY}:/etc/nginx/ssl/certificate.key:ro
     ports:
       # Calls to the server goes through the client's NGINX reverse proxy
       - ${WOLEET_ID_SERVER_API_PORT:-3000}:3000 # client web app + main server API endpoints port
       - ${WOLEET_ID_SERVER_IDENTITY_PORT:-3001}:3001 # /identity endpoint point
       - ${WOLEET_ID_SERVER_SIGNATURE_PORT:-3002}:3002 # /sign and /discover endpoints port
       - ${WOLEET_ID_SERVER_OIDCP_PORT:-3003}:3003 # OpenID Connect Provider endpoints port
-    volumes:
-      - ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}:/etc/nginx/ssl/certificate.crt:ro
-      - ${WOLEET_ID_SERVER_HTTP_TLS_KEY:?Undefined WOLEET_ID_SERVER_HTTP_TLS_KEY}:/etc/nginx/ssl/certificate.key:ro
-    restart: on-failure
-    depends_on:
-      - wid-server
     networks:
       - client-server
+    depends_on:
+      - wid-server
+    restart: "${WOLEET_ID_SERVER_RESTART_POLICY:-on-failure}"
+
   wid-server:
     image: ${WOLEET_ID_SERVER_REGISTRY:-wids}/server:${WOLEET_ID_SERVER_VERSION:-latest}
-    restart: on-failure
     stdin_open: true
     tty: true
-    depends_on:
-      - wid-postgres
     environment:
       DEBUG: ${WOLEET_ID_SERVER_DEBUG} # Set to "id*" to see debug traces
       WOLEET_ID_SERVER_API_PORT: 3000
@@ -56,3 +38,24 @@ services:
     networks:
       - client-server
       - postgres-server
+    depends_on:
+      - wid-postgres
+    restart: "${WOLEET_ID_SERVER_RESTART_POLICY:-on-failure}"
+
+  wid-postgres:
+    image: postgres:10.4-alpine
+    environment:
+      POSTGRES_DB: ${WOLEET_ID_SERVER_POSTGRES_DB:-wid}
+      POSTGRES_USER: ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser}
+      POSTGRES_PASSWORD: ${WOLEET_ID_SERVER_POSTGRES_PASSWORD:-pass}
+    volumes:
+      - ${WOLEET_ID_SERVER_DATA_DIR:-./db}:/var/lib/postgresql/data:rw
+    networks:
+      - postgres-server
+    restart: "${WOLEET_ID_SERVER_RESTART_POLICY:-on-failure}"
+
+networks:
+  client-server:
+    driver: bridge
+  postgres-server:
+    driver: bridge
