@@ -83,7 +83,7 @@ bash <(curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/ma
 
 You will need a certificate and its key, as described below, on the computer you execute this script.
 
-By default it will:
+By default, it will:
 - install Docker and other tools required
 - clone the GitHub project to $HOME/wids directory
 - store the path of your certificate and key files in the file `configuration.sh`
@@ -135,14 +135,15 @@ export WOLEET_ID_SERVER_POSTGRES_PASSWORD=(PostgreSQL user password, default: pa
 
 ## Restart policy
 
-By default Woleet.ID Server will restart if one of its container exits with a non-zero exit.  
-If you set the encryption secret by typing it when using ./app.sh start, the server will not be able to properly restart and you will probably need to use ./app.sh restart to recover.  
+By default, Docker automatically restarts Woleet.ID Server containers when they exit with a non-zero exit.
+If you set the encryption secret by typing it when using ./app.sh start, the server will not be able to properly restart automatically, and you will have to use ./app.sh restart to recover.
+
 You can choose between 4 type of restart policies:
 
-- no (Containers will never restart)
-- on-failure (By default)
-- unless-stopped (Always restart unless explicitly stopped, or if Docker itself is stopped or restarted)
-- always (Docker will always try to restart the containers)
+- no (containers will never restart)
+- on-failure (by default)
+- unless-stopped (always restart unless explicitly stopped, or if Docker itself is stopped or restarted)
+- always (always restart)
 
 ```bash
 export WOLEET_ID_SERVER_RESTART_POLICY="always"
