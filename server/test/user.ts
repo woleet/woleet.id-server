@@ -35,7 +35,7 @@ describe('/user', () => {
   describe('/user (post)', () => {
 
     const userProperties = [
-      'id', 'role', 'defaultKeyId', 'identity',
+      'id', 'role', 'defaultKeyId', 'identity', 'mode',
       'status', 'lastLogin', 'username', 'email',
       'updatedAt', 'createdAt',
       'countryCallingCode', 'phone'
@@ -43,9 +43,9 @@ describe('/user', () => {
 
     const user = {
       username: 'test' + (+new Date),
-      password: 'pass',
       identity: {
-        commonName: 'Tester'
+        commonName: 'Tester',
+        organization: 'Tester'
       }
     };
 
