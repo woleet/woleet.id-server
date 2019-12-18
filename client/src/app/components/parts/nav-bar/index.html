@@ -4,13 +4,13 @@
     <button mat-icon-button class="collapse-button" (click)="collapseSideBar()">
       <mat-icon>view_headline</mat-icon>
     </button>
-    <img class="logo" [src]="config.logoURL || '/assets/logo.svg'">
+    <img class="logo" [src]="config.logoURL || '/assets/logo.png'">
     <div class="sub-logo">
       <span class="text-gray text-slim">{{ page() }}</span>
     </div>
   </div>
   <div fxLayout="row">
-    <h1 class="mat-title text-center" style="line-height: 40px; margin-right: 12px">{{ commonName() }}</h1>
+    <h1 class="mat-title text-center" style="line-height: 50px; margin-right: 12px">{{ commonName() }}</h1>
     <mat-divider vertical></mat-divider>
     <button mat-icon-button matTooltip="Logout" (click)="logout()" [disabled]="lock$ | async">
       <i class="material-icons">clear</i>

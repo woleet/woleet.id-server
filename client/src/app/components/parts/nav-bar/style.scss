@@ -1,18 +1,18 @@
 $mat-list-item-height: 36px;
 $nav-top-height: 48px;
 $side-nav-width: 200px;
-$nav-bg: #1d2939;
+$nav-bg: #f8f9fa;
 $nav-border: 1px solid #e0e0e0;
 
 .logo {
-  width: 120px;
-  height: 28px;
+  height: 50px;
   margin-right: 68px;
   margin-top: 3px;
 }
 
 .sub-logo {
   margin-left: -30px;
+  margin-top: 12px;
 }
 
 mat-toolbar {
@@ -34,7 +34,7 @@ mat-toolbar {
 }
 
 mat-sidenav-container {
-  background-color: #e4e7ea;
+  background-color: rgba(255, 255, 255, 0.7);
   height: 100%;
 }
 
@@ -64,7 +64,7 @@ mat-sidenav-container {
   .mat-list-item {
     height: $mat-list-item-height;
     min-height: $mat-list-item-height;
-    color: #9e9e9e;
+    color: #343a40;
     margin: 0;
 
     i {
@@ -85,6 +85,10 @@ mat-sidenav-container {
       display: block;
     }
   }
+
+  .mat-list-item:hover {
+    background-color: #e9eaeb;
+  }
 }
 
 .collapse {
@@ -92,10 +96,13 @@ mat-sidenav-container {
 }
 
 .collapse-button {
-  height: 28px;
   background-position: center;
 }
 
+[mat-icon-button] {
+  margin-top: 6px;
+}
+
 .active-link {
-  background-color: #ffffff09;
+  background-color: #e9eaeb;
 }
