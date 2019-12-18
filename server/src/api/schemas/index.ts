@@ -22,7 +22,7 @@ function validateBody(schema: string): IMiddleware {
 
   const _schema = schemas[schema];
 
-  // Thrown at initialization.
+  // Thrown at initialization
   if (!_schema) {
     throw new Error(`Cannot find "${schema}" schema`);
   }
@@ -41,7 +41,7 @@ function validateParam(name: string, schema: string): IMiddleware {
 
   const _schema = schemas[schema];
 
-  // Thrown at initialization.
+  // Thrown at initialization
   if (!_schema) {
     throw new Error(`Cannot find "${schema}" schema`);
   }
@@ -65,7 +65,7 @@ function validateValue(schema: string): ((value: any) => Promise<boolean>) {
 
   const _schema = schemas[schema];
 
-  // Thrown at initialization.
+  // Thrown at initialization
   if (!_schema) {
     throw new Error(`Cannot find "${schema}" schema`);
   }

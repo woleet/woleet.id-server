@@ -38,7 +38,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
   const user: ApiPostUserObject = ctx.request.body;
 
   if (getServerConfig().blockPasswordInput && user.password) {
-    throw new BadRequest('Cannot create a user with a preset password with this server configuration');
+    throw new BadRequest('Server configuration prevent from creating a user with a preset password');
   }
 
   if (user.mode === 'esign' && !user.email) {
@@ -51,7 +51,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
 
   const authorizedUser = await getUserById(ctx.session.user.get('id'));
   if (user.role === 'admin' && authorizedUser.role !== 'admin') {
-    throw new Unauthorized('Only admin can create other admin.');
+    throw new Unauthorized('Only admin can create other admin');
   }
 
   const created = await createUser(copy(user));
@@ -102,7 +102,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const update = ctx.request.body;
 
   if (getServerConfig().blockPasswordInput && update.password) {
-    throw new BadRequest('Cannot create a user with a preset password with this server configuration');
+    throw new BadRequest('Server configuration prevent from creating a user with a preset password');
   }
 
   if (update.defaultKeyId) {
@@ -117,7 +117,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const authorizedUser = await getUserById(ctx.session.user.get('id'));
   if ((update.role === 'admin' && authorizedUser.role !== 'admin')
     || (user.role === 'admin' && authorizedUser.role !== 'admin')) {
-    throw new Unauthorized('Only admin can create other admin.');
+    throw new Unauthorized('Only admin can create other admin');
   }
   user = await updateUser(id, copy(update));
 

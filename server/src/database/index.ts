@@ -72,7 +72,7 @@ export async function init() {
       return !keys.length;
     } catch (err) {
       if (attempts && err instanceof ConnectionError) {
-        log.warn(`Failed to connect to database, retrying in ${db.retryDelay}ms`);
+        log.warn(`Cannot connect to database, retrying in ${db.retryDelay}ms`);
         await wait(db.retryDelay);
         continue;
       }

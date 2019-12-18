@@ -36,22 +36,22 @@ export async function initServerConfig() {
       throw new Error('Secret is not the same that the previously set one');
     }
     if (!config.mailOnboardingTemplate) {
-      log.warn('The onboarding template is set to default.');
+      log.warn('The onboarding template is set to default');
       config.mailOnboardingTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), { encoding: 'ascii' });
     }
     if (!config.mailResetPasswordTemplate) {
-      log.warn('The reset password template is set to default.');
+      log.warn('The reset password template is set to default');
       config.mailResetPasswordTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), { encoding: 'ascii' });
     }
     if (!config.mailKeyEnrollmentTemplate) {
-      log.warn('The key enrollment mail template is set to default.');
+      log.warn('The key enrollment mail template is set to default');
       config.mailKeyEnrollmentTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultKeyEnrollmentMailTemplate.html'), { encoding: 'ascii' });
     }
     if (!config.organizationName) {
-      log.warn('The organization name is set as Woleet.');
+      log.warn('The organization name is set as Woleet');
       config.organizationName = 'Woleet';
     }
   } else {
@@ -67,7 +67,7 @@ export async function initServerConfig() {
         sendKeyEnrollmentMail: false
       });
     } catch (err) {
-      return exit(`Failed to create user "admin": ${err.message}`, err);
+      return exit(`Cannot create user "admin": ${err.message}`, err);
     }
 
     log.info(`Created user "admin" with id ${admin.id}`);

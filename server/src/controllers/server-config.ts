@@ -39,7 +39,7 @@ export function getServerConfig(): InternalServerConfigObject {
   return config;
 }
 
-// Create a stream to overwrite the current TCU pdf with the new TCU pdf.
+// Create a stream to overwrite the current TCU pdf with the new TCU pdf
 export async function updateTCU(file) {
   const reader = createReadStream(file.path);
   const stream = createWriteStream(TCUPath);
@@ -47,7 +47,7 @@ export async function updateTCU(file) {
   log.info('Updating TCU file');
 }
 
-// Create a stream to overwrite the current TCU pdf with the default TCU pdf.
+// Create a stream to overwrite the current TCU pdf with the default TCU pdf
 export async function defaultTCU() {
   const reader = createReadStream(defaultTCUPath);
   const stream = createWriteStream(TCUPath);
@@ -75,7 +75,7 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
     await checkProofDeskConfigChange(up);
     return getServerConfig();
   } catch (err) {
-    exit('FATAL: Failed update the server configuration.', err);
+    exit('FATAL: Cannot update the server configuration', err);
   }
 }
 
@@ -120,7 +120,7 @@ async function checkOIDCConfigChange(up: ServerConfigUpdate) {
     try {
       await fns.updateOIDCClient();
     } catch (err) {
-      log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
+      log.error('Cannot initialize OpenID Connect, it will be automatically disabled!', err);
       return setServerConfig({ enableOpenIDConnect: false });
     }
   }
@@ -130,9 +130,9 @@ function OIDCPSafeReboot() {
   debug('Reboot OIDCP');
   return fns.bootOIDCProvider()
     .catch((err) => {
-      log.error('Failed to reboot OpenID Connect, it will be automatically disabled!');
+      log.error('Cannot reboot OpenID Connect, it will be automatically disabled!');
       setServerConfig({ enableOIDCP: false });
-      exit('FATAL: This error should have been handled.', err);
+      exit('FATAL: This error should have been handled', err);
     });
 }
 
@@ -142,7 +142,7 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
       debug('Stop OIDCP');
       await fns.stopOIDCProvider();
     } catch (err) {
-      exit('FATAL: Failed to stop the OIDCP server.', err);
+      exit('FATAL: Cannot stop the OIDCP server', err);
     }
   }
   if (up.OIDCPIssuerURL || up.OIDCPClients || up.enableOIDCP) {
@@ -151,7 +151,7 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
       await fns.updateOIDCProvider();
       await OIDCPSafeReboot();
     } catch (err) {
-      log.error('Failed to initialize OpenID Connect, it will be automatically disabled!', err);
+      log.error('Cannot initialize OpenID Connect, it will be automatically disabled!', err);
       return setServerConfig({ enableOpenIDConnect: false });
     }
   }
@@ -165,15 +165,16 @@ async function checkSMTPConfigChange(up: ServerConfigUpdate) {
     try {
       await fns.updateSMTP();
     } catch (err) {
-      log.error('Failed to initialize SMTP, it will be automatically disabled!', err);
+      log.error('Cannot initialize SMTP, it will be automatically disabled!', err);
       return setServerConfig({ enableSMTP: false });
     }
   }
 }
 
-// Check the ProofDesk configuration validity.
+// Check the ProofDesk configuration validity
 async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
-  // Check the configuration changed.
+
+  // Check the configuration changed
   if ((up.proofDeskAPIURL || up.proofDeskAPIToken) && up.enableProofDesk) {
     debug('Update ProofDesk Config with', { up });
     const url = new URL(up.proofDeskAPIURL || getServerConfig().proofDeskAPIURL);

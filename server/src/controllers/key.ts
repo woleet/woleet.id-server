@@ -40,7 +40,7 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
  */
 export async function createExternalKey(userId: string, key: ApiPostKeyObject): Promise<InternalKeyObject> {
 
-  // Check that user exists.
+  // Check that user exists
   const user = await User.getById(userId);
   if (!user) {
     throw new NotFoundUserError();
@@ -48,10 +48,10 @@ export async function createExternalKey(userId: string, key: ApiPostKeyObject): 
 
   // Check that user is a esign user
   if (user.get('mode') === 'seal') {
-    throw new Error('Cannot create an external key for a user in seal mode.');
+    throw new Error('Cannot create an external key for a user in seal mode');
   }
 
-  // Create and return a new external key.
+  // Create and return a new external key
   const holder: KeyHolderEnum = 'user';
   const newKey = await Key.create(Object.assign({}, key, {
     publicKey: key.publicKey,
@@ -68,19 +68,19 @@ export async function createExternalKey(userId: string, key: ApiPostKeyObject): 
 export async function updateKey(id: string, attrs: ApiPutKeyObject) {
   const update: any = attrs;
 
-  // Check key existence.
+  // Check key existence
   const keyUpdated = await Key.getById(id);
   if (!keyUpdated) {
     throw new NotFoundKeyError();
   }
 
-  // If the key is revoked the update is not available.
+  // If the key is revoked the update is not available
   if (keyUpdated && keyUpdated.get('status') === 'revoked') {
     throw new RevokedKeyError();
   }
 
-  // Upon revocation the revocation date is added and
-  // the private key and the entropy is deleted if the user is a esign user.
+  // Upon revocation the revocation date is added and the private key and the entropy is deleted
+  // if the user is a esign user
   let user;
   if (update.status === 'revoked') {
     const userId = await keyUpdated.get('userId');
@@ -94,15 +94,15 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
     }
   }
 
-  // Update the key.
+  // Update the key
   const key = await Key.update(id, update);
 
-  // If the key is revoked and the update succeeded, send an email to the admins.
+  // If the key is revoked and the update succeeded, send an email to the admins
   if (update.status === 'revoked') {
     sendKeyRevocationEmail(user.toJSON(), keyUpdated.toJSON());
   }
 
-  // Return the key.
+  // Return the key
   return key.toJSON();
 }
 
@@ -139,7 +139,7 @@ export async function exportKey(id: string): Promise<string> {
     throw new NotFoundKeyError();
   }
 
-  // Get the entropy and its initialization vector to retrieve the mnemonic word.
+  // Get the entropy and its initialization vector to retrieve the mnemonic word
   const entropy = Buffer.from(key.get('mnemonicEntropy'), 'hex');
   const entropyIV = Buffer.from(key.get('mnemonicEntropyIV'), 'hex');
   return secureModule.exportPhrase(entropy, entropyIV);

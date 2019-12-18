@@ -43,20 +43,20 @@ export async function askResetPasswordEmail(email: string): Promise<InternalUser
     { encoding: 'ascii' }
   );
 
-  // Search all active manager except the requester.
+  // Search all active manager except the requester
   let managers = await User.getByRole('manager');
   managers = managers.filter((manager) => manager.get('email')
     && user.get('id') !== manager.get('id')
     && manager.get('status') === 'active');
 
-  // If manager are not found search all active admin except the requester.
+  // If manager are not found search all active admin except the requester
   if (!managers.length) {
     managers = await User.getByRole('admin');
     managers = managers.filter((admin) => admin.get('email')
       && user.get('id') !== admin.get('id')
       && admin.get('status') === 'active');
 
-    // If no admin are not found send an error message with the contact if it is configured.
+    // If no admin are not found send an error message with the contact if it is configured
     if (!managers.length) {
       if (config.contact) {
         throw new BadRequest('Unable to contact a manager please contact ' + config.contact);
@@ -66,7 +66,7 @@ export async function askResetPasswordEmail(email: string): Promise<InternalUser
     }
   }
 
-  // For all manager/admin send an email following the template.
+  // For all manager/admin send an email following the template
   managers.forEach(async (manager) => {
     if (manager.get('email')) {
       const html = mustache.render(template, {

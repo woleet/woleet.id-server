@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getUserInfo**](AuthenticationApi.md#getUserInfo) | **GET** /info | Return information about the current logged user.
-[**login**](AuthenticationApi.md#login) | **GET** /login | Log into the system. Both email or username can be used to authentify.
+[**login**](AuthenticationApi.md#login) | **GET** /login | Log into the system. Both email or username can be used to authenticate.
 [**logout**](AuthenticationApi.md#logout) | **GET** /logout | Log out from the system.
 
 
@@ -77,7 +77,7 @@ This endpoint does not need any parameter.
 # **login**
 > UserInfo login()
 
-Log into the system. Both email or username can be used to authentify.
+Log into the system. Both email or username can be used to authenticate.
 
 ### Example
 ```java

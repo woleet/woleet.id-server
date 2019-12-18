@@ -148,28 +148,28 @@ declare global {
 
   /* AbstractToken: server specific */
   interface InternalTokenObject {
-    id: string,
-    scope: string[],
-    type: 'api' | 'oauth',
-    role: 'admin' | 'user',
-    status: 'active' | 'blocked' | 'expired',
-    exp: number,
-    userId?: string
+    id: string;
+    scope: string[];
+    type: 'api' | 'oauth';
+    role: 'admin' | 'user';
+    status: 'active' | 'blocked' | 'expired';
+    exp: number;
+    userId?: string;
   }
 
   /* OauthAccessToken: server specific */
   interface InternalOauthTokenObject {
-    iat: number,
-    iss: uri,
-    exp: number,
-    clientId: string,
-    gty: string,
-    accountId: string,
-    claims: any,
-    grantId: string,
-    scope: string,
-    kind: string,
-    jti: string
+    iat: number;
+    iss: uri;
+    exp: number;
+    clientId: string;
+    gty: string;
+    accountId: string;
+    claims: any;
+    grantId: string;
+    scope: string;
+    kind: string;
+    jti: string;
   }
 
   /* APIToken: server specific */
@@ -435,10 +435,10 @@ declare global {
   type OIDCGrantTypesEnum = 'refresh_token' | 'authorization_code';
 
   interface OIDCPClient {
-    client_id: string,
-    client_secret: string,
-    grant_types: OIDCGrantTypesEnum[],
-    redirect_uris: uri[],
+    client_id: string;
+    client_secret: string;
+    grant_types: OIDCGrantTypesEnum[];
+    redirect_uris: uri[];
   }
 }
 

@@ -45,7 +45,6 @@ export class AppConfigService {
           const redirect = atob(params.redirect);
           store.set(LOGIN_REDIRECT_KEY, redirect);
         } catch {
-          log.warn(`Failed to decode`, params.redirect);
           errorService.setError('redirect-parameter', new Error(params.redirect));
         }
       }
@@ -58,7 +57,7 @@ export class AppConfigService {
     log.debug(`Load on ${location.href}`);
 
     // Must use the native way to handle request because this call is done during
-    // the application boot and is used by the authentification service.
+    // the application boot and is used by the authentication service
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', `${serverURL}/app-config`);
@@ -89,7 +88,7 @@ export class AppConfigService {
             resolve();
           }
 
-          log.error('Failed to get initial configuration', xhr.response);
+          log.error('Cannot get initial configuration', xhr.response);
           reject();
         }
       });

@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: This is Woleet.ID Server API documentation.
-  version: 1.2.1
+  version: 1.2.2
   title: Woleet.ID Server
   contact:
     email: contact@woleet.com
@@ -14,7 +14,7 @@ paths:
     get:
       tags:
         - Authentication
-      summary: Log into the system. Both email or username can be used to authentify.
+      summary: Log into the system. Both email or username can be used to authenticate.
       operationId: login
       security:
         - BasicAuth: []
@@ -68,12 +68,12 @@ paths:
   /sign:
     get:
       operationId: getSignature
-      summary: Sign some data using a key.
+      summary: Sign a message or a SHA256 hash using a key.
       tags:
         - Signature
       description: >
-        Use this endpoint to sign a SHA256 hash using one of the keys managed by the server.
-        <br>Provide the SHA256 hash to sign in the `hashToSign` parameter.
+        Use this endpoint to sign a message or a SHA256 hash using one of the keys managed by the server.
+        <br>Provide the message to sign in the `messageToSign` parameter, or the SHA256 hash to sign in the `hashToSign` parameter.
         <br>When authenticated using an API token, the key to use can be specified using the `pubKey`, `userId` and/or `customUserId` parameters:
         <br>- set the `pubKey` parameter only: the referred key is used
         <br>- set the `userId` (or the `customUserId`) parameter only: the default key of the referred user is used (if any).
@@ -82,6 +82,7 @@ paths:
         If not specified, the authenticated user's default key is used (if any).
       parameters:
         - $ref: '#/components/parameters/HashToSignQueryParameter'
+        - $ref: '#/components/parameters/MessageToSignQueryParameter'
         - $ref: '#/components/parameters/UserIdQueryParameter'
         - $ref: '#/components/parameters/CustomUserIdQueryParameter'
         - $ref: '#/components/parameters/PubKeyQueryParameter'
@@ -1487,7 +1488,7 @@ components:
         authorizedTokenId:
           type: string
           format: uuid
-          description: Identifier of the API token used to authentify.
+          description: Identifier of the API token used to authenticate.
           example: "fd7cb389-91e6-41ba-a0a5-14a05bd2b5f7"
         associatedTokenId:
           type: string
@@ -1684,11 +1685,16 @@ components:
           format: hex
           example: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
           description: SHA256 hash that is signed (same as the `hashToSign` parameter).
+        signedMessage:
+          type: string
+          format: hex
+          example: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+          description: Message that is signed (same as the `messageToSign` parameter).
         signature:
           type: string
           format: base64
           example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
-          description: Signature of `hashToSign` using the public key `pubKey`.
+          description: Signature of `messageToSign` or `hashToSign` using the public key `pubKey`.
         identityURL:
           $ref: '#/components/schemas/IdentityURL'
     IdentityResult:
@@ -1899,10 +1905,16 @@ components:
       name: hashToSign
       in: query
       description: SHA256 hash to be signed (a string formatted like [a-f0-9]{64}).
-      required: true
       schema:
         type: string
         example: 'd8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975'
+    MessageToSignQueryParameter:
+      name: messageToSign
+      in: query
+      description: Message to be signed.
+      schema:
+        type: string
+        example: 'This is the message ot ber signed'
     FilterUserModeQueryParameter:
       name: mode
       in: query
@@ -2119,12 +2131,12 @@ components:
       type: apiKey
       in: cookie
       name: session
-      description: Use a session cookie to authentify (see /login).
+      description: Use a session cookie to authenticate (see /login).
     APITokenAuth:
       type: http
       scheme: bearer
-      description: Use an API token to authentify (see /api-token).
+      description: Use an API token to authenticate (see /api-token).
     OAuthTokenAuth:
       type: http
       scheme: bearer
-      description: Use an OAuth access token to authentify.
+      description: Use an OAuth access token to authenticate.

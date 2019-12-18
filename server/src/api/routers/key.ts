@@ -34,15 +34,15 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
   // Verify mnemonic phrase if provided
   if (key.phrase) {
     if (key.phrase.split(' ').length < 12) {
-      throw new BadRequest('The phrase length must be at least 12 words.');
+      throw new BadRequest('The phrase length must be at least 12 words');
     } else if (key.phrase.split(' ').length > 50) {
-      throw new BadRequest('The phrase length cannot exceed 50 words.');
+      throw new BadRequest('The phrase length cannot exceed 50 words');
     }
   }
 
   // Verify that the expiration date is not set in the past
   if (key.expiration != null && key.expiration < Date.now()) {
-    throw new BadRequest('Cannot set expiration date in the past.');
+    throw new BadRequest('Cannot set expiration date in the past');
   }
 
   // Create the key
@@ -76,7 +76,7 @@ router.post('/user/:userId/extern-key', vuid, validate.body('createExternKey'), 
 
   // Verify that the expiration date is not set in the past
   if (key.expiration != null && key.expiration < Date.now()) {
-    throw new BadRequest('Cannot set expiration date in the past.');
+    throw new BadRequest('Cannot set expiration date in the past');
   }
 
   // Verify that the expiration date is not set in the past
@@ -118,7 +118,7 @@ router.get('/user/:userId/key/list', vuid, async function (ctx) {
 router.get('/key/:id/export', vkid, async function (ctx) {
   const { id } = ctx.params;
   if (production) {
-    throw new Forbidden('Cannot export a key in production mode.');
+    throw new Forbidden('Cannot export a key in production mode');
   }
   const phrase = await exportKey(id);
   ctx.body = { phrase };

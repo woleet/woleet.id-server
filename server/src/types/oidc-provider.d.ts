@@ -14,5 +14,5 @@ interface LoginInteraction extends Interaction {
   error: 'login_required';
   error_description: 'End-User authentication is required';
   reason: 'no_session';
-  reason_description: 'Please Sign-in to continue.'
+  reason_description: 'Please sign-in to continue'
 }

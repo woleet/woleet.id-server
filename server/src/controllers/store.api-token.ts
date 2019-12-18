@@ -24,8 +24,8 @@ export class APITokenStore {
   }
 
   async getByValue(value: string): Promise<InternalTokenObject> {
-    // Hash the value of the received token to search it in the DB.
     try {
+      // Hash the value of the received token to search it in the DB
       const bin = Buffer.from(value, 'base64');
       const hash = crypto.createHash('sha256').update(bin).digest('hex');
       return this.getByHash(hash);
@@ -35,14 +35,14 @@ export class APITokenStore {
   }
 
   async getByHash(hash: string): Promise<InternalTokenObject> {
-    // If the corresponding token is already stocked in the cache return it.
-    let token = this.lru.get(hash);
 
+    // If the corresponding token is already stocked in the cache return it
+    let token = this.lru.get(hash);
     if (token) {
       return token;
     }
 
-    // If the token is not in the cache search it in the DB.
+    // If the token is not in the cache search it in the DB
     const apiToken = await APIToken.getByHash(hash);
 
     if (!apiToken) {
@@ -53,7 +53,7 @@ export class APITokenStore {
 
     token = serialize(apiToken);
 
-    // Stock this token in the cache.
+    // Stock this token in the cache
     this.lru.set(hash, token);
     return token;
   }

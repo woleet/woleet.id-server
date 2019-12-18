@@ -39,7 +39,7 @@ export class EnrollmentPageComponent implements OnInit {
         (error) => {
           switch (error.error.name) {
             case 'NotFoundEnrollmentError':
-              this.errorMessage = 'This page doesn\'t refer to a signature key registration in progress.';
+              this.errorMessage = 'This page doesn\'t refer to a signature key registration in progress';
               break;
             case 'EnrollmentExpiredError':
               this.errorMessage = 'This page refers to a signature key registration that is expired.' +
@@ -75,7 +75,7 @@ export class EnrollmentPageComponent implements OnInit {
           this.isSendingSignatureRequest = false;
           switch (error.error.name) {
             case 'NotFoundEnrollmentError':
-              this.errorMessage = 'This page doesn\'t refer to a signature key registration in progress.';
+              this.errorMessage = 'This page doesn\'t refer to a signature key registration in progress';
               break;
             case 'EnrollmentExpiredError':
               this.errorMessage = 'This page refers to a signature key registration that is expired.' +

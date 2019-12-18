@@ -9,7 +9,7 @@ function servers() {
 
 describe('/login', () => {
 
-  it('can login with basic on api server', (done) => {
+  it('can login with basic on API server', (done) => {
     servers()
       .get('/login')
       .auth('admin', 'pass')

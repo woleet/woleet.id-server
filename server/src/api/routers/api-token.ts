@@ -39,11 +39,11 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
 
   const authorizedUser = ctx.session.user.toJSON();
   if (!token.userId && authorizedUser.role !== 'admin') {
-    throw new Forbidden('Only admin can create other admin token.');
+    throw new Forbidden('Only admin can create other admin API token');
   }
 
   if (authorizedUser.role === 'user' && (token.userId !== authorizedUser.id)) {
-    throw new Forbidden('User can only create token for themself.');
+    throw new Forbidden('User can only create token for themselves');
   }
 
   const created = await createAPIToken(token);
@@ -83,7 +83,7 @@ router.get('/:id', vid, async function (ctx) {
   const authorizedUser = ctx.session.user.toJSON();
 
   if (authorizedUser.role === 'user' && (apiToken.userId !== authorizedUser.id)) {
-    throw new Forbidden('User can only get their own token.');
+    throw new Forbidden('User can only get their own token');
   }
 
   ctx.body = await serializeAPIToken(apiToken);

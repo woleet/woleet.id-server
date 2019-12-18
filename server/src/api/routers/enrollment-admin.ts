@@ -30,27 +30,27 @@ router.post('/enrollment', validate.body('createEnrollment'), async function (ct
   // TODO: change the test boolean by a new end point allowing to send the mail
   if (!enrollment.test) {
     if (!getServerConfig().enableSMTP) {
-      throw new MethodNotAllowed('SMTP Server not configured.');
+      throw new MethodNotAllowed('SMTP Server not configured');
     }
     if (!getServerConfig().contact) {
-      throw new MethodNotAllowed('Admin contact not configured.');
+      throw new MethodNotAllowed('Admin contact not configured');
     }
     if (!getServerConfig().webClientURL) {
-      throw new MethodNotAllowed('Web client URL not configured.');
+      throw new MethodNotAllowed('Web client URL not configured');
     }
     if (!getServerConfig().enableProofDesk) {
-      throw new MethodNotAllowed('ProofDesk account not configured.');
+      throw new MethodNotAllowed('ProofDesk account not configured');
     }
   }
 
   // Verify that the expiration date is not set in the past
   if (enrollment.expiration != null && enrollment.expiration < Date.now()) {
-    throw new BadRequest('Cannot set expiration date in the past.');
+    throw new BadRequest('Cannot set expiration date in the past');
   }
 
   // Verify that the key expiration date is not set in the past
   if (enrollment.keyExpiration != null && enrollment.keyExpiration < Date.now()) {
-    throw new BadRequest('Cannot set key expiration date in the past.');
+    throw new BadRequest('Cannot set key expiration date in the past');
   }
 
   // Create enrollment

@@ -44,12 +44,12 @@ export class OAuthRedirectComponent {
               router.navigate([mainRoute]);
             }
           } else {
-            this.errorMsg = 'Failed to login';
+            this.errorMsg = 'Unable to login';
           }
         }
       } catch (err) {
         log.error(err);
-        this.errorMsg = `Failed to login: ${err.error.message}`;
+        this.errorMsg = `Unable to login: ${err.error.message}`;
       }
     });
   }

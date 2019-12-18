@@ -381,7 +381,7 @@ async function postUpgrade3() {
       return;
     }
 
-    log.warn('Need to re-encrypt keys, we will ask you to enter your encryption secret (again) if not set as environment variable.');
+    log.warn('Need to re-encrypt keys, we will ask you to enter your encryption secret (again) if not set as environment variable');
 
     let secret = process.env[secretEnvVariableName] || '';
 
@@ -411,11 +411,11 @@ async function postUpgrade3() {
     try {
       decrypt(Buffer.from(testKey.get('privateKey'), 'hex'));
     } catch (err) {
-      log.error('Failed to decrypt key! Please check that the secret is correct and try again.');
-      throw new Error('Failed to decrypt key');
+      log.error('Cannot decrypt key! Please check that the secret is correct and try again');
+      throw new Error('Cannot decrypt key');
     }
 
-    log.warn('Secret is corretcly set, re-encypting all keys.');
+    log.warn('Secret is corretcly set, re-encypting all keys');
 
     const keys = await Key.model.findAll({ paranoid: false });
 
@@ -491,7 +491,7 @@ async function afterInitUpgrade5() {
       return;
     }
 
-    log.warn('Need to encrypt tokens.');
+    log.warn('Need to encrypt tokens');
 
     const tokens = await APIToken.model.findAll({ paranoid: false });
 

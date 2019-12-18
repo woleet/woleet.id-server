@@ -26,11 +26,11 @@ async function getSignature(ctx: Context) {
   const query = ctx.query;
   const token = ctx.token;
 
-  if (!query.hashToSign) {
-    throw new BadRequest('Missing mandatory "hashToSign" query parameter');
+  if (!query.messageToSign && !query.hashToSign) {
+    throw new BadRequest('Missing mandatory "messageToSign" or "hashToSign" query parameter');
   }
 
-  if (!(await vhash(query.hashToSign))) {
+  if (query.hashToSign && !(await vhash(query.hashToSign))) {
     throw new BadRequest('Query parameter "hashToSign" must be a SHA256 hash (in lowercase)');
   }
 
@@ -39,25 +39,30 @@ async function getSignature(ctx: Context) {
   }
 
   if (query.userId && token.userId && (token.userId !== query.userId)) {
-    throw new Unauthorized('Cannot sign for another user.');
+    throw new Unauthorized('Cannot sign for another user');
   }
 
   if (query.pubKey && !(await vaddr(query.pubKey))) {
     throw new BadRequest('Invalid query parameter "pubKey"');
   }
 
+  // When authenticated using a user token, a user can only sign for himself
   let _userId = null;
   if (token.userId) {
     _userId = token.userId;
-  } else if (query.userId) {
+  }
+
+  // When authenticated using an admin token, an admin can only sign for seal users
+  else if (query.userId) {
     _userId = query.userId;
     const user = await getUserById(_userId);
     if (user.mode === 'esign') {
-      throw new Unauthorized('Cannot use e-signature with an admin token.');
+      throw new Unauthorized('Cannot use e-signature with an admin token');
     }
   }
 
-  const { signature, pubKey, userId, keyId, signedHash } = await sign(Object.assign({}, query, { userId: _userId }));
+  const { signature, pubKey, userId, keyId, signedMessage, signedHash } =
+    await sign(Object.assign({}, query, { userId: _userId }));
 
   const identityURL = getServerConfig().identityURL;
 
@@ -71,7 +76,7 @@ async function getSignature(ctx: Context) {
     data: { hash: signedHash, auth: ctx.token.type }
   });
 
-  ctx.body = { pubKey, signedHash, signature, identityURL };
+  ctx.body = { pubKey, signedMessage, signedHash, signature, identityURL };
 }
 
 /**

@@ -38,12 +38,12 @@ export async function getIdentity(leftData: string, pubKey: string) {
     status
   };
 
-  // Add expiration field if the expiration date is set, transform the Date string type into timestamp format.
+  // Add expiration field if the expiration date is set, transform the Date string type into timestamp format
   if (key.get('expiration')) {
     identityKey.expiration = +key.get('expiration');
   }
 
-  // Add the revocation date if set (transform the date string to a timestamp).
+  // Add the revocation date if set (transform the date string to a timestamp)
   if (key.get('revokedAt')) {
     identityKey.revokedAt = +key.get('revokedAt');
   }

@@ -35,7 +35,6 @@ export class LoginPageComponent {
         try {
           this.redirect = atob(params.redirect);
         } catch {
-          log.warn(`Failed to decode`, params.redirect);
           errorService.setError('redirect-parameter', new Error(params.redirect));
           this.router.navigate(['/error']);
         }
@@ -58,7 +57,7 @@ export class LoginPageComponent {
         }
       }
     } else {
-      this.errorMsg = 'Failed to login.';
+      this.errorMsg = 'Unable to login';
     }
   }
 

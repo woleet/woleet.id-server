@@ -4,9 +4,8 @@ import { secureModule } from '../config';
 import { Unauthorized } from 'http-errors';
 
 import {
-  NotFoundUserError, NotFoundKeyError, BlockedUserError,
-  BlockedKeyError, NoDefaultKeyError, ServerNotReadyError,
-  KeyOwnerMismatchError, ExpiredKeyError, KeyNotHeldByServerError, RevokedKeyError
+  BlockedKeyError, BlockedUserError, ExpiredKeyError, KeyNotHeldByServerError, KeyOwnerMismatchError, NoDefaultKeyError,
+  NotFoundKeyError, NotFoundUserError, RevokedKeyError, ServerNotReadyError
 } from '../errors';
 
 export function signMessage(key: SequelizeKeyObject, message: string, compressed = true): Promise<string> {
@@ -15,49 +14,61 @@ export function signMessage(key: SequelizeKeyObject, message: string, compressed
   return secureModule.sign(privateKey, message, privateKeyIV, compressed);
 }
 
-export async function sign({ hashToSign, pubKey, userId, customUserId }) {
+export async function sign({ hashToSign, messageToSign, pubKey, userId, customUserId }) {
   let user: SequelizeUserObject;
   let key: SequelizeKeyObject;
 
+  // Get the user if set (it is always set if accessed using a user token)
   if (userId) {
     user = await User.getById(userId);
   } else if (customUserId) {
     user = await User.getByCustomUserId(customUserId);
   }
 
+  // If set, the user should have been found at this point
+  if ((userId || customUserId) && !user) {
+    throw new NotFoundUserError();
+  }
+
+  // Get the key if set
   if (pubKey) {
     key = await Key.getByPubKey(pubKey, user && user.get('id'), !user);
     if (!key) {
       throw new NotFoundKeyError();
     }
+
+    // Get the user from the key if not set
     if (!user) {
       user = key.get('user');
+
+      // Check that the user is a seal
       if (user.get('mode') === 'esign') {
-        throw new Unauthorized('Cannot use e-signature with an admin token.');
+        throw new Unauthorized('Cannot use e-signature with an admin token');
       }
     }
   }
 
-  if ((userId || customUserId) && !user) {
-    throw new NotFoundUserError();
-  }
-
-  // Key and user are specified, need to check that the user is the owner of a key.
+  // If the key and the user are specified, the user must be the owner of a key
   if (key && user) {
     if (key.get('userId') !== user.get('id')) {
       throw new KeyOwnerMismatchError();
     }
   }
 
-  // If the pubkey is not specified, need to put the value by default.
+  // If the key is not specified, need to get the default key
   if (!pubKey) {
     let defaultKeyId;
+
+    // Default key is user's default key
     if (userId || customUserId) {
       defaultKeyId = user.get('defaultKeyId');
       if (!defaultKeyId) {
         throw new NoDefaultKeyError();
       }
-    } else {
+    }
+
+    // Default key is server's default key
+    else {
       const config = getServerConfig();
       if (!config) {
         throw new ServerNotReadyError();
@@ -67,6 +78,8 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
       }
       defaultKeyId = config.defaultKeyId;
     }
+
+    // Get the key
     key = await Key.getByIdAndPullUser(defaultKeyId);
     if (!key) {
       throw new Error(`Cannot find default key (${defaultKeyId})`);
@@ -90,8 +103,8 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     throw new BlockedKeyError();
   }
 
-   // A revoked key cannot sign
-   if (key.getDataValue('status') === 'revoked') {
+  // A revoked key cannot sign
+  if (key.getDataValue('status') === 'revoked') {
     throw new RevokedKeyError();
   }
 
@@ -106,7 +119,7 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     throw new ExpiredKeyError();
   }
 
-  const signature = await signMessage(key, hashToSign);
+  const signature = await signMessage(key, messageToSign || hashToSign);
 
   const now = new Date();
 
@@ -117,6 +130,7 @@ export async function sign({ hashToSign, pubKey, userId, customUserId }) {
     keyId: key.get('id'),
     pubKey: key.get('publicKey'),
     signedHash: hashToSign,
+    signedMessage: messageToSign,
     signature
   };
 }

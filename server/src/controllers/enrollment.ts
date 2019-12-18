@@ -186,7 +186,7 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
     httpsOptions.agent = agent;
   }
 
-  // Create an observable that get the signature request every 30 secondes.
+  // Create an observable that get the signature request every 30 seconds
   const observable = new Observable<any>(subscriber => {
     const interval = setInterval(() => {
       https.get(httpsOptions, (res) => {
@@ -268,7 +268,7 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
     // Send a enrollment success email to the admin
     await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, true);
   } catch (error) {
-    log.error('Failed to finalize enrollment', error.message);
+    log.error('Cannot finalize enrollment', error.message);
 
     // Send a enrollment failure email to the admin
     await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, false);

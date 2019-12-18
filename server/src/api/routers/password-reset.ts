@@ -34,23 +34,23 @@ const router = new Router({ prefix: '/password-reset' });
 router.post('/', async function (ctx) {
   const { email } = ctx.request.body;
   if (!email) {
-    throw new BadRequest('Need to send the email address.');
+    throw new BadRequest('Need to send the email address');
   }
 
-  // Check if the requester is an authentified manager
+  // Check if the requester is an authenticated manager
   const managerId = ctx.session &&
     (ctx.session.user.getDataValue('role') === 'manager' || ctx.session.user.getDataValue('role') === 'admin')
     ? ctx.session.user.get('id') : null;
   let user;
 
-  // If the requester is not an authentified manager and the reset password fonction is blocked start warn the managers.
+  // If the requester is not an authenticated manager and the reset password function is blocked start warn the managers
   if (getServerConfig().askForResetInput && !managerId) {
     user = await askResetPasswordEmail(email);
   } else {
     try {
       user = await sendResetPasswordEmail(email, managerId);
     } catch {
-      throw new NotFound(email + ' does not correspond to a user.');
+      throw new NotFound(email + ' does not correspond to a user');
     }
   }
 
@@ -76,19 +76,19 @@ router.post('/validate', async function (ctx) {
   const infoUpdatePassword = ctx.request.body;
   let user;
   if (!infoUpdatePassword.email) {
-    throw new BadRequest('Need to send the email address.');
+    throw new BadRequest('Need to send the email address');
   }
   if (!infoUpdatePassword.token) {
-    throw new BadRequest('Need to send the reset token.');
+    throw new BadRequest('Need to send the reset token');
   }
   if (!infoUpdatePassword.password) {
-    throw new BadRequest('Need to send the new password.');
+    throw new BadRequest('Need to send the new password');
   }
 
   try {
     user = await updatePassword(infoUpdatePassword);
   } catch (err) {
-    throw new Unauthorized('Invalid token.');
+    throw new Unauthorized('Invalid token');
   }
 
   event.register({

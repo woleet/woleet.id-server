@@ -27,7 +27,7 @@ export class ConfigAskResetPasswordInputComponent extends ErrorMessageProvider i
     this.configService.update({ askForResetInput });
   }
 
-  // Search all active manager or admin with an email disable the checkbox if no one is found.
+  // Search all active manager or admin with an email disable the checkbox if no one is found
   checkManagerAvailable(users: ApiUserObject[]): boolean {
     let managers = users.filter((user) => user.role === 'manager' && user.email && user.status === 'active');
     if (!managers.length) {
