@@ -62,7 +62,8 @@ public class SignatureApi {
      * @param messageToSign Message to be signed. (optional)
      * @param userId User identifier. (optional)
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
-     * @param pubKey The public key to use to sign. &lt;br&gt;When not provided and a user is provided, the default key of the user is used (if any). &lt;br&gt;When not provided and no user is provided, the default key of the server is used (if any).  (optional)
+     * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
+     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path &#39;m/44/0/0&#39; is used.  (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -76,7 +77,7 @@ public class SignatureApi {
         <tr><td> 403 </td><td> No &#x60;pubKey&#x60; parameter is provided and the server or the user has no default key to fallback on. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call getSignatureCall(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getSignatureCall(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -104,6 +105,10 @@ public class SignatureApi {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("pubKey", pubKey));
         }
 
+        if (path != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("path", path));
+        }
+
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
         Map<String, String> localVarCookieParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
@@ -126,22 +131,23 @@ public class SignatureApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call getSignatureValidateBeforeCall(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getSignatureValidateBeforeCall(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = getSignatureCall(hashToSign, messageToSign, userId, customUserId, pubKey, _callback);
+        okhttp3.Call localVarCall = getSignatureCall(hashToSign, messageToSign, userId, customUserId, pubKey, path, _callback);
         return localVarCall;
 
     }
 
     /**
      * Sign a message or a SHA256 hash using a key.
-     * Use this endpoint to sign a message or a SHA256 hash using one of the keys managed by the server. &lt;br&gt;Provide the message to sign in the &#x60;messageToSign&#x60; parameter, or the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;When authenticated using an API token, the key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60; parameter. If not specified, the authenticated user&#39;s default key is used (if any). 
+     * Use this endpoint to sign a message or a SHA256 hash using one of the keys managed by the server.&lt;br&gt; Provide the message to sign in the &#x60;messageToSign&#x60; parameter, or the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter.&lt;br&gt; When authenticated using an API token, the key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters:&lt;br&gt; - set the &#x60;pubKey&#x60; parameter only: the referred key is used&lt;br&gt; - set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any).&lt;br&gt; - set none of the 3 parameters: the default key of the server is used (if any).&lt;br&gt; When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60; parameter. If not specified, the authenticated user&#39;s default key is used (if any). 
      * @param hashToSign SHA256 hash to be signed (a string formatted like [a-f0-9]{64}). (optional)
      * @param messageToSign Message to be signed. (optional)
      * @param userId User identifier. (optional)
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
-     * @param pubKey The public key to use to sign. &lt;br&gt;When not provided and a user is provided, the default key of the user is used (if any). &lt;br&gt;When not provided and no user is provided, the default key of the server is used (if any).  (optional)
+     * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
+     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path &#39;m/44/0/0&#39; is used.  (optional)
      * @return SignatureResult
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -154,19 +160,20 @@ public class SignatureApi {
         <tr><td> 403 </td><td> No &#x60;pubKey&#x60; parameter is provided and the server or the user has no default key to fallback on. </td><td>  -  </td></tr>
      </table>
      */
-    public SignatureResult getSignature(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey) throws ApiException {
-        ApiResponse<SignatureResult> localVarResp = getSignatureWithHttpInfo(hashToSign, messageToSign, userId, customUserId, pubKey);
+    public SignatureResult getSignature(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path) throws ApiException {
+        ApiResponse<SignatureResult> localVarResp = getSignatureWithHttpInfo(hashToSign, messageToSign, userId, customUserId, pubKey, path);
         return localVarResp.getData();
     }
 
     /**
      * Sign a message or a SHA256 hash using a key.
-     * Use this endpoint to sign a message or a SHA256 hash using one of the keys managed by the server. &lt;br&gt;Provide the message to sign in the &#x60;messageToSign&#x60; parameter, or the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;When authenticated using an API token, the key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60; parameter. If not specified, the authenticated user&#39;s default key is used (if any). 
+     * Use this endpoint to sign a message or a SHA256 hash using one of the keys managed by the server.&lt;br&gt; Provide the message to sign in the &#x60;messageToSign&#x60; parameter, or the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter.&lt;br&gt; When authenticated using an API token, the key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters:&lt;br&gt; - set the &#x60;pubKey&#x60; parameter only: the referred key is used&lt;br&gt; - set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any).&lt;br&gt; - set none of the 3 parameters: the default key of the server is used (if any).&lt;br&gt; When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60; parameter. If not specified, the authenticated user&#39;s default key is used (if any). 
      * @param hashToSign SHA256 hash to be signed (a string formatted like [a-f0-9]{64}). (optional)
      * @param messageToSign Message to be signed. (optional)
      * @param userId User identifier. (optional)
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
-     * @param pubKey The public key to use to sign. &lt;br&gt;When not provided and a user is provided, the default key of the user is used (if any). &lt;br&gt;When not provided and no user is provided, the default key of the server is used (if any).  (optional)
+     * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
+     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path &#39;m/44/0/0&#39; is used.  (optional)
      * @return ApiResponse&lt;SignatureResult&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -179,20 +186,21 @@ public class SignatureApi {
         <tr><td> 403 </td><td> No &#x60;pubKey&#x60; parameter is provided and the server or the user has no default key to fallback on. </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<SignatureResult> getSignatureWithHttpInfo(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey) throws ApiException {
-        okhttp3.Call localVarCall = getSignatureValidateBeforeCall(hashToSign, messageToSign, userId, customUserId, pubKey, null);
+    public ApiResponse<SignatureResult> getSignatureWithHttpInfo(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path) throws ApiException {
+        okhttp3.Call localVarCall = getSignatureValidateBeforeCall(hashToSign, messageToSign, userId, customUserId, pubKey, path, null);
         Type localVarReturnType = new TypeToken<SignatureResult>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
      * Sign a message or a SHA256 hash using a key. (asynchronously)
-     * Use this endpoint to sign a message or a SHA256 hash using one of the keys managed by the server. &lt;br&gt;Provide the message to sign in the &#x60;messageToSign&#x60; parameter, or the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;When authenticated using an API token, the key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60; parameter. If not specified, the authenticated user&#39;s default key is used (if any). 
+     * Use this endpoint to sign a message or a SHA256 hash using one of the keys managed by the server.&lt;br&gt; Provide the message to sign in the &#x60;messageToSign&#x60; parameter, or the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter.&lt;br&gt; When authenticated using an API token, the key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters:&lt;br&gt; - set the &#x60;pubKey&#x60; parameter only: the referred key is used&lt;br&gt; - set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any).&lt;br&gt; - set none of the 3 parameters: the default key of the server is used (if any).&lt;br&gt; When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60; parameter. If not specified, the authenticated user&#39;s default key is used (if any). 
      * @param hashToSign SHA256 hash to be signed (a string formatted like [a-f0-9]{64}). (optional)
      * @param messageToSign Message to be signed. (optional)
      * @param userId User identifier. (optional)
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
-     * @param pubKey The public key to use to sign. &lt;br&gt;When not provided and a user is provided, the default key of the user is used (if any). &lt;br&gt;When not provided and no user is provided, the default key of the server is used (if any).  (optional)
+     * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
+     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path &#39;m/44/0/0&#39; is used.  (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -206,9 +214,9 @@ public class SignatureApi {
         <tr><td> 403 </td><td> No &#x60;pubKey&#x60; parameter is provided and the server or the user has no default key to fallback on. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call getSignatureAsync(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, final ApiCallback<SignatureResult> _callback) throws ApiException {
+    public okhttp3.Call getSignatureAsync(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path, final ApiCallback<SignatureResult> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = getSignatureValidateBeforeCall(hashToSign, messageToSign, userId, customUserId, pubKey, _callback);
+        okhttp3.Call localVarCall = getSignatureValidateBeforeCall(hashToSign, messageToSign, userId, customUserId, pubKey, path, _callback);
         Type localVarReturnType = new TypeToken<SignatureResult>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;

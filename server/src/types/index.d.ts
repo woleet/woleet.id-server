@@ -227,7 +227,7 @@ declare global {
     authorizedToken?: InternalUserObject;
     associatedToken?: InternalAPITokenObject;
     associatedUser?: InternalUserObject;
-    associatedkey?: InternalKeyObject;
+    associatedKey?: InternalKeyObject;
   }
 
   interface ServerEventCreate {
@@ -433,13 +433,6 @@ declare global {
   }
 
   type OIDCGrantTypesEnum = 'refresh_token' | 'authorization_code';
-
-  interface OIDCPClient {
-    client_id: string;
-    client_secret: string;
-    grant_types: OIDCGrantTypesEnum[];
-    redirect_uris: uri[];
-  }
 }
 
 declare module 'koa' {

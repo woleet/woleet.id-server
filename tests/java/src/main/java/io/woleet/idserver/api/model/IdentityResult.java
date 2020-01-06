@@ -55,11 +55,11 @@ public class IdentityResult {
   }
 
    /**
-   * The right part of the signed data (generated randomly). &lt;br&gt;To prevent man-in-the-middle attacks, the data starts with the server&#39;s identity URL and this should be verified by the caller. 
+   * The right part of the signed data (generated randomly).&lt;br&gt; To prevent man-in-the-middle attacks, the data starts with the server&#39;s identity URL and this should be verified by the caller. 
    * @return rightData
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "The right part of the signed data (generated randomly). <br>To prevent man-in-the-middle attacks, the data starts with the server's identity URL and this should be verified by the caller. ")
+  @ApiModelProperty(value = "The right part of the signed data (generated randomly).<br> To prevent man-in-the-middle attacks, the data starts with the server's identity URL and this should be verified by the caller. ")
 
   public String getRightData() {
     return rightData;

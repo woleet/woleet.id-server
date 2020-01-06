@@ -9,11 +9,11 @@ Method | HTTP request | Description
 
 <a name="getSignature"></a>
 # **getSignature**
-> SignatureResult getSignature(hashToSign, messageToSign, userId, customUserId, pubKey)
+> SignatureResult getSignature(hashToSign, messageToSign, userId, customUserId, pubKey, path)
 
 Sign a message or a SHA256 hash using a key.
 
-Use this endpoint to sign a message or a SHA256 hash using one of the keys managed by the server. &lt;br&gt;Provide the message to sign in the &#x60;messageToSign&#x60; parameter, or the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter. &lt;br&gt;When authenticated using an API token, the key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters: &lt;br&gt;- set the &#x60;pubKey&#x60; parameter only: the referred key is used &lt;br&gt;- set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any). &lt;br&gt;- set none of the 3 parameters: the default key of the server is used (if any). &lt;br&gt;When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60; parameter. If not specified, the authenticated user&#39;s default key is used (if any). 
+Use this endpoint to sign a message or a SHA256 hash using one of the keys managed by the server.&lt;br&gt; Provide the message to sign in the &#x60;messageToSign&#x60; parameter, or the SHA256 hash to sign in the &#x60;hashToSign&#x60; parameter.&lt;br&gt; When authenticated using an API token, the key to use can be specified using the &#x60;pubKey&#x60;, &#x60;userId&#x60; and/or &#x60;customUserId&#x60; parameters:&lt;br&gt; - set the &#x60;pubKey&#x60; parameter only: the referred key is used&lt;br&gt; - set the &#x60;userId&#x60; (or the &#x60;customUserId&#x60;) parameter only: the default key of the referred user is used (if any).&lt;br&gt; - set none of the 3 parameters: the default key of the server is used (if any).&lt;br&gt; When authenticated using an OAuth token, the key to use must be one of the authenticated user&#39;s keys and can be specified using the &#x60;pubKey&#x60; parameter. If not specified, the authenticated user&#39;s default key is used (if any). 
 
 ### Example
 ```java
@@ -43,9 +43,10 @@ public class Example {
     String messageToSign = This is the message ot ber signed; // String | Message to be signed.
     UUID userId = 345a4513-0266-419a-8344-2daf645b78ed; // UUID | User identifier.
     String customUserId = wol.jim-smith.01; // String | Custom user identifier (ie. `userId` field of the user's identity).
-    String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | The public key to use to sign. <br>When not provided and a user is provided, the default key of the user is used (if any). <br>When not provided and no user is provided, the default key of the server is used (if any). 
+    String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | The public key to use to sign.<br> When not provided and a user is provided, the default key of the user is used (if any).<br> When not provided and no user is provided, the default key of the server is used (if any). 
+    String path = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | The derivation path of the key to use to sign.<br> When not provided, the default derivation path 'm/44/0/0' is used. 
     try {
-      SignatureResult result = apiInstance.getSignature(hashToSign, messageToSign, userId, customUserId, pubKey);
+      SignatureResult result = apiInstance.getSignature(hashToSign, messageToSign, userId, customUserId, pubKey, path);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling SignatureApi#getSignature");
@@ -66,7 +67,8 @@ Name | Type | Description  | Notes
  **messageToSign** | **String**| Message to be signed. | [optional]
  **userId** | [**UUID**](.md)| User identifier. | [optional]
  **customUserId** | **String**| Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). | [optional]
- **pubKey** | **String**| The public key to use to sign. &lt;br&gt;When not provided and a user is provided, the default key of the user is used (if any). &lt;br&gt;When not provided and no user is provided, the default key of the server is used (if any).  | [optional]
+ **pubKey** | **String**| The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  | [optional]
+ **path** | **String**| The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path &#39;m/44/0/0&#39; is used.  | [optional]
 
 ### Return type
 

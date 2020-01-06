@@ -111,11 +111,11 @@ public class EnrollmentGet {
   }
 
    /**
-   * Enrollment expiration date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the enrollment has no expiration date. 
+   * Enrollment expiration date (Unix ms timestamp).&lt;br&gt; Note that the field is not returned if the enrollment has no expiration date. 
    * @return expiration
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "1569542400000", value = "Enrollment expiration date (Unix ms timestamp). <br>Note that the field is not returned if the enrollment has no expiration date. ")
+  @ApiModelProperty(example = "1569542400000", value = "Enrollment expiration date (Unix ms timestamp).<br> Note that the field is not returned if the enrollment has no expiration date. ")
 
   public Long getExpiration() {
     return expiration;
@@ -134,11 +134,11 @@ public class EnrollmentGet {
   }
 
    /**
-   * Enrolled key expiration date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the enrollment has no expiration date. 
+   * Enrolled key expiration date (Unix ms timestamp).&lt;br&gt; Note that the field is not returned if the enrollment has no expiration date. 
    * @return keyExpiration
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "1569542400000", value = "Enrolled key expiration date (Unix ms timestamp). <br>Note that the field is not returned if the enrollment has no expiration date. ")
+  @ApiModelProperty(example = "1569542400000", value = "Enrolled key expiration date (Unix ms timestamp).<br> Note that the field is not returned if the enrollment has no expiration date. ")
 
   public Long getKeyExpiration() {
     return keyExpiration;

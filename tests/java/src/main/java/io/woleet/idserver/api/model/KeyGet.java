@@ -118,11 +118,11 @@ public class KeyGet {
   }
 
    /**
-   * Key expiration date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no expiration date. 
+   * Key expiration date (Unix ms timestamp).&lt;br&gt; Note that the field is not returned if the key has no expiration date. 
    * @return expiration
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "1569542400000", value = "Key expiration date (Unix ms timestamp). <br>Note that the field is not returned if the key has no expiration date. ")
+  @ApiModelProperty(example = "1569542400000", value = "Key expiration date (Unix ms timestamp).<br> Note that the field is not returned if the key has no expiration date. ")
 
   public Long getExpiration() {
     return expiration;
@@ -270,11 +270,11 @@ public class KeyGet {
   }
 
    /**
-   * Indicates whether the key has expired or not. &lt;br&gt;Note that the field is not returned if the key has not expired. 
+   * Indicates whether the key has expired or not.&lt;br&gt; Note that the field is not returned if the key has not expired. 
    * @return expired
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "false", value = "Indicates whether the key has expired or not. <br>Note that the field is not returned if the key has not expired. ")
+  @ApiModelProperty(example = "false", value = "Indicates whether the key has expired or not.<br> Note that the field is not returned if the key has not expired. ")
 
   public Boolean getExpired() {
     return expired;
@@ -293,11 +293,11 @@ public class KeyGet {
   }
 
    /**
-   * Key revocation date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no revocation date. 
+   * Key revocation date (Unix ms timestamp).&lt;br&gt; Note that the field is not returned if the key has no revocation date. 
    * @return revokedAt
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "1569542400000", value = "Key revocation date (Unix ms timestamp). <br>Note that the field is not returned if the key has no revocation date. ")
+  @ApiModelProperty(example = "1569542400000", value = "Key revocation date (Unix ms timestamp).<br> Note that the field is not returned if the key has no revocation date. ")
 
   public Long getRevokedAt() {
     return revokedAt;

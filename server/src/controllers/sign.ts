@@ -14,7 +14,7 @@ export function signMessage(key: SequelizeKeyObject, message: string, compressed
   return secureModule.sign(privateKey, message, privateKeyIV, compressed);
 }
 
-export async function sign({ hashToSign, messageToSign, pubKey, userId, customUserId }) {
+export async function sign({ hashToSign, messageToSign, pubKey, userId, customUserId, path }) {
   let user: SequelizeUserObject;
   let key: SequelizeKeyObject;
 
@@ -25,7 +25,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     user = await User.getByCustomUserId(customUserId);
   }
 
-  // If set, the user should have been found at this point
+  // If set, the user should have been found at this step
   if ((userId || customUserId) && !user) {
     throw new NotFoundUserError();
   }
@@ -62,9 +62,6 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     // Default key is user's default key
     if (userId || customUserId) {
       defaultKeyId = user.get('defaultKeyId');
-      if (!defaultKeyId) {
-        throw new NoDefaultKeyError();
-      }
     }
 
     // Default key is server's default key
@@ -77,6 +74,11 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
         throw new NoDefaultKeyError();
       }
       defaultKeyId = config.defaultKeyId;
+    }
+
+    // Default key should be set at this step
+    if (!defaultKeyId) {
+      throw new NoDefaultKeyError();
     }
 
     // Get the key
@@ -92,10 +94,6 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
   // A blocked user cannot sign
   if (user.getDataValue('status') === 'blocked') {
     throw new BlockedUserError();
-  }
-
-  if (!key) {
-    throw new NoDefaultKeyError();
   }
 
   // A blocked key cannot sign
@@ -119,7 +117,22 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     throw new ExpiredKeyError();
   }
 
-  const signature = await signMessage(key, messageToSign || hashToSign);
+  // If no derivation path is specified, sign using the key unmodified
+  let signature: string;
+  let publicKey: string;
+  if (!path) {
+    signature = await signMessage(key, messageToSign || hashToSign);
+    publicKey = key.get('publicKey');
+  }
+
+  // If a derivation path is specified, sign using the derived key
+  else {
+    const entropy = Buffer.from(key.get('mnemonicEntropy'), 'hex');
+    const entropyIV = Buffer.from(key.get('mnemonicEntropyIV'), 'hex');
+    const derivedKey = await secureModule.deriveKey(entropy, entropyIV, path);
+    signature = await secureModule.sign(derivedKey.privateKey, messageToSign || hashToSign, derivedKey.privateKeyIV);
+    publicKey = derivedKey.publicKey;
+  }
 
   const now = new Date();
 
@@ -128,9 +141,9 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
   return {
     userId: user.get('id'),
     keyId: key.get('id'),
-    pubKey: key.get('publicKey'),
     signedHash: hashToSign,
     signedMessage: messageToSign,
+    pubKey: publicKey,
     signature
   };
 }

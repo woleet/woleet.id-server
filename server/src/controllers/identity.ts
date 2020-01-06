@@ -31,7 +31,7 @@ export async function getIdentity(leftData: string, pubKey: string) {
     status = 'valid';
   }
 
-  const identityKey: ApiIndentityKeyObject = {
+  const identityKey: ApiIdentityKeyObject = {
     name: key.get('name'),
     pubKey: key.get('publicKey'),
     status

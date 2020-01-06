@@ -57,7 +57,7 @@ interface ApiPutKeyObject extends KeyObject {
   expiration?: number;
 }
 
-interface ApiIndentityKeyObject extends KeyObject {
+interface ApiIdentityKeyObject extends KeyObject {
   name: string;
   pubKey: string;
   expiration?: number;
