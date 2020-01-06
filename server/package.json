@@ -12,9 +12,7 @@
     "dev": "WOLEET_ID_SERVER_PRODUCTION=false DEBUG=id* npx ts-node-dev src/index.ts",
     "test": "WOLEET_ID_SERVER_PRODUCTION=false npx mocha --require ts-node/register test/*.ts --exit --timeout 10000"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "private": true,
   "devDependencies": {
     "@types/basic-auth": "^1.1.2",
     "@types/debug": "^0.0.31",
