@@ -82,8 +82,8 @@ async function getSignature(ctx: Context) {
 router.get('/sign', bearerAuth, getSignature);
 
 /**
- * Backward compatibility with woleet backend-kit
  * @route: /signature
+ * @deprecated For backward compatibility with woleet backend-kit
  * @swagger
  *  operationId: getSignature
  */
