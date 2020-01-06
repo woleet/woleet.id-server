@@ -28,9 +28,8 @@ class APITokenAccess extends AbstractInstanceAccess<InternalAPITokenObject, ApiF
   }
 
   getByUserId(userId: string) {
-    return this.model.findAll({where: { userId } });
+    return this.model.findAll({ where: { userId } });
   }
-
 }
 
 export const APIToken = new APITokenAccess();

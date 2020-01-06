@@ -1,5 +1,5 @@
-import { Cache } from 'lru-cache';
 import * as LRU from 'lru-cache';
+import { Cache } from 'lru-cache';
 
 import { getProvider } from './oidc-provider';
 import * as log from 'loglevel';

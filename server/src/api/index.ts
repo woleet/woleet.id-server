@@ -14,10 +14,9 @@ import { router as identity } from './routers/identity';
 import { router as discovery } from './routers/discovery';
 import { router as openid } from './routers/openid';
 import { router as healthcheck } from './routers/healthcheck';
-import { admin as adminAuth, session, user as userAuth, manager as managerAuth } from './authentication';
+import { admin as adminAuth, manager as managerAuth, session, user as userAuth } from './authentication';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
-import { from } from 'rxjs';
 
 /**
  * API

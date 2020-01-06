@@ -170,7 +170,8 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
  * @param enrollmentId the enrollment id
  * @param user the enrolled user
  */
-export async function monitorSignatureRequest(signatureRequestId: string, enrollmentId: string, user: InternalUserObject) {
+export async function monitorSignatureRequest(signatureRequestId: string, enrollmentId: string,
+                                              user: InternalUserObject) {
   const url = new URL(getServerConfig().proofDeskAPIURL);
   const httpsOptions: any = {
     host: url.host,
@@ -202,7 +203,7 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
               subscriber.next(signatureRequest);
               break;
             default:
-            subscriber.error({ code: res.statusCode, data });
+              subscriber.error({ code: res.statusCode, data });
           }
         });
       }).on('error', (error) => {
@@ -214,19 +215,19 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
 
   const signatureRequestSubscriber = observable
     .subscribe(async (signatureRequest) => {
-      try {
-        await testEnrollmentExpiration(enrollmentId, user);
-      } catch (error) {
-        log.error(error);
-        signatureRequestSubscriber.unsubscribe();
-      }
-      if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
-        // Once the signature request is fulfilled, finalize the enrollment
-        await finalizeEnrollment(enrollmentId, user, signatureRequest);
-        signatureRequestSubscriber.unsubscribe();
-      }
-      return;
-    },
+        try {
+          await testEnrollmentExpiration(enrollmentId, user);
+        } catch (error) {
+          log.error(error);
+          signatureRequestSubscriber.unsubscribe();
+        }
+        if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
+          // Once the signature request is fulfilled, finalize the enrollment
+          await finalizeEnrollment(enrollmentId, user, signatureRequest);
+          signatureRequestSubscriber.unsubscribe();
+        }
+        return;
+      },
       (error) => {
         signatureRequestSubscriber.unsubscribe();
         throw error;

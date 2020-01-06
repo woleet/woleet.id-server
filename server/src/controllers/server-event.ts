@@ -68,7 +68,8 @@ export async function getServerEventById(id: string): Promise<InternalServerEven
   return event.toJSON();
 }
 
-export async function getServerEventListByType(type: ServerEventTypeEnum, opts: ListOptions): Promise<InternalServerEventObject[]> {
+export async function getServerEventListByType(type: ServerEventTypeEnum, opts: ListOptions)
+  : Promise<InternalServerEventObject[]> {
   const events = await ServerEvent.getByType(type, opts);
   return events.map((evt) => evt.toJSON());
 }

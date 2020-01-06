@@ -2,7 +2,7 @@ import { APIToken } from '../database';
 
 import * as crypto from 'crypto';
 import * as Debug from 'debug';
-import { NotFoundAPITokenError, APITokenOwnerMismatchError } from '../errors';
+import { APITokenOwnerMismatchError, NotFoundAPITokenError } from '../errors';
 import { store } from './store.api-token';
 import { secureModule } from '../config';
 
@@ -21,7 +21,8 @@ export async function createAPIToken(apiToken: ApiPostAPITokenObject): Promise<I
   return newApiToken.toJSON();
 }
 
-export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject, user: InternalUserObject): Promise<InternalAPITokenObject> {
+export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject,
+                                     user: InternalUserObject): Promise<InternalAPITokenObject> {
   debug('Update apiToken', attrs);
 
   let apiToken = await APIToken.getById(id);

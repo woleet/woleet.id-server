@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 import { copy } from '../../controllers/utils/copy';
 import { serializeUser } from '../serialize/user';
 import { updatePassword } from '../../controllers/user';
-import { sendResetPasswordEmail, askResetPasswordEmail } from '../../controllers/send-email';
+import { askResetPasswordEmail, sendResetPasswordEmail } from '../../controllers/send-email';
 import { store as event } from '../../controllers/server-event';
 import { getServerConfig } from '../../controllers/server-config';
 import { BadRequest, NotFound, Unauthorized } from 'http-errors';
@@ -39,8 +39,8 @@ router.post('/', async function (ctx) {
 
   // Check if the requester is an authenticated manager
   const managerId = ctx.session &&
-    (ctx.session.user.getDataValue('role') === 'manager' || ctx.session.user.getDataValue('role') === 'admin')
-    ? ctx.session.user.get('id') : null;
+  (ctx.session.user.getDataValue('role') === 'manager' || ctx.session.user.getDataValue('role') === 'admin') ?
+    ctx.session.user.get('id') : null;
   let user;
 
   // If the requester is not an authenticated manager and the reset password function is blocked start warn the managers

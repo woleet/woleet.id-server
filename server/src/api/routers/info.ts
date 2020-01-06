@@ -1,7 +1,6 @@
 import * as Router from 'koa-router';
 import { serializeUserDTO } from '../serialize/userDTO';
 
-
 /**
  * Info
  * Request handlers for info.

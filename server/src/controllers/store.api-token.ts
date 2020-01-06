@@ -1,5 +1,5 @@
-import { Cache } from 'lru-cache';
 import * as LRU from 'lru-cache';
+import { Cache } from 'lru-cache';
 import * as crypto from 'crypto';
 import { APIToken } from '../database';
 

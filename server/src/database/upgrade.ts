@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize';
 import * as log from 'loglevel';
 import * as read from 'read';
 import * as crypto from 'crypto';
-import { APIToken, Key, User, ServerConfig } from '.';
+import { APIToken, Key, ServerConfig, User } from '.';
 import { secretEnvVariableName, secureModule, serverConfig } from '../config';
 import { promisify } from 'util';
 

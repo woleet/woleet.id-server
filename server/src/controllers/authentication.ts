@@ -10,7 +10,8 @@ export function lookForUser(login: string): Promise<SequelizeUserObject> {
   }
 }
 
-export async function createSession(login: string, password: string): Promise<{ token: string, user: InternalUserObject }> {
+export async function createSession(login: string, password: string)
+  : Promise<{ token: string, user: InternalUserObject }> {
   const user = await lookForUser(login);
   if (!user) {
     return null;

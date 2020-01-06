@@ -2,10 +2,10 @@ import * as Router from 'koa-router';
 import * as body from 'koa-body';
 import { BadRequest } from 'http-errors';
 import { validate } from '../schemas';
-import { getServerConfig, setServerConfig, updateTCU, defaultTCU } from '../../controllers/server-config';
+import { defaultTCU, getServerConfig, setServerConfig, updateTCU } from '../../controllers/server-config';
 import { store as event } from '../../controllers/server-event';
 import { serializeServerConfig } from '../serialize/server-config';
-import { getOwner, getKeyById } from '../../controllers/key';
+import { getKeyById, getOwner } from '../../controllers/key';
 import { admin } from '../authentication';
 
 /**

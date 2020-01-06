@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { CountryCode, Word, DirectoryString, uuid, Name, SafeWord } from './misc';
+import { CountryCode, DirectoryString, SafeWord, uuid, Word } from './misc';
 
 const userRoleEnum = ['user', 'admin', 'manager'];
 const userStatusEnum = ['active', 'blocked'];

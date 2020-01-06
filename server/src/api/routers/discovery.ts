@@ -65,13 +65,12 @@ router.get('/user', async function (ctx) {
 
   const userId = token.userId;
   if (userId) {
-  const user = await getUserById(userId);
-  ctx.body = serializeUser(user, false);
-} else {
-  ctx.body = null;
-}
+    const user = await getUserById(userId);
+    ctx.body = serializeUser(user, false);
+  } else {
+    ctx.body = null;
+  }
 });
-
 
 /**
  * @route: /discover/users

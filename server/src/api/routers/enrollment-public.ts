@@ -3,7 +3,6 @@ import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
 import { createSignatureRequest, getEnrollmentUser, monitorSignatureRequest } from '../../controllers/enrollment';
 import { BadRequest } from 'http-errors';
-import log = require('loglevel');
 
 /**
  * Key enrollment public

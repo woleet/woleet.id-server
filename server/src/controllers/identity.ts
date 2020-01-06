@@ -1,7 +1,6 @@
 import * as crypto from 'crypto';
 import { Key, User } from '../database';
 import { NotFoundKeyError } from '../errors';
-import * as timestring from 'timestring';
 
 import { serializeIdentity } from '../api/serialize/identity';
 import { getServerConfig } from './server-config';

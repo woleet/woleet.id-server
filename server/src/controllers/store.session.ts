@@ -1,5 +1,5 @@
-import { Cache } from 'lru-cache';
 import * as LRU from 'lru-cache';
+import { Cache } from 'lru-cache';
 import * as uuid from 'uuid/v4';
 
 import { session as config } from '../config';
