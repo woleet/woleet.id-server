@@ -6,7 +6,5 @@ export const uuid = Joi.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3
 export const Word = Joi.string();
 export const SafeWord = Joi.string().regex(/^[a-zA-Z][a-zA-Z0-9_\-]+$/);
 export const DirectoryString = Joi.string().min(1).max(64);
-export const AccentedWord = Joi.string().regex(/^[a-zA-ZÀ-ÿ]+$/);
-export const PrintableString = Joi.string().regex(/^[a-zA-Z0-9\ \'\(\)\+\,\-\.\/\:\=\?]+$/);
 export const Name = DirectoryString;
 export const CountryCode = Joi.string().regex(/^[A-Z]{2}$/);

@@ -53,7 +53,6 @@ public class UserApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-
         // Check that we cannot create an e-signature user without an email
         try {
             userApi.createUser(userESign);

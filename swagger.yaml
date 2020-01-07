@@ -656,16 +656,16 @@ paths:
       parameters:
         - $ref: '#/components/parameters/FilterUserModeQueryParameter'
         - $ref: '#/components/parameters/FilterUserRoleQueryParameter'
+        - $ref: '#/components/parameters/FilterUserEmailQueryParameter'
         - $ref: '#/components/parameters/FilterUserCommonNameQueryParameter'
         - $ref: '#/components/parameters/FilterUserOrganizationQueryParameter'
         - $ref: '#/components/parameters/FilterUserOrganizationalUnitQueryParameter'
         - $ref: '#/components/parameters/FilterUserLocalityQueryParameter'
         - $ref: '#/components/parameters/FilterUserCountryQueryParameter'
         - $ref: '#/components/parameters/FilterUserUserIdQueryParameter'
-        - $ref: '#/components/parameters/FilterUserEmailQueryParameter'
-        - $ref: '#/components/parameters/FilterUserStatusQueryParameter'
         - $ref: '#/components/parameters/FilterUserCountryCallingCodeQueryParameter'
         - $ref: '#/components/parameters/FilterUserPhoneQueryParameter'
+        - $ref: '#/components/parameters/FilterUserStatusQueryParameter'
       responses:
         '200':
           description: Array of users.
@@ -1854,11 +1854,11 @@ components:
       in: query
       description: >
         The derivation path of the key to use to sign.<br>
-        When not provided, the default derivation path 'm/44/0/0' is used.
+        When not provided, the default derivation path "m/'44/'0/'0" is used.
       required: false
       schema:
         type: string
-        example: "m/44/0/1"
+        example: "m/'44/'0/'1"
     PubKeyToVerifyQueryParameter:
       name: pubKey
       in: query
@@ -1949,6 +1949,14 @@ components:
           - manager
           - admin
         example: 'user'
+    FilterUserEmailQueryParameter:
+      name: email
+      in: query
+      description: Filter the user email.
+      required: false
+      schema:
+        type: string
+        example: 'john.doe@acme.com'
     FilterUserCommonNameQueryParameter:
       name: commonName
       in: query
@@ -1992,30 +2000,11 @@ components:
     FilterUserUserIdQueryParameter:
       name: userId
       in: query
-      description: Filter the user X500 organization.
+      description: Filter the user X500 custom user identifier.
       required: false
       schema:
         type: string
         example: 'wol.jim-smith.01'
-    FilterUserEmailQueryParameter:
-      name: email
-      in: query
-      description: Filter the user email.
-      required: false
-      schema:
-        type: string
-        example: 'john.doe@acme.com'
-    FilterUserStatusQueryParameter:
-      name: status
-      in: query
-      description: Filter the user status.
-      required: false
-      schema:
-        type: string
-        enum:
-          - active
-          - blocked
-        example: 'active'
     FilterUserCountryCallingCodeQueryParameter:
       name: countryCallingCode
       in: query
@@ -2032,6 +2021,17 @@ components:
       schema:
         type: string
         example: '123456789'
+    FilterUserStatusQueryParameter:
+      name: status
+      in: query
+      description: Filter the user status.
+      required: false
+      schema:
+        type: string
+        enum:
+          - active
+          - blocked
+        example: 'active'
     EnrollmentIdParameter:
       name: EnrollmentId
       in: path

@@ -103,7 +103,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     return new FormGroup({
       username: new FormControl(user.username, [
         safeWordValidator,
-        Validators.minLength(1),
+        Validators.minLength(2),
         Validators.maxLength(32)
       ]),
       email: new FormControl(user.email, [Validators.email]),

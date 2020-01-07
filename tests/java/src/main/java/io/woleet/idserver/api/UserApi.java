@@ -303,16 +303,16 @@ public class UserApi {
      * Build call for getAllUsers
      * @param mode Filter the user mode. (optional)
      * @param role Filter the user role. (optional)
+     * @param email Filter the user email. (optional)
      * @param commonName Filter the user X500 common name. (optional)
      * @param organization Filter the user X500 organization. (optional)
      * @param organizationalUnit Filter the user X500 organizational unit. (optional)
      * @param locality Filter the user X500 locality. (optional)
      * @param country Filter the user X500 country. (optional)
-     * @param userId Filter the user X500 organization. (optional)
-     * @param email Filter the user email. (optional)
-     * @param status Filter the user status. (optional)
+     * @param userId Filter the user X500 custom user identifier. (optional)
      * @param countryCallingCode Filter the user country calling code. (optional)
      * @param phone Filter the user phone. (optional)
+     * @param status Filter the user status. (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -322,7 +322,7 @@ public class UserApi {
         <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call getAllUsersCall(String mode, String role, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String email, String status, String countryCallingCode, String phone, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getAllUsersCall(String mode, String role, String email, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -336,6 +336,10 @@ public class UserApi {
 
         if (role != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("role", role));
+        }
+
+        if (email != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("email", email));
         }
 
         if (commonName != null) {
@@ -362,20 +366,16 @@ public class UserApi {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("userId", userId));
         }
 
-        if (email != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("email", email));
-        }
-
-        if (status != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("status", status));
-        }
-
         if (countryCallingCode != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("countryCallingCode", countryCallingCode));
         }
 
         if (phone != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("phone", phone));
+        }
+
+        if (status != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("status", status));
         }
 
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
@@ -400,10 +400,10 @@ public class UserApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call getAllUsersValidateBeforeCall(String mode, String role, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String email, String status, String countryCallingCode, String phone, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getAllUsersValidateBeforeCall(String mode, String role, String email, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = getAllUsersCall(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone, _callback);
+        okhttp3.Call localVarCall = getAllUsersCall(mode, role, email, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status, _callback);
         return localVarCall;
 
     }
@@ -413,16 +413,16 @@ public class UserApi {
      * 
      * @param mode Filter the user mode. (optional)
      * @param role Filter the user role. (optional)
+     * @param email Filter the user email. (optional)
      * @param commonName Filter the user X500 common name. (optional)
      * @param organization Filter the user X500 organization. (optional)
      * @param organizationalUnit Filter the user X500 organizational unit. (optional)
      * @param locality Filter the user X500 locality. (optional)
      * @param country Filter the user X500 country. (optional)
-     * @param userId Filter the user X500 organization. (optional)
-     * @param email Filter the user email. (optional)
-     * @param status Filter the user status. (optional)
+     * @param userId Filter the user X500 custom user identifier. (optional)
      * @param countryCallingCode Filter the user country calling code. (optional)
      * @param phone Filter the user phone. (optional)
+     * @param status Filter the user status. (optional)
      * @return List&lt;UserGet&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -431,8 +431,8 @@ public class UserApi {
         <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
      </table>
      */
-    public List<UserGet> getAllUsers(String mode, String role, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String email, String status, String countryCallingCode, String phone) throws ApiException {
-        ApiResponse<List<UserGet>> localVarResp = getAllUsersWithHttpInfo(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone);
+    public List<UserGet> getAllUsers(String mode, String role, String email, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status) throws ApiException {
+        ApiResponse<List<UserGet>> localVarResp = getAllUsersWithHttpInfo(mode, role, email, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status);
         return localVarResp.getData();
     }
 
@@ -441,16 +441,16 @@ public class UserApi {
      * 
      * @param mode Filter the user mode. (optional)
      * @param role Filter the user role. (optional)
+     * @param email Filter the user email. (optional)
      * @param commonName Filter the user X500 common name. (optional)
      * @param organization Filter the user X500 organization. (optional)
      * @param organizationalUnit Filter the user X500 organizational unit. (optional)
      * @param locality Filter the user X500 locality. (optional)
      * @param country Filter the user X500 country. (optional)
-     * @param userId Filter the user X500 organization. (optional)
-     * @param email Filter the user email. (optional)
-     * @param status Filter the user status. (optional)
+     * @param userId Filter the user X500 custom user identifier. (optional)
      * @param countryCallingCode Filter the user country calling code. (optional)
      * @param phone Filter the user phone. (optional)
+     * @param status Filter the user status. (optional)
      * @return ApiResponse&lt;List&lt;UserGet&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -459,8 +459,8 @@ public class UserApi {
         <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<List<UserGet>> getAllUsersWithHttpInfo(String mode, String role, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String email, String status, String countryCallingCode, String phone) throws ApiException {
-        okhttp3.Call localVarCall = getAllUsersValidateBeforeCall(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone, null);
+    public ApiResponse<List<UserGet>> getAllUsersWithHttpInfo(String mode, String role, String email, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status) throws ApiException {
+        okhttp3.Call localVarCall = getAllUsersValidateBeforeCall(mode, role, email, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status, null);
         Type localVarReturnType = new TypeToken<List<UserGet>>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -470,16 +470,16 @@ public class UserApi {
      * 
      * @param mode Filter the user mode. (optional)
      * @param role Filter the user role. (optional)
+     * @param email Filter the user email. (optional)
      * @param commonName Filter the user X500 common name. (optional)
      * @param organization Filter the user X500 organization. (optional)
      * @param organizationalUnit Filter the user X500 organizational unit. (optional)
      * @param locality Filter the user X500 locality. (optional)
      * @param country Filter the user X500 country. (optional)
-     * @param userId Filter the user X500 organization. (optional)
-     * @param email Filter the user email. (optional)
-     * @param status Filter the user status. (optional)
+     * @param userId Filter the user X500 custom user identifier. (optional)
      * @param countryCallingCode Filter the user country calling code. (optional)
      * @param phone Filter the user phone. (optional)
+     * @param status Filter the user status. (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -489,9 +489,9 @@ public class UserApi {
         <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call getAllUsersAsync(String mode, String role, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String email, String status, String countryCallingCode, String phone, final ApiCallback<List<UserGet>> _callback) throws ApiException {
+    public okhttp3.Call getAllUsersAsync(String mode, String role, String email, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status, final ApiCallback<List<UserGet>> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = getAllUsersValidateBeforeCall(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone, _callback);
+        okhttp3.Call localVarCall = getAllUsersValidateBeforeCall(mode, role, email, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status, _callback);
         Type localVarReturnType = new TypeToken<List<UserGet>>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;

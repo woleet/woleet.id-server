@@ -152,7 +152,7 @@ Name | Type | Description  | Notes
 
 <a name="getAllUsers"></a>
 # **getAllUsers**
-> List&lt;UserGet&gt; getAllUsers(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone)
+> List&lt;UserGet&gt; getAllUsers(mode, role, email, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status)
 
 List all users.
 
@@ -180,18 +180,18 @@ public class Example {
     UserApi apiInstance = new UserApi(defaultClient);
     String mode = seal; // String | Filter the user mode.
     String role = user; // String | Filter the user role.
+    String email = john.doe@acme.com; // String | Filter the user email.
     String commonName = John Doe; // String | Filter the user X500 common name.
     String organization = Woleet; // String | Filter the user X500 organization.
     String organizationalUnit = Sales; // String | Filter the user X500 organizational unit.
     String locality = Rennes; // String | Filter the user X500 locality.
     String country = FR; // String | Filter the user X500 country.
-    String userId = wol.jim-smith.01; // String | Filter the user X500 organization.
-    String email = john.doe@acme.com; // String | Filter the user email.
-    String status = active; // String | Filter the user status.
+    String userId = wol.jim-smith.01; // String | Filter the user X500 custom user identifier.
     String countryCallingCode = 33; // String | Filter the user country calling code.
     String phone = 123456789; // String | Filter the user phone.
+    String status = active; // String | Filter the user status.
     try {
-      List<UserGet> result = apiInstance.getAllUsers(mode, role, commonName, organization, organizationalUnit, locality, country, userId, email, status, countryCallingCode, phone);
+      List<UserGet> result = apiInstance.getAllUsers(mode, role, email, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling UserApi#getAllUsers");
@@ -210,16 +210,16 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **mode** | **String**| Filter the user mode. | [optional] [enum: seal, esign]
  **role** | **String**| Filter the user role. | [optional] [enum: user, manager, admin]
+ **email** | **String**| Filter the user email. | [optional]
  **commonName** | **String**| Filter the user X500 common name. | [optional]
  **organization** | **String**| Filter the user X500 organization. | [optional]
  **organizationalUnit** | **String**| Filter the user X500 organizational unit. | [optional]
  **locality** | **String**| Filter the user X500 locality. | [optional]
  **country** | **String**| Filter the user X500 country. | [optional]
- **userId** | **String**| Filter the user X500 organization. | [optional]
- **email** | **String**| Filter the user email. | [optional]
- **status** | **String**| Filter the user status. | [optional] [enum: active, blocked]
+ **userId** | **String**| Filter the user X500 custom user identifier. | [optional]
  **countryCallingCode** | **String**| Filter the user country calling code. | [optional]
  **phone** | **String**| Filter the user phone. | [optional]
+ **status** | **String**| Filter the user status. | [optional] [enum: active, blocked]
 
 ### Return type
 
