@@ -20,7 +20,7 @@ function getLogo(config: InternalServerConfigObject): String {
   if (config.logoURL) {
     return config.logoURL;
   } else {
-    return 'https://www.woleet.io/wp-content/uploads/2018/12/Woleet-logo-black-big-e1550678072706.png';
+    return 'https://app.woleet.io/resources/images/logo.png';
   }
 }
 
