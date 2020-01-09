@@ -1854,7 +1854,7 @@ components:
       in: query
       description: >
         The derivation path of the key to use to sign.<br>
-        When not provided, the default derivation path "m/'44/'0/'0" is used.
+        When not provided, the default derivation path "m/44'/0'/0'" is used.
       required: false
       schema:
         type: string

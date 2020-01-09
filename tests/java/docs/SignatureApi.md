@@ -44,7 +44,7 @@ public class Example {
     UUID userId = 345a4513-0266-419a-8344-2daf645b78ed; // UUID | User identifier.
     String customUserId = wol.jim-smith.01; // String | Custom user identifier (ie. `userId` field of the user's identity).
     String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | The public key to use to sign.<br> When not provided and a user is provided, the default key of the user is used (if any).<br> When not provided and no user is provided, the default key of the server is used (if any). 
-    String path = m/'44/'0/'1; // String | The derivation path of the key to use to sign.<br> When not provided, the default derivation path \"m/'44/'0/'0\" is used. 
+    String path = m/'44/'0/'1; // String | The derivation path of the key to use to sign.<br> When not provided, the default derivation path \"m/44'/0'/0'\" is used. 
     try {
       SignatureResult result = apiInstance.getSignature(hashToSign, messageToSign, userId, customUserId, pubKey, path);
       System.out.println(result);
@@ -68,7 +68,7 @@ Name | Type | Description  | Notes
  **userId** | [**UUID**](.md)| User identifier. | [optional]
  **customUserId** | **String**| Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). | [optional]
  **pubKey** | **String**| The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  | [optional]
- **path** | **String**| The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/&#39;44/&#39;0/&#39;0\&quot; is used.  | [optional]
+ **path** | **String**| The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/44&#39;/0&#39;/0&#39;\&quot; is used.  | [optional]
 
 ### Return type
 

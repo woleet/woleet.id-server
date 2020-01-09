@@ -63,7 +63,7 @@ public class SignatureApi {
      * @param userId User identifier. (optional)
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
-     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/&#39;44/&#39;0/&#39;0\&quot; is used.  (optional)
+     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/44&#39;/0&#39;/0&#39;\&quot; is used.  (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -147,7 +147,7 @@ public class SignatureApi {
      * @param userId User identifier. (optional)
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
-     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/&#39;44/&#39;0/&#39;0\&quot; is used.  (optional)
+     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/44&#39;/0&#39;/0&#39;\&quot; is used.  (optional)
      * @return SignatureResult
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -173,7 +173,7 @@ public class SignatureApi {
      * @param userId User identifier. (optional)
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
-     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/&#39;44/&#39;0/&#39;0\&quot; is used.  (optional)
+     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/44&#39;/0&#39;/0&#39;\&quot; is used.  (optional)
      * @return ApiResponse&lt;SignatureResult&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -200,7 +200,7 @@ public class SignatureApi {
      * @param userId User identifier. (optional)
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
-     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/&#39;44/&#39;0/&#39;0\&quot; is used.  (optional)
+     * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/44&#39;/0&#39;/0&#39;\&quot; is used.  (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
