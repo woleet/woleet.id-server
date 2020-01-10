@@ -43,12 +43,10 @@ public class EnrollmentApiTest {
     public void createExpiredEnrollmentTest() throws ApiException {
         EnrollmentApi enrollmentApi = new EnrollmentApi(Config.getAdminAuthApiClient());
 
-
-
         // Check that we cannot create an already expired enrollment
         try {
             enrollmentPost.setName(Config.randomName());
-            enrollmentPost.setExpiration(System.currentTimeMillis() - 1000);
+            enrollmentPost.setExpiration(System.currentTimeMillis() - 1000L);
             enrollmentPost.setUserId(userESign.getId());
             enrollmentApi.createEnrollment(enrollmentPost);
             fail("Should not be able to create an already expired enrollment");
@@ -133,7 +131,7 @@ public class EnrollmentApiTest {
         try {
             enrollmentPost.setName(Config.randomName());
             enrollmentPost.setUserId(userESign.getId());
-            enrollmentPost.setKeyExpiration(System.currentTimeMillis() - 1000);
+            enrollmentPost.setKeyExpiration(System.currentTimeMillis() - 1000L);
             enrollmentApi.createEnrollment(enrollmentPost);
             fail("Should not be able to create an enrollment with an already expired key");
         }

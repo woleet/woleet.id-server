@@ -8,12 +8,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class KeyApiTest {
 
     private UserGet userSeal;
+    private KeyApi userAuthKeyApi, adminAuthKeyApi;
 
     @Before
     public void setUp() throws Exception {
@@ -22,6 +22,8 @@ public class KeyApiTest {
         tearDown();
 
         userSeal = Config.createTestUser(UserModeEnum.SEAL);
+        adminAuthKeyApi = new KeyApi(Config.getAdminAuthApiClient());
+        userAuthKeyApi = new KeyApi(Config.getAuthApiClient(userSeal.getUsername(), "pass"));
     }
 
     @After
@@ -30,36 +32,13 @@ public class KeyApiTest {
     }
 
     @Test
-    public void createExpiredKeyTest() throws ApiException {
-
-        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
-
-        // Check that we cannot create an already expired key
-        try {
-            KeyPost keyPost = new KeyPost();
-            keyPost.setName(Config.randomName());
-            keyPost.setExpiration(System.currentTimeMillis() - 1000);
-            keyApi.createKey(userSeal.getId(), keyPost);
-            fail("Should not be able to create an already expired key");
-        }
-        catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
-        }
-
-        // TODO: get the key and check that the expiration and expired are ok
-        // TODO: check that we cannot use an expired key to sign
-    }
-
-    @Test
-    public void userCreateKeyTest() throws ApiException {
-        UserGet user = Config.createTestUser();
-        KeyApi userAuthApi = new KeyApi(Config.getAuthApiClient(user.getUsername(), "pass"));
+    public void userCreateKeyTest() {
 
         // Try to create a key with user credentials
         try {
             KeyPost keyPost = new KeyPost();
             keyPost.setName(Config.randomName());
-            userAuthApi.createKey(userSeal.getId(), keyPost);
+            userAuthKeyApi.createKey(userSeal.getId(), keyPost);
             fail("Should not be able to create a key object with user credentials");
         }
         catch (ApiException e) {
@@ -68,18 +47,12 @@ public class KeyApiTest {
     }
 
     @Test
-    public void userDeleteKeyTest() throws ApiException {
-        UserGet user = Config.createTestUser();
-        KeyApi userAuthApi = new KeyApi(Config.getAuthApiClient(user.getUsername(), "pass"));
-        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
+    public void userDeleteKeyTest() {
 
         // Try to delete a key with user credentials
         try {
-            KeyPost keyPost = new KeyPost();
-            keyPost.setName(Config.randomName());
-            KeyGet keyGet = keyApi.createKey(userSeal.getId(), keyPost);
-            userAuthApi.deleteKey(keyGet.getId());
-            fail("Should not be able to delete a key object with user credentials");
+            userAuthKeyApi.deleteKey(userSeal.getDefaultKeyId());
+            fail("Should not be able to delete a key with user credentials");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -87,34 +60,56 @@ public class KeyApiTest {
     }
 
     @Test
-    public void userGetAllKeyTest() throws ApiException {
-        UserGet user = Config.createTestUser();
-        KeyApi userAuthApi = new KeyApi(Config.getAuthApiClient(user.getUsername(), "pass"));
+    public void userGetAllKeyTest() {
 
         // Try to get all keys with user credentials
         try {
-            userAuthApi.getAllUserKeys(user.getId());
-            fail("Should not be able to get all keys object with user credentials");
+            userAuthKeyApi.getAllUserKeys(userSeal.getId());
+            fail("Should not be able to get all keys with user credentials");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
+    }
+
+    @Test
+    public void keyExpirationTest() throws ApiException {
+
+        // Check that we cannot create an already expired key
+        try {
+            KeyPost keyPost = new KeyPost();
+            keyPost.setName(Config.randomName());
+            keyPost.setExpiration(System.currentTimeMillis() - 1000L);
+            adminAuthKeyApi.createKey(userSeal.getId(), keyPost);
+            fail("Should not be able to create an already expired key");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+        }
+
+        // Expire a key and check that the expiration status and date is valid
+        adminAuthKeyApi.updateKey(userSeal.getDefaultKeyId(), new KeyPut().expiration(System.currentTimeMillis()));
+        KeyGet keyGet = adminAuthKeyApi.getKeyById(userSeal.getDefaultKeyId());
+        assertTrue(keyGet.getExpired());
+        assertTrue(keyGet.getExpiration() < System.currentTimeMillis()
+                   && keyGet.getExpiration() > System.currentTimeMillis() - 1000L);
+
+        // TODO: check that we cannot use an expired key to sign
     }
 
     @Test
     public void keyRevocationTest() throws ApiException {
 
-        KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
-
-        // Revoke SEAL user's default key
-        KeyPut keyPut = new KeyPut();
-        keyPut.setStatus(KeyStatusEnum.REVOKED);
-        KeyGet keyGet = keyApi.updateKey(userSeal.getDefaultKeyId(), keyPut);
+        // Revoke a key and check that revocation status and date are valid
+        adminAuthKeyApi.updateKey(userSeal.getDefaultKeyId(), new KeyPut().status(KeyStatusEnum.REVOKED));
+        KeyGet keyGet = adminAuthKeyApi.getKeyById(userSeal.getDefaultKeyId());
         assertEquals(KeyStatusEnum.REVOKED, keyGet.getStatus());
+        assertTrue(keyGet.getRevokedAt() < System.currentTimeMillis()
+                   && keyGet.getRevokedAt() > System.currentTimeMillis() - 1000L);
 
         // Check that we cannot update a revoked key
         try {
-            keyApi.updateKey(userSeal.getDefaultKeyId(), keyPut);
+            adminAuthKeyApi.updateKey(userSeal.getDefaultKeyId(), new KeyPut().status(KeyStatusEnum.REVOKED));
             fail("Should not be able to update a revoked key");
         }
         catch (ApiException e) {
@@ -123,14 +118,13 @@ public class KeyApiTest {
 
         // Check that we cannot delete a revoked key
         try {
-            keyApi.deleteKey(userSeal.getDefaultKeyId());
+            adminAuthKeyApi.deleteKey(userSeal.getDefaultKeyId());
             fail("Should not be able to delete a revoked key");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-        // TODO: get the key and check that the revokedAt is ok
         // TODO: check that we cannot use a revoked key to sign
     }
 }

@@ -133,10 +133,22 @@ public class DiscoveryApiTest {
 
     @Test
     public void discoverUserTest() throws ApiException {
+
+        // Check that an authenticated admin token cannot discover himself
         UserDisco response = discoveryApiAdmin.discoverUser();
-        assertEquals(null,response);
+        assertEquals(null, response);
+
+        // Check that an authenticated user can discover himself
         response = discoveryApiUser.discoverUser();
-        assertEquals(user.getId(),response.getId());
+        assertEquals(user.getId(), response.getId());
+        assertNotNull(user.getCreatedAt());
+        assertNotNull(user.getUpdatedAt());
+        assertNull(user.getLastLogin());
+        assertNotNull(user.getStatus());
+        assertNotNull(user.getMode());
+        assertNotNull(user.getRole());
+        assertNotNull(user.getIdentity());
+        assertNotNull(user.getDefaultKeyId());
     }
 
     @Test
