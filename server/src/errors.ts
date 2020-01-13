@@ -99,7 +99,7 @@ export class ExpiredKeyError extends BlockedResourceError {
 }
 
 export class RevokedKeyError extends BlockedResourceError {
-  constructor(m = 'Key revoked') {
+  constructor(m = 'Key is revoked') {
     super(m);
   }
 
