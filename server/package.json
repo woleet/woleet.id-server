@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "description": "Woleet.ID Server Node.js server",
   "main": "index.js",
   "scripts": {
