@@ -73,7 +73,7 @@ export async function initServerConfig() {
     log.info(`Created user "admin" with id ${admin.id}`);
 
     const conf = await setServerConfig(Object.assign({}, serverConfig.default, { defaultKeyId: admin.defaultKeyId }));
-    const printedConf = conf;
+    const printedConf = Object.assign({}, conf);
     delete printedConf.mailKeyEnrollmentTemplate;
     delete printedConf.mailOnboardingTemplate;
     delete printedConf.mailResetPasswordTemplate;

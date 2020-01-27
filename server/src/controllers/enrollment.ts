@@ -190,7 +190,7 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
   // Create an observable that get the signature request every 30 seconds
   const observable = new Observable<any>(subscriber => {
     const interval = setInterval(() => {
-      https.get(httpsOptions, (res) => {
+      const req = https.get(httpsOptions, (res) => {
         let data = '';
         let signatureRequest;
         res.on('data', (chunk) => {
@@ -203,55 +203,69 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
               subscriber.next(signatureRequest);
               break;
             default:
-              subscriber.error({ code: res.statusCode, data });
+              log.error({ code: res.statusCode, data });
           }
         });
-      }).on('error', (error) => {
-        subscriber.error(error);
       });
-    }, 1000 * 30);
+
+      req.on('error', function(error: any) {
+        switch (error.code) {
+          case 'ECONNREFUSED':
+            log.error('Cannot connect to the Woleet server.');
+            break;
+          case 'ECONNRESET':
+            log.error('The Woleet server\'s rebooting.');
+            break;
+          default:
+          log.error(error);
+        }
+      });
+
+    }, 1000 * 60);
     return () => clearInterval(interval);
   });
 
   const signatureRequestSubscriber = observable
     .subscribe(async (signatureRequest) => {
-        try {
-          await testEnrollmentExpiration(enrollmentId, user);
-        } catch (error) {
-          log.error(error);
-          signatureRequestSubscriber.unsubscribe();
-        }
-        if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
-          // Once the signature request is fulfilled, finalize the enrollment
-          await finalizeEnrollment(enrollmentId, user, signatureRequest);
-          signatureRequestSubscriber.unsubscribe();
-        }
-        return;
-      },
-      (error) => {
+      try {
+        await testEnrollmentExpiration(enrollmentId, user);
+      } catch (error) {
+        log.error(error);
         signatureRequestSubscriber.unsubscribe();
-        throw error;
+      }
+      log.debug('debug monitorSignatureRequest');
+      log.debug(signatureRequest);
+      if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
+        // Once the signature request is fulfilled, finalize the enrollment
+        await finalizeEnrollment(enrollmentId, user, signatureRequest);
+        signatureRequestSubscriber.unsubscribe();
+      }
+      return;
+    },
+      (error) => {
+        log.error('error monitorSignatureRequest subscribe');
+        log.error(error);
       }
     );
 }
 
 async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject, signatureRequest: any) {
-  const publicKey = signatureRequest.anchors[0].pubKey;
+  const publicKey = signatureRequest ? signatureRequest.anchors[0].pubKey : null;
   const enrollment = await getEnrollmentById(enrollmentId);
   const name = enrollment.name;
   const userId = enrollment.userId;
 
-  // Guess the type of the device used to sign
-  // FIXME: the type of the device used to sign the TCU is retrieved first from the signature request,
-  //  then from the enrollment, or we fallback on mobile (until the mobile app is updated to register the device type)
-  const signeeDevice = signatureRequest.authorizedSignees[0].device ?
-    signatureRequest.authorizedSignees[0].device.toLowerCase() : null;
-  const device = signeeDevice || enrollment.device || 'mobile';
-  const expiration = enrollment.keyExpiration;
+  // Create a new external key: this must be done before setting the identity URL on the signature anchor,
+  // so that the public key can be resolved through the identity URL
   try {
 
-    // Create a new external key: this must be done before setting the identity URL on the signature anchor,
-    // so that the public key can be resolved through the identity URL
+    // Guess the type of the device used to sign
+    // FIXME: the type of the device used to sign the TCU is retrieved first from the signature request,
+    //  then from the enrollment, or we fallback on mobile (until the mobile app is updated to register the device type)
+    const signeeDevice = signatureRequest.authorizedSignees[0].device ?
+      signatureRequest.authorizedSignees[0].device.toLowerCase() : null;
+    const device = signeeDevice || enrollment.device || 'mobile';
+    const expiration = enrollment.keyExpiration;
     await Key.create(Object.assign({
       name,
       publicKey,
