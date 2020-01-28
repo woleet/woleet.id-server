@@ -104,7 +104,7 @@ export async function getTCUHash(): Promise<string> {
 
 /**
  * Create a signature request in ProofDesk with the current TCU hash and the enrolled user as the only authorized signee
- * @param enrollmentId the enrollment identifiant
+ * @param enrollmentId the enrollment identifier
  */
 export async function createSignatureRequest(enrollmentId): Promise<any> {
   const config = getServerConfig();
@@ -192,58 +192,45 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
     const interval = setInterval(() => {
       const req = https.get(httpsOptions, (res) => {
         let data = '';
-        let signatureRequest;
         res.on('data', (chunk) => {
           data += chunk;
         });
         res.on('end', async () => {
           switch (res.statusCode) {
             case 200:
-              signatureRequest = JSON.parse(data);
-              subscriber.next(signatureRequest);
+              subscriber.next(JSON.parse(data));
               break;
             default:
-              log.error({ code: res.statusCode, data });
+              log.error('Cannot get signature request', { code: res.statusCode, data });
+              break;
           }
         });
       });
 
-      req.on('error', function(error: any) {
-        switch (error.code) {
-          case 'ECONNREFUSED':
-            log.error('Cannot connect to the Woleet server.');
-            break;
-          case 'ECONNRESET':
-            log.error('The Woleet server\'s rebooting.');
-            break;
-          default:
-          log.error(error);
-        }
+      req.on('error', (error) => {
+        log.error('Cannot get signature request', error);
       });
 
-    }, 1000 * 60);
+    }, 1000 * 1);
     return () => clearInterval(interval);
   });
 
   const signatureRequestSubscriber = observable
     .subscribe(async (signatureRequest) => {
-      try {
-        await testEnrollmentExpiration(enrollmentId, user);
-      } catch (error) {
-        log.error(error);
-        signatureRequestSubscriber.unsubscribe();
-      }
-      log.debug('debug monitorSignatureRequest');
-      log.debug(signatureRequest);
-      if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
+        try {
+          await testEnrollmentExpiration(enrollmentId, user);
+        } catch (error) {
+          log.error(error);
+          signatureRequestSubscriber.unsubscribe();
+        }
+
         // Once the signature request is fulfilled, finalize the enrollment
-        await finalizeEnrollment(enrollmentId, user, signatureRequest);
-        signatureRequestSubscriber.unsubscribe();
-      }
-      return;
-    },
+        if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
+          await finalizeEnrollment(enrollmentId, user, signatureRequest);
+          signatureRequestSubscriber.unsubscribe();
+        }
+      },
       (error) => {
-        log.error('error monitorSignatureRequest subscribe');
         log.error(error);
       }
     );

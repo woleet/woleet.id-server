@@ -169,7 +169,7 @@ async function upgrade8(sequelize) {
 }
 
 async function upgrade9(sequelize) {
-  log.warn('Checking for update of "onboardings" table...');
+  log.warn('Checking for update of the "onboardings" table...');
   await ServerConfig.model.sync();
 
   let old;
@@ -203,7 +203,7 @@ async function upgrade10(sequelize) {
 }
 
 async function upgrade11(sequelize) {
-  log.warn('Checking for update of the "enrollments" model and server-event type...');
+  log.warn('Checking for update of the "enrollments" model and "serverEvents" type...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   let enrollmentExist = false;
