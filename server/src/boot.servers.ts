@@ -19,7 +19,6 @@ import { monitorSignatureRequest } from './controllers/enrollment';
 const apps: Dictionary<Server> = {};
 
 function startServer(app, port): Server {
-  let server = null;
 
   app.keys = cookies.keys;
 
@@ -28,20 +27,16 @@ function startServer(app, port): Server {
     app.proxy = true;
   }
 
+  let server;
   if (config.cert && config.key) {
     log.info('Using TLS');
-
     const { key, cert } = config;
-
     const options: ServerOptions = { key, cert };
-
     server = createServer(options, app.callback());
-
     server.listen(port);
   } else {
     server = app.listen(port);
   }
-
   return server;
 }
 
@@ -50,7 +45,7 @@ export function bootServers(): Promise<void> {
 
   const promises = definitions.map(({ name, port, router }) => {
 
-    return new Promise<void>((resolve) => {
+    return new Promise((resolve) => {
 
       log.info(`Starting ${name} server on port ${port}...`);
 
