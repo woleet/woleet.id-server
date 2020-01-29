@@ -1,5 +1,4 @@
 import * as Router from 'koa-router';
-
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '../../controllers/user';

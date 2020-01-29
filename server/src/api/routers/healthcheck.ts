@@ -1,6 +1,5 @@
 import { sequelize } from '../../database/sequelize';
 import { ServiceUnavailable } from 'http-errors';
-
 import * as Router from 'koa-router';
 
 /**

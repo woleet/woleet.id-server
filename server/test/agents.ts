@@ -3,19 +3,33 @@
 /* tslint import/no-extraneous-dependencies: "off" */
 
 import 'mocha';
-
 import { agent, SuperTest, Test } from 'supertest';
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
-
 import { api, identity, signature } from '../src/api';
 import { errorHandler } from '../src/api/error';
 import { createServer } from 'http';
 
-declare interface Definition { router: Router; }
-declare interface Definitions { api: Definition; identity: Definition; signature: Definition; allInOne: Definition; }
-declare interface Agent extends SuperTest<Test> { }
-declare interface Agents { api: Agent; identity: Agent; signature: Agent; allInOne: Agent; }
+declare interface Definition {
+  router: Router;
+}
+
+declare interface Definitions {
+  api: Definition;
+  identity: Definition;
+  signature: Definition;
+  allInOne: Definition;
+}
+
+declare interface Agent extends SuperTest<Test> {
+}
+
+declare interface Agents {
+  api: Agent;
+  identity: Agent;
+  signature: Agent;
+  allInOne: Agent;
+}
 
 const definitions: Definitions = {
   api: { router: (new Router()).use(api.routes()) },

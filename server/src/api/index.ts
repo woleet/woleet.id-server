@@ -1,7 +1,6 @@
 import { router as auth } from './routers/authentication';
 import { router as appConfig } from './routers/app-config';
 import { router as serverConfig } from './routers/server-config';
-import { router as serverEvent } from './routers/server-event';
 import { router as apiToken } from './routers/api-token';
 import { router as info } from './routers/info';
 import { router as enrollmentPublic } from './routers/enrollment-public';
@@ -39,7 +38,6 @@ apiRouter.use(key.routes());
 apiRouter.use(enrollmentAdmin.routes());
 apiRouter.use(serverConfig.routes());
 apiRouter.use(adminAuth);
-apiRouter.use(serverEvent.routes());
 
 /**
  * Identity

@@ -1,7 +1,6 @@
 import { validate } from '../schemas';
 import * as Router from 'koa-router';
 import { BadRequest } from 'http-errors';
-
 import { getAllKeysOfUser, getOwnerByPubKey } from '../../controllers/key';
 import { serializeUser } from '../serialize/user';
 import { getUserById, searchAllUsers } from '../../controllers/user';

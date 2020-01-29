@@ -4,7 +4,6 @@ import { sign } from '../../controllers/sign';
 import { validate } from '../schemas';
 import { bearerAuth } from '../authentication';
 import { store as event } from '../../controllers/server-event';
-
 import { getServerConfig } from '../../controllers/server-config';
 import { Context } from 'koa';
 import { getUserById } from '../../controllers/user';

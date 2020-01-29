@@ -211,7 +211,7 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
         log.error('Cannot get signature request', error);
       });
 
-    }, 1000 * 1);
+    }, 1000 * 60);
     return () => clearInterval(interval);
   });
 

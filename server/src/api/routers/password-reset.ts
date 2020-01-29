@@ -1,5 +1,4 @@
 import * as Router from 'koa-router';
-
 import { copy } from '../../controllers/utils/copy';
 import { serializeUser } from '../serialize/user';
 import { updatePassword } from '../../controllers/user';

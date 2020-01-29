@@ -1,6 +1,5 @@
 import { validate } from '../schemas';
 import * as Router from 'koa-router';
-
 import {
   createExternalKey, createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, getOwner, updateKey
 } from '../../controllers/key';
