@@ -150,7 +150,7 @@ then
         fi
         printf "%s\n" "export WOLEET_ID_SERVER_VERSION='$LATEST_TAG'" >> configuration.sh
       else
-        echo "Images linked to the latest version are not built/pushed yet, please wait before attending to upograde again"
+        echo "Images linked to the latest version are not built/pushed yet, please wait before attending to upgrade again"
         exit 0
       fi
     else
