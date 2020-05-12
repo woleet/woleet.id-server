@@ -173,7 +173,7 @@ export async function sendEnrollmentFinalizeEmail(userName: string, address: str
   const logo = getLogo(config);
   const subject = 'Key registration ' + (success ? 'success' : 'failure');
   const template = readFileSync(
-    path.join(__dirname, '../../assets/defaultAdminEnrollmentConfirmationMailTemplate.html'),
+    path.join(__dirname, '../../assets/defaultAdminKeyEnrollmentStatusMailTemplate.html'),
     { encoding: 'ascii' }
   );
   const html = mustache.render(template, {

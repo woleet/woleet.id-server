@@ -165,7 +165,7 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
 }
 
 /**
- * Monitor the enrollment request with a pulling request to retrive the address of the enrolled key.
+ * Monitor the enrollment request with a pulling request to retrieve the address of the enrolled key.
  * @param signatureRequestId the signature request id
  * @param enrollmentId the enrollment id
  * @param user the enrolled user
@@ -187,7 +187,7 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
     httpsOptions.agent = agent;
   }
 
-  // Create an observable that get the signature request every 30 seconds
+  // Create an observable that get the signature request every 60 seconds
   const observable = new Observable<any>(subscriber => {
     const interval = setInterval(() => {
       const req = https.get(httpsOptions, (res) => {
