@@ -10,11 +10,11 @@ Each identity can be associated to one or several internal **bitcoin key pairs**
 Each identity can also be associated to one or several external **bitcoin addresses** (controlled by the user) using a secure registration mechanism ensuring the user effectively controls these addresses.
 
 Basically, Woleet.ID Server provides a **private API** allowing your users to **sign data using their bitcoin key pairs**,
-and a **public API** allowing third-parties to **retrieve the identity of a signatory from his bitcoin address** and to **verify that your organization controls this addresses**.
+and a **public API** allowing third-parties to **retrieve the identity of a signer from his bitcoin address** and to **verify that your organization controls this addresses**.
 
 Basically, Woleet.ID Server enables you to integrate Woleet's [signature anchoring](https://doc.woleet.io/docs/signature-anchoring) into your organization workflow.
 Signature anchoring goes far beyond data anchoring: while data anchoring allows creating a timestamped proof of existence of data,
-signature anchoring allows creating a timestamped proof of signature of data, optionally embedding a proof of identity for the signatory
+signature anchoring allows creating a timestamped proof of signature of data, optionally embedding a proof of identity for the signer
 (in the form of an **identity URL** served by Woleet.ID Server).
 Using signature anchoring, new use cases like *document authentication* or *multi-signature workflow* are possible.
 

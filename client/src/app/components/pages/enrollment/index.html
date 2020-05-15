@@ -46,7 +46,7 @@
     <h1>Acknowledge your identity information</h1>
     <div>
       <div>
-        <p>The following identity information will be associated to your signature key to identify you as a signatory:</p>
+        <p>The following identity information will be associated to your signature key to identify you as a signer:</p>
         <br>
         <div *ngIf="user; else loadingUser">
           <app-user-card [user]="user" [modes]="['display']" [hideAttribute]="['username']"></app-user-card>
