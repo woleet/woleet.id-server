@@ -309,7 +309,7 @@ You will be then able to get user information from your third party app. The ass
 
 # Secure the server
 
-By default, only the identity endpoint of Woleet.ID Server must be accessible publicly from the internet via its identity URL.
+By default, only the identity endpoint of Woleet.ID Server must be accessible publicly from the internet (via the server's identity URL).
 All other endpoint can be firewalled to be only accessible from inside your organization intranet.
 
 If you plan to use your Woleet.ID Server as an authentication and signature server for Woleet's ProofDesk for Teams SaaS application,
