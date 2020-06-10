@@ -119,6 +119,7 @@ export const serverConfig = {
   default: {
     version: 16, // datamodel version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
+    signatureURL: `${server.protocol}://${server.host}:${ports.signature}`,
     fallbackOnDefaultKey: true,
     organizationName: 'Woleet',
     mailOnboardingTemplate: readFileSync(

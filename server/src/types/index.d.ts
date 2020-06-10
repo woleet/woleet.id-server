@@ -2,7 +2,7 @@
 
 import { Instance } from 'sequelize';
 import { SessionStore } from '../controllers/store.session';
-import { AnySchema } from 'joi';
+import { AnySchema, string } from 'joi';
 import * as Router from 'koa-router';
 
 import '../../../types/api.api-token';
@@ -246,6 +246,7 @@ declare global {
   interface InternalServerConfigObject extends ServerConfig {
     version: number;
     identityURL: string;
+    signatureURL: string;
     APIURL?: string;
     logoURL?: string;
     HTMLFrame?: string;
@@ -300,6 +301,7 @@ declare global {
 
   interface ServerConfigUpdate extends ServerConfig {
     identityURL?: string;
+    signatureURL?: string;
     APIURL?: string;
     logoURL?: string;
     HTMLFrame?: string;
@@ -353,6 +355,7 @@ declare global {
 
   interface ServerConfigCreate extends ServerConfig {
     identityURL: string;
+    signatureURL: string;
     APIURL?: string;
     logoURL?: string;
     HTMLFrame?: string;

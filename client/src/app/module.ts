@@ -18,6 +18,7 @@ import { UserCardComponent } from '@parts/user.card';
 import { KeyCardComponent } from '@parts/key.card';
 import { ConfigFallbackKeyComponent } from '@parts/config.fallback-key';
 import { ConfigIdentityUrlComponent } from '@parts/config.identity-url';
+import { ConfigSignatureUrlComponent } from '@parts/config.signature-url';
 import { ConfigAPIUrlComponent } from '@parts/config.api-url';
 import { ConfigWebClientUrlComponent } from '@parts/config.server-client-url';
 import { APITokenCreateCardComponent } from '@parts/api-token.card.create';
@@ -107,6 +108,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     EnrollmentPageComponent,
     ConfigFallbackKeyComponent,
     ConfigIdentityUrlComponent,
+    ConfigSignatureUrlComponent,
     ConfigAPIUrlComponent,
     ConfigWebClientUrlComponent,
     ConfigOpenIDComponent,

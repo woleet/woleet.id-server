@@ -4,6 +4,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider } from '@components/util';
 import { confirm } from '../../util';
 import { UserService } from '@services/user';
+import { serverURL } from '@services/config';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'api-token-card',
@@ -17,10 +19,16 @@ export class APITokenCardComponent extends ErrorMessageProvider implements OnIni
 
   user$: Promise<ApiUserObject>;
 
+  SignatureURL: string;
+
   constructor(
     private userService: UserService,
-    private apiTokenService: APITokenService) {
+    private apiTokenService: APITokenService,
+    private http: HttpClient) {
     super();
+    this.http.get<ApiServerConfig>(`${serverURL}/server-config`).toPromise().then(config => {
+      this.SignatureURL = config.signatureURL;
+    });
   }
 
   @Input()
@@ -86,5 +94,18 @@ export class APITokenCardComponent extends ErrorMessageProvider implements OnIni
   reveal() {
     this.displayApiToken = true;
     setTimeout(() => this.displayApiToken = false, 5 * 1000);
+  }
+
+  getProofKeeperURL(apiToken: string) {
+    return `proofkeeper://wids?token=${apiToken}&url=${this.SignatureURL}`;
+  }
+
+  copyTextToClipboard(textToCopy: string) {
+    const dummyInput = document.createElement('textarea');
+    document.body.appendChild(dummyInput);
+    dummyInput.value = textToCopy;
+    dummyInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummyInput);
   }
 }

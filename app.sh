@@ -135,7 +135,7 @@ then
   if git describe --tags --exact-match HEAD > /dev/null 2>&1
   then
     CURRENT_TAG=$(git describe --tags --exact-match HEAD)
-    LATEST_TAG=$(git tag | grep -E '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sort | tail -n 1)
+    LATEST_TAG=$(git tag | grep -E '^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$' | sort | tail -n 1)
     if [[ "$CURRENT_TAG" != "$LATEST_TAG" ]]
     then
       CLIENT_STATUS="$(curl --silent -f -lSL "https://hub.docker.com/v2/repositories/${WOLEET_ID_SERVER_REGISTRY:-wids}/client/tags/${LATEST_TAG}" > /dev/null 2>&1; echo "$?")"

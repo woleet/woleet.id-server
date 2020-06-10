@@ -11,6 +11,7 @@ const oidcpClient = Joi.object().keys(<DefineJoiModelAttributes<ApiOIDCPClient>>
 
 const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig>>{
   identityURL: Joi.string().uri({ scheme: ['http', 'https'] }),
+  signatureURL: Joi.string().uri({ scheme: ['http', 'https'] }),
   APIURL: Joi.string().uri({ scheme: ['http', 'https'] }).allow(null),
   defaultKeyId: uuid,
   fallbackOnDefaultKey: Joi.boolean(),

@@ -1379,6 +1379,12 @@ components:
       example: "https://identity.mydomain.com/identity"
       description: >
         Public URL of the `/identity` endpoint (ie. the URL that anyone can use to get the identity associated with a public key).
+    SignatureURL:
+      type: string
+      format: url
+      example: "https://sign.mydomain.com:3002"
+      description: >
+        Public URL of the `signature` endpoint (ie. the URL that some can use to discover keys and sign).
     APIURL:
       type: string
       format: url
@@ -1390,6 +1396,8 @@ components:
       properties:
         identityURL:
           $ref: '#/components/schemas/IdentityURL'
+        signatureURL:
+          $ref: '#/components/schemas/SignatureURL'
         defaultKeyId:
           type: string
           format: uuid
