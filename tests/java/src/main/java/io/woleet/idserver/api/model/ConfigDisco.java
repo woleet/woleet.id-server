@@ -49,11 +49,11 @@ public class ConfigDisco {
   }
 
    /**
-   * Public URL of the **Identity endpoint** endpoint (ie. the URL that anyone can use to get the identity associated to a public key). 
+   * Public URL of the **Identity endpoint** (ie. the URL that anyone can use to get the identity associated to a public key). 
    * @return identityURL
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "Public URL of the **Identity endpoint** endpoint (ie. the URL that anyone can use to get the identity associated to a public key). ")
+  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "Public URL of the **Identity endpoint** (ie. the URL that anyone can use to get the identity associated to a public key). ")
 
   public String getIdentityURL() {
     return identityURL;
@@ -72,11 +72,11 @@ public class ConfigDisco {
   }
 
    /**
-   * Public URL of **Signature endpoints** base path (ie. the URL that authorized users can use to sign and to discover other users). 
+   * Public base URL of **Signature endpoints** (ie. the base URL that authorized users can use to sign and to discover other users). 
    * @return signatureURL
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "https://sign.mydomain.com:3002", value = "Public URL of **Signature endpoints** base path (ie. the URL that authorized users can use to sign and to discover other users). ")
+  @ApiModelProperty(example = "https://sign.mydomain.com:3002", value = "Public base URL of **Signature endpoints** (ie. the base URL that authorized users can use to sign and to discover other users). ")
 
   public String getSignatureURL() {
     return signatureURL;
@@ -95,11 +95,11 @@ public class ConfigDisco {
   }
 
    /**
-   * Public URL of **API endpoints** base path (ie. the URL that authorized users to use Woleet.ID Server API). 
+   * Public base URL of **API endpoints** (ie. the base URL that authorized users can use to call the server API). 
    * @return APIURL
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "https://mydomain.com/api", value = "Public URL of **API endpoints** base path (ie. the URL that authorized users to use Woleet.ID Server API). ")
+  @ApiModelProperty(example = "https://mydomain.com/api", value = "Public base URL of **API endpoints** (ie. the base URL that authorized users can use to call the server API). ")
 
   public String getAPIURL() {
     return APIURL;

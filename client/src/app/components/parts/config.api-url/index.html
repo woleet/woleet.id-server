@@ -1,5 +1,5 @@
 <mat-card *ngIf="!editMode">
-  <mat-card-title>API URL</mat-card-title>
+  <mat-card-title>API endpoints base URL</mat-card-title>
   <mat-divider></mat-divider>
   <br>
   <div *ngIf="(config$ | async) as config; else loading">
@@ -17,7 +17,7 @@
   <ng-template #loading>Loading...<br></ng-template>
 </mat-card>
 <mat-card *ngIf="editMode">
-  <mat-card-title>Set API URL</mat-card-title>
+  <mat-card-title>Set API endpoints base URL</mat-card-title>
   <mat-divider></mat-divider>
   <br>
   <br>

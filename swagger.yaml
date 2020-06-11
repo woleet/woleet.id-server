@@ -1378,19 +1378,19 @@ components:
       format: url
       example: "https://identity.mydomain.com/identity"
       description: >
-        Public URL of the **Identity endpoint** endpoint (ie. the URL that anyone can use to get the identity associated to a public key).
+        Public URL of the **Identity endpoint** (ie. the URL that anyone can use to get the identity associated to a public key).
     SignatureURL:
       type: string
       format: url
       example: "https://sign.mydomain.com:3002"
       description: >
-        Public URL of **Signature endpoints** base path (ie. the URL that authorized users can use to sign and to discover other users).
+        Public base URL of **Signature endpoints** (ie. the base URL that authorized users can use to sign and to discover other users).
     APIURL:
       type: string
       format: url
       example: "https://mydomain.com/api"
       description: >
-        Public URL of **API endpoints** base path (ie. the URL that authorized users to use Woleet.ID Server API).
+        Public base URL of **API endpoints** (ie. the base URL that authorized users can use to call the server API).
     ServerConfig:
       type: object
       properties:
