@@ -1,6 +1,4 @@
-import {
-  AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output
-} from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { UserService } from '@services/user';
 import { AuthService } from '@services/auth';
 import { Router } from '@angular/router';
@@ -48,7 +46,7 @@ function passwordMandatoryValidatorOnEdit(sendPasswordEmail: boolean) {
   templateUrl: './index.html',
   styleUrls: ['./style.scss']
 })
-export class UserFormComponent extends ErrorMessageProvider implements OnInit, OnDestroy, AfterViewInit {
+export class UserFormComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
 
   formLocked = false;
 
@@ -152,10 +150,6 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     } else {
       this.form = this.setFormControl({ role: 'user', identity: {} });
     }
-  }
-
-  ngAfterViewInit() {
-    this.cdr.detectChanges();
   }
 
   registerSubscription(sub: Subscription) {

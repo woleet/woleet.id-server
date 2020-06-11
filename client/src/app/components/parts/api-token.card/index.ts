@@ -1,16 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { APITokenService } from '@services/api-token';
 import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider } from '@components/util';
 import { confirm } from '../../util';
 import { UserService } from '@services/user';
 import { ServerConfigService as ConfigService } from '@services/server-config';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'api-token-card',
   templateUrl: './index.html'
 })
-export class APITokenCardComponent extends ErrorMessageProvider implements OnInit {
+export class APITokenCardComponent extends ErrorMessageProvider implements OnInit, OnDestroy {
 
   editMode = false;
 
@@ -19,11 +20,6 @@ export class APITokenCardComponent extends ErrorMessageProvider implements OnIni
   user$: Promise<ApiUserObject>;
 
   signatureURL: string;
-
-  constructor(private userService: UserService, private apiTokenService: APITokenService,
-              private configService: ConfigService) {
-    super();
-  }
 
   @Input()
   apiToken: ApiAPITokenObject;
@@ -36,14 +32,35 @@ export class APITokenCardComponent extends ErrorMessageProvider implements OnIni
 
   displayApiToken = false;
 
+  private onDestroy: EventEmitter<void>;
+
+  constructor(
+    private userService: UserService,
+    private apiTokenService: APITokenService,
+    private configService: ConfigService
+  ) {
+    super();
+    this.onDestroy = new EventEmitter();
+  }
+
   ngOnInit() {
     if (this.apiToken.userId) {
       this.user$ = this.userService.getById(this.apiToken.userId);
     }
-
-    this.configService.getConfig().subscribe(config => {
+    this.registerSubscription(this.configService.getConfig().subscribe((config) => {
+      if (!config) {
+        return;
+      }
       this.signatureURL = config.signatureURL;
-    });
+    }));
+  }
+
+  registerSubscription(sub: Subscription) {
+    this.onDestroy.subscribe(() => sub.unsubscribe());
+  }
+
+  ngOnDestroy() {
+    this.onDestroy.emit();
   }
 
   setEditMode(active) {
