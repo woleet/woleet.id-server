@@ -71,7 +71,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
     const enableSMTP = this.enableSMTP;
 
     const SMTPConfig = this.formSMTP.get('SMTPConfig').value || null;
-    this.configService.update({ enableSMTP, SMTPConfig });
+    this.configService.updateConfig({ enableSMTP, SMTPConfig });
   }
 
   updateSMTPOption(enableSMTP) {

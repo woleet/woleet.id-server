@@ -84,7 +84,7 @@ export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnIni
     const openIDConnectClientSecret = this.form.get('openIDConnectClientSecret').value || null;
     const openIDConnectClientRedirectURL = this.form.get('openIDConnectClientRedirectURL').value || null;
     const enableOpenIDConnect = this.enableOpenIDConnect;
-    this.configService.update({
+    this.configService.updateConfig({
       openIDConnectURL,
       enableOpenIDConnect,
       openIDConnectClientId,

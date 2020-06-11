@@ -38,6 +38,10 @@ public class ServerConfig {
   @SerializedName(SERIALIZED_NAME_SIGNATURE_U_R_L)
   private String signatureURL;
 
+  public static final String SERIALIZED_NAME_A_P_I_U_R_L = "APIURL";
+  @SerializedName(SERIALIZED_NAME_A_P_I_U_R_L)
+  private String APIURL;
+
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
   private UUID defaultKeyId;
@@ -54,11 +58,11 @@ public class ServerConfig {
   }
 
    /**
-   * Public URL of the &#x60;/identity&#x60; endpoint (ie. the URL that anyone can use to get the identity associated with a public key). 
+   * Public URL of the **Identity endpoint** endpoint (ie. the URL that anyone can use to get the identity associated to a public key). 
    * @return identityURL
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "Public URL of the `/identity` endpoint (ie. the URL that anyone can use to get the identity associated with a public key). ")
+  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "Public URL of the **Identity endpoint** endpoint (ie. the URL that anyone can use to get the identity associated to a public key). ")
 
   public String getIdentityURL() {
     return identityURL;
@@ -77,11 +81,11 @@ public class ServerConfig {
   }
 
    /**
-   * Public URL of the &#x60;signature&#x60; endpoint (ie. the URL that some can use to discover keys and sign). 
+   * Public URL of **Signature endpoints** base path (ie. the URL that authorized users can use to sign and to discover other users). 
    * @return signatureURL
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "https://sign.mydomain.com:3002", value = "Public URL of the `signature` endpoint (ie. the URL that some can use to discover keys and sign). ")
+  @ApiModelProperty(example = "https://sign.mydomain.com:3002", value = "Public URL of **Signature endpoints** base path (ie. the URL that authorized users can use to sign and to discover other users). ")
 
   public String getSignatureURL() {
     return signatureURL;
@@ -90,6 +94,29 @@ public class ServerConfig {
 
   public void setSignatureURL(String signatureURL) {
     this.signatureURL = signatureURL;
+  }
+
+
+  public ServerConfig APIURL(String APIURL) {
+    
+    this.APIURL = APIURL;
+    return this;
+  }
+
+   /**
+   * Public URL of **API endpoints** base path (ie. the URL that authorized users to use Woleet.ID Server API). 
+   * @return APIURL
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "https://mydomain.com/api", value = "Public URL of **API endpoints** base path (ie. the URL that authorized users to use Woleet.ID Server API). ")
+
+  public String getAPIURL() {
+    return APIURL;
+  }
+
+
+  public void setAPIURL(String APIURL) {
+    this.APIURL = APIURL;
   }
 
 
@@ -150,13 +177,14 @@ public class ServerConfig {
     ServerConfig serverConfig = (ServerConfig) o;
     return Objects.equals(this.identityURL, serverConfig.identityURL) &&
         Objects.equals(this.signatureURL, serverConfig.signatureURL) &&
+        Objects.equals(this.APIURL, serverConfig.APIURL) &&
         Objects.equals(this.defaultKeyId, serverConfig.defaultKeyId) &&
         Objects.equals(this.fallbackOnDefaultKey, serverConfig.fallbackOnDefaultKey);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identityURL, signatureURL, defaultKeyId, fallbackOnDefaultKey);
+    return Objects.hash(identityURL, signatureURL, APIURL, defaultKeyId, fallbackOnDefaultKey);
   }
 
 
@@ -166,6 +194,7 @@ public class ServerConfig {
     sb.append("class ServerConfig {\n");
     sb.append("    identityURL: ").append(toIndentedString(identityURL)).append("\n");
     sb.append("    signatureURL: ").append(toIndentedString(signatureURL)).append("\n");
+    sb.append("    APIURL: ").append(toIndentedString(APIURL)).append("\n");
     sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");
     sb.append("    fallbackOnDefaultKey: ").append(toIndentedString(fallbackOnDefaultKey)).append("\n");
     sb.append("}");

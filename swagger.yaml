@@ -1378,19 +1378,19 @@ components:
       format: url
       example: "https://identity.mydomain.com/identity"
       description: >
-        Public URL of the `/identity` endpoint (ie. the URL that anyone can use to get the identity associated with a public key).
+        Public URL of the **Identity endpoint** endpoint (ie. the URL that anyone can use to get the identity associated to a public key).
     SignatureURL:
       type: string
       format: url
       example: "https://sign.mydomain.com:3002"
       description: >
-        Public URL of the `signature` endpoint (ie. the URL that some can use to discover keys and sign).
+        Public URL of **Signature endpoints** base path (ie. the URL that authorized users can use to sign and to discover other users).
     APIURL:
       type: string
       format: url
       example: "https://mydomain.com/api"
       description: >
-        Public URL of the `/api` endpoint (ie. the URL that correspond to the Woleet.ID Server API).
+        Public URL of **API endpoints** base path (ie. the URL that authorized users to use Woleet.ID Server API).
     ServerConfig:
       type: object
       properties:
@@ -1398,6 +1398,8 @@ components:
           $ref: '#/components/schemas/IdentityURL'
         signatureURL:
           $ref: '#/components/schemas/SignatureURL'
+        APIURL:
+          $ref: '#/components/schemas/APIURL'
         defaultKeyId:
           type: string
           format: uuid
@@ -1535,6 +1537,8 @@ components:
       properties:
         identityURL:
           $ref: '#/components/schemas/IdentityURL'
+        signatureURL:
+          $ref: '#/components/schemas/SignatureURL'
         APIURL:
           $ref: '#/components/schemas/APIURL'
     ExternalKeyPost:

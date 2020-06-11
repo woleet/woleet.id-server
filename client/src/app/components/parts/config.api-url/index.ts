@@ -53,7 +53,7 @@ export class ConfigAPIUrlComponent extends ErrorMessageProvider implements OnIni
   async submit() {
     const APIURL = this.form.value;
     log.debug('Set API URL to', APIURL);
-    this.configService.update({ APIURL });
+    this.configService.updateConfig({ APIURL });
   }
 
   cancelEdit() {

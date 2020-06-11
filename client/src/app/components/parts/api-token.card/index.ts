@@ -1,11 +1,10 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { APITokenService } from '@services/api-token';
 import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider } from '@components/util';
 import { confirm } from '../../util';
 import { UserService } from '@services/user';
-import { serverURL } from '@services/config';
-import { HttpClient } from '@angular/common/http';
+import { ServerConfigService as ConfigService } from '@services/server-config';
 
 @Component({
   selector: 'api-token-card',
@@ -19,16 +18,11 @@ export class APITokenCardComponent extends ErrorMessageProvider implements OnIni
 
   user$: Promise<ApiUserObject>;
 
-  SignatureURL: string;
+  signatureURL: string;
 
-  constructor(
-    private userService: UserService,
-    private apiTokenService: APITokenService,
-    private http: HttpClient) {
+  constructor(private userService: UserService, private apiTokenService: APITokenService,
+              private configService: ConfigService) {
     super();
-    this.http.get<ApiServerConfig>(`${serverURL}/server-config`).toPromise().then(config => {
-      this.SignatureURL = config.signatureURL;
-    });
   }
 
   @Input()
@@ -46,6 +40,10 @@ export class APITokenCardComponent extends ErrorMessageProvider implements OnIni
     if (this.apiToken.userId) {
       this.user$ = this.userService.getById(this.apiToken.userId);
     }
+
+    this.configService.getConfig().subscribe(config => {
+      this.signatureURL = config.signatureURL;
+    });
   }
 
   setEditMode(active) {
@@ -97,7 +95,7 @@ export class APITokenCardComponent extends ErrorMessageProvider implements OnIni
   }
 
   getProofKeeperURL(apiToken: string) {
-    return `proofkeeper://wids?token=${apiToken}&url=${this.SignatureURL}`;
+    return `proofkeeper://wids?token=${apiToken}&url=${this.signatureURL}`;
   }
 
   copyTextToClipboard(textToCopy: string) {

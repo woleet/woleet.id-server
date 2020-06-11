@@ -26,8 +26,8 @@ const router = new Router({ prefix: '/discover' });
  *  operationId: discoverConfig
  */
 router.get('/config', async function (ctx) {
-  const { identityURL, APIURL } = await getServerConfig();
-  ctx.body = { identityURL, APIURL };
+  const { identityURL, signatureURL, APIURL } = await getServerConfig();
+  ctx.body = { identityURL, signatureURL, APIURL };
 });
 
 router.use(bearerAuth);

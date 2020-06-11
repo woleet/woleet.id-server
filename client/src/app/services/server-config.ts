@@ -106,7 +106,7 @@ export class ServerConfigService {
     return this.config$;
   }
 
-  update(config: ApiServerConfigUpdate): void {
+  updateConfig(config: ApiServerConfigUpdate): void {
     this.incrLock();
     this.http.put<ApiServerConfig>(`${serverURL}/server-config`, config)
       .subscribe((up) => {

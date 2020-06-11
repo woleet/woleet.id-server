@@ -51,7 +51,7 @@ export class ConfigHTMLFrameUrlComponent extends ErrorMessageProvider implements
 
   async submit() {
     const HTMLFrame = this.form.value || null;
-    this.configService.update({ HTMLFrame });
+    this.configService.updateConfig({ HTMLFrame });
   }
 
   cancelEdit() {

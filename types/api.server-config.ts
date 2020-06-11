@@ -13,7 +13,7 @@ interface ApiOIDCPClient {
 
 interface ApiServerConfig {
   identityURL: string;
-  signatureURL: string;
+  signatureURL?: string;
   APIURL?: string;
   defaultKeyId: string;
   fallbackOnDefaultKey: boolean;

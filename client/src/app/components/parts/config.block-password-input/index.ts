@@ -20,6 +20,6 @@ export class ConfigBlockPasswordInputComponent extends ErrorMessageProvider impl
   }
 
   update(blockPasswordInput: boolean) {
-    this.configService.update({ blockPasswordInput });
+    this.configService.updateConfig({ blockPasswordInput });
   }
 }

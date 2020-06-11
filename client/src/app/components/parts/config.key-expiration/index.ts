@@ -56,7 +56,7 @@ export class ConfigKeyExpirationComponent extends ErrorMessageProvider implement
     keyExpirationOffset ?
       log.debug('Set default key expiration to', keyExpirationOffset, timestring(keyExpirationOffset))
       : log.debug('Unset default key expiration');
-    this.configService.update({ keyExpirationOffset });
+    this.configService.updateConfig({ keyExpirationOffset });
   }
 
   cancelEdit() {

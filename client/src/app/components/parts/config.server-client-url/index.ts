@@ -52,7 +52,7 @@ export class ConfigWebClientUrlComponent extends ErrorMessageProvider implements
   async submit() {
     const webClientURL = this.form.value;
     log.debug('Set web client URL to', webClientURL);
-    this.configService.update({ webClientURL });
+    this.configService.updateConfig({ webClientURL });
   }
 
   cancelEdit() {

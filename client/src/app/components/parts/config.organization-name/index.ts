@@ -52,7 +52,7 @@ export class ConfigOrganizationNameComponent extends ErrorMessageProvider implem
   async submit() {
     const organizationName = this.form.value;
     log.debug('Set organization name to', organizationName);
-    this.configService.update({ organizationName });
+    this.configService.updateConfig({ organizationName });
   }
 
   cancelEdit() {

@@ -52,7 +52,7 @@ export class ConfigContactComponent extends ErrorMessageProvider implements OnIn
   async submit() {
     const contact = this.form.value;
     log.debug('Set contact to', contact);
-    this.configService.update({ contact });
+    this.configService.updateConfig({ contact });
   }
 
   cancelEdit() {

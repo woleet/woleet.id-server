@@ -26,7 +26,7 @@
           <button mat-button color="warn" (click)="reveal()" *ngIf="!displayApiToken">REVEAL</button>
           <pre *ngIf="displayApiToken" class="token-val"><code>{{ apiToken.value }}</code></pre>
         </div>
-        <div fxLayout="column" *ngIf="SignatureURL">
+        <div fxLayout="column" *ngIf="signatureURL">
           <button mat-button color="warn" (click)="copyTextToClipboard(getProofKeeperURL(apiToken.value))">COPY PROOFKEEPER CONFIGURATION</button>
         </div>
         <div fxLayout="column">

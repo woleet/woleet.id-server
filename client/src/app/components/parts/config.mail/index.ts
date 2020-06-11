@@ -54,6 +54,6 @@ export class ConfigMailTemplateComponent extends ErrorMessageProvider implements
     const mailResetPasswordTemplate = this.formMail.get('resetPasswordMail').value;
     const mailOnboardingTemplate = this.formMail.get('onboardingMail').value;
     const mailKeyEnrollmentTemplate = this.formMail.get('keyEnrollmentMail').value;
-    this.configService.update({ mailResetPasswordTemplate, mailOnboardingTemplate, mailKeyEnrollmentTemplate });
+    this.configService.updateConfig({ mailResetPasswordTemplate, mailOnboardingTemplate, mailKeyEnrollmentTemplate });
   }
 }

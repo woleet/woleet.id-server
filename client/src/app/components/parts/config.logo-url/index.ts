@@ -53,7 +53,7 @@ export class ConfigLogoUrlComponent extends ErrorMessageProvider implements OnIn
   async submit() {
     const logoURL = this.form.value || null;
     log.debug('Set logo URL to', logoURL);
-    this.configService.update({ logoURL });
+    this.configService.updateConfig({ logoURL });
   }
 
   cancelEdit() {

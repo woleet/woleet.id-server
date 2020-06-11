@@ -149,11 +149,11 @@ public class SignatureResult {
   }
 
    /**
-   * Public URL of the &#x60;/identity&#x60; endpoint (ie. the URL that anyone can use to get the identity associated with a public key). 
+   * Public URL of the **Identity endpoint** endpoint (ie. the URL that anyone can use to get the identity associated to a public key). 
    * @return identityURL
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "Public URL of the `/identity` endpoint (ie. the URL that anyone can use to get the identity associated with a public key). ")
+  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "Public URL of the **Identity endpoint** endpoint (ie. the URL that anyone can use to get the identity associated to a public key). ")
 
   public String getIdentityURL() {
     return identityURL;

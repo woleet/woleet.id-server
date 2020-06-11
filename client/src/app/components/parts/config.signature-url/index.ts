@@ -53,8 +53,8 @@ export class ConfigSignatureUrlComponent extends ErrorMessageProvider implements
 
   async submit() {
     const signatureURL = this.form.value;
-    log.debug('Set identity URL to', signatureURL);
-    this.configService.update({ signatureURL });
+    log.debug('Set signature URL to', signatureURL);
+    this.configService.updateConfig({ signatureURL });
   }
 
   beginEdit() {

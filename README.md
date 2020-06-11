@@ -31,20 +31,20 @@ The source code can be found in the `client/` directory.
 
 **Node.js server**
 
-The Node.js server exposes several API endpoints:
+The Node.js server exposes 4 groups of endpoints:
 
-- A `/sign` endpoint allowing to sign using the keys managed by the server.
-By default, it is exposed at [https://localhost:3002/sign]().
+- **Signature endpoints** allowing to sign some data and to discover the identities managed by the server 
+By default, they are exposed at [https://localhost:3002/sign]() and [https://localhost:3002/discover]() .
   
-- An `/identity` endpoint allowing to retrieve and verify the user identity associated to a key.
+- An **Identity endpoint** allowing to retrieve and verify the user identity associated to a key.
 By default, it is exposed at [https://localhost:3001/identity]().
 **This endpoint need to be exposed publicly on the internet.**
 
-- A set of API endpoints dedicated to the client web app, but that can also be used by your backend.
-By default, they are exposed at [https://localhost:3000/api/]().
+- **API endpoints** dedicated to the client web app, but that can also be used by your backend.
+By default, they are exposed at [https://localhost:3000/api/*]().
 
-- A set of OpenID Connect endpoint used only when Woleet.ID Server is used as an OpenID Connect provider.
-By default, they are exposed at [https://localhost:3003/]().
+- **OpenID Connect endpoints** used only when Woleet.ID Server is used as an OpenID Connect provider.
+By default, they are exposed at [https://localhost:3003/*]().
 
 The source code can be found in the `server/` directory.
 
@@ -190,13 +190,13 @@ export WOLEET_ID_SERVER_ENCRYPTION_SECRET={encryption secret, default: 'secret'}
 You can define the ports on which Woleet.ID Server listens by setting the following environment variables:
 
 ```bash
-export WOLEET_ID_SERVER_API_PORT={port where to expose the client web app and the server API endpoints dedicated to the client web app, default: 3000}
-export WOLEET_ID_SERVER_IDENTITY_PORT={port where to expose the /identity endpoint, default: 3001}
-export WOLEET_ID_SERVER_SIGNATURE_PORT={port where to expose the /sign and /discover endpoints, default 3002}
-export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose the OpenID Connect Provicer endpoints, default 3003}
+export WOLEET_ID_SERVER_API_PORT={port where to expose API endpoints and the client web app (default: 3000)}
+export WOLEET_ID_SERVER_IDENTITY_PORT={port where to expose the Identity endpoint (default: 3001)}
+export WOLEET_ID_SERVER_SIGNATURE_PORT={port where to expose Signature endpoints (default 3002)}
+export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoints (default 3003)}
 ```
 
-> WARNING: these ports should never be exposed outside your organization's network, except for the /identity endpoint, which must be accessible publicly via the identity URL.
+> WARNING: these ports should never be exposed outside your organization's network, except for the Identity endpoint, which must be accessible publicly via the identity URL.
 
 # Build the server
 
@@ -240,7 +240,7 @@ You should get:
 
     { "message": "Missing \"pubKey\" parameter", "status": 400 }
 
-[Signature endpoint](https://localhost:3002/sign)
+[Signature endpoints](https://localhost:3002/sign)
 
 You should get:
 
@@ -270,7 +270,7 @@ The identity URL is the public URL of the `/identity` endpoint.
 - Open the client web app
 - Sign in as admin
 - Select the `Settings` menu
-- Enter the identity URL as you expose it the the internet: as an example, if your server domain is `idserver.acme.com`, the identity URL would be `https://idserver.acme.com:3001/identity`.
+- Enter the identity URL as you expose it to the internet: as an example, if your server domain is `idserver.acme.com`, the identity URL would be `https://idserver.acme.com:3001/identity`.
 
 > WARNING: It is preferable to serve the identity URL on the default HTTPS port 443. To do this, simply set WOLEET_ID_SERVER_IDENTITY_PORT to 443.
 
@@ -305,14 +305,14 @@ Woleet.ID Server can be used as an OpenID Connect provider by 3rd party applicat
 
 > NOTE: The OpenID Connect Provider will not be effectively enabled without at least one specified OpenID client.
 
-You will be then able to get user information from your third party app. The associated OpenID client must request access to the `openid profile email` scope to get user information and `signature` to use the signature endpoint.
+You will be then able to get user information from your third party app. The associated OpenID client must request access to the `openid profile email` scope to get user information and `signature` scope to use the Signature endpoints.
 
 # Secure the server
 
-By default, only the identity endpoint of Woleet.ID Server must be accessible publicly from the internet (via the server's identity URL).
-All other endpoint can be firewalled to be only accessible from inside your organization intranet.
+By default, only the Identity endpoint of Woleet.ID Server must be accessible publicly from the internet (via the server's identity URL).
+All other endpoints can be firewalled to be only accessible from inside your organization intranet.
 
 If you plan to use your Woleet.ID Server as an authentication and signature server for Woleet's ProofDesk for Teams SaaS application,
-you will have to whitelist the IP addresses of Woleet's backend on the OpenID Connect and signature endpoints.
+you will have to whitelist the IP addresses of Woleet's backend on the OpenID Connect and Signature endpoints.
 Additionally, if you plan to allow you users to use ProofDesk for Teams from outside your organization network,
-you will have to expose Woleet.ID Server's client web app endpoint and OpenID Connect endpoint publicly.
+you will have to expose Woleet.ID Server's client web app and OpenID Connect endpoints publicly.

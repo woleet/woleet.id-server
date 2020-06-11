@@ -355,7 +355,7 @@ declare global {
 
   interface ServerConfigCreate extends ServerConfig {
     identityURL: string;
-    signatureURL: string;
+    signatureURL?: string;
     APIURL?: string;
     logoURL?: string;
     HTMLFrame?: string;

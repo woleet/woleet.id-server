@@ -33,6 +33,10 @@ public class ConfigDisco {
   @SerializedName(SERIALIZED_NAME_IDENTITY_U_R_L)
   private String identityURL;
 
+  public static final String SERIALIZED_NAME_SIGNATURE_U_R_L = "signatureURL";
+  @SerializedName(SERIALIZED_NAME_SIGNATURE_U_R_L)
+  private String signatureURL;
+
   public static final String SERIALIZED_NAME_A_P_I_U_R_L = "APIURL";
   @SerializedName(SERIALIZED_NAME_A_P_I_U_R_L)
   private String APIURL;
@@ -45,11 +49,11 @@ public class ConfigDisco {
   }
 
    /**
-   * Public URL of the &#x60;/identity&#x60; endpoint (ie. the URL that anyone can use to get the identity associated with a public key). 
+   * Public URL of the **Identity endpoint** endpoint (ie. the URL that anyone can use to get the identity associated to a public key). 
    * @return identityURL
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "Public URL of the `/identity` endpoint (ie. the URL that anyone can use to get the identity associated with a public key). ")
+  @ApiModelProperty(example = "https://identity.mydomain.com/identity", value = "Public URL of the **Identity endpoint** endpoint (ie. the URL that anyone can use to get the identity associated to a public key). ")
 
   public String getIdentityURL() {
     return identityURL;
@@ -61,6 +65,29 @@ public class ConfigDisco {
   }
 
 
+  public ConfigDisco signatureURL(String signatureURL) {
+    
+    this.signatureURL = signatureURL;
+    return this;
+  }
+
+   /**
+   * Public URL of **Signature endpoints** base path (ie. the URL that authorized users can use to sign and to discover other users). 
+   * @return signatureURL
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "https://sign.mydomain.com:3002", value = "Public URL of **Signature endpoints** base path (ie. the URL that authorized users can use to sign and to discover other users). ")
+
+  public String getSignatureURL() {
+    return signatureURL;
+  }
+
+
+  public void setSignatureURL(String signatureURL) {
+    this.signatureURL = signatureURL;
+  }
+
+
   public ConfigDisco APIURL(String APIURL) {
     
     this.APIURL = APIURL;
@@ -68,11 +95,11 @@ public class ConfigDisco {
   }
 
    /**
-   * Public URL of the &#x60;/api&#x60; endpoint (ie. the URL that correspond to the Woleet.ID Server API). 
+   * Public URL of **API endpoints** base path (ie. the URL that authorized users to use Woleet.ID Server API). 
    * @return APIURL
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "https://mydomain.com/api", value = "Public URL of the `/api` endpoint (ie. the URL that correspond to the Woleet.ID Server API). ")
+  @ApiModelProperty(example = "https://mydomain.com/api", value = "Public URL of **API endpoints** base path (ie. the URL that authorized users to use Woleet.ID Server API). ")
 
   public String getAPIURL() {
     return APIURL;
@@ -94,12 +121,13 @@ public class ConfigDisco {
     }
     ConfigDisco configDisco = (ConfigDisco) o;
     return Objects.equals(this.identityURL, configDisco.identityURL) &&
+        Objects.equals(this.signatureURL, configDisco.signatureURL) &&
         Objects.equals(this.APIURL, configDisco.APIURL);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identityURL, APIURL);
+    return Objects.hash(identityURL, signatureURL, APIURL);
   }
 
 
@@ -108,6 +136,7 @@ public class ConfigDisco {
     StringBuilder sb = new StringBuilder();
     sb.append("class ConfigDisco {\n");
     sb.append("    identityURL: ").append(toIndentedString(identityURL)).append("\n");
+    sb.append("    signatureURL: ").append(toIndentedString(signatureURL)).append("\n");
     sb.append("    APIURL: ").append(toIndentedString(APIURL)).append("\n");
     sb.append("}");
     return sb.toString();

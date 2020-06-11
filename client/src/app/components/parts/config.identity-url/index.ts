@@ -53,7 +53,7 @@ export class ConfigIdentityUrlComponent extends ErrorMessageProvider implements 
   async submit() {
     const identityURL = this.form.value;
     log.debug('Set identity URL to', identityURL);
-    this.configService.update({ identityURL });
+    this.configService.updateConfig({ identityURL });
   }
 
   cancelEdit() {

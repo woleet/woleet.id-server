@@ -24,7 +24,7 @@ export class ConfigAskResetPasswordInputComponent extends ErrorMessageProvider i
   }
 
   update(askForResetInput: boolean) {
-    this.configService.update({ askForResetInput });
+    this.configService.updateConfig({ askForResetInput });
   }
 
   // Search all active manager or admin with an email disable the checkbox if no one is found

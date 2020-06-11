@@ -91,7 +91,7 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
     const OIDCPClients = this.oidcpClients;
     OIDCPClients.forEach((c) => c.redirect_uris = c.redirect_uris.filter(e => !!e));
     const enableOIDCP = this._enableOIDCP;
-    this.configService.update({
+    this.configService.updateConfig({
       enableOIDCP,
       OIDCPProviderURL,
       OIDCPIssuerURL,

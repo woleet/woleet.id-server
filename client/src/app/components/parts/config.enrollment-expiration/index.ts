@@ -55,7 +55,7 @@ export class ConfigEnrollmentExpirationComponent extends ErrorMessageProvider im
     enrollmentExpirationOffset ?
       log.debug('Set default key expiration to', enrollmentExpirationOffset, timestring(enrollmentExpirationOffset))
       : log.debug('Unset default key expiration');
-    this.configService.update({ enrollmentExpirationOffset });
+    this.configService.updateConfig({ enrollmentExpirationOffset });
   }
 
   cancelEdit() {

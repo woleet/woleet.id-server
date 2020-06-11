@@ -64,7 +64,7 @@ export class ConfigFallbackKeyComponent implements OnInit, OnDestroy {
 
   async submit() {
     log.debug('Set new default server key to', this.newKeyId);
-    this.configService.update({ defaultKeyId: this.newKeyId });
+    this.configService.updateConfig({ defaultKeyId: this.newKeyId });
   }
 
   loadUserList() {
@@ -87,7 +87,7 @@ export class ConfigFallbackKeyComponent implements OnInit, OnDestroy {
 
   async updateFallbackOnDefaultKeyOption(fallbackOnDefaultKey) {
     log.debug('Set fallback option to', fallbackOnDefaultKey);
-    this.configService.update({ fallbackOnDefaultKey });
+    this.configService.updateConfig({ fallbackOnDefaultKey });
   }
 
   cancelEdit() {

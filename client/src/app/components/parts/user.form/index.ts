@@ -92,9 +92,13 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
 
   private onDestroy: EventEmitter<void>;
 
-  constructor(private service: UserService, private router: Router, private configService: ConfigService,
-              private cdr: ChangeDetectorRef,
-              private authService: AuthService) {
+  constructor(
+    private service: UserService,
+    private router: Router,
+    private configService: ConfigService,
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
+  ) {
     super();
     this.onDestroy = new EventEmitter();
   }
@@ -233,10 +237,7 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
     if (user.mode === 'seal') {
       const query = 'commonName=' + user.identity.commonName + '&organization=' + user.identity.organization + '&mode=seal';
       alreadyExist = await this.service.getAll(query).then((users) => {
-        if (users.length > 0) {
-          return true;
-        }
-        return false;
+        return users.length > 0;
       });
     }
     return alreadyExist;
