@@ -45,6 +45,10 @@ async function getSignature(ctx: Context) {
     throw new BadRequest('Invalid query parameter "pubKey"');
   }
 
+  if (query.identityToSign && !query.identityToSign.match(/^((CN|O|OU|L|C|EMAILADDRESS),?)+$/g)) {
+    throw new BadRequest('Invalid query parameter "identityToSign"');
+  }
+
   // When authenticated using a user token, a user can only sign for himself
   let _userId = null;
   if (token.userId) {
@@ -60,7 +64,7 @@ async function getSignature(ctx: Context) {
     }
   }
 
-  const { signature, pubKey, userId, keyId, signedMessage, signedHash } =
+  const { signature, pubKey, userId, keyId, signedMessage, signedHash, signedIdentity, signedIssuerDomain } =
     await sign(Object.assign({}, query, { userId: _userId }));
 
   const identityURL = getServerConfig().identityURL;
@@ -75,7 +79,7 @@ async function getSignature(ctx: Context) {
     data: { hash: signedHash, auth: ctx.token.type }
   });
 
-  ctx.body = { pubKey, signedMessage, signedHash, signature, identityURL };
+  ctx.body = { pubKey, signedMessage, signedHash, signature, identityURL, signedIdentity, signedIssuerDomain };
 }
 
 /**

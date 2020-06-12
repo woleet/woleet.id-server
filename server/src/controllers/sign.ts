@@ -2,6 +2,7 @@ import { Key, User } from '../database';
 import { getServerConfig } from './server-config';
 import { secureModule } from '../config';
 import { Unauthorized } from 'http-errors';
+import * as crypto from 'crypto';
 
 import {
   BlockedKeyError, BlockedUserError, ExpiredKeyError, KeyNotHeldByServerError, KeyOwnerMismatchError, NoDefaultKeyError,
@@ -14,7 +15,7 @@ export function signMessage(key: SequelizeKeyObject, message: string, compressed
   return secureModule.sign(privateKey, message, privateKeyIV, compressed);
 }
 
-export async function sign({ hashToSign, messageToSign, pubKey, userId, customUserId, path }) {
+export async function sign({ hashToSign, messageToSign, pubKey, userId, customUserId, path, identityToSign }) {
   let user: SequelizeUserObject;
   let key: SequelizeKeyObject;
 
@@ -117,6 +118,66 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     throw new ExpiredKeyError();
   }
 
+  let identity = '';
+  let issuerDomain = '';
+
+  if (identityToSign !== undefined) {
+    if (!identityToSign) {
+      identityToSign = 'CN,O,OU,L,C,EMAILADDRESS';
+    }
+    const tabIdentityToSign = identityToSign.split(',');
+    if (user.get('x500CommonName') && tabIdentityToSign.includes('CN')) {
+      identity += 'CN=' + user.get('x500CommonName');
+    }
+    if (user.get('x500Organization') && tabIdentityToSign.includes('O')) {
+      if (!identity) {
+        identity += ',';
+      }
+      identity += 'O=' + user.get('x500Organization');
+    }
+    if (user.get('x500OrganizationalUnit') && tabIdentityToSign.includes('OU')) {
+      if (!identity) {
+        identity += ',';
+      }
+      identity += 'CN=' + user.get('x500OrganizationalUnit');
+    }
+    if (user.get('x500Locality') && tabIdentityToSign.includes('L')) {
+      if (!identity) {
+        identity += ',';
+      }
+      identity += 'OU=' + user.get('x500Locality');
+    }
+    if (user.get('x500Country') && tabIdentityToSign.includes('C')) {
+      if (!identity) {
+        identity += ',';
+      }
+      identity += 'C=' + user.get('x500Country');
+    }
+    if (user.get('email') && tabIdentityToSign.includes('EMAILADDRESS')) {
+      if (!identity) {
+        identity += ',';
+      }
+      identity += 'EMAILADDRESS=' + user.get('email');
+    }
+
+    const sub = new URL(getServerConfig().identityURL).hostname.split('.');
+    switch (sub.length) {
+      case 0:
+        break;
+      case 1:
+        issuerDomain = sub[0]; break;
+      default:
+        issuerDomain = sub[sub.length - 2] + '.' + sub[sub.length - 1];
+    }
+
+    const hash = crypto.createHash('sha256');
+    if (messageToSign) {
+      messageToSign = hash.update(messageToSign + identity + issuerDomain).digest('hex');
+    } else if (hashToSign) {
+      hashToSign = hash.update(hashToSign + identity + issuerDomain).digest('hex');
+    }
+  }
+
   // If no derivation path is specified, sign using the key unmodified
   let signature: string;
   let publicKey: string;
@@ -144,6 +205,8 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     signedHash: hashToSign,
     signedMessage: messageToSign,
     pubKey: publicKey,
+    signedIdentity: identity,
+    signedIssuerDomain: issuerDomain,
     signature
   };
 }
