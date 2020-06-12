@@ -118,6 +118,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     throw new ExpiredKeyError();
   }
 
+  let realHashToSign =  messageToSign || hashToSign;
   let identity = '';
   let issuerDomain = '';
 
@@ -171,18 +172,15 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     }
 
     const hash = crypto.createHash('sha256');
-    if (messageToSign) {
-      messageToSign = hash.update(messageToSign + identity + issuerDomain).digest('hex');
-    } else if (hashToSign) {
-      hashToSign = hash.update(hashToSign + identity + issuerDomain).digest('hex');
-    }
+    realHashToSign = hash.update(realHashToSign + identity + issuerDomain).digest('hex');
   }
+
 
   // If no derivation path is specified, sign using the key unmodified
   let signature: string;
   let publicKey: string;
   if (!path) {
-    signature = await signMessage(key, messageToSign || hashToSign);
+    signature = await signMessage(key, realHashToSign);
     publicKey = key.get('publicKey');
   }
 
@@ -191,7 +189,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     const entropy = Buffer.from(key.get('mnemonicEntropy'), 'hex');
     const entropyIV = Buffer.from(key.get('mnemonicEntropyIV'), 'hex');
     const derivedKey = await secureModule.deriveKey(entropy, entropyIV, path);
-    signature = await secureModule.sign(derivedKey.privateKey, messageToSign || hashToSign, derivedKey.privateKeyIV);
+    signature = await secureModule.sign(derivedKey.privateKey, realHashToSign, derivedKey.privateKeyIV);
     publicKey = derivedKey.publicKey;
   }
 
