@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="getSignature"></a>
 # **getSignature**
-> SignatureResult getSignature(hashToSign, messageToSign, userId, customUserId, pubKey, path)
+> SignatureResult getSignature(hashToSign, messageToSign, userId, customUserId, pubKey, path, identityToSign)
 
 Sign a message or a SHA256 hash using a key.
 
@@ -45,8 +45,9 @@ public class Example {
     String customUserId = wol.jim-smith.01; // String | Custom user identifier (ie. `userId` field of the user's identity).
     String pubKey = 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh; // String | The public key to use to sign.<br> When not provided and a user is provided, the default key of the user is used (if any).<br> When not provided and no user is provided, the default key of the server is used (if any). 
     String path = m/'44/'0/'1; // String | The derivation path of the key to use to sign.<br> When not provided, the default derivation path \"m/44'/0'/0'\" is used. 
+    String identityToSign = CN,O,OU,L,C,EMAILADDRESS; // String | Identity to add to the signature: if you add this query without paramters, all known informations on wids will be added to the signature. You can also select the informations you want to add to the signature by providing a string with these X500 fields separated with ',':<br>   CN: Common name<br>   O: Organization<br>   OU: Organization unit<br>   L: Locality<br>   C: Country<br>   EMAILADDRESS: Email address 
     try {
-      SignatureResult result = apiInstance.getSignature(hashToSign, messageToSign, userId, customUserId, pubKey, path);
+      SignatureResult result = apiInstance.getSignature(hashToSign, messageToSign, userId, customUserId, pubKey, path, identityToSign);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling SignatureApi#getSignature");
@@ -69,6 +70,7 @@ Name | Type | Description  | Notes
  **customUserId** | **String**| Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). | [optional]
  **pubKey** | **String**| The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  | [optional]
  **path** | **String**| The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/44&#39;/0&#39;/0&#39;\&quot; is used.  | [optional]
+ **identityToSign** | **String**| Identity to add to the signature: if you add this query without paramters, all known informations on wids will be added to the signature. You can also select the informations you want to add to the signature by providing a string with these X500 fields separated with &#39;,&#39;:&lt;br&gt;   CN: Common name&lt;br&gt;   O: Organization&lt;br&gt;   OU: Organization unit&lt;br&gt;   L: Locality&lt;br&gt;   C: Country&lt;br&gt;   EMAILADDRESS: Email address  | [optional]
 
 ### Return type
 

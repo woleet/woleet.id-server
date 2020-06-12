@@ -89,6 +89,7 @@ paths:
         - $ref: '#/components/parameters/CustomUserIdQueryParameter'
         - $ref: '#/components/parameters/PubKeyQueryParameter'
         - $ref: '#/components/parameters/PathQueryParameter'
+        - $ref: '#/components/parameters/IdentityToSignQueryParameter'
       security:
         - APITokenAuth: []
         - OAuthTokenAuth: []
@@ -1742,6 +1743,22 @@ components:
       schema:
         type: string
         example: "m/'44/'0/'1"
+    IdentityToSignQueryParameter:
+      name: identityToSign
+      in: query
+      description: >
+        Identity to add to the signature: if you add this query without paramters, all known informations on wids will be added to the signature.
+        You can also select the informations you want to add to the signature by providing a string with these X500 fields separated with ',':<br>
+          CN: Common name<br>
+          O: Organization<br>
+          OU: Organization unit<br>
+          L: Locality<br>
+          C: Country<br>
+          EMAILADDRESS: Email address
+      required: false
+      schema:
+        type: string
+        example: "CN,O,OU,L,C,EMAILADDRESS"
     PubKeyToVerifyQueryParameter:
       name: pubKey
       in: query

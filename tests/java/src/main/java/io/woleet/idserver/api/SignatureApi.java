@@ -64,6 +64,7 @@ public class SignatureApi {
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
      * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/44&#39;/0&#39;/0&#39;\&quot; is used.  (optional)
+     * @param identityToSign Identity to add to the signature: if you add this query without paramters, all known informations on wids will be added to the signature. You can also select the informations you want to add to the signature by providing a string with these X500 fields separated with &#39;,&#39;:&lt;br&gt;   CN: Common name&lt;br&gt;   O: Organization&lt;br&gt;   OU: Organization unit&lt;br&gt;   L: Locality&lt;br&gt;   C: Country&lt;br&gt;   EMAILADDRESS: Email address  (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -77,7 +78,7 @@ public class SignatureApi {
         <tr><td> 403 </td><td> No &#x60;pubKey&#x60; parameter is provided and the server or the user has no default key to fallback on. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call getSignatureCall(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call getSignatureCall(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path, String identityToSign, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -109,6 +110,10 @@ public class SignatureApi {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("path", path));
         }
 
+        if (identityToSign != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("identityToSign", identityToSign));
+        }
+
         Map<String, String> localVarHeaderParams = new HashMap<String, String>();
         Map<String, String> localVarCookieParams = new HashMap<String, String>();
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
@@ -131,10 +136,10 @@ public class SignatureApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call getSignatureValidateBeforeCall(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path, final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call getSignatureValidateBeforeCall(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path, String identityToSign, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = getSignatureCall(hashToSign, messageToSign, userId, customUserId, pubKey, path, _callback);
+        okhttp3.Call localVarCall = getSignatureCall(hashToSign, messageToSign, userId, customUserId, pubKey, path, identityToSign, _callback);
         return localVarCall;
 
     }
@@ -148,6 +153,7 @@ public class SignatureApi {
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
      * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/44&#39;/0&#39;/0&#39;\&quot; is used.  (optional)
+     * @param identityToSign Identity to add to the signature: if you add this query without paramters, all known informations on wids will be added to the signature. You can also select the informations you want to add to the signature by providing a string with these X500 fields separated with &#39;,&#39;:&lt;br&gt;   CN: Common name&lt;br&gt;   O: Organization&lt;br&gt;   OU: Organization unit&lt;br&gt;   L: Locality&lt;br&gt;   C: Country&lt;br&gt;   EMAILADDRESS: Email address  (optional)
      * @return SignatureResult
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -160,8 +166,8 @@ public class SignatureApi {
         <tr><td> 403 </td><td> No &#x60;pubKey&#x60; parameter is provided and the server or the user has no default key to fallback on. </td><td>  -  </td></tr>
      </table>
      */
-    public SignatureResult getSignature(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path) throws ApiException {
-        ApiResponse<SignatureResult> localVarResp = getSignatureWithHttpInfo(hashToSign, messageToSign, userId, customUserId, pubKey, path);
+    public SignatureResult getSignature(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path, String identityToSign) throws ApiException {
+        ApiResponse<SignatureResult> localVarResp = getSignatureWithHttpInfo(hashToSign, messageToSign, userId, customUserId, pubKey, path, identityToSign);
         return localVarResp.getData();
     }
 
@@ -174,6 +180,7 @@ public class SignatureApi {
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
      * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/44&#39;/0&#39;/0&#39;\&quot; is used.  (optional)
+     * @param identityToSign Identity to add to the signature: if you add this query without paramters, all known informations on wids will be added to the signature. You can also select the informations you want to add to the signature by providing a string with these X500 fields separated with &#39;,&#39;:&lt;br&gt;   CN: Common name&lt;br&gt;   O: Organization&lt;br&gt;   OU: Organization unit&lt;br&gt;   L: Locality&lt;br&gt;   C: Country&lt;br&gt;   EMAILADDRESS: Email address  (optional)
      * @return ApiResponse&lt;SignatureResult&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -186,8 +193,8 @@ public class SignatureApi {
         <tr><td> 403 </td><td> No &#x60;pubKey&#x60; parameter is provided and the server or the user has no default key to fallback on. </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<SignatureResult> getSignatureWithHttpInfo(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path) throws ApiException {
-        okhttp3.Call localVarCall = getSignatureValidateBeforeCall(hashToSign, messageToSign, userId, customUserId, pubKey, path, null);
+    public ApiResponse<SignatureResult> getSignatureWithHttpInfo(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path, String identityToSign) throws ApiException {
+        okhttp3.Call localVarCall = getSignatureValidateBeforeCall(hashToSign, messageToSign, userId, customUserId, pubKey, path, identityToSign, null);
         Type localVarReturnType = new TypeToken<SignatureResult>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
@@ -201,6 +208,7 @@ public class SignatureApi {
      * @param customUserId Custom user identifier (ie. &#x60;userId&#x60; field of the user&#39;s identity). (optional)
      * @param pubKey The public key to use to sign.&lt;br&gt; When not provided and a user is provided, the default key of the user is used (if any).&lt;br&gt; When not provided and no user is provided, the default key of the server is used (if any).  (optional)
      * @param path The derivation path of the key to use to sign.&lt;br&gt; When not provided, the default derivation path \&quot;m/44&#39;/0&#39;/0&#39;\&quot; is used.  (optional)
+     * @param identityToSign Identity to add to the signature: if you add this query without paramters, all known informations on wids will be added to the signature. You can also select the informations you want to add to the signature by providing a string with these X500 fields separated with &#39;,&#39;:&lt;br&gt;   CN: Common name&lt;br&gt;   O: Organization&lt;br&gt;   OU: Organization unit&lt;br&gt;   L: Locality&lt;br&gt;   C: Country&lt;br&gt;   EMAILADDRESS: Email address  (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -214,9 +222,9 @@ public class SignatureApi {
         <tr><td> 403 </td><td> No &#x60;pubKey&#x60; parameter is provided and the server or the user has no default key to fallback on. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call getSignatureAsync(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path, final ApiCallback<SignatureResult> _callback) throws ApiException {
+    public okhttp3.Call getSignatureAsync(String hashToSign, String messageToSign, UUID userId, String customUserId, String pubKey, String path, String identityToSign, final ApiCallback<SignatureResult> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = getSignatureValidateBeforeCall(hashToSign, messageToSign, userId, customUserId, pubKey, path, _callback);
+        okhttp3.Call localVarCall = getSignatureValidateBeforeCall(hashToSign, messageToSign, userId, customUserId, pubKey, path, identityToSign, _callback);
         Type localVarReturnType = new TypeToken<SignatureResult>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
