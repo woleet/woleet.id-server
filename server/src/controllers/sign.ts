@@ -130,31 +130,31 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
       identity += 'CN=' + user.get('x500CommonName');
     }
     if (user.get('x500Organization') && tabIdentityToSign.includes('O')) {
-      if (!identity) {
+      if (identity) {
         identity += ',';
       }
       identity += 'O=' + user.get('x500Organization');
     }
     if (user.get('x500OrganizationalUnit') && tabIdentityToSign.includes('OU')) {
-      if (!identity) {
+      if (identity) {
         identity += ',';
       }
       identity += 'CN=' + user.get('x500OrganizationalUnit');
     }
     if (user.get('x500Locality') && tabIdentityToSign.includes('L')) {
-      if (!identity) {
+      if (identity) {
         identity += ',';
       }
       identity += 'OU=' + user.get('x500Locality');
     }
     if (user.get('x500Country') && tabIdentityToSign.includes('C')) {
-      if (!identity) {
+      if (identity) {
         identity += ',';
       }
       identity += 'C=' + user.get('x500Country');
     }
     if (user.get('email') && tabIdentityToSign.includes('EMAILADDRESS')) {
-      if (!identity) {
+      if (identity) {
         identity += ',';
       }
       identity += 'EMAILADDRESS=' + user.get('email');

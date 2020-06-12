@@ -1591,6 +1591,18 @@ components:
           description: Signature of `messageToSign` or `hashToSign` using the public key `pubKey`.
         identityURL:
           $ref: '#/components/schemas/IdentityURL'
+        signedIdentity:
+          type: string
+          example: "CN=SOMEONE,O=COMPANY,CN=SIGNATUREDEPARTEMENT,OU=Somewhere,EMAILADDRESS=user@example.host"
+          description: >
+            X500 Distinguished Name representing the signed identity.<br>
+            Only sent if identityToSign is set.
+        signedIssuerDomain:
+          type: string
+          example: "example.host"
+          description: >
+            Domain name of the identity issuer (ie. of the organization who verified the identity).<br>
+            Only sent if identityToSign is set
     IdentityResult:
       type: object
       properties:
