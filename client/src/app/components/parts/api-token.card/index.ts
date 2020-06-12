@@ -112,7 +112,7 @@ export class APITokenCardComponent extends ErrorMessageProvider implements OnIni
   }
 
   getProofKeeperURL(apiToken: string) {
-    return `proofkeeper://wids?token=${apiToken}&url=${this.signatureURL}`;
+    return `proofkeeper://wids?token=${encodeURIComponent(apiToken)}&url=${encodeURIComponent(this.signatureURL)}`;
   }
 
   copyTextToClipboard(textToCopy: string) {
