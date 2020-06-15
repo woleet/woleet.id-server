@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: This is Woleet.ID Server API documentation.
-  version: 1.2.4
+  version: 1.2.5
   title: Woleet.ID Server
   contact:
     email: contact@woleet.com
@@ -1392,6 +1392,11 @@ components:
       example: "https://mydomain.com/api"
       description: >
         Public base URL of **API endpoints** (ie. the base URL that authorized users can use to call the server API).
+    APIVersion:
+      type: string
+      example: "1.2.5"
+      description: >
+        API version number of this wserver instance (extraced from the swagger file).
     ServerConfig:
       type: object
       properties:
@@ -1542,6 +1547,8 @@ components:
           $ref: '#/components/schemas/SignatureURL'
         APIURL:
           $ref: '#/components/schemas/APIURL'
+        APIVersion:
+          $ref: '#/components/schemas/APIVersion'
     ExternalKeyPost:
       type: object
       properties:

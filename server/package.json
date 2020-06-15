@@ -4,13 +4,14 @@
   "description": "Woleet.ID Server Node.js server",
   "main": "index.js",
   "scripts": {
+    "setAPIVersion": "WOLEET_ID_SERVER_API_VERSION=$(cat ../swagger.yaml | grep 'version' | grep -oE '([[:digit:]]+.?)+')",
     "lint": "npx tslint src/**/*.ts",
     "check": "npx tsc --noEmit",
     "transpile": "npx tsc",
     "build": "npx tsc && cp -a assets/ dist/server/assets/",
     "start": "node dist/server/src",
-    "dev": "WOLEET_ID_SERVER_PRODUCTION=false DEBUG=id* npx ts-node-dev src/index.ts",
-    "test": "WOLEET_ID_SERVER_PRODUCTION=false npx mocha --require ts-node/register test/*.ts --exit --timeout 10000"
+    "dev": "npm run setAPIVersion; WOLEET_ID_SERVER_PRODUCTION=false DEBUG=id* npx ts-node-dev src/index.ts",
+    "test": "npm run setAPIVersion; WOLEET_ID_SERVER_PRODUCTION=false npx mocha --require ts-node/register test/*.ts --exit --timeout 10000"
   },
   "private": true,
   "devDependencies": {

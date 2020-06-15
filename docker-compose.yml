@@ -24,6 +24,7 @@ services:
     tty: true
     environment:
       DEBUG: ${WOLEET_ID_SERVER_DEBUG} # Set to "id*" to see debug traces
+      WOLEET_ID_SERVER_API_VERSION: ${WOLEET_ID_SERVER_API_VERSION}
       WOLEET_ID_SERVER_API_PORT: 3000
       WOLEET_ID_SERVER_IDENTITY_PORT: 3001
       WOLEET_ID_SERVER_SIGNATURE_PORT: 3002

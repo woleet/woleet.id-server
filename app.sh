@@ -9,6 +9,7 @@ fi
 
 CLIENT_IMAGE="${WOLEET_ID_SERVER_REGISTRY:-wids}/client:${WOLEET_ID_SERVER_VERSION:-latest}"
 SERVER_IMAGE="${WOLEET_ID_SERVER_REGISTRY:-wids}/server:${WOLEET_ID_SERVER_VERSION:-latest}"
+export WOLEET_ID_SERVER_API_VERSION="$(cat swagger.yaml | grep 'version' | grep -oE '([[:digit:]]+.?)+')"
 
 display_usage_app() {
   echo "usage: $0 [start|stop|restart|build|push|check|logs|backup|restore|upgrade]"
