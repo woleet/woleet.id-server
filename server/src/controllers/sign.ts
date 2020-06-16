@@ -140,13 +140,13 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
       if (identity) {
         identity += ',';
       }
-      identity += 'CN=' + user.get('x500OrganizationalUnit');
+      identity += 'OU=' + user.get('x500OrganizationalUnit');
     }
     if (user.get('x500Locality') && tabIdentityToSign.includes('L')) {
       if (identity) {
         identity += ',';
       }
-      identity += 'OU=' + user.get('x500Locality');
+      identity += 'L=' + user.get('x500Locality');
     }
     if (user.get('x500Country') && tabIdentityToSign.includes('C')) {
       if (identity) {
