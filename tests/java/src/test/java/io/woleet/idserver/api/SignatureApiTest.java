@@ -244,7 +244,7 @@ public class SignatureApiTest {
         verifySignatureValid(hashToSign, null, signatureResult);
 
         // Sign a ramdom message using the user's default key
-        String messageToSign = Config.randomString(16);
+        String messageToSign = Config.randomString(32);
         signatureResult = tokenAuthUserSealApi.getSignature(null, messageToSign, null, null, null, null);
         verifySignatureValid(null, messageToSign, signatureResult);
 
