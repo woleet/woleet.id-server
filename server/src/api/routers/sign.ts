@@ -45,7 +45,7 @@ async function getSignature(ctx: Context) {
     throw new BadRequest('Invalid query parameter "pubKey"');
   }
 
-  if (query.identityToSign && !query.identityToSign.match(/^((CN|O|OU|L|C|EMAILADDRESS),?)+$/g)) {
+  if (query.identityToSign && !query.identityToSign.match(/^(ALL|((CN|O|OU|L|C|EMAILADDRESS),?)+)$/g)) {
     throw new BadRequest('Invalid query parameter "identityToSign"');
   }
 

@@ -122,11 +122,11 @@ public class ConfigDisco {
   }
 
    /**
-   * API version number of this wserver instance (extraced from the swagger file). 
+   * API version number of this Woleet.ID Server instance (extraced from the swagger file). 
    * @return apIVersion
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "1.2.5", value = "API version number of this wserver instance (extraced from the swagger file). ")
+  @ApiModelProperty(example = "1.2.5", value = "API version number of this Woleet.ID Server instance (extraced from the swagger file). ")
 
   public String getApIVersion() {
     return apIVersion;

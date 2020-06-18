@@ -122,43 +122,44 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
   let identity = '';
   let issuerDomain = '';
 
-  if (identityToSign !== undefined) {
-    if (!identityToSign) {
+  if (identityToSign ) {
+    if (identityToSign === 'ALL') {
       identityToSign = 'CN,O,OU,L,C,EMAILADDRESS';
     }
+    const escapingRegex = /([=",;+])/mg;
     const tabIdentityToSign = identityToSign.split(',');
     if (user.get('x500CommonName') && tabIdentityToSign.includes('CN')) {
-      identity += 'CN=' + user.get('x500CommonName');
+      identity += 'CN=' + user.get('x500CommonName').replace(escapingRegex, '\\$1');
     }
     if (user.get('x500Organization') && tabIdentityToSign.includes('O')) {
       if (identity) {
         identity += ',';
       }
-      identity += 'O=' + user.get('x500Organization');
+      identity += 'O=' + user.get('x500Organization').replace(escapingRegex, '\\$1');
     }
     if (user.get('x500OrganizationalUnit') && tabIdentityToSign.includes('OU')) {
       if (identity) {
         identity += ',';
       }
-      identity += 'OU=' + user.get('x500OrganizationalUnit');
+      identity += 'OU=' + user.get('x500OrganizationalUnit').replace(escapingRegex, '\\$1');
     }
     if (user.get('x500Locality') && tabIdentityToSign.includes('L')) {
       if (identity) {
         identity += ',';
       }
-      identity += 'L=' + user.get('x500Locality');
+      identity += 'L=' + user.get('x500Locality').replace(escapingRegex, '\\$1');
     }
     if (user.get('x500Country') && tabIdentityToSign.includes('C')) {
       if (identity) {
         identity += ',';
       }
-      identity += 'C=' + user.get('x500Country');
+      identity += 'C=' + user.get('x500Country').replace(escapingRegex, '\\$1');
     }
     if (user.get('email') && tabIdentityToSign.includes('EMAILADDRESS')) {
       if (identity) {
         identity += ',';
       }
-      identity += 'EMAILADDRESS=' + user.get('email');
+      identity += 'EMAILADDRESS=' + user.get('email').replace(escapingRegex, '\\$1');
     }
 
     const sub = new URL(getServerConfig().identityURL).hostname.split('.');
