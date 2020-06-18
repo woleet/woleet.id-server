@@ -1,7 +1,6 @@
 package io.woleet.idserver;
 
 import io.woleet.idserver.api.AuthenticationApi;
-import io.woleet.idserver.api.EnrollmentApi;
 import io.woleet.idserver.api.UserApi;
 import io.woleet.idserver.api.model.*;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -103,17 +102,22 @@ public class Config {
     }
 
     /**
-     * Create a new random string of a given length.
+     * Create a new random UTF8 string of a given length.
      */
     public static String randomString(int length) {
-        return randomHash().substring(0, length - 1);
+        Random random = new Random();
+        char[] charSet = {'a', 'z', '0', '9', 'é', 'à', '京', '都'};
+        String s = new String();
+        while (length-- > 0)
+            s += charSet[random.nextInt(charSet.length)];
+        return s;
     }
 
     /**
      * Create a new random user name.
      */
     public static String randomUsername() {
-        return Config.TEST_USERS_USERNAME_PREFIX + randomHash().substring(0, 9);
+        return Config.TEST_USERS_USERNAME_PREFIX + randomHash().substring(0, 8);
     }
 
     /**
@@ -155,8 +159,8 @@ public class Config {
      */
     public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
-        List<UserGet> users = userApi.getAllUsers(null,null,null,null,null,
-                null,null,null,null,null,null,null);
+        List<UserGet> users = userApi.getAllUsers(null, null, null, null, null,
+            null, null, null, null, null, null, null);
         for (UserGet user : users) {
             if (user.getIdentity().getCommonName().startsWith(TEST_USERS_COMMONNAME_PREFIX))
                 userApi.deleteUser(user.getId());
@@ -169,7 +173,8 @@ public class Config {
      * @param userApi User API to use to create the user
      * @return a user
      */
-    public static UserGet createTestUser(UserApi userApi, UserRoleEnum userRoleEnum, UserModeEnum userModeEnum) throws ApiException {
+    public static UserGet createTestUser(UserApi userApi, UserRoleEnum userRoleEnum, UserModeEnum userModeEnum)
+        throws ApiException {
         UserPost userPost = new UserPost();
         String USERNAME = randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
