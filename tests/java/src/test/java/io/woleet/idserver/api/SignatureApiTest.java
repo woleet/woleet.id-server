@@ -466,7 +466,7 @@ public class SignatureApiTest {
         String problematicString = "@&é\"'(§è!çà)-^$ù`,;:=#°_¨*%£?./+";
 
         FullIdentity testFullIdentity = new FullIdentity();
-        testFullIdentity.setCommonName("CN" + problematicString);
+        testFullIdentity.setCommonName(Config.TEST_USERS_COMMONNAME_PREFIX + problematicString);
         testFullIdentity.setOrganization("O" + problematicString);
         testFullIdentity.setOrganizationalUnit("OU" + problematicString);
         testFullIdentity.setLocality("L" + problematicString);
