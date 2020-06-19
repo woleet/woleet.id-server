@@ -134,11 +134,11 @@ public class SignatureResult {
   }
 
    /**
-   * Signature of &#x60;messageToSign&#x60; or &#x60;hashToSign&#x60; using the public key &#x60;pubKey&#x60;.
+   * Signature of &#x60;messageToSign&#x60; or &#x60;hashToSign&#x60; using the public key &#x60;pubKey&#x60;,&lt;br&gt; or signature of SHA256(&#x60;signedMessage&#x60; or &#x60;signedHash&#x60; + &#x60;signedIdentity&#x60; + &#x60;signedIssuerDomain&#x60;) if the identity of the signer and the domain of the identity issuer are included to the signed data. 
    * @return signature
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=", value = "Signature of `messageToSign` or `hashToSign` using the public key `pubKey`.")
+  @ApiModelProperty(example = "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=", value = "Signature of `messageToSign` or `hashToSign` using the public key `pubKey`,<br> or signature of SHA256(`signedMessage` or `signedHash` + `signedIdentity` + `signedIssuerDomain`) if the identity of the signer and the domain of the identity issuer are included to the signed data. ")
 
   public String getSignature() {
     return signature;

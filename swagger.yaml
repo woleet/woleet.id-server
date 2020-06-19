@@ -1595,7 +1595,10 @@ components:
           type: string
           format: base64
           example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
-          description: Signature of `messageToSign` or `hashToSign` using the public key `pubKey`.
+          description: >
+            Signature of `messageToSign` or `hashToSign` using the public key `pubKey`,<br>
+            or signature of SHA256(`signedMessage` or `signedHash` + `signedIdentity` + `signedIssuerDomain`)
+            if the identity of the signer and the domain of the identity issuer are included to the signed data.
         identityURL:
           $ref: '#/components/schemas/IdentityURL'
         signedIdentity:
