@@ -1778,7 +1778,8 @@ components:
           OU: Organization unit<br>
           L: Locality<br>
           C: Country<br>
-          EMAILADDRESS: Email address
+          EMAILADDRESS: Email address<br>
+        For information, you can pass these fields to the woleet API to create an anchor you'll just need to add a field "name".
       required: false
       schema:
         type: string
