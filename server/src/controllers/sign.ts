@@ -119,14 +119,15 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
   }
 
   // Prepare the data to be signed
-  let signedMessage = messageToSign || hashToSign;
-  let signedIdentity = '';
-  let signedIssuerDomain = '';
+  let signedData = messageToSign || hashToSign;
+  let signedIdentity = null;
+  let signedIssuerDomain = null;
 
   // If the identity must be included in the signed data
   if (identityToSign) {
 
     // Prepare the identity to be signed
+    signedIdentity = '';
     if (identityToSign === 'ALL') {
       identityToSign = 'CN,O,OU,L,C,EMAILADDRESS';
     }
@@ -167,6 +168,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     }
 
     // Prepare the issuer domain to be signed (extract it from the identity URL)
+    signedIssuerDomain = '';
     const sub = new URL(getServerConfig().identityURL).hostname.split('.');
     switch (sub.length) {
       case 0:
@@ -178,16 +180,16 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
         signedIssuerDomain = sub[sub.length - 2] + '.' + sub[sub.length - 1];
     }
 
-    // Prepare the message including the identity and issuer domain to sign
+    // Include the identity and issuer domain to the data to be signed
     const hash = crypto.createHash('sha256');
-    signedMessage = hash.update(signedMessage + signedIdentity + signedIssuerDomain).digest('hex');
+    signedData = hash.update(signedData + signedIdentity + signedIssuerDomain).digest('hex');
   }
 
   // If no derivation path is specified, sign using the key unmodified
   let signature: string;
   let publicKey: string;
   if (!path) {
-    signature = await signMessage(key, signedMessage);
+    signature = await signMessage(key, signedData);
     publicKey = key.get('publicKey');
   }
 
@@ -196,7 +198,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     const entropy = Buffer.from(key.get('mnemonicEntropy'), 'hex');
     const entropyIV = Buffer.from(key.get('mnemonicEntropyIV'), 'hex');
     const derivedKey = await secureModule.deriveKey(entropy, entropyIV, path);
-    signature = await secureModule.sign(derivedKey.privateKey, signedMessage, derivedKey.privateKeyIV);
+    signature = await secureModule.sign(derivedKey.privateKey, signedData, derivedKey.privateKeyIV);
     publicKey = derivedKey.publicKey;
   }
 

@@ -172,7 +172,7 @@ public class DiscoveryApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Successful operation. Send the user corresponding to the token. </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Successful operation. This case happend when this endpoint is called with an admin token. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> Successful operation. This case occurs when this endpoint is called with an admin token. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> User not found. </td><td>  -  </td></tr>
      </table>
@@ -224,7 +224,7 @@ public class DiscoveryApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Successful operation. Send the user corresponding to the token. </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Successful operation. This case happend when this endpoint is called with an admin token. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> Successful operation. This case occurs when this endpoint is called with an admin token. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> User not found. </td><td>  -  </td></tr>
      </table>
@@ -243,7 +243,7 @@ public class DiscoveryApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Successful operation. Send the user corresponding to the token. </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Successful operation. This case happend when this endpoint is called with an admin token. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> Successful operation. This case occurs when this endpoint is called with an admin token. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> User not found. </td><td>  -  </td></tr>
      </table>
@@ -264,7 +264,7 @@ public class DiscoveryApi {
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
         <tr><td> 200 </td><td> Successful operation. Send the user corresponding to the token. </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Successful operation. This case happend when this endpoint is called with an admin token. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> Successful operation. This case occurs when this endpoint is called with an admin token. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> User not found. </td><td>  -  </td></tr>
      </table>

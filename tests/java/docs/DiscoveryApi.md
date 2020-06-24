@@ -145,7 +145,7 @@ This endpoint does not need any parameter.
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Successful operation. Send the user corresponding to the token. |  -  |
-**204** | Successful operation. This case happend when this endpoint is called with an admin token. |  -  |
+**204** | Successful operation. This case occurs when this endpoint is called with an admin token. |  -  |
 **401** | Missing or invalid session cookie. |  -  |
 **404** | User not found. |  -  |
 

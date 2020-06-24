@@ -33,7 +33,7 @@ public class UserApiTest {
 
         UserApi userApi = new UserApi(Config.getAdminAuthApiClient());
 
-        // Create an e-signature user without an email
+        // Create an esign user without an email
         UserPost userESign;
         userESign = new UserPost();
         userESign.setMode(UserModeEnum.ESIGN);
@@ -53,10 +53,10 @@ public class UserApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-        // Check that we cannot create an e-signature user without an email
+        // Check that we cannot create an esign user without an email
         try {
             userApi.createUser(userESign);
-            fail("Should not be able to create a e-signature user without an email");
+            fail("Should not be able to create an esign user without an email");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());

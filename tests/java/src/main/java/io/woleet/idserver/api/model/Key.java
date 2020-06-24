@@ -176,11 +176,11 @@ public class Key {
   }
 
    /**
-   * Key expiration date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key has no expiration date. 
+   * Key expiration date (Unix ms timestamp).&lt;br&gt; Note that the field is not returned if the key has no expiration date. 
    * @return expiration
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "1569542400000", value = "Key expiration date (Unix ms timestamp). <br>Note that the field is not returned if the key has no expiration date. ")
+  @ApiModelProperty(example = "1569542400000", value = "Key expiration date (Unix ms timestamp).<br> Note that the field is not returned if the key has no expiration date. ")
 
   public Long getExpiration() {
     return expiration;
@@ -199,11 +199,11 @@ public class Key {
   }
 
    /**
-   * Key revocation date (Unix ms timestamp). &lt;br&gt;Note that the field is not returned if the key is not yet revoked. 
+   * Key revocation date (Unix ms timestamp).&lt;br&gt; Note that the field is not returned if the key is not yet revoked. 
    * @return revokedAt
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "1569542400000", value = "Key revocation date (Unix ms timestamp). <br>Note that the field is not returned if the key is not yet revoked. ")
+  @ApiModelProperty(example = "1569542400000", value = "Key revocation date (Unix ms timestamp).<br> Note that the field is not returned if the key is not yet revoked. ")
 
   public Long getRevokedAt() {
     return revokedAt;
