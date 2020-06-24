@@ -114,6 +114,15 @@ public class Config {
     }
 
     /**
+     * Compute the SHA256 hash of a string.
+     *
+     * @return the SHA256 hash of the provided string
+     */
+    public static String sha256(String data) {
+        return DigestUtils.sha256Hex(data);
+    }
+
+    /**
      * Create a new random user name.
      */
     public static String randomUsername() {

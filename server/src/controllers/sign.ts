@@ -118,70 +118,76 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     throw new ExpiredKeyError();
   }
 
-  let realHashToSign =  messageToSign || hashToSign;
-  let identity = '';
-  let issuerDomain = '';
+  // Prepare the data to be signed
+  let signedMessage = messageToSign || hashToSign;
+  let signedIdentity = '';
+  let signedIssuerDomain = '';
 
-  if (identityToSign ) {
+  // If the identity must be included in the signed data
+  if (identityToSign) {
+
+    // Prepare the identity to be signed
     if (identityToSign === 'ALL') {
       identityToSign = 'CN,O,OU,L,C,EMAILADDRESS';
     }
     const escapingRegex = /([=",;+])/mg;
     const tabIdentityToSign = identityToSign.split(',');
     if (user.get('x500CommonName') && tabIdentityToSign.includes('CN')) {
-      identity += 'CN=' + user.get('x500CommonName').replace(escapingRegex, '\\$1');
+      signedIdentity += 'CN=' + user.get('x500CommonName').replace(escapingRegex, '\\$1');
     }
     if (user.get('x500Organization') && tabIdentityToSign.includes('O')) {
-      if (identity) {
-        identity += ',';
+      if (signedIdentity) {
+        signedIdentity += ',';
       }
-      identity += 'O=' + user.get('x500Organization').replace(escapingRegex, '\\$1');
+      signedIdentity += 'O=' + user.get('x500Organization').replace(escapingRegex, '\\$1');
     }
     if (user.get('x500OrganizationalUnit') && tabIdentityToSign.includes('OU')) {
-      if (identity) {
-        identity += ',';
+      if (signedIdentity) {
+        signedIdentity += ',';
       }
-      identity += 'OU=' + user.get('x500OrganizationalUnit').replace(escapingRegex, '\\$1');
+      signedIdentity += 'OU=' + user.get('x500OrganizationalUnit').replace(escapingRegex, '\\$1');
     }
     if (user.get('x500Locality') && tabIdentityToSign.includes('L')) {
-      if (identity) {
-        identity += ',';
+      if (signedIdentity) {
+        signedIdentity += ',';
       }
-      identity += 'L=' + user.get('x500Locality').replace(escapingRegex, '\\$1');
+      signedIdentity += 'L=' + user.get('x500Locality').replace(escapingRegex, '\\$1');
     }
     if (user.get('x500Country') && tabIdentityToSign.includes('C')) {
-      if (identity) {
-        identity += ',';
+      if (signedIdentity) {
+        signedIdentity += ',';
       }
-      identity += 'C=' + user.get('x500Country').replace(escapingRegex, '\\$1');
+      signedIdentity += 'C=' + user.get('x500Country').replace(escapingRegex, '\\$1');
     }
     if (user.get('email') && tabIdentityToSign.includes('EMAILADDRESS')) {
-      if (identity) {
-        identity += ',';
+      if (signedIdentity) {
+        signedIdentity += ',';
       }
-      identity += 'EMAILADDRESS=' + user.get('email').replace(escapingRegex, '\\$1');
+      signedIdentity += 'EMAILADDRESS=' + user.get('email').replace(escapingRegex, '\\$1');
     }
 
+    // Prepare the issuer domain to be signed (extract it from the identity URL)
     const sub = new URL(getServerConfig().identityURL).hostname.split('.');
     switch (sub.length) {
       case 0:
         break;
       case 1:
-        issuerDomain = sub[0]; break;
+        signedIssuerDomain = sub[0];
+        break;
       default:
-        issuerDomain = sub[sub.length - 2] + '.' + sub[sub.length - 1];
+        signedIssuerDomain = sub[sub.length - 2] + '.' + sub[sub.length - 1];
     }
 
+    // Prepare the message including the identity and issuer domain to sign
     const hash = crypto.createHash('sha256');
-    realHashToSign = hash.update(realHashToSign + identity + issuerDomain).digest('hex');
+    signedMessage = hash.update(signedMessage + signedIdentity + signedIssuerDomain).digest('hex');
   }
-
 
   // If no derivation path is specified, sign using the key unmodified
   let signature: string;
   let publicKey: string;
   if (!path) {
-    signature = await signMessage(key, realHashToSign);
+    signature = await signMessage(key, signedMessage);
     publicKey = key.get('publicKey');
   }
 
@@ -190,7 +196,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     const entropy = Buffer.from(key.get('mnemonicEntropy'), 'hex');
     const entropyIV = Buffer.from(key.get('mnemonicEntropyIV'), 'hex');
     const derivedKey = await secureModule.deriveKey(entropy, entropyIV, path);
-    signature = await secureModule.sign(derivedKey.privateKey, realHashToSign, derivedKey.privateKeyIV);
+    signature = await secureModule.sign(derivedKey.privateKey, signedMessage, derivedKey.privateKeyIV);
     publicKey = derivedKey.publicKey;
   }
 
@@ -204,8 +210,8 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     signedHash: hashToSign,
     signedMessage: messageToSign,
     pubKey: publicKey,
-    signedIdentity: identity,
-    signedIssuerDomain: issuerDomain,
+    signedIdentity: signedIdentity,
+    signedIssuerDomain: signedIssuerDomain,
     signature
   };
 }
