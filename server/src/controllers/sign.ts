@@ -212,8 +212,8 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     signedHash: hashToSign,
     signedMessage: messageToSign,
     pubKey: publicKey,
-    signedIdentity: signedIdentity,
-    signedIssuerDomain: signedIssuerDomain,
+    signedIdentity,
+    signedIssuerDomain,
     signature
   };
 }

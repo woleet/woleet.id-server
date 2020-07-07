@@ -79,7 +79,29 @@ async function getSignature(ctx: Context) {
     data: { hash: signedHash, auth: ctx.token.type }
   });
 
-  ctx.body = { pubKey, signedMessage, signedHash, signature, identityURL, signedIdentity, signedIssuerDomain };
+  const body: {[k: string]: any} = {};
+  if (pubKey) {
+    body.pubKey = pubKey;
+  }
+  if (signedMessage) {
+    body.signedMessage = signedMessage;
+  }
+  if (signedHash) {
+    body.signedHash = signedHash;
+  }
+  if (signature) {
+    body.signature = signature;
+  }
+  if (identityURL) {
+    body.identityURL = identityURL;
+  }
+  if (signedIdentity) {
+    body.signedIdentity = signedIdentity;
+  }
+  if (signedIssuerDomain) {
+    body.signedIssuerDomain = signedIssuerDomain;
+  }
+  ctx.body = body;
 }
 
 /**
