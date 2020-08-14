@@ -1,0 +1,46 @@
+version: '3.4'
+
+services:
+  wid-client:
+    secrets:
+      - source: ssl-cert
+        target: /etc/nginx/ssl/certificate.crt
+      - source: ssl-key
+        target: /etc/nginx/ssl/certificate.key
+    deploy:
+      mode: replicated
+      replicas: ${WOLEET_ID_SERVER_CLIENT_REPLICAS:-2}
+      restart_policy:
+        condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-on-failure}"
+
+  wid-server:
+    secrets:
+      - source: encryption-secret
+        target: /etc/nginx/ssl/certificate.key
+    deploy:
+      mode: replicated
+      replicas: ${WOLEET_ID_SERVER_SERVER_REPLICAS:-2}
+      restart_policy:
+        condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-on-failure}"
+
+  redis:
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-on-failure}"
+
+
+secrets:
+  encryption-secret:
+    external: true
+  ssl-cert:
+    file: ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}
+  ssl-key:
+    file: ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}
+
+networks:
+  client-server:
+    driver: overlay
+  redis-server:
+    driver: overlay

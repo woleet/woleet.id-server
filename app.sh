@@ -12,13 +12,13 @@ SERVER_IMAGE="${WOLEET_ID_SERVER_REGISTRY:-wids}/server:${WOLEET_ID_SERVER_VERSI
 export WOLEET_ID_SERVER_API_VERSION="$(cat swagger.yaml | grep 'version' | grep -oE '([[:digit:]]+.?)+')"
 
 display_usage_app() {
-  echo "usage: $0 [start|stop|restart|build|push|check|logs|backup|restore|upgrade]"
+  echo "usage: $0 [start|stop|restart|build|push|check|logs|backup|restore|upgrade|ha-start|ha-stop|ha-restart]"
 }
 
-start() {
+start-local() {
   local old_server
   old_server=$(docker ps | grep "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-server_1" | cut -d' ' -f 1)
-  docker-compose --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" up -d
+  docker-compose -f docker-compose.yml -f docker-compose.local.yml --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" up -d
 
   # If WOLEET_ID_SERVER_ENCRYPTION_SECRET it not set, attaching to the server's container to enter it via CLI
   if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
@@ -35,6 +35,65 @@ start() {
     echo "No WOLEET_ID_SERVER_ENCRYPTION_SECRET environment set, attaching to container ${server}..."
     docker attach "$server" --detach-keys='ctrl-c'
   fi
+}
+
+start-ha() {
+  if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
+  then
+  echo "WOLEET_ID_SERVER_ENCRYPTION_SECRET is not defined, you will now be asked to create a secret"
+    create-secret-ha
+  else
+
+  fi
+
+  docker stack deploy -c docker-compose.yml -c docker-compose.ha.yml "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}"
+}
+
+stop-local() {
+  docker-compose -f docker-compose.yml -f docker-compose.local.yml --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" down
+}
+
+stop-ha() {
+  echo "Stopping ${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server} stack..."
+  until docker stack rm "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" 2>&1 | grep "Nothing"
+  do
+    echo "Waiting for stack to shutdown..."
+    sleep 1
+  done
+  echo "Stack successfully shutdown"
+}
+
+check-manager-node-ha() {
+  if ! docker node inspect --format '{{ .ManagerStatus.Leader }}' self > /dev/null 2>&1
+  then
+    echo "Node is not a manager, this script needs to be run on a manager node, exiting"
+    exit 1
+  fi
+}
+
+create-secret-ha() {
+  local secret
+
+  #prompt
+  local hash="$(echo "$secret" | cksum | cut -d' ' -f1)"
+  echo "$secret" | docker secret create --label hash=$hash encryption-secret -
+}
+
+update-secret-ha() {
+  if docker stack ps -q "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" > /dev/null 2>&1
+  then
+    echo "Please stop the ${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server} stack before running this command again"
+    echo "You can do it by doing: ./app.sh stop-ha"
+    exit 1
+  fi
+
+  delete-secret
+  create-secret
+  echo "Encryption secret has been updated, you can now (re)start Woleet,ID Server"
+}
+
+delete-secret() {
+  docker secret rm encryption-secret
 }
 
 backup() {
@@ -93,17 +152,30 @@ shift
 
 if [[ "$operation" == "start" ]]
 then
-  start
+  start-local
+elif [[ "$operation" == "ha-start" ]]
+then
+  check-manager-node-ha
+  start-ha
 elif [[ "$operation" == "logs" ]]
 then
-  docker-compose --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" logs -f --tail 50
+  docker-compose -f docker-compose.yml -f docker-compose.local.yml --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" logs -f --tail 50
 elif [[ "$operation" == "stop" ]]
 then
-  docker-compose --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" down
+  stop-local
+elif [[ "$operation" == "ha-stop" ]]
+then
+  check-manager-node-ha
+  stop-ha
 elif [[ "$operation" == "restart" ]]
 then
-  docker-compose --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" down
-  start
+  stop-local
+  start-local
+elif [[ "$operation" == "ha-restart" ]]
+then
+  check-manager-node-ha
+  stop-ha
+  start-ha
 elif [[ "$operation" == "push" ]]
 then
   docker push "$CLIENT_IMAGE"
