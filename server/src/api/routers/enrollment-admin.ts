@@ -59,7 +59,7 @@ router.post('/enrollment', validate.body('createEnrollment'), async function (ct
   // Register enrollment creation event
   event.register({
     type: 'enrollment.create',
-    authorizedUserId: ctx.session.user.get('id'),
+    authorizedUserId: ctx.session.userId,
     associatedTokenId: null,
     associatedUserId: created.userId,
     associatedKeyId: null,
@@ -82,7 +82,7 @@ router.put('/enrollment/:id', async function (ctx) {
 
   event.register({
     type: 'enrollment.edit',
-    authorizedUserId: ctx.session.user.get('id'),
+    authorizedUserId: ctx.session.userId,
     associatedTokenId: null,
     associatedUserId: updated.userId,
     associatedKeyId: null,
@@ -108,7 +108,7 @@ router.delete('/enrollment/:id', async function (ctx) {
 
   event.register({
     type: 'enrollment.delete',
-    authorizedUserId: ctx.session.user.get('id'),
+    authorizedUserId: ctx.session.userId,
     associatedTokenId: null,
     associatedUserId: deleted.userId,
     associatedKeyId: null,

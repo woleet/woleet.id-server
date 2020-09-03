@@ -72,6 +72,11 @@ export const db = {
   retryDelay: 5 * 1000
 };
 
+export const cacheConfig = {
+  host: getenv('REDIS_HOST', 'localhost'),
+  port: getenv('REDIS_PORT', 6379)
+};
+
 export const sessionSuffix = production ? '' : '-' + crypto.randomBytes(4).toString('hex');
 
 export const session = {

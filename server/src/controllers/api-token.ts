@@ -22,14 +22,14 @@ export async function createAPIToken(apiToken: ApiPostAPITokenObject): Promise<I
 }
 
 export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject,
-                                     user: InternalUserObject): Promise<InternalAPITokenObject> {
+                                     userId: string, userRole: UserRoleEnum): Promise<InternalAPITokenObject> {
   debug('Update apiToken', attrs);
 
   let apiToken = await APIToken.getById(id);
   if (!apiToken) {
     throw new NotFoundAPITokenError();
   }
-  if (user.role === 'user' && apiToken.get('userId') !== user.id) {
+  if (userRole === 'user' && apiToken.get('userId') !== userId) {
     throw new APITokenOwnerMismatchError();
   }
   apiToken = await APIToken.update(id, attrs);
@@ -61,13 +61,13 @@ export async function getAPITokensByUser(userId: string): Promise<InternalAPITok
   return apiTokens.map((apiToken) => apiToken.toJSON());
 }
 
-export async function deleteAPIToken(id: string, user: InternalUserObject): Promise<InternalAPITokenObject> {
+export async function deleteAPIToken(id: string, userId: string, userRole: UserRoleEnum): Promise<InternalAPITokenObject> {
 
   const apiToken = await APIToken.getById(id);
   if (!apiToken) {
     throw new NotFoundAPITokenError();
   }
-  if (user.role === 'user' && apiToken.get('userId') !== user.id) {
+  if (userRole === 'user' && apiToken.get('userId') !== userId) {
     throw new APITokenOwnerMismatchError();
   }
 

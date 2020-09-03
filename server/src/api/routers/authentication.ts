@@ -2,7 +2,7 @@ import { BadRequest, Unauthorized } from 'http-errors';
 import * as auth from 'basic-auth';
 import * as Router from 'koa-router';
 import { createSession, delSession } from '../../controllers/authentication';
-import { serializeUserDTO } from '../serialize/userDTO';
+import { getUserById } from '../../controllers/user';
 import { store as event } from '../../controllers/server-event';
 import { cookies, sessionSuffix } from '../../config';
 import { setProviderSession } from '../../controllers/oidc-provider';
@@ -45,7 +45,7 @@ router.get('/login', async function (ctx) {
   await setProviderSession(ctx, authorization.user.id);
 
   ctx.cookies.set('session' + sessionSuffix, authorization.token, cookies.options);
-  ctx.body = { user: serializeUserDTO(authorization.user) };
+  ctx.body = { user: await getUserById(ctx.session.userId) };
 });
 
 /**

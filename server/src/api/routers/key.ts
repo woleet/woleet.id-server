@@ -54,7 +54,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
 
   event.register({
     type: 'key.create',
-    authorizedUserId: ctx.session.user.get('id'),
+    authorizedUserId: ctx.session.userId,
     associatedTokenId: null,
     associatedUserId: null,
     associatedKeyId: created.id,
@@ -88,7 +88,7 @@ router.post('/user/:userId/extern-key', vuid, validate.body('createExternKey'), 
 
   event.register({
     type: 'key.create',
-    authorizedUserId: ctx.session.user.get('id'),
+    authorizedUserId: ctx.session.userId,
     associatedTokenId: null,
     associatedUserId: userId,
     associatedKeyId: created.id,
@@ -158,7 +158,7 @@ router.put('/key/:id', vkid, validate.body('updateKey'), async function (ctx) {
 
   event.register({
     type: 'key.edit',
-    authorizedUserId: ctx.session.user.get('id'),
+    authorizedUserId: ctx.session.userId,
     associatedTokenId: null,
     associatedUserId: null,
     associatedKeyId: key.id,
@@ -180,7 +180,7 @@ router.delete('/key/:id', vkid, async function (ctx) {
 
   event.register({
     type: 'key.delete',
-    authorizedUserId: ctx.session.user.get('id'),
+    authorizedUserId: ctx.session.userId,
     associatedTokenId: null,
     associatedUserId: null,
     associatedKeyId: key.id,

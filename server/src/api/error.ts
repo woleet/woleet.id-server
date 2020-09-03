@@ -46,7 +46,7 @@ const errorHandler: IMiddleware = async function (ctx, next) {
 
       event.register({
         type: 'error',
-        authorizedUserId: ctx.session && ctx.session.user && ctx.session.user.get('id'),
+        authorizedUserId: ctx.session && ctx.session.userId,
         associatedTokenId: null,
         associatedUserId: null,
         associatedKeyId: null,

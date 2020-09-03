@@ -5,7 +5,7 @@ import * as LRU from 'lru-cache';
 import { Cache } from 'lru-cache';
 import * as uuid from 'uuid/v4';
 import { randomBytes } from 'crypto';
-import { serializeUserDTO } from '../serialize/userDTO';
+import { getUserById } from '../../controllers/user';
 import * as log from 'loglevel';
 import { cookies, sessionSuffix } from '../../config';
 import { updateUser } from '../../controllers/user';
@@ -120,7 +120,7 @@ router.get('/callback', async function (ctx) {
 
   await setProviderSession(ctx, session.user.id);
 
-  return ctx.body = { user: serializeUserDTO(session.user) };
+  return ctx.body = { user: await getUserById(ctx.session.userId) };
 });
 
 export { router };

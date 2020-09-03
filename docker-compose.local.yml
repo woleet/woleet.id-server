@@ -12,6 +12,8 @@ services:
   wid-server:
     stdin_open: true
     tty: true
+    networks:
+      - postgres-server
     depends_on:
       - wid-postgres
     restart: "${WOLEET_ID_SERVER_RESTART_POLICY:-on-failure}"

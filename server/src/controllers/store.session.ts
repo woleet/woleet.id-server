@@ -1,8 +1,10 @@
-import * as LRU from 'lru-cache';
-import { Cache } from 'lru-cache';
 import * as uuid from 'uuid/v4';
+import * as Redis from 'ioredis';
+import * as log from 'loglevel';
 
 import { session as config } from '../config';
+import { cacheConfig as cacheConfig } from '../config';
+import { production } from '../config';
 
 import * as Debug from 'debug';
 
@@ -13,84 +15,72 @@ function exp() {
 }
 
 export class SessionStore {
-  cache: Cache<string, Session>;
-
-  // User-Sessions-Set (uss)
-  // Data structure to link a user to a set of active sessions
-  uss: Map<string, Set<Session>>;
+  cachePrefix = 'cache_';
+  ussPrefix = 'uss_';
+  redis: Redis;
 
   constructor() {
-    this.uss = new Map<string, Set<Session>>();
-    this.cache = new LRU({
-      maxAge: config.maxAge,
-      dispose: (sessionId, session) => {
-        debug('Cache disposing session', sessionId);
-        this._delSessionInUSS(session);
+      this.redis = new Redis(cacheConfig.port, cacheConfig.host);
+      if (!production) {
+        log.info('Flushing Redis as development mode is set');
+        this.redis.flushall().then(() => {
+          log.info('Flushing Redis done');
+        });
       }
-    });
   }
-
   async create(user: SequelizeUserObject): Promise<string> {
     const id = uuid();
     const userId = user.get('id');
-    const session = { id, user, exp: exp() };
+    const userRole = user.get('role');
+    const session = { id, exp: exp(), userId, userRole };
 
-    this.cache.set(id, session);
+    this.setSession(id, session);
 
-    if (this.uss.has(userId)) {
-      this.uss.get(userId).add(session);
-    } else {
-      const sessionSet = new Set<Session>();
-      sessionSet.add(session);
-      this.uss.set(userId, sessionSet);
-    }
+    let sessionSet = await this.getUSS(userId);
+
+    sessionSet.add(session);
+
+    await this.setUSS(userId, sessionSet);
 
     return id;
   }
 
   async get(sessionId: string): Promise<Session> {
-    const session = this.cache.get(sessionId);
+    const session = await this.getSession(sessionId);
 
     if (!session) {
       return null;
     }
 
     if (session.exp < +new Date) {
-      this.cache.del(sessionId);
+      this.delSession(sessionId);
       return null;
     }
 
     // Report expiration date;
     session.exp = exp();
-
+    this.setSession(sessionId, session);
     return session;
   }
 
   async del(sessionId: string): Promise<void> {
-    const session = this.cache.get(sessionId);
-
-    if (!session) {
-      return;
-    }
+    const session = await this.getSession(sessionId);
 
     debug('Deleting session', sessionId);
 
-    this.cache.del(sessionId);
+    this.delSession(sessionId);
 
     this._delSessionInUSS(session);
   }
 
-  private _delSessionInUSS(session: Session) {
-
-    const userId = session.user.get('id');
-
-    const sessionSet = this.uss.get(userId);
-
+  private async _delSessionInUSS(session: Session) {
+    const sessionSet = await this.getUSS(session.userId);
     sessionSet.delete(session);
+    this.setUSS(session.userId, sessionSet);
   }
 
   async delSessionsWithUser(userId: string): Promise<void> {
-    const sessionSet = this.uss.get(userId);
+    const sessionSet = await this.getUSS(userId);
 
     debug('Deleting sessions of user', userId);
 
@@ -98,9 +88,46 @@ export class SessionStore {
       return;
     }
 
-    sessionSet.forEach(s => this.cache.del(s.id));
+    sessionSet.forEach(session => {
+      this.delSession(session.id);
+    });
 
     sessionSet.clear();
+    this.setUSS(userId, sessionSet);
+  }
+
+  async getSession(id: string): Promise<Session> {
+    const sessionJSON = await this.redis.get(this.cachePrefix + id);
+    let session: Session;
+    if (sessionJSON) {
+      session = JSON.parse(sessionJSON);
+    }
+    return session;
+  }
+
+  async getUSS(userId: string): Promise<Set<Session>> {
+    const sessionSetJSON = await this.redis.get(this.ussPrefix + userId);
+    let sessionSet: Set<Session> = new Set<Session>();
+    if (sessionSetJSON) {
+      sessionSet = JSON.parse(sessionSetJSON);
+    }
+    return sessionSet;
+  }
+
+  async setSession(id: string, session: Session) {
+    this.redis.set(this.cachePrefix + id, JSON.stringify(session));
+  }
+
+  async setUSS(userId: string, sessionSet: Set<Session>) {
+    this.redis.set(this.ussPrefix + userId, JSON.stringify(sessionSet));
+  }
+
+  async delSession(id: string) {
+    this.redis.del(this.cachePrefix + id);
+  }
+
+  async delUSS(userId: string) {
+    this.redis.del(this.ussPrefix + userId);
   }
 
 }

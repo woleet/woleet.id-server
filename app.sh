@@ -37,12 +37,13 @@ start-local() {
   fi
 }
 
+#TODO
 start-ha() {
   if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
   then
-  echo "WOLEET_ID_SERVER_ENCRYPTION_SECRET is not defined, you will now be asked to create a secret"
+    echo "WOLEET_ID_SERVER_ENCRYPTION_SECRET is not defined, you will now be asked to create a secret"
     create-secret-ha
-  else
+  #else
 
   fi
 
@@ -71,10 +72,22 @@ check-manager-node-ha() {
   fi
 }
 
+# TODO
 create-secret-ha() {
+  if [[ -n "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
+  then
+    echo "You don't need to create a secret as WOLEET_ID_SERVER_ENCRYPTION_SECRET is defined"
+    exit 1
+  fi
   local secret
+  local confirm-secret
 
-  #prompt
+  stty -echo
+  printf "Encryption secret: "
+  read secret
+  stty echo
+  printf "\n"
+
   local hash="$(echo "$secret" | cksum | cut -d' ' -f1)"
   echo "$secret" | docker secret create --label hash=$hash encryption-secret -
 }

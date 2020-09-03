@@ -58,7 +58,7 @@ export async function bearerAuth(ctx: Context, next) {
 }
 
 export async function user(ctx: Context, next) {
-  if (!(ctx.session && ctx.session.user)) {
+  if (!(ctx.session && ctx.session.userId)) {
     throw new Unauthorized();
   }
 
@@ -66,11 +66,11 @@ export async function user(ctx: Context, next) {
 }
 
 export async function admin(ctx: Context, next) {
-  if (!(ctx.session && ctx.session.user)) {
+  if (!(ctx.session && ctx.session.userId)) {
     throw new Unauthorized();
   }
 
-  if (ctx.session.user.getDataValue('role') !== 'admin') {
+  if (ctx.session.userRole !== 'admin') {
     throw new Forbidden('Invalid user level');
   }
 
@@ -78,11 +78,11 @@ export async function admin(ctx: Context, next) {
 }
 
 export async function manager(ctx: Context, next) {
-  if (!(ctx.session && ctx.session.user)) {
+  if (!(ctx.session && ctx.session.userId)) {
     throw new Unauthorized();
   }
 
-  if (ctx.session.user.getDataValue('role') !== 'manager' && ctx.session.user.getDataValue('role') !== 'admin') {
+  if (ctx.session.userRole !== 'manager' && ctx.session.userRole !== 'admin') {
     throw new Forbidden('Invalid user level');
   }
 

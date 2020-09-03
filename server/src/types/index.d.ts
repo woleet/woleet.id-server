@@ -209,7 +209,8 @@ declare global {
   interface Session {
     id: string;
     exp: number;
-    user: SequelizeUserObject;
+    userId: string;
+    userRole: UserRoleEnum;
     oauth?: Object;
   }
 

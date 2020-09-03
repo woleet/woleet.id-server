@@ -62,7 +62,7 @@ export function build(): Koa {
   router.get('/auth', async (ctx, next) => {
     const config = getServerConfig();
 
-    debug('pre auth', ctx['oidc'], `session=${ctx.session && ctx.session.id}`, `user=${ctx.session && ctx.session.user.get('id')}`);
+    debug('pre auth', ctx['oidc'], `session=${ctx.session && ctx.session.id}`, `user=${ctx.session && ctx.session.userId}`);
 
     if (!ctx.session) {
       // #login-precondition
