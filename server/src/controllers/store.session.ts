@@ -111,7 +111,6 @@ export class SessionStore {
     if (ussArrayJSON) {
       ussArray = JSON.parse(ussArrayJSON);
     }
-    console.log(ussArray);
     return ussArray;
   }
 

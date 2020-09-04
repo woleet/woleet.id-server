@@ -11,8 +11,6 @@ export async function session(ctx: Context, next) {
   ctx.sessions = sessionStore;
   const sid = ctx.cookies.get('session' + sessionSuffix);
   ctx.session = (sid && (await sessionStore.get(sid))) || null;
-  log.warn(sid);
-  log.warn(ctx.session);
   return next();
 }
 
