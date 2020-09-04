@@ -3,6 +3,7 @@ import * as send from 'koa-send';
 import * as path from 'path';
 import { getServerConfig } from '../../controllers/server-config';
 import { getUserById } from '../../controllers/user';
+import { serializeUserDTO } from '../serialize/userDTO';
 
 /**
  * AppConfig
@@ -11,7 +12,7 @@ const router = new Router();
 const serverBase = path.join(__dirname, '../../..');
 
 router.get('/app-config', async function (ctx) {
-  const user = ctx.session && ctx.session.userId && await getUserById(ctx.session.userId) || null;
+  const user = ctx.session && ctx.session.userId && serializeUserDTO(await getUserById(ctx.session.userId)) || null;
   const hasSession = !!(ctx.session && ctx.session.userId);
   const {
     enableOpenIDConnect, OIDCPProviderURL, logoURL,

@@ -6,6 +6,7 @@ import { getUserById } from '../../controllers/user';
 import { store as event } from '../../controllers/server-event';
 import { cookies, sessionSuffix } from '../../config';
 import { setProviderSession } from '../../controllers/oidc-provider';
+import { serializeUserDTO } from '../serialize/userDTO';
 
 /**
  * Authentication
@@ -45,7 +46,7 @@ router.get('/login', async function (ctx) {
   await setProviderSession(ctx, authorization.user.id);
 
   ctx.cookies.set('session' + sessionSuffix, authorization.token, cookies.options);
-  ctx.body = { user: await getUserById(ctx.session.userId) };
+  ctx.body = { user: serializeUserDTO(authorization.user) };
 });
 
 /**

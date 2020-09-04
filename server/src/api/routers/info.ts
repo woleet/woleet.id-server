@@ -1,5 +1,6 @@
 import * as Router from 'koa-router';
 import { getUserById } from '../../controllers/user';
+import { serializeUserDTO } from '../serialize/userDTO';
 
 /**
  * Info
@@ -16,7 +17,7 @@ const router = new Router();
  *  operationId: getUserInfo
  */
 router.get('/info', async function (ctx) {
-  ctx.body = await getUserById(ctx.session.userId);
+  ctx.body = serializeUserDTO(await getUserById(ctx.session.userId));
 });
 
 export { router };

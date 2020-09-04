@@ -5,11 +5,14 @@ import { store as oauthAccessTokenStore } from '../controllers/store.oauth-token
 import { isInitialized } from '../controllers/oidc-provider';
 import { Context } from 'koa';
 import { sessionSuffix } from '../config';
+import * as log from 'loglevel';
 
 export async function session(ctx: Context, next) {
   ctx.sessions = sessionStore;
   const sid = ctx.cookies.get('session' + sessionSuffix);
   ctx.session = (sid && (await sessionStore.get(sid))) || null;
+  log.warn(sid);
+  log.warn(ctx.session);
   return next();
 }
 

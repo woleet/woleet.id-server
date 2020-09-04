@@ -10,6 +10,7 @@ import * as log from 'loglevel';
 import { cookies, sessionSuffix } from '../../config';
 import { updateUser } from '../../controllers/user';
 import { setProviderSession } from '../../controllers/oidc-provider';
+import { serializeUserDTO } from '../serialize/userDTO';
 
 const router = new Router({ prefix: '/oauth' });
 
@@ -120,7 +121,7 @@ router.get('/callback', async function (ctx) {
 
   await setProviderSession(ctx, session.user.id);
 
-  return ctx.body = { user: await getUserById(ctx.session.userId) };
+  return ctx.body = { user: serializeUserDTO(await getUserById(ctx.session.userId)) };
 });
 
 export { router };

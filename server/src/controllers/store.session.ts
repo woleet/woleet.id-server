@@ -28,6 +28,7 @@ export class SessionStore {
         });
       }
   }
+
   async create(user: SequelizeUserObject): Promise<string> {
     const id = uuid();
     const userId = user.get('id');
@@ -36,11 +37,9 @@ export class SessionStore {
 
     this.setSession(id, session);
 
-    let sessionSet = await this.getUSS(userId);
-
-    sessionSet.add(session);
-
-    await this.setUSS(userId, sessionSet);
+    const ussArray = await this.getUSS(userId);
+    ussArray.push(session.id);
+    await this.setUSS(userId, ussArray);
 
     return id;
   }
@@ -53,7 +52,7 @@ export class SessionStore {
     }
 
     if (session.exp < +new Date) {
-      this.delSession(sessionId);
+      this.del(sessionId);
       return null;
     }
 
@@ -69,31 +68,32 @@ export class SessionStore {
     debug('Deleting session', sessionId);
 
     this.delSession(sessionId);
-
     this._delSessionInUSS(session);
   }
 
   private async _delSessionInUSS(session: Session) {
-    const sessionSet = await this.getUSS(session.userId);
-    sessionSet.delete(session);
-    this.setUSS(session.userId, sessionSet);
+    const ussArray = await this.getUSS(session.userId);
+    const ussIndexToDelete = ussArray.findIndex(elem => (elem === session.id));
+    if (ussIndexToDelete !== -1) {
+      ussArray.splice(ussIndexToDelete, 1);
+      this.setUSS(session.userId, ussArray);
+    }
   }
 
   async delSessionsWithUser(userId: string): Promise<void> {
-    const sessionSet = await this.getUSS(userId);
+    const ussArray = await this.getUSS(userId);
 
     debug('Deleting sessions of user', userId);
 
-    if (!sessionSet) {
+    if (!ussArray) {
       return;
     }
 
-    sessionSet.forEach(session => {
-      this.delSession(session.id);
+    ussArray.forEach(sessionId => {
+      this.delSession(sessionId);
     });
 
-    sessionSet.clear();
-    this.setUSS(userId, sessionSet);
+    this.setUSS(userId, new Array());
   }
 
   async getSession(id: string): Promise<Session> {
@@ -105,21 +105,22 @@ export class SessionStore {
     return session;
   }
 
-  async getUSS(userId: string): Promise<Set<Session>> {
-    const sessionSetJSON = await this.redis.get(this.ussPrefix + userId);
-    let sessionSet: Set<Session> = new Set<Session>();
-    if (sessionSetJSON) {
-      sessionSet = JSON.parse(sessionSetJSON);
+  async getUSS(userId: string): Promise<Array<string>> {
+    const ussArrayJSON = await this.redis.get(this.ussPrefix + userId);
+    let ussArray = [];
+    if (ussArrayJSON) {
+      ussArray = JSON.parse(ussArrayJSON);
     }
-    return sessionSet;
+    console.log(ussArray);
+    return ussArray;
   }
 
   async setSession(id: string, session: Session) {
     this.redis.set(this.cachePrefix + id, JSON.stringify(session));
   }
 
-  async setUSS(userId: string, sessionSet: Set<Session>) {
-    this.redis.set(this.ussPrefix + userId, JSON.stringify(sessionSet));
+  async setUSS(userId: string, ussArray: Array<string>) {
+    this.redis.set(this.ussPrefix + userId, JSON.stringify(ussArray));
   }
 
   async delSession(id: string) {
@@ -129,7 +130,6 @@ export class SessionStore {
   async delUSS(userId: string) {
     this.redis.del(this.ussPrefix + userId);
   }
-
 }
 
 export const store = new SessionStore;
