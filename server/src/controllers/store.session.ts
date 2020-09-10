@@ -1,5 +1,6 @@
 import * as uuid from 'uuid/v4';
 import * as Redis from 'ioredis';
+import * as NodeCache from 'node-cache';
 import * as log from 'loglevel';
 
 import { session as config } from '../config';
@@ -10,13 +11,7 @@ import * as Debug from 'debug';
 
 const debug = Debug('id:sessions');
 
-function exp() {
-  return config.expireAfter + (+new Date);
-}
-
 export class SessionStore {
-  cachePrefix = 'cache_';
-  ussPrefix = 'uss_';
   redis: Redis;
 
   constructor() {
@@ -30,16 +25,16 @@ export class SessionStore {
   }
 
   async create(user: SequelizeUserObject): Promise<string> {
-    const id = uuid();
     const userId = user.get('id');
     const userRole = user.get('role');
-    const session = { id, exp: exp(), userId, userRole };
+
+    // sessionId is the userId concatenated with % and a random string
+    const id = userId + '%' + uuid();
+
+    // userId is not set in the session object it will be infered from the sessionId.
+    const session = { userRole };
 
     this.setSession(id, session);
-
-    const ussArray = await this.getUSS(userId);
-    ussArray.push(session.id);
-    await this.setUSS(userId, ussArray);
 
     return id;
   }
@@ -51,53 +46,38 @@ export class SessionStore {
       return null;
     }
 
-    if (session.exp < +new Date) {
+    // Report expiration date;
+    this.setSession(sessionId, session);
+
+    // Infers userId from sessionId and delete session if none is found
+    session.userId = sessionId.split('%')[0];
+    if (!session.userId) {
       this.del(sessionId);
       return null;
     }
-
-    // Report expiration date;
-    session.exp = exp();
-    this.setSession(sessionId, session);
+    session.id = sessionId;
     return session;
   }
 
   async del(sessionId: string): Promise<void> {
-    const session = await this.getSession(sessionId);
-
-    debug('Deleting session', sessionId);
-
-    this.delSession(sessionId);
-    this._delSessionInUSS(session);
-  }
-
-  private async _delSessionInUSS(session: Session) {
-    const ussArray = await this.getUSS(session.userId);
-    const ussIndexToDelete = ussArray.findIndex(elem => (elem === session.id));
-    if (ussIndexToDelete !== -1) {
-      ussArray.splice(ussIndexToDelete, 1);
-      this.setUSS(session.userId, ussArray);
-    }
+    await this.delSession(sessionId);
   }
 
   async delSessionsWithUser(userId: string): Promise<void> {
-    const ussArray = await this.getUSS(userId);
-
     debug('Deleting sessions of user', userId);
-
-    if (!ussArray) {
-      return;
-    }
-
-    ussArray.forEach(sessionId => {
-      this.delSession(sessionId);
+    const stream = this.redis.scanStream({match: `${userId}+*`});
+    stream.on('data', (resultKeys) => {
+      resultKeys.array.forEach(element => {
+        this.delSession(element);
+      });
     });
-
-    this.setUSS(userId, new Array());
+    return new Promise (function(resolve) {
+      stream.on('end', () => resolve());
+    });
   }
 
-  async getSession(id: string): Promise<Session> {
-    const sessionJSON = await this.redis.get(this.cachePrefix + id);
+  async getSession(sessionId: string): Promise<Session> {
+    const sessionJSON = await this.redis.get(sessionId);
     let session: Session;
     if (sessionJSON) {
       session = JSON.parse(sessionJSON);
@@ -105,29 +85,12 @@ export class SessionStore {
     return session;
   }
 
-  async getUSS(userId: string): Promise<Array<string>> {
-    const ussArrayJSON = await this.redis.get(this.ussPrefix + userId);
-    let ussArray = [];
-    if (ussArrayJSON) {
-      ussArray = JSON.parse(ussArrayJSON);
-    }
-    return ussArray;
+  async setSession(sessionId: string, session: Session) {
+    await this.redis.setex(sessionId, config.expireAfter / 1000, JSON.stringify(session));
   }
 
-  async setSession(id: string, session: Session) {
-    this.redis.set(this.cachePrefix + id, JSON.stringify(session));
-  }
-
-  async setUSS(userId: string, ussArray: Array<string>) {
-    this.redis.set(this.ussPrefix + userId, JSON.stringify(ussArray));
-  }
-
-  async delSession(id: string) {
-    this.redis.del(this.cachePrefix + id);
-  }
-
-  async delUSS(userId: string) {
-    this.redis.del(this.ussPrefix + userId);
+  async delSession(sessionId: string) {
+    await this.redis.del(sessionId);
   }
 }
 

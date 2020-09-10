@@ -207,10 +207,9 @@ declare global {
   /* Authorization */
 
   interface Session {
-    id: string;
-    exp: number;
-    userId: string;
     userRole: UserRoleEnum;
+    id?: string;
+    userId?: string;
     oauth?: Object;
   }
 
