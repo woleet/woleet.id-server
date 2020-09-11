@@ -6,22 +6,37 @@ import * as log from 'loglevel';
 import { session as config } from '../config';
 import { cacheConfig as cacheConfig } from '../config';
 import { production } from '../config';
+import { exit } from '../exit';
 
 import * as Debug from 'debug';
 
 const debug = Debug('id:sessions');
 
 export class SessionStore {
-  redis: Redis;
+  redis: Redis = undefined;
+  localCache: NodeCache = undefined;
 
   constructor() {
-      this.redis = new Redis(cacheConfig.port, cacheConfig.host);
-      if (!production) {
-        log.info('Flushing Redis as development mode is set');
-        this.redis.flushall().then(() => {
-          log.info('Flushing Redis done');
-        });
+    switch (cacheConfig.type) {
+      case 'local': {
+        this.localCache = new NodeCache();
+        break;
       }
+      case 'redis': {
+        this.redis = new Redis(cacheConfig.port, cacheConfig.host);
+        if (!production) {
+          log.info('Flushing Redis as development mode is set');
+          this.redis.flushall().then(() => {
+            log.info('Flushing Redis done');
+          });
+        }
+        break;
+      }
+      default: {
+        exit(`Invalid cache type: ${cacheConfig.type}`, '');
+        break;
+      }
+    }
   }
 
   async create(user: SequelizeUserObject): Promise<string> {
@@ -65,19 +80,32 @@ export class SessionStore {
 
   async delSessionsWithUser(userId: string): Promise<void> {
     debug('Deleting sessions of user', userId);
-    const stream = this.redis.scanStream({match: `${userId}+*`});
-    stream.on('data', (resultKeys) => {
-      resultKeys.array.forEach(element => {
-        this.delSession(element);
+    if (this.localCache !== undefined) {
+      this.localCache.keys().forEach(key => {
+        if (key.startsWith(userId)) {
+          this.delSession(userId);
+        }
       });
-    });
-    return new Promise (function(resolve) {
-      stream.on('end', () => resolve());
-    });
+    } else if (this.redis !== undefined) {
+      const stream = this.redis.scanStream({match: `${userId}+*`});
+      stream.on('data', (resultKeys) => {
+        resultKeys.array.forEach(element => {
+          this.delSession(element);
+        });
+      });
+      return new Promise (function(resolve) {
+        stream.on('end', () => resolve());
+      });
+    }
   }
 
   async getSession(sessionId: string): Promise<Session> {
-    const sessionJSON = await this.redis.get(sessionId);
+    let sessionJSON;
+    if (this.localCache !== undefined) {
+      sessionJSON = this.localCache.get(sessionId);
+    } else if (this.redis !== undefined) {
+      sessionJSON = await this.redis.get(sessionId);
+    }
     let session: Session;
     if (sessionJSON) {
       session = JSON.parse(sessionJSON);
@@ -86,11 +114,19 @@ export class SessionStore {
   }
 
   async setSession(sessionId: string, session: Session) {
-    await this.redis.setex(sessionId, config.expireAfter / 1000, JSON.stringify(session));
+    if (this.localCache !== undefined) {
+      this.localCache.set(sessionId, JSON.stringify(session), config.expireAfter / 1000);
+    } else if (this.redis !== undefined) {
+      await this.redis.setex(sessionId, config.expireAfter / 1000, JSON.stringify(session));
+    }
   }
 
   async delSession(sessionId: string) {
-    await this.redis.del(sessionId);
+    if (this.localCache !== undefined) {
+      this.localCache.del(sessionId);
+    } else if (this.redis !== undefined) {
+      await this.redis.del(sessionId);
+    }
   }
 }
 

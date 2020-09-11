@@ -73,6 +73,7 @@ export const db = {
 };
 
 export const cacheConfig = {
+  type: getenv('CACHE_TYPE', 'local'),
   host: getenv('REDIS_HOST', 'localhost'),
   port: getenv('REDIS_PORT', 6379)
 };
