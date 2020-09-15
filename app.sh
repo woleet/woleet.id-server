@@ -267,9 +267,6 @@ then
     echo "if not, you will always use the 'latest' docker image available on your computer"
     exit 1
   fi
-elif [[ "$operation" == "test" ]]
-then
-  create-secret-ha "$@"
 else
   display_usage_app
   exit 1
