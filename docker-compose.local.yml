@@ -12,6 +12,8 @@ services:
   wid-server:
     stdin_open: true
     tty: true
+    environment:
+      WOLEET_ID_SERVER_CACHE_TYPE: ${WOLEET_ID_SERVER_CACHE_TYPE:-local}
     networks:
       - postgres-server
     depends_on:
@@ -39,6 +41,4 @@ networks:
   client-server:
     driver: bridge
   postgres-server:
-    driver: bridge
-  redis-server:
     driver: bridge

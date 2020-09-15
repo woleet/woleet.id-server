@@ -7,6 +7,7 @@ import * as log from 'loglevel';
 import * as crypto from 'crypto';
 import * as assert from 'assert';
 import * as chalk from 'chalk';
+import * as fs from 'fs';
 
 import { SecureModule } from '@woleet/woleet-secure-module';
 
@@ -28,6 +29,12 @@ log.methodFactory = function (methodName, logLevel, loggerName) {
 const prefix = 'WOLEET_ID_SERVER_';
 
 export const secretEnvVariableName = prefix + 'ENCRYPTION_SECRET';
+const dockerSwarmSecretFile = 'encryption_secret';
+const dockerSwarmSecretFilePath = path.join(__dirname, dockerSwarmSecretFile);
+
+if (fs.existsSync(dockerSwarmSecretFilePath)) {
+  process.env[secretEnvVariableName] = fs.readFileSync(dockerSwarmSecretFilePath, 'utf8').split(/[\r\n]+/)[0];
+}
 
 function getenv<T = string>(name: string, fallback: T = null): T {
   const value = process.env[prefix + name];
@@ -77,8 +84,6 @@ export const cacheConfig = {
   host: getenv('REDIS_HOST', 'localhost'),
   port: getenv('REDIS_PORT', 6379)
 };
-
-export const sessionSuffix = production ? '' : '-' + crypto.randomBytes(4).toString('hex');
 
 export const session = {
   expireAfter: 30 * 60 * 1000,

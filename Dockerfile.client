@@ -18,5 +18,7 @@ RUN cd /build/client && \
 # https://docs.docker.com/develop/develop-images/multistage-build/
 FROM nginx:mainline-alpine
 
+RUN apk add --no-cache curl
+
 COPY --from=0 /build/client/dist/client /usr/share/nginx/html
 COPY --from=0 /build/client/nginx /etc/nginx

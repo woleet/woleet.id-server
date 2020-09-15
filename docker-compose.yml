@@ -44,13 +44,3 @@ services:
       options:
         max-size: "20m"
         max-file: "3"
-
-  redis:
-    image: redis:6.0-alpine
-    networks:
-      - redis-server
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "20m"
-        max-file: "3"

@@ -7,7 +7,7 @@ import * as uuid from 'uuid/v4';
 import { randomBytes } from 'crypto';
 import { getUserById } from '../../controllers/user';
 import * as log from 'loglevel';
-import { cookies, sessionSuffix } from '../../config';
+import { cookies } from '../../config';
 import { updateUser } from '../../controllers/user';
 import { setProviderSession } from '../../controllers/oidc-provider';
 import { serializeUserDTO } from '../serialize/userDTO';
@@ -38,7 +38,7 @@ router.get('/login', async function (ctx) {
   });
 
   lru.set(oauth, { state, nonce });
-  ctx.cookies.set('oauth' + sessionSuffix, oauth, cookies.options);
+  ctx.cookies.set('oauth', oauth, cookies.options);
   ctx.redirect(url);
 });
 
@@ -52,13 +52,13 @@ router.get('/callback', async function (ctx) {
     throw new ServiceUnavailable();
   }
 
-  const oauth = ctx.cookies.get('oauth' + sessionSuffix);
+  const oauth = ctx.cookies.get('oauth');
 
   if (!oauth) {
     throw new BadRequest('Missing OAuth session');
   }
 
-  ctx.cookies.set('oauth' + sessionSuffix, null);
+  ctx.cookies.set('oauth', null);
   const oauthSession = lru.get(oauth);
 
   if (!oauthSession) {
@@ -102,7 +102,7 @@ router.get('/callback', async function (ctx) {
   let session = await createOAuthSession(info.email);
 
   if (session) {
-    ctx.cookies.set('session' + sessionSuffix, session.token, cookies.options);
+    ctx.cookies.set('session', session.token, cookies.options);
 
     if (session.user.x500CommonName !== info.name) {
       const user = session.user;
@@ -116,7 +116,7 @@ router.get('/callback', async function (ctx) {
       createDefaultKey: true,
       sendKeyEnrollmentMail: false
     });
-    ctx.cookies.set('session' + sessionSuffix, session.token, cookies.options);
+    ctx.cookies.set('session', session.token, cookies.options);
   }
 
   await setProviderSession(ctx, session.user.id);

@@ -37,17 +37,14 @@ start-local() {
   fi
 }
 
-#TODO
 start-ha() {
-  if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
+  check-manager-node-ha
+
+  if ! docker secret inspect encryption-secret > /dev/null 2>&1
   then
-    echo "WOLEET_ID_SERVER_ENCRYPTION_SECRET is not defined, you will now be asked to create a secret"
     create-secret-ha
-  #else
-
   fi
-
-  docker stack deploy -c docker-compose.yml -c docker-compose.ha.yml "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}"
+  docker stack deploy --prune -c docker-compose.yml -c docker-compose.ha.yml "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}"
 }
 
 stop-local() {
@@ -65,31 +62,52 @@ stop-ha() {
 }
 
 check-manager-node-ha() {
-  if ! docker node inspect --format '{{ .ManagerStatus.Leader }}' self > /dev/null 2>&1
+  if [[ "$(docker info -f '{{.Swarm.LocalNodeState}}')" != "active" ]]
+  then
+    echo "This node is not in an active swarm cluster, exiting"
+    exit 1
+  fi
+
+  if [[ "$(docker info --format '{{.Swarm.ControlAvailable}}')" != "true" ]]
   then
     echo "Node is not a manager, this script needs to be run on a manager node, exiting"
     exit 1
   fi
 }
 
-# TODO
 create-secret-ha() {
+  local secret
+  local confirmSecret
   if [[ -n "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
   then
-    echo "You don't need to create a secret as WOLEET_ID_SERVER_ENCRYPTION_SECRET is defined"
-    exit 1
-  fi
-  local secret
-  local confirm-secret
+    echo "Secret is created from WOLEET_ID_SERVER_ENCRYPTION_SECRET"
+    secret="${WOLEET_ID_SERVER_ENCRYPTION_SECRET}"
+  else
+    echo "WOLEET_ID_SERVER_ENCRYPTION_SECRET is not defined, you will now be asked to create a secret"
+    while [[ -z "${secret}" ]] || [[ -z "${confirmSecret}" ]] || [[ "${secret}" != "${confirmSecret}" ]]
+    do
+      stty -echo
+      printf "Encryption secret: "
+      read -r secret
+      printf "\n"
+      printf "Confirm secret: "
+      read -r confirmSecret
+      stty echo
 
-  stty -echo
-  printf "Encryption secret: "
-  read secret
-  stty echo
-  printf "\n"
+      if [[ "${secret}" != "${confirmSecret}" ]]
+      then
+        echo "Inputs are differents, please reconfirm secret."
+      elif [[ -z "${secret}" ]] || [[ -z "${confirmSecret}" ]]
+      then
+        echo "Secret can't be void, please enter a new one."
+      else
+        echo ""
+      fi
+    done
+  fi
 
   local hash="$(echo "$secret" | cksum | cut -d' ' -f1)"
-  echo "$secret" | docker secret create --label hash=$hash encryption-secret -
+  echo "$secret" | docker secret create --label hash="$hash" encryption-secret -
 }
 
 update-secret-ha() {
@@ -102,7 +120,7 @@ update-secret-ha() {
 
   delete-secret
   create-secret
-  echo "Encryption secret has been updated, you can now (re)start Woleet,ID Server"
+  echo "Encryption secret has been updated, you can now (re)start Woleet.ID Server"
 }
 
 delete-secret() {
@@ -249,7 +267,9 @@ then
     echo "if not, you will always use the 'latest' docker image available on your computer"
     exit 1
   fi
-
+elif [[ "$operation" == "test" ]]
+then
+  create-secret-ha "$@"
 else
   display_usage_app
   exit 1

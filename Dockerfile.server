@@ -35,6 +35,8 @@ RUN cd /build/server && npm run build && \
 # https://docs.docker.com/develop/develop-images/multistage-build/
 FROM node:10.9.0-alpine
 
+RUN apk add --no-cache curl
+
 COPY --from=0 /build/app /usr/src/app
 
 WORKDIR /usr/src/app

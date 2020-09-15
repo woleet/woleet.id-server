@@ -8,7 +8,6 @@ import * as log from 'loglevel';
 import * as Debug from 'debug';
 import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
 import { delSession } from '../controllers/authentication';
-import { sessionSuffix } from '../config';
 import { getProvider } from '../controllers/oidc-provider';
 import { session } from './authentication';
 import { getServerConfig } from '../controllers/server-config';
@@ -55,7 +54,7 @@ export function build(): Koa {
     if (ctx.session) {
       await delSession(ctx.session.id);
     }
-    ctx.cookies.set('session' + sessionSuffix, null);
+    ctx.cookies.set('session', null);
     await next();
   });
 

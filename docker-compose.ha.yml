@@ -10,26 +10,59 @@ services:
     deploy:
       mode: replicated
       replicas: ${WOLEET_ID_SERVER_CLIENT_REPLICAS:-2}
+      #placement:
+      #  max_replicas_per_node: 1
+      update_config:
+        order: stop-first
       restart_policy:
-        condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-on-failure}"
+        condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-any}"
+    healthcheck:
+      test: "curl -fqk https://localhost:3000 > /dev/null 2>&1"
+      start_period: 30s
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   wid-server:
     secrets:
       - source: encryption-secret
-        target: /etc/nginx/ssl/certificate.key
+        target: /usr/src/app/dist/server/src/encryption_secret
     deploy:
       mode: replicated
       replicas: ${WOLEET_ID_SERVER_SERVER_REPLICAS:-2}
+      #placement:
+      #  max_replicas_per_node: 1
+      update_config:
+        order: stop-first
       restart_policy:
-        condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-on-failure}"
+        condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-any}"
+    healthcheck:
+      test: "curl -fq http://localhost:3000/check > /dev/null 2>&1"
+      start_period: 2s
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   redis:
+    image: redis:6.0-alpine
+    networks:
+      - redis-server
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
     deploy:
       mode: replicated
       replicas: 1
       restart_policy:
-        condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-on-failure}"
-
+        condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-any}"
+    healthcheck:
+      test: "redis-cli ping > /dev/null 2>&1"
+      start_period: 2s
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 secrets:
   encryption-secret:
@@ -37,7 +70,7 @@ secrets:
   ssl-cert:
     file: ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}
   ssl-key:
-    file: ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}
+    file: ${WOLEET_ID_SERVER_HTTP_TLS_KEY:?Undefined WOLEET_ID_SERVER_HTTP_TLS_KEY}
 
 networks:
   client-server:
