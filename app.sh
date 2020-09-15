@@ -44,7 +44,7 @@ start-ha() {
   then
     create-secret-ha
   fi
-  docker stack deploy --prune -c docker-compose.yml -c docker-compose.ha.yml "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}"
+  docker stack deploy --prune -c docker-compose.yml -c docker-compose.ha.yml "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" "$@"
 }
 
 stop-local() {
@@ -186,8 +186,7 @@ then
   start-local
 elif [[ "$operation" == "ha-start" ]]
 then
-  check-manager-node-ha
-  start-ha
+  start-ha "$@"
 elif [[ "$operation" == "logs" ]]
 then
   docker-compose -f docker-compose.yml -f docker-compose.local.yml --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" logs -f --tail 50
@@ -196,7 +195,6 @@ then
   stop-local
 elif [[ "$operation" == "ha-stop" ]]
 then
-  check-manager-node-ha
   stop-ha
 elif [[ "$operation" == "restart" ]]
 then
@@ -204,7 +202,6 @@ then
   start-local
 elif [[ "$operation" == "ha-restart" ]]
 then
-  check-manager-node-ha
   stop-ha
   start-ha
 elif [[ "$operation" == "push" ]]
