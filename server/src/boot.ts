@@ -1,4 +1,3 @@
-import * as log from 'loglevel';
 
 import {
   registerOIDCPBootFunction, registerOIDCPStopFunction, registerOIDCPUpdateFunction, registerOIDCUpdateFunction,
@@ -13,8 +12,11 @@ import { initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider } from './
 import { bootOIDCProvider, bootServers } from './boot.servers';
 import { initServerConfig } from './boot.server-config';
 import { exit } from './exit';
+import { doLockByCache } from './lockByCache';
+import * as log from 'loglevel';
 
-initdb()
+async function _boot() {
+  await initdb()
   .catch((err) => exit(`Cannot initialize database: ${err.message}`, err))
   .then((isFirst) => {
     if (isFirst) {
@@ -67,3 +69,6 @@ initdb()
   .then(() => bootServers())
   .catch((err) => exit(`Cannot start servers: ${err.message}`, err))
   .then(() => log.info('All done. You can now detach the CLI (ctrl+c)'));
+}
+
+doLockByCache('boot', _boot);
