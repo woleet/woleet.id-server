@@ -118,12 +118,12 @@ update-secret-ha() {
     exit 1
   fi
 
-  delete-secret
-  create-secret
+  delete-secret-ha
+  create-secret-ha
   echo "Encryption secret has been updated, you can now (re)start Woleet.ID Server"
 }
 
-delete-secret() {
+delete-secret-ha() {
   docker secret rm encryption-secret
 }
 

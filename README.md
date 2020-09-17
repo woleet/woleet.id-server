@@ -170,8 +170,9 @@ to upgrade the repo to the latest tagged version, it will also set the `WOLEET_I
 ## Docker
 
 Woleet.ID Server requires a recent Docker version:
- - docker 18.09+
- - docker-compose 1.22+
+
+- docker 18.09+
+- docker-compose 1.22+
 
 To check your docker and docker-compose versions use `docker -v` and `docker-compose -v`.
 
@@ -200,29 +201,41 @@ export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoint
 
 # Build the server
 
+```bash
     ./app.sh build
+```
 
 > NOTE: If you want Woleet.ID Server's Docker images to be stored on a specific Docker registry, you can set the WOLEET_ID_SERVER_REGISTRY environment variable.
 
 # Start the server
 
-    ./app.sh start
+```bash
+./app.sh start
+```
 
 # Display server logs
- 
-     ./app.sh logs -f
- 
+
+```bash
+./app.sh logs -f
+```
+
 # Stop the server
- 
-    ./app.sh stop
+
+```bash
+./app.sh stop
+```
 
 # Backup the server
 
-    ./app.sh backup <your_backup_path>
+```bash
+./app.sh backup <your_backup_path>
+```
 
 # Restore the server
 
-    ./app.sh restore <your_backup_file>
+```bash
+./app.sh restore <your_backup_file>
+```
 
 # Upgrade the server
 
@@ -238,19 +251,25 @@ You should see the sign in page.
 
 You should get:
 
-    { "message": "Missing \"pubKey\" parameter", "status": 400 }
+```json
+{ "message": "Missing \"pubKey\" parameter", "status": 400 }
+```
 
 [Signature endpoints](https://localhost:3002/sign)
 
 You should get:
 
-    { "message": "Missing token", "status": 401 }
+```json
+{ "message": "Missing token", "status": 401 }
+```
 
 [API endpoints](https://localhost:3000/api/info)
 
 You should get:
 
-    { "message": "Unauthorized", "status":401 }
+```json
+{ "message": "Unauthorized", "status":401 }
+```
 
 # Change administrator account password
 
@@ -323,15 +342,15 @@ Woleet.ID Server can be deployed on a docker swarm cluster,
 
 ## Prerequisites
 
-  - You must have a docker swarm cluster up and running
-  - You must know how to use and maintain a docker swarm cluster
-  - All the commands must be run on a swarm manager machine
-  - You must provide the PostgreSQL database
+- You must have a docker swarm cluster up and running
+- You must know how to use and maintain a docker swarm cluster
+- All the commands must be run on a swarm manager machine
+- You must provide the PostgreSQL database
 
 ## Limitations
 
-  - Backuping and restoring the database cannot be done with `./app.sh`
-  - Logs are not available trought ./app.sh
+- Backuping and restoring the database cannot be done with `./app.sh`
+- Logs are not available trought ./app.sh
 
 ## Setup
 
@@ -367,20 +386,21 @@ export WOLEET_ID_SERVER_POSTGRES_PASSWORD="" # Set your Postgres password
 
 After everyting is configures you will be able to start Woleet.ID Server on a swarm cluster, there are some commands of the `app.sh` file that aremade to works in a swarm cluster:
 
-  - `/app.sh  ha-start` # Start or update the Woleet.ID Server stack
-  - `/app.sh  ha-stop` # Stops and clean or updates the Woleet.ID Server stack (the encryption secret will still be stored as a docker secret and the database will be unaffected)
-  - `/app.sh ha-restart` # Stop then start the Woleet.ID Server stack
-  - `/app.sh ha-create-secret` # If you want to manually create a docker secret before running the stack
-  - `/app.sh ha-delete-secret` # Delete the secret from the docker secret storage
-  - `/app.sh ha-update-secret` # *WARNING* you can update the secret but this change will not be reflected onto the database.
+- `./app.sh  ha-start` # Start or update the Woleet.ID Server stack
+- `./app.sh  ha-stop` # Stops and clean or updates the Woleet.ID Server stack (the encryption secret will still be stored as a docker secret and the database will be unaffected)
+- `./app.sh ha-restart` # Stop then start the Woleet.ID Server stack
+- `./app.sh ha-create-secret` # If you want to manually create a docker secret before running the stack
+- `./app.sh ha-delete-secret` # Delete the secret from the docker secret storage
+- `./app.sh ha-update-secret` # *WARNING* you can update the secret but this change will not be reflected onto the database.
 
 `./app.sh upgrade` can also be used in a swarm environnement to update your cluster to the latest version of Woleet.ID Server.
 
 ***IMPORTANT!*** Do not use other functions when running in swarm mode.
 
 ### First start
-```
-/app.sh  ha-start
+
+```bash
+/app.sh ha-start
 ```
 
 You will be prompted to choose a password to encrypt sensible informations in the database, it will be store in a [docker sercret](https://docs.docker.com/engine/swarm/secrets/).
@@ -398,3 +418,16 @@ For now if you update your ssl certificates you will need to do `./app.sh ha-res
 ```bash
 ./app.sh upgrade && ./app.sh ha-start
 ```
+
+### Scaling
+
+Edit `configuration.sh` by adding:
+
+```bash
+export WOLEET_ID_SERVER_CLIENT_REPLICAS='n'
+export WOLEET_ID_SERVER_SERVER_REPLICAS='n'
+```
+
+With n the number of instances you want for each service (default is 2)
+
+Then apply changes by doing: `./app.sh ha-start`
