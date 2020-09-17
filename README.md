@@ -316,3 +316,85 @@ If you plan to use your Woleet.ID Server as an authentication and signature serv
 you will have to whitelist the IP addresses of Woleet's backend on the OpenID Connect and Signature endpoints.
 Additionally, if you plan to allow you users to use ProofDesk for Teams from outside your organization network,
 you will have to expose Woleet.ID Server's client web app and OpenID Connect endpoints publicly.
+
+# Swarm
+
+Woleet.ID Server can be deployed on a docker swarm cluster,
+
+## Prerequisites
+
+  - You must have a docker swarm cluster up and running
+  - You must know how to use and maintain a docker swarm cluster
+  - All the commands must be run on a swarm manager machine
+  - You must provide the PostgreSQL database
+
+## Limitations
+
+  - Backuping and restoring the database cannot be done with `./app.sh`
+  - Logs are not available trought ./app.sh
+
+## Setup
+
+You can tune the configuration by using global variables, but the preferred way is to put them in the `configuration.sh` file
+
+### Prepare project
+
+```bash
+git clone git@github.com:woleet/woleet.id-server.git
+cd woleet.id-server
+./app.sh upgrade # In this case it is used to create a configuration.sh file with WOLEET_ID_SERVER_VERSION set
+```
+
+### Configure the project
+
+If the previous step have been done htere is now a configuration.sh file in the woleet.is-server folder.
+You will need to add some mandatory properties in this file to be able to use Woleet.ID Server in a swarm environnement.
+ex:
+
+```bash
+export WOLEET_ID_SERVER_VERSION='x.x.x' # Set by ./app.sh upgrade, do not modify
+export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE="" # Set the path of your ssl certificate
+export WOLEET_ID_SERVER_HTTP_TLS_KEY=""  # Set the path of your ssl key
+export WOLEET_ID_SERVER_POSTGRES_HOST="" # Set the url of your Postgres instance
+export WOLEET_ID_SERVER_POSTGRES_DB="" # Set the datadabe to use on your Postgres instance
+export WOLEET_ID_SERVER_POSTGRES_USER="" # Set your Postgres username
+export WOLEET_ID_SERVER_POSTGRES_PASSWORD="" # Set your Postgres password
+```
+
+[You may also need change ports](##Server-ports)
+
+### Running the project
+
+After everyting is configures you will be able to start Woleet.ID Server on a swarm cluster, there are some commands of the `app.sh` file that aremade to works in a swarm cluster:
+
+  - `/app.sh  ha-start` # Start or update the Woleet.ID Server stack
+  - `/app.sh  ha-stop` # Stops and clean or updates the Woleet.ID Server stack (the encryption secret will still be stored as a docker secret and the database will be unaffected)
+  - `/app.sh ha-restart` # Stop then start the Woleet.ID Server stack
+  - `/app.sh ha-create-secret` # If you want to manually create a docker secret before running the stack
+  - `/app.sh ha-delete-secret` # Delete the secret from the docker secret storage
+  - `/app.sh ha-update-secret` # *WARNING* you can update the secret but this change will not be reflected onto the database.
+
+`./app.sh upgrade` can also be used in a swarm environnement to update your cluster to the latest version of Woleet.ID Server.
+
+***IMPORTANT!*** Do not use other functions when running in swarm mode.
+
+### First start
+```
+/app.sh  ha-start
+```
+
+You will be prompted to choose a password to encrypt sensible informations in the database, it will be store in a [docker sercret](https://docs.docker.com/engine/swarm/secrets/).
+
+If you have the environnement variable : `WOLEET_ID_SERVER_ENCRYPTION_SECRET` set, the password will be this one.
+
+This secret will presists even when stopping the Woleet.ID Server stack
+
+### Update SSL certificate
+
+For now if you update your ssl certificates you will need to do `./app.sh ha-restart` as docker swarm do not update files used as configs or secrets if they change.
+
+### Update stack
+
+```bash
+./app.sh upgrade && ./app.sh ha-start
+```

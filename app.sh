@@ -12,7 +12,7 @@ SERVER_IMAGE="${WOLEET_ID_SERVER_REGISTRY:-wids}/server:${WOLEET_ID_SERVER_VERSI
 export WOLEET_ID_SERVER_API_VERSION="$(cat swagger.yaml | grep 'version' | grep -oE '([[:digit:]]+.?)+')"
 
 display_usage_app() {
-  echo "usage: $0 [start|stop|restart|build|push|check|logs|backup|restore|upgrade|ha-start|ha-stop|ha-restart]"
+  echo "usage: $0 [start|stop|restart|build|push|check|logs|backup|restore|upgrade|ha-start|ha-stop|ha-restart|create-secret-ha|delete-secret-ha|update-secret-ha]"
 }
 
 start-local() {
@@ -204,6 +204,15 @@ elif [[ "$operation" == "ha-restart" ]]
 then
   stop-ha
   start-ha
+elif [[ "$operation" == "ha-create-secret" ]]
+then
+create-secret-ha
+elif [[ "$operation" == "ha-delete-secret" ]]
+then
+delete-secret-ha
+elif [[ "$operation" == "ha-update-secret" ]]
+then
+update-secret-ha
 elif [[ "$operation" == "push" ]]
 then
   docker push "$CLIENT_IMAGE"

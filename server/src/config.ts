@@ -80,7 +80,7 @@ export const db = {
 };
 
 export const cacheConfig = {
-  type: getenv('CACHE_TYPE', 'local'),
+  type: getenv('CACHE_TYPE', 'local'), // For, now there is only 'local' or 'redis' as options
   host: getenv('REDIS_HOST', 'localhost'),
   port: getenv('REDIS_PORT', 6379)
 };

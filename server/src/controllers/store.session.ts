@@ -82,11 +82,13 @@ export class SessionStore {
         }
       });
     } else if (this.redis !== undefined) {
-      const stream = this.redis.scanStream({match: `${userId}+*`});
+      const stream = this.redis.scanStream({match: `${userId}*`});
       stream.on('data', (resultKeys) => {
-        resultKeys.array.forEach(element => {
-          this._delSession(element);
-        });
+        if (resultKeys) {
+          resultKeys.forEach(element => {
+            this._delSession(element);
+          });
+        }
       });
       return new Promise (function(resolve) {
         stream.on('end', () => resolve());
@@ -94,6 +96,7 @@ export class SessionStore {
     }
   }
 
+  // Get a session from a sessionId from the cache
   async _getSession(sessionId: string): Promise<Session> {
     let sessionJSON;
     if (this.localCache !== undefined) {
@@ -108,6 +111,7 @@ export class SessionStore {
     return session;
   }
 
+    // Create or update a session in the cache
   async _setSession(sessionId: string, session: Session) {
     if (this.localCache !== undefined) {
       this.localCache.set(sessionId, JSON.stringify(session), config.expireAfter / 1000);
@@ -116,7 +120,8 @@ export class SessionStore {
     }
   }
 
-  async _delSession(sessionId: string) {
+    // Destroy a session in the cache from the sessionId
+    async _delSession(sessionId: string) {
     if (this.localCache !== undefined) {
       this.localCache.del(sessionId);
     } else if (this.redis !== undefined) {
