@@ -12,7 +12,7 @@ import { initializeOIDCProvider, stopOIDCProvider, updateOIDCProvider } from './
 import { bootOIDCProvider, bootServers } from './boot.servers';
 import { initServerConfig } from './boot.server-config';
 import { exit } from './exit';
-import { doLockByCache } from './lockByCache';
+import { cacheLock } from './cacheLock';
 import * as log from 'loglevel';
 
 async function _boot() {
@@ -71,4 +71,4 @@ async function _boot() {
   .then(() => log.info('All done. You can now detach the CLI (ctrl+c)'));
 }
 
-doLockByCache('boot', _boot);
+cacheLock.doLockByCache('boot', _boot);

@@ -7,6 +7,7 @@ import { createReadStream, createWriteStream } from 'fs';
 import * as path from 'path';
 import * as https from 'https';
 import { getAgent } from './utils/agent';
+import { cacheLock } from '../cacheLock';
 
 const debug = Debug('id:ctrl:config');
 
@@ -32,6 +33,14 @@ export async function loadServerConfig(): Promise<InternalServerConfigObject> {
   }
   setInMemoryConfig(cfg.toJSON().config);
   return getInMemoryConfig();
+}
+
+export async function reloadServerConfig() {
+  const config = await loadServerConfig();
+  await checkOIDCConfigChange(config);
+  await checkOIDCPConfigChange(config);
+  await checkSMTPConfigChange(config);
+  await checkProofDeskConfigChange(config);
 }
 
 export function getServerConfig(): InternalServerConfigObject {
@@ -73,6 +82,7 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
     await checkOIDCPConfigChange(up);
     await checkSMTPConfigChange(up);
     await checkProofDeskConfigChange(up);
+    cacheLock.publishReloadServerConfig();
     return getServerConfig();
   } catch (err) {
     exit('FATAL: Cannot update the server configuration', err);

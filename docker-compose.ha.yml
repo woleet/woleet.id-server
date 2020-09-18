@@ -22,6 +22,10 @@ services:
       retries: 3
 
   wid-server:
+    environment:
+      WOLEET_ID_SERVER_CACHE_TYPE: ${WOLEET_ID_SERVER_CACHE_TYPE:-redis}
+      WOLEET_ID_SERVER_REDIS_HOST: ${WOLEET_ID_SERVER_REDIS_HOST:-redis}
+      WOLEET_ID_SERVER_REDIS_PORT: ${WOLEET_ID_SERVER_REDIS_PORT:-6379}
     secrets:
       - source: encryption-secret
         target: /usr/src/app/dist/server/src/encryption_secret

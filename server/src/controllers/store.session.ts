@@ -1,35 +1,13 @@
 import * as uuid from 'uuid/v4';
-import * as Redis from 'ioredis';
-import * as NodeCache from 'node-cache';
 
 import { session as config } from '../config';
-import { cacheConfig as cacheConfig } from '../config';
-import { exit } from '../exit';
+import { cacheLock as cacheLock} from '../cacheLock';
 
 import * as Debug from 'debug';
 
 const debug = Debug('id:sessions');
 
 export class SessionStore {
-  redis: Redis = undefined;
-  localCache: NodeCache = undefined;
-
-  constructor() {
-    switch (cacheConfig.type) {
-      case 'local': {
-        this.localCache = new NodeCache();
-        break;
-      }
-      case 'redis': {
-        this.redis = new Redis(cacheConfig.port, cacheConfig.host);
-        break;
-      }
-      default: {
-        exit(`Invalid cache type: ${cacheConfig.type}`, '');
-        break;
-      }
-    }
-  }
 
   async create(user: SequelizeUserObject): Promise<string> {
     const userId = user.get('id');
@@ -75,14 +53,14 @@ export class SessionStore {
   // Basically search in the session storage evey keys that begin with the userId and proceeeds to delete it
   async delSessionsWithUser(userId: string): Promise<void> {
     debug('Deleting sessions of user', userId);
-    if (this.localCache !== undefined) {
-      this.localCache.keys().forEach(key => {
+    if (cacheLock.localCache !== undefined) {
+      cacheLock.localCache.keys().forEach(key => {
         if (key.startsWith(userId)) {
           this._delSession(userId);
         }
       });
-    } else if (this.redis !== undefined) {
-      const stream = this.redis.scanStream({match: `${userId}*`});
+    } else if (cacheLock.redis !== undefined) {
+      const stream = cacheLock.redis.scanStream({match: `${userId}*`});
       stream.on('data', (resultKeys) => {
         if (resultKeys) {
           resultKeys.forEach(element => {
@@ -99,10 +77,10 @@ export class SessionStore {
   // Get a session from a sessionId from the cache
   async _getSession(sessionId: string): Promise<Session> {
     let sessionJSON;
-    if (this.localCache !== undefined) {
-      sessionJSON = this.localCache.get(sessionId);
-    } else if (this.redis !== undefined) {
-      sessionJSON = await this.redis.get(sessionId);
+    if (cacheLock.localCache !== undefined) {
+      sessionJSON = cacheLock.localCache.get(sessionId);
+    } else if (cacheLock.redis !== undefined) {
+      sessionJSON = await cacheLock.redis.get(sessionId);
     }
     let session: Session;
     if (sessionJSON) {
@@ -113,19 +91,19 @@ export class SessionStore {
 
     // Create or update a session in the cache
   async _setSession(sessionId: string, session: Session) {
-    if (this.localCache !== undefined) {
-      this.localCache.set(sessionId, JSON.stringify(session), config.expireAfter / 1000);
-    } else if (this.redis !== undefined) {
-      await this.redis.setex(sessionId, config.expireAfter / 1000, JSON.stringify(session));
+    if (cacheLock.localCache !== undefined) {
+      cacheLock.localCache.set(sessionId, JSON.stringify(session), config.expireAfter / 1000);
+    } else if (cacheLock.redis !== undefined) {
+      await cacheLock.redis.setex(sessionId, config.expireAfter / 1000, JSON.stringify(session));
     }
   }
 
     // Destroy a session in the cache from the sessionId
     async _delSession(sessionId: string) {
-    if (this.localCache !== undefined) {
-      this.localCache.del(sessionId);
-    } else if (this.redis !== undefined) {
-      await this.redis.del(sessionId);
+    if (cacheLock.localCache !== undefined) {
+      cacheLock.localCache.del(sessionId);
+    } else if (cacheLock.redis !== undefined) {
+      await cacheLock.redis.del(sessionId);
     }
   }
 }
