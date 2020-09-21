@@ -29,6 +29,8 @@ services:
     secrets:
       - source: encryption-secret
         target: /usr/src/app/dist/server/src/encryption_secret
+    networks:
+      - redis-server
     deploy:
       mode: replicated
       replicas: ${WOLEET_ID_SERVER_SERVER_REPLICAS:-2}

@@ -37,7 +37,6 @@ services:
       WOLEET_ID_SERVER_POSTGRES_PASSWORD: ${WOLEET_ID_SERVER_POSTGRES_PASSWORD:-pass}
     networks:
       - client-server
-      - redis-server
     logging:
       driver: "json-file"
       options:
