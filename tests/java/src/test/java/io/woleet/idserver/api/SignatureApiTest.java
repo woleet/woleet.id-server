@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -206,7 +207,7 @@ public class SignatureApiTest {
     }
 
     @Test
-    public void getRegularSignatureTest() throws ApiException {
+    public void getRegularSignatureTest() throws ApiException, InterruptedException {
 
         // Try to sign with no credentials
         try {
@@ -365,6 +366,7 @@ public class SignatureApiTest {
         ServerConfigApi serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
         ServerConfig serverConfig = serverConfigApi.getServerConfig();
         serverConfigApi.updateServerConfig(new ServerConfig().fallbackOnDefaultKey(false));
+        TimeUnit.MILLISECONDS.sleep(1000L);
 
         // Try to sign using a non existing server's default key
         try {
@@ -377,6 +379,7 @@ public class SignatureApiTest {
 
         // Reset server config
         serverConfigApi.updateServerConfig(serverConfig);
+        TimeUnit.MILLISECONDS.sleep(1000L);
 
         // Sign using user's default key (userId)
         hashToSign = Config.randomHash();
