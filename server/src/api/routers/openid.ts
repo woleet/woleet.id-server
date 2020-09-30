@@ -121,7 +121,7 @@ router.get('/callback', async function (ctx) {
 
   await setProviderSession(ctx, session.user.id);
 
-  return ctx.body = { user: serializeUserDTO(await getUserById(ctx.session.userId)) };
+  return ctx.body = { user: serializeUserDTO(await getUserById(session.user.id)) };
 });
 
 export { router };
