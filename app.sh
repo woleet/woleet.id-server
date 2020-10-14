@@ -40,7 +40,7 @@ start-local() {
 start-ha() {
   check-manager-node-ha
 
-  if ! docker secret inspect encryption-secret > /dev/null 2>&1
+  if ! docker secret inspect "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_encryption-secret" > /dev/null 2>&1
   then
     create-secret-ha
   fi
@@ -106,8 +106,7 @@ create-secret-ha() {
     done
   fi
 
-  local hash="$(echo "$secret" | cksum | cut -d' ' -f1)"
-  echo "$secret" | docker secret create --label hash="$hash" encryption-secret -
+  echo "$secret" | docker secret create "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_encryption-secret" -
 }
 
 update-secret-ha() {
@@ -124,7 +123,7 @@ update-secret-ha() {
 }
 
 delete-secret-ha() {
-  docker secret rm encryption-secret
+  docker secret rm "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_encryption-secret"
 }
 
 backup() {

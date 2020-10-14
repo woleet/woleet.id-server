@@ -68,7 +68,8 @@ services:
 
 secrets:
   encryption-secret:
-    external: true
+    external:
+      name : ${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_encryption-secret
   ssl-cert:
     file: ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}
   ssl-key:

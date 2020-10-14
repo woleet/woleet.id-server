@@ -8,7 +8,7 @@ const USERNAME = db.username;
 const options = {
   dialect: 'postgres',
   host: db.host,
-  port: 5432,
+  port: db.port,
 
   pool: {
     max: 5,

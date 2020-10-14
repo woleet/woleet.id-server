@@ -72,6 +72,7 @@ export const ports = {
 
 export const db = {
   host: getenv('POSTGRES_HOST', 'localhost'),
+  port: parseInt(getenv('POSTGRES_PORT', '5432')),
   database: getenv('POSTGRES_DB', 'wid'),
   username: getenv('POSTGRES_USER', 'pguser'),
   password: getenv('POSTGRES_PASSWORD', 'pass'),
