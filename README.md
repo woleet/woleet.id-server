@@ -155,7 +155,7 @@ Woleet.ID Server have prebuilt images on DockerHub:
 <https://hub.docker.com/r/wids/client>  
 <https://hub.docker.com/r/wids/server>
 
-If the WOLEET_ID_SERVER_VERSION` environment variable is set, app.sh and docker-compose.yml will use the specified version (> 0.5.0).
+If the `WOLEET_ID_SERVER_VERSION` environment variable is set, app.sh and docker-compose.yml will use the specified version (> 0.5.0).
 
 If you want to see the differences between versions, you can go to the Release tab of GitHub.
 
@@ -373,10 +373,10 @@ You will need to add some mandatory properties in this file to be able to use Wo
 export WOLEET_ID_SERVER_VERSION='x.x.x' # Set by ./app.sh upgrade, do not modify
 export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE="" # Set the path of your ssl certificate
 export WOLEET_ID_SERVER_HTTP_TLS_KEY=""  # Set the path of your ssl key
-export WOLEET_ID_SERVER_POSTGRES_HOST="" # Set the url of your Postgres instance
-export WOLEET_ID_SERVER_POSTGRES_DB="" # Set the datadabe to use on your Postgres instance
-export WOLEET_ID_SERVER_POSTGRES_USER="" # Set your Postgres username
-export WOLEET_ID_SERVER_POSTGRES_PASSWORD="" # Set your Postgres password
+export WOLEET_ID_SERVER_POSTGRES_HOST="" # Set the url of your PostgreSQL instance
+export WOLEET_ID_SERVER_POSTGRES_DB="" # Set the datadabe to use on your PostgreSQL instance
+export WOLEET_ID_SERVER_POSTGRES_USER="" # Set your PostgreSQL username
+export WOLEET_ID_SERVER_POSTGRES_PASSWORD="" # Set your PostgreSQL password
 ```
 
 [You may also need change ports](#Server-ports)
@@ -400,7 +400,7 @@ Here are some commands of the `./app.sh` file that are made to works in a Docker
 ### First start
 
 ```bash
-/app.sh ha-start
+./app.sh ha-start
 ```
 
 You will be prompted to choose a password to encrypt sensible data in the database, it will be store in a [docker sercret](https://docs.docker.com/engine/swarm/secrets/).

@@ -14,12 +14,11 @@ services:
         order: stop-first
       restart_policy:
         condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-any}"
-    healthcheck:
-      test: "curl -fqk https://localhost:3000 > /dev/null 2>&1"
-      start_period: 30s
-      interval: 30s
-      timeout: 10s
-      retries: 3
+#    healthcheck:
+#      test: "curl -fqk https://localhost:3000 > /dev/null 2>&1"
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
 
   wid-server:
     environment:
@@ -38,12 +37,11 @@ services:
         order: stop-first
       restart_policy:
         condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-any}"
-    healthcheck:
-      test: "curl -fq -H 'X-Forwarded-Proto:https' http://localhost:3000/check > /dev/null 2>&1"
-      start_period: 2s
-      interval: 30s
-      timeout: 10s
-      retries: 3
+#    healthcheck:
+#      test: "curl -fq -H 'X-Forwarded-Proto:https' http://localhost:3000/check > /dev/null 2>&1"
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
 
   redis:
     image: redis:6.0-alpine
@@ -59,12 +57,11 @@ services:
       replicas: 1
       restart_policy:
         condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-any}"
-    healthcheck:
-      test: "redis-cli ping > /dev/null 2>&1"
-      start_period: 2s
-      interval: 30s
-      timeout: 10s
-      retries: 3
+#    healthcheck:
+#      test: "redis-cli ping > /dev/null 2>&1"
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
 
 secrets:
   encryption-secret:
