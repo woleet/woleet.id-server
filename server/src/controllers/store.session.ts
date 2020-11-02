@@ -1,8 +1,6 @@
 import * as uuid from 'uuid/v4';
-
 import { session as config } from '../config';
-import { cacheLock as cacheLock} from '../cacheLock';
-
+import { cacheLock as cacheLock } from '../cacheLock';
 import * as Debug from 'debug';
 
 const debug = Debug('id:sessions');
@@ -13,35 +11,26 @@ export class SessionStore {
     const userId = user.get('id');
     const userRole = user.get('role');
 
-    // sessionId is the userId concatenated with % and a random string
-    const id = userId + '%' + uuid();
+    // Session identifier is built from the user identifier concatenated with % and a random string
+    const sessionId = userId + '%' + uuid();
 
-    // userId is not set in the session object it will be infered from the sessionId.
-    const session = { userRole };
+    // Create session object
+    await this._setSession(sessionId, { id: sessionId, userId, userRole });
 
-    this._setSession(id, session);
-
-    return id;
+    return sessionId;
   }
 
   async get(sessionId: string): Promise<Session> {
-    const session = await this._getSession(sessionId);
 
+    // Get session
+    const session = await this._getSession(sessionId);
     if (!session) {
       return null;
     }
 
-    // Report expiration date;
-    this._setSession(sessionId, session);
+    // Refresh expiration date
+    await this._setSession(sessionId, session);
 
-    // Infers userId from sessionId and delete session if none is found
-    // Sets the userId in the session object to be able to use it in the application
-    session.userId = sessionId.split('%')[0];
-    if (!session.userId) {
-      this.del(sessionId);
-      return null;
-    }
-    session.id = sessionId;
     return session;
   }
 
@@ -49,8 +38,8 @@ export class SessionStore {
     await this._delSession(sessionId);
   }
 
-  // Used to delete all sessions of a specified user
-  // Basically search in the session storage evey keys that begin with the userId and proceeeds to delete it
+  // Delete all the sessions of a specified user
+  // (search in the session storage every keys beginning with the user identifier and delete it)
   async delSessionsWithUser(userId: string): Promise<void> {
     debug('Deleting sessions of user', userId);
     if (cacheLock.localCache !== undefined) {
@@ -60,7 +49,7 @@ export class SessionStore {
         }
       });
     } else if (cacheLock.redis !== undefined) {
-      const stream = cacheLock.redis.scanStream({match: `${userId}*`});
+      const stream = cacheLock.redis.scanStream({ match: `${userId}*` });
       stream.on('data', (resultKeys) => {
         if (resultKeys) {
           resultKeys.forEach(element => {
@@ -68,13 +57,13 @@ export class SessionStore {
           });
         }
       });
-      return new Promise (function(resolve) {
+      return new Promise(function (resolve) {
         stream.on('end', () => resolve());
       });
     }
   }
 
-  // Get a session from a sessionId from the cache
+  // Get a session from the cache
   async _getSession(sessionId: string): Promise<Session> {
     let sessionJSON;
     if (cacheLock.localCache !== undefined) {
@@ -89,7 +78,7 @@ export class SessionStore {
     return session;
   }
 
-    // Create or update a session in the cache
+  // Create or update a session in the cache
   async _setSession(sessionId: string, session: Session) {
     if (cacheLock.localCache !== undefined) {
       cacheLock.localCache.set(sessionId, JSON.stringify(session), config.expireAfter / 1000);
@@ -98,8 +87,8 @@ export class SessionStore {
     }
   }
 
-    // Destroy a session in the cache from the sessionId
-    async _delSession(sessionId: string) {
+  // Destroy a session from the cache
+  async _delSession(sessionId: string) {
     if (cacheLock.localCache !== undefined) {
       cacheLock.localCache.del(sessionId);
     } else if (cacheLock.redis !== undefined) {

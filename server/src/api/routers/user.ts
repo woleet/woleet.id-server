@@ -116,7 +116,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   const authorizedUser = await getUserById(ctx.session.userId);
   if ((update.role === 'admin' && authorizedUser.role !== 'admin')
     || (user.role === 'admin' && authorizedUser.role !== 'admin')) {
-    throw new Unauthorized('Only admin can create other admin');
+    throw new Unauthorized('Only admin can update other admin');
   }
   user = await updateUser(id, copy(update));
 

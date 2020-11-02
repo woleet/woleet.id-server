@@ -1,15 +1,15 @@
 # About
 
 Woleet.ID Server is a lightweight web application to host inside your organization's IT.
-It allows you to **manage your users' identities and bitcoin key pairs**.
-It allows your users to **sign data using their bitcoin key pairs**.
+It allows you to **manage your users' identities and bitcoin addresses**.
+It allows your users to **sign data using their bitcoin addresses**.
 It allows third-parties to **retrieve your users' identities from their bitcoin addresses** and to **verify that your organization controls these addresses**.
 
 Woleet.ID Server identities are made of **X500 information** (common name, organization name, country code, etc.).
 Each identity can be associated to one or several internal **bitcoin key pairs** made of a public bitcoin address and of a private key securely stored encrypted in the server's database.
 Each identity can also be associated to one or several external **bitcoin addresses** (controlled by the user) using a secure registration mechanism ensuring the user effectively controls these addresses.
 
-Basically, Woleet.ID Server provides a **private API** allowing your users to **sign data using their bitcoin key pairs**,
+Basically, Woleet.ID Server provides a **private API** allowing your users to **sign data using their bitcoin addresses**,
 and a **public API** allowing third-parties to **retrieve the identity of a signer from his bitcoin address** and to **verify that your organization controls this addresses**.
 
 Basically, Woleet.ID Server enables you to integrate Woleet's [signature anchoring](https://doc.woleet.io/docs/signature-anchoring) into your organization workflow.
@@ -78,19 +78,19 @@ OS Supported:
 If you run one of these Linux version you can install Woleet.ID Server by running:
 
 ```bash
-bash <(curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh)
+bash < (curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh)
 ```
 
 You will need a certificate and its key, as described below, on the computer you execute this script.
 
 By default, it will:
 - install Docker and other tools required
-- clone the GitHub project to $HOME/wids directory
+- clone the GitHub project to `$HOME/wids` directory
 - store the path of your certificate and key files in the file `configuration.sh`
 
 ## configuration.sh
 
-If you want to override some of the environment variables you can create a `configuration.sh` file: if it exists its content will be sourced in app.sh.
+If you want to override some environment variables you can create a `configuration.sh` file: if it exists its content will be sourced in app.sh.
 
 For example to fix a version for Woleet.ID Server (related to release tab) add this in `configuration.sh`:
 
@@ -155,11 +155,11 @@ Woleet.ID Server have prebuilt images on DockerHub:
 <https://hub.docker.com/r/wids/client>  
 <https://hub.docker.com/r/wids/server>
 
-If the WOLEET_ID_SERVER_VERSION` environment variable is set, app.sh and docker-compose.yml will use the specified version (> 0.5.0).
+If the `WOLEET_ID_SERVER_VERSION` environment variable is set, app.sh and docker-compose.yml will use the specified version (> 0.5.0).
 
 If you want to see the differences between versions, you can go to the Release tab of GitHub.
 
-If you have this project cloned and checkouted to a commit that match with a tag (for example, when using onlineSetup.sh to install the project) you can use
+If you have this project cloned and checked out to a commit that match with a tag (for example, when using onlineSetup.sh to install the project) you can use
 
 ```bash
 ./app.sh upgrade
@@ -202,7 +202,7 @@ export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoint
 # Build the server
 
 ```bash
-    ./app.sh build
+./app.sh build
 ```
 
 > NOTE: If you want Woleet.ID Server's Docker images to be stored on a specific Docker registry, you can set the WOLEET_ID_SERVER_REGISTRY environment variable.
@@ -239,7 +239,7 @@ export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoint
 
 # Upgrade the server
 
-[See the documentation](##Version)
+[See the documentation](#Version)
 
 # Test the server
 
@@ -336,21 +336,21 @@ you will have to whitelist the IP addresses of Woleet's backend on the OpenID Co
 Additionally, if you plan to allow you users to use ProofDesk for Teams from outside your organization network,
 you will have to expose Woleet.ID Server's client web app and OpenID Connect endpoints publicly.
 
-# Swarm
+# High Availability / Docker Swarm mode
 
-Woleet.ID Server can be deployed on a docker swarm cluster,
+Woleet.ID Server can be deployed on a Docker Swarm cluster to achieve High Availability (HA) capabilities by running Woleet.ID Server on a Docker Swarm cluster allows running several server and client instances. 
 
 ## Prerequisites
 
-- You must have a docker swarm cluster up and running
-- You must know how to use and maintain a docker swarm cluster
-- All the commands must be run on a swarm manager machine
-- You must provide the PostgreSQL database
+- You must have a Docker Swarm cluster up and running
+- You must know how to use and maintain a Docker Swarm cluster
+- All the commands must be run on a Docker Swarm manager machine
+- You must provide the PostgreSQL database (preferably with HA capabilities)
 
 ## Limitations
 
-- Backuping and restoring the database cannot be done with `./app.sh`
-- Logs are not available trought ./app.sh
+- Backing up and restoring the database cannot be done with `./app.sh`
+- Logs are not available through `./app.sh`
 
 ## Setup
 
@@ -366,52 +366,52 @@ cd woleet.id-server
 
 ### Configure the project
 
-If the previous step have been done htere is now a configuration.sh file in the woleet.is-server folder.
-You will need to add some mandatory properties in this file to be able to use Woleet.ID Server in a swarm environnement.
-ex:
+You can now find a `configuration.sh` file in the woleet.id-server folder.
+You will need to add some mandatory properties in this file to be able to use Woleet.ID Server in a Docker Swarm environment.
 
 ```bash
 export WOLEET_ID_SERVER_VERSION='x.x.x' # Set by ./app.sh upgrade, do not modify
 export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE="" # Set the path of your ssl certificate
 export WOLEET_ID_SERVER_HTTP_TLS_KEY=""  # Set the path of your ssl key
-export WOLEET_ID_SERVER_POSTGRES_HOST="" # Set the url of your Postgres instance
-export WOLEET_ID_SERVER_POSTGRES_DB="" # Set the datadabe to use on your Postgres instance
-export WOLEET_ID_SERVER_POSTGRES_USER="" # Set your Postgres username
-export WOLEET_ID_SERVER_POSTGRES_PASSWORD="" # Set your Postgres password
+export WOLEET_ID_SERVER_POSTGRES_HOST="" # Set the url of your PostgreSQL instance
+export WOLEET_ID_SERVER_POSTGRES_DB="" # Set the datadabe to use on your PostgreSQL instance
+export WOLEET_ID_SERVER_POSTGRES_USER="" # Set your PostgreSQL username
+export WOLEET_ID_SERVER_POSTGRES_PASSWORD="" # Set your PostgreSQL password
 ```
 
-[You may also need change ports](##Server-ports)
+[You may also need change ports](#Server-ports)
 
 ### Running the project
 
-After everyting is configures you will be able to start Woleet.ID Server on a swarm cluster, there are some commands of the `app.sh` file that aremade to works in a swarm cluster:
+Once configured you will be able to start Woleet.ID Server on a Docker Swarm cluster.
+Here are some commands of the `./app.sh` file that are made to works in a Docker Swarm cluster:
 
-- `./app.sh  ha-start` # Start or update the Woleet.ID Server stack
-- `./app.sh  ha-stop` # Stops and clean or updates the Woleet.ID Server stack (the encryption secret will still be stored as a docker secret and the database will be unaffected)
+- `./app.sh ha-start` # Start or update the Woleet.ID Server stack
+- `./app.sh ha-stop` # Stop and clean the Woleet.ID Server stack (the encryption secret stay stored as a Docker secret, and the database is unaffected)
 - `./app.sh ha-restart` # Stop then start the Woleet.ID Server stack
-- `./app.sh ha-create-secret` # If you want to manually create a docker secret before running the stack
-- `./app.sh ha-delete-secret` # Delete the secret from the docker secret storage
+- `./app.sh ha-create-secret` # If you want to manually create a Docker secret before running the stack
+- `./app.sh ha-delete-secret` # Delete the secret from the Docker secret storage
 - `./app.sh ha-update-secret` # *WARNING* you can update the secret but this change will not be reflected onto the database.
 
-`./app.sh upgrade` can also be used in a swarm environnement to update your cluster to the latest version of Woleet.ID Server.
+`./app.sh upgrade` can still be used in a Docker Swarm environment to update your cluster to the latest version of Woleet.ID Server.
 
-***IMPORTANT!*** Do not use other functions when running in swarm mode.
+***IMPORTANT!*** Do not use other functions when running in Docker Swarm mode.
 
 ### First start
 
 ```bash
-/app.sh ha-start
+./app.sh ha-start
 ```
 
-You will be prompted to choose a password to encrypt sensible informations in the database, it will be store in a [docker sercret](https://docs.docker.com/engine/swarm/secrets/).
+You will be prompted to choose a password to encrypt sensible data in the database, it will be store in a [docker sercret](https://docs.docker.com/engine/swarm/secrets/).
 
-If you have the environnement variable : `WOLEET_ID_SERVER_ENCRYPTION_SECRET` set, the password will be this one.
+If you have the environment variable `WOLEET_ID_SERVER_ENCRYPTION_SECRET` set, the secret used will be this one.
 
-This secret will presists even when stopping the Woleet.ID Server stack
+This secret will persist after stopping the Woleet.ID Server stack.
 
 ### Update SSL certificate
 
-For now if you update your ssl certificates you will need to do `./app.sh ha-restart` as docker swarm do not update files used as configs or secrets if they change.
+For now if you update your SSL certificates you will need to do `./app.sh ha-restart` as Docker Swarm do not update files used as configs or secrets if they change.
 
 ### Update stack
 
@@ -424,10 +424,10 @@ For now if you update your ssl certificates you will need to do `./app.sh ha-res
 Edit `configuration.sh` by adding:
 
 ```bash
-export WOLEET_ID_SERVER_CLIENT_REPLICAS='n'
-export WOLEET_ID_SERVER_SERVER_REPLICAS='n'
+export WOLEET_ID_SERVER_CLIENT_REPLICAS='{n}'
+export WOLEET_ID_SERVER_SERVER_REPLICAS='{n}'
 ```
 
-With n the number of instances you want for each service (default is 2)
+With {n} being the number of instances you want for each service (default is 2).
 
-Then apply changes by doing: `./app.sh ha-start`
+Then apply changes by doing `./app.sh ha-start`.
