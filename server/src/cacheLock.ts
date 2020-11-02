@@ -24,7 +24,7 @@ export class CacheLock {
       }
       case 'redis': {
         this.redis = new Redis(cacheConfig.port, cacheConfig.host);
-        this.redisSub = new Redis(cacheConfig.port, cacheConfig.host, {maxRetriesPerRequest: null});
+        this.redisSub = new Redis(cacheConfig.port, cacheConfig.host, { maxRetriesPerRequest: null });
         this.subscribeToUpdate();
         break;
       }
@@ -65,8 +65,8 @@ export class CacheLock {
     }
   }
 
-  // This function is to be used when a function must be run only one at time in a cluster environnement
-  // when there is only one server (redis not configured) this function does not lock anything
+  // This function is to be used when a function must be run only one at a time in a cluster environment
+  // (when there is only one server (redis not configured) this function does not lock anything)
   async doLockByCache(lockName: string, functionToCall: () => any) {
     switch (cacheConfig.type) {
       case 'local': {
@@ -74,8 +74,8 @@ export class CacheLock {
         break;
       }
       case 'redis': {
-        // Here redlock is configured to retry indefinitly when trying to get a lock.
-        const redlock = new Redlock([this.redis], {retryCount: -1});
+        // Here redlock is configured to retry indefinitely when trying to get a lock.
+        const redlock = new Redlock([this.redis], { retryCount: -1 });
         log.info(`Trying to take redis lock: ${lockName}`);
         const lock = await redlock.lock(lockName, 5 * 60 * 1000); // TTL is 5 minutes,  after this delay this lock will be destroyed
         await functionToCall();
@@ -89,7 +89,6 @@ export class CacheLock {
       }
     }
   }
-
 }
 
 export const cacheLock = new CacheLock;

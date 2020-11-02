@@ -2,7 +2,7 @@
 
 import { Instance } from 'sequelize';
 import { SessionStore } from '../controllers/store.session';
-import { AnySchema, string } from 'joi';
+import { AnySchema } from 'joi';
 import * as Router from 'koa-router';
 
 import '../../../types/api.api-token';
@@ -207,9 +207,9 @@ declare global {
   /* Authorization */
 
   interface Session {
+    id: string;
+    userId: string;
     userRole: UserRoleEnum;
-    id?: string;
-    userId?: string;
     oauth?: Object;
   }
 
@@ -434,8 +434,6 @@ declare global {
     expiresAt: Date;
     consumedAt: Date;
   }
-
-  type OIDCGrantTypesEnum = 'refresh_token' | 'authorization_code';
 }
 
 declare module 'koa' {
