@@ -25,7 +25,13 @@ export class CacheLock {
       case 'redis': {
         this.redis = new Redis(cacheConfig.port, cacheConfig.host);
         this.redisSub = new Redis(cacheConfig.port, cacheConfig.host, { maxRetriesPerRequest: null });
-        this.subscribeToUpdate();
+        this.redisSub.subscribe(this.updateChannel);
+        this.redisSub.on('message', async (channel, message) => {
+          if (channel === this.updateChannel && message === 'update') {
+            debug('Receiving reload config signal');
+            await reloadServerConfig();
+          }
+        });
         break;
       }
       default: {
@@ -33,16 +39,6 @@ export class CacheLock {
         break;
       }
     }
-  }
-
-  subscribeToUpdate() {
-    this.redisSub.subscribe(this.updateChannel);
-    this.redisSub.on('message', (channel, message) => {
-      if (channel === this.updateChannel && message === 'update') {
-        debug('Receiving reload config signal');
-        reloadServerConfig();
-      }
-    });
   }
 
   async publishReloadServerConfig() {
@@ -53,9 +49,9 @@ export class CacheLock {
       }
       case 'redis': {
         debug('Sending reload to redis');
-        this.redisSub.unsubscribe(this.updateChannel);
+        await this.redisSub.unsubscribe(this.updateChannel);
         await this.redis.publish(this.updateChannel, 'update');
-        this.subscribeToUpdate();
+        await this.redisSub.subscribe(this.updateChannel);
         break;
       }
       default: {
