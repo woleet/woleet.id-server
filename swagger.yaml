@@ -1086,15 +1086,15 @@ components:
         commonName:
           type: string
           description: Common name (CN) (2.5.4.3)
-          example: "Jim Smith"
+          example: "John Doe"
         organization:
           type: string
           description: Organization name (O) (2.5.4.10)
-          example: "Woleet"
+          example: "Acme corp"
         organizationalUnit:
           type: string
           description: Organizational unit name (OU) (2.5.4.11)
-          example: "Sales"
+          example: "Sales dept"
         locality:
           type: string
           description: Locality name (L) (2.5.4.7)
@@ -1592,25 +1592,27 @@ components:
         signedMessage:
           type: string
           format: hex
-          example: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+          example: "Love is the message!"
           description: Message that is signed (same as the `messageToSign` parameter).
         signature:
           type: string
           format: base64
           example: "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q="
           description: >
-            Signature of `messageToSign` or `hashToSign` using the public key `pubKey`, or signature of SHA256(`signedMessage` or `signedHash` + `signedIdentity` + `signedIssuerDomain`) if the identity of the signer and the domain of the identity issuer are included to the signed data.
+            Signature of `signedMessage` or `signedHash` using the public key `pubKey`,
+            or signature of SHA256(`signedMessage` or `signedHash` + `signedIdentity` + `signedIssuerDomain`)
+            if the identity of the signer and the domain of the identity issuer are included to the signed data.
         identityURL:
           $ref: '#/components/schemas/IdentityURL'
         signedIdentity:
           type: string
-          example: "CN=SOMEONE,O=COMPANY,CN=SIGNATUREDEPARTEMENT,OU=Somewhere,EMAILADDRESS=user@example.host"
+          example: "CN=John Doe,EMAILADDRESS=john.doe@acme.com,O=Acme corp,OU=Sales dept"
           description: >
             X500 Distinguished Name representing the identity of the signer.<br>
             Returned only if `identityToSign` is used.
         signedIssuerDomain:
           type: string
-          example: "example.host"
+          example: "acme.com"
           description: >
             Domain of the identity issuer (ie. of the organization who verified the identity).<br>
             Returned only if `identityToSign` is used.
@@ -1786,7 +1788,7 @@ components:
       required: false
       schema:
         type: string
-        example: "CN,O,OU,L,C,EMAILADDRESS"
+        example: "CN=John Doe,EMAILADDRESS=john.doe@acme.com,O=Acme corp,OU=Sales dept"
     PubKeyToVerifyQueryParameter:
       name: pubKey
       in: query
@@ -1812,7 +1814,7 @@ components:
           x500Organization:
             value: "Acme corp"
           x500OrganizationalUnit:
-            value: "Business unit"
+            value: "Sales dept"
     CustomUserIdQueryParameter:
       name: customUserId
       in: query
@@ -1853,7 +1855,7 @@ components:
       description: Message to be signed.
       schema:
         type: string
-        example: 'This is the message ot ber signed'
+        example: 'This is the message to be signed'
     FilterUserModeQueryParameter:
       name: mode
       in: query
@@ -1900,7 +1902,7 @@ components:
       required: false
       schema:
         type: string
-        example: 'Woleet'
+        example: 'Acme corp'
     FilterUserOrganizationalUnitQueryParameter:
       name: organizationalUnit
       in: query
@@ -1908,7 +1910,7 @@ components:
       required: false
       schema:
         type: string
-        example: 'Sales'
+        example: 'Sales dept'
     FilterUserLocalityQueryParameter:
       name: locality
       in: query

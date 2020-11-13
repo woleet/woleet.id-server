@@ -182,8 +182,8 @@ public class Example {
     String role = user; // String | Filter the user role.
     String email = john.doe@acme.com; // String | Filter the user email.
     String commonName = John Doe; // String | Filter the user X500 common name.
-    String organization = Woleet; // String | Filter the user X500 organization.
-    String organizationalUnit = Sales; // String | Filter the user X500 organizational unit.
+    String organization = Acme corp; // String | Filter the user X500 organization.
+    String organizationalUnit = Sales dept; // String | Filter the user X500 organizational unit.
     String locality = Rennes; // String | Filter the user X500 locality.
     String country = FR; // String | Filter the user X500 country.
     String userId = wol.jim-smith.01; // String | Filter the user X500 custom user identifier.

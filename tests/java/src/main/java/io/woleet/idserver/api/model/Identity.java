@@ -61,7 +61,7 @@ public class Identity {
    * Common name (CN) (2.5.4.3)
    * @return commonName
   **/
-  @ApiModelProperty(example = "Jim Smith", required = true, value = "Common name (CN) (2.5.4.3)")
+  @ApiModelProperty(example = "John Doe", required = true, value = "Common name (CN) (2.5.4.3)")
 
   public String getCommonName() {
     return commonName;
@@ -84,7 +84,7 @@ public class Identity {
    * @return organization
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "Woleet", value = "Organization name (O) (2.5.4.10)")
+  @ApiModelProperty(example = "Acme corp", value = "Organization name (O) (2.5.4.10)")
 
   public String getOrganization() {
     return organization;
@@ -107,7 +107,7 @@ public class Identity {
    * @return organizationalUnit
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "Sales", value = "Organizational unit name (OU) (2.5.4.11)")
+  @ApiModelProperty(example = "Sales dept", value = "Organizational unit name (OU) (2.5.4.11)")
 
   public String getOrganizationalUnit() {
     return organizationalUnit;

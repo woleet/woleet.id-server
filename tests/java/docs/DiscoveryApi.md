@@ -328,7 +328,7 @@ public class Example {
     OAuthTokenAuth.setBearerToken("BEARER TOKEN");
 
     DiscoveryApi apiInstance = new DiscoveryApi(defaultClient);
-    String search = {"email":{"value":"john.doe@acme.com"},"username":{"value":"johndoe"},"x500CommonName":{"value":"John Doe"},"x500Organization":{"value":"Acme corp"},"x500OrganizationalUnit":{"value":"Business unit"}}; // String | A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
+    String search = {"email":{"value":"john.doe@acme.com"},"username":{"value":"johndoe"},"x500CommonName":{"value":"John Doe"},"x500Organization":{"value":"Acme corp"},"x500OrganizationalUnit":{"value":"Sales dept"}}; // String | A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
     try {
       List<UserDisco> result = apiInstance.discoverUsers(search);
       System.out.println(result);

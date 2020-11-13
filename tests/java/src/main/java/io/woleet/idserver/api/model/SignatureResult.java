@@ -115,7 +115,7 @@ public class SignatureResult {
    * @return signedMessage
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b", value = "Message that is signed (same as the `messageToSign` parameter).")
+  @ApiModelProperty(example = "Love is the message!", value = "Message that is signed (same as the `messageToSign` parameter).")
 
   public String getSignedMessage() {
     return signedMessage;
@@ -134,11 +134,11 @@ public class SignatureResult {
   }
 
    /**
-   * Signature of &#x60;messageToSign&#x60; or &#x60;hashToSign&#x60; using the public key &#x60;pubKey&#x60;, or signature of SHA256(&#x60;signedMessage&#x60; or &#x60;signedHash&#x60; + &#x60;signedIdentity&#x60; + &#x60;signedIssuerDomain&#x60;) if the identity of the signer and the domain of the identity issuer are included to the signed data. 
+   * Signature of &#x60;signedMessage&#x60; or &#x60;signedHash&#x60; using the public key &#x60;pubKey&#x60;, or signature of SHA256(&#x60;signedMessage&#x60; or &#x60;signedHash&#x60; + &#x60;signedIdentity&#x60; + &#x60;signedIssuerDomain&#x60;) if the identity of the signer and the domain of the identity issuer are included to the signed data. 
    * @return signature
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=", value = "Signature of `messageToSign` or `hashToSign` using the public key `pubKey`, or signature of SHA256(`signedMessage` or `signedHash` + `signedIdentity` + `signedIssuerDomain`) if the identity of the signer and the domain of the identity issuer are included to the signed data. ")
+  @ApiModelProperty(example = "IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=", value = "Signature of `signedMessage` or `signedHash` using the public key `pubKey`, or signature of SHA256(`signedMessage` or `signedHash` + `signedIdentity` + `signedIssuerDomain`) if the identity of the signer and the domain of the identity issuer are included to the signed data. ")
 
   public String getSignature() {
     return signature;
@@ -184,7 +184,7 @@ public class SignatureResult {
    * @return signedIdentity
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "CN=SOMEONE,O=COMPANY,CN=SIGNATUREDEPARTEMENT,OU=Somewhere,EMAILADDRESS=user@example.host", value = "X500 Distinguished Name representing the identity of the signer.<br> Returned only if `identityToSign` is used. ")
+  @ApiModelProperty(example = "CN=John Doe,EMAILADDRESS=john.doe@acme.com,O=Acme corp,OU=Sales dept", value = "X500 Distinguished Name representing the identity of the signer.<br> Returned only if `identityToSign` is used. ")
 
   public String getSignedIdentity() {
     return signedIdentity;
@@ -207,7 +207,7 @@ public class SignatureResult {
    * @return signedIssuerDomain
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "example.host", value = "Domain of the identity issuer (ie. of the organization who verified the identity).<br> Returned only if `identityToSign` is used. ")
+  @ApiModelProperty(example = "acme.com", value = "Domain of the identity issuer (ie. of the organization who verified the identity).<br> Returned only if `identityToSign` is used. ")
 
   public String getSignedIssuerDomain() {
     return signedIssuerDomain;
