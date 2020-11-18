@@ -10,6 +10,7 @@ import { sendEnrollmentFinalizeEmail, sendKeyEnrollmentEmail } from './send-emai
 import * as timestring from 'timestring';
 import { getAgent } from './utils/agent';
 import * as log from 'loglevel';
+import { cacheLock } from '../cacheLock';
 import { BadRequest } from 'http-errors';
 
 const TCUPath = path.join(__dirname, '../../assets/custom_TCU.pdf');
@@ -217,19 +218,20 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
 
   const signatureRequestSubscriber = observable
     .subscribe(async (signatureRequest) => {
-        try {
-          await testEnrollmentExpiration(enrollmentId, user);
-        } catch (error) {
-          log.error(error);
-          signatureRequestSubscriber.unsubscribe();
-        }
+      try {
+        await testEnrollmentExpiration(enrollmentId, user);
+      } catch (error) {
+        log.error(error);
+        signatureRequestSubscriber.unsubscribe();
+      }
 
-        // Once the signature request is fulfilled, finalize the enrollment
-        if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
-          await finalizeEnrollment(enrollmentId, user, signatureRequest);
-          signatureRequestSubscriber.unsubscribe();
-        }
-      },
+      // Once the signature request is fulfilled, finalize the enrollment
+      if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
+        const finalizeCurrentEnrollment = () => finalizeEnrollment(enrollmentId, user, signatureRequest);
+        cacheLock.doLockByCache('finalizeEnrollment', finalizeCurrentEnrollment);
+        signatureRequestSubscriber.unsubscribe();
+      }
+    },
       (error) => {
         log.error(error);
       }
