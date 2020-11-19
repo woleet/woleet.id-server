@@ -218,20 +218,22 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
 
   const signatureRequestSubscriber = observable.subscribe(
     async (signatureRequest) => {
+      cacheLock.doLockByCache('monitorSignatureRequest', async () => {
 
-      // Expire the enrollment if required
-      try {
-        await testEnrollmentExpiration(enrollmentId, user);
-      } catch (error) {
-        log.error(error);
-        signatureRequestSubscriber.unsubscribe();
-      }
+        // Expire the enrollment if required
+        try {
+          await testEnrollmentExpiration(enrollmentId, user);
+        } catch (error) {
+          log.error(error);
+          signatureRequestSubscriber.unsubscribe();
+        }
 
-      // Once the signature request is fulfilled, finalize the enrollment
-      if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
-        cacheLock.doLockByCache('finalizeEnrollment', () => finalizeEnrollment(enrollmentId, user, signatureRequest));
-        signatureRequestSubscriber.unsubscribe();
-      }
+        // Once the signature request is fulfilled, finalize the enrollment
+        if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
+          await finalizeEnrollment(enrollmentId, user, signatureRequest);
+          signatureRequestSubscriber.unsubscribe();
+        }
+      }, 0);
     },
     (error) => {
       log.error(error);
