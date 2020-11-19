@@ -168,7 +168,7 @@ export async function sendKeyEnrollmentEmail(user: InternalUserObject, enrollmen
   return;
 }
 
-export async function sendEnrollmentFinalizeEmail(userName: string, address: string, success: boolean): Promise<void> {
+export async function sendEnrollmentFinalizeEmail(userName: string, address: string, success: boolean, reason: string): Promise<void> {
   const config = getServerConfig();
   const logo = getLogo(config);
   const subject = 'Key registration ' + (success ? 'success' : 'failure');
@@ -181,7 +181,8 @@ export async function sendEnrollmentFinalizeEmail(userName: string, address: str
     logoURL: logo,
     userName,
     address,
-    success
+    success,
+    reason
   });
 
   try {

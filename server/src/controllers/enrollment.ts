@@ -49,11 +49,15 @@ export async function createEnrollment(enrollment: ApiPostEnrollmentObject): Pro
 }
 
 export async function getEnrollmentById(id: string): Promise<InternalEnrollmentObject> {
-  const enrollment = await Enrollment.getById(id);
-  if (!enrollment) {
-    throw new NotFoundEnrollmentError();
+  try {
+    const enrollment = await Enrollment.getById(id);
+    if (!enrollment) {
+      throw new NotFoundEnrollmentError();
+    }
+    return enrollment.toJSON();
+  } catch (err) {
+    log.error(err);
   }
-  return enrollment.toJSON();
 }
 
 export async function getEnrollmentUser(id): Promise<InternalUserObject> {
@@ -268,12 +272,12 @@ async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject
     }
 
     // Send a enrollment success email to the admin
-    await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, true);
+    await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, true, null);
   } catch (error) {
-    log.error('Cannot finalize enrollment', error.message);
+    log.error('Cannot finalize enrollment', error.original.detail);
 
     // Send a enrollment failure email to the admin
-    await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, false);
+    await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, false, error.errors[0].message);
   } finally {
 
     // In all cases, delete the enrollment
@@ -340,7 +344,7 @@ async function testEnrollmentExpiration(enrollmentId: string, user: InternalUser
   if (expiration && (Date.now() > expiration)) {
 
     // Send a enrollment failure email to the admin and delete the enrollment
-    sendEnrollmentFinalizeEmail(user.x500CommonName, null, false);
+    sendEnrollmentFinalizeEmail(user.x500CommonName, null, false, 'The enrollment expiration date is reached');
     deleteEnrollment(enrollmentId);
 
     // Delete the corresponding signature request
