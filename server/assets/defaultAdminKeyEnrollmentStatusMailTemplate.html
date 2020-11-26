@@ -26,10 +26,10 @@
                   <div style="font-size: 15px;line-height: 150%;">
                     Hi,<br><br>
                     {{#success}}
-                    {{userName}} just finished the registration of the key {{address}}.
+                    {{userName}} has successfully registered a key (public key: {{address}}).
                     {{/success}}
                     {{^success}}
-                    {{userName}} key {{#address}}({{address}}){{/address}} registration just failed. Reason: {{reason}}.
+                    {{userName}} failed to register a key{{#address}} (public key: {{address}}){{/address}}. Reason: {{reason}}.
                     {{/success}}
                     <br><br>
                   </div>

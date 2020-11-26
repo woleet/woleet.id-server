@@ -10,6 +10,7 @@ import { sendEnrollmentFinalizeEmail, sendKeyEnrollmentEmail } from './send-emai
 import * as timestring from 'timestring';
 import { getAgent } from './utils/agent';
 import * as log from 'loglevel';
+import { cacheLock } from '../cacheLock';
 import { BadRequest } from 'http-errors';
 
 const TCUPath = path.join(__dirname, '../../assets/custom_TCU.pdf');
@@ -169,13 +170,15 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
 }
 
 /**
- * Monitor the enrollment request with a pulling request to retrieve the address of the enrolled key.
+ * Monitor an enrollment by pulling the signature request to retrieve the address of the enrolled key.
  * @param signatureRequestId the signature request id
  * @param enrollmentId the enrollment id
  * @param user the enrolled user
  */
 export async function monitorSignatureRequest(signatureRequestId: string, enrollmentId: string,
                                               user: InternalUserObject) {
+
+  // Prepare an HTTP request to get the signature request
   const url = new URL(getServerConfig().proofDeskAPIURL);
   const httpsOptions: any = {
     host: url.host,
@@ -210,17 +213,18 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
           }
         });
       });
-
       req.on('error', (error) => {
         log.error('Cannot get signature request', error);
       });
-
     }, 1000 * 60);
     return () => clearInterval(interval);
   });
 
-  const signatureRequestSubscriber = observable
-    .subscribe(async (signatureRequest) => {
+  const signatureRequestSubscriber = observable.subscribe(
+    async (signatureRequest) => {
+      cacheLock.doLockByCache('monitorSignatureRequest', async () => {
+
+        // Expire the enrollment if required
         try {
           await testEnrollmentExpiration(enrollmentId, user);
         } catch (error) {
@@ -233,11 +237,12 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
           await finalizeEnrollment(enrollmentId, user, signatureRequest);
           signatureRequestSubscriber.unsubscribe();
         }
-      },
-      (error) => {
-        log.error(error);
-      }
-    );
+      }, 0);
+    },
+    (error) => {
+      log.error(error);
+    }
+  );
 }
 
 async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject, signatureRequest: any) {
