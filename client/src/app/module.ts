@@ -81,6 +81,7 @@ import { ConfigSMTPComponent } from '@components/parts/config.smtp';
 import { ConfigMailTemplateComponent } from '@components/parts/config.mail';
 import { ConfigProofDeskComponent } from '@components/parts/config.proofdesk';
 import { ConfigAskResetPasswordInputComponent } from '@components/parts/config.ask-password-reset';
+import { ConfigIdentityExpositionComponent } from '@components/parts/config.identity-exposition';
 import { LocalStorageService } from '@services/local-storage';
 import { ConfigKeyExpirationComponent } from '@components/parts/config.key-expiration';
 import { ConfigEnrollmentExpirationComponent } from '@parts/config.enrollment-expiration';
@@ -143,6 +144,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     ConfigOrganizationNameComponent,
     ConfigTCUComponent,
     ConfigBlockPasswordInputComponent,
+    ConfigIdentityExpositionComponent,
     DialogResetPasswordComponent,
     DialogMailResetComponent,
     DialogAskResetComponent,

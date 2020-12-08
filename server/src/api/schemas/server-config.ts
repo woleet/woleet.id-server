@@ -55,6 +55,9 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
 
   // Block password reset for user
   askForResetInput: Joi.boolean().allow(null),
+
+  // Block identity endpoint without signed identity query
+  preventIdentityExposition: Joi.boolean().allow(null)
 });
 
 export { updateConfig };

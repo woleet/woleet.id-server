@@ -63,6 +63,9 @@ interface ApiServerConfig {
 
   // Block password reset for user
   askForResetInput: boolean | null;
+
+  // Block identity endpoint without signed identity query
+  preventIdentityExposition: boolean | null;
 }
 
 interface ApiServerConfigUpdate {
@@ -117,4 +120,7 @@ interface ApiServerConfigUpdate {
 
   // Block password reset for user
   askForResetInput?: boolean;
+
+  // Block identity endpoint without signed identity query
+  preventIdentityExposition?: boolean;
 }

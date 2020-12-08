@@ -6,7 +6,7 @@ import { serializeIdentity } from '../api/serialize/identity';
 import { getServerConfig } from './server-config';
 import { signMessage } from './sign';
 
-export async function getIdentity(leftData: string, pubKey: string) {
+export async function getIdentity(leftData: string, pubKey: string, signedIdentity?: string) {
 
   const key = await Key.getByPubKey(pubKey, undefined, true);
   if (!key) {

@@ -33,6 +33,7 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     enableProofDesk,
     blockPasswordInput,
     askForResetInput,
+    preventIdentityExposition
   } = config;
 
   return {
@@ -69,5 +70,6 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     enableProofDesk,
     blockPasswordInput,
     askForResetInput,
+    preventIdentityExposition
   };
 }

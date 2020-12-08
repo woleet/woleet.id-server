@@ -51,7 +51,7 @@ public class IdentityApiTest {
 
         // Check that we cannot get an identity from an invalid public key
         try {
-            identityApi.getIdentity("invalid pubKey", null);
+            identityApi.getIdentity("invalid pubKey", null, null);
             fail("Should not be able to get an identity with an invalid key");
         }
         catch (ApiException e) {
@@ -60,7 +60,7 @@ public class IdentityApiTest {
 
         // Check that we cannot get an identity from a public key that does not exist
         try {
-            identityApi.getIdentity("1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG", null);
+            identityApi.getIdentity("1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG", null, null);
             fail("Should not be able to get an identity with an non existing key");
         }
         catch (ApiException e) {
@@ -82,7 +82,7 @@ public class IdentityApiTest {
         TimeUnit.MILLISECONDS.sleep(1000L);
 
         // Test expired key identity
-        IdentityResult expiredIdentity = identityApi.getIdentity(expiredKey.getPubKey(), leftData);
+        IdentityResult expiredIdentity = identityApi.getIdentity(expiredKey.getPubKey(), leftData, null);
         assertNotNull(expiredIdentity.getSignature());
         assertNotNull(expiredIdentity.getRightData());
         assertNotNull(expiredIdentity.getIdentity());
@@ -100,7 +100,7 @@ public class IdentityApiTest {
         KeyGet blockedKey = keyApi.createKey(userSeal.getId(), keyPost);
 
         // Test the blocked key identity
-        IdentityResult blockedIdentity = identityApi.getIdentity(blockedKey.getPubKey(), leftData);
+        IdentityResult blockedIdentity = identityApi.getIdentity(blockedKey.getPubKey(), leftData, null);
         assertNotNull(blockedIdentity.getSignature());
         assertNotNull(blockedIdentity.getRightData());
         assertNotNull(blockedIdentity.getIdentity());
@@ -123,7 +123,7 @@ public class IdentityApiTest {
         KeyGet revokedKey = keyApi.updateKey(CreatedRevokedKey.getId(), keyPut);
 
         // Test the revoked key identity
-        IdentityResult revokedIdentity = identityApi.getIdentity(revokedKey.getPubKey(), leftData);
+        IdentityResult revokedIdentity = identityApi.getIdentity(revokedKey.getPubKey(), leftData, null);
         assertNotNull(revokedIdentity.getSignature());
         assertNotNull(revokedIdentity.getRightData());
         assertNotNull(revokedIdentity.getIdentity());
@@ -141,7 +141,7 @@ public class IdentityApiTest {
         KeyGet externalKey = keyApi.createExternalKey(userESign.getId(), externalKeyPost);
 
         // Test external key identity
-        IdentityResult externalIdentity = identityApi.getIdentity(externalKey.getPubKey(), null);
+        IdentityResult externalIdentity = identityApi.getIdentity(externalKey.getPubKey(), null, null);
         assertNull(externalIdentity.getSignature());
         assertNull(externalIdentity.getRightData());
         assertNotNull(externalIdentity.getIdentity());
@@ -169,7 +169,7 @@ public class IdentityApiTest {
         KeyGet eSignatureKey = keyApi.createKey(userESign.getId(), keyPost);
 
         // Test E-Signature key
-        IdentityResult eSignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null);
+        IdentityResult eSignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, null);
         assertNull(eSignatureIdentity.getSignature());
         assertNull(eSignatureIdentity.getRightData());
         assertNotNull(eSignatureIdentity.getIdentity());
@@ -183,7 +183,7 @@ public class IdentityApiTest {
         assertEquals(Key.StatusEnum.VALID, eSignatureIdentity.getKey().getStatus());
 
         // Get and verify server's default identity
-        IdentityResult identityResult = identityApi.getIdentity(pubKey, leftData);
+        IdentityResult identityResult = identityApi.getIdentity(pubKey, leftData, null);
         assertNotNull(identityResult.getSignature());
         assertNotNull(identityResult.getIdentity());
         assertNotNull(identityResult.getIdentity().getCommonName());
@@ -199,5 +199,20 @@ public class IdentityApiTest {
         );
         assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(),
             leftData + identityResult.getRightData()));
+
+        // Test signed identity
+        String signedIdentity = Config.sha256()
+        IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, null);
+        assertNull(eSignatureIdentity.getSignature());
+        assertNull(eSignatureIdentity.getRightData());
+        assertNotNull(eSignatureIdentity.getIdentity());
+        assertNotNull(eSignatureIdentity.getIdentity().getCommonName());
+        assertNotNull(eSignatureIdentity.getKey());
+        assertEquals(userESign.getIdentity().getCommonName(), eSignatureIdentity.getIdentity().getCommonName());
+        assertNotNull(eSignatureIdentity.getKey());
+        assertEquals(keyPost.getName(), eSignatureIdentity.getKey().getName());
+        assertNotNull(eSignatureIdentity.getKey().getPubKey());
+        assertNull(eSignatureIdentity.getKey().getExpiration());
+        assertEquals(Key.StatusEnum.VALID, eSignatureIdentity.getKey().getStatus());
     }
 }

@@ -1,0 +1,10 @@
+<mat-card *ngIf="(config$ | async) as config; else loading">
+  <mat-card-title>Prevent the identity URL to expose users' identity</mat-card-title>
+  <mat-divider></mat-divider>
+  <br>
+  <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="config.preventIdentityExposition"
+    (change)="update(config.preventIdentityExposition)">
+    Do not expose users' identity on identity URL
+  </mat-checkbox>
+</mat-card>
+<ng-template #loading>Loading...<br></ng-template>
