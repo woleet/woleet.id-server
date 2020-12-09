@@ -201,8 +201,9 @@ public class IdentityApiTest {
             leftData + identityResult.getRightData()));
 
         // Test signed identity
-        String signedIdentity = Config.sha256()
-        IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, null);
+        String signedIdentity =
+            Config.sha256("CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail());
+        IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, signedIdentity);
         assertNull(eSignatureIdentity.getSignature());
         assertNull(eSignatureIdentity.getRightData());
         assertNotNull(eSignatureIdentity.getIdentity());

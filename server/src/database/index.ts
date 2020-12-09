@@ -7,6 +7,7 @@ import { ServerConfig } from './model/server-config';
 import { User } from './model/user';
 import { Key } from './model/key';
 import { Enrollment } from './model/enrollment';
+import { SignedIdentity } from './model/signed-identity';
 import { getServerConfig, setServerConfig } from '../controllers/server-config';
 import { afterInitUpgrade, postUpgrade, upgrade } from './upgrade';
 import { db } from '../config';
@@ -52,7 +53,7 @@ Key.model.beforeDestroy(async (key) => {
   await user.save();
 });
 
-export { User, Key, APIToken, ServerEvent, ServerConfig, Enrollment };
+export { User, Key, APIToken, ServerEvent, ServerConfig, Enrollment, SignedIdentity };
 
 export async function init() {
   let attempts = db.connectionAttempts;

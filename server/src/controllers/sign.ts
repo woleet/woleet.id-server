@@ -1,4 +1,4 @@
-import { Key, User } from '../database';
+import { Key, SignedIdentity, User } from '../database';
 import { getServerConfig } from './server-config';
 import { secureModule } from '../config';
 import { Unauthorized } from 'http-errors';
@@ -205,6 +205,12 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
   const now = new Date();
 
   await Key.update(key.get('id'), { lastUsed: now });
+
+  if (signedIdentity) {
+    const hash = crypto.createHash('sha256');
+    const signedIdentityHash = hash.update(signedIdentity).digest('hex');
+    await SignedIdentity.create({ signedIdentity: signedIdentityHash, publicKey: publicKey});
+  }
 
   return {
     userId: user.get('id'),

@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
-import { Key, User } from '../database';
-import { NotFoundKeyError } from '../errors';
+import { Key, User, SignedIdentity } from '../database';
+import { NotFoundKeyError, SignedIdentityPublicKeyMismatchError } from '../errors';
 
 import { serializeIdentity } from '../api/serialize/identity';
 import { getServerConfig } from './server-config';
@@ -45,6 +45,16 @@ export async function getIdentity(leftData: string, pubKey: string, signedIdenti
   // Add the revocation date if set (transform the date string to a timestamp)
   if (key.get('revokedAt')) {
     identityKey.revokedAt = +key.get('revokedAt');
+  }
+
+  if (signedIdentity) {
+    const hash = crypto.createHash('sha256');
+    const signedIdentityHash = hash.update(signedIdentity).digest('hex');
+    const SignedIdentities = await SignedIdentity.getBySignedIdentity(signedIdentityHash);
+    const matchingSignedIdentity = SignedIdentities.find(SignedId => SignedId.get('publicKey') === pubKey);
+    if (!matchingSignedIdentity) {
+      throw new SignedIdentityPublicKeyMismatchError();
+    }
   }
 
   if ((key.get('holder') === 'server') && (leftData !== undefined) && (user.get('mode') === 'seal')) {

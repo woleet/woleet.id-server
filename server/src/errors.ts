@@ -153,3 +153,11 @@ export class APITokenOwnerMismatchError extends WIDSError {
 
   name = 'APITokenOwnerMismatchError';
 }
+
+export class SignedIdentityPublicKeyMismatchError extends KeyOwnerMismatchError {
+  constructor(m = 'The signed identity doesn\'t match the public key') {
+    super(m);
+  }
+
+  name = 'SignedIdentityPublicKeyMismatchError';
+}

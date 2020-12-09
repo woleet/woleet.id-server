@@ -19,6 +19,22 @@ class SignedIdentityAccess extends AbstractInstanceAccess<InternalSignedIdentity
     return this.model.findOne({ where: { id } });
   }
 
+  /**
+   * @description Returns a signed identity/public key by its hashed signed identity (bitcoin address)
+   * @param signedIdentity: the requested hashed signed identity
+   */
+  async getBySignedIdentity(signedIdentity: string): Promise<SequelizeSignedIdentityObject[]> {
+    return this.model.findAll({ where: { signedIdentity } });
+  }
+
+  /**
+   * @description Returns a signed identity/public key by its public key (bitcoin address)
+   * @param publicKey: the requested public key
+   */
+  async getByPubKey(publicKey: string): Promise<SequelizeSignedIdentityObject[]> {
+    return this.model.findAll({ where: { publicKey } });
+  }
+
   handleError(err: any) {
     if (err instanceof ForeignKeyConstraintError) {
       throw new InvalidForeignUserError();
@@ -26,4 +42,4 @@ class SignedIdentityAccess extends AbstractInstanceAccess<InternalSignedIdentity
   }
 }
 
-export const Enrollment = new SignedIdentityAccess();
+export const SignedIdentity = new SignedIdentityAccess();
