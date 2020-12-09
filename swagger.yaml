@@ -1790,7 +1790,7 @@ components:
       required: false
       schema:
         type: string
-        example: "CN=John Doe,EMAILADDRESS=john.doe@acme.com,O=Acme corp,OU=Sales dept"
+        example: "CN,EMAILADDRESS,O,OU"
     PubKeyToVerifyQueryParameter:
       name: pubKey
       in: query

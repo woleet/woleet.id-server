@@ -1,5 +1,6 @@
 package io.woleet.idserver.api;
 
+import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
@@ -15,13 +16,22 @@ import static org.junit.Assert.*;
 public class IdentityApiTest {
 
     private static String WOLEET_ID_SERVER_IDENTITY_BASEPATH = System.getenv("WOLEET_ID_SERVER_IDENTITY_BASEPATH");
+    private static String WOLEET_ID_SERVER_SIGNATURE_BASEPATH = System.getenv("WOLEET_ID_SERVER_SIGNATURE_BASEPATH");
 
     static {
         if (WOLEET_ID_SERVER_IDENTITY_BASEPATH == null)
             WOLEET_ID_SERVER_IDENTITY_BASEPATH = "https://localhost:3000";
+
+        if (WOLEET_ID_SERVER_SIGNATURE_BASEPATH == null)
+            WOLEET_ID_SERVER_SIGNATURE_BASEPATH = "https://localhost:3000";
     }
 
     private UserGet userSeal, userESign;
+
+    private SignatureApi tokenAuthUserESignApi;
+
+    private ApiTokenApi apiTokenApi;
+    private APITokenGet apiTokenUserESignGet;
 
     @Before
     public void setUp() throws Exception {
@@ -29,13 +39,28 @@ public class IdentityApiTest {
         // Start from a clean state
         tearDown();
 
-        // Create test user
+        // Create test user;
         userSeal = Config.createTestUser(UserModeEnum.SEAL);
         userESign = Config.createTestUser(UserModeEnum.ESIGN);
+
+        // Create
+        apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
+        APITokenPost apiTokenUser = new APITokenPost();
+        apiTokenUser.setName("test-user");
+        apiTokenUser.setUserId(userESign.getId());
+        apiTokenUserESignGet = apiTokenApi.createAPIToken(apiTokenUser);
+        ApiClient apiClientUserESign = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
+        apiClientUserESign.addDefaultHeader("Authorization", "Bearer " + apiTokenUserESignGet.getValue());
+        tokenAuthUserESignApi = new SignatureApi(apiClientUserESign);
+
     }
 
     @After
     public void tearDown() throws Exception {
+        if (apiTokenUserESignGet != null) {
+            apiTokenApi.deleteAPIToken(apiTokenUserESignGet.getId());
+            apiTokenUserESignGet = null;
+        }
         Config.deleteAllTestUsers();
     }
 
@@ -163,7 +188,6 @@ public class IdentityApiTest {
         keyApi.deleteKey(expiredKey.getId());
 
         // Create E-Signature user and key
-        userESign = Config.createTestUser(UserModeEnum.ESIGN);
         keyPost = new KeyPost();
         keyPost.setName(Config.randomName());
         KeyGet eSignatureKey = keyApi.createKey(userESign.getId(), keyPost);
@@ -200,20 +224,23 @@ public class IdentityApiTest {
         assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(),
             leftData + identityResult.getRightData()));
 
+
         // Test signed identity
         String signedIdentity =
-            Config.sha256("CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail());
+            "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail();
+        String hashToSign = Config.randomHash();
+        tokenAuthUserESignApi.getSignature(null, hashToSign, userESign.getId(), null, eSignatureKey.getPubKey(), null, "CN,EMAILADDRESS");
         IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, signedIdentity);
-        assertNull(eSignatureIdentity.getSignature());
-        assertNull(eSignatureIdentity.getRightData());
-        assertNotNull(eSignatureIdentity.getIdentity());
-        assertNotNull(eSignatureIdentity.getIdentity().getCommonName());
-        assertNotNull(eSignatureIdentity.getKey());
-        assertEquals(userESign.getIdentity().getCommonName(), eSignatureIdentity.getIdentity().getCommonName());
-        assertNotNull(eSignatureIdentity.getKey());
-        assertEquals(keyPost.getName(), eSignatureIdentity.getKey().getName());
-        assertNotNull(eSignatureIdentity.getKey().getPubKey());
-        assertNull(eSignatureIdentity.getKey().getExpiration());
-        assertEquals(Key.StatusEnum.VALID, eSignatureIdentity.getKey().getStatus());
+        assertNull(SignatureIdentity.getSignature());
+        assertNull(SignatureIdentity.getRightData());
+        assertNotNull(SignatureIdentity.getIdentity());
+        assertNotNull(SignatureIdentity.getIdentity().getCommonName());
+        assertNotNull(SignatureIdentity.getKey());
+        assertEquals(userESign.getIdentity().getCommonName(), SignatureIdentity.getIdentity().getCommonName());
+        assertNotNull(SignatureIdentity.getKey());
+        assertEquals(keyPost.getName(), SignatureIdentity.getKey().getName());
+        assertNotNull(SignatureIdentity.getKey().getPubKey());
+        assertNull(SignatureIdentity.getKey().getExpiration());
+        assertEquals(Key.StatusEnum.VALID, SignatureIdentity.getKey().getStatus());
     }
 }
