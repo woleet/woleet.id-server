@@ -51,6 +51,10 @@ public class FullIdentity {
   @SerializedName(SERIALIZED_NAME_COUNTRY)
   private String country;
 
+  public static final String SERIALIZED_NAME_EMAIL = "email";
+  @SerializedName(SERIALIZED_NAME_EMAIL)
+  private String email;
+
   public static final String SERIALIZED_NAME_USER_ID = "userId";
   @SerializedName(SERIALIZED_NAME_USER_ID)
   private String userId;
@@ -170,6 +174,29 @@ public class FullIdentity {
   }
 
 
+  public FullIdentity email(String email) {
+    
+    this.email = email;
+    return this;
+  }
+
+   /**
+   * Email address.
+   * @return email
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "john.doe@acme.com", value = "Email address.")
+
+  public String getEmail() {
+    return email;
+  }
+
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+
   public FullIdentity userId(String userId) {
     
     this.userId = userId;
@@ -207,12 +234,13 @@ public class FullIdentity {
         Objects.equals(this.organizationalUnit, fullIdentity.organizationalUnit) &&
         Objects.equals(this.locality, fullIdentity.locality) &&
         Objects.equals(this.country, fullIdentity.country) &&
+        Objects.equals(this.email, fullIdentity.email) &&
         Objects.equals(this.userId, fullIdentity.userId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(commonName, organization, organizationalUnit, locality, country, userId);
+    return Objects.hash(commonName, organization, organizationalUnit, locality, country, email, userId);
   }
 
 
@@ -225,6 +253,7 @@ public class FullIdentity {
     sb.append("    organizationalUnit: ").append(toIndentedString(organizationalUnit)).append("\n");
     sb.append("    locality: ").append(toIndentedString(locality)).append("\n");
     sb.append("    country: ").append(toIndentedString(country)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("}");
     return sb.toString();

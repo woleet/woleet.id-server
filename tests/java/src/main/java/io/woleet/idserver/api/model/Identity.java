@@ -50,6 +50,10 @@ public class Identity {
   @SerializedName(SERIALIZED_NAME_COUNTRY)
   private String country;
 
+  public static final String SERIALIZED_NAME_EMAIL = "email";
+  @SerializedName(SERIALIZED_NAME_EMAIL)
+  private String email;
+
 
   public Identity commonName(String commonName) {
     
@@ -165,6 +169,29 @@ public class Identity {
   }
 
 
+  public Identity email(String email) {
+    
+    this.email = email;
+    return this;
+  }
+
+   /**
+   * Email address.
+   * @return email
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "john.doe@acme.com", value = "Email address.")
+
+  public String getEmail() {
+    return email;
+  }
+
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -178,12 +205,13 @@ public class Identity {
         Objects.equals(this.organization, identity.organization) &&
         Objects.equals(this.organizationalUnit, identity.organizationalUnit) &&
         Objects.equals(this.locality, identity.locality) &&
-        Objects.equals(this.country, identity.country);
+        Objects.equals(this.country, identity.country) &&
+        Objects.equals(this.email, identity.email);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(commonName, organization, organizationalUnit, locality, country);
+    return Objects.hash(commonName, organization, organizationalUnit, locality, country, email);
   }
 
 
@@ -196,6 +224,7 @@ public class Identity {
     sb.append("    organizationalUnit: ").append(toIndentedString(organizationalUnit)).append("\n");
     sb.append("    locality: ").append(toIndentedString(locality)).append("\n");
     sb.append("    country: ").append(toIndentedString(country)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("}");
     return sb.toString();
   }

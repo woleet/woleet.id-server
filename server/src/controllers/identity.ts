@@ -5,6 +5,7 @@ import { NotFoundKeyError, SignedIdentityPublicKeyMismatchError } from '../error
 import { serializeIdentity } from '../api/serialize/identity';
 import { getServerConfig } from './server-config';
 import { signMessage } from './sign';
+import { deserializeX500DN } from './utils/x500-parser';
 
 export async function getIdentity(leftData: string, pubKey: string, signedIdentity?: string) {
 
@@ -16,8 +17,6 @@ export async function getIdentity(leftData: string, pubKey: string, signedIdenti
   const keyUserId = key.get('userId');
 
   const user = await User.getById(keyUserId);
-
-  const identity = serializeIdentity(user.toJSON(), true);
 
   const expired = key.get('expiration') ? (+key.get('expiration') < Date.now()) : false;
 
@@ -47,6 +46,8 @@ export async function getIdentity(leftData: string, pubKey: string, signedIdenti
     identityKey.revokedAt = +key.get('revokedAt');
   }
 
+  let identity;
+
   if (signedIdentity) {
     const hash = crypto.createHash('sha256');
     const signedIdentityHash = hash.update(signedIdentity).digest('hex');
@@ -55,7 +56,12 @@ export async function getIdentity(leftData: string, pubKey: string, signedIdenti
     if (!matchingSignedIdentity) {
       throw new SignedIdentityPublicKeyMismatchError();
     }
+    identity = deserializeX500DN(signedIdentity);
+  } else {
+    identity = serializeIdentity(user.toJSON(), true);
   }
+
+  console.log(identity);
 
   if ((key.get('holder') === 'server') && (leftData !== undefined) && (user.get('mode') === 'seal')) {
     const rightData = getServerConfig().identityURL + '.' + crypto.randomBytes(16).toString('hex');

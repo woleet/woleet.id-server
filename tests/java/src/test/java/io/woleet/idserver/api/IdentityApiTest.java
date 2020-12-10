@@ -225,11 +225,13 @@ public class IdentityApiTest {
             leftData + identityResult.getRightData()));
 
 
-        // Test signed identity
+        // Create signature to test new identity endpoint
         String signedIdentity =
             "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail();
         String hashToSign = Config.randomHash();
         tokenAuthUserESignApi.getSignature(null, hashToSign, userESign.getId(), null, eSignatureKey.getPubKey(), null, "CN,EMAILADDRESS");
+
+        // Test signed identity
         IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, signedIdentity);
         assertNull(SignatureIdentity.getSignature());
         assertNull(SignatureIdentity.getRightData());
@@ -237,6 +239,7 @@ public class IdentityApiTest {
         assertNotNull(SignatureIdentity.getIdentity().getCommonName());
         assertNotNull(SignatureIdentity.getKey());
         assertEquals(userESign.getIdentity().getCommonName(), SignatureIdentity.getIdentity().getCommonName());
+        assertEquals(userESign.getIdentity().getEmail(), SignatureIdentity.getIdentity().getEmail());
         assertNotNull(SignatureIdentity.getKey());
         assertEquals(keyPost.getName(), SignatureIdentity.getKey().getName());
         assertNotNull(SignatureIdentity.getKey().getPubKey());
