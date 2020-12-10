@@ -20,7 +20,7 @@ class SignedIdentityAccess extends AbstractInstanceAccess<InternalSignedIdentity
   }
 
   /**
-   * @description Returns a signed identity/public key by its hashed signed identity (bitcoin address)
+   * @description Returns all signed identity/public key pair by its hashed signed identity
    * @param signedIdentity: the requested hashed signed identity
    */
   async getBySignedIdentity(signedIdentity: string): Promise<SequelizeSignedIdentityObject[]> {
@@ -28,11 +28,20 @@ class SignedIdentityAccess extends AbstractInstanceAccess<InternalSignedIdentity
   }
 
   /**
-   * @description Returns a signed identity/public key by its public key (bitcoin address)
+   * @description Returns all signed identity/public key pair by its public key (bitcoin address)
    * @param publicKey: the requested public key
    */
   async getByPubKey(publicKey: string): Promise<SequelizeSignedIdentityObject[]> {
     return this.model.findAll({ where: { publicKey } });
+  }
+
+  /**
+   * @description Returns a signed identity/public key pair
+   * @param publicKey: the requested public key
+   * @param signedIdentity: the requested hashed signed identity
+   */
+  async getByCombinaison(publicKey: string, signedIdentity: string): Promise<SequelizeSignedIdentityObject> {
+    return this.model.findOne({ where: { publicKey, signedIdentity } });
   }
 
   handleError(err: any) {

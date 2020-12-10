@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 import { Key, User, SignedIdentity } from '../database';
-import { NotFoundKeyError, SignedIdentityPublicKeyMismatchError } from '../errors';
+import { NotFoundKeyError, SignedIdentityPublicKeyPairNotFoundError } from '../errors';
 
 import { serializeIdentity } from '../api/serialize/identity';
 import { getServerConfig } from './server-config';
@@ -48,20 +48,18 @@ export async function getIdentity(leftData: string, pubKey: string, signedIdenti
 
   let identity;
 
+  // If there is a signed identity as a parameter check if the signed identity/public key pair exist in the database
   if (signedIdentity) {
     const hash = crypto.createHash('sha256');
     const signedIdentityHash = hash.update(signedIdentity).digest('hex');
-    const SignedIdentities = await SignedIdentity.getBySignedIdentity(signedIdentityHash);
-    const matchingSignedIdentity = SignedIdentities.find(SignedId => SignedId.get('publicKey') === pubKey);
-    if (!matchingSignedIdentity) {
-      throw new SignedIdentityPublicKeyMismatchError();
+    const signedIdentities = await SignedIdentity.getByCombinaison(pubKey, signedIdentityHash);
+    if (!signedIdentities) {
+      throw new SignedIdentityPublicKeyPairNotFoundError();
     }
     identity = deserializeX500DN(signedIdentity);
   } else {
     identity = serializeIdentity(user.toJSON(), true);
   }
-
-  console.log(identity);
 
   if ((key.get('holder') === 'server') && (leftData !== undefined) && (user.get('mode') === 'seal')) {
     const rightData = getServerConfig().identityURL + '.' + crypto.randomBytes(16).toString('hex');

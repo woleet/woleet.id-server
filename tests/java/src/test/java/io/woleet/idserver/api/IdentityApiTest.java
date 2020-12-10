@@ -282,8 +282,6 @@ public class IdentityApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
-
-
         // Test signed identity
         IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, signedIdentity);
         assertNull(SignatureIdentity.getSignature());

@@ -206,10 +206,14 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
 
   await Key.update(key.get('id'), { lastUsed: now });
 
+  // If the signature have a signed identity, save the signed identity/public key pair in the database if it doesn't already exist
   if (signedIdentity) {
     const hash = crypto.createHash('sha256');
     const signedIdentityHash = hash.update(signedIdentity).digest('hex');
-    await SignedIdentity.create({ signedIdentity: signedIdentityHash, publicKey: publicKey});
+    const signedIdentities = await SignedIdentity.getByCombinaison(pubKey, signedIdentityHash);
+    if (!signedIdentities) {
+     await SignedIdentity.create({ signedIdentity: signedIdentityHash, publicKey: publicKey});
+    }
   }
 
   return {
