@@ -33,6 +33,8 @@ public class IdentityApiTest {
     private ApiTokenApi apiTokenApi;
     private APITokenGet apiTokenUserESignGet;
 
+    private ServerConfigApi serverConfigApi;
+
     @Before
     public void setUp() throws Exception {
 
@@ -43,7 +45,7 @@ public class IdentityApiTest {
         userSeal = Config.createTestUser(UserModeEnum.SEAL);
         userESign = Config.createTestUser(UserModeEnum.ESIGN);
 
-        // Create
+        // Create one helper API with user rights using token authentication
         apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
         APITokenPost apiTokenUser = new APITokenPost();
         apiTokenUser.setName("test-user");
@@ -53,6 +55,8 @@ public class IdentityApiTest {
         apiClientUserESign.addDefaultHeader("Authorization", "Bearer " + apiTokenUserESignGet.getValue());
         tokenAuthUserESignApi = new SignatureApi(apiClientUserESign);
 
+        //
+        serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
     }
 
     @After
@@ -69,6 +73,12 @@ public class IdentityApiTest {
 
         IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
             .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
+
+        ServerConfig serverConfig = new ServerConfigApi(Config.getAdminAuthApiClient()).getServerConfig();
+        Boolean currentPreventIdentityExpositionConfig = serverConfig.getPreventIdentityExposition();
+
+        serverConfig.setPreventIdentityExposition(false);
+        serverConfigApi.updateServerConfig(serverConfig);
 
         KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
 
@@ -93,7 +103,6 @@ public class IdentityApiTest {
         }
 
         // Check that server's default key and identity URL are set
-        ServerConfig serverConfig = new ServerConfigApi(Config.getAdminAuthApiClient()).getServerConfig();
         assertTrue(serverConfig.getFallbackOnDefaultKey());
         assertNotNull(serverConfig.getIdentityURL());
         assertNotNull(serverConfig.getDefaultKeyId());
@@ -231,6 +240,50 @@ public class IdentityApiTest {
         String hashToSign = Config.randomHash();
         tokenAuthUserESignApi.getSignature(null, hashToSign, userESign.getId(), null, eSignatureKey.getPubKey(), null, "CN,EMAILADDRESS");
 
+        // Check that we cannot get an identity from an invalid public key
+        try {
+            IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, "CN=false");
+            fail("Should not be able to get an identity with an invalid signed identity");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+        }
+
+        // Check that we cannot get an identity from an invalid public key
+        signedIdentity =
+            "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail() + ",C=" + userESign.getIdentity().getCountry();
+        try {
+            IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, signedIdentity);
+            fail("Should not be able to get an identity with a signed identity mismatching the one which signed");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+        }
+
+        // Check that we cannot get an identity from an invalid public key
+        signedIdentity =
+            "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail();
+        try {
+            IdentityResult SignatureIdentity = identityApi.getIdentity(pubKey, null, signedIdentity);
+            fail("Should not be able to get an identity with a public key mismatching the one which signed");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+        }
+
+        serverConfig.setPreventIdentityExposition(true);
+        serverConfigApi.updateServerConfig(serverConfig);
+        try {
+            IdentityResult SignatureIdentity = identityApi.getIdentity(pubKey, null, null);
+            fail("Should not be able to get an identity with without the signed identity field if the server do not "
+                 + "expose identity");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+        }
+
+
+
         // Test signed identity
         IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, signedIdentity);
         assertNull(SignatureIdentity.getSignature());
@@ -239,11 +292,15 @@ public class IdentityApiTest {
         assertNotNull(SignatureIdentity.getIdentity().getCommonName());
         assertNotNull(SignatureIdentity.getKey());
         assertEquals(userESign.getIdentity().getCommonName(), SignatureIdentity.getIdentity().getCommonName());
-        assertEquals(userESign.getIdentity().getEmail(), SignatureIdentity.getIdentity().getEmail());
+        assertEquals(userESign.getEmail(), SignatureIdentity.getIdentity().getEmailAddress());
+        assertNull(SignatureIdentity.getIdentity().getCountry());
         assertNotNull(SignatureIdentity.getKey());
         assertEquals(keyPost.getName(), SignatureIdentity.getKey().getName());
         assertNotNull(SignatureIdentity.getKey().getPubKey());
         assertNull(SignatureIdentity.getKey().getExpiration());
         assertEquals(Key.StatusEnum.VALID, SignatureIdentity.getKey().getStatus());
+
+        serverConfig.setPreventIdentityExposition(currentPreventIdentityExpositionConfig);
+        serverConfigApi.updateServerConfig(serverConfig);
     }
 }

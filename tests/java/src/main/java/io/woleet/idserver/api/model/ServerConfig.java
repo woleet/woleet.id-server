@@ -34,6 +34,10 @@ public class ServerConfig {
   @SerializedName(SERIALIZED_NAME_IDENTITY_U_R_L)
   private String identityURL;
 
+  public static final String SERIALIZED_NAME_PREVENT_IDENTITY_EXPOSITION = "preventIdentityExposition";
+  @SerializedName(SERIALIZED_NAME_PREVENT_IDENTITY_EXPOSITION)
+  private Boolean preventIdentityExposition;
+
   public static final String SERIALIZED_NAME_SIGNATURE_U_R_L = "signatureURL";
   @SerializedName(SERIALIZED_NAME_SIGNATURE_U_R_L)
   private String signatureURL;
@@ -71,6 +75,29 @@ public class ServerConfig {
 
   public void setIdentityURL(String identityURL) {
     this.identityURL = identityURL;
+  }
+
+
+  public ServerConfig preventIdentityExposition(Boolean preventIdentityExposition) {
+    
+    this.preventIdentityExposition = preventIdentityExposition;
+    return this;
+  }
+
+   /**
+   * Prevent the identity endpoint to expose users identity. The identity endpoint will only verify that a given identity was used to sign a message with a given public key. If the result is positive the endpoint will return only the verified identity field.
+   * @return preventIdentityExposition
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "Prevent the identity endpoint to expose users identity. The identity endpoint will only verify that a given identity was used to sign a message with a given public key. If the result is positive the endpoint will return only the verified identity field.")
+
+  public Boolean getPreventIdentityExposition() {
+    return preventIdentityExposition;
+  }
+
+
+  public void setPreventIdentityExposition(Boolean preventIdentityExposition) {
+    this.preventIdentityExposition = preventIdentityExposition;
   }
 
 
@@ -176,6 +203,7 @@ public class ServerConfig {
     }
     ServerConfig serverConfig = (ServerConfig) o;
     return Objects.equals(this.identityURL, serverConfig.identityURL) &&
+        Objects.equals(this.preventIdentityExposition, serverConfig.preventIdentityExposition) &&
         Objects.equals(this.signatureURL, serverConfig.signatureURL) &&
         Objects.equals(this.APIURL, serverConfig.APIURL) &&
         Objects.equals(this.defaultKeyId, serverConfig.defaultKeyId) &&
@@ -184,7 +212,7 @@ public class ServerConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(identityURL, signatureURL, APIURL, defaultKeyId, fallbackOnDefaultKey);
+    return Objects.hash(identityURL, preventIdentityExposition, signatureURL, APIURL, defaultKeyId, fallbackOnDefaultKey);
   }
 
 
@@ -193,6 +221,7 @@ public class ServerConfig {
     StringBuilder sb = new StringBuilder();
     sb.append("class ServerConfig {\n");
     sb.append("    identityURL: ").append(toIndentedString(identityURL)).append("\n");
+    sb.append("    preventIdentityExposition: ").append(toIndentedString(preventIdentityExposition)).append("\n");
     sb.append("    signatureURL: ").append(toIndentedString(signatureURL)).append("\n");
     sb.append("    APIURL: ").append(toIndentedString(APIURL)).append("\n");
     sb.append("    defaultKeyId: ").append(toIndentedString(defaultKeyId)).append("\n");

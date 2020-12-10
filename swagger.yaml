@@ -1105,7 +1105,7 @@ components:
           type: string
           description: Country code (C) (2.5.4.6)
           example: "FR"
-        email:
+        emailAddress:
           type: string
           format: email
           description: Email address.
@@ -1412,6 +1412,11 @@ components:
       properties:
         identityURL:
           $ref: '#/components/schemas/IdentityURL'
+        preventIdentityExposition:
+          type: boolean
+          description: Prevent the identity endpoint to expose users identity.
+            The identity endpoint will only verify that a given identity was used to sign a message with a given public key.
+            If the result is positive the endpoint will return only the verified identity field.
         signatureURL:
           $ref: '#/components/schemas/SignatureURL'
         APIURL:
