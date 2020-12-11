@@ -14,7 +14,6 @@ RUN cd /build/client && \
     npm run postinstall && \
     npm run build:prod
 
-
 # https://docs.docker.com/develop/develop-images/multistage-build/
 FROM nginx:mainline-alpine
 
