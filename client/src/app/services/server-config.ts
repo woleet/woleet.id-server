@@ -111,7 +111,6 @@ export class ServerConfigService {
     this.http.put<ApiServerConfig>(`${serverURL}/server-config`, config)
       .subscribe((up) => {
         this.decrLock();
-        log.debug('updated', up);
         this.config$.next(up);
       });
   }

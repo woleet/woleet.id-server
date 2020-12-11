@@ -31,7 +31,7 @@ router.get('/identity', async function (ctx) {
     throw new BadRequest('Invalid "pubKey" parameter');
   }
 
-  if (getServerConfig().preventIdentityExposition && !signedIdentity) {
+  if (getServerConfig().preventIdentityExposure && !signedIdentity) {
     throw new BadRequest('Missing "signedIdentity" parameter');
   }
 

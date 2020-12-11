@@ -4,10 +4,10 @@ import { ErrorMessageProvider } from '@components/util';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'config-identity-exposition',
+  selector: 'config-identity-exposure',
   templateUrl: './index.html'
 })
-export class ConfigIdentityExpositionComponent extends ErrorMessageProvider implements OnInit {
+export class ConfigIdentityExposureComponent extends ErrorMessageProvider implements OnInit {
 
   config$: Observable<ApiServerConfig>;
 
@@ -19,7 +19,7 @@ export class ConfigIdentityExpositionComponent extends ErrorMessageProvider impl
     this.config$ = this.configService.getConfig();
   }
 
-  update(preventIdentityExposition: boolean) {
-    this.configService.updateConfig({ preventIdentityExposition });
+  update(preventIdentityExposure: boolean) {
+    this.configService.updateConfig({ preventIdentityExposure });
   }
 }

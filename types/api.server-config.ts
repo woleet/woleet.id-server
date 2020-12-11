@@ -65,7 +65,7 @@ interface ApiServerConfig {
   askForResetInput: boolean | null;
 
   // Block identity endpoint without signed identity query
-  preventIdentityExposition: boolean | null;
+  preventIdentityExposure: boolean | null;
 }
 
 interface ApiServerConfigUpdate {
@@ -122,5 +122,5 @@ interface ApiServerConfigUpdate {
   askForResetInput?: boolean;
 
   // Block identity endpoint without signed identity query
-  preventIdentityExposition?: boolean;
+  preventIdentityExposure?: boolean;
 }

@@ -33,7 +33,7 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     enableProofDesk,
     blockPasswordInput,
     askForResetInput,
-    preventIdentityExposition
+    preventIdentityExposure
   } = config;
 
   return {
@@ -57,7 +57,7 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     OIDCPClients,
     keyExpirationOffset,
     enrollmentExpirationOffset,
-    enableSMTP: enableSMTP,
+    enableSMTP,
     SMTPConfig,
     webClientURL,
     mailResetPasswordTemplate,
@@ -70,6 +70,6 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     enableProofDesk,
     blockPasswordInput,
     askForResetInput,
-    preventIdentityExposition
+    preventIdentityExposure
   };
 }

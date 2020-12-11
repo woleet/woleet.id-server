@@ -57,7 +57,7 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   askForResetInput: Joi.boolean().allow(null),
 
   // Block identity endpoint without signed identity query
-  preventIdentityExposition: Joi.boolean().allow(null)
+  preventIdentityExposure: Joi.boolean().allow(null)
 });
 
 export { updateConfig };

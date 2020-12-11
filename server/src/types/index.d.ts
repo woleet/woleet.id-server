@@ -300,7 +300,7 @@ declare global {
     askForResetInput?: boolean;
 
     // Block identity endpoint without signed identity query
-    preventIdentityExposition?: boolean;
+    preventIdentityExposure?: boolean;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -357,7 +357,7 @@ declare global {
     askForResetInput?: boolean;
 
     // Block identity endpoint without signed identity query
-    preventIdentityExposition?: boolean;
+    preventIdentityExposure?: boolean;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -414,7 +414,7 @@ declare global {
     askForResetInput?: boolean;
 
     // Block identity endpoint without signed identity query
-    preventIdentityExposition?: boolean;
+    preventIdentityExposure?: boolean;
   }
 
   /* Enrollment */

@@ -75,9 +75,9 @@ public class IdentityApiTest {
             .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
 
         ServerConfig serverConfig = new ServerConfigApi(Config.getAdminAuthApiClient()).getServerConfig();
-        Boolean currentPreventIdentityExpositionConfig = serverConfig.getPreventIdentityExposition();
+        Boolean currentPreventIdentityExposureConfig = serverConfig.getPreventIdentityExposure();
 
-        serverConfig.setPreventIdentityExposition(false);
+        serverConfig.setPreventIdentityExposure(false);
         serverConfigApi.updateServerConfig(serverConfig);
 
         KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
@@ -233,16 +233,14 @@ public class IdentityApiTest {
         assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(),
             leftData + identityResult.getRightData()));
 
-
         // Create signature to test new identity endpoint
-        String signedIdentity =
-            "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail();
         String hashToSign = Config.randomHash();
-        tokenAuthUserESignApi.getSignature(null, hashToSign, userESign.getId(), null, eSignatureKey.getPubKey(), null, "CN,EMAILADDRESS");
+        tokenAuthUserESignApi.getSignature(null, hashToSign, userESign.getId(), null, eSignatureKey.getPubKey(), null,
+            "CN,EMAILADDRESS");
 
         // Check that we cannot get an identity from an invalid public key
         try {
-            IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, "CN=false");
+            identityApi.getIdentity(eSignatureKey.getPubKey(), null, "CN=false");
             fail("Should not be able to get an identity with an invalid signed identity");
         }
         catch (ApiException e) {
@@ -250,10 +248,11 @@ public class IdentityApiTest {
         }
 
         // Check that we cannot get an identity from an invalid public key
-        signedIdentity =
-            "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail() + ",C=" + userESign.getIdentity().getCountry();
+        String signedIdentity =
+            "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail() + ",C="
+            + userESign.getIdentity().getCountry();
         try {
-            IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, signedIdentity);
+            identityApi.getIdentity(eSignatureKey.getPubKey(), null, signedIdentity);
             fail("Should not be able to get an identity with a signed identity mismatching the one which signed");
         }
         catch (ApiException e) {
@@ -264,17 +263,17 @@ public class IdentityApiTest {
         signedIdentity =
             "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail();
         try {
-            IdentityResult SignatureIdentity = identityApi.getIdentity(pubKey, null, signedIdentity);
+            identityApi.getIdentity(pubKey, null, signedIdentity);
             fail("Should not be able to get an identity with a public key mismatching the one which signed");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
-        serverConfig.setPreventIdentityExposition(true);
+        serverConfig.setPreventIdentityExposure(true);
         serverConfigApi.updateServerConfig(serverConfig);
         try {
-            IdentityResult SignatureIdentity = identityApi.getIdentity(pubKey, null, null);
+            identityApi.getIdentity(pubKey, null, null);
             fail("Should not be able to get an identity with without the signed identity field if the server do not "
                  + "expose identity");
         }
@@ -298,7 +297,7 @@ public class IdentityApiTest {
         assertNull(SignatureIdentity.getKey().getExpiration());
         assertEquals(Key.StatusEnum.VALID, SignatureIdentity.getKey().getStatus());
 
-        serverConfig.setPreventIdentityExposition(currentPreventIdentityExpositionConfig);
+        serverConfig.setPreventIdentityExposure(currentPreventIdentityExposureConfig);
         serverConfigApi.updateServerConfig(serverConfig);
     }
 }
