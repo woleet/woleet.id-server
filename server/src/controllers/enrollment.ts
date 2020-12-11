@@ -57,7 +57,7 @@ export async function getEnrollmentById(id: string): Promise<InternalEnrollmentO
     }
     return enrollment.toJSON();
   } catch (err) {
-    log.error(err);
+    throw err;
   }
 }
 
