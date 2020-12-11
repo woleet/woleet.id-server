@@ -85,11 +85,11 @@ public class ServerConfig {
   }
 
    /**
-   * True to prevent the identity endpoint from exposing the identity data of users.&lt;br&gt; In this mode, the identity endpoint requires the &#x60;signedIdentity&#x60; parameter to be provided, and verifies that this identity was signed at least once by the given public key.&lt;br&gt; If so, the identity endpoint succeeds and returns only the identity fields present in the provided signed identity. 
+   * True to prevent the identity endpoint from exposing the identity of users.&lt;br&gt; In this mode, the identity endpoint requires the &#x60;signedIdentity&#x60; parameter to be provided, and verifies that this identity was signed at least once by the public key.&lt;br&gt; If so, the identity endpoint succeeds and returns only the identity fields present in the provided signed identity. 
    * @return preventIdentityExposure
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "True to prevent the identity endpoint from exposing the identity data of users.<br> In this mode, the identity endpoint requires the `signedIdentity` parameter to be provided, and verifies that this identity was signed at least once by the given public key.<br> If so, the identity endpoint succeeds and returns only the identity fields present in the provided signed identity. ")
+  @ApiModelProperty(value = "True to prevent the identity endpoint from exposing the identity of users.<br> In this mode, the identity endpoint requires the `signedIdentity` parameter to be provided, and verifies that this identity was signed at least once by the public key.<br> If so, the identity endpoint succeeds and returns only the identity fields present in the provided signed identity. ")
 
   public Boolean getPreventIdentityExposure() {
     return preventIdentityExposure;

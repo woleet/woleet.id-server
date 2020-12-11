@@ -274,8 +274,7 @@ public class IdentityApiTest {
         serverConfigApi.updateServerConfig(serverConfig);
         try {
             identityApi.getIdentity(pubKey, null, null);
-            fail("Should not be able to get an identity with without the signed identity field if the server do not "
-                 + "expose identity");
+            fail("Should not be able to get an identity without the signed identity");
         }
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
