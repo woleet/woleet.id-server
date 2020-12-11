@@ -19,7 +19,7 @@ export class ConfigIdentityExpositionComponent extends ErrorMessageProvider impl
     this.config$ = this.configService.getConfig();
   }
 
-  update(blockPasswordInput: boolean) {
-    this.configService.updateConfig({ blockPasswordInput });
+  update(preventIdentityExposition: boolean) {
+    this.configService.updateConfig({ preventIdentityExposition });
   }
 }
