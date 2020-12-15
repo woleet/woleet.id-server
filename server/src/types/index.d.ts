@@ -28,7 +28,6 @@ declare global {
   type uuid = string;
 
   interface CommonInternalProperties {
-    /** UUID */
     id: string;
     updatedAt: Date;
     createdAt: Date;
@@ -46,11 +45,10 @@ declare global {
     router: Router;
   }
 
-  /* User: server specific */
-
   interface SequelizeUserObject extends Instance<InternalUserObject> {
   }
 
+  /* User: server specific */
   interface InternalUserObject extends UserObject, InternalIdentityObject, CommonInternalProperties {
     lastLogin: Date;
 
@@ -94,11 +92,10 @@ declare global {
     defaultKeyId?: string;
   }
 
-  /* Key: server specific */
-
   interface SequelizeKeyObject extends Instance<InternalKeyObject> {
   }
 
+  /* Key: server specific */
   interface InternalKeyObject extends KeyObject, CommonInternalProperties {
     lastUsed: Date;
 
@@ -173,11 +170,10 @@ declare global {
     jti: string;
   }
 
-  /* APIToken: server specific */
-
   interface SequelizeAPITokenObject extends Instance<InternalAPITokenObject> {
   }
 
+  /* APIToken: server specific */
   interface InternalAPITokenObject extends APITokenObject, CommonInternalProperties {
     lastUsed: Date;
 

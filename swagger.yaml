@@ -145,8 +145,8 @@ paths:
         If the server is configured to prevent users' identity exposure, the caller must also provide a user identity signed at least once by the public key (as an X500 Distinguished Name).
       parameters:
         - $ref: '#/components/parameters/PubKeyToVerifyQueryParameter'
-        - $ref: '#/components/parameters/LeftDataQueryParameter'
         - $ref: '#/components/parameters/SignedIdentityParameter'
+        - $ref: '#/components/parameters/LeftDataQueryParameter'
       responses:
         '200':
           description: Successful operation.

@@ -18,7 +18,7 @@ public class Config {
     //private static final Logger logger = LoggerFactory.getLogger(Config.class);
 
     // True if tests are to be debugged
-    private static final boolean debug = false;
+    private static final boolean debug = true;
 
     // Initialize data needed to test users
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";

@@ -12,7 +12,7 @@ class SignedIdentityAccess extends AbstractInstanceAccess<InternalSignedIdentity
 
   constructor() {
     super();
-    this.define('identity', SignedIdentityModel, { paranoid: false });
+    this.define('signedIdentity', SignedIdentityModel, { paranoid: false });
   }
 
   async getById(id: string): Promise<SequelizeSignedIdentityObject> {
@@ -20,15 +20,15 @@ class SignedIdentityAccess extends AbstractInstanceAccess<InternalSignedIdentity
   }
 
   /**
-   * @description Returns all signed identity/public key pair by its hashed signed identity
-   * @param signedIdentity: the requested hashed signed identity
+   * @description Returns all signed identities matching a given signed identity
+   * @param signedIdentity: the requested signed identity
    */
   async getBySignedIdentity(signedIdentity: string): Promise<SequelizeSignedIdentityObject[]> {
     return this.model.findAll({ where: { signedIdentity } });
   }
 
   /**
-   * @description Returns all signed identity/public key pair by its public key (bitcoin address)
+   * @description Returns all signed identities matching a given public key
    * @param publicKey: the requested public key
    */
   async getByPubKey(publicKey: string): Promise<SequelizeSignedIdentityObject[]> {
@@ -36,11 +36,12 @@ class SignedIdentityAccess extends AbstractInstanceAccess<InternalSignedIdentity
   }
 
   /**
-   * @description Returns a signed identity/public key pair
+   * @description Returns the signed identity matching a given public key and signed identity
    * @param publicKey: the requested public key
-   * @param signedIdentity: the requested hashed signed identity
+   * @param signedIdentity: the requested signed identity
    */
-  async getByCombinaison(publicKey: string, signedIdentity: string): Promise<SequelizeSignedIdentityObject> {
+  async getByPublicKeyAndSignedIdentity(publicKey: string, signedIdentity: string)
+    : Promise<SequelizeSignedIdentityObject> {
     return this.model.findOne({ where: { publicKey, signedIdentity } });
   }
 

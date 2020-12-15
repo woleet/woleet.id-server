@@ -31,11 +31,13 @@ router.get('/identity', async function (ctx) {
     throw new BadRequest('Invalid "pubKey" parameter');
   }
 
+  // If the server implements identity URL contract V2, signed identity must be provided
+  // (otherwise, it is ignored)
   if (getServerConfig().preventIdentityExposure && !signedIdentity) {
     throw new BadRequest('Missing "signedIdentity" parameter');
   }
 
-  ctx.body = await getIdentity(leftData, pubKey, signedIdentity);
+  ctx.body = await getIdentity(pubKey, getServerConfig().preventIdentityExposure ? signedIdentity : null, leftData);
 });
 
 export { router };

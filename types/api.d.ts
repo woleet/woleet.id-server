@@ -1,10 +1,6 @@
-/* Authorization */
-
 interface AuthResponseObject {
   user: ApiUserDTOObject;
 }
-
-/* Shared */
 
 interface ApiCommonProperties {
 

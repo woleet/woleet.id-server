@@ -1,7 +1,7 @@
 import { Key, SignedIdentity, User } from '../database';
 import { getServerConfig } from './server-config';
 import { secureModule } from '../config';
-import { Unauthorized } from 'http-errors';
+import { BadRequest, Unauthorized } from 'http-errors';
 import * as crypto from 'crypto';
 
 import {
@@ -33,7 +33,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
 
   // Get the key if set
   if (pubKey) {
-    key = await Key.getByPubKey(pubKey, user && user.get('id'), !user);
+    key = await Key.getByPublicKey(pubKey, user && user.get('id'), !user);
     if (!key) {
       throw new NotFoundKeyError();
     }
@@ -92,30 +92,35 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     }
   }
 
-  // A blocked user cannot sign
+  // Check that the user is not blocked
   if (user.getDataValue('status') === 'blocked') {
     throw new BlockedUserError();
   }
 
-  // A blocked key cannot sign
+  // Check that the key is not blocked
   if (key.getDataValue('status') === 'blocked') {
     throw new BlockedKeyError();
   }
 
-  // A revoked key cannot sign
+  // Check that the key is not revoked
   if (key.getDataValue('status') === 'revoked') {
     throw new RevokedKeyError();
   }
 
-  // Block the call if the private key is not held by the server
+  // Check that the private key is held the server
   if (key.get('holder') !== 'server') {
     throw new KeyNotHeldByServerError();
   }
 
-  // A expired key cannot sign
+  // Check that the key has not expired
   const exp = key.getDataValue('expiration');
   if (exp && exp < +Date.now()) {
     throw new ExpiredKeyError();
+  }
+
+  // If the server implements identity URL contract V2, identity to sign must be provided
+  if (getServerConfig().preventIdentityExposure && !identityToSign) {
+    throw new BadRequest('Missing "identityToSign" parameter');
   }
 
   // Prepare the data to be signed
@@ -206,13 +211,15 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
 
   await Key.update(key.get('id'), { lastUsed: now });
 
-  // If the signature have a signed identity, save the signed identity/public key pair in the database if it doesn't already exist
+  // If the signature includes a signed identity, save or update the signed identity in the database
   if (signedIdentity) {
     const hash = crypto.createHash('sha256');
     const signedIdentityHash = hash.update(signedIdentity).digest('hex');
-    const signedIdentities = await SignedIdentity.getByCombinaison(pubKey, signedIdentityHash);
-    if (!signedIdentities) {
-     await SignedIdentity.create({ signedIdentity: signedIdentityHash, publicKey: publicKey});
+    const dbObject = await SignedIdentity.getByPublicKeyAndSignedIdentity(pubKey, signedIdentityHash);
+    if (!dbObject) {
+      await SignedIdentity.create({ signedIdentity: signedIdentityHash, publicKey: publicKey });
+    } else {
+      await SignedIdentity.update(dbObject.get('id'), { signedIdentity: signedIdentityHash, publicKey: publicKey });
     }
   }
 

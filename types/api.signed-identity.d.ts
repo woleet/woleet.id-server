@@ -1,5 +1,5 @@
-/* Enrollment */
-interface SignedIdentityObject { }
+interface SignedIdentityObject {
+}
 
 interface ApiSignedIdentityObject extends SignedIdentityObject, ApiCommonProperties {
   signedIdentity: string;

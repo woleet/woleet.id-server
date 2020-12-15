@@ -4,7 +4,7 @@
   <br>
   <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="config.preventIdentityExposure"
     (change)="update(config.preventIdentityExposure)">
-    The user identity must always be provided to the identity URL
+    The user identity must always be included in signatures and provided to the identity URL
   </mat-checkbox>
 </mat-card>
 <ng-template #loading>Loading...<br></ng-template>

@@ -1,5 +1,5 @@
-/* Enrollment */
-interface EnrollmentObject { }
+interface EnrollmentObject {
+}
 
 interface ApiEnrollmentObject extends EnrollmentObject, ApiCommonProperties {
   userId: string;

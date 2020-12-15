@@ -33,8 +33,6 @@ public class IdentityApiTest {
     private ApiTokenApi apiTokenApi;
     private APITokenGet apiTokenUserESignGet;
 
-    private ServerConfigApi serverConfigApi;
-
     @Before
     public void setUp() throws Exception {
 
@@ -54,31 +52,31 @@ public class IdentityApiTest {
         ApiClient apiClientUserESign = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
         apiClientUserESign.addDefaultHeader("Authorization", "Bearer " + apiTokenUserESignGet.getValue());
         tokenAuthUserESignApi = new SignatureApi(apiClientUserESign);
-
-        //
-        serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
     }
 
     @After
     public void tearDown() throws Exception {
+
+        // This code is called before setUp() is called, so API token can be null
         if (apiTokenUserESignGet != null) {
             apiTokenApi.deleteAPIToken(apiTokenUserESignGet.getId());
             apiTokenUserESignGet = null;
         }
+
         Config.deleteAllTestUsers();
     }
 
     @Test
     public void getIdentityTest() throws ApiException, InterruptedException {
 
-        IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
-            .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
-
-        ServerConfig serverConfig = new ServerConfigApi(Config.getAdminAuthApiClient()).getServerConfig();
-        Boolean currentPreventIdentityExposureConfig = serverConfig.getPreventIdentityExposure();
-
+        // Switch the server in relaxed mode (don't prevent identity exposure)
+        ServerConfigApi serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
+        ServerConfig serverConfig = serverConfigApi.getServerConfig();
         serverConfig.setPreventIdentityExposure(false);
         serverConfigApi.updateServerConfig(serverConfig);
+
+        IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
+            .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
 
         KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
 
@@ -116,7 +114,7 @@ public class IdentityApiTest {
         TimeUnit.MILLISECONDS.sleep(1000L);
 
         // Test expired key identity
-        IdentityResult expiredIdentity = identityApi.getIdentity(expiredKey.getPubKey(), leftData, null);
+        IdentityResult expiredIdentity = identityApi.getIdentity(expiredKey.getPubKey(), null, leftData);
         assertNotNull(expiredIdentity.getSignature());
         assertNotNull(expiredIdentity.getRightData());
         assertNotNull(expiredIdentity.getIdentity());
@@ -126,6 +124,14 @@ public class IdentityApiTest {
         assertNotNull(expiredIdentity.getKey().getPubKey());
         assertEquals(expiration, expiredIdentity.getKey().getExpiration());
         assertEquals(Key.StatusEnum.EXPIRED, expiredIdentity.getKey().getStatus());
+        assertTrue(
+            "Expected " + expiredIdentity.getRightData()
+            + "to start with \"" + serverConfig.getIdentityURL()
+            + "\" but got \"" + expiredIdentity.getRightData() + "\"",
+            expiredIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
+        );
+        assertTrue(Config.isValidSignature(expiredKey.getPubKey(), expiredIdentity.getSignature(),
+            leftData + expiredIdentity.getRightData()));
 
         // Create a blocked key
         keyPost = new KeyPost();
@@ -133,8 +139,8 @@ public class IdentityApiTest {
         keyPost.setStatus(KeyStatusEnum.BLOCKED);
         KeyGet blockedKey = keyApi.createKey(userSeal.getId(), keyPost);
 
-        // Test the blocked key identity
-        IdentityResult blockedIdentity = identityApi.getIdentity(blockedKey.getPubKey(), leftData, null);
+        // Test blocked key identity
+        IdentityResult blockedIdentity = identityApi.getIdentity(blockedKey.getPubKey(), null, leftData);
         assertNotNull(blockedIdentity.getSignature());
         assertNotNull(blockedIdentity.getRightData());
         assertNotNull(blockedIdentity.getIdentity());
@@ -144,6 +150,14 @@ public class IdentityApiTest {
         assertNotNull(blockedIdentity.getKey().getPubKey());
         assertNull(blockedIdentity.getKey().getExpiration());
         assertEquals(Key.StatusEnum.VALID, blockedIdentity.getKey().getStatus());
+        assertTrue(
+            "Expected " + blockedIdentity.getRightData()
+            + "to start with \"" + serverConfig.getIdentityURL()
+            + "\" but got \"" + blockedIdentity.getRightData() + "\"",
+            blockedIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
+        );
+        assertTrue(Config.isValidSignature(blockedKey.getPubKey(), blockedIdentity.getSignature(),
+            leftData + blockedIdentity.getRightData()));
 
         // Delete blocked key
         keyApi.deleteKey(blockedKey.getId());
@@ -156,8 +170,8 @@ public class IdentityApiTest {
         KeyGet CreatedRevokedKey = keyApi.createKey(userSeal.getId(), keyPost);
         KeyGet revokedKey = keyApi.updateKey(CreatedRevokedKey.getId(), keyPut);
 
-        // Test the revoked key identity
-        IdentityResult revokedIdentity = identityApi.getIdentity(revokedKey.getPubKey(), leftData, null);
+        // Test revoked key identity
+        IdentityResult revokedIdentity = identityApi.getIdentity(revokedKey.getPubKey(), null, leftData);
         assertNotNull(revokedIdentity.getSignature());
         assertNotNull(revokedIdentity.getRightData());
         assertNotNull(revokedIdentity.getIdentity());
@@ -167,6 +181,14 @@ public class IdentityApiTest {
         assertNotNull(revokedIdentity.getKey().getPubKey());
         assertNotNull(revokedIdentity.getKey().getRevokedAt());
         assertEquals(Key.StatusEnum.REVOKED, revokedIdentity.getKey().getStatus());
+        assertTrue(
+            "Expected " + revokedIdentity.getRightData()
+            + "to start with \"" + serverConfig.getIdentityURL()
+            + "\" but got \"" + revokedIdentity.getRightData() + "\"",
+            revokedIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
+        );
+        assertTrue(Config.isValidSignature(revokedKey.getPubKey(), revokedIdentity.getSignature(),
+            leftData + revokedIdentity.getRightData()));
 
         // Create an external key
         ExternalKeyPost externalKeyPost = new ExternalKeyPost();
@@ -196,12 +218,12 @@ public class IdentityApiTest {
         // Delete expired key
         keyApi.deleteKey(expiredKey.getId());
 
-        // Create E-Signature user and key
+        // Create esign user and key
         keyPost = new KeyPost();
         keyPost.setName(Config.randomName());
         KeyGet eSignatureKey = keyApi.createKey(userESign.getId(), keyPost);
 
-        // Test E-Signature key
+        // Test esign key identity
         IdentityResult eSignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, null);
         assertNull(eSignatureIdentity.getSignature());
         assertNull(eSignatureIdentity.getRightData());
@@ -216,7 +238,7 @@ public class IdentityApiTest {
         assertEquals(Key.StatusEnum.VALID, eSignatureIdentity.getKey().getStatus());
 
         // Get and verify server's default identity
-        IdentityResult identityResult = identityApi.getIdentity(pubKey, leftData, null);
+        IdentityResult identityResult = identityApi.getIdentity(pubKey, null, leftData);
         assertNotNull(identityResult.getSignature());
         assertNotNull(identityResult.getIdentity());
         assertNotNull(identityResult.getIdentity().getCommonName());
@@ -233,45 +255,38 @@ public class IdentityApiTest {
         assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(),
             leftData + identityResult.getRightData()));
 
+        // Switch the server in strict mode (prevent identity exposure)
+        serverConfig.setPreventIdentityExposure(true);
+        serverConfigApi.updateServerConfig(serverConfig);
+
         // Create signature to test new identity endpoint
         String hashToSign = Config.randomHash();
         tokenAuthUserESignApi.getSignature(null, hashToSign, userESign.getId(), null, eSignatureKey.getPubKey(), null,
             "CN,EMAILADDRESS");
 
-        // Check that we cannot get an identity from an invalid public key
-        try {
-            identityApi.getIdentity(eSignatureKey.getPubKey(), null, "CN=false");
-            fail("Should not be able to get an identity with an invalid signed identity");
-        }
-        catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
-        }
-
-        // Check that we cannot get an identity from an invalid public key
+        // Check that we cannot get an identity from a mismatching signed identity
         String signedIdentity =
-            "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail() + ",C="
-            + userESign.getIdentity().getCountry();
+            "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail()
+            + ",C=" + userESign.getIdentity().getCountry();
         try {
-            identityApi.getIdentity(eSignatureKey.getPubKey(), null, signedIdentity);
+            identityApi.getIdentity(eSignatureKey.getPubKey(), signedIdentity, null);
             fail("Should not be able to get an identity with a signed identity mismatching the one which signed");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
-        // Check that we cannot get an identity from an invalid public key
-        signedIdentity =
-            "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail();
+        // Check that we cannot get an identity from a mismatching public key
+        signedIdentity = "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail();
         try {
-            identityApi.getIdentity(pubKey, null, signedIdentity);
+            identityApi.getIdentity(pubKey, signedIdentity, null);
             fail("Should not be able to get an identity with a public key mismatching the one which signed");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
-        serverConfig.setPreventIdentityExposure(true);
-        serverConfigApi.updateServerConfig(serverConfig);
+        // Check that we cannot get an identity without providing a signed identity
         try {
             identityApi.getIdentity(pubKey, null, null);
             fail("Should not be able to get an identity without the signed identity");
@@ -281,7 +296,7 @@ public class IdentityApiTest {
         }
 
         // Test signed identity
-        IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, signedIdentity);
+        IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), signedIdentity, null);
         assertNull(SignatureIdentity.getSignature());
         assertNull(SignatureIdentity.getRightData());
         assertNotNull(SignatureIdentity.getIdentity());
@@ -295,8 +310,5 @@ public class IdentityApiTest {
         assertNotNull(SignatureIdentity.getKey().getPubKey());
         assertNull(SignatureIdentity.getKey().getExpiration());
         assertEquals(Key.StatusEnum.VALID, SignatureIdentity.getKey().getStatus());
-
-        serverConfig.setPreventIdentityExposure(currentPreventIdentityExposureConfig);
-        serverConfigApi.updateServerConfig(serverConfig);
     }
 }

@@ -30,7 +30,7 @@ public class SignatureApiTest {
         tokenAuthUserSealApi, tokenAuthUserESignApi;
 
     private ApiTokenApi apiTokenApi;
-    private APITokenGet apiTokenAdminGet, apiTokenUserSealGet, apiTokenUserESignGet;
+    private APITokenGet apiTokenAdmin, apiTokenUserSeal, apiTokenUserESign;
 
     /**
      * Verify that the result of a signature not including a signed identity is valid.
@@ -166,23 +166,23 @@ public class SignatureApiTest {
 
         // Create one helper API with admin rights using token authentication
         apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
-        apiTokenAdminGet = apiTokenApi.createAPIToken(new APITokenPost().name("test-admin"));
+        apiTokenAdmin = apiTokenApi.createAPIToken(new APITokenPost().name("test-admin"));
         ApiClient apiClientAdmin = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
-        apiClientAdmin.addDefaultHeader("Authorization", "Bearer " + apiTokenAdminGet.getValue());
+        apiClientAdmin.addDefaultHeader("Authorization", "Bearer " + apiTokenAdmin.getValue());
         tokenAuthAdminApi = new SignatureApi(apiClientAdmin);
 
         // Create two helper APIs with user rights using token authentication
         APITokenPost apiTokenUser = new APITokenPost();
         apiTokenUser.setName("test-user");
         apiTokenUser.setUserId(userSeal.getId());
-        apiTokenUserSealGet = apiTokenApi.createAPIToken(apiTokenUser);
+        apiTokenUserSeal = apiTokenApi.createAPIToken(apiTokenUser);
         apiTokenUser.setUserId(userESign.getId());
-        apiTokenUserESignGet = apiTokenApi.createAPIToken(apiTokenUser);
+        apiTokenUserESign = apiTokenApi.createAPIToken(apiTokenUser);
         ApiClient apiClientUserSeal = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
-        apiClientUserSeal.addDefaultHeader("Authorization", "Bearer " + apiTokenUserSealGet.getValue());
+        apiClientUserSeal.addDefaultHeader("Authorization", "Bearer " + apiTokenUserSeal.getValue());
         tokenAuthUserSealApi = new SignatureApi(apiClientUserSeal);
         ApiClient apiClientUserESign = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
-        apiClientUserESign.addDefaultHeader("Authorization", "Bearer " + apiTokenUserESignGet.getValue());
+        apiClientUserESign.addDefaultHeader("Authorization", "Bearer " + apiTokenUserESign.getValue());
         tokenAuthUserESignApi = new SignatureApi(apiClientUserESign);
     }
 
@@ -190,17 +190,17 @@ public class SignatureApiTest {
     public void tearDown() throws Exception {
 
         // This code is called before setUp() is called, so API token can be null
-        if (apiTokenAdminGet != null) {
-            apiTokenApi.deleteAPIToken(apiTokenAdminGet.getId());
-            apiTokenAdminGet = null;
+        if (apiTokenAdmin != null) {
+            apiTokenApi.deleteAPIToken(apiTokenAdmin.getId());
+            apiTokenAdmin = null;
         }
-        if (apiTokenUserSealGet != null) {
-            apiTokenApi.deleteAPIToken(apiTokenUserSealGet.getId());
-            apiTokenUserSealGet = null;
+        if (apiTokenUserSeal != null) {
+            apiTokenApi.deleteAPIToken(apiTokenUserSeal.getId());
+            apiTokenUserSeal = null;
         }
-        if (apiTokenUserESignGet != null) {
-            apiTokenApi.deleteAPIToken(apiTokenUserESignGet.getId());
-            apiTokenUserESignGet = null;
+        if (apiTokenUserESign != null) {
+            apiTokenApi.deleteAPIToken(apiTokenUserESign.getId());
+            apiTokenUserESign = null;
         }
 
         Config.deleteAllTestUsers();
@@ -208,6 +208,12 @@ public class SignatureApiTest {
 
     @Test
     public void getRegularSignatureTest() throws ApiException, InterruptedException {
+
+        // Switch the server in relaxed mode (don't prevent identity exposure)
+        ServerConfigApi serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
+        ServerConfig serverConfig = serverConfigApi.getServerConfig();
+        serverConfig.setPreventIdentityExposure(false);
+        serverConfigApi.updateServerConfig(serverConfig);
 
         // Try to sign with no credentials
         try {
@@ -358,13 +364,11 @@ public class SignatureApiTest {
         verifyRegularSignatureValid(null, messageToSign, signatureResult);
 
         // Check that API token's last used time is close to current time
-        apiTokenAdminGet = apiTokenApi.getAPITokenById(apiTokenAdminGet.getId());
-        assertTrue(apiTokenAdminGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
-                   && apiTokenAdminGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
+        apiTokenAdmin = apiTokenApi.getAPITokenById(apiTokenAdmin.getId());
+        assertTrue(apiTokenAdmin.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
+                   && apiTokenAdmin.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
 
         // Change server config not to fallback on default key
-        ServerConfigApi serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
-        ServerConfig serverConfig = serverConfigApi.getServerConfig();
         serverConfigApi.updateServerConfig(new ServerConfig().fallbackOnDefaultKey(false));
         TimeUnit.MILLISECONDS.sleep(1000L);
 
@@ -376,10 +380,6 @@ public class SignatureApiTest {
         catch (ApiException e) {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
-
-        // Reset server config
-        serverConfigApi.updateServerConfig(serverConfig);
-        TimeUnit.MILLISECONDS.sleep(1000L);
 
         // Sign using user's default key (userId)
         hashToSign = Config.randomHash();
@@ -435,9 +435,9 @@ public class SignatureApiTest {
                    && keyGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
 
         // Check that API token's last used time is close to current time
-        apiTokenUserSealGet = apiTokenApi.getAPITokenById(apiTokenUserSealGet.getId());
-        assertTrue(apiTokenUserSealGet.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
-                   && apiTokenUserSealGet.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
+        apiTokenUserSeal = apiTokenApi.getAPITokenById(apiTokenUserSeal.getId());
+        assertTrue(apiTokenUserSeal.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
+                   && apiTokenUserSeal.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
 
         // Try to sign with a blocked key
         try {
@@ -516,6 +516,12 @@ public class SignatureApiTest {
 
     @Test
     public void getIdentifiedSignatureTest() throws ApiException, MalformedURLException {
+
+        // Switch the server in strict mode (prevent identity exposure)
+        ServerConfigApi serverConfigApi = new ServerConfigApi(Config.getAdminAuthApiClient());
+        ServerConfig serverConfig = serverConfigApi.getServerConfig();
+        serverConfig.setPreventIdentityExposure(true);
+        serverConfigApi.updateServerConfig(serverConfig);
 
         // Prepare some random data to be signed
         String hashToSign = Config.randomHash();

@@ -125,7 +125,7 @@ export async function getOwner(id): Promise<InternalUserObject> {
 }
 
 export async function getOwnerByPubKey(pubKey): Promise<InternalUserObject> {
-  const key = await Key.getByPubKey(pubKey, null, true);
+  const key = await Key.getByPublicKey(pubKey, null, true);
   if (!key) {
     throw new NotFoundKeyError();
   }

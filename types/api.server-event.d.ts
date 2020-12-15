@@ -1,5 +1,3 @@
-/* User */
-
 type ServerEventTypeEnum =
   'signature'
   | 'config.edit'
