@@ -17,5 +17,12 @@
       "es2017",
       "dom"
     ]
-  }
+  },
+  "files": [
+    "./src/main.ts",
+    "./src/polyfills.ts"
+  ],
+  "include": [
+      "src/**/*.d.ts"
+  ]
 }
