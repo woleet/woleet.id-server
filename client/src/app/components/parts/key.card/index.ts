@@ -4,7 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ErrorMessageProvider, nextYear } from '@components/util';
 import { UserService } from '@services/user';
 import { confirm } from '../../util';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogKeyDeleteComponent } from '@parts/dialog-key-delete';
 import * as log from 'loglevel';
 

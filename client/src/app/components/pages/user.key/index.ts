@@ -5,7 +5,7 @@ import { TrackById } from '../../util';
 import { UserService } from '@services/user';
 import { ServerConfigService as ConfigService } from '@services/server-config';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   templateUrl: './index.html'

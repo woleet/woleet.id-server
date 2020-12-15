@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UserService } from '@services/user';
 import { AsYouType } from 'libphonenumber-js';
 import { confirm } from '../../util';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogIdentityDeleteComponent } from '@parts/dialog-identity-delete';
 import cc from '@components/cc';
 

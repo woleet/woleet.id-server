@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppConfigService } from '@services/boot';
-import { MatStepper } from '@angular/material';
+import { MatStepper } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { EnrollmentService } from '@services/enrollment';

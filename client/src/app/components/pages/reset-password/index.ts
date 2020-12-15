@@ -5,7 +5,7 @@ import * as log from 'loglevel';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { asciiValidator, ErrorMessageProvider, passwordValidator } from '@components/util';
 import { UserService } from '@services/user';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogResetPasswordComponent } from '@parts/dialog-reset-password';
 import { DialogMailResetComponent } from '@parts/dialog-mail-reset';
 import { DialogAskResetComponent } from '@parts/dialog-ask-reset';

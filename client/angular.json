@@ -47,7 +47,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "patch.js"
+            ]
           },
           "configurations": {
             "production": {

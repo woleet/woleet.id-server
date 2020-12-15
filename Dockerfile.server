@@ -1,4 +1,4 @@
-FROM node:10.9.0-alpine
+FROM node:10.23.0-alpine3.10
 
 RUN apk add --no-cache python gcc g++ make bash --virtual .build-deps
 
@@ -31,7 +31,7 @@ RUN cd /build/server && npm run build && \
   mv /build/server-runtime/node_modules /build/app/node_modules
 
 # https://docs.docker.com/develop/develop-images/multistage-build/
-FROM node:10.9.0-alpine
+FROM node:10.23.0-alpine3.10
 
 RUN apk add --no-cache curl
 
