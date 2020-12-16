@@ -215,11 +215,8 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
   if (signedIdentity) {
     const hash = crypto.createHash('sha256');
     const signedIdentityHash = hash.update(signedIdentity).digest('hex');
-    const dbObject = await SignedIdentity.getByPublicKeyAndSignedIdentity(pubKey, signedIdentityHash);
-    if (!dbObject) {
-      await SignedIdentity.create({ signedIdentity: signedIdentityHash, publicKey: publicKey });
-    } else {
-      await SignedIdentity.update(dbObject.get('id'), { signedIdentity: signedIdentityHash, publicKey: publicKey });
+    if (!await SignedIdentity.getByPublicKeyAndSignedIdentity(publicKey, signedIdentityHash)) {
+      await SignedIdentity.create({ signedIdentity: signedIdentityHash, publicKey });
     }
   }
 
