@@ -69,11 +69,11 @@ public class EnrollmentGetAllOf {
   }
 
    /**
-   * Id of the enrolled user.
+   * Identifier of the enrolled user.
    * @return userId
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Id of the enrolled user.")
+  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Identifier of the enrolled user.")
 
   public UUID getUserId() {
     return userId;

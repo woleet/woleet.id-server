@@ -42,11 +42,11 @@ public class APITokenPostAllOf {
   }
 
    /**
-   * Id of the authorized user.
+   * Identifier of the authorized user.&lt;br&gt; If set, the token allows to authenticate as the user, if not the token allow to authenticate as a server admin. 
    * @return userId
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Id of the authorized user.")
+  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Identifier of the authorized user.<br> If set, the token allows to authenticate as the user, if not the token allow to authenticate as a server admin. ")
 
   public UUID getUserId() {
     return userId;

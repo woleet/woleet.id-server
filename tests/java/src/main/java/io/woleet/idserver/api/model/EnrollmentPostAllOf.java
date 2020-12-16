@@ -46,10 +46,10 @@ public class EnrollmentPostAllOf {
   }
 
    /**
-   * Id of the enrolled user.
+   * Identifier of the enrolled user.
    * @return userId
   **/
-  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", required = true, value = "Id of the enrolled user.")
+  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", required = true, value = "Identifier of the enrolled user.")
 
   public UUID getUserId() {
     return userId;
@@ -68,11 +68,11 @@ public class EnrollmentPostAllOf {
   }
 
    /**
-   * Used only for test purpose.
+   * Used only for test purpose only.
    * @return test
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Used only for test purpose.")
+  @ApiModelProperty(value = "Used only for test purpose only.")
 
   public Boolean getTest() {
     return test;

@@ -171,8 +171,8 @@ public class DiscoveryApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successful operation. Send the user corresponding to the token. </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Successful operation. This case occurs when this endpoint is called with an admin token. </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> Successful operation. The current authenticated user is a server admin. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> User not found. </td><td>  -  </td></tr>
      </table>
@@ -216,15 +216,15 @@ public class DiscoveryApi {
     }
 
     /**
-     * Get the current logged user.
-     * Use this endpoint to get the current logged user. 
+     * Get the current authenticated user.
+     * Use this endpoint to get the current authenticated user. 
      * @return UserDisco
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successful operation. Send the user corresponding to the token. </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Successful operation. This case occurs when this endpoint is called with an admin token. </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> Successful operation. The current authenticated user is a server admin. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> User not found. </td><td>  -  </td></tr>
      </table>
@@ -235,15 +235,15 @@ public class DiscoveryApi {
     }
 
     /**
-     * Get the current logged user.
-     * Use this endpoint to get the current logged user. 
+     * Get the current authenticated user.
+     * Use this endpoint to get the current authenticated user. 
      * @return ApiResponse&lt;UserDisco&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successful operation. Send the user corresponding to the token. </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Successful operation. This case occurs when this endpoint is called with an admin token. </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> Successful operation. The current authenticated user is a server admin. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> User not found. </td><td>  -  </td></tr>
      </table>
@@ -255,16 +255,16 @@ public class DiscoveryApi {
     }
 
     /**
-     * Get the current logged user. (asynchronously)
-     * Use this endpoint to get the current logged user. 
+     * Get the current authenticated user. (asynchronously)
+     * Use this endpoint to get the current authenticated user. 
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Successful operation. Send the user corresponding to the token. </td><td>  -  </td></tr>
-        <tr><td> 204 </td><td> Successful operation. This case occurs when this endpoint is called with an admin token. </td><td>  -  </td></tr>
+        <tr><td> 200 </td><td> Successful operation. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> Successful operation. The current authenticated user is a server admin. </td><td>  -  </td></tr>
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
         <tr><td> 404 </td><td> User not found. </td><td>  -  </td></tr>
      </table>

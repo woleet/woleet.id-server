@@ -90,11 +90,11 @@ public class APITokenGetAllOf {
   }
 
    /**
-   * Id of the authorized user.
+   * Identifier of the authorized user.
    * @return userId
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Id of the authorized user.")
+  @ApiModelProperty(example = "feb37e23-d04e-4e71-bf53-1f1a75ba3a68", value = "Identifier of the authorized user.")
 
   public UUID getUserId() {
     return userId;

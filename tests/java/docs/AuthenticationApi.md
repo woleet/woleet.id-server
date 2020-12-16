@@ -4,7 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getUserInfo**](AuthenticationApi.md#getUserInfo) | **GET** /info | Return information about the current logged user.
+[**getUserInfo**](AuthenticationApi.md#getUserInfo) | **GET** /info | Get information about the current logged user.
 [**login**](AuthenticationApi.md#login) | **GET** /login | Log into the system. Both email or username can be used to authenticate.
 [**logout**](AuthenticationApi.md#logout) | **GET** /logout | Log out from the system.
 
@@ -13,7 +13,7 @@ Method | HTTP request | Description
 # **getUserInfo**
 > UserInfo getUserInfo()
 
-Return information about the current logged user.
+Get information about the current logged user.
 
 ### Example
 ```java
