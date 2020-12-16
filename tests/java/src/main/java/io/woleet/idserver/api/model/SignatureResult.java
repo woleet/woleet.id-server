@@ -180,11 +180,11 @@ public class SignatureResult {
   }
 
    /**
-   * X500 Distinguished Name representing the identity of the signer.&lt;br&gt; Returned only if &#x60;identityToSign&#x60; is used. 
+   * Identity of the signer (as a X500 Distinguished Name).&lt;br&gt; Returned only if &#x60;identityToSign&#x60; is used. 
    * @return signedIdentity
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "CN=John Doe,EMAILADDRESS=john.doe@acme.com,O=Acme corp,OU=Sales dept", value = "X500 Distinguished Name representing the identity of the signer.<br> Returned only if `identityToSign` is used. ")
+  @ApiModelProperty(example = "CN=John Doe,EMAILADDRESS=john.doe@acme.com,O=Acme corp,OU=Sales dept", value = "Identity of the signer (as a X500 Distinguished Name).<br> Returned only if `identityToSign` is used. ")
 
   public String getSignedIdentity() {
     return signedIdentity;

@@ -75,11 +75,10 @@ public class IdentityApiTest {
         serverConfig.setPreventIdentityExposure(false);
         serverConfigApi.updateServerConfig(serverConfig);
 
+        // Prepare test data
         IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
             .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
-
         KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
-
         String leftData = Config.randomString(32);
 
         // Check that we cannot get an identity from an invalid public key
