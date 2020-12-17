@@ -1,0 +1,10 @@
+<mat-card *ngIf="(config$ | async) as config; else loading">
+  <mat-card-title>Do not expose the identity of users</mat-card-title>
+  <mat-divider></mat-divider>
+  <br>
+  <mat-checkbox matInput placeholder="Set as default key" [(ngModel)]="config.preventIdentityExposure"
+    (change)="update(config.preventIdentityExposure)">
+    The user identity must always be included in signatures and provided to the identity URL
+  </mat-checkbox>
+</mat-card>
+<ng-template #loading>Loading...<br></ng-template>

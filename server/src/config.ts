@@ -1,13 +1,13 @@
 // tslint:disable:radix
 
 import { SetOption } from 'cookies';
+import * as fs from 'fs';
 import { readFileSync } from 'fs';
 import * as path from 'path';
 import * as log from 'loglevel';
 import * as crypto from 'crypto';
 import * as assert from 'assert';
 import * as chalk from 'chalk';
-import * as fs from 'fs';
 
 import { SecureModule } from '@woleet/woleet-secure-module';
 
@@ -129,8 +129,9 @@ export const events = {
 
 export const serverConfig = {
   default: {
-    version: 16, // datamodel version
+    version: 16, // data model version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
+    preventIdentityExposure: true, // identity URL contract V2 is activated by default on a fresh server
     signatureURL: `${server.protocol}://${server.host}:${ports.signature}`,
     fallbackOnDefaultKey: true,
     organizationName: 'Woleet',

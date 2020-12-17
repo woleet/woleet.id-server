@@ -44,6 +44,14 @@ export class NotFoundKeyError extends NotFoundDBObjectError {
   name = 'NotFoundKeyError';
 }
 
+export class NotFoundIdentityError extends NotFoundDBObjectError {
+  constructor(m = 'Identity not found') {
+    super(m);
+  }
+
+  name = 'NotFoundIdentityError';
+}
+
 export class NotFoundEnrollmentError extends NotFoundDBObjectError {
   constructor(m = 'Enrollment not found') {
     super(m);
@@ -83,7 +91,7 @@ export class BlockedKeyError extends BlockedResourceError {
 }
 
 export class KeyNotHeldByServerError extends BlockedResourceError {
-  constructor(m = 'The private key is not held by the server') {
+  constructor(m = 'Private key is not held by the server') {
     super(m);
   }
 

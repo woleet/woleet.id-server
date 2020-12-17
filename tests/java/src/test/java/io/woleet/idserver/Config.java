@@ -184,16 +184,22 @@ public class Config {
      */
     public static UserGet createTestUser(UserApi userApi, UserRoleEnum userRoleEnum, UserModeEnum userModeEnum)
         throws ApiException {
-        UserPost userPost = new UserPost();
         String USERNAME = randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
-        userPost.email(EMAIL).username(USERNAME).role(userRoleEnum).status(UserStatusEnum.ACTIVE);
-        userPost.password("pass");
-        userPost.setMode(userModeEnum);
+        UserPost userPost = new UserPost();
+        userPost
+            .email(EMAIL)
+            .username(USERNAME)
+            .role(userRoleEnum)
+            .status(UserStatusEnum.ACTIVE)
+            .password("pass")
+            .mode(userModeEnum)
+            .createDefaultKey(true);
         FullIdentity fullIdentity = new FullIdentity();
-        fullIdentity.commonName(randomCommonName());
-        fullIdentity.organization("WOLEET SAS");
-        userPost.setCreateDefaultKey(true);
+        fullIdentity
+            .commonName(randomCommonName())
+            .organization("WOLEET SAS")
+            .userId(randomUUID().toString());
         return userApi.createUser((UserPost) userPost.identity(fullIdentity));
     }
 

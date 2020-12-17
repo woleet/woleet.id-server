@@ -4,6 +4,7 @@ import '../../../types/api.api-token';
 import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api.enrollment';
+import '../../../types/api.signed-identity';
 import '../../../types/api';
 
 /* SystemJS module definition */

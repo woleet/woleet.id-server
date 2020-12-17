@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**discoverConfig**](DiscoveryApi.md#discoverConfig) | **GET** /discover/config | Get the server configuration.
-[**discoverUser**](DiscoveryApi.md#discoverUser) | **GET** /discover/user | Get the current logged user.
+[**discoverUser**](DiscoveryApi.md#discoverUser) | **GET** /discover/user | Get the current authenticated user.
 [**discoverUserByPubKey**](DiscoveryApi.md#discoverUserByPubKey) | **GET** /discover/user/{pubKey} | Get the user associated to a public key.
 [**discoverUserKeys**](DiscoveryApi.md#discoverUserKeys) | **GET** /discover/keys/{userId} | Get all public keys of a user.
 [**discoverUsers**](DiscoveryApi.md#discoverUsers) | **GET** /discover/users | Get all users matching a search string.
@@ -83,9 +83,9 @@ This endpoint does not need any parameter.
 # **discoverUser**
 > UserDisco discoverUser()
 
-Get the current logged user.
+Get the current authenticated user.
 
-Use this endpoint to get the current logged user. 
+Use this endpoint to get the current authenticated user. 
 
 ### Example
 ```java
@@ -144,8 +144,8 @@ This endpoint does not need any parameter.
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | Successful operation. Send the user corresponding to the token. |  -  |
-**204** | Successful operation. This case occurs when this endpoint is called with an admin token. |  -  |
+**200** | Successful operation. |  -  |
+**204** | Successful operation. The current authenticated user is a server admin. |  -  |
 **401** | Missing or invalid session cookie. |  -  |
 **404** | User not found. |  -  |
 

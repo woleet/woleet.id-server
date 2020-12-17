@@ -36,12 +36,12 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
   }
 
   /**
-   * @description Returns a key by its public key (bitcoin address)
+   * @description Returns a key by its public key
    * @param publicKey: the requested public key
    * @param userId: optional parameter for extra check
    * @param loadUser true is the user model must be loaded
    */
-  async getByPubKey(publicKey: string, userId?: string, loadUser = false): Promise<SequelizeKeyObject> {
+  async getByPublicKey(publicKey: string, userId?: string, loadUser = false): Promise<SequelizeKeyObject> {
     const query = { where: { publicKey } };
 
     if (userId) {

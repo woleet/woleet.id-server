@@ -1,5 +1,4 @@
 version: '3.4'
-
 services:
   wid-client:
     secrets:
@@ -7,6 +6,10 @@ services:
         target: /etc/nginx/ssl/certificate.crt
       - source: ssl-key
         target: /etc/nginx/ssl/certificate.key
+    networks:
+      wids-network:
+        aliases:
+          - 'wid-client.woleet.localhost'
     deploy:
       mode: replicated
       replicas: ${WOLEET_ID_SERVER_CLIENT_REPLICAS:-2}
@@ -19,7 +22,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-
   wid-server:
     environment:
       WOLEET_ID_SERVER_CACHE_TYPE: ${WOLEET_ID_SERVER_CACHE_TYPE:-redis}
@@ -42,7 +44,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-
   redis:
     image: redis:6.0-alpine
     networks:
@@ -62,7 +63,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-
 secrets:
   encryption-secret:
     external:
@@ -71,9 +71,11 @@ secrets:
     file: ${WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE:?Undefined WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE}
   ssl-key:
     file: ${WOLEET_ID_SERVER_HTTP_TLS_KEY:?Undefined WOLEET_ID_SERVER_HTTP_TLS_KEY}
-
 networks:
   client-server:
     driver: overlay
   redis-server:
     driver: overlay
+  wids-network:
+    external: true
+

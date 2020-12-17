@@ -39,7 +39,7 @@ export class SequelizeAdapter {
 
   find(id) {
     debug(`find ${id}`);
-    return this.model.findByPrimary(id)
+    return this.model.findByPk(id)
       .then((found) => {
         if (!found) {
           return undefined;
@@ -71,7 +71,7 @@ export class SequelizeAdapter {
   async destroy(id) {
     debug(`destroy ${id}`);
     if (grantable.has(this.name)) {
-      const { grantId } = await this.model.findByPrimary(id);
+      const { grantId } = await this.model.findByPk(id);
       const promises = [];
       grantable.forEach((name) => {
         promises.push(models.get(name).destroy({ where: { grantId } }));

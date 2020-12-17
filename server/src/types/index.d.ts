@@ -12,6 +12,7 @@ import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api';
 import '../../../types/api.enrollment';
+import '../../../types/api.signed-identity';
 import './oidc-provider';
 
 declare global {
@@ -27,7 +28,6 @@ declare global {
   type uuid = string;
 
   interface CommonInternalProperties {
-    /** UUID */
     id: string;
     updatedAt: Date;
     createdAt: Date;
@@ -45,11 +45,10 @@ declare global {
     router: Router;
   }
 
-  /* User: server specific */
-
   interface SequelizeUserObject extends Instance<InternalUserObject> {
   }
 
+  /* User: server specific */
   interface InternalUserObject extends UserObject, InternalIdentityObject, CommonInternalProperties {
     lastLogin: Date;
 
@@ -93,11 +92,10 @@ declare global {
     defaultKeyId?: string;
   }
 
-  /* Key: server specific */
-
   interface SequelizeKeyObject extends Instance<InternalKeyObject> {
   }
 
+  /* Key: server specific */
   interface InternalKeyObject extends KeyObject, CommonInternalProperties {
     lastUsed: Date;
 
@@ -172,11 +170,10 @@ declare global {
     jti: string;
   }
 
-  /* APIToken: server specific */
-
   interface SequelizeAPITokenObject extends Instance<InternalAPITokenObject> {
   }
 
+  /* APIToken: server specific */
   interface InternalAPITokenObject extends APITokenObject, CommonInternalProperties {
     lastUsed: Date;
 
@@ -297,6 +294,9 @@ declare global {
 
     // Block password reset for user
     askForResetInput?: boolean;
+
+    // Block identity endpoint without signed identity query
+    preventIdentityExposure?: boolean;
   }
 
   interface ServerConfigUpdate extends ServerConfig {
@@ -351,6 +351,9 @@ declare global {
 
     // Block password reset for user
     askForResetInput?: boolean;
+
+    // Block identity endpoint without signed identity query
+    preventIdentityExposure?: boolean;
   }
 
   interface ServerConfigCreate extends ServerConfig {
@@ -405,6 +408,9 @@ declare global {
 
     // Block password reset for user
     askForResetInput?: boolean;
+
+    // Block identity endpoint without signed identity query
+    preventIdentityExposure?: boolean;
   }
 
   /* Enrollment */
@@ -419,6 +425,16 @@ declare global {
   }
 
   interface SequelizeEnrollmentObject extends Instance<InternalEnrollmentObject> {
+  }
+
+  /* Signed identity */
+
+  interface InternalSignedIdentityObject extends SignedIdentityObject, CommonInternalProperties {
+    signedIdentity: string;
+    publicKey: string;
+  }
+
+  interface SequelizeSignedIdentityObject extends Instance<InternalSignedIdentityObject> {
   }
 
   /* OIDC Provider */

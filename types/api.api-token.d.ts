@@ -1,8 +1,7 @@
-/* API Token */
-
 type APITokenStatusEnum = 'active' | 'blocked';
 
-interface APITokenObject { }
+interface APITokenObject {
+}
 
 interface ApiAPITokenObject extends APITokenObject, ApiCommonProperties {
 

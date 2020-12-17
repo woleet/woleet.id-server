@@ -1,5 +1,3 @@
-/* User */
-
 type UserRoleEnum = 'user' | 'admin' | 'manager';
 type UserStatusEnum = 'active' | 'blocked';
 type UserModeEnum = 'seal' | 'esign';
