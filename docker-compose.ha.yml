@@ -25,7 +25,7 @@ services:
       WOLEET_ID_SERVER_REDIS_PORT: ${WOLEET_ID_SERVER_REDIS_PORT:-6379}
     secrets:
       - source: encryption-secret
-        target: /usr/src/app/dist/server/src/encryption_secret
+        target: /usr/src/app/dist/src/encryption_secret
     networks:
       - redis-server
     deploy:

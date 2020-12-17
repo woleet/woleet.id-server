@@ -19,8 +19,8 @@
             "name": "Docker: Attach to node",
             "port": 9229,
             "address": "localhost",
-            "localRoot": "${workspaceFolder}/server/dist/server/src/",
-            "remoteRoot": "/usr/src/app/dist/server/src/",
+            "localRoot": "${workspaceFolder}/server/dist/src/",
+            "remoteRoot": "/usr/src/app/dist/src/",
             "protocol":"inspector"
         }
     ]

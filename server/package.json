@@ -7,8 +7,8 @@
     "lint": "npx tslint src/**/*.ts",
     "check": "npx tsc --noEmit",
     "transpile": "npx tsc",
-    "build": "npx tsc && cp -a assets/ dist/server/assets/",
-    "start": "node dist/server/src",
+    "build": "npx tsc && cp -a assets/ dist/assets/",
+    "start": "node dist/src",
     "dev": "npm run setAPIVersion; WOLEET_ID_SERVER_PRODUCTION=false DEBUG=id* npx ts-node-dev --files src/index.ts",
     "test": "npm run setAPIVersion; WOLEET_ID_SERVER_PRODUCTION=false npx mocha -r ts-node/register test/**/*.ts --exit --timeout 10000"
   },
