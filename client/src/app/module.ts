@@ -65,7 +65,8 @@ import { DialogAskResetComponent } from '@parts/dialog-ask-reset';
 import { DialogIdentityDeleteComponent } from '@parts/dialog-identity-delete';
 import { DialogKeyDeleteComponent } from '@parts/dialog-key-delete';
 import {
-  AdminGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, UserGuardService, ManagerGuardService
+  AdminGuardService, AnonymousGuardService, ErrorGuardService, ManagerGuardService, NoErrorGuardService,
+  UserGuardService
 } from '@guards/auth';
 import { ExternalKeyService, KeyService } from '@services/key';
 import { UserService } from '@services/user';
