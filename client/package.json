@@ -7,7 +7,6 @@
     "ng": "npx ng",
     "dev": "npx ng serve --port 4220 -o --ssl --ssl-key $WOLEET_ID_SERVER_HTTP_TLS_KEY --ssl-cert $WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE",
     "dev:prod": "npx ng serve --port 4220 -o --prod --ssl --ssl-key $WOLEET_ID_SERVER_HTTP_TLS_KEY --ssl-cert $WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE",
-    "dev:aot": "npx ng serve --port 4220 -o --aot --optimization --ssl --ssl-key $WOLEET_ID_SERVER_HTTP_TLS_KEY --ssl-cert $WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE",
     "build": "npx ng build",
     "build:prod": "npx ng build --prod",
     "build:prod:silent": "npx ng build --prod --no-progress",
