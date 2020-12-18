@@ -45,9 +45,9 @@ export async function getIdentity(publicKey: string, signedIdentity?: string, le
   // Get the user associated to the requested key
   const user = await User.getById(key.get('userId'));
 
-  // If a signed identity is provided to this function, it means the server implements identity URL contract V2
+  // If a signed identity is provided and the key holder is the server, implements identity URL contract V2
   let identity;
-  if (signedIdentity) {
+  if (signedIdentity && key.get('holder') === 'server') {
 
     // Check that the key was used at least once to sign the given identity
     const hash = crypto.createHash('sha256');
@@ -56,12 +56,14 @@ export async function getIdentity(publicKey: string, signedIdentity?: string, le
       throw new NotFoundIdentityError();
     }
 
-    // Prepare identity information to return
+    // Return only provided identity information
     identity = deserializeX500DN(signedIdentity);
   }
 
-  // Otherwise, it means the server implements identity URL contract V1
+  // Otherwise, implements identity URL contract V1
   else {
+
+    // Return full user identity information
     identity = serializeIdentity(user.toJSON(), true);
   }
 
