@@ -68,14 +68,18 @@ If you want to build or run without Docker, you can find detailed information ab
 
 OS Supported:
 
-- CentOS 7
-- Debian 9
-- Ubuntu 16.04
-- Ubuntu 18.04
-- Fedora 29
-- Fedora 28
+- CentOS
+- Debian
+- Ubuntu
+- Fedora
 
-If you run one of these Linux version you can install Woleet.ID Server by running:
+Prerequisites:
+You must have the following software installed and configured:
+
+- docker 18.09+
+- docker-compose 1.22+
+
+If your system matches these, you can install Woleet.ID Server by running:
 
 ```bash
 bash < (curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh)
