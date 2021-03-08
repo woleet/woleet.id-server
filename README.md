@@ -66,29 +66,27 @@ If you want to build or run without Docker, you can find detailed information ab
 
 ## Easy install
 
-OS Supported:
+Supported Operating Systems:
 
-- CentOS
-- Debian
-- Ubuntu
-- Fedora
+- Linux CentOS
+- Linux Debian
+- Linux Ubuntu
+- Linux Fedora
 
-Prerequisites:
 You must have the following software installed and configured:
-
 - docker 18.09+
 - docker-compose 1.22+
 
-If your system matches these, you can install Woleet.ID Server by running:
+If your system matches these conditions, you can install Woleet.ID Server by running:
 
 ```bash
 bash < (curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh)
 ```
 
-You will need a certificate and its key, as described below, on the computer you execute this script.
+As described below, you will need a certificate and its key on the computer you execute this script.
 
-By default, it will:
-- install Docker and other tools required
+By default, the script:
+- check server configuration
 - clone the GitHub project to `$HOME/wids` directory
 - store the path of your certificate and key files in the file `configuration.sh`
 
