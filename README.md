@@ -340,7 +340,7 @@ you will have to expose Woleet.ID Server's client web app and OpenID Connect end
 
 # High Availability / Docker Swarm mode
 
-Woleet.ID Server can be deployed on a Docker Swarm cluster to achieve High Availability (HA) capabilities by running Woleet.ID Server on a Docker Swarm cluster allows running several server and client instances. 
+Woleet.ID Server can be deployed on a Docker Swarm cluster to achieve High Availability (HA) capabilities by running several server and client instances. 
 
 ## Prerequisites
 
@@ -373,10 +373,10 @@ You will need to add some mandatory properties in this file to be able to use Wo
 
 ```bash
 export WOLEET_ID_SERVER_VERSION='x.x.x' # Set by ./app.sh upgrade, do not modify
-export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE="" # Set the path of your ssl certificate
-export WOLEET_ID_SERVER_HTTP_TLS_KEY=""  # Set the path of your ssl key
-export WOLEET_ID_SERVER_POSTGRES_HOST="" # Set the url of your PostgreSQL instance
-export WOLEET_ID_SERVER_POSTGRES_DB="" # Set the datadabe to use on your PostgreSQL instance
+export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE="" # Set the path of your SSL certificate
+export WOLEET_ID_SERVER_HTTP_TLS_KEY=""  # Set the path of your SSL key
+export WOLEET_ID_SERVER_POSTGRES_HOST="" # Set the URL of your PostgreSQL instance
+export WOLEET_ID_SERVER_POSTGRES_DB="" # Set the database to use on your PostgreSQL instance
 export WOLEET_ID_SERVER_POSTGRES_USER="" # Set your PostgreSQL username
 export WOLEET_ID_SERVER_POSTGRES_PASSWORD="" # Set your PostgreSQL password
 ```
