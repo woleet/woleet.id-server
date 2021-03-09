@@ -21,7 +21,7 @@ const vaddr = validate.raw('address');
 
 const router = new Router();
 
-async function getSignature(ctx: Context) {
+async function getSignature(ctx) {
   const query = ctx.query;
   const token = ctx.token;
 
@@ -37,7 +37,7 @@ async function getSignature(ctx: Context) {
     throw new BadRequest('Invalid query parameter "userId"');
   }
 
-  if (query.userId && token.userId && (token.userId !== query.userId)) {
+  if (query.userId && token.userId && token.userId !== query.userId) {
     throw new Unauthorized('Cannot sign for another user');
   }
 
