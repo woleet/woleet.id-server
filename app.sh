@@ -38,12 +38,21 @@ start-local() {
 }
 
 start-ha() {
+  if ! [[ -x "$(command -v openssl)" ]]
+  then
+    echo 'openssl either not installed or not found in your path, please install it before rerunning this script'
+    exit 1
+  fi
+
   check-manager-node-ha
 
   if ! docker secret inspect "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_encryption-secret" > /dev/null 2>&1
   then
     create-secret-ha
   fi
+
+  WOLEET_ID_SERVER_COOKIE_KEY="$(openssl rand -base64 16)" \
+  WOLEET_ID_SERVER_OIDC_KEY="$(openssl genrsa 2048 2> /dev/null)" \
   docker stack deploy --prune -c docker-compose.yml -c docker-compose.ha.yml "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" "$@"
 }
 

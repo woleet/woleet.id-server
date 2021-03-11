@@ -146,11 +146,13 @@ export const serverConfig = {
 };
 
 export const cookies: { keys: string[], options: SetOption } = {
-  keys: [crypto.randomBytes(16).toString('base64')],
+  keys: [ getenv('COOKIE_KEY', crypto.randomBytes(16).toString('base64')) ],
   options: {
     secure: <boolean>production === true,
     signed: <boolean>production === true
   }
 };
+
+export const oidcKey  = getenv('OIDC_KEY', "random");
 
 export const secureModule = new SecureModule;

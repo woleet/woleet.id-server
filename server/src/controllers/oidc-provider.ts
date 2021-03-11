@@ -5,6 +5,7 @@ import * as Debug from 'debug';
 import { provider as providerConfiguration } from '../config.oidcp';
 import { OIDCAccount as Account, SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
 import { getServerConfig } from './server-config';
+import { oidcKey } from '../config';
 
 import * as log from 'loglevel';
 
@@ -33,12 +34,19 @@ function abortInit(message): void {
 
 // https://github.com/panva/node-oidc-provider/blob/master/docs/keystores.md#generating-all-keys-for-all-features
 const keystorePromise = (async () => {
-  const keystore = OIDCProvider.createKeyStore();
+  let keystore;
 
-  await Promise.all([
-    keystore.generate('RSA', 2048, { alg: 'RS256', use: 'sig' }),
-    keystore.generate('EC', 'P-256', { kid: 'enc-ec2-0', use: 'sig' })
-  ]);
+  if (oidcKey != "random") {
+    await Promise.all([
+      OIDCProvider.asKey(oidcKey, "pem").then(function(result) {
+        keystore = result.keystore;
+      })]);
+  } else {
+    keystore = OIDCProvider.createKeyStore();
+    await Promise.all([
+      keystore.generate('RSA', 2048, { alg: 'RS256', use: 'sig' })
+    ]);
+  }
 
   return keystore;
 })();
