@@ -4,7 +4,7 @@ services:
   wid-client:
     image: ${WOLEET_ID_SERVER_REGISTRY:-wids}/client:${WOLEET_ID_SERVER_VERSION:-latest}
     ports:
-      # Calls to the server goes through the client's NGINX reverse proxy
+      # Calls to the server goes through the client's NGinX reverse proxy
       - ${WOLEET_ID_SERVER_API_PORT:-3000}:3000 # client web app + main server API endpoints port
       - ${WOLEET_ID_SERVER_IDENTITY_PORT:-3001}:3001 # /identity endpoint point
       - ${WOLEET_ID_SERVER_SIGNATURE_PORT:-3002}:3002 # /sign and /discover endpoints port
