@@ -200,7 +200,7 @@ export WOLEET_ID_SERVER_SIGNATURE_PORT={port where to expose Signature endpoints
 export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoints (default 3003)}
 ```
 
-> WARNING: these ports should never be exposed outside your organization's network, except for the Identity endpoint, which must be accessible publicly via the identity URL.
+> WARNING: it is recommended not to expose these ports outside your organization's network, except for the Identity endpoint, which must be accessible publicly via the identity URL.
 
 # Build the server
 
@@ -255,7 +255,7 @@ You should see the sign in page.
 You should get:
 
 ```json
-{ "message": "Missing \"pubKey\" parameter", "status": 400 }
+{"name":"BadRequestError","message":"Missing \"pubKey\" parameter","status":400}
 ```
 
 [Signature endpoints](https://localhost:3002/sign)
@@ -263,7 +263,7 @@ You should get:
 You should get:
 
 ```json
-{ "message": "Missing token", "status": 401 }
+{"name":"UnauthorizedError","message":"Missing token","status":401}
 ```
 
 [API endpoints](https://localhost:3000/info)
@@ -271,7 +271,7 @@ You should get:
 You should get:
 
 ```json
-{ "message": "Unauthorized", "status":401 }
+{"name":"UnauthorizedError","message":"Unauthorized","status":401}
 ```
 
 # Change administrator account password
