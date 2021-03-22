@@ -405,7 +405,7 @@ Here are some commands of the `./app.sh` file that are made to works in a Docker
 ./app.sh ha-start
 ```
 
-You will be prompted to choose a password to encrypt sensible data in the database, it will be store in a [docker sercret](https://docs.docker.com/engine/swarm/secrets/).
+You will be prompted to choose a password to encrypt sensible data in the database, it will be store in a [docker secret](https://docs.docker.com/engine/swarm/secrets/).
 
 If you have the environment variable `WOLEET_ID_SERVER_ENCRYPTION_SECRET` set, the secret used will be this one.
 
