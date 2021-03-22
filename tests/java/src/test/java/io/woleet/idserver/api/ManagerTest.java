@@ -118,7 +118,7 @@ public class ManagerTest {
         // Try to modify server configuration with manager right
         try {
             ServerConfig serverConfig = new ServerConfig();
-            serverConfig.setIdentityURL("https://localhost:3000/identity");
+            serverConfig.setIdentityURL("https://localhost:3001/identity");
             managerServerConfigApi.updateServerConfig(serverConfig);
             fail("Should not be able to modify server configuration with manager right");
         }

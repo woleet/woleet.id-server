@@ -61,13 +61,11 @@ log[production ? 'info' : 'warn'](
   `Running server in ${chalk.bold(production ? chalk.green('PRODUCTION') : chalk.red('DEVELOPMENT'))} mode`
 );
 
-const defaultPort = getenv('DEFAULT_PORT', 3000);
-
 export const ports = {
-  oidcp: (getenv('OIDCP_PORT', 3003)),
-  signature: (getenv('SIGNATURE_PORT', defaultPort)),
-  identity: (getenv('IDENTITY_PORT', defaultPort)),
-  api: (getenv('API_PORT', defaultPort))
+  api: (getenv('API_PORT', 3000)),
+  identity: (getenv('IDENTITY_PORT', 3001)),
+  signature: (getenv('SIGNATURE_PORT', 3002)),
+  oidcp: (getenv('OIDCP_PORT', 3003))
 };
 
 export const db = {

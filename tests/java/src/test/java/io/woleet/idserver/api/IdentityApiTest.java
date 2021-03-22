@@ -20,10 +20,10 @@ public class IdentityApiTest {
 
     static {
         if (WOLEET_ID_SERVER_IDENTITY_BASEPATH == null)
-            WOLEET_ID_SERVER_IDENTITY_BASEPATH = "https://localhost:3000";
+            WOLEET_ID_SERVER_IDENTITY_BASEPATH = "https://localhost:3001";
 
         if (WOLEET_ID_SERVER_SIGNATURE_BASEPATH == null)
-            WOLEET_ID_SERVER_SIGNATURE_BASEPATH = "https://localhost:3000";
+            WOLEET_ID_SERVER_SIGNATURE_BASEPATH = "https://localhost:3002";
     }
 
     private UserGet userSeal, userESign;

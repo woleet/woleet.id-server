@@ -19,7 +19,7 @@ public class DiscoveryApiTest {
 
     static {
         if (WOLEET_ID_SERVER_SIGNATURE_BASEPATH == null)
-            WOLEET_ID_SERVER_SIGNATURE_BASEPATH = "https://localhost:3000";
+            WOLEET_ID_SERVER_SIGNATURE_BASEPATH = "https://localhost:3002";
     }
 
     private UserGet user;

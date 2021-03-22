@@ -105,8 +105,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'user',
-    canActivate: [HasNoError, IsUser]
+    redirectTo: 'user'
   }
 ];
 
