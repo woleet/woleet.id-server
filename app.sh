@@ -51,8 +51,18 @@ start-ha() {
     create-secret-ha
   fi
 
-  WOLEET_ID_SERVER_COOKIE_KEY="$(openssl rand -base64 16)" \
-  WOLEET_ID_SERVER_OIDC_KEY="$(openssl genrsa 2048 2> /dev/null)" \
+  if [[ -z "$WOLEET_ID_SERVER_COOKIE_KEY" ]]
+  then
+    WOLEET_ID_SERVER_COOKIE_KEY="$(openssl rand -base64 16)"
+  fi
+
+  if [[ -z "$WOLEET_ID_SERVER_OIDC_KEY" ]]
+  then
+    WOLEET_ID_SERVER_OIDC_KEY="$(openssl genrsa 2048 2> /dev/null)"
+  fi
+
+  WOLEET_ID_SERVER_COOKIE_KEY="$WOLEET_ID_SERVER_COOKIE_KEY" \
+  WOLEET_ID_SERVER_OIDC_KEY="$WOLEET_ID_SERVER_OIDC_KEY" \
   docker stack deploy --prune -c docker-compose.yml -c docker-compose.ha.yml "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" "$@"
 }
 
