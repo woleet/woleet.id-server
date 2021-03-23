@@ -14,7 +14,7 @@ services:
       restart_policy:
         condition: "${WOLEET_ID_SERVER_RESTART_POLICY:-any}"
     healthcheck:
-      test: "curl -fqk https://localhost:3000 > /dev/null 2>&1"
+      test: "curl -fqk https://localhost:4220 > /dev/null 2>&1"
       interval: 30s
       timeout: 10s
       retries: 3

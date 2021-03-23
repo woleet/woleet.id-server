@@ -25,7 +25,7 @@ Woleet.ID Server is made of a Node.js server and a Angular/Material client web a
 **Angular/Material client web app**
 
 The web app is intended for the server administrator only. It allows to configure the server and to manage users and their keys.
-By default, it is exposed at [https://localhost:3000]().
+By default, it is exposed at [https://localhost:4220]().
 
 The source code can be found in the `client/` directory.
 
@@ -41,7 +41,7 @@ By default, it is exposed at [https://localhost:3001/identity]().
 **This endpoint need to be exposed publicly on the internet.**
 
 - **API endpoints** dedicated to the client web app, but that can also be used by your backend.
-By default, they are exposed at [https://localhost:3000/api/*]().
+By default, they are exposed at [https://localhost:3000/*]().
 
 - **OpenID Connect endpoints** used only when Woleet.ID Server is used as an OpenID Connect provider.
 By default, they are exposed at [https://localhost:3003/*]().
@@ -193,13 +193,14 @@ export WOLEET_ID_SERVER_ENCRYPTION_SECRET={encryption secret, default: 'secret'}
 You can define the ports on which Woleet.ID Server listens by setting the following environment variables:
 
 ```bash
-export WOLEET_ID_SERVER_API_PORT={port where to expose API endpoints and the client web app (default: 3000)}
+export WOLEET_ID_SERVER_CLIENT_PORT={port where to expose the client web app (default: 4220)}
+export WOLEET_ID_SERVER_API_PORT={port where to expose API endpoints (default: 3000)}
 export WOLEET_ID_SERVER_IDENTITY_PORT={port where to expose the Identity endpoint (default: 3001)}
 export WOLEET_ID_SERVER_SIGNATURE_PORT={port where to expose Signature endpoints (default 3002)}
 export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoints (default 3003)}
 ```
 
-> WARNING: these ports should never be exposed outside your organization's network, except for the Identity endpoint, which must be accessible publicly via the identity URL.
+> WARNING: it is recommended not to expose these ports outside your organization's network, except for the Identity endpoint, which must be accessible publicly via the identity URL.
 
 # Build the server
 
@@ -245,7 +246,7 @@ export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoint
 
 # Test the server
 
-[Client web app](https://localhost:3000/)
+[Client web app](https://localhost:4220/)
 
 You should see the sign in page.
 
@@ -254,7 +255,7 @@ You should see the sign in page.
 You should get:
 
 ```json
-{ "message": "Missing \"pubKey\" parameter", "status": 400 }
+{"name":"BadRequestError","message":"Missing \"pubKey\" parameter","status":400}
 ```
 
 [Signature endpoints](https://localhost:3002/sign)
@@ -262,15 +263,15 @@ You should get:
 You should get:
 
 ```json
-{ "message": "Missing token", "status": 401 }
+{"name":"UnauthorizedError","message":"Missing token","status":401}
 ```
 
-[API endpoints](https://localhost:3000/api/info)
+[API endpoints](https://localhost:3000/info)
 
 You should get:
 
 ```json
-{ "message": "Unauthorized", "status":401 }
+{"name":"UnauthorizedError","message":"Unauthorized","status":401}
 ```
 
 # Change administrator account password

@@ -5,7 +5,7 @@ services:
     image: ${WOLEET_ID_SERVER_REGISTRY:-wids}/client:${WOLEET_ID_SERVER_VERSION:-latest}
     ports:
       # Calls to the server goes through the client's NGinX reverse proxy
-      - 4220:4220 # client web app
+      - ${WOLEET_ID_SERVER_CLIENT_PORT:-4220}:4220 # client web app port
       - ${WOLEET_ID_SERVER_API_PORT:-3000}:3000 # server API endpoints port
       - ${WOLEET_ID_SERVER_IDENTITY_PORT:-3001}:3001 # server /identity endpoint port
       - ${WOLEET_ID_SERVER_SIGNATURE_PORT:-3002}:3002 # server /sign and /discover endpoints port
