@@ -34,7 +34,7 @@ export function build(): Koa {
     }
   });
 
-  router.get('/interaction/:grant', async (ctx, next) => {
+  router.get('/interaction/:grant', async (ctx) => {
     const details = await provider.interactionDetails(ctx.req);
     if (details.interaction.error === 'login_required') {
       throw new Error('Should not be called because we handle this case earlier in the process (#login-precondition)');
@@ -43,8 +43,6 @@ export function build(): Koa {
     } else {
       throw new Error('Unexpected interaction case');
     }
-
-    await next();
   });
 
   provider.use(session);
@@ -61,7 +59,7 @@ export function build(): Koa {
   router.get('/auth', async (ctx, next) => {
     const config = getServerConfig();
 
-    debug('pre auth', ctx['oidc'], `session=${ctx.session && ctx.session.id}`, `user=${ctx.session && ctx.session.userId}`);
+    debug('pre auth', ctx.oidc, `session=${ctx.session && ctx.session.id}`, `user=${ctx.session && ctx.session.userId}`);
 
     if (!ctx.session) {
       // #login-precondition
@@ -98,6 +96,5 @@ export function build(): Koa {
   provider.use(router.routes());
   provider.use(cors());
 
-  const app = <Koa>provider.app;
-  return app;
+  return <Koa>provider.app;
 }

@@ -35,10 +35,9 @@ function abortInit(message): void {
 // https://github.com/panva/node-oidc-provider/blob/master/docs/keystores.md#generating-all-keys-for-all-features
 const keystorePromise = (async () => {
   let keystore;
-
-  if (oidcKey != "random") {
+  if (oidcKey !== 'random') {
     await Promise.all([
-      OIDCProvider.asKey(oidcKey, "pem").then(function(result) {
+      OIDCProvider.asKey(oidcKey, 'pem').then(function (result) {
         keystore = result.keystore;
       })]);
   } else {
