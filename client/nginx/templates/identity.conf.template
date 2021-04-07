@@ -1,10 +1,12 @@
 #
-# API endpoint proxy
+# Identity endpoint proxy
 #
 
 server {
-  listen 3000 http2 ssl default_server;
-  listen [::]:3000 http2 ssl;
+  listen 3001 http2 ssl default_server;
+  listen [::]:3001 http2 ssl;
+
+  resolver ${WOLEET_ID_SERVER_NGINX_RESOLVER};
 
   server_name localhost;
   root /usr/share/nginx/html;
@@ -15,7 +17,7 @@ server {
   include rules/handle497.conf;
   include rules/handle500.conf;
 
-  set $proxy_target wid-server:3000;
+  set $proxy_target ${WOLEET_ID_SERVER_NGINX_SERVER_ADDRESS}:3001;
   location / {
     include rules/proxy.conf;
   }
