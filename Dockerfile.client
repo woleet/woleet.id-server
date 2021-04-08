@@ -17,6 +17,9 @@ RUN cd /build/client && \
 # https://docs.docker.com/develop/develop-images/multistage-build/
 FROM nginx:1.19-alpine
 
+ENV WOLEET_ID_SERVER_NGINX_RESOLVER '127.0.0.11 ipv6=off'
+ENV WOLEET_ID_SERVER_NGINX_SERVER_ADDRESS 'wid-server'
+
 RUN apk add --no-cache curl && rm -rf /etc/nginx/* && mkdir -p /etc/nginx/conf.d
 
 COPY --from=0 /build/client/dist/client /usr/share/nginx/html
