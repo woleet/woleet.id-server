@@ -244,10 +244,9 @@ then
   npm run lint
 elif [[ "$operation" == "build" ]]
 then
-  echo "Build client image ($CLIENT_IMAGE)..."
+  echo "Building client image ($CLIENT_IMAGE)..."
   docker build -f Dockerfile.client -t "$CLIENT_IMAGE" .
   echo "Done."
-
   echo "Building server image ($SERVER_IMAGE)..."
   docker build -f Dockerfile.server -t "$SERVER_IMAGE" .
   echo "Done."

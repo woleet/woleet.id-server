@@ -200,7 +200,7 @@ export WOLEET_ID_SERVER_SIGNATURE_PORT={port where to expose Signature endpoints
 export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoints (default 3003)}
 ```
 
-> WARNING: it is recommended not to expose these ports outside your organization's network, except for the Identity endpoint, which must be accessible publicly via the identity URL.
+> WARNING: it is not recommended to expose these ports outside your organization's network, except for the Identity endpoint, which must be accessible publicly via the identity URL.
 
 # Build the server
 
@@ -294,7 +294,7 @@ The identity URL is the public URL of the `/identity` endpoint.
 - Select the `Settings` menu
 - Enter the identity URL as you expose it to the internet: as an example, if your server domain is `idserver.acme.com`, the identity URL would be `https://idserver.acme.com:3001/identity`.
 
-> WARNING: It is preferable to serve the identity URL on the default HTTPS port 443. To do this, simply set WOLEET_ID_SERVER_IDENTITY_PORT to 443.
+> WARNING: It is recommended to serve the identity URL on the default HTTPS port 443. To do this, simply set WOLEET_ID_SERVER_IDENTITY_PORT to 443.
 
 # Use Woleet.ID Server with an OpenID Connect provider
 
