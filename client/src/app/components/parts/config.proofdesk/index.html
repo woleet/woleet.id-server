@@ -6,7 +6,10 @@
     [disabled]="(formLocked$ | async)">
     Enable ProofDesk
   </mat-checkbox>
-  <br>
+  <mat-error *ngIf="config.proofDeskError && updated" style="font-size: small;">
+    {{ config.proofDeskError }}
+  </mat-error>
+  <br *ngIf="!(config.proofDeskError && updated)">
   <br>
   <mat-divider></mat-divider>
   <br>

@@ -239,7 +239,6 @@ declare global {
   }
 
   /* Server config */
-
   interface InternalServerConfigObject extends ServerConfig {
     version: number;
     identityURL: string;
@@ -449,6 +448,13 @@ declare global {
     data: Object;
     expiresAt: Date;
     consumedAt: Date;
+  }
+
+  interface ServerConfigError {
+    oidcError?: string;
+    oidcpError?: string;
+    smtpError?: string;
+    proofDeskError?: string;
   }
 }
 

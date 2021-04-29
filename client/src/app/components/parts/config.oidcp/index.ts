@@ -21,6 +21,7 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
   _enableOIDCP: boolean;
   reveal = false;
   changed = false;
+  updated = false;
 
   oidcpClients: (ApiOIDCPClient & { _valid?: () => boolean })[];
 
@@ -85,6 +86,7 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
   }
 
   update() {
+    this.updated = true;
     const OIDCPIssuerURL = this.form.get('issuerURL').value || null;
     const OIDCPProviderURL = this.form.get('providerURL').value || null;
     const OIDCPInterfaceURL = this.form.get('interfaceURL').value || null;

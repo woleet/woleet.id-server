@@ -20,6 +20,7 @@ export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnIni
   enableOpenIDConnect: boolean;
   reveal = false;
   changed = false;
+  updated = false;
 
   private onDestroy: EventEmitter<void>;
 
@@ -79,6 +80,7 @@ export class ConfigOpenIDComponent extends ErrorMessageProvider implements OnIni
   }
 
   update() {
+    this.updated = true;
     const openIDConnectURL = this.form.get('openIDConnectURL').value || null;
     const openIDConnectClientId = this.form.get('openIDConnectClientId').value || null;
     const openIDConnectClientSecret = this.form.get('openIDConnectClientSecret').value || null;

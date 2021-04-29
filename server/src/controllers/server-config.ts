@@ -64,7 +64,7 @@ export async function defaultTCU() {
   log.info('Reset TCU file to default value');
 }
 
-export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject> {
+export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject & ServerConfigError> {
   try {
     const config = Object.assign({}, getInMemoryConfig(), up);
     if (!config.enableSMTP) {
@@ -77,13 +77,14 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
     } else {
       debug('Updated with', up);
     }
+    const error: ServerConfigError = {};
     setInMemoryConfig(cfg.toJSON().config);
-    await checkOIDCConfigChange(up);
-    await checkOIDCPConfigChange(up);
-    await checkSMTPConfigChange(up);
-    await checkProofDeskConfigChange(up);
+    error.oidcError = await checkOIDCConfigChange(up);
+    error.oidcpError = await checkOIDCPConfigChange(up);
+    error.smtpError = await checkSMTPConfigChange(up);
+    error.proofDeskError = await checkProofDeskConfigChange(up);
     cacheLock.publishReloadServerConfig();
-    return getServerConfig();
+    return Object.assign({}, getServerConfig(), error);
   } catch (err) {
     exit('FATAL: Cannot update the server configuration', err);
   }
@@ -131,7 +132,8 @@ async function checkOIDCConfigChange(up: ServerConfigUpdate) {
       await fns.updateOIDCClient();
     } catch (err) {
       log.error('Cannot initialize OpenID Connect, it will be automatically disabled!', err);
-      return setServerConfig({ enableOpenIDConnect: false });
+      await setServerConfig({ enableOpenIDConnect: false });
+      return 'Cannot initialize OpenID Connect, check your configuration.';
     }
   }
 }
@@ -162,7 +164,8 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
       await OIDCPSafeReboot();
     } catch (err) {
       log.error('Cannot initialize OpenID Connect, it will be automatically disabled!', err);
-      return setServerConfig({ enableOpenIDConnect: false });
+      await setServerConfig({ enableOpenIDConnect: false });
+      return err ? err.message : 'Cannot initialize OpenID Connect, check your configuration.';
     }
   }
 }
@@ -176,13 +179,14 @@ async function checkSMTPConfigChange(up: ServerConfigUpdate) {
       await fns.updateSMTP();
     } catch (err) {
       log.error('Cannot initialize SMTP, it will be automatically disabled!', err);
-      return setServerConfig({ enableSMTP: false });
+      await setServerConfig({ enableSMTP: false });
+      return err ? err.message : 'Cannot initialize SMTP, check your configuration.';
     }
   }
 }
 
 // Check the ProofDesk configuration validity
-async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
+async function checkProofDeskConfigChange(up: ServerConfigUpdate): Promise<string> {
 
   // Check the configuration changed
   if ((up.proofDeskAPIURL || up.proofDeskAPIToken) && up.enableProofDesk) {
@@ -215,18 +219,18 @@ async function checkProofDeskConfigChange(up: ServerConfigUpdate) {
             } else {
               log.error(json.error);
               await setServerConfig({ enableProofDesk: false });
-              resolve();
+              resolve('Connection with proofDesk blocked: ' + json.error);
             }
           } catch (err) {
             log.error('Response is not a JSON (bad URL?)');
             await setServerConfig({ enableProofDesk: false });
-            resolve();
+            resolve('Response is not a JSON (bad URL?)');
           }
         });
       }).on('error', async (err) => {
         log.error(err.message);
         await setServerConfig({ enableProofDesk: false });
-        resolve();
+        resolve(err.message);
       });
     });
   }

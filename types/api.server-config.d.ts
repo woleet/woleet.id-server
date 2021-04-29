@@ -66,6 +66,12 @@ interface ApiServerConfig {
 
   // Block identity endpoint without signed identity query
   preventIdentityExposure: boolean | null;
+
+  // Configuration errors
+  oidcError?: string | null;
+  oidcpError?: string | null;
+  smtpError?: string | null;
+  proofDeskError?: string | null;
 }
 
 interface ApiServerConfigUpdate {

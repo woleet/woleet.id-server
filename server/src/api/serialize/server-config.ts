@@ -1,4 +1,4 @@
-export function serializeServerConfig(config: InternalServerConfigObject): ApiServerConfig {
+export function serializeServerConfig(config: InternalServerConfigObject & ServerConfigError): ApiServerConfig {
   const {
     fallbackOnDefaultKey,
     defaultKeyId,
@@ -33,7 +33,11 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     enableProofDesk,
     blockPasswordInput,
     askForResetInput,
-    preventIdentityExposure
+    preventIdentityExposure,
+    oidcError,
+    oidcpError,
+    smtpError,
+    proofDeskError
   } = config;
 
   return {
@@ -70,6 +74,10 @@ export function serializeServerConfig(config: InternalServerConfigObject): ApiSe
     enableProofDesk,
     blockPasswordInput,
     askForResetInput,
-    preventIdentityExposure
+    preventIdentityExposure,
+    oidcError,
+    oidcpError,
+    smtpError,
+    proofDeskError
   };
 }

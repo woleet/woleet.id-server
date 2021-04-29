@@ -20,6 +20,8 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
 
   private onDestroy: EventEmitter<void>;
 
+  updated = false;
+
   constructor(private configService: ConfigService) {
     super();
     this.onDestroy = new EventEmitter();
@@ -65,6 +67,7 @@ export class ConfigProofDeskComponent extends ErrorMessageProvider implements On
     const proofDeskAPIURL = this.form.get('proofDeskAPIURL').value || null;
     const proofDeskAPIToken = this.form.get('proofDeskAPIToken').value || null;
     const enableProofDesk = this.enableProofDesk;
+    this.updated = true;
     this.configService.updateConfig({
       proofDeskAPIURL,
       proofDeskAPIToken,

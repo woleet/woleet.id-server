@@ -6,7 +6,10 @@
     (change)="updateSMTPOption(config.enableSMTP)" [disabled]="(formLocked$ | async)">
     Enable SMTP
   </mat-checkbox>
-  <br>
+  <mat-error *ngIf="config.smtpError && updated" style="font-size: small;">
+    {{ config.smtpError }}
+  </mat-error>
+  <br *ngIf="!(config.smtpError && updated)">
   <br>
   <mat-divider></mat-divider>
   <br>

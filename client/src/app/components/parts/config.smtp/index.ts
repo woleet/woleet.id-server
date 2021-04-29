@@ -19,6 +19,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
   formSMTP: FormGroup;
   enableSMTP: boolean;
   changed = false;
+  updated = false;
 
   private onDestroy: EventEmitter<void>;
 
@@ -72,6 +73,7 @@ export class ConfigSMTPComponent extends ErrorMessageProvider implements OnInit,
 
     const SMTPConfig = this.formSMTP.get('SMTPConfig').value || null;
     this.configService.updateConfig({ enableSMTP, SMTPConfig });
+    this.updated = true;
   }
 
   updateSMTPOption(enableSMTP) {
