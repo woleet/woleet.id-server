@@ -180,7 +180,12 @@ async function checkSMTPConfigChange(up: ServerConfigUpdate) {
     } catch (err) {
       log.error('Cannot initialize SMTP, it will be automatically disabled!', err);
       await setServerConfig({ enableSMTP: false });
-      return err ? err.message : 'Cannot initialize SMTP, check your configuration.';
+      // syntaxt error have a message, configuration error doesn't
+      if (err) {
+        return err.message ? err.message : err;
+      }
+      // empty object have an undefined error
+      return 'Cannot initialize SMTP, check your configuration.';
     }
   }
 }
