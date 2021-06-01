@@ -6,6 +6,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**id** | [**UUID**](UUID.md) | User identifier (allocated by the server). |  [optional] [readonly]
 **createdAt** | **Long** | Date of creation (Unix ms timestamp). |  [optional] [readonly]
 **updatedAt** | **Long** | Date of last modification (Unix ms timestamp). |  [optional] [readonly]
 **lastLogin** | **Long** | Date of last login (Unix ms timestamp). |  [optional] [readonly]

@@ -31,6 +31,10 @@ import java.util.UUID;
  */
 
 public class UserGetAllOf {
+  public static final String SERIALIZED_NAME_ID = "id";
+  @SerializedName(SERIALIZED_NAME_ID)
+  private UUID id;
+
   public static final String SERIALIZED_NAME_CREATED_AT = "createdAt";
   @SerializedName(SERIALIZED_NAME_CREATED_AT)
   private Long createdAt;
@@ -50,6 +54,20 @@ public class UserGetAllOf {
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
   private UUID defaultKeyId;
+
+
+   /**
+   * User identifier (allocated by the server).
+   * @return id
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3", value = "User identifier (allocated by the server).")
+
+  public UUID getId() {
+    return id;
+  }
+
+
 
 
    /**
@@ -149,7 +167,8 @@ public class UserGetAllOf {
       return false;
     }
     UserGetAllOf userGetAllOf = (UserGetAllOf) o;
-    return Objects.equals(this.createdAt, userGetAllOf.createdAt) &&
+    return Objects.equals(this.id, userGetAllOf.id) &&
+        Objects.equals(this.createdAt, userGetAllOf.createdAt) &&
         Objects.equals(this.updatedAt, userGetAllOf.updatedAt) &&
         Objects.equals(this.lastLogin, userGetAllOf.lastLogin) &&
         Objects.equals(this.mode, userGetAllOf.mode) &&
@@ -158,7 +177,7 @@ public class UserGetAllOf {
 
   @Override
   public int hashCode() {
-    return Objects.hash(createdAt, updatedAt, lastLogin, mode, defaultKeyId);
+    return Objects.hash(id, createdAt, updatedAt, lastLogin, mode, defaultKeyId);
   }
 
 
@@ -166,6 +185,7 @@ public class UserGetAllOf {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserGetAllOf {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");

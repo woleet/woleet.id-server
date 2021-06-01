@@ -1230,12 +1230,6 @@ components:
     UserBase:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: User identifier (allocated by the server).
-          example: "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3"
         email:
           type: string
           format: email
@@ -1264,6 +1258,12 @@ components:
         - $ref: '#/components/schemas/UserBase'
         - type: object
           properties:
+            id:
+              type: string
+              format: uuid
+              readOnly: true
+              description: User identifier (allocated by the server).
+              example: "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3"
             createdAt:
               $ref: '#/components/schemas/CreatedAt'
             updatedAt:

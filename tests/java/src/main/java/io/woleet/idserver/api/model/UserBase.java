@@ -26,17 +26,12 @@ import io.woleet.idserver.api.model.FullIdentity;
 import io.woleet.idserver.api.model.UserRoleEnum;
 import io.woleet.idserver.api.model.UserStatusEnum;
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * UserBase
  */
 
 public class UserBase {
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
-  private UUID id;
-
   public static final String SERIALIZED_NAME_EMAIL = "email";
   @SerializedName(SERIALIZED_NAME_EMAIL)
   private String email;
@@ -64,20 +59,6 @@ public class UserBase {
   public static final String SERIALIZED_NAME_IDENTITY = "identity";
   @SerializedName(SERIALIZED_NAME_IDENTITY)
   private FullIdentity identity = null;
-
-
-   /**
-   * User identifier (allocated by the server).
-   * @return id
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3", value = "User identifier (allocated by the server).")
-
-  public UUID getId() {
-    return id;
-  }
-
-
 
 
   public UserBase email(String email) {
@@ -250,8 +231,7 @@ public class UserBase {
       return false;
     }
     UserBase userBase = (UserBase) o;
-    return Objects.equals(this.id, userBase.id) &&
-        Objects.equals(this.email, userBase.email) &&
+    return Objects.equals(this.email, userBase.email) &&
         Objects.equals(this.username, userBase.username) &&
         Objects.equals(this.countryCallingCode, userBase.countryCallingCode) &&
         Objects.equals(this.phone, userBase.phone) &&
@@ -262,7 +242,7 @@ public class UserBase {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, email, username, countryCallingCode, phone, status, role, identity);
+    return Objects.hash(email, username, countryCallingCode, phone, status, role, identity);
   }
 
 
@@ -270,7 +250,6 @@ public class UserBase {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserBase {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    countryCallingCode: ").append(toIndentedString(countryCallingCode)).append("\n");

@@ -6,7 +6,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | [**UUID**](UUID.md) | User identifier (allocated by the server). |  [optional] [readonly]
 **email** | **String** | User email (can be used for login). |  [optional]
 **username** | **String** | User name (can be used for login). |  [optional]
 **countryCallingCode** | **String** | User country calling code |  [optional]
@@ -14,6 +13,7 @@ Name | Type | Description | Notes
 **status** | [**UserStatusEnum**](UserStatusEnum.md) |  |  [optional]
 **role** | [**UserRoleEnum**](UserRoleEnum.md) |  |  [optional]
 **identity** | [**FullIdentity**](FullIdentity.md) |  |  [optional]
+**id** | [**UUID**](UUID.md) | User identifier (allocated by the server). |  [optional] [readonly]
 **createdAt** | **Long** | Date of creation (Unix ms timestamp). |  [optional] [readonly]
 **updatedAt** | **Long** | Date of last modification (Unix ms timestamp). |  [optional] [readonly]
 **lastLogin** | **Long** | Date of last login (Unix ms timestamp). |  [optional] [readonly]

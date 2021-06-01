@@ -35,10 +35,6 @@ import java.util.UUID;
  */
 
 public class UserPut {
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
-  private UUID id;
-
   public static final String SERIALIZED_NAME_EMAIL = "email";
   @SerializedName(SERIALIZED_NAME_EMAIL)
   private String email;
@@ -74,20 +70,6 @@ public class UserPut {
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
   private UUID defaultKeyId;
-
-
-   /**
-   * User identifier (allocated by the server).
-   * @return id
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3", value = "User identifier (allocated by the server).")
-
-  public UUID getId() {
-    return id;
-  }
-
-
 
 
   public UserPut email(String email) {
@@ -306,8 +288,7 @@ public class UserPut {
       return false;
     }
     UserPut userPut = (UserPut) o;
-    return Objects.equals(this.id, userPut.id) &&
-        Objects.equals(this.email, userPut.email) &&
+    return Objects.equals(this.email, userPut.email) &&
         Objects.equals(this.username, userPut.username) &&
         Objects.equals(this.countryCallingCode, userPut.countryCallingCode) &&
         Objects.equals(this.phone, userPut.phone) &&
@@ -320,7 +301,7 @@ public class UserPut {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, email, username, countryCallingCode, phone, status, role, identity, password, defaultKeyId);
+    return Objects.hash(email, username, countryCallingCode, phone, status, role, identity, password, defaultKeyId);
   }
 
 
@@ -328,7 +309,6 @@ public class UserPut {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserPut {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    countryCallingCode: ").append(toIndentedString(countryCallingCode)).append("\n");

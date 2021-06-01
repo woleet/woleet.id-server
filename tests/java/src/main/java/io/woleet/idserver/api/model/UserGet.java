@@ -36,10 +36,6 @@ import java.util.UUID;
  */
 
 public class UserGet {
-  public static final String SERIALIZED_NAME_ID = "id";
-  @SerializedName(SERIALIZED_NAME_ID)
-  private UUID id;
-
   public static final String SERIALIZED_NAME_EMAIL = "email";
   @SerializedName(SERIALIZED_NAME_EMAIL)
   private String email;
@@ -68,6 +64,10 @@ public class UserGet {
   @SerializedName(SERIALIZED_NAME_IDENTITY)
   private FullIdentity identity = null;
 
+  public static final String SERIALIZED_NAME_ID = "id";
+  @SerializedName(SERIALIZED_NAME_ID)
+  private UUID id;
+
   public static final String SERIALIZED_NAME_CREATED_AT = "createdAt";
   @SerializedName(SERIALIZED_NAME_CREATED_AT)
   private Long createdAt;
@@ -87,20 +87,6 @@ public class UserGet {
   public static final String SERIALIZED_NAME_DEFAULT_KEY_ID = "defaultKeyId";
   @SerializedName(SERIALIZED_NAME_DEFAULT_KEY_ID)
   private UUID defaultKeyId;
-
-
-   /**
-   * User identifier (allocated by the server).
-   * @return id
-  **/
-  @javax.annotation.Nullable
-  @ApiModelProperty(example = "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3", value = "User identifier (allocated by the server).")
-
-  public UUID getId() {
-    return id;
-  }
-
-
 
 
   public UserGet email(String email) {
@@ -265,6 +251,20 @@ public class UserGet {
 
 
    /**
+   * User identifier (allocated by the server).
+   * @return id
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "7c42e7e9-aec5-4d56-9a3b-bd55e129aae3", value = "User identifier (allocated by the server).")
+
+  public UUID getId() {
+    return id;
+  }
+
+
+
+
+   /**
    * Date of creation (Unix ms timestamp).
    * @return createdAt
   **/
@@ -361,14 +361,14 @@ public class UserGet {
       return false;
     }
     UserGet userGet = (UserGet) o;
-    return Objects.equals(this.id, userGet.id) &&
-        Objects.equals(this.email, userGet.email) &&
+    return Objects.equals(this.email, userGet.email) &&
         Objects.equals(this.username, userGet.username) &&
         Objects.equals(this.countryCallingCode, userGet.countryCallingCode) &&
         Objects.equals(this.phone, userGet.phone) &&
         Objects.equals(this.status, userGet.status) &&
         Objects.equals(this.role, userGet.role) &&
         Objects.equals(this.identity, userGet.identity) &&
+        Objects.equals(this.id, userGet.id) &&
         Objects.equals(this.createdAt, userGet.createdAt) &&
         Objects.equals(this.updatedAt, userGet.updatedAt) &&
         Objects.equals(this.lastLogin, userGet.lastLogin) &&
@@ -378,7 +378,7 @@ public class UserGet {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, email, username, countryCallingCode, phone, status, role, identity, createdAt, updatedAt, lastLogin, mode, defaultKeyId);
+    return Objects.hash(email, username, countryCallingCode, phone, status, role, identity, id, createdAt, updatedAt, lastLogin, mode, defaultKeyId);
   }
 
 
@@ -386,7 +386,6 @@ public class UserGet {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserGet {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    countryCallingCode: ").append(toIndentedString(countryCallingCode)).append("\n");
@@ -394,6 +393,7 @@ public class UserGet {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("    identity: ").append(toIndentedString(identity)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    lastLogin: ").append(toIndentedString(lastLogin)).append("\n");
