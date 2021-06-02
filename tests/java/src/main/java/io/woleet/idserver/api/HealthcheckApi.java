@@ -54,7 +54,7 @@ public class HealthcheckApi {
     }
 
     /**
-     * Build call for checkGet
+     * Build call for check
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -65,7 +65,7 @@ public class HealthcheckApi {
         <tr><td> 503 </td><td> the database is unavailable. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call checkGetCall(final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call checkCall(final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -95,10 +95,10 @@ public class HealthcheckApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call checkGetValidateBeforeCall(final ApiCallback _callback) throws ApiException {
+    private okhttp3.Call checkValidateBeforeCall(final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = checkGetCall(_callback);
+        okhttp3.Call localVarCall = checkCall(_callback);
         return localVarCall;
 
     }
@@ -114,8 +114,8 @@ public class HealthcheckApi {
         <tr><td> 503 </td><td> the database is unavailable. </td><td>  -  </td></tr>
      </table>
      */
-    public void checkGet() throws ApiException {
-        checkGetWithHttpInfo();
+    public void check() throws ApiException {
+        checkWithHttpInfo();
     }
 
     /**
@@ -130,8 +130,8 @@ public class HealthcheckApi {
         <tr><td> 503 </td><td> the database is unavailable. </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<Void> checkGetWithHttpInfo() throws ApiException {
-        okhttp3.Call localVarCall = checkGetValidateBeforeCall(null);
+    public ApiResponse<Void> checkWithHttpInfo() throws ApiException {
+        okhttp3.Call localVarCall = checkValidateBeforeCall(null);
         return localVarApiClient.execute(localVarCall);
     }
 
@@ -148,9 +148,9 @@ public class HealthcheckApi {
         <tr><td> 503 </td><td> the database is unavailable. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call checkGetAsync(final ApiCallback<Void> _callback) throws ApiException {
+    public okhttp3.Call checkAsync(final ApiCallback<Void> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = checkGetValidateBeforeCall(_callback);
+        okhttp3.Call localVarCall = checkValidateBeforeCall(_callback);
         localVarApiClient.executeAsync(localVarCall, _callback);
         return localVarCall;
     }

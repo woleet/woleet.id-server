@@ -1070,6 +1070,7 @@ paths:
                 $ref: '#/components/responses/UserGet'
   /check:
     get:
+      operationId: check
       tags:
         - Healthcheck
       summary: Check the database availability.

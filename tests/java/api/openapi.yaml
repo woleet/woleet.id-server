@@ -1,0 +1,2676 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: contact@woleet.com
+  description: This is Woleet.ID Server API documentation.
+  license:
+    name: MIT
+  title: Woleet.ID Server
+  version: 1.2.6
+servers:
+- url: /
+security:
+- CookieAuth: []
+paths:
+  /login:
+    get:
+      operationId: login
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserInfo'
+          description: User successfully logged in. A session cookie is returned.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing email/username or password.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid email/username or password.
+      security:
+      - BasicAuth: []
+      summary: Log into the system. Both email or username can be used to authenticate.
+      tags:
+      - Authentication
+      x-accepts: application/json
+  /logout:
+    get:
+      operationId: logout
+      responses:
+        "200":
+          description: User successfully logged out.
+      summary: Log out from the system.
+      tags:
+      - Authentication
+      x-accepts: application/json
+  /info:
+    get:
+      operationId: getUserInfo
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserInfo'
+          description: Successful operation.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+      summary: Get information about the current logged user.
+      tags:
+      - Authentication
+      x-accepts: application/json
+  /sign:
+    get:
+      description: |
+        Use this endpoint to sign a message or a SHA256 hash using one of the keys managed by the server.<br> **NOTE: this endpoint is by default exposed on the port 3002, and not on port 3000 like for other API endpoints. It is not recommended to expose this endpoint publicly on the internet.**<br> Provide the message to sign in the `messageToSign` parameter, or the SHA256 hash to sign in the `hashToSign` parameter.<br> When authenticated as an admin, the key to use can be specified using the `pubKey`, `userId` and/or `customUserId` parameters:<br> - set the `pubKey` parameter only: the referred key is used<br> - set the `userId` (or the `customUserId`) parameter only: the default key of the referred user is used (if any).<br> - set none of the 3 parameters: the default key of the server is used (if any).<br> When authenticated as a user, the key to use must be one of the authenticated user's keys and can be specified using the `pubKey` parameter.<br> If not specified, the authenticated user's default key is used (if any).<br> If the server is configured to prevent identity exposure, the caller must always provide the `identityToSign` parameter.
+      operationId: getSignature
+      parameters:
+      - description: SHA256 hash to be signed (a string formatted like [a-f0-9]{64}).
+        explode: true
+        in: query
+        name: hashToSign
+        required: false
+        schema:
+          example: d8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975
+          type: string
+        style: form
+      - description: Message to be signed.
+        explode: true
+        in: query
+        name: messageToSign
+        required: false
+        schema:
+          example: This is the message to be signed
+          type: string
+        style: form
+      - description: User identifier.
+        explode: true
+        in: query
+        name: userId
+        required: false
+        schema:
+          example: 345a4513-0266-419a-8344-2daf645b78ed
+          format: uuid
+          type: string
+        style: form
+      - description: Custom user identifier (ie. `userId` field of the user identity).
+        explode: true
+        in: query
+        name: customUserId
+        required: false
+        schema:
+          example: wol.jim-smith.01
+          type: string
+        style: form
+      - description: |
+          The public key to use to sign.<br> When not provided and a user is provided, the default key of the user is used (if any).<br> When not provided and no user is provided, the default key of the server is used (if any).
+        explode: true
+        in: query
+        name: pubKey
+        required: false
+        schema:
+          example: 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh
+          type: string
+        style: form
+      - description: |
+          The derivation path of the key to use to sign.<br> When not provided, the default derivation path "m/44'/0'/0'" is used.
+        explode: true
+        in: query
+        name: path
+        required: false
+        schema:
+          example: m/'44/'0/'1
+          type: string
+        style: form
+      - description: |
+          Identity to sign: when set, the identity of the signer and the domain of the identity issuer are included to the signed data.<br> The identity of the signer is the X500 Distinguished Name built by the server from the identity associated to the key.<br> The domain of the identity issuer is extracted from the server's identity URL.<br> Both are included to the signed data: the signature produced in this case is the signature of SHA256(hash or message to sign + identity of the signer + domain of the identity issuer).<br> The identity of the signer and the domain of the identity issuer are returned respectively in the `signedIdentity` and the `signedIssuerDomain` fields of the signature result.<br> You must specify the fields you want to include in the identity of the signer by providing a string containing the list of the X500 fields to include, separated with ',':<br>
+            CN: Common name<br>
+            EMAILADDRESS: Email address<br>
+            O: Organization<br>
+            OU: Organizational unit<br>
+            L: Locality<br>
+            C: Country<br>
+          If you want to include all fields, you can also provide ALL.
+        explode: true
+        in: query
+        name: identityToSign
+        required: false
+        schema:
+          example: CN,EMAILADDRESS,O,OU,L,C
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignatureResult'
+          description: |
+            Successful operation. The produced signature and its associated parameters are returned as a JSON object<br> Note that if your are using the Woleet API and you want to anchor this signature, you can simply add a `name` field to the returned JSON object, and provide it as is to the `POST /anchor` endpoint.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid query parameter. More details are returned
+            in the response body.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid token. More details are returned in the
+            response body.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Key or User not found.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: No `pubKey` parameter is provided and the server or the user
+            has no default key to fallback on.
+      security:
+      - APITokenAuth: []
+      - OAuthTokenAuth: []
+      summary: Sign a message or a SHA256 hash using a key.
+      tags:
+      - Signature
+      x-accepts: application/json
+  /identity:
+    get:
+      description: |
+        Use this endpoint to verify that the server knows a given public key and to get or check the identity of the user owning that key.<br> **NOTE: this endpoint is not protected and by default exposed on the port 3001, and not on port 3000 like for other API endpoints.<br> It is recommended to expose this endpoint publicly on the internet on HTTPS default port 443 and to configure the server's identity URL so that it resolves on this endpoint.**<br> If the server controls the private key associated to the public key, it can also sign some random data and return the produced signature to prove it owns the key.<br> The random data is built by concatenating the `leftData` parameter (provided by the client) and some random data generated by the server (returned in the `rightData` field).<br> The caller can then verify that the returned signature is valid for the public key (which proves the ownership of the private key by the server).<br> The caller can optionally read the TLS certificate securing this endpoint to get the certified identity of the owner of the domain of this identity endpoint.<br> If the server is configured to prevent identity exposure, the caller must always provide the `signedIdentity` parameter.
+      operationId: getIdentity
+      parameters:
+      - description: Public key to verify.
+        explode: true
+        in: query
+        name: pubKey
+        required: true
+        schema:
+          example: 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh
+          type: string
+        style: form
+      - description: |
+          Identity to verify (as a X500 Distinguished Name).<br> This identity must have been signed at least once by the public key.
+        explode: true
+        in: query
+        name: signedIdentity
+        required: false
+        schema:
+          example: CN=John Doe,EMAILADDRESS=john.doe@acme.com
+          type: string
+        style: form
+      - description: |
+          Left part of the random data to sign (should be generated randomly).<br> When not provided, the server does not return a signature, even if it controls the key.
+        explode: true
+        in: query
+        name: leftData
+        required: false
+        schema:
+          example: 00c8a2b0c373050e7f2abbb2e4c631a42c10d402
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityResult'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid query parameter.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Public key not found.
+      security: []
+      summary: Verify the identity of a user.
+      tags:
+      - Identity
+      x-accepts: application/json
+  /discover/users:
+    get:
+      description: |
+        Use this endpoint to get all users whose `email`, `username`, `identity.commonName`, `identity.organization` or `identity.organizationalUnit` contains the search string.
+      operationId: discoverUsers
+      parameters:
+      - description: A string used to search users through the fields `email`, `username`,
+          `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
+        explode: true
+        in: query
+        name: search
+        required: true
+        schema:
+          example: '{"email":{"value":"john.doe@acme.com"},"username":{"value":"johndoe"},"x500CommonName":{"value":"John
+            Doe"},"x500Organization":{"value":"Acme corp"},"x500OrganizationalUnit":{"value":"Sales
+            dept"}}'
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserDiscoArray'
+          description: Successful operation.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+      security:
+      - APITokenAuth: []
+      - OAuthTokenAuth: []
+      summary: Get all users matching a search string.
+      tags:
+      - Discovery
+      x-accepts: application/json
+  /discover/user/{pubKey}:
+    get:
+      description: |
+        Use this endpoint to get the user owning a public key.
+      operationId: discoverUserByPubKey
+      parameters:
+      - description: Public key (bitcoin address when using BIP39 keys).
+        explode: false
+        in: path
+        name: pubKey
+        required: true
+        schema:
+          example: 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserDisco'
+          description: Successful operation.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: User not found.
+      security:
+      - APITokenAuth: []
+      - OAuthTokenAuth: []
+      summary: Get the user associated to a public key.
+      tags:
+      - Discovery
+      x-accepts: application/json
+  /discover/user:
+    get:
+      description: |
+        Use this endpoint to get the current authenticated user.
+      operationId: discoverUser
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserDisco'
+          description: Successful operation.
+        "204":
+          description: Successful operation. The current authenticated user is a server
+            admin.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: User not found.
+      security:
+      - APITokenAuth: []
+      - OAuthTokenAuth: []
+      summary: Get the current authenticated user.
+      tags:
+      - Discovery
+      x-accepts: application/json
+  /discover/keys/{userId}:
+    get:
+      description: |
+        Use this endpoint to get all public keys owned by a user.
+      operationId: discoverUserKeys
+      parameters:
+      - description: Identifier of the user.
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/KeyDiscoArray'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid user identifier.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: User not found.
+      security:
+      - APITokenAuth: []
+      - OAuthTokenAuth: []
+      summary: Get all public keys of a user.
+      tags:
+      - Discovery
+      x-accepts: application/json
+  /discover/config:
+    get:
+      description: |
+        Use this endpoint to get the server configuration.
+      operationId: discoverConfig
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ConfigDisco'
+          description: Successful operation.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+      security:
+      - APITokenAuth: []
+      - OAuthTokenAuth: []
+      summary: Get the server configuration.
+      tags:
+      - Discovery
+      x-accepts: application/json
+  /key/{keyId}:
+    delete:
+      operationId: deleteKey
+      parameters:
+      - description: Identifier of the key.
+        explode: false
+        in: path
+        name: keyId
+        required: true
+        schema:
+          example: 552aa3fd-3b5e-434f-bdd3-9b6c58c269c1
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid key identifier.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Key not found.
+      summary: Delete a key.
+      tags:
+      - Key
+      x-accepts: application/json
+    get:
+      operationId: getKeyById
+      parameters:
+      - description: Identifier of the key.
+        explode: false
+        in: path
+        name: keyId
+        required: true
+        schema:
+          example: 552aa3fd-3b5e-434f-bdd3-9b6c58c269c1
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid key identifier.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Key not found.
+      summary: Get a key by its identifier.
+      tags:
+      - Key
+      x-accepts: application/json
+    put:
+      operationId: updateKey
+      parameters:
+      - description: Identifier of the key.
+        explode: false
+        in: path
+        name: keyId
+        required: true
+        schema:
+          example: 552aa3fd-3b5e-434f-bdd3-9b6c58c269c1
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/KeyPut'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid key identifier.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Key not found.
+      summary: Update a key.
+      tags:
+      - Key
+      x-contentType: application/json
+      x-accepts: application/json
+  /user/{userId}/extern-key:
+    post:
+      operationId: createExternalKey
+      parameters:
+      - description: Identifier of the user.
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/ExternalKeyPost'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/KeyGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid input.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: User not found.
+      summary: Create a new external key for a user.
+      tags:
+      - Key
+      x-contentType: application/json
+      x-accepts: application/json
+  /user/{userId}/key:
+    post:
+      operationId: createKey
+      parameters:
+      - description: Identifier of the user.
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/KeyPost'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/KeyGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid input.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: User not found.
+      summary: Create a new key for a user.
+      tags:
+      - Key
+      x-contentType: application/json
+      x-accepts: application/json
+  /user/{userId}/key/list:
+    get:
+      operationId: getAllUserKeys
+      parameters:
+      - description: Identifier of the user.
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/KeyArray'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid user identifier.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: User not found.
+      summary: List all keys of a user.
+      tags:
+      - Key
+      x-accepts: application/json
+  /user:
+    post:
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPost'
+        description: User object to create.
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserGet'
+          description: Successful operation.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid object supplied.
+      summary: Create a new user.
+      tags:
+      - User
+      x-contentType: application/json
+      x-accepts: application/json
+  /user/{userId}:
+    delete:
+      operationId: deleteUser
+      parameters:
+      - description: Identifier of the user.
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid user identifier.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: User not found.
+      summary: Delete a user.
+      tags:
+      - User
+      x-accepts: application/json
+    get:
+      operationId: getUserById
+      parameters:
+      - description: Identifier of the user.
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid user identifier.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: User not found.
+      summary: Get a user by his identifier.
+      tags:
+      - User
+      x-accepts: application/json
+    put:
+      operationId: updateUser
+      parameters:
+      - description: Identifier of the user.
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPut'
+        description: User object to update.
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid object supplied / Invalid user identifier.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: User not found.
+      summary: Update a user.
+      tags:
+      - User
+      x-contentType: application/json
+      x-accepts: application/json
+  /user/list:
+    get:
+      operationId: getAllUsers
+      parameters:
+      - description: Filter the user mode.
+        explode: true
+        in: query
+        name: mode
+        required: false
+        schema:
+          enum:
+          - seal
+          - esign
+          example: seal
+          type: string
+        style: form
+      - description: Filter the user role.
+        explode: true
+        in: query
+        name: role
+        required: false
+        schema:
+          enum:
+          - user
+          - manager
+          - admin
+          example: user
+          type: string
+        style: form
+      - description: Filter the user email.
+        explode: true
+        in: query
+        name: email
+        required: false
+        schema:
+          example: john.doe@acme.com
+          type: string
+        style: form
+      - description: Filter the user X500 common name.
+        explode: true
+        in: query
+        name: commonName
+        required: false
+        schema:
+          example: John Doe
+          type: string
+        style: form
+      - description: Filter the user X500 organization.
+        explode: true
+        in: query
+        name: organization
+        required: false
+        schema:
+          example: Acme corp
+          type: string
+        style: form
+      - description: Filter the user X500 organizational unit.
+        explode: true
+        in: query
+        name: organizationalUnit
+        required: false
+        schema:
+          example: Sales dept
+          type: string
+        style: form
+      - description: Filter the user X500 locality.
+        explode: true
+        in: query
+        name: locality
+        required: false
+        schema:
+          example: Rennes
+          type: string
+        style: form
+      - description: Filter the user X500 country.
+        explode: true
+        in: query
+        name: country
+        required: false
+        schema:
+          example: FR
+          type: string
+        style: form
+      - description: Filter the user X500 custom user identifier.
+        explode: true
+        in: query
+        name: userId
+        required: false
+        schema:
+          example: wol.jim-smith.01
+          type: string
+        style: form
+      - description: Filter the user country calling code.
+        explode: true
+        in: query
+        name: countryCallingCode
+        required: false
+        schema:
+          example: "33"
+          type: string
+        style: form
+      - description: Filter the user phone.
+        explode: true
+        in: query
+        name: phone
+        required: false
+        schema:
+          example: "123456789"
+          type: string
+        style: form
+      - description: Filter the user status.
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - active
+          - blocked
+          example: active
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserArray'
+          description: Array of users.
+      summary: List all users.
+      tags:
+      - User
+      x-accepts: application/json
+  /api-token:
+    post:
+      operationId: createAPIToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APITokenPost'
+        description: API token object to create.
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APITokenGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid object supplied.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Users cannot manage other users' API tokens.
+      summary: Create an API token.
+      tags:
+      - API Token
+      x-contentType: application/json
+      x-accepts: application/json
+  /api-token/{APITokenId}:
+    delete:
+      operationId: deleteAPIToken
+      parameters:
+      - description: Identifier of the API token.
+        explode: false
+        in: path
+        name: APITokenId
+        required: true
+        schema:
+          example: f34d92e3-4f71-49ab-862f-69443bd48266
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APITokenGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid API token identifier.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Users cannot manage other users' API tokens.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: API token not found.
+      summary: Delete an API token.
+      tags:
+      - API Token
+      x-accepts: application/json
+    get:
+      operationId: getAPITokenById
+      parameters:
+      - description: Identifier of the API token.
+        explode: false
+        in: path
+        name: APITokenId
+        required: true
+        schema:
+          example: f34d92e3-4f71-49ab-862f-69443bd48266
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APITokenGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid API token identifier.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Users cannot manage other users' API tokens.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: API token not found.
+      summary: Get an API token by its identifier.
+      tags:
+      - API Token
+      x-accepts: application/json
+    put:
+      operationId: updateAPIToken
+      parameters:
+      - description: Identifier of the API token.
+        explode: false
+        in: path
+        name: APITokenId
+        required: true
+        schema:
+          example: f34d92e3-4f71-49ab-862f-69443bd48266
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APITokenPut'
+        description: API token object to update.
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APITokenGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid object supplied.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Users cannot manage other users' API tokens.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: API token not found.
+      summary: Update an API token.
+      tags:
+      - API Token
+      x-contentType: application/json
+      x-accepts: application/json
+  /api-token/list:
+    get:
+      operationId: getAllAPITokens
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APITokenArray'
+          description: Succesful operation.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+      summary: List all API tokens. A user with user role only get his token.
+      tags:
+      - API Token
+      x-accepts: application/json
+  /server-config:
+    get:
+      operationId: getServerConfig
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ServerConfig'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid API token identifier.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: API token not found.
+      summary: Get the server configuration.
+      tags:
+      - Server Config
+      x-accepts: application/json
+    put:
+      operationId: updateServerConfig
+      requestBody:
+        $ref: '#/components/requestBodies/ServerConfig'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ServerConfig'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid object supplied.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: API token not found.
+      summary: Update the server configuration.
+      tags:
+      - Server Config
+      x-contentType: application/json
+      x-accepts: application/json
+  /enrollment:
+    post:
+      operationId: createEnrollment
+      requestBody:
+        $ref: '#/components/requestBodies/EnrollmentPost'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/EnrollmentGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid object supplied.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+      summary: Create a key enrollment request.
+      tags:
+      - Enrollment
+      x-contentType: application/json
+      x-accepts: application/json
+  /enrollment/list:
+    get:
+      operationId: getAllEnrollments
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/EnrollmentArray'
+          description: Successful operation.
+      summary: List all key enrollment requests.
+      tags:
+      - Enrollment
+      x-accepts: application/json
+  /enrollment/{EnrollmentId}:
+    delete:
+      operationId: deleteEnrollment
+      parameters:
+      - description: Identifier of the enrollment.
+        explode: false
+        in: path
+        name: EnrollmentId
+        required: true
+        schema:
+          example: 813797c8-01e3-4a80-8068-bc2bda13df16
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/EnrollmentGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid object supplied.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+      summary: Delete a key enrollment request.
+      tags:
+      - Enrollment
+      x-accepts: application/json
+    get:
+      operationId: getEnrollment
+      parameters:
+      - description: Identifier of the enrollment.
+        explode: false
+        in: path
+        name: EnrollmentId
+        required: true
+        schema:
+          example: 813797c8-01e3-4a80-8068-bc2bda13df16
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/EnrollmentGet'
+          description: Successful operation.
+      summary: Get a key enrollment request.
+      tags:
+      - Enrollment
+      x-accepts: application/json
+    put:
+      operationId: updateEnrollment
+      parameters:
+      - description: Identifier of the enrollment.
+        explode: false
+        in: path
+        name: EnrollmentId
+        required: true
+        schema:
+          example: 813797c8-01e3-4a80-8068-bc2bda13df16
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/EnrollmentPut'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/EnrollmentGet'
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid object supplied.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Missing or invalid session cookie.
+      summary: Update a key enrollment request.
+      tags:
+      - Enrollment
+      x-contentType: application/json
+      x-accepts: application/json
+  /enrollment/{EnrollmentId}/create-signature-request:
+    post:
+      operationId: createSignatureRequest
+      parameters:
+      - description: Identifier of the enrollment.
+        explode: false
+        in: path
+        name: EnrollmentId
+        required: true
+        schema:
+          example: 813797c8-01e3-4a80-8068-bc2bda13df16
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Successful operation.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/APIError'
+          description: Invalid object supplied / The signature request creation is
+            not possible.
+      security: []
+      summary: Create and send the signature request of the TCU to the owner of the
+        enrolled key.
+      tags:
+      - Enrollment
+      x-accepts: application/json
+  /enrollment/{EnrollmentId}/user:
+    get:
+      operationId: getEnrollmentUser
+      parameters:
+      - description: Identifier of the enrollment.
+        explode: false
+        in: path
+        name: EnrollmentId
+        required: true
+        schema:
+          example: 813797c8-01e3-4a80-8068-bc2bda13df16
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/UserGet'
+          description: Successful operation.
+      security: []
+      summary: Get the user of a key enrollment request.
+      tags:
+      - Enrollment
+      x-accepts: application/json
+  /check:
+    get:
+      operationId: check
+      responses:
+        "200":
+          description: Successful operation.
+        "503":
+          description: the database is unavailable.
+      security: []
+      summary: Check the database availability.
+      tags:
+      - Healthcheck
+      x-accepts: application/json
+components:
+  parameters:
+    UserIdParameter:
+      description: Identifier of the user.
+      explode: false
+      in: path
+      name: userId
+      required: true
+      schema:
+        example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+        format: uuid
+        type: string
+      style: simple
+    KeyIdParameter:
+      description: Identifier of the key.
+      explode: false
+      in: path
+      name: keyId
+      required: true
+      schema:
+        example: 552aa3fd-3b5e-434f-bdd3-9b6c58c269c1
+        format: uuid
+        type: string
+      style: simple
+    APITokenIdParameter:
+      description: Identifier of the API token.
+      explode: false
+      in: path
+      name: APITokenId
+      required: true
+      schema:
+        example: f34d92e3-4f71-49ab-862f-69443bd48266
+        format: uuid
+        type: string
+      style: simple
+    PubKeyParameter:
+      description: Public key (bitcoin address when using BIP39 keys).
+      explode: false
+      in: path
+      name: pubKey
+      required: true
+      schema:
+        example: 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh
+        type: string
+      style: simple
+    PubKeyQueryParameter:
+      description: |
+        The public key to use to sign.<br> When not provided and a user is provided, the default key of the user is used (if any).<br> When not provided and no user is provided, the default key of the server is used (if any).
+      explode: true
+      in: query
+      name: pubKey
+      required: false
+      schema:
+        example: 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh
+        type: string
+      style: form
+    PathQueryParameter:
+      description: |
+        The derivation path of the key to use to sign.<br> When not provided, the default derivation path "m/44'/0'/0'" is used.
+      explode: true
+      in: query
+      name: path
+      required: false
+      schema:
+        example: m/'44/'0/'1
+        type: string
+      style: form
+    IdentityToSignQueryParameter:
+      description: |
+        Identity to sign: when set, the identity of the signer and the domain of the identity issuer are included to the signed data.<br> The identity of the signer is the X500 Distinguished Name built by the server from the identity associated to the key.<br> The domain of the identity issuer is extracted from the server's identity URL.<br> Both are included to the signed data: the signature produced in this case is the signature of SHA256(hash or message to sign + identity of the signer + domain of the identity issuer).<br> The identity of the signer and the domain of the identity issuer are returned respectively in the `signedIdentity` and the `signedIssuerDomain` fields of the signature result.<br> You must specify the fields you want to include in the identity of the signer by providing a string containing the list of the X500 fields to include, separated with ',':<br>
+          CN: Common name<br>
+          EMAILADDRESS: Email address<br>
+          O: Organization<br>
+          OU: Organizational unit<br>
+          L: Locality<br>
+          C: Country<br>
+        If you want to include all fields, you can also provide ALL.
+      explode: true
+      in: query
+      name: identityToSign
+      required: false
+      schema:
+        example: CN,EMAILADDRESS,O,OU,L,C
+        type: string
+      style: form
+    PubKeyToVerifyQueryParameter:
+      description: Public key to verify.
+      explode: true
+      in: query
+      name: pubKey
+      required: true
+      schema:
+        example: 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh
+        type: string
+      style: form
+    SignedIdentityToVerifyQueryParameter:
+      description: |
+        Identity to verify (as a X500 Distinguished Name).<br> This identity must have been signed at least once by the public key.
+      explode: true
+      in: query
+      name: signedIdentity
+      required: false
+      schema:
+        example: CN=John Doe,EMAILADDRESS=john.doe@acme.com
+        type: string
+      style: form
+    LeftDataQueryParameter:
+      description: |
+        Left part of the random data to sign (should be generated randomly).<br> When not provided, the server does not return a signature, even if it controls the key.
+      explode: true
+      in: query
+      name: leftData
+      required: false
+      schema:
+        example: 00c8a2b0c373050e7f2abbb2e4c631a42c10d402
+        type: string
+      style: form
+    DiscoverUsersQueryParameter:
+      description: A string used to search users through the fields `email`, `username`,
+        `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
+      explode: true
+      in: query
+      name: search
+      required: true
+      schema:
+        example: '{"email":{"value":"john.doe@acme.com"},"username":{"value":"johndoe"},"x500CommonName":{"value":"John
+          Doe"},"x500Organization":{"value":"Acme corp"},"x500OrganizationalUnit":{"value":"Sales
+          dept"}}'
+        type: string
+      style: form
+    CustomUserIdQueryParameter:
+      description: Custom user identifier (ie. `userId` field of the user identity).
+      explode: true
+      in: query
+      name: customUserId
+      required: false
+      schema:
+        example: wol.jim-smith.01
+        type: string
+      style: form
+    UserIdQueryParameter:
+      description: User identifier.
+      explode: true
+      in: query
+      name: userId
+      required: false
+      schema:
+        example: 345a4513-0266-419a-8344-2daf645b78ed
+        format: uuid
+        type: string
+      style: form
+    HashToSignQueryParameter:
+      description: SHA256 hash to be signed (a string formatted like [a-f0-9]{64}).
+      explode: true
+      in: query
+      name: hashToSign
+      required: false
+      schema:
+        example: d8e734d7c02e5b889e3e15acd5aaf231a67e1d9974f17b2c907148c4f4a7f975
+        type: string
+      style: form
+    MessageToSignQueryParameter:
+      description: Message to be signed.
+      explode: true
+      in: query
+      name: messageToSign
+      required: false
+      schema:
+        example: This is the message to be signed
+        type: string
+      style: form
+    FilterUserModeQueryParameter:
+      description: Filter the user mode.
+      explode: true
+      in: query
+      name: mode
+      required: false
+      schema:
+        enum:
+        - seal
+        - esign
+        example: seal
+        type: string
+      style: form
+    FilterUserRoleQueryParameter:
+      description: Filter the user role.
+      explode: true
+      in: query
+      name: role
+      required: false
+      schema:
+        enum:
+        - user
+        - manager
+        - admin
+        example: user
+        type: string
+      style: form
+    FilterUserEmailQueryParameter:
+      description: Filter the user email.
+      explode: true
+      in: query
+      name: email
+      required: false
+      schema:
+        example: john.doe@acme.com
+        type: string
+      style: form
+    FilterUserCommonNameQueryParameter:
+      description: Filter the user X500 common name.
+      explode: true
+      in: query
+      name: commonName
+      required: false
+      schema:
+        example: John Doe
+        type: string
+      style: form
+    FilterUserOrganizationQueryParameter:
+      description: Filter the user X500 organization.
+      explode: true
+      in: query
+      name: organization
+      required: false
+      schema:
+        example: Acme corp
+        type: string
+      style: form
+    FilterUserOrganizationalUnitQueryParameter:
+      description: Filter the user X500 organizational unit.
+      explode: true
+      in: query
+      name: organizationalUnit
+      required: false
+      schema:
+        example: Sales dept
+        type: string
+      style: form
+    FilterUserLocalityQueryParameter:
+      description: Filter the user X500 locality.
+      explode: true
+      in: query
+      name: locality
+      required: false
+      schema:
+        example: Rennes
+        type: string
+      style: form
+    FilterUserCountryQueryParameter:
+      description: Filter the user X500 country.
+      explode: true
+      in: query
+      name: country
+      required: false
+      schema:
+        example: FR
+        type: string
+      style: form
+    FilterUserUserIdQueryParameter:
+      description: Filter the user X500 custom user identifier.
+      explode: true
+      in: query
+      name: userId
+      required: false
+      schema:
+        example: wol.jim-smith.01
+        type: string
+      style: form
+    FilterUserCountryCallingCodeQueryParameter:
+      description: Filter the user country calling code.
+      explode: true
+      in: query
+      name: countryCallingCode
+      required: false
+      schema:
+        example: "33"
+        type: string
+      style: form
+    FilterUserPhoneQueryParameter:
+      description: Filter the user phone.
+      explode: true
+      in: query
+      name: phone
+      required: false
+      schema:
+        example: "123456789"
+        type: string
+      style: form
+    FilterUserStatusQueryParameter:
+      description: Filter the user status.
+      explode: true
+      in: query
+      name: status
+      required: false
+      schema:
+        enum:
+        - active
+        - blocked
+        example: active
+        type: string
+      style: form
+    EnrollmentIdParameter:
+      description: Identifier of the enrollment.
+      explode: false
+      in: path
+      name: EnrollmentId
+      required: true
+      schema:
+        example: 813797c8-01e3-4a80-8068-bc2bda13df16
+        format: uuid
+        type: string
+      style: simple
+  requestBodies:
+    KeyPost:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/KeyPost'
+      description: Key object to add.
+      required: true
+    ExternalKeyPost:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExternalKeyPost'
+      description: External key object to add.
+      required: true
+    KeyPut:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/KeyPut'
+      description: Key object to update.
+      required: true
+    APITokenPost:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APITokenPost'
+      description: API token object to add.
+      required: true
+    APITokenPut:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APITokenPut'
+      description: API token object to update.
+      required: true
+    ServerConfig:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServerConfig'
+      description: Server config object.
+      required: true
+    EnrollmentPost:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EnrollmentPost'
+      description: Enrollment object to add.
+      required: true
+    EnrollmentPut:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EnrollmentPut'
+      description: Enrollment object to update.
+      required: true
+  responses:
+    UserGet:
+      $ref: '#/components/schemas/UserGet'
+    UserArray:
+      $ref: '#/components/schemas/UserArray'
+    UserInfo:
+      $ref: '#/components/schemas/UserInfo'
+    UserDisco:
+      $ref: '#/components/schemas/UserDisco'
+    KeyDiscoArray:
+      $ref: '#/components/schemas/KeyDiscoArray'
+    UserDiscoArray:
+      $ref: '#/components/schemas/UserDiscoArray'
+    ConfigDisco:
+      $ref: '#/components/schemas/ConfigDisco'
+    APIError:
+      $ref: '#/components/schemas/APIError'
+    KeyGet:
+      $ref: '#/components/schemas/KeyGet'
+    KeyArray:
+      $ref: '#/components/schemas/KeyArray'
+    APITokenGet:
+      $ref: '#/components/schemas/APITokenGet'
+    APITokenArray:
+      $ref: '#/components/schemas/APITokenArray'
+    ServerConfig:
+      $ref: '#/components/schemas/ServerConfig'
+    EnrollmentGet:
+      $ref: '#/components/schemas/EnrollmentGet'
+    EnrollmentArray:
+      $ref: '#/components/schemas/EnrollmentArray'
+  schemas:
+    Identity:
+      description: User identity provided as a set of X500 Distinguished Name attributes
+        (see https://www.ietf.org/rfc/rfc4519.txt).
+      example:
+        commonName: John Doe
+        country: FR
+        emailAddress: john.doe@acme.com
+        organization: Acme corp
+        locality: Rennes
+        organizationalUnit: Sales dept
+      properties:
+        commonName:
+          description: Common name (CN) (2.5.4.3)
+          example: John Doe
+          type: string
+        organization:
+          description: Organization name (O) (2.5.4.10)
+          example: Acme corp
+          type: string
+        organizationalUnit:
+          description: Organizational unit name (OU) (2.5.4.11)
+          example: Sales dept
+          type: string
+        locality:
+          description: Locality name (L) (2.5.4.7)
+          example: Rennes
+          type: string
+        country:
+          description: Country code (C) (2.5.4.6)
+          example: FR
+          type: string
+        emailAddress:
+          description: Email address.
+          example: john.doe@acme.com
+          format: email
+          type: string
+      required:
+      - commonName
+      type: object
+    Key:
+      description: Key information.
+      example:
+        name: Jim Smith's key
+        expiration: 1569542400000
+        revokedAt: 1569542400000
+        pubKey: 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh
+        status: valid
+      properties:
+        name:
+          description: Key name.
+          example: Jim Smith's key
+          type: string
+        pubKey:
+          description: Public key (bitcoin address when using BIP39 keys).
+          example: 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh
+          type: string
+        status:
+          description: |
+            Key status:<br> `valid`: the key is valid and can be used to sign<br> `expired`: the key expired at `expiration`<br> `revoked`: the key was revoked at `revokedAt`
+          enum:
+          - valid
+          - expired
+          - revoked
+          example: valid
+          type: string
+        expiration:
+          description: |
+            Key expiration date (Unix ms timestamp).<br> Note that the field is not returned if the key has no expiration date.
+          example: 1569542400000
+          format: int64
+          type: integer
+        revokedAt:
+          description: |
+            Key revocation date (Unix ms timestamp).<br> Note that the field is not returned if the key is not yet revoked.
+          example: 1569542400000
+          format: int64
+          type: integer
+      type: object
+    FullIdentity:
+      allOf:
+      - $ref: '#/components/schemas/Identity'
+      - $ref: '#/components/schemas/FullIdentity_allOf'
+    Password:
+      description: User password.
+      example: nSBa+rV3%2/LpD
+      format: password
+      type: string
+    PubKey:
+      description: Public key (bitcoin address when using BIP39 keys).
+      example: 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh
+      type: string
+    CreatedAt:
+      description: Date of creation (Unix ms timestamp).
+      example: 1529052551419
+      format: int64
+      readOnly: true
+      type: integer
+    UpdatedAt:
+      description: Date of last modification (Unix ms timestamp).
+      example: 1529052551419
+      format: int64
+      readOnly: true
+      type: integer
+    LastUsed:
+      description: Date of last usage (Unix ms timestamp).
+      example: 1529059167339
+      format: int64
+      readOnly: true
+      type: integer
+    LastLogin:
+      description: Date of last login (Unix ms timestamp).
+      example: 1529050155459
+      format: int64
+      readOnly: true
+      type: integer
+    UserRoleEnum:
+      default: user
+      description: |
+        User role.<br> - `user`: a user can sign using his keys<br> - `manager`: a manager can manage user and seal identities and keys<br> - `admin`: an administrator can do everything on the server
+      enum:
+      - user
+      - manager
+      - admin
+      example: user
+      type: string
+    UserStatusEnum:
+      default: active
+      description: |
+        User status:<br> - `active`: the user is active: he can use his keys to sign<br> - `blocked`: the user is blocked: he cannot use his keys to sign
+      enum:
+      - active
+      - blocked
+      example: active
+      type: string
+    UserModeEnum:
+      default: seal
+      description: |
+        User mode.<br> - `esign`: the user is a regular user, and his keys are used to create electronic signatures.<br> - `seal`: the user represents a legal entity, and his keys are used to create server seals.
+      enum:
+      - seal
+      - esign
+      example: seal
+      type: string
+    UserBase:
+      properties:
+        email:
+          description: User email (can be used for login).
+          example: john.doe@acme.com
+          format: email
+          type: string
+        username:
+          description: User name (can be used for login).
+          example: johndoe
+          type: string
+        countryCallingCode:
+          description: User country calling code
+          example: "33"
+          type: string
+        phone:
+          description: User phone number
+          example: "123456789"
+          type: string
+        status:
+          $ref: '#/components/schemas/UserStatusEnum'
+        role:
+          $ref: '#/components/schemas/UserRoleEnum'
+        identity:
+          $ref: '#/components/schemas/FullIdentity'
+      type: object
+    UserGet:
+      allOf:
+      - $ref: '#/components/schemas/UserBase'
+      - $ref: '#/components/schemas/UserGet_allOf'
+    UserPost:
+      allOf:
+      - $ref: '#/components/schemas/UserBase'
+      - $ref: '#/components/schemas/UserPost_allOf'
+    UserPut:
+      allOf:
+      - $ref: '#/components/schemas/UserBase'
+      - $ref: '#/components/schemas/UserPut_allOf'
+    UserArray:
+      items:
+        $ref: '#/components/schemas/UserGet'
+      type: array
+    UserInfo:
+      allOf:
+      - $ref: '#/components/schemas/UserBase'
+    UserDisco:
+      allOf:
+      - $ref: '#/components/schemas/UserGet'
+    UserDiscoArray:
+      items:
+        $ref: '#/components/schemas/UserDisco'
+      type: array
+    APITokenStatusEnum:
+      default: active
+      description: |
+        API token status:<br> - `active`: the token is active: it can be used to sign<br> - `blocked`: the token is blocked: it cannot be used to sign
+      enum:
+      - active
+      - blocked
+      example: active
+      type: string
+    APITokenBase:
+      properties:
+        name:
+          description: API token name.
+          example: My API token name
+          type: string
+        status:
+          $ref: '#/components/schemas/APITokenStatusEnum'
+      type: object
+    APITokenGet:
+      allOf:
+      - $ref: '#/components/schemas/APITokenBase'
+      - $ref: '#/components/schemas/APITokenGet_allOf'
+    APITokenPost:
+      allOf:
+      - $ref: '#/components/schemas/APITokenBase'
+      - $ref: '#/components/schemas/APITokenPost_allOf'
+    APITokenPut:
+      allOf:
+      - $ref: '#/components/schemas/APITokenBase'
+    APITokenArray:
+      items:
+        $ref: '#/components/schemas/APITokenGet'
+      type: array
+    IdentityURL:
+      description: |
+        Public URL of the **Identity endpoint** (ie. the URL that anyone can use to get the identity associated to a public key).
+      example: https://identity.mydomain.com/identity
+      format: url
+      type: string
+    SignatureURL:
+      description: |
+        Public base URL of **Signature endpoints** (ie. the base URL that authorized users can use to sign and to discover other users).
+      example: https://sign.mydomain.com:3002
+      format: url
+      type: string
+    APIURL:
+      description: |
+        Public base URL of **API endpoints** (ie. the base URL that authorized users can use to call the server API).
+      example: https://mydomain.com/api
+      format: url
+      type: string
+    APIVersion:
+      description: |
+        API version number of this Woleet.ID Server instance (extraced from the swagger file).
+      example: 1.2.5
+      type: string
+    ServerConfig:
+      example:
+        APIURL: https://mydomain.com/api
+        fallbackOnDefaultKey: true
+        defaultKeyId: 7b8e5c49-18c6-4ef7-9dab-261a5e717b31
+        signatureURL: https://sign.mydomain.com:3002
+        identityURL: https://identity.mydomain.com/identity
+        preventIdentityExposure: true
+      properties:
+        identityURL:
+          description: |
+            Public URL of the **Identity endpoint** (ie. the URL that anyone can use to get the identity associated to a public key).
+          example: https://identity.mydomain.com/identity
+          format: url
+          type: string
+        preventIdentityExposure:
+          description: |
+            True to prevent the identity endpoint from exposing the identities.<br> In this mode, the `/sign` endpoint requires the `identityToSign` parameter and the `/identity` endpoint requires the `signedIdentity` parameter: the sign endpoint records each (public key, signed identity) pair in the database, so that the identity endpoint can verify that the given signed identity was actually signed at least once by the given public key. If yes, the identity endpoint succeeds and returns only the identity fields present in the provided signed identity.
+          type: boolean
+        signatureURL:
+          description: |
+            Public base URL of **Signature endpoints** (ie. the base URL that authorized users can use to sign and to discover other users).
+          example: https://sign.mydomain.com:3002
+          format: url
+          type: string
+        APIURL:
+          description: |
+            Public base URL of **API endpoints** (ie. the base URL that authorized users can use to call the server API).
+          example: https://mydomain.com/api
+          format: url
+          type: string
+        defaultKeyId:
+          description: Identifier of the default key to use when signing with no user
+            and no key specified.
+          example: 7b8e5c49-18c6-4ef7-9dab-261a5e717b31
+          format: uuid
+          type: string
+        fallbackOnDefaultKey:
+          description: True is the server must fallback on the default key (if any).
+          example: true
+          type: boolean
+      type: object
+    KeyStatusEnum:
+      default: active
+      description: |
+        The status of the key:<br> - `active`: the key is active: it can be used to sign<br> - `blocked`: the key is blocked: it cannot be used to sign<br> - `revoked` the key is revoked: it will no longer be used to sign
+      enum:
+      - active
+      - blocked
+      - revoked
+      example: active
+      type: string
+    KeyTypeEnum:
+      description: |
+        The type of the key (only `bip39` is supported).<br> - `bip39`: Bitcoin BIP39
+      enum:
+      - bip39
+      example: bip39
+      type: string
+    KeyDeviceEnum:
+      description: |
+        The type of device storing the key.<br> - `server`: Woleet.ID Server or equivalent<br> - `mobile`: Woleet.ID Mobile or equivalent<br> - `nano`: Ledger Nano S or equivalent
+      enum:
+      - server
+      - mobile
+      - nano
+      example: server
+      type: string
+    KeyHolderEnum:
+      description: |
+        The type of entity holding the private key.<br> - `server`: the server (Woleet.ID Server or equivalent)<br> - `user`: the user (eg. by using a Ledger Nano S or Woleet.ID Mobile or equivalent)
+      enum:
+      - server
+      - user
+      example: server
+      type: string
+    KeyBase:
+      properties:
+        name:
+          description: Key name.
+          example: Jim Smith's key
+          type: string
+        expiration:
+          description: |
+            Key expiration date (Unix ms timestamp).<br> Note that the field is not returned if the key has no expiration date.
+          example: 1569542400000
+          format: int64
+          type: integer
+        status:
+          $ref: '#/components/schemas/KeyStatusEnum'
+      type: object
+    KeyGet:
+      allOf:
+      - $ref: '#/components/schemas/KeyBase'
+      - $ref: '#/components/schemas/KeyGet_allOf'
+    KeyPost:
+      allOf:
+      - $ref: '#/components/schemas/KeyBase'
+      - required:
+        - name
+        type: object
+    KeyPut:
+      allOf:
+      - $ref: '#/components/schemas/KeyBase'
+      - $ref: '#/components/schemas/KeyPut_allOf'
+    KeyArray:
+      items:
+        $ref: '#/components/schemas/KeyGet'
+      type: array
+    KeyDisco:
+      allOf:
+      - $ref: '#/components/schemas/KeyGet'
+    KeyDiscoArray:
+      items:
+        $ref: '#/components/schemas/KeyDisco'
+      type: array
+    ConfigDisco:
+      example:
+        APIURL: https://mydomain.com/api
+        APIVersion: 1.2.5
+        signatureURL: https://sign.mydomain.com:3002
+        identityURL: https://identity.mydomain.com/identity
+      properties:
+        identityURL:
+          description: |
+            Public URL of the **Identity endpoint** (ie. the URL that anyone can use to get the identity associated to a public key).
+          example: https://identity.mydomain.com/identity
+          format: url
+          type: string
+        signatureURL:
+          description: |
+            Public base URL of **Signature endpoints** (ie. the base URL that authorized users can use to sign and to discover other users).
+          example: https://sign.mydomain.com:3002
+          format: url
+          type: string
+        APIURL:
+          description: |
+            Public base URL of **API endpoints** (ie. the base URL that authorized users can use to call the server API).
+          example: https://mydomain.com/api
+          format: url
+          type: string
+        APIVersion:
+          description: |
+            API version number of this Woleet.ID Server instance (extraced from the swagger file).
+          example: 1.2.5
+          type: string
+      type: object
+    ExternalKeyPost:
+      example:
+        name: Jim Smith's key
+        expiration: 1569542400000
+        publicKey: 1HA79GnnZdHLZBMBQusXcgPEeMcrpnWahb
+        device: server
+        status: active
+      properties:
+        name:
+          description: Key name.
+          example: Jim Smith's key
+          type: string
+        publicKey:
+          description: Key address.
+          example: 1HA79GnnZdHLZBMBQusXcgPEeMcrpnWahb
+          type: string
+        device:
+          $ref: '#/components/schemas/KeyDeviceEnum'
+        status:
+          $ref: '#/components/schemas/KeyStatusEnum'
+        expiration:
+          description: |
+            Key expiration date (Unix ms timestamp).
+          example: 1569542400000
+          format: int64
+          type: integer
+      required:
+      - name
+      - publicKey
+      type: object
+    SignatureResult:
+      example:
+        signedIssuerDomain: acme.com
+        signature: IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=
+        signedHash: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+        identityURL: https://identity.mydomain.com/identity
+        pubKey: 1KjQ8LgUgYVSqeK7JFhA9W8FVsHCzFrFi8
+        signedMessage: Love is the message!
+        signedIdentity: CN=John Doe,EMAILADDRESS=john.doe@acme.com,O=Acme corp,OU=Sales
+          dept
+      properties:
+        pubKey:
+          description: Public key used to sign (must be the same as the `pubKey` parameter
+            if provided).
+          example: 1KjQ8LgUgYVSqeK7JFhA9W8FVsHCzFrFi8
+          format: base58
+          type: string
+        signedHash:
+          description: SHA256 hash that is signed (same as the `hashToSign` parameter).
+          example: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+          format: hex
+          type: string
+        signedMessage:
+          description: Message that is signed (same as the `messageToSign` parameter).
+          example: Love is the message!
+          format: hex
+          type: string
+        signature:
+          description: |
+            Signature of `signedMessage` or `signedHash` using the public key `pubKey`, or signature of SHA256(`signedMessage` or `signedHash` + `signedIdentity` + `signedIssuerDomain`) if the identity of the signer and the domain of the identity issuer are included to the signed data.
+          example: IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=
+          format: base64
+          type: string
+        identityURL:
+          description: |
+            Public URL of the **Identity endpoint** (ie. the URL that anyone can use to get the identity associated to a public key).
+          example: https://identity.mydomain.com/identity
+          format: url
+          type: string
+        signedIdentity:
+          description: |
+            Identity of the signer (as a X500 Distinguished Name).<br> Returned only if `identityToSign` is used.
+          example: CN=John Doe,EMAILADDRESS=john.doe@acme.com,O=Acme corp,OU=Sales
+            dept
+          type: string
+        signedIssuerDomain:
+          description: |
+            Domain of the identity issuer (ie. of the organization who verified the identity).<br> Returned only if `identityToSign` is used.
+          example: acme.com
+          type: string
+      type: object
+    IdentityResult:
+      example:
+        signature: IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=
+        identity:
+          commonName: John Doe
+          country: FR
+          emailAddress: john.doe@acme.com
+          organization: Acme corp
+          locality: Rennes
+          organizationalUnit: Sales dept
+        rightData: rightData
+        key:
+          name: Jim Smith's key
+          expiration: 1569542400000
+          revokedAt: 1569542400000
+          pubKey: 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh
+          status: valid
+      properties:
+        rightData:
+          description: |
+            The right part of the signed data (generated randomly).<br> To prevent man-in-the-middle attacks, the data starts with the server's identity URL and this should be verified by the caller.
+          type: string
+        signature:
+          description: |
+            The signature of the concatenation of `leftData` and `rightData` using the public key `pubKey`.
+          example: IKnOvW2/BQqahssC2l9Icz7qiJQqesgu0HCKvW/L5xZLaMCLyg19ATDNJojMILdUijFOqiRzgk6ieDXi89DeB0Q=
+          format: base64
+          type: string
+        identity:
+          $ref: '#/components/schemas/Identity'
+        key:
+          $ref: '#/components/schemas/Key'
+      type: object
+    APIError:
+      properties:
+        error:
+          $ref: '#/components/schemas/APIError_error'
+      type: object
+    EnrollmentBase:
+      properties:
+        name:
+          description: Name of the enrolled key.
+          example: test
+          type: string
+        device:
+          $ref: '#/components/schemas/KeyDeviceEnum'
+        expiration:
+          description: |
+            Enrollment expiration date (Unix ms timestamp).<br> Note that the field is not returned if the enrollment has no expiration date.
+          example: 1569542400000
+          format: int64
+          type: integer
+        keyExpiration:
+          description: |
+            Enrolled key expiration date (Unix ms timestamp).<br> Note that the field is not returned if the enrollment has no expiration date.
+          example: 1569542400000
+          format: int64
+          type: integer
+      type: object
+    EnrollmentGet:
+      allOf:
+      - $ref: '#/components/schemas/EnrollmentBase'
+      - $ref: '#/components/schemas/EnrollmentGet_allOf'
+    EnrollmentPost:
+      allOf:
+      - $ref: '#/components/schemas/EnrollmentBase'
+      - $ref: '#/components/schemas/EnrollmentPost_allOf'
+    EnrollmentPut:
+      allOf:
+      - $ref: '#/components/schemas/EnrollmentBase'
+    EnrollmentArray:
+      items:
+        $ref: '#/components/schemas/EnrollmentGet'
+      type: array
+    FullIdentity_allOf:
+      properties:
+        userId:
+          description: Custom user identifier (UID) (0.9.2342.19200300.100.1.1) must
+            be unique for each user.
+          example: wol.jim-smith.01
+          type: string
+    UserGet_allOf:
+      properties:
+        id:
+          description: User identifier (allocated by the server).
+          example: 7c42e7e9-aec5-4d56-9a3b-bd55e129aae3
+          format: uuid
+          readOnly: true
+          type: string
+        createdAt:
+          description: Date of creation (Unix ms timestamp).
+          example: 1529052551419
+          format: int64
+          readOnly: true
+          type: integer
+        updatedAt:
+          description: Date of last modification (Unix ms timestamp).
+          example: 1529052551419
+          format: int64
+          readOnly: true
+          type: integer
+        lastLogin:
+          description: Date of last login (Unix ms timestamp).
+          example: 1529050155459
+          format: int64
+          readOnly: true
+          type: integer
+        mode:
+          $ref: '#/components/schemas/UserModeEnum'
+        defaultKeyId:
+          description: Identifier of the default key to use to sign for this user
+            (cannot be the an external key nor a e-signature key).
+          example: c7c6e0de-2acb-4311-80b4-17dbf0b76806
+          format: uuid
+          type: string
+    UserPost_allOf:
+      properties:
+        password:
+          description: User password.
+          example: nSBa+rV3%2/LpD
+          format: password
+          type: string
+        createDefaultKey:
+          description: If true create a key holded by the server when this user is
+            created.
+          type: boolean
+        mode:
+          $ref: '#/components/schemas/UserModeEnum'
+      required:
+      - createDefaultKey
+      - identity
+    UserPut_allOf:
+      properties:
+        password:
+          description: User password.
+          example: nSBa+rV3%2/LpD
+          format: password
+          type: string
+        defaultKeyId:
+          description: Identifier of the default key to use to sign for this user
+            (cannot be the an external key).
+          example: c7c6e0de-2acb-4311-80b4-17dbf0b76806
+          format: uuid
+          type: string
+    APITokenGet_allOf:
+      properties:
+        id:
+          description: API token identifier (allocated by the platform).
+          example: a35c9fee-3893-4eb7-adde-205e1be03209
+          format: uuid
+          readOnly: true
+          type: string
+        value:
+          description: Token to use for the signature endpoint.
+          example: b9PXEeMpSCyeaPpQiZ3Bvw==
+          readOnly: true
+          type: string
+        userId:
+          description: Identifier of the authorized user.
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+        createdAt:
+          description: Date of creation (Unix ms timestamp).
+          example: 1529052551419
+          format: int64
+          readOnly: true
+          type: integer
+        updatedAt:
+          description: Date of last modification (Unix ms timestamp).
+          example: 1529052551419
+          format: int64
+          readOnly: true
+          type: integer
+        lastUsed:
+          description: Date of last usage (Unix ms timestamp).
+          example: 1529059167339
+          format: int64
+          readOnly: true
+          type: integer
+    APITokenPost_allOf:
+      properties:
+        userId:
+          description: |
+            Identifier of the authorized user.<br> If set, the token allows to authenticate as the user, if not the token allow to authenticate as a server admin.
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+      required:
+      - name
+    KeyGet_allOf:
+      properties:
+        id:
+          description: Key identifier (allocated by the platform).
+          example: a35c9fee-3893-4eb7-adde-205e1be03209
+          format: uuid
+          readOnly: true
+          type: string
+        pubKey:
+          description: Public key (bitcoin address when using BIP39 keys).
+          example: 1GChJMuyxvq28F3Uksqf5v7QkxQ4WLQdBh
+          type: string
+        type:
+          $ref: '#/components/schemas/KeyTypeEnum'
+        holder:
+          $ref: '#/components/schemas/KeyHolderEnum'
+        device:
+          $ref: '#/components/schemas/KeyDeviceEnum'
+        expired:
+          description: |
+            Indicates whether the key has expired or not.<br> Note that the field is not returned if the key has not expired.
+          example: false
+          type: boolean
+        revokedAt:
+          description: |
+            Key revocation date (Unix ms timestamp).<br> Note that the field is not returned if the key has no revocation date.
+          example: 1569542400000
+          format: int64
+          type: integer
+        createdAt:
+          description: Date of creation (Unix ms timestamp).
+          example: 1529052551419
+          format: int64
+          readOnly: true
+          type: integer
+        updatedAt:
+          description: Date of last modification (Unix ms timestamp).
+          example: 1529052551419
+          format: int64
+          readOnly: true
+          type: integer
+        lastUsed:
+          description: Date of last usage (Unix ms timestamp).
+          example: 1529059167339
+          format: int64
+          readOnly: true
+          type: integer
+      required:
+      - name
+    KeyPut_allOf:
+      properties:
+        device:
+          $ref: '#/components/schemas/KeyDeviceEnum'
+    APIError_error:
+      properties:
+        code:
+          example: 418
+          format: int32
+          type: integer
+        message:
+          example: I'm a teapot
+          type: string
+      required:
+      - code
+      - message
+    EnrollmentGet_allOf:
+      properties:
+        id:
+          description: Enrollment identifier (allocated by the server).
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+        userId:
+          description: Identifier of the enrolled user.
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+    EnrollmentPost_allOf:
+      properties:
+        userId:
+          description: Identifier of the enrolled user.
+          example: feb37e23-d04e-4e71-bf53-1f1a75ba3a68
+          format: uuid
+          type: string
+        test:
+          description: Used only for test purpose only.
+          type: boolean
+      required:
+      - name
+      - userId
+  securitySchemes:
+    BasicAuth:
+      description: Use email/username and password to authenticate.
+      scheme: basic
+      type: http
+    CookieAuth:
+      description: Use a session cookie to authenticate (see /login).
+      in: cookie
+      name: session
+      type: apiKey
+    APITokenAuth:
+      description: Use an API token to authenticate (see /api-token).
+      scheme: bearer
+      type: http
+    OAuthTokenAuth:
+      description: Use an OAuth access token to authenticate.
+      scheme: bearer
+      type: http
+

@@ -4,12 +4,12 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**checkGet**](HealthcheckApi.md#checkGet) | **GET** /check | Check the database availability.
+[**check**](HealthcheckApi.md#check) | **GET** /check | Check the database availability.
 
 
-<a name="checkGet"></a>
-# **checkGet**
-> checkGet()
+<a name="check"></a>
+# **check**
+> check()
 
 Check the database availability.
 
@@ -29,9 +29,9 @@ public class Example {
 
     HealthcheckApi apiInstance = new HealthcheckApi(defaultClient);
     try {
-      apiInstance.checkGet();
+      apiInstance.check();
     } catch (ApiException e) {
-      System.err.println("Exception when calling HealthcheckApi#checkGet");
+      System.err.println("Exception when calling HealthcheckApi#check");
       System.err.println("Status code: " + e.getCode());
       System.err.println("Reason: " + e.getResponseBody());
       System.err.println("Response headers: " + e.getResponseHeaders());
