@@ -6,7 +6,7 @@ info:
   contact:
     email: contact@woleet.com
   license:
-    name: MIT
+    name: CC BY-NC-SA 4.0
 security:
   - CookieAuth: []
 paths:

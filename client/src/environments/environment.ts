@@ -6,7 +6,7 @@ const { protocol, hostname } = window.location;
 const port = 3000;
 
 export const environment = {
-  version: '0.10.0',
+  version: '0.11.0',
   production: false,
   serverURL: `${protocol}//${hostname}:${port}`
 };

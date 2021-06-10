@@ -21,7 +21,10 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
-
+api/openapi.yaml
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+src/main/AndroidManifest.xml
 .travis.yml
 build.gradle
 build.sbt
@@ -29,6 +32,5 @@ git_push.sh
 gradle.properties
 gradlew
 gradlew.bat
-settings.gradle
-src/main/AndroidManifest.xml
 README.md
+settings.gradle
