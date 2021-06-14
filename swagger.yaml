@@ -1841,17 +1841,7 @@ components:
       required: true
       schema:
         type: string
-        example:
-          email:
-            value: "john.doe@acme.com"
-          username:
-            value: "johndoe"
-          x500CommonName:
-            value: "John Doe"
-          x500Organization:
-            value: "Acme corp"
-          x500OrganizationalUnit:
-            value: "Sales dept"
+        example: "John Doe"
     CustomUserIdQueryParameter:
       name: customUserId
       in: query
