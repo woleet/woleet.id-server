@@ -6,10 +6,10 @@ const PASSWORD = db.password;
 const USERNAME = db.username;
 
 const options = {
+  native: db.host === 'envvars' ? true : false,
   dialect: 'postgres',
   host: db.host,
   port: db.port,
-
   pool: {
     max: 5,
     min: 0,
@@ -21,4 +21,4 @@ const options = {
   operatorsAliases: false
 };
 
-export const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, options);
+export const sequelize = db.host === 'envvars' ? new Sequelize(options) : new Sequelize(DATABASE, USERNAME, PASSWORD, options) ;

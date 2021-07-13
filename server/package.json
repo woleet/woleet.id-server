@@ -4,6 +4,7 @@
   "description": "Woleet.ID Server Node.js server",
   "scripts": {
     "setAPIVersion": "WOLEET_ID_SERVER_API_VERSION=$(cat ../swagger.yaml | grep 'version' | grep -oE '([[:digit:]]+.?)+')",
+    "postinstall": "node patch.js",
     "lint": "npx tslint src/**/*.ts",
     "check": "npx tsc --noEmit",
     "transpile": "npx tsc",
@@ -48,6 +49,7 @@
     "openid-client": "2.5.0",
     "pg": "8.4.2",
     "pg-hstore": "2.3.3",
+    "pg-native": "^3.0.0",
     "read": "1.0.7",
     "redlock": "4.2.0",
     "rxjs": "6.6.6",

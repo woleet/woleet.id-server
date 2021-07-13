@@ -1,6 +1,6 @@
 FROM node:15.11.0-alpine3.11
 
-RUN apk add --no-cache python gcc g++ make bash --virtual .build-deps
+RUN apk add --no-cache python gcc g++ make bash postgresql-dev --virtual .build-deps
 
 # Build
 
@@ -11,13 +11,15 @@ RUN npm -v
 RUN mkdir -p /build/server-runtime
 COPY server/package.json /build/server-runtime/
 COPY server/package-lock.json /build/server-runtime/
+COPY server/patch.js /build/server-runtime/
 RUN cd /build/server-runtime && npm i --production
 
 # Install runtime and dev dependencies
 RUN mkdir -p /build/server
 COPY server/package.json /build/server/
 COPY server/package-lock.json /build/server/
-RUN cd /build/server && npm i --ignore-scripts
+COPY server/patch.js /build/server/
+RUN cd /build/server && npm i --ignore-scripts && npm run postinstall
 
 # Copy sources
 COPY server /build/server
@@ -33,7 +35,7 @@ RUN cd /build/server && npm run build && \
 # https://docs.docker.com/develop/develop-images/multistage-build/
 FROM node:15.11.0-alpine3.11
 
-RUN apk add --no-cache curl
+RUN apk add --no-cache curl postgresql-dev
 
 COPY --from=0 /build/app /usr/src/app
 
