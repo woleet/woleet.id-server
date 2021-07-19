@@ -31,7 +31,7 @@ export async function createKey(userId: string, key: ApiPostKeyObject): Promise<
     userId
   }));
 
-  return newKey.toJSON();
+  return newKey.get();
 }
 
 /**
@@ -58,7 +58,7 @@ export async function createExternalKey(userId: string, key: ApiPostKeyObject): 
     holder,
     userId
   }));
-  return newKey.toJSON();
+  return newKey.get();
 }
 
 /**
@@ -83,7 +83,7 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
   // if the user is a esign user
   let user;
   if (update.status === 'revoked') {
-    const userId = await keyUpdated.get('userId');
+    const userId = await keyUpdated.getDataValue('userId');
     user = await User.getById(userId);
     update.revokedAt = Date.now();
     if (user.get('mode') !== 'seal') {
@@ -99,11 +99,11 @@ export async function updateKey(id: string, attrs: ApiPutKeyObject) {
 
   // If the key is revoked and the update succeeded, send an email to the admins
   if (update.status === 'revoked') {
-    sendKeyRevocationEmail(user.toJSON(), keyUpdated.toJSON());
+    sendKeyRevocationEmail(user.get(), keyUpdated.get());
   }
 
   // Return the key
-  return key.toJSON();
+  return key.get();
 }
 
 export async function getKeyById(id: string): Promise<InternalKeyObject> {
@@ -112,7 +112,7 @@ export async function getKeyById(id: string): Promise<InternalKeyObject> {
     throw new NotFoundKeyError();
   }
 
-  return key.toJSON();
+  return key.get();
 }
 
 export async function getOwner(id): Promise<InternalUserObject> {
@@ -121,7 +121,7 @@ export async function getOwner(id): Promise<InternalUserObject> {
     throw new NotFoundKeyError();
   }
 
-  return key.get('user').toJSON();
+  return key.getDataValue('user');
 }
 
 export async function getOwnerByPubKey(pubKey): Promise<InternalUserObject> {
@@ -130,7 +130,7 @@ export async function getOwnerByPubKey(pubKey): Promise<InternalUserObject> {
     throw new NotFoundKeyError();
   }
 
-  return key.get('user').toJSON();
+  return key.getDataValue('user');
 }
 
 export async function exportKey(id: string): Promise<string> {
@@ -140,8 +140,8 @@ export async function exportKey(id: string): Promise<string> {
   }
 
   // Get the entropy and its initialization vector to retrieve the mnemonic word
-  const entropy = Buffer.from(key.get('mnemonicEntropy'), 'hex');
-  const entropyIV = Buffer.from(key.get('mnemonicEntropyIV'), 'hex');
+  const entropy = Buffer.from(key.getDataValue('mnemonicEntropy'), 'hex');
+  const entropyIV = Buffer.from(key.getDataValue('mnemonicEntropyIV'), 'hex');
   return secureModule.exportPhrase(entropy, entropyIV);
 }
 
@@ -152,7 +152,7 @@ export async function getAllKeysOfUser(userId: string, full = false): Promise<In
   }
 
   const keys = await Key.getAllKeysOfUser(userId, full);
-  return keys.map((key) => key.toJSON());
+  return keys.map((key) => key.get());
 }
 
 export async function deleteKey(id: string): Promise<InternalKeyObject> {
@@ -166,7 +166,7 @@ export async function deleteKey(id: string): Promise<InternalKeyObject> {
   }
 
   const key = await Key.delete(id);
-  return key.toJSON();
+  return key.get();
 }
 
 export async function isKeyHeldByServer(id: string): Promise<Boolean> {
@@ -175,5 +175,5 @@ export async function isKeyHeldByServer(id: string): Promise<Boolean> {
     throw new NotFoundKeyError();
   }
 
-  return key.toJSON().holder === 'server';
+  return key.get().holder === 'server';
 }

@@ -5,8 +5,8 @@ import { User } from '..';
 
 const KeyModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
-  type: { type: ENUM(['bip39']), defaultValue: 'bip39' },
-  status: { type: ENUM(['active', 'blocked', 'revoked']), defaultValue: 'active' },
+  type: { type: ENUM('bip39'), defaultValue: 'bip39' },
+  status: { type: ENUM('active', 'blocked', 'revoked'), defaultValue: 'active' },
   name: { type: STRING, allowNull: false },
   // encrypted
   mnemonicEntropy: { type: STRING, unique: true, allowNull: true },
@@ -20,8 +20,8 @@ const KeyModel = {
   expiration: { type: DATE },
   revokedAt: { type: DATE },
   userId: { type: UUID },
-  holder: { type: ENUM(['server', 'user']), defaultValue: 'server' },
-  device: { type: ENUM(['server', 'nano', 'mobile']), allowNull: true }
+  holder: { type: ENUM('server', 'user'), defaultValue: 'server' },
+  device: { type: ENUM('server', 'nano', 'mobile'), allowNull: true }
 };
 
 class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKeyObject> {
@@ -45,10 +45,12 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
     const query = { where: { publicKey } };
 
     if (userId) {
+      // tslint:disable-next-line:no-string-literal
       query.where['userId'] = userId;
     }
 
     if (loadUser) {
+      // tslint:disable-next-line:no-string-literal
       query['include'] = [{ model: User.model }];
     }
 

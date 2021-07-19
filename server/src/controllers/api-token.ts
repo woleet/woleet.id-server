@@ -18,7 +18,7 @@ export async function createAPIToken(apiToken: ApiPostAPITokenObject): Promise<I
 
   const newApiToken = await APIToken.create(Object.assign(apiToken, { hash, value, valueIV }));
 
-  return newApiToken.toJSON();
+  return newApiToken.get();
 }
 
 export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject,
@@ -34,8 +34,8 @@ export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject,
   }
   apiToken = await APIToken.update(id, attrs);
 
-  store.resetCache(apiToken.get('hash'));
-  return apiToken.toJSON();
+  store.resetCache(apiToken.getDataValue('hash'));
+  return apiToken.get();
 }
 
 export async function getAPITokenById(id: string): Promise<InternalAPITokenObject> {
@@ -48,17 +48,17 @@ export async function getAPITokenById(id: string): Promise<InternalAPITokenObjec
   }
 
   debug('Got apiToken');
-  return apiToken.toJSON();
+  return apiToken.get();
 }
 
 export async function getAllAPITokens(full = false): Promise<InternalAPITokenObject[]> {
   const apiTokens = await APIToken.getAll({ full });
-  return apiTokens.map((apiToken) => apiToken.toJSON());
+  return apiTokens.map((apiToken) => apiToken.get());
 }
 
 export async function getAPITokensByUser(userId: string): Promise<InternalAPITokenObject[]> {
   const apiTokens = await APIToken.getByUserId(userId);
-  return apiTokens.map((apiToken) => apiToken.toJSON());
+  return apiTokens.map((apiToken) => apiToken.get());
 }
 
 export async function deleteAPIToken(id: string, userId: string, userRole: UserRoleEnum): Promise<InternalAPITokenObject> {
@@ -75,5 +75,5 @@ export async function deleteAPIToken(id: string, userId: string, userRole: UserR
 
   store.resetCache(apiToken.getDataValue('value'));
 
-  return apiToken.toJSON();
+  return apiToken.get();
 }

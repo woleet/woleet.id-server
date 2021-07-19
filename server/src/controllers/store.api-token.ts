@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 import { APIToken } from '../database';
 
 function serialize(token: SequelizeAPITokenObject): InternalTokenObject {
-  const t = token.toJSON();
+  const t = token.get();
   return {
     id: t.id,
     exp: null,
@@ -49,7 +49,7 @@ export class APITokenStore {
       return null;
     }
 
-    await this.updateLastUsed(apiToken.get('id'));
+    await this.updateLastUsed(apiToken.getDataValue('id'));
 
     token = serialize(apiToken);
 

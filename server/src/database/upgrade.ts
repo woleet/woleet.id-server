@@ -18,7 +18,7 @@ async function getConfig() {
   if (!config) {
     return;
   }
-  return config.toJSON().config;
+  return config.getDataValue('config');
 }
 
 async function upgrade1(sequelize) {
@@ -109,7 +109,7 @@ async function upgrade6(sequelize) {
     return;
   }
 
-  const { config } = cfg.toJSON();
+  const config = cfg.getDataValue('config');
   if (config.version < 6) {
     doPostUpgrade3 = true;
     log.warn('Need to change "privateKeyIV" and "mnemonicEntropyIV" type to handle 24 mnemonics words');
@@ -129,7 +129,7 @@ async function upgrade7(sequelize) {
     return;
   }
 
-  const { config } = cfg.toJSON();
+  const config = cfg.getDataValue('config');
   if (config.version < 7) {
     log.warn('Need to add "tokenResetPassword" column to the "users" table');
     const tokenResetPassword = await sequelize.query(`ALTER TABLE "users" ADD COLUMN "tokenResetPassword" VARCHAR;`);
@@ -146,7 +146,7 @@ async function upgrade8(sequelize) {
     return;
   }
 
-  const { config } = cfg.toJSON();
+  const config = cfg.getDataValue('config');
   if (config.version < 8) {
     doPostUpgrade8 = true;
     log.warn('Need to add "holder" column to the "key" table');
@@ -192,7 +192,7 @@ async function upgrade10(sequelize) {
     return;
   }
 
-  const { config } = cfg.toJSON();
+  const config = cfg.getDataValue('config');
   if (config.version < 10) {
     doPostUpgrade10 = true;
     log.warn('Need to add "device" column to the "key" table');
@@ -216,7 +216,7 @@ async function upgrade11(sequelize) {
   } catch {
   }
 
-  const { config } = cfg.toJSON();
+  const config = cfg.getDataValue('config');
   if (config.version < 11) {
     if (enrollmentExist) {
       log.warn('Need to add "device" and "name" column to the "enrollments" table');
@@ -249,7 +249,7 @@ async function upgrade12(sequelize) {
   } catch {
   }
 
-  const { config } = cfg.toJSON();
+  const config = cfg.getDataValue('config');
   if (config.version < 12) {
     if (enrollmentExist) {
       log.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
@@ -275,7 +275,7 @@ async function upgrade13(sequelize) {
     return;
   }
 
-  const { config } = cfg.toJSON();
+  const config = cfg.getDataValue('config');
   if (config.version < 13) {
     log.warn('Need to add "userId" column to the "apiToken" table');
     const userId = await sequelize.query(`ALTER TABLE "apiTokens" ADD COLUMN "userId" UUID;`);
@@ -291,7 +291,7 @@ async function upgrade14(sequelize) {
   if (!cfg) {
     return;
   }
-  const { config } = cfg.toJSON();
+  const config = cfg.getDataValue('config');
   if (config.version < 14) {
     log.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
     const editKeysStatusEvent = await sequelize.query(`ALTER TYPE "enum_keys_status" ADD VALUE 'revoked';`);
@@ -310,7 +310,7 @@ async function upgrade15(sequelize) {
     return;
   }
 
-  const { config } = cfg.toJSON();
+  const config = cfg.getDataValue('config');
   if (config.version < 15) {
     log.warn('Need to add the mode enum in "users" table');
     const enum_users_type = await sequelize.query(`CREATE TYPE "enum_users_mode" AS ENUM ('seal', 'esign');`);
@@ -341,7 +341,7 @@ async function upgrade16(sequelize) {
     return;
   }
 
-  const { config } = cfg.toJSON();
+  const config = cfg.getDataValue('config');
   if (config.version < 16) {
     log.warn('Need to add "manager" enums to the "enum_users_role" table');
     const userManager = await sequelize.query(`ALTER TYPE "enum_users_role" ADD VALUE 'manager';`);
@@ -409,7 +409,7 @@ async function postUpgrade3() {
     }
 
     try {
-      decrypt(Buffer.from(testKey.get('privateKey'), 'hex'));
+      decrypt(Buffer.from(testKey.getDataValue('privateKey'), 'hex'));
     } catch (err) {
       log.error('Cannot decrypt key! Please check that the secret is correct and try again');
       throw new Error('Cannot decrypt key');
@@ -424,13 +424,13 @@ async function postUpgrade3() {
     for (const key of keys) {
       log.warn(`Updating key ${key.get('id')} ...`);
       {
-        const p = decrypt(Buffer.from(key.get('privateKey'), 'hex'));
+        const p = decrypt(Buffer.from(key.getDataValue('privateKey'), 'hex'));
         const { data, iv } = await secureModule.encrypt(p);
         key.set('privateKeyIV', iv.toString('hex'));
         key.set('privateKey', data.toString('hex'));
       }
       {
-        const e = decrypt(Buffer.from(key.get('mnemonicEntropy'), 'hex'));
+        const e = decrypt(Buffer.from(key.getDataValue('mnemonicEntropy'), 'hex'));
         const { data, iv } = await secureModule.encrypt(e);
         key.set('mnemonicEntropyIV', iv.toString('hex'));
         key.set('mnemonicEntropy', data.toString('hex'));
@@ -500,7 +500,7 @@ async function afterInitUpgrade5() {
     for (const token of tokens) {
       log.warn(`Updating token ${token.get('id')} ...`);
       {
-        const bin = Buffer.from(token.get('value'), 'base64');
+        const bin = Buffer.from(token.getDataValue('value'), 'base64');
         const hash = crypto.createHash('sha256').update(bin).digest('hex');
         const { data, iv } = await secureModule.encrypt(bin);
         token.set('hash', hash);

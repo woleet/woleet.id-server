@@ -3,6 +3,7 @@ import { ServerEvent } from '../database';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { events as config } from '../config';
+import { FindOptions } from 'sequelize';
 
 const debug = Debug('id:events');
 
@@ -65,16 +66,17 @@ export const store = new EventStore;
 
 export async function getServerEventById(id: string): Promise<InternalServerEventObject> {
   const event = await ServerEvent.getById(id);
-  return event.toJSON();
+  return event.get();
 }
 
 export async function getServerEventListByType(type: ServerEventTypeEnum, opts: ListOptions)
   : Promise<InternalServerEventObject[]> {
   const events = await ServerEvent.getByType(type, opts);
-  return events.map((evt) => evt.toJSON());
+  return events.map((evt) => evt.get());
 }
 
 export async function getAllServerEvents(opts: ListOptions): Promise<InternalServerEventObject[]> {
-  const events = await ServerEvent.getAll(Object.assign({ order: [['occurredAt', 'DESC']] }, opts));
-  return events.map((evt) => evt.toJSON());
+  const opt: FindOptions<InternalServerEventObject> = Object.assign({ order: [['occurredAt', 'DESC']] });
+  const events = await ServerEvent.getAll(opt, opts);
+  return events.map((evt) => evt.get());
 }

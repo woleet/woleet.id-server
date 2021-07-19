@@ -4,9 +4,9 @@ import { AbstractInstanceAccess } from './abstract';
 
 const UserModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
-  role: { type: ENUM(['user', 'admin', 'manager']), defaultValue: 'user' },
-  status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
-  mode: { type: ENUM(['seal', 'esign']), defaultValue: 'seal' },
+  role: { type: ENUM('user', 'admin', 'manager'), defaultValue: 'user' },
+  status: { type: ENUM('active', 'blocked'), defaultValue: 'active' },
+  mode: { type: ENUM('seal', 'esign'), defaultValue: 'seal' },
   email: { type: STRING, unique: true },
   tokenResetPassword: { type: STRING, unique: true, allowNull: true },
   username: { type: STRING, unique: true, allowNull: true /* allowNull: false */ }, // step 1
@@ -68,7 +68,7 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
 
   handleError(err: any) {
     if (err instanceof UniqueConstraintError) {
-      const field = Object.keys(err['fields']);
+      const field = Object.keys(err.fields);
       throw new DuplicatedUserError(`Duplicated field ${field}`, err);
     }
   }

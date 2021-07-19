@@ -42,7 +42,7 @@ export async function createSession(login: string, password: string)
 
   await user.save();
 
-  return { token, user: user.toJSON() };
+  return { token, user: user.get() };
 }
 
 export async function createOAuthSession(user): Promise<{ token: string, user: InternalUserObject }> {
@@ -61,7 +61,7 @@ export async function createOAuthSession(user): Promise<{ token: string, user: I
 
   await user.save();
 
-  return { token, user: user.toJSON() };
+  return { token, user: user.get() };
 }
 
 export async function delSession(id: string): Promise<void> {

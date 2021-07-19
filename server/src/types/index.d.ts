@@ -1,6 +1,6 @@
 /* Server types */
 
-import { Instance } from 'sequelize';
+import { Model } from 'sequelize';
 import { SessionStore } from '../controllers/store.session';
 import { AnySchema } from 'joi';
 import * as Router from 'koa-router';
@@ -45,7 +45,7 @@ declare global {
     router: Router;
   }
 
-  interface SequelizeUserObject extends Instance<InternalUserObject> {
+  interface SequelizeUserObject extends Model<InternalUserObject, ApiFullPostUserObject> {
   }
 
   /* User: server specific */
@@ -92,7 +92,7 @@ declare global {
     defaultKeyId?: string;
   }
 
-  interface SequelizeKeyObject extends Instance<InternalKeyObject> {
+  interface SequelizeKeyObject extends Model<InternalKeyObject, ApiFullPostKeyObject> {
   }
 
   /* Key: server specific */
@@ -170,7 +170,7 @@ declare global {
     jti: string;
   }
 
-  interface SequelizeAPITokenObject extends Instance<InternalAPITokenObject> {
+  interface SequelizeAPITokenObject extends Model<InternalAPITokenObject, ApiFullPostAPITokenObject> {
   }
 
   /* APIToken: server specific */
@@ -423,7 +423,7 @@ declare global {
     keyExpiration?: number;
   }
 
-  interface SequelizeEnrollmentObject extends Instance<InternalEnrollmentObject> {
+  interface SequelizeEnrollmentObject extends Model<InternalEnrollmentObject, ApiPostEnrollmentObject> {
   }
 
   /* Signed identity */
@@ -433,7 +433,7 @@ declare global {
     publicKey: string;
   }
 
-  interface SequelizeSignedIdentityObject extends Instance<InternalSignedIdentityObject> {
+  interface SequelizeSignedIdentityObject extends Model<InternalSignedIdentityObject, ApiPostSignedIdentityObject> {
   }
 
   /* OIDC Provider */
