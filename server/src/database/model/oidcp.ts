@@ -8,7 +8,7 @@ export const grantable = new Set<OIDCTokenEnum>([
   'DeviceCode',
 ]);
 
-export const models: Map<OIDCTokenEnum, Model<OIDCToken, OIDCToken>> = (<OIDCTokenEnum[]>[
+export const models = (<OIDCTokenEnum[]>[
   'Session',
   'AccessToken',
   'AuthorizationCode',
@@ -19,7 +19,7 @@ export const models: Map<OIDCTokenEnum, Model<OIDCToken, OIDCToken>> = (<OIDCTok
   'InitialAccessToken',
   'RegistrationAccessToken',
 ]).reduce((map, name: OIDCTokenEnum) => {
-  const model: ModelCtor<Model<OIDCToken, OIDCToken>> = <OIDCModelStatic>sequelize.define(name, {
+  const model = sequelize.define(name, {
     id: { type: STRING, primaryKey: true },
     grantId: { type: UUID, defaultValue: UUIDV4 },
     userCode: { type: UUID, defaultValue: UUIDV4 },
@@ -28,18 +28,7 @@ export const models: Map<OIDCTokenEnum, Model<OIDCToken, OIDCToken>> = (<OIDCTok
     consumedAt: { type: DATE }
   });
 
-  map.set(name, model.build());
+  map.set(name, model);
 
   return map;
-}, new Map<OIDCTokenEnum, Model<OIDCToken, OIDCToken>>());
-
-class OIDCModel extends Model {
-  id: string;
-  grantId: string;
-  userCode: string;
-  data: object;
-  expiresAt: Date;
-  consumedAt: Date;
-}
-
-type OIDCModelStatic = typeof Model & (new (values?: object, options?: BuildOptions) => OIDCModel);
+}, new Map<OIDCTokenEnum, ModelCtor<Model<OIDCToken, OIDCToken>>>());

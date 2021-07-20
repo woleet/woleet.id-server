@@ -1,4 +1,4 @@
-import { Model } from 'sequelize';
+import { Model, ModelCtor } from 'sequelize';
 import { grantable, models } from './model/oidcp';
 import { sequelize } from './sequelize';
 import { User } from './index';
@@ -14,7 +14,7 @@ type OptionalAttributesOf<T> = {
 
 export class SequelizeAdapter {
 
-  model: Model<OIDCToken, OptionalAttributesOf<OIDCToken>>;
+  model: ModelCtor<Model<OIDCToken, OptionalAttributesOf<OIDCToken>>>;
   name: OIDCTokenEnum;
 
   constructor(name: OIDCTokenEnum) {
@@ -28,7 +28,7 @@ export class SequelizeAdapter {
 
   async upsert(id, data, expiresIn) {
     debug(`upsert ${id}`, data, expiresIn);
-    await sequelize.models[this.name].upsert({
+    await this.model.upsert({
       id,
       data,
       ...(data.grantId ? { grantId: data.grantId } : undefined),
@@ -39,7 +39,7 @@ export class SequelizeAdapter {
 
   find(id) {
     debug(`find ${id}`);
-    return sequelize.models[this.name].findByPk(id)
+    return this.model.findByPk(id)
       .then((found) => {
         if (!found) {
           return undefined;
@@ -57,7 +57,7 @@ export class SequelizeAdapter {
 
   findByUserCode(userCode) {
     debug(`findByUserCode ${userCode}`);
-    return sequelize.models[this.name].findOne({ where: { userCode } }).then((found) => {
+    return this.model.findOne({ where: { userCode } }).then((found) => {
       if (!found) {
         return undefined;
       }
@@ -71,15 +71,15 @@ export class SequelizeAdapter {
   async destroy(id) {
     debug(`destroy ${id}`);
     if (grantable.has(this.name)) {
-      const found = await sequelize.models[this.name].findByPk(id);
+      const found = await this.model.findByPk(id);
       const grantId = found.getDataValue('grantId');
       const promises = [];
       grantable.forEach((name) => {
-        promises.push(sequelize.models[this.name].destroy({ where: { grantId } }));
+        promises.push(models.get(name).destroy({ where: { grantId } }));
       });
       await Promise.all(promises);
     } else {
-      await sequelize.models[this.name].destroy({ where: { id } });
+      await this.model.destroy({ where: { id } });
     }
   }
 

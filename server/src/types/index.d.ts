@@ -447,7 +447,7 @@ declare global {
     userCode: uuid;
     data: Object;
     expiresAt: Date;
-    consumedAt: Date;
+    consumedAt?: Date;
   }
 
   interface ServerConfigError {
