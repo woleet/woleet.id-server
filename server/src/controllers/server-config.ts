@@ -70,7 +70,8 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
     if (!config.enableSMTP) {
       delete config.blockPasswordInput;
     }
-    let cfg = await ServerConfig.update(CONFIG_ID, { config }).then(serverConfigAcess => serverConfigAcess.get());
+    const cfgModel = await ServerConfig.update(CONFIG_ID, { config });
+    let cfg = cfgModel ? cfgModel.get() : null;
     if (!cfg) {
       debug('Create config with', up);
       cfg = await (await ServerConfig.create({ config })).get();

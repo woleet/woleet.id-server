@@ -1,4 +1,4 @@
-import { Model, InstanceDestroyOptions } from 'sequelize';
+import { Model } from 'sequelize';
 import { grantable, models } from './model/oidcp';
 import { sequelize } from './sequelize';
 import { User } from './index';
