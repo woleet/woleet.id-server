@@ -10,11 +10,8 @@ export function serializeUser(user: InternalUserObject, withDates = true): ApiUs
       lastLogin: +user.lastLogin || null
     };
   }
-
   const identity = serializeIdentity(user);
-
   const { id, role, mode, status, countryCallingCode, phone, email, username, defaultKeyId } = user;
-
   return Object.assign({
     id,
     role,
@@ -30,11 +27,9 @@ export function serializeUser(user: InternalUserObject, withDates = true): ApiUs
 }
 
 export function serializeFilter(query): ApiFilterUsersObject {
-
   const identity = filterIdentity(query);
   const { mode, role, email, status, countryCallingCode, phone } = query;
   const filter = Object.assign({ mode, role, email, status, countryCallingCode, phone }, identity);
   Object.keys(filter).forEach(key => filter[key] === undefined && delete filter[key]);
-
   return filter;
 }

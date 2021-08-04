@@ -11,7 +11,6 @@ const debug = Debug('id:ctr');
 
 async function serializeAndEncodePassword(password: string) {
   const key = await encode(password);
-
   return {
     passwordHash: key.hash,
     passwordSalt: key.salt,
