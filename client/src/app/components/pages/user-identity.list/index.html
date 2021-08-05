@@ -11,8 +11,9 @@
     </div>
   </div>
   <div *ngIf="formOpened">
-    <create-edit-user mode="create" userMode="esign" (create)="refreshUserList()"
-      (submitSucceed)="formOpened=false; refreshUserList()" (cancel)="formOpened=false"></create-edit-user>
+    <create-edit-user mode="create" userMode="esign" (submitSucceed)="formOpened=false; refreshUserList()"
+      (cancel)="formOpened=false">
+    </create-edit-user>
   </div>
   <br>
   <mat-divider></mat-divider>

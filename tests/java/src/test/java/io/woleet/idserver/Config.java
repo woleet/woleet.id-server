@@ -22,7 +22,7 @@ public class Config {
 
     // Initialize data needed to test users
     public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
-    private static final String TEST_USERS_USERNAME_PREFIX = "tester_";
+    public static final String TEST_USERS_USERNAME_PREFIX = "tester_";
 
     // Get API base path from the environment
     public static String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
@@ -168,8 +168,8 @@ public class Config {
      */
     public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
-        List<UserGet> users = userApi.getAllUsers(null, null, null, null, null,
-            null, null, null, null, null, null, null);
+        List<UserGet> users = userApi.getAllUsers(null, null, null, null, null, null, null, null, null, null, null,
+                null, null, null, null);
         for (UserGet user : users) {
             if (user.getIdentity().getCommonName().startsWith(TEST_USERS_COMMONNAME_PREFIX))
                 userApi.deleteUser(user.getId());
@@ -183,23 +183,23 @@ public class Config {
      * @return a user
      */
     public static UserGet createTestUser(UserApi userApi, UserRoleEnum userRoleEnum, UserModeEnum userModeEnum)
-        throws ApiException {
+            throws ApiException {
         String USERNAME = randomUsername();
         String EMAIL = USERNAME + "@woleet.com";
         UserPost userPost = new UserPost();
         userPost
-            .email(EMAIL)
-            .username(USERNAME)
-            .role(userRoleEnum)
-            .status(UserStatusEnum.ACTIVE)
-            .password("pass")
-            .mode(userModeEnum)
-            .createDefaultKey(true);
+                .email(EMAIL)
+                .username(USERNAME)
+                .role(userRoleEnum)
+                .status(UserStatusEnum.ACTIVE)
+                .password("pass")
+                .mode(userModeEnum)
+                .createDefaultKey(true);
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity
-            .commonName(randomCommonName())
-            .organization("WOLEET SAS")
-            .userId(randomUUID().toString());
+                .commonName(randomCommonName())
+                .organization("WOLEET SAS")
+                .userId(randomUUID().toString());
         return userApi.createUser((UserPost) userPost.identity(fullIdentity));
     }
 
@@ -230,7 +230,7 @@ public class Config {
     public static boolean isValidSignature(String address, String signature, String message) {
         try {
             return ECKey.signedMessageToKey(message, signature).toAddress(Address.fromBase58(null, address)
-                .getParameters()).toString().equals(address);
+                    .getParameters()).toString().equals(address);
         }
         catch (Exception e) {
             return false;

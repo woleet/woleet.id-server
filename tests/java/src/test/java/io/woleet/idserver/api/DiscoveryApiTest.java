@@ -40,8 +40,8 @@ public class DiscoveryApiTest {
         // Create test user
         user = Config.createTestUser();
 
-        // Create kep API
-        keyApi = new KeyApi(Config.getAdminAuthApiClient().setBasePath(Config.WOLEET_ID_SERVER_API_BASEPATH));
+        // Create key API
+        keyApi = new KeyApi(Config.getAdminAuthApiClient());
 
         // Create an helper API with API token authentication
         apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
@@ -124,11 +124,16 @@ public class DiscoveryApiTest {
 
     @Test
     public void discoverUsersTest() throws ApiException {
-        List<UserDisco> response = discoveryApiAdmin.discoverUsers("test");
-        for (UserDisco u : response)
-            if (u.getId().equals(user.getId()))
-                return;
-        fail("Test user not found in user list");
+
+        // Search test user by his common name
+        List<UserDisco> response = discoveryApiAdmin.discoverUsers(Config.TEST_USERS_COMMONNAME_PREFIX);
+        assertEquals(1, response.size());
+        assertEquals(response.get(0).getId(), user.getId());
+
+        // Serch test user by his user name
+        response = discoveryApiAdmin.discoverUsers(Config.TEST_USERS_USERNAME_PREFIX);
+        assertEquals(1, response.size());
+        assertEquals(response.get(0).getId(), user.getId());
     }
 
     @Test

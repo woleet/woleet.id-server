@@ -22,7 +22,7 @@ export class UserIdentityListPageComponent extends TrackById implements OnInit {
   }
 
   refreshUserList() {
-    this.users$ = this.service.getAll('mode=esign');
+    this.users$ = this.service.getAll({ mode: 'esign', limit: 100 });
   }
 
   isAdmin() {

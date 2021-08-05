@@ -21,7 +21,7 @@ export class SealIdentityListPageComponent extends TrackById implements OnInit {
   }
 
   refreshUserList() {
-    this.users$ = this.service.getAll('mode=seal');
+    this.users$ = this.service.getAll({ mode: 'seal', limit: 100 });
   }
 
   isAdmin() {

@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**discoverConfig**](DiscoveryApi.md#discoverConfig) | **GET** /discover/config | Get the server configuration.
 [**discoverUser**](DiscoveryApi.md#discoverUser) | **GET** /discover/user | Get the current authenticated user.
 [**discoverUserByPubKey**](DiscoveryApi.md#discoverUserByPubKey) | **GET** /discover/user/{pubKey} | Get the user associated to a public key.
-[**discoverUserKeys**](DiscoveryApi.md#discoverUserKeys) | **GET** /discover/keys/{userId} | Get all public keys of a user.
+[**discoverUserKeys**](DiscoveryApi.md#discoverUserKeys) | **GET** /discover/keys/{userId} | Get all the public keys of a user.
 [**discoverUsers**](DiscoveryApi.md#discoverUsers) | **GET** /discover/users | Get all users matching a search string.
 
 
@@ -16,8 +16,6 @@ Method | HTTP request | Description
 > ConfigDisco discoverConfig()
 
 Get the server configuration.
-
-Use this endpoint to get the server configuration. 
 
 ### Example
 ```java
@@ -84,8 +82,6 @@ This endpoint does not need any parameter.
 > UserDisco discoverUser()
 
 Get the current authenticated user.
-
-Use this endpoint to get the current authenticated user. 
 
 ### Example
 ```java
@@ -154,8 +150,6 @@ This endpoint does not need any parameter.
 > UserDisco discoverUserByPubKey(pubKey)
 
 Get the user associated to a public key.
-
-Use this endpoint to get the user owning a public key. 
 
 ### Example
 ```java
@@ -226,9 +220,7 @@ Name | Type | Description  | Notes
 # **discoverUserKeys**
 > List&lt;KeyDisco&gt; discoverUserKeys(userId)
 
-Get all public keys of a user.
-
-Use this endpoint to get all public keys owned by a user. 
+Get all the public keys of a user.
 
 ### Example
 ```java

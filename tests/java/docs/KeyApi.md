@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**createExternalKey**](KeyApi.md#createExternalKey) | **POST** /user/{userId}/extern-key | Create a new external key for a user.
 [**createKey**](KeyApi.md#createKey) | **POST** /user/{userId}/key | Create a new key for a user.
 [**deleteKey**](KeyApi.md#deleteKey) | **DELETE** /key/{keyId} | Delete a key.
-[**getAllUserKeys**](KeyApi.md#getAllUserKeys) | **GET** /user/{userId}/key/list | List all keys of a user.
+[**getAllUserKeys**](KeyApi.md#getAllUserKeys) | **GET** /user/{userId}/key/list | List all the keys of a user.
 [**getKeyById**](KeyApi.md#getKeyById) | **GET** /key/{keyId} | Get a key by its identifier.
 [**updateKey**](KeyApi.md#updateKey) | **PUT** /key/{keyId} | Update a key.
 
@@ -17,6 +17,8 @@ Method | HTTP request | Description
 > KeyGet createExternalKey(userId, externalKeyPost)
 
 Create a new external key for a user.
+
+Use this endpoint to register a public key that is controlled by a user on an external device. 
 
 ### Example
 ```java
@@ -230,7 +232,7 @@ Name | Type | Description  | Notes
 # **getAllUserKeys**
 > List&lt;KeyGet&gt; getAllUserKeys(userId)
 
-List all keys of a user.
+List all the keys of a user.
 
 ### Example
 ```java

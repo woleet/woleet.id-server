@@ -6,6 +6,7 @@ import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
 import * as Sequelize from 'sequelize';
+import { FindOptions } from 'sequelize';
 
 const debug = Debug('id:ctr');
 
@@ -114,11 +115,15 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
   return user.toJSON();
 }
 
-export async function getAllUsers(where: ApiFilterUsersObject = null): Promise<InternalUserObject[]> {
-  const opt: any = [];
-  // Sorts users by common name ignoring the case
-  opt.order = [[Sequelize.fn('lower', Sequelize.col('x500CommonName'))]];
-  const users = await User.getAll(opt, where);
+export async function getAllUsers(opts: FindOptions<any>): Promise<InternalUserObject[]> {
+
+  // By default, sorts users by common name ignoring the case
+  if (!opts.order) {
+    opts.order = [[Sequelize.fn('lower', Sequelize.col('x500CommonName'))]];
+  }
+
+  // Get all users and return them as a JSON array
+  const users = await User.getAll(opts);
   return users.map((user) => user.toJSON());
 }
 

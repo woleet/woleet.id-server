@@ -12,4 +12,4 @@ rm -rf tests/java/docs
 export JAVA_OPTS='-Djava8=true -DmodelTests=false -DdateLibrary=java8'
 
 # Generation of the Java client used for tests
-$OPENAPI_CODEGEN generate -p hideGenerationTimestamp=true -i openapi.yaml -g java -o tests/java --api-package io.woleet.idserver.api --artifact-id woleet-idserver-api-client --group-id io.woleet.idserver --model-package io.woleet.idserver.api.model --artifact-version 1.0.0
+$OPENAPI_CODEGEN generate -p hideGenerationTimestamp=true -i swagger.yaml -g java -o tests/java --api-package io.woleet.idserver.api --artifact-id woleet-idserver-api-client --group-id io.woleet.idserver --model-package io.woleet.idserver.api.model --artifact-version 1.0.0

@@ -47,7 +47,7 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
     return this.model.findAll({ where: { role } });
   }
 
-  async find(search: string, opt: ListOptions = {}): Promise<SequelizeUserObject[]> {
+  async find(search: string, offset?: number, limit?: number): Promise<SequelizeUserObject[]> {
     const query = { [Op.iLike]: '%' + search + '%' };
     return this.model.findAll({
       where: {
@@ -59,10 +59,9 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
           { x500OrganizationalUnit: query },
         ]
       },
-      offset: opt.offset,
-      limit: opt.limit,
-      order: [['createdAt', 'DESC']],
-      paranoid: !opt.full
+      offset: offset,
+      limit: limit,
+      order: [['createdAt', 'DESC']]
     });
   }
 

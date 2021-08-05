@@ -152,9 +152,11 @@ Name | Type | Description  | Notes
 
 <a name="getAllUsers"></a>
 # **getAllUsers**
-> List&lt;UserGet&gt; getAllUsers(mode, role, email, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status)
+> List&lt;UserGet&gt; getAllUsers(offset, limit, mode, role, email, username, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status)
 
 List all users.
+
+Use this operation to get the list of users.&lt;br&gt; Results can be pagged and filtered. 
 
 ### Example
 ```java
@@ -178,9 +180,12 @@ public class Example {
     //CookieAuth.setApiKeyPrefix("Token");
 
     UserApi apiInstance = new UserApi(defaultClient);
+    Integer offset = 20; // Integer | Offset of the returned results (0 to get all results from the beginning).
+    Integer limit = 20; // Integer | Maximum number of returned results.
     String mode = seal; // String | Filter the user mode.
     String role = user; // String | Filter the user role.
     String email = john.doe@acme.com; // String | Filter the user email.
+    String username = johndoe; // String | Filter the user username.
     String commonName = John Doe; // String | Filter the user X500 common name.
     String organization = Acme corp; // String | Filter the user X500 organization.
     String organizationalUnit = Sales dept; // String | Filter the user X500 organizational unit.
@@ -191,7 +196,7 @@ public class Example {
     String phone = 123456789; // String | Filter the user phone.
     String status = active; // String | Filter the user status.
     try {
-      List<UserGet> result = apiInstance.getAllUsers(mode, role, email, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status);
+      List<UserGet> result = apiInstance.getAllUsers(offset, limit, mode, role, email, username, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling UserApi#getAllUsers");
@@ -208,9 +213,12 @@ public class Example {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **offset** | **Integer**| Offset of the returned results (0 to get all results from the beginning). | [optional]
+ **limit** | **Integer**| Maximum number of returned results. | [optional]
  **mode** | **String**| Filter the user mode. | [optional] [enum: seal, esign]
  **role** | **String**| Filter the user role. | [optional] [enum: user, manager, admin]
  **email** | **String**| Filter the user email. | [optional]
+ **username** | **String**| Filter the user username. | [optional]
  **commonName** | **String**| Filter the user X500 common name. | [optional]
  **organization** | **String**| Filter the user X500 organization. | [optional]
  **organizationalUnit** | **String**| Filter the user X500 organizational unit. | [optional]

@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: This is Woleet.ID Server API documentation.
-  version: 1.2.6
+  version: 1.2.7
   title: Woleet.ID Server
   contact:
     email: contact@woleet.com
@@ -14,7 +14,8 @@ paths:
     get:
       tags:
         - Authentication
-      summary: Log into the system. Both email or username can be used to authenticate.
+      summary: Log into the system.
+      description: Both email or username can be used to authenticate.
       operationId: login
       security:
         - BasicAuth: []
@@ -202,8 +203,6 @@ paths:
         - OAuthTokenAuth: []
       tags:
         - Discovery
-      description: >
-        Use this endpoint to get the user owning a public key.
       parameters:
         - $ref: '#/components/parameters/PubKeyParameter'
       responses:
@@ -234,8 +233,6 @@ paths:
         - OAuthTokenAuth: []
       tags:
         - Discovery
-      description: >
-        Use this endpoint to get the current authenticated user.
       responses:
         '200':
           description: Successful operation.
@@ -260,14 +257,12 @@ paths:
   /discover/keys/{userId}:
     get:
       operationId: discoverUserKeys
-      summary: Get all public keys of a user.
+      summary: Get all the public keys of a user.
       security:
         - APITokenAuth: []
         - OAuthTokenAuth: []
       tags:
         - Discovery
-      description: >
-        Use this endpoint to get all public keys owned by a user.
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
       responses:
@@ -304,8 +299,6 @@ paths:
         - OAuthTokenAuth: []
       tags:
         - Discovery
-      description: >
-        Use this endpoint to get the server configuration.
       responses:
         '200':
           description: Successful operation.
@@ -423,6 +416,8 @@ paths:
       tags:
         - Key
       summary: Create a new external key for a user.
+      description: >
+        Use this endpoint to register a public key that is controlled by a user on an external device.
       operationId: createExternalKey
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
@@ -492,7 +487,7 @@ paths:
     get:
       tags:
         - Key
-      summary: List all keys of a user.
+      summary: List all the keys of a user.
       operationId: getAllUserKeys
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
@@ -662,11 +657,17 @@ paths:
       tags:
         - User
       summary: List all users.
+      description: >
+        Use this operation to get the list of users.<br>
+        Results can be pagged and filtered.
       operationId: getAllUsers
       parameters:
+        - $ref: '#/components/parameters/PagingOffsetQueryParameter'
+        - $ref: '#/components/parameters/PagingLimitQueryParameter'
         - $ref: '#/components/parameters/FilterUserModeQueryParameter'
         - $ref: '#/components/parameters/FilterUserRoleQueryParameter'
         - $ref: '#/components/parameters/FilterUserEmailQueryParameter'
+        - $ref: '#/components/parameters/FilterUserUsernameQueryParameter'
         - $ref: '#/components/parameters/FilterUserCommonNameQueryParameter'
         - $ref: '#/components/parameters/FilterUserOrganizationQueryParameter'
         - $ref: '#/components/parameters/FilterUserOrganizationalUnitQueryParameter'
@@ -847,7 +848,8 @@ paths:
     get:
       tags:
         - API Token
-      summary: List all API tokens. A user with user role only get his token.
+      summary: List all API tokens.
+      description:  When logged as a user, only the tokens belonging to the user are returned.
       operationId: getAllAPITokens
       responses:
         '200':
@@ -1578,7 +1580,7 @@ components:
           example: "Jim Smith's key"
         publicKey:
           type: string
-          description: Key address.
+          description: Public key (bitcoin address when using BIP39 keys).
           example: "1HA79GnnZdHLZBMBQusXcgPEeMcrpnWahb"
         device:
           $ref: '#/components/schemas/KeyDeviceEnum'
@@ -1598,7 +1600,6 @@ components:
       properties:
         pubKey:
           type: string
-          format: base58
           example: "1KjQ8LgUgYVSqeK7JFhA9W8FVsHCzFrFi8"
           description: Public key used to sign (must be the same as the `pubKey` parameter if provided).
         signedHash:
@@ -1873,6 +1874,22 @@ components:
       schema:
         type: string
         example: 'This is the message to be signed'
+    PagingOffsetQueryParameter:
+      name: offset
+      in: query
+      description: Offset of the returned results (0 to get all results from the beginning).
+      required: false
+      schema:
+        type: integer
+        example: 20
+    PagingLimitQueryParameter:
+      name: limit
+      in: query
+      description: Maximum number of returned results.
+      required: false
+      schema:
+        type: integer
+        example: 20
     FilterUserModeQueryParameter:
       name: mode
       in: query
@@ -1904,6 +1921,14 @@ components:
       schema:
         type: string
         example: 'john.doe@acme.com'
+    FilterUserUsernameQueryParameter:
+      name: username
+      in: query
+      description: Filter the user username.
+      required: false
+      schema:
+        type: string
+        example: 'johndoe'
     FilterUserCommonNameQueryParameter:
       name: commonName
       in: query

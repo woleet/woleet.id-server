@@ -26,10 +26,10 @@ export function serializeUser(user: InternalUserObject, withDates = true): ApiUs
   }, dates);
 }
 
-export function serializeFilter(query): ApiFilterUsersObject {
+export function serializeFilterUsers(query): ApiFilterUsersObject {
   const identity = filterIdentity(query);
-  const { mode, role, email, status, countryCallingCode, phone } = query;
-  const filter = Object.assign({ mode, role, email, status, countryCallingCode, phone }, identity);
+  const { mode, role, email, username, status, countryCallingCode, phone } = query;
+  const filter = Object.assign({ mode, role, email, username, status, countryCallingCode, phone }, identity);
   Object.keys(filter).forEach(key => filter[key] === undefined && delete filter[key]);
   return filter;
 }

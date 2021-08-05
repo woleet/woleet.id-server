@@ -2,11 +2,12 @@ import * as Router from 'koa-router';
 import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '../../controllers/user';
-import { serializeFilter, serializeUser } from '../serialize/user';
+import { serializeFilterUsers, serializeUser } from '../serialize/user';
 import { store as event } from '../../controllers/server-event';
 import { isKeyHeldByServer } from '../../controllers/key';
 import { getServerConfig } from '../../controllers/server-config';
 import { BadRequest, Unauthorized } from 'http-errors';
+import { FindOptions } from 'sequelize';
 
 const vid = validate.param('id', 'uuid');
 
@@ -74,8 +75,8 @@ router.post('/', validate.body('createUser'), async function (ctx) {
  */
 router.get('/list', async function (ctx) {
   const query = ctx.query;
-  const where: ApiFilterUsersObject = serializeFilter(query);
-  const users = await getAllUsers(where);
+  const opts: FindOptions<any> = { where: serializeFilterUsers(query) as object, offset: query.offset, limit: query.limit };
+  const users = await getAllUsers(opts);
   ctx.body = users.map((user) => serializeUser(user));
 });
 

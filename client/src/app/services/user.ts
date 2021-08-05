@@ -5,14 +5,25 @@ import { serverURL } from './config';
 @Injectable()
 export class UserService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getById(userId: string): Promise<ApiUserObject> {
     return this.http.get<ApiUserObject>(`${serverURL}/user/${userId}/`).toPromise();
   }
 
-  async getAll(where?: string): Promise<ApiUserObject[]> {
-    return this.http.get<ApiUserObject[]>(`${serverURL}/user/list?${where}`).toPromise();
+  async getAll(where?: object, offset?: number, limit?: number): Promise<ApiUserObject[]> {
+    const params = new URLSearchParams();
+    for (const key of Object.keys(where)) {
+      params.set(key, where[key]);
+    }
+    if (offset) {
+      params.set('offset', offset.toString());
+    }
+    if (limit) {
+      params.set('limit', limit.toString());
+    }
+    return this.http.get<ApiUserObject[]>(`${serverURL}/user/list?${params.toString()}`).toPromise();
   }
 
   async create(user: ApiPostUserObject): Promise<ApiUserObject> {
