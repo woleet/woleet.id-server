@@ -5,7 +5,6 @@ import { NotFoundUserError, TokenResetPasswordInvalid } from '../errors';
 import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
-import * as Sequelize from 'sequelize';
 import { FindOptions } from 'sequelize';
 
 const debug = Debug('id:ctr');
@@ -116,13 +115,6 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
 }
 
 export async function getAllUsers(opts: FindOptions<any>): Promise<InternalUserObject[]> {
-
-  // By default, sorts users by common name ignoring the case
-  if (!opts.order) {
-    opts.order = [[Sequelize.fn('lower', Sequelize.col('x500CommonName'))]];
-  }
-
-  // Get all users and return them as a JSON array
   const users = await User.getAll(opts);
   return users.map((user) => user.toJSON());
 }

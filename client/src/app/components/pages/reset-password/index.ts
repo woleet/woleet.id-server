@@ -13,7 +13,6 @@ import { AppConfigService } from '@services/boot';
 
 export function confirmPasswordValidator(control: AbstractControl) {
   const str: string = control.value;
-
   if (!str) {
     return;
   }

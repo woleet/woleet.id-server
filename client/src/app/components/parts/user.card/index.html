@@ -71,7 +71,7 @@
   </div>
   <div fxLayout="column" *ngIf="modes" no-prop no-ripple-prop>
     <div>
-      <button mat-icon-button color="primary" class="edit-button" *ngIf="modes.includes('edit')"
+      <button mat-icon-button color="primary" *ngIf="modes.includes('edit')"
         [disabled]="formLocked" (click)="setEditMode(true)">
         <mat-icon matTooltip="Edit {{userType}} identity" aria-label="Edit user button">edit</mat-icon>
       </button>
