@@ -75,7 +75,7 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
 
   async restore(id: string): Promise<Instance<TInstance>> {
     try {
-      const up = await this.model.findByPk(id, { paranoid: false });
+      const up = await this.model.findByPk(id);
       if (!up) {
         return null;
       }

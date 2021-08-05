@@ -14,7 +14,7 @@ class ServerConfigAccess
 
   constructor() {
     super();
-    this.define('serverConfig', ServerConfigModel, { paranoid: false });
+    this.define('serverConfig', ServerConfigModel);
   }
 
   handleError(err: any) {

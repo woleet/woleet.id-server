@@ -23,7 +23,6 @@ class ServerEventAccess extends AbstractInstanceAccess<InternalServerEventObject
   constructor() {
     super();
     this.define('serverEvent', ServerEventModel, {
-      paranoid: false,
       indexes: [{ fields: ['occurredAt'] }],
       timestamps: false
     });

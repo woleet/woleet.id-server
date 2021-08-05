@@ -16,7 +16,7 @@ class EnrollmentAccess extends AbstractInstanceAccess<InternalEnrollmentObject, 
 
   constructor() {
     super();
-    this.define('enrollment', EnrollmentModel, { paranoid: false });
+    this.define('enrollment', EnrollmentModel);
   }
 
   async getById(id: string): Promise<SequelizeEnrollmentObject> {
