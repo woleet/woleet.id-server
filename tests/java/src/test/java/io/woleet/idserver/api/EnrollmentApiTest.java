@@ -127,7 +127,7 @@ public class EnrollmentApiTest {
     public void createExpiredKeyEnrollmentTest() throws ApiException {
         EnrollmentApi enrollmentApi = new EnrollmentApi(Config.getAdminAuthApiClient());
 
-        // Try to create an enrollment with user credentials
+        // Try to create an enrollment with an already expired key
         try {
             enrollmentPost.setName(Config.randomName());
             enrollmentPost.setUserId(userESign.getId());
