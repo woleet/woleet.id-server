@@ -520,7 +520,9 @@ public class DiscoveryApi {
     }
     /**
      * Build call for discoverUsers
-     * @param search A string used to search users through the fields &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; and &#x60;x500OrganizationalUnit&#x60;. (required)
+     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
+     * @param limit Maximum number of returned results. (optional)
+     * @param search Filter the users using a search string.&lt;br&gt; Only users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string match.  (optional)
      * @param _callback Callback for upload/download progress
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
@@ -531,7 +533,7 @@ public class DiscoveryApi {
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call discoverUsersCall(String search, final ApiCallback _callback) throws ApiException {
+    public okhttp3.Call discoverUsersCall(Integer offset, Integer limit, String search, final ApiCallback _callback) throws ApiException {
         Object localVarPostBody = null;
 
         // create path and map variables
@@ -539,6 +541,14 @@ public class DiscoveryApi {
 
         List<Pair> localVarQueryParams = new ArrayList<Pair>();
         List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        if (offset != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
         if (search != null) {
             localVarQueryParams.addAll(localVarApiClient.parameterToPair("search", search));
         }
@@ -565,23 +575,20 @@ public class DiscoveryApi {
     }
 
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call discoverUsersValidateBeforeCall(String search, final ApiCallback _callback) throws ApiException {
-        
-        // verify the required parameter 'search' is set
-        if (search == null) {
-            throw new ApiException("Missing the required parameter 'search' when calling discoverUsers(Async)");
-        }
+    private okhttp3.Call discoverUsersValidateBeforeCall(Integer offset, Integer limit, String search, final ApiCallback _callback) throws ApiException {
         
 
-        okhttp3.Call localVarCall = discoverUsersCall(search, _callback);
+        okhttp3.Call localVarCall = discoverUsersCall(offset, limit, search, _callback);
         return localVarCall;
 
     }
 
     /**
-     * Get all users matching a search string.
-     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string. 
-     * @param search A string used to search users through the fields &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; and &#x60;x500OrganizationalUnit&#x60;. (required)
+     * Get all the users matching a set of filters.
+     * Use this operation to get all the users, or a subset of the users matching specified filters.&lt;br&gt; Results can be paged. 
+     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
+     * @param limit Maximum number of returned results. (optional)
+     * @param search Filter the users using a search string.&lt;br&gt; Only users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string match.  (optional)
      * @return List&lt;UserDisco&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -591,15 +598,17 @@ public class DiscoveryApi {
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
      </table>
      */
-    public List<UserDisco> discoverUsers(String search) throws ApiException {
-        ApiResponse<List<UserDisco>> localVarResp = discoverUsersWithHttpInfo(search);
+    public List<UserDisco> discoverUsers(Integer offset, Integer limit, String search) throws ApiException {
+        ApiResponse<List<UserDisco>> localVarResp = discoverUsersWithHttpInfo(offset, limit, search);
         return localVarResp.getData();
     }
 
     /**
-     * Get all users matching a search string.
-     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string. 
-     * @param search A string used to search users through the fields &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; and &#x60;x500OrganizationalUnit&#x60;. (required)
+     * Get all the users matching a set of filters.
+     * Use this operation to get all the users, or a subset of the users matching specified filters.&lt;br&gt; Results can be paged. 
+     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
+     * @param limit Maximum number of returned results. (optional)
+     * @param search Filter the users using a search string.&lt;br&gt; Only users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string match.  (optional)
      * @return ApiResponse&lt;List&lt;UserDisco&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      * @http.response.details
@@ -609,16 +618,18 @@ public class DiscoveryApi {
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
      </table>
      */
-    public ApiResponse<List<UserDisco>> discoverUsersWithHttpInfo(String search) throws ApiException {
-        okhttp3.Call localVarCall = discoverUsersValidateBeforeCall(search, null);
+    public ApiResponse<List<UserDisco>> discoverUsersWithHttpInfo(Integer offset, Integer limit, String search) throws ApiException {
+        okhttp3.Call localVarCall = discoverUsersValidateBeforeCall(offset, limit, search, null);
         Type localVarReturnType = new TypeToken<List<UserDisco>>(){}.getType();
         return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
 
     /**
-     * Get all users matching a search string. (asynchronously)
-     * Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string. 
-     * @param search A string used to search users through the fields &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; and &#x60;x500OrganizationalUnit&#x60;. (required)
+     * Get all the users matching a set of filters. (asynchronously)
+     * Use this operation to get all the users, or a subset of the users matching specified filters.&lt;br&gt; Results can be paged. 
+     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
+     * @param limit Maximum number of returned results. (optional)
+     * @param search Filter the users using a search string.&lt;br&gt; Only users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string match.  (optional)
      * @param _callback The callback to be executed when the API call finishes
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
@@ -629,9 +640,9 @@ public class DiscoveryApi {
         <tr><td> 401 </td><td> Missing or invalid session cookie. </td><td>  -  </td></tr>
      </table>
      */
-    public okhttp3.Call discoverUsersAsync(String search, final ApiCallback<List<UserDisco>> _callback) throws ApiException {
+    public okhttp3.Call discoverUsersAsync(Integer offset, Integer limit, String search, final ApiCallback<List<UserDisco>> _callback) throws ApiException {
 
-        okhttp3.Call localVarCall = discoverUsersValidateBeforeCall(search, _callback);
+        okhttp3.Call localVarCall = discoverUsersValidateBeforeCall(offset, limit, search, _callback);
         Type localVarReturnType = new TypeToken<List<UserDisco>>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;

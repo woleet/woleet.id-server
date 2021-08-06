@@ -60,11 +60,11 @@ public class KeyApiTest {
     }
 
     @Test
-    public void userGetAllKeyTest() {
+    public void userGetUserKeysTest() {
 
         // Try to get all keys with user credentials
         try {
-            userAuthKeyApi.getAllUserKeys(userSeal.getId());
+            userAuthKeyApi.getUserKeys(userSeal.getId());
             fail("Should not be able to get all keys with user credentials");
         }
         catch (ApiException e) {

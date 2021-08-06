@@ -168,8 +168,8 @@ public class Config {
      */
     public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
-        List<UserGet> users = userApi.getAllUsers(null, null, null, null, null, null, null, null, null, null, null,
-                null, null, null, null);
+        List<UserGet> users = userApi.getUsers(null, null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, null);
         for (UserGet user : users) {
             if (user.getIdentity().getCommonName().startsWith(TEST_USERS_COMMONNAME_PREFIX))
                 userApi.deleteUser(user.getId());

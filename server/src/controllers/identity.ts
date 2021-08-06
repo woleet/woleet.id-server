@@ -1,7 +1,7 @@
 import * as crypto from 'crypto';
 import { Key, SignedIdentity, User } from '../database';
 import { NotFoundIdentityError, NotFoundKeyError } from '../errors';
-import { serializeIdentity } from '../api/serialize/identity';
+import { serializeUserIdentity } from '../api/serialize/identity';
 import { getServerConfig } from './server-config';
 import { signMessage } from './sign';
 import { deserializeX500DN } from './utils/x500-parser';
@@ -64,7 +64,7 @@ export async function getIdentity(publicKey: string, signedIdentity?: string, le
   else {
 
     // Return full user identity information
-    identity = serializeIdentity(user.toJSON(), true);
+    identity = serializeUserIdentity(user.toJSON(), true);
   }
 
   // If some random data are provided, and the server holds the key, and the key is associated to a seal

@@ -166,7 +166,8 @@ public class ApiTokenApiTest {
 
     // Try to get all API token with the user auth
     @Test
-    public void getAllAPITokensTest() throws ApiException {
+    public void getAPITokensTest() throws ApiException {
+
         // Create the 2 tokens owned by the user
         userApiTokenApi.createAPIToken(apiTokenPost);
         APITokenPost apiTokenPost2 = new APITokenPost();
@@ -180,7 +181,7 @@ public class ApiTokenApiTest {
         apiTokenPost3.setName(Config.randomName());
         APITokenGet adminApiTokenGet = adminApiTokenApi.createAPIToken(apiTokenPost3);
 
-        List<APITokenGet> apiTokenGetList = userApiTokenApi.getAllAPITokens();
+        List<APITokenGet> apiTokenGetList = userApiTokenApi.getAPITokens();
 
         for (APITokenGet apiTokenGet: apiTokenGetList) {
             assertEquals("Should only get the user owned token", user.getId(), apiTokenGet.getUserId());

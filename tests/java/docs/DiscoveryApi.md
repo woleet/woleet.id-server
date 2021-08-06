@@ -8,7 +8,7 @@ Method | HTTP request | Description
 [**discoverUser**](DiscoveryApi.md#discoverUser) | **GET** /discover/user | Get the current authenticated user.
 [**discoverUserByPubKey**](DiscoveryApi.md#discoverUserByPubKey) | **GET** /discover/user/{pubKey} | Get the user associated to a public key.
 [**discoverUserKeys**](DiscoveryApi.md#discoverUserKeys) | **GET** /discover/keys/{userId} | Get all the public keys of a user.
-[**discoverUsers**](DiscoveryApi.md#discoverUsers) | **GET** /discover/users | Get all users matching a search string.
+[**discoverUsers**](DiscoveryApi.md#discoverUsers) | **GET** /discover/users | Get all the users matching a set of filters.
 
 
 <a name="discoverConfig"></a>
@@ -290,11 +290,11 @@ Name | Type | Description  | Notes
 
 <a name="discoverUsers"></a>
 # **discoverUsers**
-> List&lt;UserDisco&gt; discoverUsers(search)
+> List&lt;UserDisco&gt; discoverUsers(offset, limit, search)
 
-Get all users matching a search string.
+Get all the users matching a set of filters.
 
-Use this endpoint to get all users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string. 
+Use this operation to get all the users, or a subset of the users matching specified filters.&lt;br&gt; Results can be paged. 
 
 ### Example
 ```java
@@ -320,9 +320,11 @@ public class Example {
     OAuthTokenAuth.setBearerToken("BEARER TOKEN");
 
     DiscoveryApi apiInstance = new DiscoveryApi(defaultClient);
-    String search = John Doe; // String | A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
+    Integer offset = 20; // Integer | Offset of the returned results (0 to get all results from the beginning).
+    Integer limit = 20; // Integer | Maximum number of returned results.
+    String search = John Doe; // String | Filter the users using a search string.<br> Only users whose `email`, `username`, `identity.commonName`, `identity.organization` or `identity.organizationalUnit` contains the search string match. 
     try {
-      List<UserDisco> result = apiInstance.discoverUsers(search);
+      List<UserDisco> result = apiInstance.discoverUsers(offset, limit, search);
       System.out.println(result);
     } catch (ApiException e) {
       System.err.println("Exception when calling DiscoveryApi#discoverUsers");
@@ -339,7 +341,9 @@ public class Example {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **search** | **String**| A string used to search users through the fields &#x60;email&#x60;, &#x60;username&#x60;, &#x60;x500CommonName&#x60;, &#x60;x500Organization&#x60; and &#x60;x500OrganizationalUnit&#x60;. |
+ **offset** | **Integer**| Offset of the returned results (0 to get all results from the beginning). | [optional]
+ **limit** | **Integer**| Maximum number of returned results. | [optional]
+ **search** | **String**| Filter the users using a search string.&lt;br&gt; Only users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string match.  | [optional]
 
 ### Return type
 

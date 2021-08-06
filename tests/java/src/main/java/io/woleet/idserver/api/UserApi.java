@@ -300,227 +300,6 @@ public class UserApi {
         return localVarCall;
     }
     /**
-     * Build call for getAllUsers
-     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
-     * @param limit Maximum number of returned results. (optional)
-     * @param mode Filter the user mode. (optional)
-     * @param role Filter the user role. (optional)
-     * @param email Filter the user email. (optional)
-     * @param username Filter the user username. (optional)
-     * @param commonName Filter the user X500 common name. (optional)
-     * @param organization Filter the user X500 organization. (optional)
-     * @param organizationalUnit Filter the user X500 organizational unit. (optional)
-     * @param locality Filter the user X500 locality. (optional)
-     * @param country Filter the user X500 country. (optional)
-     * @param userId Filter the user X500 custom user identifier. (optional)
-     * @param countryCallingCode Filter the user country calling code. (optional)
-     * @param phone Filter the user phone. (optional)
-     * @param status Filter the user status. (optional)
-     * @param _callback Callback for upload/download progress
-     * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call getAllUsersCall(Integer offset, Integer limit, String mode, String role, String email, String username, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status, final ApiCallback _callback) throws ApiException {
-        Object localVarPostBody = null;
-
-        // create path and map variables
-        String localVarPath = "/user/list";
-
-        List<Pair> localVarQueryParams = new ArrayList<Pair>();
-        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-        if (offset != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
-        }
-
-        if (limit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
-        }
-
-        if (mode != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("mode", mode));
-        }
-
-        if (role != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("role", role));
-        }
-
-        if (email != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("email", email));
-        }
-
-        if (username != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("username", username));
-        }
-
-        if (commonName != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("commonName", commonName));
-        }
-
-        if (organization != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("organization", organization));
-        }
-
-        if (organizationalUnit != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("organizationalUnit", organizationalUnit));
-        }
-
-        if (locality != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("locality", locality));
-        }
-
-        if (country != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("country", country));
-        }
-
-        if (userId != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("userId", userId));
-        }
-
-        if (countryCallingCode != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("countryCallingCode", countryCallingCode));
-        }
-
-        if (phone != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("phone", phone));
-        }
-
-        if (status != null) {
-            localVarQueryParams.addAll(localVarApiClient.parameterToPair("status", status));
-        }
-
-        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-        Map<String, String> localVarCookieParams = new HashMap<String, String>();
-        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-        final String[] localVarAccepts = {
-            "application/json"
-        };
-        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
-        if (localVarAccept != null) {
-            localVarHeaderParams.put("Accept", localVarAccept);
-        }
-
-        final String[] localVarContentTypes = {
-            
-        };
-        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
-        localVarHeaderParams.put("Content-Type", localVarContentType);
-
-        String[] localVarAuthNames = new String[] { "CookieAuth" };
-        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
-    }
-
-    @SuppressWarnings("rawtypes")
-    private okhttp3.Call getAllUsersValidateBeforeCall(Integer offset, Integer limit, String mode, String role, String email, String username, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status, final ApiCallback _callback) throws ApiException {
-        
-
-        okhttp3.Call localVarCall = getAllUsersCall(offset, limit, mode, role, email, username, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status, _callback);
-        return localVarCall;
-
-    }
-
-    /**
-     * List all users.
-     * Use this operation to get the list of users.&lt;br&gt; Results can be pagged and filtered. 
-     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
-     * @param limit Maximum number of returned results. (optional)
-     * @param mode Filter the user mode. (optional)
-     * @param role Filter the user role. (optional)
-     * @param email Filter the user email. (optional)
-     * @param username Filter the user username. (optional)
-     * @param commonName Filter the user X500 common name. (optional)
-     * @param organization Filter the user X500 organization. (optional)
-     * @param organizationalUnit Filter the user X500 organizational unit. (optional)
-     * @param locality Filter the user X500 locality. (optional)
-     * @param country Filter the user X500 country. (optional)
-     * @param userId Filter the user X500 custom user identifier. (optional)
-     * @param countryCallingCode Filter the user country calling code. (optional)
-     * @param phone Filter the user phone. (optional)
-     * @param status Filter the user status. (optional)
-     * @return List&lt;UserGet&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
-     </table>
-     */
-    public List<UserGet> getAllUsers(Integer offset, Integer limit, String mode, String role, String email, String username, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status) throws ApiException {
-        ApiResponse<List<UserGet>> localVarResp = getAllUsersWithHttpInfo(offset, limit, mode, role, email, username, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status);
-        return localVarResp.getData();
-    }
-
-    /**
-     * List all users.
-     * Use this operation to get the list of users.&lt;br&gt; Results can be pagged and filtered. 
-     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
-     * @param limit Maximum number of returned results. (optional)
-     * @param mode Filter the user mode. (optional)
-     * @param role Filter the user role. (optional)
-     * @param email Filter the user email. (optional)
-     * @param username Filter the user username. (optional)
-     * @param commonName Filter the user X500 common name. (optional)
-     * @param organization Filter the user X500 organization. (optional)
-     * @param organizationalUnit Filter the user X500 organizational unit. (optional)
-     * @param locality Filter the user X500 locality. (optional)
-     * @param country Filter the user X500 country. (optional)
-     * @param userId Filter the user X500 custom user identifier. (optional)
-     * @param countryCallingCode Filter the user country calling code. (optional)
-     * @param phone Filter the user phone. (optional)
-     * @param status Filter the user status. (optional)
-     * @return ApiResponse&lt;List&lt;UserGet&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
-     </table>
-     */
-    public ApiResponse<List<UserGet>> getAllUsersWithHttpInfo(Integer offset, Integer limit, String mode, String role, String email, String username, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status) throws ApiException {
-        okhttp3.Call localVarCall = getAllUsersValidateBeforeCall(offset, limit, mode, role, email, username, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status, null);
-        Type localVarReturnType = new TypeToken<List<UserGet>>(){}.getType();
-        return localVarApiClient.execute(localVarCall, localVarReturnType);
-    }
-
-    /**
-     * List all users. (asynchronously)
-     * Use this operation to get the list of users.&lt;br&gt; Results can be pagged and filtered. 
-     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
-     * @param limit Maximum number of returned results. (optional)
-     * @param mode Filter the user mode. (optional)
-     * @param role Filter the user role. (optional)
-     * @param email Filter the user email. (optional)
-     * @param username Filter the user username. (optional)
-     * @param commonName Filter the user X500 common name. (optional)
-     * @param organization Filter the user X500 organization. (optional)
-     * @param organizationalUnit Filter the user X500 organizational unit. (optional)
-     * @param locality Filter the user X500 locality. (optional)
-     * @param country Filter the user X500 country. (optional)
-     * @param userId Filter the user X500 custom user identifier. (optional)
-     * @param countryCallingCode Filter the user country calling code. (optional)
-     * @param phone Filter the user phone. (optional)
-     * @param status Filter the user status. (optional)
-     * @param _callback The callback to be executed when the API call finishes
-     * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
-     </table>
-     */
-    public okhttp3.Call getAllUsersAsync(Integer offset, Integer limit, String mode, String role, String email, String username, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status, final ApiCallback<List<UserGet>> _callback) throws ApiException {
-
-        okhttp3.Call localVarCall = getAllUsersValidateBeforeCall(offset, limit, mode, role, email, username, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status, _callback);
-        Type localVarReturnType = new TypeToken<List<UserGet>>(){}.getType();
-        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
-        return localVarCall;
-    }
-    /**
      * Build call for getUserById
      * @param userId Identifier of the user. (required)
      * @param _callback Callback for upload/download progress
@@ -640,6 +419,235 @@ public class UserApi {
 
         okhttp3.Call localVarCall = getUserByIdValidateBeforeCall(userId, _callback);
         Type localVarReturnType = new TypeToken<UserGet>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for getUsers
+     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
+     * @param limit Maximum number of returned results. (optional)
+     * @param search Filter the users using a search string.&lt;br&gt; Only users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string match.  (optional)
+     * @param mode Filter the users by their mode (exact match). (optional)
+     * @param role Filter the users by their role (exact match). (optional)
+     * @param email Filter the users by their email (exact match). (optional)
+     * @param username Filter the users by their username (exact match). (optional)
+     * @param commonName Filter the users by their X500 common name (exact match). (optional)
+     * @param organization Filter the users by their X500 organization (exact match). (optional)
+     * @param organizationalUnit Filter the users by their X500 organizational unit (exact match). (optional)
+     * @param locality Filter the users by their X500 locality (exact match). (optional)
+     * @param country Filter the users by their X500 country (exact match). (optional)
+     * @param userId Filter the users by their X500 custom user identifier (exact match). (optional)
+     * @param countryCallingCode Filter the users by their country calling code (exact match). (optional)
+     * @param phone Filter the users by their phone (exact match). (optional)
+     * @param status Filter the users by their status (exact match). (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getUsersCall(Integer offset, Integer limit, String search, String mode, String role, String email, String username, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status, final ApiCallback _callback) throws ApiException {
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/user/list";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        if (offset != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("offset", offset));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (search != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("search", search));
+        }
+
+        if (mode != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("mode", mode));
+        }
+
+        if (role != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("role", role));
+        }
+
+        if (email != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("email", email));
+        }
+
+        if (username != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("username", username));
+        }
+
+        if (commonName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("commonName", commonName));
+        }
+
+        if (organization != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("organization", organization));
+        }
+
+        if (organizationalUnit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("organizationalUnit", organizationalUnit));
+        }
+
+        if (locality != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("locality", locality));
+        }
+
+        if (country != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("country", country));
+        }
+
+        if (userId != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("userId", userId));
+        }
+
+        if (countryCallingCode != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("countryCallingCode", countryCallingCode));
+        }
+
+        if (phone != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("phone", phone));
+        }
+
+        if (status != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("status", status));
+        }
+
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        localVarHeaderParams.put("Content-Type", localVarContentType);
+
+        String[] localVarAuthNames = new String[] { "CookieAuth" };
+        return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getUsersValidateBeforeCall(Integer offset, Integer limit, String search, String mode, String role, String email, String username, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status, final ApiCallback _callback) throws ApiException {
+        
+
+        okhttp3.Call localVarCall = getUsersCall(offset, limit, search, mode, role, email, username, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * Get all the users matching a set of filters.
+     * Use this operation to get all the users, or a subset of the users matching specified filters.&lt;br&gt; Results can be paged. 
+     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
+     * @param limit Maximum number of returned results. (optional)
+     * @param search Filter the users using a search string.&lt;br&gt; Only users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string match.  (optional)
+     * @param mode Filter the users by their mode (exact match). (optional)
+     * @param role Filter the users by their role (exact match). (optional)
+     * @param email Filter the users by their email (exact match). (optional)
+     * @param username Filter the users by their username (exact match). (optional)
+     * @param commonName Filter the users by their X500 common name (exact match). (optional)
+     * @param organization Filter the users by their X500 organization (exact match). (optional)
+     * @param organizationalUnit Filter the users by their X500 organizational unit (exact match). (optional)
+     * @param locality Filter the users by their X500 locality (exact match). (optional)
+     * @param country Filter the users by their X500 country (exact match). (optional)
+     * @param userId Filter the users by their X500 custom user identifier (exact match). (optional)
+     * @param countryCallingCode Filter the users by their country calling code (exact match). (optional)
+     * @param phone Filter the users by their phone (exact match). (optional)
+     * @param status Filter the users by their status (exact match). (optional)
+     * @return List&lt;UserGet&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
+     </table>
+     */
+    public List<UserGet> getUsers(Integer offset, Integer limit, String search, String mode, String role, String email, String username, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status) throws ApiException {
+        ApiResponse<List<UserGet>> localVarResp = getUsersWithHttpInfo(offset, limit, search, mode, role, email, username, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Get all the users matching a set of filters.
+     * Use this operation to get all the users, or a subset of the users matching specified filters.&lt;br&gt; Results can be paged. 
+     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
+     * @param limit Maximum number of returned results. (optional)
+     * @param search Filter the users using a search string.&lt;br&gt; Only users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string match.  (optional)
+     * @param mode Filter the users by their mode (exact match). (optional)
+     * @param role Filter the users by their role (exact match). (optional)
+     * @param email Filter the users by their email (exact match). (optional)
+     * @param username Filter the users by their username (exact match). (optional)
+     * @param commonName Filter the users by their X500 common name (exact match). (optional)
+     * @param organization Filter the users by their X500 organization (exact match). (optional)
+     * @param organizationalUnit Filter the users by their X500 organizational unit (exact match). (optional)
+     * @param locality Filter the users by their X500 locality (exact match). (optional)
+     * @param country Filter the users by their X500 country (exact match). (optional)
+     * @param userId Filter the users by their X500 custom user identifier (exact match). (optional)
+     * @param countryCallingCode Filter the users by their country calling code (exact match). (optional)
+     * @param phone Filter the users by their phone (exact match). (optional)
+     * @param status Filter the users by their status (exact match). (optional)
+     * @return ApiResponse&lt;List&lt;UserGet&gt;&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<List<UserGet>> getUsersWithHttpInfo(Integer offset, Integer limit, String search, String mode, String role, String email, String username, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status) throws ApiException {
+        okhttp3.Call localVarCall = getUsersValidateBeforeCall(offset, limit, search, mode, role, email, username, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status, null);
+        Type localVarReturnType = new TypeToken<List<UserGet>>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Get all the users matching a set of filters. (asynchronously)
+     * Use this operation to get all the users, or a subset of the users matching specified filters.&lt;br&gt; Results can be paged. 
+     * @param offset Offset of the returned results (0 to get all results from the beginning). (optional)
+     * @param limit Maximum number of returned results. (optional)
+     * @param search Filter the users using a search string.&lt;br&gt; Only users whose &#x60;email&#x60;, &#x60;username&#x60;, &#x60;identity.commonName&#x60;, &#x60;identity.organization&#x60; or &#x60;identity.organizationalUnit&#x60; contains the search string match.  (optional)
+     * @param mode Filter the users by their mode (exact match). (optional)
+     * @param role Filter the users by their role (exact match). (optional)
+     * @param email Filter the users by their email (exact match). (optional)
+     * @param username Filter the users by their username (exact match). (optional)
+     * @param commonName Filter the users by their X500 common name (exact match). (optional)
+     * @param organization Filter the users by their X500 organization (exact match). (optional)
+     * @param organizationalUnit Filter the users by their X500 organizational unit (exact match). (optional)
+     * @param locality Filter the users by their X500 locality (exact match). (optional)
+     * @param country Filter the users by their X500 country (exact match). (optional)
+     * @param userId Filter the users by their X500 custom user identifier (exact match). (optional)
+     * @param countryCallingCode Filter the users by their country calling code (exact match). (optional)
+     * @param phone Filter the users by their phone (exact match). (optional)
+     * @param status Filter the users by their status (exact match). (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> Array of users. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getUsersAsync(Integer offset, Integer limit, String search, String mode, String role, String email, String username, String commonName, String organization, String organizationalUnit, String locality, String country, String userId, String countryCallingCode, String phone, String status, final ApiCallback<List<UserGet>> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getUsersValidateBeforeCall(offset, limit, search, mode, role, email, username, commonName, organization, organizationalUnit, locality, country, userId, countryCallingCode, phone, status, _callback);
+        Type localVarReturnType = new TypeToken<List<UserGet>>(){}.getType();
         localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
         return localVarCall;
     }

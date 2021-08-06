@@ -171,16 +171,19 @@ paths:
   /discover/users:
     get:
       operationId: discoverUsers
-      summary: Get all users matching a search string.
+      summary: Get all the users matching a set of filters.
+      description: >
+        Use this operation to get all the users, or a subset of the users matching specified filters.<br>
+        Results can be paged.
       security:
         - APITokenAuth: []
         - OAuthTokenAuth: []
       tags:
         - Discovery
-      description: >
-        Use this endpoint to get all users whose `email`, `username`, `identity.commonName`, `identity.organization` or `identity.organizationalUnit` contains the search string.
       parameters:
-        - $ref: '#/components/parameters/DiscoverUsersQueryParameter'
+        - $ref: '#/components/parameters/PagingOffsetQueryParameter'
+        - $ref: '#/components/parameters/PagingLimitQueryParameter'
+        - $ref: '#/components/parameters/FilterUserSearchQueryParameter'
       responses:
         '200':
           description: Successful operation.
@@ -487,8 +490,8 @@ paths:
     get:
       tags:
         - Key
-      summary: List all the keys of a user.
-      operationId: getAllUserKeys
+      summary: Get all the keys of a user.
+      operationId: getUserKeys
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
       responses:
@@ -654,16 +657,17 @@ paths:
                 $ref: '#/components/responses/APIError'
   /user/list:
     get:
+      operationId: getUsers
+      summary: Get all the users matching a set of filters.
+      description: >
+        Use this operation to get all the users, or a subset of the users matching specified filters.<br>
+        Results can be paged.
       tags:
         - User
-      summary: List all users.
-      description: >
-        Use this operation to get the list of users.<br>
-        Results can be pagged and filtered.
-      operationId: getAllUsers
       parameters:
         - $ref: '#/components/parameters/PagingOffsetQueryParameter'
         - $ref: '#/components/parameters/PagingLimitQueryParameter'
+        - $ref: '#/components/parameters/FilterUserSearchQueryParameter'
         - $ref: '#/components/parameters/FilterUserModeQueryParameter'
         - $ref: '#/components/parameters/FilterUserRoleQueryParameter'
         - $ref: '#/components/parameters/FilterUserEmailQueryParameter'
@@ -848,9 +852,9 @@ paths:
     get:
       tags:
         - API Token
-      summary: List all API tokens.
+      summary: Get all API tokens.
       description:  When logged as a user, only the tokens belonging to the user are returned.
-      operationId: getAllAPITokens
+      operationId: getAPITokens
       responses:
         '200':
           description: Succesful operation.
@@ -958,8 +962,8 @@ paths:
     get:
       tags:
         - Enrollment
-      summary: List all key enrollment requests.
-      operationId: getAllEnrollments
+      summary: Get all key enrollment requests.
+      operationId: getEnrollments
       responses:
         '200':
           description: Successful operation.
@@ -1835,14 +1839,6 @@ components:
       schema:
         type: string
         example: '00c8a2b0c373050e7f2abbb2e4c631a42c10d402'
-    DiscoverUsersQueryParameter:
-      name: search
-      in: query
-      description: A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
-      required: true
-      schema:
-        type: string
-        example: "John Doe"
     CustomUserIdQueryParameter:
       name: customUserId
       in: query
@@ -1890,10 +1886,20 @@ components:
       schema:
         type: integer
         example: 20
+    FilterUserSearchQueryParameter:
+      name: search
+      in: query
+      description: >
+        Filter the users using a search string.<br>
+        Only users whose `email`, `username`, `identity.commonName`, `identity.organization` or `identity.organizationalUnit` contains the search string match.
+      required: false
+      schema:
+        type: string
+        example: "John Doe"
     FilterUserModeQueryParameter:
       name: mode
       in: query
-      description: Filter the user mode.
+      description: Filter the users by their mode (exact match).
       required: false
       schema:
         type: string
@@ -1904,7 +1910,7 @@ components:
     FilterUserRoleQueryParameter:
       name: role
       in: query
-      description: Filter the user role.
+      description: Filter the users by their role (exact match).
       required: false
       schema:
         type: string
@@ -1916,7 +1922,7 @@ components:
     FilterUserEmailQueryParameter:
       name: email
       in: query
-      description: Filter the user email.
+      description: Filter the users by their email (exact match).
       required: false
       schema:
         type: string
@@ -1924,7 +1930,7 @@ components:
     FilterUserUsernameQueryParameter:
       name: username
       in: query
-      description: Filter the user username.
+      description: Filter the users by their username (exact match).
       required: false
       schema:
         type: string
@@ -1932,7 +1938,7 @@ components:
     FilterUserCommonNameQueryParameter:
       name: commonName
       in: query
-      description: Filter the user X500 common name.
+      description: Filter the users by their X500 common name (exact match).
       required: false
       schema:
         type: string
@@ -1940,7 +1946,7 @@ components:
     FilterUserOrganizationQueryParameter:
       name: organization
       in: query
-      description: Filter the user X500 organization.
+      description: Filter the users by their X500 organization (exact match).
       required: false
       schema:
         type: string
@@ -1948,7 +1954,7 @@ components:
     FilterUserOrganizationalUnitQueryParameter:
       name: organizationalUnit
       in: query
-      description: Filter the user X500 organizational unit.
+      description: Filter the users by their X500 organizational unit (exact match).
       required: false
       schema:
         type: string
@@ -1956,7 +1962,7 @@ components:
     FilterUserLocalityQueryParameter:
       name: locality
       in: query
-      description: Filter the user X500 locality.
+      description: Filter the users by their X500 locality (exact match).
       required: false
       schema:
         type: string
@@ -1964,7 +1970,7 @@ components:
     FilterUserCountryQueryParameter:
       name: country
       in: query
-      description: Filter the user X500 country.
+      description: Filter the users by their X500 country (exact match).
       required: false
       schema:
         type: string
@@ -1972,7 +1978,7 @@ components:
     FilterUserUserIdQueryParameter:
       name: userId
       in: query
-      description: Filter the user X500 custom user identifier.
+      description: Filter the users by their X500 custom user identifier (exact match).
       required: false
       schema:
         type: string
@@ -1980,7 +1986,7 @@ components:
     FilterUserCountryCallingCodeQueryParameter:
       name: countryCallingCode
       in: query
-      description: Filter the user country calling code.
+      description: Filter the users by their country calling code (exact match).
       required: false
       schema:
         type: string
@@ -1988,7 +1994,7 @@ components:
     FilterUserPhoneQueryParameter:
       name: phone
       in: query
-      description: Filter the user phone.
+      description: Filter the users by their phone (exact match).
       required: false
       schema:
         type: string
@@ -1996,7 +2002,7 @@ components:
     FilterUserStatusQueryParameter:
       name: status
       in: query
-      description: Filter the user status.
+      description: Filter the users by their status (exact match).
       required: false
       schema:
         type: string

@@ -47,24 +47,6 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
     return this.model.findAll({ where: { role } });
   }
 
-  async find(search: string, offset?: number, limit?: number): Promise<SequelizeUserObject[]> {
-    const query = { [Op.iLike]: '%' + search + '%' };
-    return this.model.findAll({
-      where: {
-        [Op.or]: [
-          { email: query },
-          { username: query },
-          { x500CommonName: query },
-          { x500Organization: query },
-          { x500OrganizationalUnit: query },
-        ]
-      },
-      offset: offset,
-      limit: limit,
-      order: [['createdAt', 'DESC']]
-    });
-  }
-
   handleError(err: any) {
     if (err instanceof UniqueConstraintError) {
       const field = Object.keys(err['fields']);

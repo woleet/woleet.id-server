@@ -8,12 +8,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class UserApiTest {
+
+    private UserGet user;
 
     private UserApi userApi;
 
@@ -23,7 +25,10 @@ public class UserApiTest {
         // Start form a clean state
         tearDown();
 
-        // Create user API
+        // Create a test user
+        user = Config.createTestUser();
+
+        // Create a user API
         userApi = new UserApi(Config.getAdminAuthApiClient());
     }
 
@@ -35,7 +40,7 @@ public class UserApiTest {
     @Test
     public void createUserTest() {
 
-        // Create an esign user without an email
+        // Build a esign user without an email
         UserPost userESign;
         userESign = new UserPost();
         userESign.setMode(UserModeEnum.ESIGN);
@@ -46,7 +51,6 @@ public class UserApiTest {
 
         // Try to create a user with user credentials
         try {
-            UserGet user = Config.createTestUser();
             UserApi userAuthApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
             userAuthApi.createUser(userESign);
             fail("Should not be able to create an user object with user credentials");
@@ -64,7 +68,7 @@ public class UserApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
-        // Create a seal user without an organization
+        // Build a seal user without an organization
         UserPost userSeal;
         userSeal = new UserPost();
         userSeal.setIdentity(fullIdentity);
@@ -90,14 +94,42 @@ public class UserApiTest {
     }
 
     @Test
+    public void getUserByIdTest() throws ApiException, NoSuchFieldException, IllegalAccessException {
+        UserApi userAuthApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
+
+        // Try to get a user with user credentials
+        try {
+            userAuthApi.getUserById(user.getId());
+            fail("Should not be able to get a user object with user credentials");
+        }
+        catch (ApiException e) {
+            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+        }
+
+        // Get the test user and check that it matches (except temporal properties)
+        UserGet testUser = userApi.getUserById(user.getId());
+        Field createdAt = UserGet.class.getDeclaredField("createdAt");
+        createdAt.setAccessible(true);
+        createdAt.set(testUser, null);
+        createdAt.set(user, null);
+        Field updatedAt = UserGet.class.getDeclaredField("updatedAt");
+        updatedAt.setAccessible(true);
+        updatedAt.set(testUser, null);
+        updatedAt.set(user, null);
+        Field lastLogin = UserGet.class.getDeclaredField("lastLogin");
+        lastLogin.setAccessible(true);
+        lastLogin.set(testUser, null);
+        lastLogin.set(user, null);
+        assertEquals(user, testUser);
+    }
+
+    @Test
     public void deleteUserTest() throws ApiException {
-        UserGet user = Config.createTestUser();
         UserApi userAuthApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
 
         // Try to delete a user with user credentials
         try {
-            UserGet userGet = Config.createTestUser();
-            userAuthApi.deleteUser(userGet.getId());
+            userAuthApi.deleteUser(user.getId());
             fail("Should not be able to delete a user object with user credentials");
         }
         catch (ApiException e) {
@@ -106,15 +138,12 @@ public class UserApiTest {
     }
 
     @Test
-    public void getAllUsersTest() throws ApiException {
-
-        // Create a test user
-        UserGet user = Config.createTestUser();
+    public void getUsersTest() throws ApiException {
 
         // Try to get all users with user credentials
         try {
             UserApi userAuthUserApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
-            userAuthUserApi.getAllUsers(null, null, null, null, null, null, null, null, null, null, null, null, null,
+            userAuthUserApi.getUsers(null, null, null, null, null, null, null, null, null, null, null, null, null, null,
                     null, null);
             fail("Should not be able to get all users object with user credentials");
         }
@@ -123,36 +152,59 @@ public class UserApiTest {
         }
 
         // Get the admin user only by his username
-        List<UserGet> users = userApi.getAllUsers(null, null,
-                UserModeEnum.ESIGN.getValue(), UserRoleEnum.ADMIN.getValue(), null, "admin", null, null, null, null,
-                null, null, null, null, null);
+        List<UserGet> users = userApi.getUsers(null, null, null, UserModeEnum.ESIGN.getValue(),
+                UserRoleEnum.ADMIN.getValue(), null, "admin", null, null, null, null, null, null, null, null, null);
         assertEquals(1, users.size());
         assertEquals("admin", users.get(0).getUsername());
+
+        // Remember the admin user
         UserGet adminUser = users.get(0);
 
         // Get the admin user only by his email
-        users = userApi.getAllUsers(null, null, null, null, adminUser.getEmail(), null, null, null, null, null, null,
+        users = userApi.getUsers(null, null, null, null, null, adminUser.getEmail(), null, null, null, null, null, null,
                 null, null, null, null);
         assertEquals(1, users.size());
         assertEquals(adminUser.getEmail(), users.get(0).getEmail());
 
-        // Get the test user only
-        users = userApi.getAllUsers(null, null,
-                UserModeEnum.SEAL.getValue(), UserRoleEnum.USER.getValue(), null, user.getUsername(), null, null, null,
-                null, null, null, null, null, null);
+        // Get all users and check that the admin user is part of the results
+        users = userApi.getUsers(null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null);
+        assertTrue(users.size() > 1);
+        assertTrue(users.contains(adminUser));
+
+        // Get the test user only by his role, mode and username
+        users = userApi.getUsers(null, null, null, UserModeEnum.SEAL.getValue(), UserRoleEnum.USER.getValue(), null,
+                user.getUsername(), null, null, null, null, null, null, null, null, null);
         assertEquals(1, users.size());
         assertEquals(user.getUsername(), users.get(0).getUsername());
 
         // Get all users with a limit of 2
-        users = userApi.getAllUsers(0, 2, null, null, null, null, null, null, null, null, null, null, null, null,
+        users = userApi.getUsers(0, 2, null, null, null, null, null, null, null, null, null, null, null, null, null,
                 null);
         assertEquals(2, users.size());
+
+        // Remember 2nd user
         UserGet secondUser = users.get(1);
 
         // Get all users with an offset of 1 and a limit of 2
-        users = userApi.getAllUsers(1, 1, null, null, null, null, null, null, null, null, null, null, null, null,
+        users = userApi.getUsers(1, 1, null, null, null, null, null, null, null, null, null, null, null, null, null,
                 null);
         assertEquals(1, users.size());
+
+        // Check that 2nd user is now first
         assertEquals(secondUser, users.get(0));
+
+        // Search the test user by his common name (like)
+        users = userApi.getUsers(null, null, Config.TEST_USERS_COMMONNAME_PREFIX, null, null, null, null, null, null,
+                null, null, null, null, null, null, null);
+        assertEquals(1, users.size());
+        assertEquals(users.get(0).getId(), user.getId());
+
+        // Search the test user by his common name (like) and by his role, mode and username (exact match)
+        users = userApi.getUsers(0, 2, Config.TEST_USERS_COMMONNAME_PREFIX, UserModeEnum.SEAL.getValue(),
+                UserRoleEnum.USER.getValue(), null, user.getUsername(), null, null, null, null, null, null, null, null,
+                null);
+        assertEquals(1, users.size());
+        assertEquals(users.get(0).getId(), user.getId());
     }
 }

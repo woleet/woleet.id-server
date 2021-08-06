@@ -93,13 +93,13 @@ public class EnrollmentApiTest {
     }
 
     @Test
-    public void userGetAllEnrollmentTest() throws ApiException {
+    public void userGetEnrollmentTest() throws ApiException {
         UserGet user = Config.createTestUser();
         EnrollmentApi userAuthApi = new EnrollmentApi(Config.getAuthApiClient(user.getUsername(), "pass"));
 
         // Try to get all enrollments with user credentials
         try {
-            userAuthApi.getAllEnrollments();
+            userAuthApi.getEnrollments();
             fail("Should not be able to get all enrollments object with user credentials");
         }
         catch (ApiException e) {
