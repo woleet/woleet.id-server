@@ -8,6 +8,8 @@ import { TrackById } from '@components/util';
 })
 export class UserIdentityListPageComponent extends TrackById implements OnInit {
 
+  search = null;
+
   formOpened = false;
 
   users: ApiUserObject[];
@@ -25,7 +27,7 @@ export class UserIdentityListPageComponent extends TrackById implements OnInit {
   }
 
   refreshUserList() {
-    this.service.getAll({ mode: 'esign', offset: 0, limit: this.pageSize })
+    this.service.getAll({ search: this.search, mode: 'esign', offset: 0, limit: this.pageSize })
       .then(firstPage => {
         this.complete = (firstPage.length < this.pageSize);
         this.offset = firstPage.length;

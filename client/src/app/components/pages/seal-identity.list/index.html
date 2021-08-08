@@ -18,6 +18,11 @@
   <br>
   <mat-divider></mat-divider>
   <br>
+  <mat-form-field>
+    <mat-icon matSuffix>search</mat-icon>
+    <input matInput type="search" placeholder="Search" [(ngModel)]="search" (keyup)="refreshUserList()">
+  </mat-form-field>
+  <br>
   <div *ngFor="let user of users; trackBy: trackById;">
     <app-user-card *ngIf="(user.role === 'admin' && isAdmin()) || user.role !== 'admin'" [user]="user"
       [modes]="['block', 'detail', 'delete', 'edit']" (delete)="refreshUserList()">

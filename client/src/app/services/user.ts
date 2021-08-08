@@ -12,10 +12,12 @@ export class UserService {
     return this.http.get<ApiUserObject>(`${serverURL}/user/${userId}/`).toPromise();
   }
 
-  async getAll(where?: object, offset?: number, limit?: number): Promise<ApiUserObject[]> {
+  async getAll(query?: object, offset?: number, limit?: number): Promise<ApiUserObject[]> {
     const params = new URLSearchParams();
-    for (const key of Object.keys(where)) {
-      params.set(key, where[key]);
+    for (const key of Object.keys(query)) {
+      if (query[key]) {
+        params.set(key, query[key]);
+      }
     }
     if (offset) {
       params.set('offset', offset.toString());
