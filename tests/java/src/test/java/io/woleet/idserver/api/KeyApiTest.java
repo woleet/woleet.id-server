@@ -104,7 +104,7 @@ public class KeyApiTest {
         adminAuthKeyApi.updateKey(userSeal.getDefaultKeyId(), new KeyPut().status(KeyStatusEnum.REVOKED));
         KeyGet keyGet = adminAuthKeyApi.getKeyById(userSeal.getDefaultKeyId());
         assertEquals(KeyStatusEnum.REVOKED, keyGet.getStatus());
-        assertTrue(keyGet.getRevokedAt() < System.currentTimeMillis() + 100L
+        assertTrue(keyGet.getRevokedAt() < System.currentTimeMillis() + 1000L
                    && keyGet.getRevokedAt() > System.currentTimeMillis() - 1000L);
 
         // Check that we cannot update a revoked key
