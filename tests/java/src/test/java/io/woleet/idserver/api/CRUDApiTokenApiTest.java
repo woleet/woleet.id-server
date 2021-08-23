@@ -24,7 +24,7 @@ public class CRUDApiTokenApiTest extends CRUDApiTest {
         @Override
         public List<CRUDApiTest.ObjectGet> getAllObjects() throws ApiException {
             List<CRUDApiTest.ObjectGet> list = new ArrayList<>();
-            for (APITokenGet apiTokenGet : apiTokenApi.getAllAPITokens())
+            for (APITokenGet apiTokenGet : apiTokenApi.getAPITokens())
                 list.add(new ObjectGet(apiTokenGet));
             return list;
         }

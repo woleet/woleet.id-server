@@ -17,7 +17,7 @@ class APITokenAccess extends AbstractInstanceAccess<InternalAPITokenObject, ApiF
 
   constructor() {
     super();
-    this.define('apiToken', APITokenModel, { paranoid: false });
+    this.define('apiToken', APITokenModel);
   }
 
   handleError(err: any) {

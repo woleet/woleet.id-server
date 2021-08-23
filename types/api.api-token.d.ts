@@ -7,6 +7,7 @@ interface ApiAPITokenObject extends APITokenObject, ApiCommonProperties {
 
   /** Key name */
   name: string;
+
   /** Token to use to call the sign endpoint */
   value: string;
 

@@ -1,4 +1,4 @@
-<div *ngIf="(keys$ | async) as keys; else loadingKeys">
+<div *ngIf="(keys$ | async) as keys; else loading">
   <div fxLayout="row wrap" fxLayoutWrap fxLayoutGap="20px grid"
     *ngIf="!formOpened && !externalFormOpened && !enrollFormOpened">
     <div fxLaytout="column">
@@ -35,8 +35,9 @@
   <div *ngIf="keys.length; else noKeys">
     <div *ngFor="let key of keys; trackBy: trackById;">
       <br>
-      <app-key-card [key]="key" [userId]="(user$ | async)?.id" [modes]="['block', 'delete', 'edit', 'revoke']" [userMode]="(user$ | async)?.mode"
-        [default]="(user$ | async)?.defaultKeyId == key.id" (updateUser)="refreshUser()" (delete)="refreshKeyList()">
+      <app-key-card [key]="key" [userId]="(user$ | async)?.id" [modes]="['block', 'delete', 'edit', 'revoke']"
+        [userMode]="(user$ | async)?.mode" [default]="(user$ | async)?.defaultKeyId == key.id"
+        (updateUser)="refreshUser()" (delete)="refreshKeyList()">
       </app-key-card>
     </div>
   </div>
@@ -47,6 +48,6 @@
     </mat-card>
   </ng-template>
 </div>
-<ng-template #loadingKeys>
+<ng-template #loading>
   <mat-card>Loading...</mat-card>
 </ng-template>

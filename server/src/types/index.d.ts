@@ -33,12 +33,6 @@ declare global {
     createdAt: Date;
   }
 
-  interface ListOptions {
-    offset?: number;
-    limit?: number;
-    full?: boolean;
-  }
-
   interface AppDefinition {
     name: string;
     port: number;

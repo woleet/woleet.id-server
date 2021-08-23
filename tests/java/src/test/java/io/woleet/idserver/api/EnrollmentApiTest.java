@@ -93,13 +93,13 @@ public class EnrollmentApiTest {
     }
 
     @Test
-    public void userGetAllEnrollmentTest() throws ApiException {
+    public void userGetEnrollmentTest() throws ApiException {
         UserGet user = Config.createTestUser();
         EnrollmentApi userAuthApi = new EnrollmentApi(Config.getAuthApiClient(user.getUsername(), "pass"));
 
         // Try to get all enrollments with user credentials
         try {
-            userAuthApi.getAllEnrollments();
+            userAuthApi.getEnrollments();
             fail("Should not be able to get all enrollments object with user credentials");
         }
         catch (ApiException e) {
@@ -127,7 +127,7 @@ public class EnrollmentApiTest {
     public void createExpiredKeyEnrollmentTest() throws ApiException {
         EnrollmentApi enrollmentApi = new EnrollmentApi(Config.getAdminAuthApiClient());
 
-        // Try to create an enrollment with user credentials
+        // Try to create an enrollment with an already expired key
         try {
             enrollmentPost.setName(Config.randomName());
             enrollmentPost.setUserId(userESign.getId());

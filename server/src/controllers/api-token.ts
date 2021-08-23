@@ -51,8 +51,8 @@ export async function getAPITokenById(id: string): Promise<InternalAPITokenObjec
   return apiToken.toJSON();
 }
 
-export async function getAllAPITokens(full = false): Promise<InternalAPITokenObject[]> {
-  const apiTokens = await APIToken.getAll({ full });
+export async function getAllAPITokens(): Promise<InternalAPITokenObject[]> {
+  const apiTokens = await APIToken.getAll();
   return apiTokens.map((apiToken) => apiToken.toJSON());
 }
 
@@ -61,7 +61,9 @@ export async function getAPITokensByUser(userId: string): Promise<InternalAPITok
   return apiTokens.map((apiToken) => apiToken.toJSON());
 }
 
-export async function deleteAPIToken(id: string, userId: string, userRole: UserRoleEnum): Promise<InternalAPITokenObject> {
+export async function deleteAPIToken(
+  id: string, userId: string, userRole: UserRoleEnum
+): Promise<InternalAPITokenObject> {
 
   const apiToken = await APIToken.getById(id);
   if (!apiToken) {

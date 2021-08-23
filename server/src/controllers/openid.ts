@@ -1,5 +1,4 @@
 import { Issuer } from 'openid-client';
-import { serializeIdentity } from './user';
 import { createKey } from './key';
 import { User } from '../database';
 import { store as sessionStore } from './store.session';
@@ -7,6 +6,7 @@ import { lookForUser } from './authentication';
 import { getServerConfig } from './server-config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
+import { mapIdentityFromAPIToInternal } from './user';
 
 const debug = Debug('id:ctrl:openid');
 
@@ -62,7 +62,7 @@ export async function createOAuthUser(user: ApiPostUserObject): Promise<{ token:
   if (!config.enableOpenIDConnect) {
     throw new Error('createOAuthUser called while OpenID connect is disabled');
   }
-  const identity = serializeIdentity(user.identity);
+  const identity = mapIdentityFromAPIToInternal(user.identity);
   delete user.identity;
 
   const newUser = await User.create(Object.assign(identity, user));

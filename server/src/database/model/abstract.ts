@@ -44,14 +44,14 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
     }
   }
 
-  async getAll(opt: FindOptions<TInstance> & { full?: boolean } = {}, where = {}): Promise<Instance<TInstance>[]> {
-    return this.model.findAll({
-      where,
-      offset: opt.offset,
-      limit: opt.limit,
-      order: opt.order || [['createdAt', 'DESC']],
-      paranoid: !opt.full
-    });
+  async getAll(opts: FindOptions<any> = {}): Promise<Instance<TInstance>[]> {
+
+    // By default, sort object from the newest to the oldest
+    if (!opts.order) {
+      opts.order = [['createdAt', 'DESC']];
+    }
+
+    return this.model.findAll(opts);
   }
 
   async getById(id: string): Promise<Instance<TInstance> | null> {
@@ -75,7 +75,7 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
 
   async restore(id: string): Promise<Instance<TInstance>> {
     try {
-      const up = await this.model.findByPk(id, { paranoid: false });
+      const up = await this.model.findByPk(id);
       if (!up) {
         return null;
       }
