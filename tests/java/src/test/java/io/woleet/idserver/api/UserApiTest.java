@@ -151,16 +151,16 @@ public class UserApiTest {
             assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-        // Get the admin user only by his username
-        List<UserGet> users = userApi.getUsers(null, null, null, UserModeEnum.ESIGN.getValue(),
-                UserRoleEnum.ADMIN.getValue(), null, "admin", null, null, null, null, null, null, null, null, null);
+        // Get the admin user by his role and username
+        List<UserGet> users = userApi.getUsers(null, null, null, null, UserRoleEnum.ADMIN.getValue(), null, "admin",
+                null, null, null, null, null, null, null, null, null);
         assertEquals(1, users.size());
         assertEquals("admin", users.get(0).getUsername());
 
         // Remember the admin user
         UserGet adminUser = users.get(0);
 
-        // Get the admin user only by his email
+        // Get the admin user by his email
         users = userApi.getUsers(null, null, null, null, null, adminUser.getEmail(), null, null, null, null, null, null,
                 null, null, null, null);
         assertEquals(1, users.size());
@@ -172,7 +172,7 @@ public class UserApiTest {
         assertTrue(users.size() > 1);
         assertTrue(users.contains(adminUser));
 
-        // Get the test user only by his role, mode and username
+        // Get the test user by his mode, role and username
         users = userApi.getUsers(null, null, null, UserModeEnum.SEAL.getValue(), UserRoleEnum.USER.getValue(), null,
                 user.getUsername(), null, null, null, null, null, null, null, null, null);
         assertEquals(1, users.size());
@@ -200,7 +200,7 @@ public class UserApiTest {
         assertEquals(1, users.size());
         assertEquals(users.get(0).getId(), user.getId());
 
-        // Search the test user by his common name (like) and by his role, mode and username (exact match)
+        // Search the test user by his common name (like) and by his mode, role, mode and username (exact match)
         users = userApi.getUsers(0, 2, Config.TEST_USERS_COMMONNAME_PREFIX, UserModeEnum.SEAL.getValue(),
                 UserRoleEnum.USER.getValue(), null, user.getUsername(), null, null, null, null, null, null, null, null,
                 null);
