@@ -30,7 +30,7 @@
     "@woleet/woleet-secure-module": "1.4.0",
     "basic-auth": "2.0.1",
     "chalk": "4.1.2",
-    "ioredis": "4.23.0",
+    "ioredis": "4.27.8",
     "joi": "14.3.1",
     "koa": "2.13.1",
     "koa-body": "4.2.0",
