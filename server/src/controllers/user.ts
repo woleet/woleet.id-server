@@ -5,13 +5,12 @@ import { NotFoundUserError, TokenResetPasswordInvalid } from '../errors';
 import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
-import * as Sequelize from 'sequelize';
+import { FindOptions } from 'sequelize';
 
 const debug = Debug('id:ctr');
 
 async function serializeAndEncodePassword(password: string) {
   const key = await encode(password);
-
   return {
     passwordHash: key.hash,
     passwordSalt: key.salt,
@@ -19,7 +18,10 @@ async function serializeAndEncodePassword(password: string) {
   };
 }
 
-export function serializeIdentity(identity: ApiIdentityObject): InternalIdentityObject {
+/**
+ * Map identity format from API to DB.
+ */
+export function mapIdentityFromAPIToInternal(identity: ApiIdentityObject): InternalIdentityObject {
   return {
     x500CommonName: identity.commonName,
     x500Organization: identity.organization,
@@ -32,8 +34,8 @@ export function serializeIdentity(identity: ApiIdentityObject): InternalIdentity
 
 export async function createUser(user: ApiPostUserObject): Promise<InternalUserObject> {
 
-  // Map identity format from API to DB
-  const identity = serializeIdentity(user.identity);
+  // Convert identity from API to DB format
+  const identity = mapIdentityFromAPIToInternal(user.identity);
   delete user.identity;
 
   // Encrypt password if provided
@@ -87,7 +89,7 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
 
   // Map identity format from API to DB
   if (attrs.identity) {
-    const identity = serializeIdentity(attrs.identity);
+    const identity = mapIdentityFromAPIToInternal(attrs.identity);
     delete update.identity;
     Object.keys(identity).forEach(key => undefined === identity[key] && delete identity[key]); // delete undefined
     Object.assign(update, identity);
@@ -115,17 +117,9 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
   return user.get();
 }
 
-export async function getAllUsers(where: ApiFilterUsersObject = null): Promise<InternalUserObject[]> {
-  const opt: any = [];
-  // Sorts users by common name ignoring the case
-  opt.order = [[Sequelize.fn('lower', Sequelize.col('x500CommonName'))]];
-  const users = await User.getAll(opt, where);
-  return users.map((user) => user.get());
-}
-
-export async function searchAllUsers(search): Promise<InternalUserObject[]> {
-  const users = await User.find(search);
-  return users.map((user) => user.get());
+export async function getUsers(opts: FindOptions<any>): Promise<InternalUserObject[]> {
+  const users = await User.getAll(opts);
+  return users.map((user) => user.toJSON());
 }
 
 export async function deleteUser(id: string): Promise<InternalUserObject> {

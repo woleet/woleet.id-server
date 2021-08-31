@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: This is Woleet.ID Server API documentation.
-  version: 1.2.6
+  version: 1.2.7
   title: Woleet.ID Server
   contact:
     email: contact@woleet.com
@@ -14,7 +14,8 @@ paths:
     get:
       tags:
         - Authentication
-      summary: Log into the system. Both email or username can be used to authenticate.
+      summary: Log into the system.
+      description: Both email or username can be used to authenticate.
       operationId: login
       security:
         - BasicAuth: []
@@ -170,16 +171,19 @@ paths:
   /discover/users:
     get:
       operationId: discoverUsers
-      summary: Get all users matching a search string.
+      summary: Get all the users matching a set of filters.
+      description: >
+        Use this operation to get all the users, or a subset of the users matching specified filters.<br>
+        Results can be paged.
       security:
         - APITokenAuth: []
         - OAuthTokenAuth: []
       tags:
         - Discovery
-      description: >
-        Use this endpoint to get all users whose `email`, `username`, `identity.commonName`, `identity.organization` or `identity.organizationalUnit` contains the search string.
       parameters:
-        - $ref: '#/components/parameters/DiscoverUsersQueryParameter'
+        - $ref: '#/components/parameters/PagingOffsetQueryParameter'
+        - $ref: '#/components/parameters/PagingLimitQueryParameter'
+        - $ref: '#/components/parameters/FilterUserSearchQueryParameter'
       responses:
         '200':
           description: Successful operation.
@@ -202,8 +206,6 @@ paths:
         - OAuthTokenAuth: []
       tags:
         - Discovery
-      description: >
-        Use this endpoint to get the user owning a public key.
       parameters:
         - $ref: '#/components/parameters/PubKeyParameter'
       responses:
@@ -234,8 +236,6 @@ paths:
         - OAuthTokenAuth: []
       tags:
         - Discovery
-      description: >
-        Use this endpoint to get the current authenticated user.
       responses:
         '200':
           description: Successful operation.
@@ -260,14 +260,12 @@ paths:
   /discover/keys/{userId}:
     get:
       operationId: discoverUserKeys
-      summary: Get all public keys of a user.
+      summary: Get all the public keys of a user.
       security:
         - APITokenAuth: []
         - OAuthTokenAuth: []
       tags:
         - Discovery
-      description: >
-        Use this endpoint to get all public keys owned by a user.
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
       responses:
@@ -304,8 +302,6 @@ paths:
         - OAuthTokenAuth: []
       tags:
         - Discovery
-      description: >
-        Use this endpoint to get the server configuration.
       responses:
         '200':
           description: Successful operation.
@@ -423,6 +419,8 @@ paths:
       tags:
         - Key
       summary: Create a new external key for a user.
+      description: >
+        Use this endpoint to register a public key that is controlled by a user on an external device.
       operationId: createExternalKey
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
@@ -492,8 +490,8 @@ paths:
     get:
       tags:
         - Key
-      summary: List all keys of a user.
-      operationId: getAllUserKeys
+      summary: Get all the keys of a user.
+      operationId: getUserKeys
       parameters:
         - $ref: '#/components/parameters/UserIdParameter'
       responses:
@@ -659,14 +657,21 @@ paths:
                 $ref: '#/components/responses/APIError'
   /user/list:
     get:
+      operationId: getUsers
+      summary: Get all the users matching a set of filters.
+      description: >
+        Use this operation to get all the users, or a subset of the users matching specified filters.<br>
+        Results can be paged.
       tags:
         - User
-      summary: List all users.
-      operationId: getAllUsers
       parameters:
+        - $ref: '#/components/parameters/PagingOffsetQueryParameter'
+        - $ref: '#/components/parameters/PagingLimitQueryParameter'
+        - $ref: '#/components/parameters/FilterUserSearchQueryParameter'
         - $ref: '#/components/parameters/FilterUserModeQueryParameter'
         - $ref: '#/components/parameters/FilterUserRoleQueryParameter'
         - $ref: '#/components/parameters/FilterUserEmailQueryParameter'
+        - $ref: '#/components/parameters/FilterUserUsernameQueryParameter'
         - $ref: '#/components/parameters/FilterUserCommonNameQueryParameter'
         - $ref: '#/components/parameters/FilterUserOrganizationQueryParameter'
         - $ref: '#/components/parameters/FilterUserOrganizationalUnitQueryParameter'
@@ -847,8 +852,9 @@ paths:
     get:
       tags:
         - API Token
-      summary: List all API tokens. A user with user role only get his token.
-      operationId: getAllAPITokens
+      summary: Get all API tokens.
+      description:  When logged as a user, only the tokens belonging to the user are returned.
+      operationId: getAPITokens
       responses:
         '200':
           description: Succesful operation.
@@ -956,8 +962,8 @@ paths:
     get:
       tags:
         - Enrollment
-      summary: List all key enrollment requests.
-      operationId: getAllEnrollments
+      summary: Get all key enrollment requests.
+      operationId: getEnrollments
       responses:
         '200':
           description: Successful operation.
@@ -1578,7 +1584,7 @@ components:
           example: "Jim Smith's key"
         publicKey:
           type: string
-          description: Key address.
+          description: Public key (bitcoin address when using BIP39 keys).
           example: "1HA79GnnZdHLZBMBQusXcgPEeMcrpnWahb"
         device:
           $ref: '#/components/schemas/KeyDeviceEnum'
@@ -1598,7 +1604,6 @@ components:
       properties:
         pubKey:
           type: string
-          format: base58
           example: "1KjQ8LgUgYVSqeK7JFhA9W8FVsHCzFrFi8"
           description: Public key used to sign (must be the same as the `pubKey` parameter if provided).
         signedHash:
@@ -1834,14 +1839,6 @@ components:
       schema:
         type: string
         example: '00c8a2b0c373050e7f2abbb2e4c631a42c10d402'
-    DiscoverUsersQueryParameter:
-      name: search
-      in: query
-      description: A string used to search users through the fields `email`, `username`, `x500CommonName`, `x500Organization` and `x500OrganizationalUnit`.
-      required: true
-      schema:
-        type: string
-        example: "John Doe"
     CustomUserIdQueryParameter:
       name: customUserId
       in: query
@@ -1873,10 +1870,36 @@ components:
       schema:
         type: string
         example: 'This is the message to be signed'
+    PagingOffsetQueryParameter:
+      name: offset
+      in: query
+      description: Offset of the returned results (0 to get all results from the beginning).
+      required: false
+      schema:
+        type: integer
+        example: 20
+    PagingLimitQueryParameter:
+      name: limit
+      in: query
+      description: Maximum number of returned results.
+      required: false
+      schema:
+        type: integer
+        example: 20
+    FilterUserSearchQueryParameter:
+      name: search
+      in: query
+      description: >
+        Filter the users using a search string.<br>
+        Only users whose `email`, `username`, `identity.commonName`, `identity.organization` or `identity.organizationalUnit` contains the search string match.
+      required: false
+      schema:
+        type: string
+        example: "John Doe"
     FilterUserModeQueryParameter:
       name: mode
       in: query
-      description: Filter the user mode.
+      description: Filter the users by their mode (exact match).
       required: false
       schema:
         type: string
@@ -1887,7 +1910,7 @@ components:
     FilterUserRoleQueryParameter:
       name: role
       in: query
-      description: Filter the user role.
+      description: Filter the users by their role (exact match).
       required: false
       schema:
         type: string
@@ -1899,15 +1922,23 @@ components:
     FilterUserEmailQueryParameter:
       name: email
       in: query
-      description: Filter the user email.
+      description: Filter the users by their email (exact match).
       required: false
       schema:
         type: string
         example: 'john.doe@acme.com'
+    FilterUserUsernameQueryParameter:
+      name: username
+      in: query
+      description: Filter the users by their username (exact match).
+      required: false
+      schema:
+        type: string
+        example: 'johndoe'
     FilterUserCommonNameQueryParameter:
       name: commonName
       in: query
-      description: Filter the user X500 common name.
+      description: Filter the users by their X500 common name (exact match).
       required: false
       schema:
         type: string
@@ -1915,7 +1946,7 @@ components:
     FilterUserOrganizationQueryParameter:
       name: organization
       in: query
-      description: Filter the user X500 organization.
+      description: Filter the users by their X500 organization (exact match).
       required: false
       schema:
         type: string
@@ -1923,7 +1954,7 @@ components:
     FilterUserOrganizationalUnitQueryParameter:
       name: organizationalUnit
       in: query
-      description: Filter the user X500 organizational unit.
+      description: Filter the users by their X500 organizational unit (exact match).
       required: false
       schema:
         type: string
@@ -1931,7 +1962,7 @@ components:
     FilterUserLocalityQueryParameter:
       name: locality
       in: query
-      description: Filter the user X500 locality.
+      description: Filter the users by their X500 locality (exact match).
       required: false
       schema:
         type: string
@@ -1939,7 +1970,7 @@ components:
     FilterUserCountryQueryParameter:
       name: country
       in: query
-      description: Filter the user X500 country.
+      description: Filter the users by their X500 country (exact match).
       required: false
       schema:
         type: string
@@ -1947,7 +1978,7 @@ components:
     FilterUserUserIdQueryParameter:
       name: userId
       in: query
-      description: Filter the user X500 custom user identifier.
+      description: Filter the users by their X500 custom user identifier (exact match).
       required: false
       schema:
         type: string
@@ -1955,7 +1986,7 @@ components:
     FilterUserCountryCallingCodeQueryParameter:
       name: countryCallingCode
       in: query
-      description: Filter the user country calling code.
+      description: Filter the users by their country calling code (exact match).
       required: false
       schema:
         type: string
@@ -1963,7 +1994,7 @@ components:
     FilterUserPhoneQueryParameter:
       name: phone
       in: query
-      description: Filter the user phone.
+      description: Filter the users by their phone (exact match).
       required: false
       schema:
         type: string
@@ -1971,7 +2002,7 @@ components:
     FilterUserStatusQueryParameter:
       name: status
       in: query
-      description: Filter the user status.
+      description: Filter the users by their status (exact match).
       required: false
       schema:
         type: string

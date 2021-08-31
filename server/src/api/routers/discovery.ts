@@ -1,12 +1,12 @@
 import { validate } from '../schemas';
 import * as Router from 'koa-router';
-import { BadRequest } from 'http-errors';
 import { getAllKeysOfUser, getOwnerByPubKey } from '../../controllers/key';
-import { serializeUser } from '../serialize/user';
-import { getUserById, searchAllUsers } from '../../controllers/user';
+import { buildUserFilters, serializeUser } from '../serialize/user';
+import { getUserById, getUsers } from '../../controllers/user';
 import { bearerAuth } from '../authentication';
 import { getServerConfig } from '../../controllers/server-config';
 import { serializeKey } from '../serialize/key';
+import { FindOptions } from 'sequelize';
 
 const vuid = validate.param('userId', 'uuid');
 const vaddr = validate.param('pubKey', 'address');
@@ -78,11 +78,9 @@ router.get('/user', async function (ctx) {
  *  operationId: discoverUsers
  */
 router.get('/users', async function (ctx) {
-  const { search } = ctx.query;
-  if (!search) {
-    throw new BadRequest('Missing "search" parameter');
-  }
-  const users = await searchAllUsers(search);
+  const query = ctx.query;
+  const opts: FindOptions<any> = { where: buildUserFilters(query) as object, offset: query.offset, limit: query.limit };
+  const users = await getUsers(opts);
   ctx.body = users.map((user) => serializeUser(user, false));
 });
 

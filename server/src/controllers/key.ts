@@ -145,7 +145,7 @@ export async function exportKey(id: string): Promise<string> {
   return secureModule.exportPhrase(entropy, entropyIV);
 }
 
-export async function getAllKeysOfUser(userId: string, full = false): Promise<InternalKeyObject[]> {
+export async function getAllKeysOfUser(userId: string): Promise<InternalKeyObject[]> {
   const user = await User.getById(userId);
   if (!user) {
     throw new NotFoundUserError();

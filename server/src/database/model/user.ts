@@ -28,7 +28,7 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
 
   constructor() {
     super();
-    this.define('user', UserModel, { paranoid: false });
+    this.define('user', UserModel);
   }
 
   async getByUsername(username: string): Promise<SequelizeUserObject> {
@@ -45,25 +45,6 @@ class UserAccess extends AbstractInstanceAccess<InternalUserObject, ApiFullPostU
 
   async getByRole(role: string): Promise<SequelizeUserObject[]> {
     return this.model.findAll({ where: { role } });
-  }
-
-  async find(search: string, opt: ListOptions = {}): Promise<SequelizeUserObject[]> {
-    const query = { [Op.iLike]: '%' + search + '%' };
-    return this.model.findAll({
-      where: {
-        [Op.or]: [
-          { email: query },
-          { username: query },
-          { x500CommonName: query },
-          { x500Organization: query },
-          { x500OrganizationalUnit: query },
-        ]
-      },
-      offset: opt.offset,
-      limit: opt.limit,
-      order: [['createdAt', 'DESC']],
-      paranoid: !opt.full
-    });
   }
 
   handleError(err: any) {

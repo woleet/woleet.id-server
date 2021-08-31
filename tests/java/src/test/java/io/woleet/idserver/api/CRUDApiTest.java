@@ -278,13 +278,11 @@ public abstract class CRUDApiTest {
         // Create an object to get
         ObjectGet objectGet = createTestObject();
 
-        // Get all objects with admin credentials
-        // and check that the object is within the results
+        // Get all objects with admin credentials and check that the object is within the results
         List<ObjectGet> objects = adminAuthApi.getAllObjects();
         assertTrue(objects.contains(objectGet));
 
-        // Delete the object, get all objects
-        // and check that the object is no longer within the results
+        // Delete the object, get all objects and check that the object is no longer within the results
         objectGet = adminAuthApi.deleteObject(objectGet.getId());
         objects = adminAuthApi.getAllObjects();
         assertFalse(objects.contains(objectGet));

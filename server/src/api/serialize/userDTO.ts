@@ -1,4 +1,4 @@
-import { serializeIdentity } from './identity';
+import { serializeUserIdentity } from './identity';
 
 export function serializeUserDTO(user: InternalUserObject): ApiUserDTOObject {
   return {
@@ -9,6 +9,6 @@ export function serializeUserDTO(user: InternalUserObject): ApiUserDTOObject {
     mode: user.mode,
     countryCallingCode: user.countryCallingCode,
     phone: user.phone,
-    identity: serializeIdentity(user, true)
+    identity: serializeUserIdentity(user, true)
   };
 }

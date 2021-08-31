@@ -1,7 +1,7 @@
 import * as crypto from 'crypto';
 import { Key, SignedIdentity, User } from '../database';
 import { NotFoundIdentityError, NotFoundKeyError } from '../errors';
-import { serializeIdentity } from '../api/serialize/identity';
+import { serializeUserIdentity } from '../api/serialize/identity';
 import { getServerConfig } from './server-config';
 import { signMessage } from './sign';
 import { deserializeX500DN } from './utils/x500-parser';

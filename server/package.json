@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Woleet.ID Server Node.js server",
   "scripts": {
     "setAPIVersion": "WOLEET_ID_SERVER_API_VERSION=$(cat ../swagger.yaml | grep 'version' | grep -oE '([[:digit:]]+.?)+')",
@@ -29,8 +29,8 @@
   "dependencies": {
     "@woleet/woleet-secure-module": "1.4.0",
     "basic-auth": "2.0.1",
-    "chalk": "4.1.0",
-    "ioredis": "4.23.0",
+    "chalk": "4.1.2",
+    "ioredis": "4.27.8",
     "joi": "14.3.1",
     "koa": "2.13.1",
     "koa-body": "4.2.0",

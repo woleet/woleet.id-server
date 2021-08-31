@@ -29,7 +29,7 @@ public class CRUDExternalKeyApiTest extends CRUDApiTest {
                 return new ArrayList<>();
 
             List<CRUDApiTest.ObjectGet> list = new ArrayList<>();
-            for (KeyGet keyGet : keyApi.getAllUserKeys(user.getId()))
+            for (KeyGet keyGet : keyApi.getUserKeys(user.getId()))
                 list.add(new CRUDExternalKeyApiTest.ObjectGet(keyGet));
             return list;
         }

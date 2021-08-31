@@ -39,7 +39,7 @@ if (fs.existsSync(dockerSwarmSecretFilePath)) {
 function getenv<T = string>(name: string, fallback: T = null): T {
   const value = process.env[prefix + name];
   if (!value && fallback !== null) {
-    log.warn(`No value found for "${prefix + name}"${fallback !== null ? `, defaulting to '${JSON.stringify(fallback)}'` : '!'}`);
+    log.warn(`No value found for '${prefix + name}', defaulting to '${JSON.stringify(fallback)}'`);
   }
   if (fallback !== null) {
     switch (typeof fallback) {
@@ -101,13 +101,6 @@ export const server = {
   proxy: getenv('BEHIND_PROXY', false),
   cert: certPath && readFileSync(certPath),
   key: keyPath && readFileSync(keyPath)
-};
-
-export const pagination = {
-  default: {
-    offset: undefined,
-    limit: undefined
-  }
 };
 
 export const events = {

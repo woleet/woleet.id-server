@@ -5,7 +5,6 @@ import * as timestring from 'timestring';
 import * as bs58check from 'bs58check';
 
 export class TrackById {
-
   trackById(index: number, item: { id: string }) {
     return item.id;
   }
@@ -27,10 +26,6 @@ export class Lock {
     this._lock$.next(!!--this._lock);
   }
 
-  isLocked() {
-    return this._lock;
-  }
-
   asObservable() {
     return this._lock$.asObservable();
   }
@@ -38,13 +33,11 @@ export class Lock {
 
 export function timeStringValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
-
   if (!str) {
     return;
   }
 
   try {
-    // tslint:disable-next-line:no-unused-expression
     if (!timestring(str)) {
       return ({ timestring: true });
     }
@@ -56,61 +49,33 @@ export function timeStringValidator(control: AbstractControl): ValidationErrors 
 }
 
 export function urlValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
-
-  if (!str) {
-    return;
-  }
-
-  if (!/^https?.*/.test(str)) {
-    return ({ url: { message: 'invalid or missing protocol (http or https)' } });
-  }
-
+  let url;
   try {
-    // tslint:disable-next-line:no-unused-expression
-    new window.URL(str);
-  } catch (err) {
-    return ({ url: { message: 'must be a valid uri' } });
+    url = new URL(control.value);
+  } catch (_) {
+    return { url: { message: 'must be a valid URL' } };
+  }
+
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    return { url: { message: 'invalid or missing protocol' } };
   }
 
   return null;
 }
 
 export function secureUrlValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
-
-  if (!str) {
-    return;
-  }
-
-  if (!/^https.*/.test(str)) {
-    return ({ url: { message: 'invalid or missing protocol (https)' } });
-  }
-
+  let url;
   try {
-    // tslint:disable-next-line:no-unused-expression
-    new window.URL(str);
-  } catch (err) {
-    return ({ url: { message: 'must be a valid uri' } });
+    url = new URL(control.value);
+  } catch (_) {
+    return { url: { message: 'must be a valid URL' } };
+  }
+
+  if (url.protocol !== 'https:') {
+    return { url: { message: 'invalid or missing protocol' } };
   }
 
   return null;
-}
-
-export function endValidator(expectedEnd: string) {
-  return function (control: AbstractControl): ValidationErrors | null {
-    const str: string = control.value;
-
-    if (!str) {
-      return;
-    }
-
-    if (!str.endsWith(expectedEnd)) {
-      return ({ end: { expectedEnd } });
-    }
-
-    return null;
-  };
 }
 
 export function asciiValidator(control: AbstractControl): ValidationErrors | null {
@@ -124,7 +89,6 @@ export function asciiValidator(control: AbstractControl): ValidationErrors | nul
 
 export function passwordValidator(control: AbstractControl): ValidationErrors | null {
   const str: string = control.value;
-
   if (str && !/.*[0-9].*/.test(str)) {
     return ({ password: { missing: 'one number' } });
   }
@@ -145,9 +109,8 @@ export function passwordValidator(control: AbstractControl): ValidationErrors | 
 }
 
 export function addressValidator(control: AbstractControl): ValidationErrors | null {
-  const str: string = control.value;
   try {
-    bs58check.decode(str);
+    bs58check.decode(control.value);
   } catch {
     return ({ address: { message: 'This address is not valid' } });
   }
@@ -201,11 +164,10 @@ export function confirm(message) {
 
 export function cleanupObject(obj) {
   return traverse(obj).map(function (e) {
-    // if e is falsy, or is an empty object, we delete if, exept for zero
+    // if e is falsy, or is an empty object, we delete it, except for zero
     if ((!e || Object.keys(e).length === 0 && e.constructor === Object) && e !== 0) {
-      return void this.delete(false);
+      return this.delete(false);
     }
-
     return e;
   });
 }

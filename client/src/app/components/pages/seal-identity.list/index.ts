@@ -8,9 +8,15 @@ import { TrackById } from '@components/util';
 })
 export class SealIdentityListPageComponent extends TrackById implements OnInit {
 
+  search = null;
+
   formOpened = false;
 
-  users$: Promise<ApiUserObject[]>;
+  users: ApiUserObject[];
+  complete = false;
+
+  private pageSize = 20;
+  private offset;
 
   constructor(private service: UserService, private authService: AuthService) {
     super();
@@ -21,7 +27,21 @@ export class SealIdentityListPageComponent extends TrackById implements OnInit {
   }
 
   refreshUserList() {
-    this.users$ = this.service.getAll('mode=seal');
+    this.service.getAll({ search: this.search, mode: 'seal', offset: 0, limit: this.pageSize })
+      .then(firstPage => {
+        this.complete = (firstPage.length < this.pageSize);
+        this.offset = firstPage.length;
+        this.users = firstPage;
+      });
+  }
+
+  getMoreUsers() {
+    this.service.getAll({ mode: 'seal', offset: this.offset, limit: this.pageSize })
+      .then(nextPage => {
+        this.complete = (nextPage.length < this.pageSize);
+        this.offset += nextPage.length;
+        this.users = this.users.concat(nextPage);
+      });
   }
 
   isAdmin() {

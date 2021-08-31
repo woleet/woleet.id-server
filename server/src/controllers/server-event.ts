@@ -33,7 +33,6 @@ export class EventStore {
     debug('Registering event', event);
 
     const len = this.batch.push(event);
-
     if (len >= config.batchSize) {
       this.flush();
     } else if (!this.timer) {
@@ -57,26 +56,7 @@ export class EventStore {
       .catch((err) => {
         log.error(err);
       });
-
   }
-
 }
 
 export const store = new EventStore;
-
-export async function getServerEventById(id: string): Promise<InternalServerEventObject> {
-  const event = await ServerEvent.getById(id);
-  return event.get();
-}
-
-export async function getServerEventListByType(type: ServerEventTypeEnum, opts: ListOptions)
-  : Promise<InternalServerEventObject[]> {
-  const events = await ServerEvent.getByType(type, opts);
-  return events.map((evt) => evt.get());
-}
-
-export async function getAllServerEvents(opts: ListOptions): Promise<InternalServerEventObject[]> {
-  const opt: FindOptions<InternalServerEventObject> = Object.assign({ order: [['occurredAt', 'DESC']] });
-  const events = await ServerEvent.getAll(opt, opts);
-  return events.map((evt) => evt.get());
-}
