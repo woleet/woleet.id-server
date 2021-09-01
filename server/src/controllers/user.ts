@@ -119,7 +119,7 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
 
 export async function getUsers(opts: FindOptions<any>): Promise<InternalUserObject[]> {
   const users = await User.getAll(opts);
-  return users.map((user) => user.toJSON());
+  return users.map((user) => user.get());
 }
 
 export async function deleteUser(id: string): Promise<InternalUserObject> {

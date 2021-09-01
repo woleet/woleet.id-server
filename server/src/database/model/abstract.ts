@@ -43,7 +43,7 @@ export abstract class AbstractInstanceAccess<TAttribute, TPost> {
     }
   }
 
-  async getAll(opts: FindOptions<any> = {}): Promise<Instance<TInstance>[]> {
+  async getAll(opts: FindOptions<any> = {}): Promise<Model<TAttribute, TPost>[]> {
 
     // By default, sort object from the newest to the oldest
     if (!opts.order) {
@@ -74,13 +74,8 @@ export abstract class AbstractInstanceAccess<TAttribute, TPost> {
 
   async restore(): Promise<void> {
     try {
-      const up = await this.model.findByPk(id);
-      if (!up) {
-        return null;
-      }
-
-      await up.restore();
-      return up;
+      await this.model.restore();
+      return;
     } catch (err) {
       this.handleError(err);
       throw err;

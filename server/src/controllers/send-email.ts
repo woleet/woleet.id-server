@@ -1,7 +1,7 @@
 import { User } from '../database';
 import { NotFoundUserError } from '../errors';
 import * as mustache from 'mustache';
-import * as uuidV4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import { getTransporter } from './smtp';
 import { getServerConfig } from './server-config';
 import { readFileSync } from 'fs';
@@ -94,7 +94,7 @@ export async function sendResetPasswordEmail(email: string, managerId: string): 
   // Build a password reset token: if a manager initiated the procedure, the token expires after 7 days,
   // if it's the user himself, then the token expired 1 hour later
   let token: string;
-  const uuid = uuidV4();
+  const uuid = uuidv4();
   if (managerId && (user.getDataValue('id') !== managerId)) {
     token = uuid + '_' + (Date.now() + MANAGER_RESET_PASSWORD_TOKEN_LIFETIME);
   } else {

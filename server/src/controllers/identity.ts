@@ -64,7 +64,7 @@ export async function getIdentity(publicKey: string, signedIdentity?: string, le
   else {
 
     // Return full user identity information
-    identity = serializeIdentity(user.get(), true);
+    identity = serializeUserIdentity(user.get(), true);
   }
 
   // If some random data are provided, and the server holds the key, and the key is associated to a seal

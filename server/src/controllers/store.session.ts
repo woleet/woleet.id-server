@@ -1,4 +1,4 @@
-import * as uuid from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import { session as config } from '../config';
 import { cacheLock as cacheLock } from '../cacheLock';
 import * as Debug from 'debug';
@@ -12,7 +12,7 @@ export class SessionStore {
     const userRole = user.getDataValue('role');
 
     // Session identifier is built from the user identifier concatenated with % and a random string
-    const sessionId = userId + '%' + uuid();
+    const sessionId = userId + '%' + uuidv4();
 
     // Create session object
     await this._setSession(sessionId, { id: sessionId, userId, userRole });

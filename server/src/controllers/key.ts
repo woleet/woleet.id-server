@@ -151,7 +151,7 @@ export async function getAllKeysOfUser(userId: string): Promise<InternalKeyObjec
     throw new NotFoundUserError();
   }
 
-  const keys = await Key.getAllKeysOfUser(userId, full);
+  const keys = await Key.getAllKeysOfUser(userId);
   return keys.map((key) => key.get());
 }
 

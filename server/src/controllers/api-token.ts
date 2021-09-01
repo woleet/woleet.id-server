@@ -51,8 +51,8 @@ export async function getAPITokenById(id: string): Promise<InternalAPITokenObjec
   return apiToken.get();
 }
 
-export async function getAllAPITokens(full = false): Promise<InternalAPITokenObject[]> {
-  const apiTokens = await APIToken.getAll({ full });
+export async function getAllAPITokens(): Promise<InternalAPITokenObject[]> {
+  const apiTokens = await APIToken.getAll();
   return apiTokens.map((apiToken) => apiToken.get());
 }
 
