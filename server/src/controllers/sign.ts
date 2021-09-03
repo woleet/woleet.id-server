@@ -10,8 +10,8 @@ import {
 } from '../errors';
 
 export function signMessage(key: SequelizeKeyObject, message: string, compressed = true): Promise<string> {
-  const privateKey = Buffer.from(key.get('privateKey'), 'hex');
-  const privateKeyIV = Buffer.from(key.get('privateKeyIV'), 'hex');
+  const privateKey = Buffer.from(key.getDataValue('privateKey'), 'hex');
+  const privateKeyIV = Buffer.from(key.getDataValue('privateKeyIV'), 'hex');
   return secureModule.sign(privateKey, message, privateKeyIV, compressed);
 }
 
@@ -33,17 +33,17 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
 
   // Get the key if set
   if (pubKey) {
-    key = await Key.getByPublicKey(pubKey, user && user.get('id'), !user);
+    key = await Key.getByPublicKey(pubKey, user && user.getDataValue('id'), !user);
     if (!key) {
       throw new NotFoundKeyError();
     }
 
     // Get the user from the key if not set
     if (!user) {
-      user = key.get('user');
+      user = <SequelizeUserObject> <unknown> key.getDataValue('user');
 
       // Check that the user is a seal
-      if (user.get('mode') === 'esign') {
+      if (user.getDataValue('mode') === 'esign') {
         throw new Unauthorized('Cannot use e-signature with an admin token');
       }
     }
@@ -51,7 +51,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
 
   // If the key and the user are specified, the user must be the owner of a key
   if (key && user) {
-    if (key.get('userId') !== user.get('id')) {
+    if (key.getDataValue('userId') !== user.getDataValue('id')) {
       throw new KeyOwnerMismatchError();
     }
   }
@@ -62,7 +62,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
 
     // Default key is user's default key
     if (userId || customUserId) {
-      defaultKeyId = user.get('defaultKeyId');
+      defaultKeyId = user.getDataValue('defaultKeyId');
     }
 
     // Default key is server's default key
@@ -88,7 +88,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
       throw new Error(`Cannot find default key (${defaultKeyId})`);
     }
     if (!user) {
-      user = key.get('user');
+      user = <SequelizeUserObject> <unknown> key.getDataValue('user');
     }
   }
 
@@ -108,7 +108,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
   }
 
   // Check that the private key is held the server
-  if (key.get('holder') !== 'server') {
+  if (key.getDataValue('holder') !== 'server') {
     throw new KeyNotHeldByServerError();
   }
 
@@ -138,38 +138,38 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     }
     const escapingRegex = /([=",;+])/mg;
     const tabIdentityToSign = identityToSign.split(',');
-    if (user.get('x500CommonName') && tabIdentityToSign.includes('CN')) {
-      signedIdentity += 'CN=' + user.get('x500CommonName').replace(escapingRegex, '\\$1');
+    if (user.getDataValue('x500CommonName') && tabIdentityToSign.includes('CN')) {
+      signedIdentity += 'CN=' + user.getDataValue('x500CommonName').replace(escapingRegex, '\\$1');
     }
-    if (user.get('x500Organization') && tabIdentityToSign.includes('O')) {
+    if (user.getDataValue('x500Organization') && tabIdentityToSign.includes('O')) {
       if (signedIdentity) {
         signedIdentity += ',';
       }
-      signedIdentity += 'O=' + user.get('x500Organization').replace(escapingRegex, '\\$1');
+      signedIdentity += 'O=' + user.getDataValue('x500Organization').replace(escapingRegex, '\\$1');
     }
-    if (user.get('x500OrganizationalUnit') && tabIdentityToSign.includes('OU')) {
+    if (user.getDataValue('x500OrganizationalUnit') && tabIdentityToSign.includes('OU')) {
       if (signedIdentity) {
         signedIdentity += ',';
       }
-      signedIdentity += 'OU=' + user.get('x500OrganizationalUnit').replace(escapingRegex, '\\$1');
+      signedIdentity += 'OU=' + user.getDataValue('x500OrganizationalUnit').replace(escapingRegex, '\\$1');
     }
-    if (user.get('x500Locality') && tabIdentityToSign.includes('L')) {
+    if (user.getDataValue('x500Locality') && tabIdentityToSign.includes('L')) {
       if (signedIdentity) {
         signedIdentity += ',';
       }
-      signedIdentity += 'L=' + user.get('x500Locality').replace(escapingRegex, '\\$1');
+      signedIdentity += 'L=' + user.getDataValue('x500Locality').replace(escapingRegex, '\\$1');
     }
-    if (user.get('x500Country') && tabIdentityToSign.includes('C')) {
+    if (user.getDataValue('x500Country') && tabIdentityToSign.includes('C')) {
       if (signedIdentity) {
         signedIdentity += ',';
       }
-      signedIdentity += 'C=' + user.get('x500Country').replace(escapingRegex, '\\$1');
+      signedIdentity += 'C=' + user.getDataValue('x500Country').replace(escapingRegex, '\\$1');
     }
-    if (user.get('email') && tabIdentityToSign.includes('EMAILADDRESS')) {
+    if (user.getDataValue('email') && tabIdentityToSign.includes('EMAILADDRESS')) {
       if (signedIdentity) {
         signedIdentity += ',';
       }
-      signedIdentity += 'EMAILADDRESS=' + user.get('email').replace(escapingRegex, '\\$1');
+      signedIdentity += 'EMAILADDRESS=' + user.getDataValue('email').replace(escapingRegex, '\\$1');
     }
 
     // Prepare the issuer domain to be signed (extract it from the identity URL)
@@ -195,13 +195,13 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
   let publicKey: string;
   if (!path) {
     signature = await signMessage(key, signedData);
-    publicKey = key.get('publicKey');
+    publicKey = key.getDataValue('publicKey');
   }
 
   // If a derivation path is specified, sign using the derived key
   else {
-    const entropy = Buffer.from(key.get('mnemonicEntropy'), 'hex');
-    const entropyIV = Buffer.from(key.get('mnemonicEntropyIV'), 'hex');
+    const entropy = Buffer.from(key.getDataValue('mnemonicEntropy'), 'hex');
+    const entropyIV = Buffer.from(key.getDataValue('mnemonicEntropyIV'), 'hex');
     const derivedKey = await secureModule.deriveKey(entropy, entropyIV, path);
     signature = await secureModule.sign(derivedKey.privateKey, signedData, derivedKey.privateKeyIV);
     publicKey = derivedKey.publicKey;
@@ -209,7 +209,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
 
   const now = new Date();
 
-  await Key.update(key.get('id'), { lastUsed: now });
+  await Key.update(key.getDataValue('id'), { lastUsed: now });
 
   // If the signature includes a signed identity, save or update the signed identity in the database
   if (signedIdentity) {
@@ -221,8 +221,8 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
   }
 
   return {
-    userId: user.get('id'),
-    keyId: key.get('id'),
+    userId: user.getDataValue('id'),
+    keyId: key.getDataValue('id'),
     signedHash: hashToSign,
     signedMessage: messageToSign,
     pubKey: publicKey,

@@ -1,11 +1,11 @@
-import * as Sequelize from 'sequelize';
+import { Sequelize, Options } from 'sequelize';
 import { db } from '../config';
 
 const DATABASE = db.database;
 const PASSWORD = db.password;
 const USERNAME = db.username;
 
-const options = {
+const options: Options = {
   dialect: 'postgres',
   host: db.host,
   port: db.port,
@@ -17,8 +17,7 @@ const options = {
     idle: 10000
   },
 
-  logging: false,
-  operatorsAliases: false
+  logging: false
 };
 
 export const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, options);

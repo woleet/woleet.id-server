@@ -27,8 +27,8 @@ export async function getIdentity(publicKey: string, signedIdentity?: string, le
 
   // Prepare key information to return
   const identityKey: ApiIdentityKeyObject = {
-    name: key.get('name'),
-    pubKey: key.get('publicKey'),
+    name: key.getDataValue('name'),
+    pubKey: key.getDataValue('publicKey'),
     status
   };
 
@@ -43,7 +43,7 @@ export async function getIdentity(publicKey: string, signedIdentity?: string, le
   }
 
   // Get the user associated to the requested key
-  const user = await User.getById(key.get('userId'));
+  const user = await User.getById(key.getDataValue('userId'));
 
   // If a signed identity is provided and the key holder is the server, implements identity URL contract V2
   let identity;
@@ -64,7 +64,7 @@ export async function getIdentity(publicKey: string, signedIdentity?: string, le
   else {
 
     // Return full user identity information
-    identity = serializeUserIdentity(user.toJSON(), true);
+    identity = serializeUserIdentity(user.get(), true);
   }
 
   // If some random data are provided, and the server holds the key, and the key is associated to a seal
@@ -72,7 +72,7 @@ export async function getIdentity(publicKey: string, signedIdentity?: string, le
 
     // Build a proof of ownership by signed the random data
     const rightData = getServerConfig().identityURL + '.' + crypto.randomBytes(16).toString('hex');
-    const signature = await signMessage(key, leftData + rightData, key.get('compressed'));
+    const signature = await signMessage(key, leftData + rightData, key.getDataValue('compressed'));
 
     // Return the proof of ownership, identity and key information
     return {

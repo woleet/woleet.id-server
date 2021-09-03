@@ -1,7 +1,7 @@
 import { User } from '../database';
 import { NotFoundUserError } from '../errors';
 import * as mustache from 'mustache';
-import * as uuidV4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import { getTransporter } from './smtp';
 import { getServerConfig } from './server-config';
 import { readFileSync } from 'fs';
@@ -35,7 +35,7 @@ export async function askResetPasswordEmail(email: string): Promise<InternalUser
   // Build the password reset demand email
   const config = getServerConfig();
   const webClientURL = config.webClientURL;
-  const link = webClientURL + '/user/' + user.get('id');
+  const link = webClientURL + '/user/' + user.getDataValue('id');
   const logo = getLogo(config);
   const subject = 'Please validate password reset request';
   const template = readFileSync(
@@ -45,16 +45,16 @@ export async function askResetPasswordEmail(email: string): Promise<InternalUser
 
   // Search all active manager except the requester
   let managers = await User.getByRole('manager');
-  managers = managers.filter((manager) => manager.get('email')
-    && user.get('id') !== manager.get('id')
-    && manager.get('status') === 'active');
+  managers = managers.filter((manager) => manager.getDataValue('email')
+    && user.getDataValue('id') !== manager.getDataValue('id')
+    && manager.getDataValue('status') === 'active');
 
   // If manager are not found search all active admin except the requester
   if (!managers.length) {
     managers = await User.getByRole('admin');
-    managers = managers.filter((admin) => admin.get('email')
-      && user.get('id') !== admin.get('id')
-      && admin.get('status') === 'active');
+    managers = managers.filter((admin) => admin.getDataValue('email')
+      && user.getDataValue('id') !== admin.getDataValue('id')
+      && admin.getDataValue('status') === 'active');
 
     // If no admin are not found send an error message with the contact if it is configured
     if (!managers.length) {
@@ -68,19 +68,19 @@ export async function askResetPasswordEmail(email: string): Promise<InternalUser
 
   // For all manager/admin send an email following the template
   managers.forEach(async (manager) => {
-    if (manager.get('email')) {
+    if (manager.getDataValue('email')) {
       const html = mustache.render(template, {
         organizationName: config.organizationName,
         logoURL: logo,
-        userName: manager.get('x500CommonName'),
-        requesterName: user.get('x500CommonName'),
+        userName: manager.getDataValue('x500CommonName'),
+        requesterName: user.getDataValue('x500CommonName'),
         link
       });
-      await sendEmail(manager.get('email'), subject, html);
+      await sendEmail(manager.getDataValue('email'), subject, html);
     }
   });
 
-  return user.toJSON();
+  return user.get();
 }
 
 export async function sendResetPasswordEmail(email: string, managerId: string): Promise<InternalUserObject> {
@@ -94,8 +94,8 @@ export async function sendResetPasswordEmail(email: string, managerId: string): 
   // Build a password reset token: if a manager initiated the procedure, the token expires after 7 days,
   // if it's the user himself, then the token expired 1 hour later
   let token: string;
-  const uuid = uuidV4();
-  if (managerId && (user.get('id') !== managerId)) {
+  const uuid = uuidv4();
+  if (managerId && (user.getDataValue('id') !== managerId)) {
     token = uuid + '_' + (Date.now() + MANAGER_RESET_PASSWORD_TOKEN_LIFETIME);
   } else {
     token = uuid + '_' + (Date.now() + USER_RESET_PASSWORD_TOKEN_LIFETIME);
@@ -141,7 +141,7 @@ export async function sendResetPasswordEmail(email: string, managerId: string): 
     log.error(err);
   }
 
-  return user.toJSON();
+  return user.get();
 }
 
 export async function sendKeyEnrollmentEmail(user: InternalUserObject, enrollmentID: string): Promise<void> {
@@ -215,18 +215,18 @@ export async function sendKeyRevocationEmail(user: InternalUserObject, key: Inte
     // Send a revocation email to all admins having an email
     const admins = await User.getByRole('admin');
     admins.forEach(async (admin) => {
-      if (admin.get('email')) {
+      if (admin.getDataValue('email')) {
         const htmlAdmin = mustache.render(template, {
           organizationName: config.organizationName,
           logoURL: logo,
-          userName: admin.get('x500CommonName'),
+          userName: admin.getDataValue('x500CommonName'),
           admin: true,
           keyId: key.id,
           keyName: key.name,
           ownerName: user.x500CommonName,
           ownerId: user.id
         });
-        await sendEmail(admin.get('email'), subject, htmlAdmin);
+        await sendEmail(admin.getDataValue('email'), subject, htmlAdmin);
       }
     });
   } catch (err) {

@@ -31,7 +31,7 @@ export async function loadServerConfig(): Promise<InternalServerConfigObject> {
     log.warn('No configuration found in database');
     return;
   }
-  setInMemoryConfig(cfg.toJSON().config);
+  setInMemoryConfig(cfg.get().config);
   return getInMemoryConfig();
 }
 
@@ -70,15 +70,16 @@ export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalS
     if (!config.enableSMTP) {
       delete config.blockPasswordInput;
     }
-    let cfg = await ServerConfig.update(CONFIG_ID, { config });
+    const cfgModel = await ServerConfig.update(CONFIG_ID, { config });
+    let cfg = cfgModel ? cfgModel.get() : null;
     if (!cfg) {
       debug('Create config with', up);
-      cfg = await ServerConfig.create({ config });
+      cfg = await (await ServerConfig.create({ config })).get();
     } else {
       debug('Updated with', up);
     }
     const error: ServerConfigError = {};
-    setInMemoryConfig(cfg.toJSON().config);
+    setInMemoryConfig(cfg.config);
     error.oidcError = await checkOIDCConfigChange(up);
     error.oidcpError = await checkOIDCPConfigChange(up);
     error.smtpError = await checkSMTPConfigChange(up);
