@@ -76,7 +76,7 @@ export async function createOAuthUser(user: ApiPostUserObject): Promise<{ token:
 
   const token = await sessionStore.create(newUser);
 
-  return { token, user: newUser.toJSON() };
+  return { token, user: newUser.get() };
 }
 
 export async function createOAuthSession(email: string): Promise<{ token: string, user: InternalUserObject }> {
@@ -92,5 +92,5 @@ export async function createOAuthSession(email: string): Promise<{ token: string
 
   const token = await sessionStore.create(user);
 
-  return { token, user: user.toJSON() };
+  return { token, user: user.get() };
 }

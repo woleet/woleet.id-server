@@ -12,6 +12,7 @@ import { getAgent } from './utils/agent';
 import * as log from 'loglevel';
 import { cacheLock } from '../cacheLock';
 import { BadRequest } from 'http-errors';
+import { getUserById } from './user';
 
 const TCUPath = path.join(__dirname, '../../assets/custom_TCU.pdf');
 
@@ -44,9 +45,9 @@ export async function createEnrollment(enrollment: ApiPostEnrollmentObject): Pro
   enrollment.expiration = enrollment.expiration || expiration;
   const newEnrollment = await Enrollment.create(enrollment);
   if (!enrollment.test) {
-    await sendKeyEnrollmentEmail(user.toJSON(), newEnrollment.toJSON().id);
+    await sendKeyEnrollmentEmail(user.get(), newEnrollment.get().id);
   }
-  return newEnrollment.toJSON();
+  return newEnrollment.get();
 }
 
 export async function getEnrollmentById(id: string): Promise<InternalEnrollmentObject> {
@@ -55,7 +56,7 @@ export async function getEnrollmentById(id: string): Promise<InternalEnrollmentO
     if (!enrollment) {
       throw new NotFoundEnrollmentError();
     }
-    return enrollment.toJSON();
+    return enrollment.get();
   } catch (err) {
     throw err;
   }
@@ -75,13 +76,13 @@ export async function getEnrollmentUser(id): Promise<InternalUserObject> {
   }
 
   // Return enrolled user
-  const user = await User.getById(enrollment.get('userId'));
-  return user.toJSON();
+  const user = await User.getById(enrollment.getDataValue('userId'));
+  return user.get();
 }
 
 export async function getAllEnrollment(): Promise<InternalEnrollmentObject[]> {
   const enrollments = await Enrollment.getAll();
-  return enrollments.map((enrollment) => enrollment.toJSON());
+  return enrollments.map((enrollment) => enrollment.get());
 }
 
 export async function deleteEnrollment(id: string): Promise<InternalEnrollmentObject> {
@@ -89,7 +90,7 @@ export async function deleteEnrollment(id: string): Promise<InternalEnrollmentOb
   if (!enrollment) {
     throw new NotFoundEnrollmentError();
   }
-  return enrollment.toJSON();
+  return enrollment.get();
 }
 
 export async function putEnrollment(id: string, enrollment: ApiPutEnrollmentObject): Promise<InternalEnrollmentObject> {
@@ -97,7 +98,7 @@ export async function putEnrollment(id: string, enrollment: ApiPutEnrollmentObje
   if (!enrollmentUp) {
     throw new NotFoundEnrollmentError();
   }
-  return enrollmentUp.toJSON();
+  return enrollmentUp.get();
 }
 
 export async function getTCUHash(): Promise<string> {
@@ -175,8 +176,7 @@ export async function createSignatureRequest(enrollmentId): Promise<any> {
  * @param enrollmentId the enrollment id
  * @param user the enrolled user
  */
-export async function monitorSignatureRequest(signatureRequestId: string, enrollmentId: string,
-                                              user: InternalUserObject) {
+export async function monitorSignatureRequest(signatureRequestId: string, enrollmentId: string) {
 
   // Prepare an HTTP request to get the signature request
   const url = new URL(getServerConfig().proofDeskAPIURL);
@@ -226,7 +226,7 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
 
         // Expire the enrollment if required
         try {
-          await testEnrollmentExpiration(enrollmentId, user);
+          await testEnrollmentExpiration(enrollmentId);
         } catch (error) {
           log.error(error);
           signatureRequestSubscriber.unsubscribe();
@@ -234,7 +234,7 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
 
         // Once the signature request is fulfilled, finalize the enrollment
         if (signatureRequest.anchors && signatureRequest.anchors.length > 0) {
-          await finalizeEnrollment(enrollmentId, user, signatureRequest);
+          await finalizeEnrollment(enrollmentId, signatureRequest);
           signatureRequestSubscriber.unsubscribe();
         }
       }, 0);
@@ -245,11 +245,12 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
   );
 }
 
-async function finalizeEnrollment(enrollmentId: string, user: InternalUserObject, signatureRequest: any) {
+async function finalizeEnrollment(enrollmentId: string, signatureRequest: any) {
   const publicKey = signatureRequest ? signatureRequest.anchors[0].pubKey : null;
   const enrollment = await getEnrollmentById(enrollmentId);
   const name = enrollment.name;
   const userId = enrollment.userId;
+  const user = await getUserById(enrollment.userId);
 
   // Create a new external key: this must be done before setting the identity URL on the signature anchor,
   // so that the public key can be resolved through the identity URL
@@ -341,12 +342,14 @@ async function setAnchorProperties(signatureRequest: any, properties: string) {
  * @param enrollmentId the enrollment id
  * @param user the enrolled user
  */
-async function testEnrollmentExpiration(enrollmentId: string, user: InternalUserObject) {
+async function testEnrollmentExpiration(enrollmentId: string) {
 
   // Check enrollment expiration date
   const enrollment = await Enrollment.getById(enrollmentId);
-  const expiration = enrollment.get('expiration');
+  const expiration = enrollment.getDataValue('expiration');
   if (expiration && (Date.now() > expiration)) {
+
+    const user = await getUserById(enrollment.getDataValue('userId'));
 
     // Send a enrollment failure email to the admin and delete the enrollment
     sendEnrollmentFinalizeEmail(user.x500CommonName, null, false, 'The enrollment expiration date is reached');

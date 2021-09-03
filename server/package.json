@@ -51,7 +51,7 @@
     "read": "1.0.7",
     "redlock": "4.2.0",
     "rxjs": "6.6.6",
-    "sequelize": "4.44.4",
+    "sequelize": "6.6.5",
     "timestring": "6.0.0"
   }
 }

@@ -42,7 +42,7 @@ router.post('/enrollment/:id/create-signature-request', async function (ctx) {
     signatureRequestId = signatureReqId;
 
     // Start monitoring this signature request
-    monitorSignatureRequest(signatureRequestId, enrollmentId, user);
+    monitorSignatureRequest(signatureRequestId, enrollmentId);
   } catch (err) {
     throw new BadRequest('SignatureRequestCreationError');
   }

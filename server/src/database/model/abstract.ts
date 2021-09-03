@@ -1,10 +1,9 @@
-import * as Sequelize from 'sequelize';
-import { FindOptions, Instance } from 'sequelize';
+import { FindOptions, Sequelize, Model, ModelAttributes, ModelOptions, ModelCtor } from 'sequelize';
 import { sequelize } from '../sequelize';
 
-export abstract class AbstractInstanceAccess<TInstance, TPost> {
-  client: Sequelize.Sequelize;
-  model: Sequelize.Model<Instance<TInstance>, TPost>;
+export abstract class AbstractInstanceAccess<TAttribute, TPost> {
+  client: Sequelize;
+  model: ModelCtor<Model<TAttribute, TPost>>;
 
   constructor() {
     this.client = sequelize;
@@ -14,13 +13,13 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
 
   protected define(
     modelName: string,
-    attributes: Sequelize.DefineModelAttributes<TPost>,
-    options?: Sequelize.DefineOptions<Instance<TInstance>>
+    attributes: ModelAttributes<Model<TAttribute, TPost>, TPost>,
+    options?: ModelOptions<Model<TAttribute, TPost>>
   ) {
-    this.model = this.client.define<Instance<TInstance>, TPost>(modelName, attributes, options);
+    this.model = this.client.define(modelName, attributes, options);
   }
 
-  async create(obj: TPost): Promise<Instance<TInstance>> {
+  async create(obj: TPost): Promise<Model<TAttribute, TPost>> {
     try {
       return await this.model.create(obj);
     } catch (err) {
@@ -29,9 +28,9 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
     }
   }
 
-  async update(id: string, attrs): Promise<Instance<TInstance>> {
+  async update(keys, attrs): Promise<Model<TAttribute, TPost>> {
     try {
-      const up = await this.model.findByPk(id);
+      const up = await this.model.findByPk(keys);
       if (!up) {
         return null;
       }
@@ -44,7 +43,7 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
     }
   }
 
-  async getAll(opts: FindOptions<any> = {}): Promise<Instance<TInstance>[]> {
+  async getAll(opts: FindOptions<any> = {}): Promise<Model<TAttribute, TPost>[]> {
 
     // By default, sort object from the newest to the oldest
     if (!opts.order) {
@@ -54,11 +53,11 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
     return this.model.findAll(opts);
   }
 
-  async getById(id: string): Promise<Instance<TInstance> | null> {
+  async getById(id: string): Promise<Model<TAttribute, TPost> | null> {
     return this.model.findByPk(id);
   }
 
-  async delete(id: string): Promise<Instance<TInstance>> {
+  async delete(id: string): Promise<Model<TAttribute, TPost>> {
     try {
       const up = await this.model.findByPk(id);
       if (!up) {
@@ -73,15 +72,10 @@ export abstract class AbstractInstanceAccess<TInstance, TPost> {
     }
   }
 
-  async restore(id: string): Promise<Instance<TInstance>> {
+  async restore(): Promise<void> {
     try {
-      const up = await this.model.findByPk(id);
-      if (!up) {
-        return null;
-      }
-
-      await up.restore();
-      return up;
+      await this.model.restore();
+      return;
     } catch (err) {
       this.handleError(err);
       throw err;

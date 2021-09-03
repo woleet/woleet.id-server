@@ -3,14 +3,14 @@ import { createOAuthSession, createOAuthUser, getClient, getClientRedirectURL } 
 import { BadRequest, ServiceUnavailable } from 'http-errors';
 import * as LRU from 'lru-cache';
 import { Cache } from 'lru-cache';
-import * as uuid from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import { randomBytes } from 'crypto';
 import { getUserById } from '../../controllers/user';
 import * as log from 'loglevel';
 import { cookies } from '../../config';
 import { updateUser } from '../../controllers/user';
-import { setProviderSession } from '../../controllers/oidc-provider';
 import { serializeUserDTO } from '../serialize/userDTO';
+import { setProviderSession } from '../../controllers/oidc-provider';
 
 const router = new Router({ prefix: '/oauth' });
 
@@ -26,8 +26,8 @@ router.get('/login', async function (ctx) {
     throw new ServiceUnavailable();
   }
 
-  const oauth = uuid();
-  const state = uuid();
+  const oauth = uuidv4();
+  const state = uuidv4();
   const nonce = randomBytes(8).toString('hex');
   const url = client.authorizationUrl({
     redirect_uri: getClientRedirectURL() /* TODO: check arg */,

@@ -62,8 +62,8 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
 
   // Update and return user
   await newUser.save();
-  debug('Created user', newUser.toJSON());
-  return newUser.toJSON();
+  debug('Created user', newUser.get());
+  return newUser.get();
 }
 
 export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<InternalUserObject> {
@@ -102,7 +102,7 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
 
   // Update and return the user
   const user = await User.update(id, update);
-  return user.toJSON();
+  return user.get();
 }
 
 export async function getUserById(id: string): Promise<InternalUserObject> {
@@ -114,12 +114,12 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
   }
 
   // Return the user
-  return user.toJSON();
+  return user.get();
 }
 
 export async function getUsers(opts: FindOptions<any>): Promise<InternalUserObject[]> {
   const users = await User.getAll(opts);
-  return users.map((user) => user.toJSON());
+  return users.map((user) => user.get());
 }
 
 export async function deleteUser(id: string): Promise<InternalUserObject> {
@@ -134,7 +134,7 @@ export async function deleteUser(id: string): Promise<InternalUserObject> {
   await store.delSessionsWithUser(id);
 
   // Return the user
-  return user.toJSON();
+  return user.get();
 }
 
 export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject): Promise<InternalUserObject> {
@@ -146,12 +146,12 @@ export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject)
   }
 
   // Check that password reset token matches the one of the user
-  if (infoUpdatePassword.token !== user.toJSON().tokenResetPassword) {
+  if (infoUpdatePassword.token !== user.get().tokenResetPassword) {
     throw new TokenResetPasswordInvalid();
   }
 
   // Check that password reset token is not expired
-  const timestamp = parseInt(user.toJSON().tokenResetPassword.split('_')[1], 10);
+  const timestamp = parseInt(user.get().tokenResetPassword.split('_')[1], 10);
   if ((Date.now() - timestamp) > 0) {
     throw new TokenResetPasswordInvalid();
   }
@@ -167,5 +167,5 @@ export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject)
 
   // Update and return the user
   user = await User.update(user.getDataValue('id'), update);
-  return user.toJSON();
+  return user.get();
 }
