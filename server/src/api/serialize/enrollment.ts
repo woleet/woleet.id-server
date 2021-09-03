@@ -5,10 +5,7 @@ export function serializeEnrollment(enrollment: InternalEnrollmentObject): ApiEn
     createdAt: +enrollment.createdAt || null,
     updatedAt: +enrollment.updatedAt || null
   };
-
   const { id, name, userId, device, signatureRequestId } = enrollment;
-
   const expired = enrollment.expiration ? (+enrollment.expiration < Date.now()) : undefined;
-
   return Object.assign({ id, name, userId, device, signatureRequestId, expired }, dates);
 }

@@ -229,10 +229,8 @@ export class UserFormComponent extends ErrorMessageProvider implements OnInit, O
   async checkSealIdentity(user: ApiUserObject) {
     let alreadyExist = false;
     if (user.mode === 'seal') {
-      const query = 'commonName=' + user.identity.commonName + '&organization=' + user.identity.organization + '&mode=seal';
-      alreadyExist = await this.service.getAll(query).then((users) => {
-        return users.length > 0;
-      });
+      const query = { commonName: user.identity.commonName, organization: user.identity.organization, mode: 'seal' };
+      alreadyExist = await this.service.getAll(query).then((users) => users.length > 0);
     }
     return alreadyExist;
   }

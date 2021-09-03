@@ -7,8 +7,8 @@ Method | HTTP request | Description
 [**createExternalKey**](KeyApi.md#createExternalKey) | **POST** /user/{userId}/extern-key | Create a new external key for a user.
 [**createKey**](KeyApi.md#createKey) | **POST** /user/{userId}/key | Create a new key for a user.
 [**deleteKey**](KeyApi.md#deleteKey) | **DELETE** /key/{keyId} | Delete a key.
-[**getAllUserKeys**](KeyApi.md#getAllUserKeys) | **GET** /user/{userId}/key/list | List all keys of a user.
 [**getKeyById**](KeyApi.md#getKeyById) | **GET** /key/{keyId} | Get a key by its identifier.
+[**getUserKeys**](KeyApi.md#getUserKeys) | **GET** /user/{userId}/key/list | Get all the keys of a user.
 [**updateKey**](KeyApi.md#updateKey) | **PUT** /key/{keyId} | Update a key.
 
 
@@ -17,6 +17,8 @@ Method | HTTP request | Description
 > KeyGet createExternalKey(userId, externalKeyPost)
 
 Create a new external key for a user.
+
+Use this endpoint to register a public key that is controlled by a user on an external device. 
 
 ### Example
 ```java
@@ -226,76 +228,6 @@ Name | Type | Description  | Notes
 **401** | Missing or invalid session cookie. |  -  |
 **404** | Key not found. |  -  |
 
-<a name="getAllUserKeys"></a>
-# **getAllUserKeys**
-> List&lt;KeyGet&gt; getAllUserKeys(userId)
-
-List all keys of a user.
-
-### Example
-```java
-// Import classes:
-import io.woleet.idserver.ApiClient;
-import io.woleet.idserver.ApiException;
-import io.woleet.idserver.Configuration;
-import io.woleet.idserver.auth.*;
-import io.woleet.idserver.models.*;
-import io.woleet.idserver.api.KeyApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost");
-    
-    // Configure API key authorization: CookieAuth
-    ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-    CookieAuth.setApiKey("YOUR API KEY");
-    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-    //CookieAuth.setApiKeyPrefix("Token");
-
-    KeyApi apiInstance = new KeyApi(defaultClient);
-    UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
-    try {
-      List<KeyGet> result = apiInstance.getAllUserKeys(userId);
-      System.out.println(result);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling KeyApi#getAllUserKeys");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **userId** | [**UUID**](.md)| Identifier of the user. |
-
-### Return type
-
-[**List&lt;KeyGet&gt;**](KeyGet.md)
-
-### Authorization
-
-[CookieAuth](../README.md#CookieAuth)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Successful operation. |  -  |
-**400** | Invalid user identifier. |  -  |
-**401** | Missing or invalid session cookie. |  -  |
-**404** | User not found. |  -  |
-
 <a name="getKeyById"></a>
 # **getKeyById**
 > KeyGet getKeyById(keyId)
@@ -365,6 +297,76 @@ Name | Type | Description  | Notes
 **400** | Invalid key identifier. |  -  |
 **401** | Missing or invalid session cookie. |  -  |
 **404** | Key not found. |  -  |
+
+<a name="getUserKeys"></a>
+# **getUserKeys**
+> List&lt;KeyGet&gt; getUserKeys(userId)
+
+Get all the keys of a user.
+
+### Example
+```java
+// Import classes:
+import io.woleet.idserver.ApiClient;
+import io.woleet.idserver.ApiException;
+import io.woleet.idserver.Configuration;
+import io.woleet.idserver.auth.*;
+import io.woleet.idserver.models.*;
+import io.woleet.idserver.api.KeyApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost");
+    
+    // Configure API key authorization: CookieAuth
+    ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+    CookieAuth.setApiKey("YOUR API KEY");
+    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+    //CookieAuth.setApiKeyPrefix("Token");
+
+    KeyApi apiInstance = new KeyApi(defaultClient);
+    UUID userId = feb37e23-d04e-4e71-bf53-1f1a75ba3a68; // UUID | Identifier of the user.
+    try {
+      List<KeyGet> result = apiInstance.getUserKeys(userId);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling KeyApi#getUserKeys");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | [**UUID**](.md)| Identifier of the user. |
+
+### Return type
+
+[**List&lt;KeyGet&gt;**](KeyGet.md)
+
+### Authorization
+
+[CookieAuth](../README.md#CookieAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful operation. |  -  |
+**400** | Invalid user identifier. |  -  |
+**401** | Missing or invalid session cookie. |  -  |
+**404** | User not found. |  -  |
 
 <a name="updateKey"></a>
 # **updateKey**

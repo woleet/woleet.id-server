@@ -46,7 +46,7 @@ public class CRUDEnrollmentApiTest extends CRUDApiTest {
                 return new ArrayList<>();
 
             List<CRUDApiTest.ObjectGet> list = new ArrayList<>();
-            for (EnrollmentGet enrollmentGet : enrollmentApi.getAllEnrollments())
+            for (EnrollmentGet enrollmentGet : enrollmentApi.getEnrollments())
                 list.add(new CRUDEnrollmentApiTest.ObjectGet(enrollmentGet));
             return list;
         }

@@ -115,6 +115,24 @@ export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE={path to certificate .crt file}
 export WOLEET_ID_SERVER_HTTP_TLS_KEY={path to certificate .key file}
 ```
 
+### Renew TLS certificate
+
+#### Normal mode
+
+Just update the certificates files and do:
+
+```bash
+docker restart woleetid-server_wid-client_1
+```
+
+#### HA mode
+
+In HA mode you will need to restart the whole stack to update the certificates once file are updated
+
+```bash
+./app.sh ha-restart
+```
+
 ## Database
 
 Woleet.ID Server requires a PostgreSQL database.

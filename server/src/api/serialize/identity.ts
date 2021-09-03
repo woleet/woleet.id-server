@@ -1,4 +1,4 @@
-export function serializeIdentity(user: InternalUserObject, hideUserId = false) {
+export function serializeUserIdentity(user: InternalUserObject, hideUserId = false) {
   return {
     commonName: user.x500CommonName,
     organization: user.x500Organization,

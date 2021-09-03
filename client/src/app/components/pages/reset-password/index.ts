@@ -13,7 +13,6 @@ import { AppConfigService } from '@services/boot';
 
 export function confirmPasswordValidator(control: AbstractControl) {
   const str: string = control.value;
-
   if (!str) {
     return;
   }
@@ -49,7 +48,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
   askForResetInput: boolean;
 
   constructor(activatedRoute: ActivatedRoute, userConst: UserService, public dialog: MatDialog, private router: Router,
-    appConfigService: AppConfigService) {
+              appConfigService: AppConfigService) {
     super();
     this.userService = userConst;
     activatedRoute.queryParams.subscribe(async (params) => {
@@ -61,7 +60,7 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
       } else {
         this.validationStep = false;
       }
-    this.askForResetInput = appConfigService.getConfig().askForResetInput;
+      this.askForResetInput = appConfigService.getConfig().askForResetInput;
     });
   }
 
@@ -88,13 +87,13 @@ export class ResetPasswordPageComponent extends ErrorMessageProvider implements 
       this.email = this.formEmail.get('email').value;
       await this.userService.resetPassword(this.email);
       const dialogRef = this.askForResetInput ?
-      this.dialog.open(DialogAskResetComponent, {
-        data: null,
-        width: '250px'
-      })
-      : this.dialog.open(DialogMailResetComponent, {
-        width: '250px'
-      });
+        this.dialog.open(DialogAskResetComponent, {
+          data: null,
+          width: '250px'
+        })
+        : this.dialog.open(DialogMailResetComponent, {
+          width: '250px'
+        });
       dialogRef.afterClosed().subscribe(result => {
         this.router.navigate(['/login']);
       });

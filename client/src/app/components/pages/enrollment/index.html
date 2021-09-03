@@ -48,7 +48,7 @@
       <div>
         <p>The following identity information will be associated to your signature key to identify you as a signer:</p>
         <br>
-        <div *ngIf="user; else loadingUser">
+        <div *ngIf="user; else loading">
           <app-user-card [user]="user" [modes]="['display']" [hideAttribute]="['username']"></app-user-card>
         </div>
         <br>
@@ -140,6 +140,6 @@
     </mat-card-content>
   </mat-card>
 </div>
-<ng-template #loadingUser>
+<ng-template #loading>
   <mat-card>Loading...</mat-card>
 </ng-template>

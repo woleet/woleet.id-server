@@ -143,10 +143,10 @@ export async function bootOIDCProvider(): Promise<void> {
 export async function rebootAllEnrollmentMonitor() {
   Enrollment.getAll().then((enrollments) => {
     enrollments.forEach(enrollment => {
-      if (enrollment.get('signatureRequestId')) {
-        const enrollmentId = enrollment.get('id');
-        monitorSignatureRequest(enrollment.get('signatureRequestId'), enrollmentId, enrollmentId);
-        log.info('Monitoring enrollment id:', enrollmentId, 'name:', enrollment.get('name'));
+      if (enrollment.getDataValue('signatureRequestId')) {
+        const enrollmentId = enrollment.getDataValue('id');
+        monitorSignatureRequest(enrollment.getDataValue('signatureRequestId'), enrollmentId);
+        log.info('Monitoring enrollment id:', enrollmentId, 'name:', enrollment.getDataValue('name'));
       }
     });
   });

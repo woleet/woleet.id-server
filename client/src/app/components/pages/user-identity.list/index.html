@@ -1,4 +1,4 @@
-<div *ngIf="(users$ | async) as users; else loadingusers">
+<div *ngIf="users; else loading">
   <div *ngIf="!formOpened" fxLayout="row" fxLayoutGap="20px">
     <div fxLayout="column">
       <button mat-raised-button color="primary" (click)="formOpened=true">ADD USER IDENTITY</button>
@@ -11,22 +11,32 @@
     </div>
   </div>
   <div *ngIf="formOpened">
-    <create-edit-user mode="create" userMode="esign" (create)="refreshUserList()"
-      (submitSucceed)="formOpened=false; refreshUserList()" (cancel)="formOpened=false"></create-edit-user>
+    <create-edit-user mode="create" userMode="esign" (submitSucceed)="formOpened=false; refreshUserList()"
+      (cancel)="formOpened=false">
+    </create-edit-user>
   </div>
   <br>
   <mat-divider></mat-divider>
+  <br>
+  <mat-form-field>
+    <mat-icon matSuffix>search</mat-icon>
+    <input matInput type="search" placeholder="Search" [(ngModel)]="search" (keyup)="refreshUserList()">
+  </mat-form-field>
   <br>
   <div *ngFor="let user of users; trackBy: trackById;">
     <app-user-card *ngIf="(user.role === 'admin' && isAdmin()) || user.role !== 'admin'" [user]="user"
       [modes]="['block', 'detail', 'delete', 'edit']" (delete)="refreshUserList()">
     </app-user-card>
-    <app-user-card *ngIf="(user.role === 'admin' && isManager())" [user]="user" [modes]="['detail']"
-      (delete)="refreshUserList()">
+    <app-user-card *ngIf="(user.role === 'admin' && isManager())" [user]="user" [modes]="['detail']">
     </app-user-card>
     <br>
   </div>
+  <div align="center">
+    <button *ngIf="!complete" mat-icon-button (click)="getMoreUsers()">
+      <mat-icon matTooltip="Get more users" aria-label="Get more users">expand_more</mat-icon>
+    </button>
+  </div>
 </div>
-<ng-template #loadingusers>
+<ng-template #loading>
   <mat-card>Loading...</mat-card>
 </ng-template>

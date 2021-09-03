@@ -1,4 +1,4 @@
-import * as Sequelize from 'sequelize';
+import { Model, STRING, UUID, UUIDV4, JSON, DATE, ModelCtor, BuildOptions } from 'sequelize';
 import { sequelize } from '../sequelize';
 
 export const grantable = new Set<OIDCTokenEnum>([
@@ -8,7 +8,7 @@ export const grantable = new Set<OIDCTokenEnum>([
   'DeviceCode',
 ]);
 
-export const models: Map<OIDCTokenEnum, Sequelize.Model<OIDCToken, OIDCToken>> = (<OIDCTokenEnum[]>[
+export const models = (<OIDCTokenEnum[]>[
   'Session',
   'AccessToken',
   'AuthorizationCode',
@@ -19,16 +19,16 @@ export const models: Map<OIDCTokenEnum, Sequelize.Model<OIDCToken, OIDCToken>> =
   'InitialAccessToken',
   'RegistrationAccessToken',
 ]).reduce((map, name: OIDCTokenEnum) => {
-  const model = sequelize.define<OIDCToken, OIDCToken>(name, {
-    id: { type: Sequelize.STRING, primaryKey: true },
-    grantId: { type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4 },
-    userCode: { type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4 },
-    data: { type: Sequelize.JSON },
-    expiresAt: { type: Sequelize.DATE },
-    consumedAt: { type: Sequelize.DATE },
+  const model = sequelize.define(name, {
+    id: { type: STRING, primaryKey: true },
+    grantId: { type: UUID, defaultValue: UUIDV4 },
+    userCode: { type: UUID, defaultValue: UUIDV4 },
+    data: { type: JSON },
+    expiresAt: { type: DATE },
+    consumedAt: { type: DATE }
   });
 
   map.set(name, model);
 
   return map;
-}, new Map<OIDCTokenEnum, Sequelize.Model<OIDCToken, OIDCToken>>());
+}, new Map<OIDCTokenEnum, ModelCtor<Model<OIDCToken, OIDCToken>>>());

@@ -5,13 +5,12 @@ import { NotFoundUserError, TokenResetPasswordInvalid } from '../errors';
 import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
-import * as Sequelize from 'sequelize';
+import { FindOptions } from 'sequelize';
 
 const debug = Debug('id:ctr');
 
 async function serializeAndEncodePassword(password: string) {
   const key = await encode(password);
-
   return {
     passwordHash: key.hash,
     passwordSalt: key.salt,
@@ -19,7 +18,10 @@ async function serializeAndEncodePassword(password: string) {
   };
 }
 
-export function serializeIdentity(identity: ApiIdentityObject): InternalIdentityObject {
+/**
+ * Map identity format from API to DB.
+ */
+export function mapIdentityFromAPIToInternal(identity: ApiIdentityObject): InternalIdentityObject {
   return {
     x500CommonName: identity.commonName,
     x500Organization: identity.organization,
@@ -32,8 +34,8 @@ export function serializeIdentity(identity: ApiIdentityObject): InternalIdentity
 
 export async function createUser(user: ApiPostUserObject): Promise<InternalUserObject> {
 
-  // Map identity format from API to DB
-  const identity = serializeIdentity(user.identity);
+  // Convert identity from API to DB format
+  const identity = mapIdentityFromAPIToInternal(user.identity);
   delete user.identity;
 
   // Encrypt password if provided
@@ -60,8 +62,8 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
 
   // Update and return user
   await newUser.save();
-  debug('Created user', newUser.toJSON());
-  return newUser.toJSON();
+  debug('Created user', newUser.get());
+  return newUser.get();
 }
 
 export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<InternalUserObject> {
@@ -87,7 +89,7 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
 
   // Map identity format from API to DB
   if (attrs.identity) {
-    const identity = serializeIdentity(attrs.identity);
+    const identity = mapIdentityFromAPIToInternal(attrs.identity);
     delete update.identity;
     Object.keys(identity).forEach(key => undefined === identity[key] && delete identity[key]); // delete undefined
     Object.assign(update, identity);
@@ -100,7 +102,7 @@ export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<I
 
   // Update and return the user
   const user = await User.update(id, update);
-  return user.toJSON();
+  return user.get();
 }
 
 export async function getUserById(id: string): Promise<InternalUserObject> {
@@ -112,20 +114,12 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
   }
 
   // Return the user
-  return user.toJSON();
+  return user.get();
 }
 
-export async function getAllUsers(where: ApiFilterUsersObject = null): Promise<InternalUserObject[]> {
-  const opt: any = [];
-  // Sorts users by common name ignoring the case
-  opt.order = [[Sequelize.fn('lower', Sequelize.col('x500CommonName'))]];
-  const users = await User.getAll(opt, where);
-  return users.map((user) => user.toJSON());
-}
-
-export async function searchAllUsers(search): Promise<InternalUserObject[]> {
-  const users = await User.find(search);
-  return users.map((user) => user.toJSON());
+export async function getUsers(opts: FindOptions<any>): Promise<InternalUserObject[]> {
+  const users = await User.getAll(opts);
+  return users.map((user) => user.get());
 }
 
 export async function deleteUser(id: string): Promise<InternalUserObject> {
@@ -140,7 +134,7 @@ export async function deleteUser(id: string): Promise<InternalUserObject> {
   await store.delSessionsWithUser(id);
 
   // Return the user
-  return user.toJSON();
+  return user.get();
 }
 
 export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject): Promise<InternalUserObject> {
@@ -152,12 +146,12 @@ export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject)
   }
 
   // Check that password reset token matches the one of the user
-  if (infoUpdatePassword.token !== user.toJSON().tokenResetPassword) {
+  if (infoUpdatePassword.token !== user.get().tokenResetPassword) {
     throw new TokenResetPasswordInvalid();
   }
 
   // Check that password reset token is not expired
-  const timestamp = parseInt(user.toJSON().tokenResetPassword.split('_')[1], 10);
+  const timestamp = parseInt(user.get().tokenResetPassword.split('_')[1], 10);
   if ((Date.now() - timestamp) > 0) {
     throw new TokenResetPasswordInvalid();
   }
@@ -173,5 +167,5 @@ export async function updatePassword(infoUpdatePassword: ApiResetPasswordObject)
 
   // Update and return the user
   user = await User.update(user.getDataValue('id'), update);
-  return user.toJSON();
+  return user.get();
 }

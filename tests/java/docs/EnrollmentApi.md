@@ -7,9 +7,9 @@ Method | HTTP request | Description
 [**createEnrollment**](EnrollmentApi.md#createEnrollment) | **POST** /enrollment | Create a key enrollment request.
 [**createSignatureRequest**](EnrollmentApi.md#createSignatureRequest) | **POST** /enrollment/{EnrollmentId}/create-signature-request | Create and send the signature request of the TCU to the owner of the enrolled key.
 [**deleteEnrollment**](EnrollmentApi.md#deleteEnrollment) | **DELETE** /enrollment/{EnrollmentId} | Delete a key enrollment request.
-[**getAllEnrollments**](EnrollmentApi.md#getAllEnrollments) | **GET** /enrollment/list | List all key enrollment requests.
 [**getEnrollment**](EnrollmentApi.md#getEnrollment) | **GET** /enrollment/{EnrollmentId} | Get a key enrollment request.
 [**getEnrollmentUser**](EnrollmentApi.md#getEnrollmentUser) | **GET** /enrollment/{EnrollmentId}/user | Get the user of a key enrollment request.
+[**getEnrollments**](EnrollmentApi.md#getEnrollments) | **GET** /enrollment/list | Get all key enrollment requests.
 [**updateEnrollment**](EnrollmentApi.md#updateEnrollment) | **PUT** /enrollment/{EnrollmentId} | Update a key enrollment request.
 
 
@@ -211,69 +211,6 @@ Name | Type | Description  | Notes
 **400** | Invalid object supplied. |  -  |
 **401** | Missing or invalid session cookie. |  -  |
 
-<a name="getAllEnrollments"></a>
-# **getAllEnrollments**
-> List&lt;EnrollmentGet&gt; getAllEnrollments()
-
-List all key enrollment requests.
-
-### Example
-```java
-// Import classes:
-import io.woleet.idserver.ApiClient;
-import io.woleet.idserver.ApiException;
-import io.woleet.idserver.Configuration;
-import io.woleet.idserver.auth.*;
-import io.woleet.idserver.models.*;
-import io.woleet.idserver.api.EnrollmentApi;
-
-public class Example {
-  public static void main(String[] args) {
-    ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("http://localhost");
-    
-    // Configure API key authorization: CookieAuth
-    ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
-    CookieAuth.setApiKey("YOUR API KEY");
-    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-    //CookieAuth.setApiKeyPrefix("Token");
-
-    EnrollmentApi apiInstance = new EnrollmentApi(defaultClient);
-    try {
-      List<EnrollmentGet> result = apiInstance.getAllEnrollments();
-      System.out.println(result);
-    } catch (ApiException e) {
-      System.err.println("Exception when calling EnrollmentApi#getAllEnrollments");
-      System.err.println("Status code: " + e.getCode());
-      System.err.println("Reason: " + e.getResponseBody());
-      System.err.println("Response headers: " + e.getResponseHeaders());
-      e.printStackTrace();
-    }
-  }
-}
-```
-
-### Parameters
-This endpoint does not need any parameter.
-
-### Return type
-
-[**List&lt;EnrollmentGet&gt;**](EnrollmentGet.md)
-
-### Authorization
-
-[CookieAuth](../README.md#CookieAuth)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Successful operation. |  -  |
-
 <a name="getEnrollment"></a>
 # **getEnrollment**
 > EnrollmentGet getEnrollment(enrollmentId)
@@ -390,6 +327,69 @@ Name | Type | Description  | Notes
 ### Authorization
 
 No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful operation. |  -  |
+
+<a name="getEnrollments"></a>
+# **getEnrollments**
+> List&lt;EnrollmentGet&gt; getEnrollments()
+
+Get all key enrollment requests.
+
+### Example
+```java
+// Import classes:
+import io.woleet.idserver.ApiClient;
+import io.woleet.idserver.ApiException;
+import io.woleet.idserver.Configuration;
+import io.woleet.idserver.auth.*;
+import io.woleet.idserver.models.*;
+import io.woleet.idserver.api.EnrollmentApi;
+
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("http://localhost");
+    
+    // Configure API key authorization: CookieAuth
+    ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
+    CookieAuth.setApiKey("YOUR API KEY");
+    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+    //CookieAuth.setApiKeyPrefix("Token");
+
+    EnrollmentApi apiInstance = new EnrollmentApi(defaultClient);
+    try {
+      List<EnrollmentGet> result = apiInstance.getEnrollments();
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling EnrollmentApi#getEnrollments");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
+    }
+  }
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;EnrollmentGet&gt;**](EnrollmentGet.md)
+
+### Authorization
+
+[CookieAuth](../README.md#CookieAuth)
 
 ### HTTP request headers
 

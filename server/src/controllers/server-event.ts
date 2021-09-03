@@ -3,6 +3,7 @@ import { ServerEvent } from '../database';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { events as config } from '../config';
+import { FindOptions } from 'sequelize';
 
 const debug = Debug('id:events');
 
@@ -32,7 +33,6 @@ export class EventStore {
     debug('Registering event', event);
 
     const len = this.batch.push(event);
-
     if (len >= config.batchSize) {
       this.flush();
     } else if (!this.timer) {
@@ -56,25 +56,7 @@ export class EventStore {
       .catch((err) => {
         log.error(err);
       });
-
   }
-
 }
 
 export const store = new EventStore;
-
-export async function getServerEventById(id: string): Promise<InternalServerEventObject> {
-  const event = await ServerEvent.getById(id);
-  return event.toJSON();
-}
-
-export async function getServerEventListByType(type: ServerEventTypeEnum, opts: ListOptions)
-  : Promise<InternalServerEventObject[]> {
-  const events = await ServerEvent.getByType(type, opts);
-  return events.map((evt) => evt.toJSON());
-}
-
-export async function getAllServerEvents(opts: ListOptions): Promise<InternalServerEventObject[]> {
-  const events = await ServerEvent.getAll(Object.assign({ order: [['occurredAt', 'DESC']] }, opts));
-  return events.map((evt) => evt.toJSON());
-}

@@ -12,7 +12,7 @@ class SignedIdentityAccess extends AbstractInstanceAccess<InternalSignedIdentity
 
   constructor() {
     super();
-    this.define('signedIdentity', SignedIdentityModel, { paranoid: false });
+    this.define('signedIdentity', SignedIdentityModel);
   }
 
   async getById(id: string): Promise<SequelizeSignedIdentityObject> {

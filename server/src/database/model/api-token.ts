@@ -4,7 +4,7 @@ import { AbstractInstanceAccess } from './abstract';
 
 const APITokenModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
-  status: { type: ENUM(['active', 'blocked']), defaultValue: 'active' },
+  status: { type: ENUM('active', 'blocked'), defaultValue: 'active' },
   userId: { type: UUID },
   name: { type: STRING, allowNull: false },
   hash: { type: CHAR(32 * 2), unique: true, allowNull: false },
@@ -17,7 +17,7 @@ class APITokenAccess extends AbstractInstanceAccess<InternalAPITokenObject, ApiF
 
   constructor() {
     super();
-    this.define('apiToken', APITokenModel, { paranoid: false });
+    this.define('apiToken', APITokenModel);
   }
 
   handleError(err: any) {

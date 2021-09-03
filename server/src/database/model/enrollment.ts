@@ -7,7 +7,7 @@ const EnrollmentModel = {
   userId: { type: UUID },
   expiration: { type: DATE, allowNull: true },
   name: { type: STRING, allowNull: false },
-  device: { type: ENUM(['server', 'nano', 'mobile']), allowNull: true },
+  device: { type: ENUM('server', 'nano', 'mobile'), allowNull: true },
   signatureRequestId: { type: STRING, allowNull: true },
   keyExpiration: { type: DATE, allowNull: true },
 };
@@ -16,7 +16,7 @@ class EnrollmentAccess extends AbstractInstanceAccess<InternalEnrollmentObject, 
 
   constructor() {
     super();
-    this.define('enrollment', EnrollmentModel, { paranoid: false });
+    this.define('enrollment', EnrollmentModel);
   }
 
   async getById(id: string): Promise<SequelizeEnrollmentObject> {

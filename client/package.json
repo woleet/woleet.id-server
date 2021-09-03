@@ -1,11 +1,11 @@
 {
   "name": "client",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Woleet.ID Server web client",
   "scripts": {
     "postinstall": "node patch.js",
     "ng": "npx ng",
-    "dev": "npx ng serve --port 4220 -o --ssl --ssl-key $WOLEET_ID_SERVER_HTTP_TLS_KEY --ssl-cert $WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE",
+    "dev": "npx ng serve --port 4220 -o --ssl --disable-host-check --ssl-key $WOLEET_ID_SERVER_HTTP_TLS_KEY --ssl-cert $WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE",
     "dev:prod": "npx ng serve --port 4220 -o --prod --ssl --ssl-key $WOLEET_ID_SERVER_HTTP_TLS_KEY --ssl-cert $WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE",
     "build": "npx ng build",
     "build:prod": "npx ng build --prod",

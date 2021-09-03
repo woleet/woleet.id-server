@@ -6,15 +6,12 @@ export async function serializeAPIToken(token: InternalAPITokenObject): Promise<
     updatedAt: +token.updatedAt || null,
     lastUsed: +token.lastUsed || null
   };
-
   const { id, name, status, userId } = token;
-
   const value = (
     await secureModule.decrypt(
       Buffer.from(token.value, 'hex'),
       Buffer.from(token.valueIV, 'hex')
     )
   ).toString('base64');
-
   return Object.assign({ id, name, status, value, userId }, dates);
 }
