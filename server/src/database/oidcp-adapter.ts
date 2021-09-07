@@ -68,6 +68,19 @@ export class SequelizeAdapter {
     });
   }
 
+  findByUid(uid) {
+    debug(`findByUid ${uid}`);
+    return this.model.findOne({ where: { data: { uid } } }).then((found) => {
+      if (!found) {
+        return undefined;
+      }
+      return {
+        ...found.getDataValue('data'),
+        ...(found.getDataValue('consumedAt') ? { consumed: true } : undefined),
+      };
+    });
+  }
+
   async destroy(id) {
     debug(`destroy ${id}`);
     if (grantable.has(this.name)) {

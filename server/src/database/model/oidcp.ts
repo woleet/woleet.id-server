@@ -16,12 +16,14 @@ export const models = (<OIDCTokenEnum[]>[
   'DeviceCode',
   'ClientCredentials',
   'Client',
+  'Grant',
+  'Interaction',
   'InitialAccessToken',
   'RegistrationAccessToken',
 ]).reduce((map, name: OIDCTokenEnum) => {
   const model = sequelize.define(name, {
     id: { type: STRING, primaryKey: true },
-    grantId: { type: UUID, defaultValue: UUIDV4 },
+    grantId: { type: STRING, defaultValue: STRING },
     userCode: { type: UUID, defaultValue: UUIDV4 },
     data: { type: JSON },
     expiresAt: { type: DATE },

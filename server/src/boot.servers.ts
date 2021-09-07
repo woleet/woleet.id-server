@@ -70,7 +70,7 @@ export function bootServers(): Promise<void> {
       } else {
         app.use(morgan('dev'));
       }
-      app.use(cors({ credentials: true }));
+      app.use(cors());
       app.use(router.routes());
 
       const server = startServer(app, port);

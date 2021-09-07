@@ -152,12 +152,11 @@ declare global {
   /* OauthAccessToken: server specific */
   interface InternalOauthTokenObject {
     iat: number;
-    iss: uri;
-    exp: number;
-    clientId: string;
+    exp?: number;
+    clientId?: string;
     gty: string;
     accountId: string;
-    claims: any;
+    claims?: any;
     grantId: string;
     scope: string;
     kind: string;
@@ -433,7 +432,7 @@ declare global {
   /* OIDC Provider */
 
   type OIDCTokenEnum = 'Session' | 'AccessToken' | 'AuthorizationCode' | 'RefreshToken'
-    | 'DeviceCode' | 'ClientCredentials' | 'Client' | 'InitialAccessToken' | 'RegistrationAccessToken';
+    | 'DeviceCode' | 'ClientCredentials' | 'Client' | 'InitialAccessToken' | 'RegistrationAccessToken' | 'Interaction' | 'Grant';
 
   interface OIDCToken {
     id: string;

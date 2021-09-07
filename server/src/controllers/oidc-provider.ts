@@ -1,11 +1,13 @@
 /* eslint-disable no-console */
 
-import * as OIDCProvider from 'oidc-provider';
+import { Provider } from 'oidc-provider';
 import * as Debug from 'debug';
 import { provider as providerConfiguration } from '../config.oidcp';
-import { OIDCAccount as Account, SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
+import { SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
 import { getServerConfig } from './server-config';
 import { oidcKey } from '../config';
+import { v4 as uuidv4 } from 'uuid';
+import { generateKeyPair } from 'crypto';
 
 import * as log from 'loglevel';
 
@@ -32,27 +34,37 @@ function abortInit(message): void {
   provider = null;
 }
 
-// https://github.com/panva/node-oidc-provider/blob/master/docs/keystores.md#generating-all-keys-for-all-features
 const keystorePromise = (async () => {
-  let keystore;
+  let keys;
   if (oidcKey !== 'random') {
-    await Promise.all([
-      OIDCProvider.asKey(oidcKey, 'pem').then(function (result) {
-        keystore = result.keystore;
-      })]);
+    keys = [{ oidcKey }];
   } else {
-    keystore = OIDCProvider.createKeyStore();
-    await Promise.all([
-      keystore.generate('RSA', 2048, { alg: 'RS256', use: 'sig' })
-    ]);
+    let randomPrivateKey;
+    let randomPublicKey;
+    await generateKeyPair('rsa', {
+      modulusLength: 4096,
+      publicKeyEncoding: {
+        type: 'spki',
+        format: 'pem'
+      },
+      privateKeyEncoding: {
+        type: 'pkcs8',
+        format: 'pem',
+        cipher: 'aes-256-cbc',
+        passphrase: 'top secret'
+      }
+    }, async (err, publicKey, privateKey) => {
+      randomPrivateKey = privateKey;
+      randomPublicKey = publicKey;
+      keys = [randomPrivateKey];
+    });
   }
 
-  return keystore;
+  return keys;
 })();
 
 async function configure(): Promise<void> {
   const { enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL, OIDCPClients } = getServerConfig();
-  const keystore = await keystorePromise;
 
   debug('Init OIDCP with:\n' + JSON.stringify({ enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL }, null, 2));
 
@@ -78,8 +90,12 @@ async function configure(): Promise<void> {
   }));
 
   initialized = false;
-  provider = new OIDCProvider(OIDCPIssuerURL, Object.assign({}, providerConfiguration, { findById: Account.findById }));
-  await provider.initialize({ adapter: Adapter, clients, keystore });
+  const adapter = Adapter;
+  const jwks = await keystorePromise;
+  const configuration = Object.assign(
+    {}, { ...{ jwks, cookies: { keys: ['tralalala'] }, clients }, ...providerConfiguration }
+  );
+  provider = new Provider(OIDCPIssuerURL, { adapter, ...configuration });
   initialized = true;
 }
 
@@ -120,6 +136,6 @@ export function stopOIDCProvider(): Promise<void> {
 
 export function setProviderSession(ctx, userId) {
   if (initialized && provider) {
-    return provider.setProviderSession(ctx.req, ctx.res, { account: userId });
+    return new (provider.Session)(ctx.req, ctx.res, { account: userId });
   }
 }

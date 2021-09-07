@@ -4,9 +4,10 @@
 const { protocol, hostname } = window.location;
 
 const port = 3000;
+const portOIDC = 3003;
 
 export const environment = {
   version: '0.11.1',
   production: false,
-  serverURL: `${protocol}//${hostname}:${port}`
+  serverURL: '/api',
 };
