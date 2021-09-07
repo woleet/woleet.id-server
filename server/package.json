@@ -49,7 +49,7 @@
     "openid-client": "2.5.0",
     "pg": "8.4.2",
     "pg-hstore": "2.3.3",
-    "pg-native": "^3.0.0",
+    "pg-native": "3.0.0",
     "read": "1.0.7",
     "redlock": "4.2.0",
     "rxjs": "6.6.6",
