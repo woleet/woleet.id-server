@@ -35,6 +35,9 @@ RUN cd /build/server && npm run build && \
 # https://docs.docker.com/develop/develop-images/multistage-build/
 FROM node:15.11.0-alpine3.11
 
+ARG WOLEET_ID_SERVER_API_VERSION_BUILDTIME
+ENV WOLEET_ID_SERVER_API_VERSION=$WOLEET_ID_SERVER_API_VERSION_BUILDTIME
+
 RUN apk add --no-cache curl postgresql-dev
 
 COPY --from=0 /build/app /usr/src/app
