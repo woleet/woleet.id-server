@@ -7,7 +7,7 @@ import { HttpRequest, HttpHandler, HttpInterceptor, HTTP_INTERCEPTORS } from '@a
 export class AllowCredentialsInterceptor implements HttpInterceptor {
   constructor() { }
   intercept(request: HttpRequest<any>, next: HttpHandler) {
-    return next.handle(request.clone({ withCredentials: true }));
+    return next.handle(request.clone());
   }
 }
 
