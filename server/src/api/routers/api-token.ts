@@ -36,11 +36,11 @@ const router = new Router({ prefix: '/api-token' });
 router.post('/', validate.body('createApiToken'), async function (ctx) {
   const token: ApiPostAPITokenObject = ctx.request.body;
 
-  if (!token.userId && ctx.session.userRole !== 'admin') {
+  if (!token.userId && ctx.authorizedUser.userRole !== 'admin') {
     throw new Forbidden('Only admin can create other admin API token');
   }
 
-  if (ctx.session.userRole === 'user' && (token.userId !== ctx.session.userId)) {
+  if (ctx.authorizedUser.userRole === 'user' && (token.userId !== ctx.authorizedUser.userId)) {
     throw new Forbidden('User can only create token for themselves');
   }
 
@@ -48,7 +48,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
 
   event.register({
     type: 'token.create',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser.userId,
     associatedTokenId: created.id,
     associatedUserId: token.userId || null,
     associatedKeyId: null,
@@ -64,7 +64,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
  *  operationId: getAPITokenList
  */
 router.get('/list', async function (ctx) {
-  const apiTokens = ctx.session.userRole === 'user' ? await getAPITokensByUser(ctx.session.userId) : await getAllAPITokens();
+  const apiTokens = ctx.authorizedUser.userRole === 'user' ? await getAPITokensByUser(ctx.authorizedUser.userId) : await getAllAPITokens();
   ctx.body = await Promise.all(apiTokens.map(serializeAPIToken));
 });
 
@@ -77,7 +77,7 @@ router.get('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const apiToken = await getAPITokenById(id);
 
-  if (ctx.session.userRole === 'user' && (apiToken.userId !== ctx.session.userId)) {
+  if (ctx.authorizedUser.userRole === 'user' && (apiToken.userId !== ctx.authorizedUser.userId)) {
     throw new Forbidden('User can only get their own token');
   }
 
@@ -94,11 +94,11 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
   const { id } = ctx.params;
   const update: ApiPutAPITokenObject = ctx.request.body;
 
-  const apiToken = await updateAPIToken(id, update, ctx.session.userId, ctx.session.userRole);
+  const apiToken = await updateAPIToken(id, update, ctx.authorizedUser.userId, ctx.authorizedUser.userRole);
 
   event.register({
     type: 'token.edit',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser.userId,
     associatedTokenId: apiToken.id,
     associatedUserId: apiToken.userId || null,
     associatedKeyId: null,
@@ -116,11 +116,11 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
  */
 router.delete('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
-  const apiToken = await deleteAPIToken(id, ctx.session.userId, ctx.session.userRole);
+  const apiToken = await deleteAPIToken(id, ctx.authorizedUser.userId, ctx.authorizedUser.userRole);
 
   event.register({
     type: 'token.delete',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser.userId,
     associatedTokenId: apiToken.id,
     associatedUserId: null,
     associatedKeyId: null,

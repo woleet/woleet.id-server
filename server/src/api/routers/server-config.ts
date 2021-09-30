@@ -48,7 +48,7 @@ router.put('/', validate.body('updateConfig'), async function (ctx) {
 
   event.register({
     type: 'config.edit',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser.userId,
     associatedTokenId: null,
     associatedUserId: null,
     associatedKeyId: null,
@@ -69,7 +69,7 @@ router.post('/TCU', body({ multipart: true }), async function (ctx) {
 
   event.register({
     type: 'config.edit',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser.userId,
     associatedTokenId: null,
     associatedUserId: null,
     associatedKeyId: null,
@@ -85,7 +85,7 @@ router.get('/TCU/default', async function (ctx) {
 
   event.register({
     type: 'config.edit',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser.userId,
     associatedTokenId: null,
     associatedUserId: null,
     associatedKeyId: null,

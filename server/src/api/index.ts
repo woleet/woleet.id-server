@@ -13,7 +13,7 @@ import { router as identity } from './routers/identity';
 import { router as discovery } from './routers/discovery';
 import { router as openid } from './routers/openid';
 import { router as healthcheck } from './routers/healthcheck';
-import { admin as adminAuth, manager as managerAuth, session, user as userAuth } from './authentication';
+import { admin as adminAuth, manager as managerAuth, session, user as userAuth, token } from './authentication';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 
@@ -25,6 +25,7 @@ apiRouter.use(bodyParser());
 apiRouter.use(healthcheck.routes());
 apiRouter.use(session);
 apiRouter.use(auth.routes());
+apiRouter.use(token);
 apiRouter.use(appConfig.routes());
 apiRouter.use(openid.routes());
 apiRouter.use(passwordReset.routes());

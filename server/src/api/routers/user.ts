@@ -49,7 +49,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
     throw new BadRequest('The organization is mandatory for seal users');
   }
 
-  const authorizedUser = await getUserById(ctx.session.userId);
+  const authorizedUser = await getUserById(ctx.authorizedUser.userId);
   if (user.role === 'admin' && authorizedUser.role !== 'admin') {
     throw new Unauthorized('Only admin can create other admin');
   }
@@ -58,7 +58,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
 
   event.register({
     type: 'user.create',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser.userId,
     associatedTokenId: null,
     associatedUserId: created.id,
     associatedKeyId: null,
@@ -114,7 +114,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
 
   let user = await getUserById(id);
 
-  const authorizedUser = await getUserById(ctx.session.userId);
+  const authorizedUser = await getUserById(ctx.authorizedUser.userId);
   if ((update.role === 'admin' && authorizedUser.role !== 'admin')
     || (user.role === 'admin' && authorizedUser.role !== 'admin')) {
     throw new Unauthorized('Only admin can update other admin');
@@ -123,7 +123,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
 
   event.register({
     type: 'user.edit',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser.userId,
     associatedTokenId: null,
     associatedUserId: user.id,
     associatedKeyId: null,
@@ -144,7 +144,7 @@ router.delete('/:id', vid, async function (ctx) {
 
   event.register({
     type: 'user.delete',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser.userId,
     associatedTokenId: null,
     associatedUserId: user.id,
     associatedKeyId: null,
