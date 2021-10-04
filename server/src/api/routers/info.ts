@@ -19,7 +19,7 @@ const router = new Router();
  */
 router.get('/info', async function (ctx) {
   if (!ctx.authorizedUser) {
-    throw new BadRequest('Cannot get user info of admin token');
+    throw new BadRequest('Cannot get user info with an admin token');
   }
   ctx.body = serializeUserDTO(await getUserById(ctx.authorizedUser.userId));
 });

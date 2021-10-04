@@ -26,8 +26,8 @@ public class SignatureApiTest {
 
     private UserGet userSeal, userESign;
 
-    private SignatureApi adminAuthApi, userAuthApi, noAuthApi, tokenAuthAdminApi,
-        tokenAuthUserSealApi, tokenAuthUserESignApi;
+    private SignatureApi adminAuthApi, userAuthApi, noAuthApi,
+            tokenAuthAdminApi, tokenAuthUserSealApi, tokenAuthUserESignApi;
 
     private ApiTokenApi apiTokenApi;
     private APITokenGet apiTokenAdmin, apiTokenUserSeal, apiTokenUserESign;
@@ -36,7 +36,7 @@ public class SignatureApiTest {
      * Verify that the result of a signature not including a signed identity is valid.
      */
     private void verifyRegularSignatureValid(String hashToSign, String messageToSign, SignatureResult signatureResult)
-        throws ApiException {
+            throws ApiException {
 
         // Check provided properties
         assertNotNull(signatureResult.getIdentityURL());
@@ -51,15 +51,15 @@ public class SignatureApiTest {
 
         // Verify the signature
         assertTrue(Config.isValidSignature(signatureResult.getPubKey(), signatureResult.getSignature(),
-            signatureResult.getSignedMessage() != null ?
-                signatureResult.getSignedMessage() : signatureResult.getSignedHash()));
+                signatureResult.getSignedMessage() != null ?
+                        signatureResult.getSignedMessage() : signatureResult.getSignedHash()));
     }
 
     /**
      * Verify that the result of a signature including a signed identity is valid.
      */
     private void verifyIdentifiedSignatureValid(
-        String hashToSign, String messageToSign, SignatureResult signatureResult, UserGet user
+            String hashToSign, String messageToSign, SignatureResult signatureResult, UserGet user
     ) throws ApiException, MalformedURLException {
 
         // Check provided properties
@@ -83,42 +83,42 @@ public class SignatureApiTest {
             String remplacementRegex = "\\\\$1";
             if (signatureResult.getSignedIdentity().contains("CN=")) {
                 signedIdentity +=
-                    "CN=" + user.getIdentity().getCommonName().replaceAll(escapingRegex, remplacementRegex);
+                        "CN=" + user.getIdentity().getCommonName().replaceAll(escapingRegex, remplacementRegex);
             }
             if (signatureResult.getSignedIdentity().contains(",O=")) {
                 if (!signedIdentity.equals("")) {
                     signedIdentity += ",";
                 }
                 signedIdentity +=
-                    "O=" + user.getIdentity().getOrganization().replaceAll(escapingRegex, remplacementRegex);
+                        "O=" + user.getIdentity().getOrganization().replaceAll(escapingRegex, remplacementRegex);
             }
             if (signatureResult.getSignedIdentity().contains(",OU=")) {
                 if (!signedIdentity.equals("")) {
                     signedIdentity += ",";
                 }
                 signedIdentity +=
-                    "OU=" + user.getIdentity().getOrganizationalUnit().replaceAll(escapingRegex, remplacementRegex);
+                        "OU=" + user.getIdentity().getOrganizationalUnit().replaceAll(escapingRegex, remplacementRegex);
             }
             if (signatureResult.getSignedIdentity().contains(",L=")) {
                 if (!signedIdentity.equals("")) {
                     signedIdentity += ",";
                 }
                 signedIdentity +=
-                    "L=" + user.getIdentity().getLocality().replaceAll(escapingRegex, remplacementRegex);
+                        "L=" + user.getIdentity().getLocality().replaceAll(escapingRegex, remplacementRegex);
             }
             if (signatureResult.getSignedIdentity().contains(",C=")) {
                 if (!signedIdentity.equals("")) {
                     signedIdentity += ",";
                 }
                 signedIdentity +=
-                    "C=" + user.getIdentity().getCountry().replaceAll(escapingRegex, remplacementRegex);
+                        "C=" + user.getIdentity().getCountry().replaceAll(escapingRegex, remplacementRegex);
             }
             if (signatureResult.getSignedIdentity().contains(",EMAILADDRESS=")) {
                 if (!signedIdentity.equals("")) {
                     signedIdentity += ",";
                 }
                 signedIdentity +=
-                    "EMAILADDRESS=" + user.getEmail().replaceAll(escapingRegex, remplacementRegex);
+                        "EMAILADDRESS=" + user.getEmail().replaceAll(escapingRegex, remplacementRegex);
             }
             assertEquals(signatureResult.getSignedIdentity(), signedIdentity);
 
@@ -158,11 +158,11 @@ public class SignatureApiTest {
 
         // Create 3 helper APIs: one with admin rights, one with user rights, one not authenticated
         adminAuthApi = new SignatureApi(Config.getAdminAuthApiClient()
-            .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
+                .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
         userAuthApi = new SignatureApi(Config.getAuthApiClient(userSeal.getUsername(), "pass")
-            .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
+                .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
         noAuthApi = new SignatureApi(Config.getNoAuthApiClient()
-            .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
+                .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
 
         // Create one helper API with admin rights using token authentication
         apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
@@ -269,7 +269,7 @@ public class SignatureApiTest {
         // Try to sign using a non existing key
         try {
             tokenAuthAdminApi.getSignature(hashToSign, null, null, null, "1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG", null,
-                null);
+                    null);
             fail("Should not be able to sign using a non existing key");
         }
         catch (ApiException e) {
@@ -297,7 +297,7 @@ public class SignatureApiTest {
         // Try to sign using a non existing key
         try {
             tokenAuthAdminApi.getSignature(hashToSign, null, null, null, "1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG", null,
-                null);
+                    null);
             fail("Should not be able to sign using a non existing key");
         }
         catch (ApiException e) {
@@ -365,7 +365,7 @@ public class SignatureApiTest {
 
         // Sign a random hash using the server's default key
         SignatureResult signatureResult = tokenAuthAdminApi.getSignature(hashToSign, null, null, null, null, null,
-            null);
+                null);
         verifyRegularSignatureValid(hashToSign, null, signatureResult);
 
         // Check that admin API token's last used time is close to current time
@@ -389,14 +389,14 @@ public class SignatureApiTest {
 
         // Sign using the server's default key and derivation path (force it)
         SignatureResult signatureResult4400 = tokenAuthAdminApi
-            .getSignature(hashToSign, null, null, null, null, "m/44'/0'/0'", null);
+                .getSignature(hashToSign, null, null, null, null, "m/44'/0'/0'", null);
         verifyRegularSignatureValid(hashToSign, null, signatureResult4400);
         assertEquals(signatureResult.getPubKey(), signatureResult4400.getPubKey());
         assertEquals(signatureResult.getSignature(), signatureResult4400.getSignature());
 
         // Sign using the server's default key and specific derivation path
         SignatureResult signatureResult4401 = tokenAuthAdminApi
-            .getSignature(hashToSign, null, null, null, null, "m/44'/0'/1'", null);
+                .getSignature(hashToSign, null, null, null, null, "m/44'/0'/1'", null);
         verifyRegularSignatureValid(hashToSign, null, signatureResult4401);
         assertNotEquals(signatureResult.getPubKey(), signatureResult4401.getPubKey());
         assertNotEquals(signatureResult.getSignature(), signatureResult4401.getSignature());
@@ -416,7 +416,7 @@ public class SignatureApiTest {
 
         // Sign using seal user's default key (customUserId) with an admin token
         signatureResult = tokenAuthAdminApi.getSignature(hashToSign, null, null, userSeal.getIdentity().getUserId(),
-            null, null, null);
+                null, null, null);
         verifyRegularSignatureValid(hashToSign, null, signatureResult);
 
         // Sign using seal user's default key with a user token
@@ -429,7 +429,7 @@ public class SignatureApiTest {
 
         // Sign using seal user's default key (customUserId) with a user token
         signatureResult = tokenAuthUserSealApi.getSignature(hashToSign, null, null, userSeal.getIdentity().getUserId(),
-            null, null, null);
+                null, null, null);
         verifyRegularSignatureValid(hashToSign, null, signatureResult);
 
         // Sign using seal user's default key (pubKey) with a user token
@@ -446,12 +446,12 @@ public class SignatureApiTest {
 
         // Sign using esign user's default key (userId) with a user token
         signatureResult = tokenAuthUserESignApi.getSignature(hashToSign, null, userESign.getId(), null, null, null,
-            null);
+                null);
         verifyRegularSignatureValid(hashToSign, null, signatureResult);
 
         // Sign using esign user's default key (customUserId) with a user token
         signatureResult = tokenAuthUserESignApi.getSignature(hashToSign, null, null,
-            userESign.getIdentity().getUserId(), null, null, null);
+                userESign.getIdentity().getUserId(), null, null, null);
         verifyRegularSignatureValid(hashToSign, null, signatureResult);
 
         // Sign using esign user's default key (pubKey) with a user token
@@ -555,17 +555,17 @@ public class SignatureApiTest {
 
         // Sign random data using various identity layouts
         SignatureResult testSignatureHashSealALL = tokenAuthUserSealApi
-            .getSignature(hashToSign, null, null, null, null, null, "ALL");
+                .getSignature(hashToSign, null, null, null, null, null, "ALL");
         SignatureResult testSignatureHashSealCN = tokenAuthUserSealApi
-            .getSignature(hashToSign, null, null, null, null, null, "CN");
+                .getSignature(hashToSign, null, null, null, null, null, "CN");
         SignatureResult testSignatureHashSealCNOOULCE = tokenAuthUserSealApi
-            .getSignature(hashToSign, null, null, null, null, null, "CN,O,OU,L,C,EMAILADDRESS");
+                .getSignature(hashToSign, null, null, null, null, null, "CN,O,OU,L,C,EMAILADDRESS");
         SignatureResult testSignatureMessageSealALL = tokenAuthUserSealApi
-            .getSignature(null, messageToSign, null, null, null, null, "ALL");
+                .getSignature(null, messageToSign, null, null, null, null, "ALL");
         SignatureResult testSignatureMessageSealCN = tokenAuthUserSealApi
-            .getSignature(null, messageToSign, null, null, null, null, "CN");
+                .getSignature(null, messageToSign, null, null, null, null, "CN");
         SignatureResult testSignatureMessageSealCNOOULCE = tokenAuthUserSealApi
-            .getSignature(null, messageToSign, null, null, null, null, "CN,O,OU,L,C,EMAILADDRESS");
+                .getSignature(null, messageToSign, null, null, null, null, "CN,O,OU,L,C,EMAILADDRESS");
 
         // Check that "ALL" sends the same result as "CN,O,OU,L,C,EMAILADDRESS"
         assertEquals(testSignatureHashSealCNOOULCE, testSignatureHashSealALL);
@@ -581,17 +581,17 @@ public class SignatureApiTest {
 
         // Sign random data using various identity layouts
         SignatureResult testSignatureHashESignALL = tokenAuthUserESignApi
-            .getSignature(hashToSign, null, null, null, null, null, "ALL");
+                .getSignature(hashToSign, null, null, null, null, null, "ALL");
         SignatureResult testSignatureHashESignCN = tokenAuthUserESignApi
-            .getSignature(hashToSign, null, null, null, null, null, "CN");
+                .getSignature(hashToSign, null, null, null, null, null, "CN");
         SignatureResult testSignatureHashESignCNOOULCE = tokenAuthUserESignApi
-            .getSignature(hashToSign, null, null, null, null, null, "CN,O,OU,L,C,EMAILADDRESS");
+                .getSignature(hashToSign, null, null, null, null, null, "CN,O,OU,L,C,EMAILADDRESS");
         SignatureResult testSignatureMessageESignALL = tokenAuthUserESignApi
-            .getSignature(null, messageToSign, null, null, null, null, "ALL");
+                .getSignature(null, messageToSign, null, null, null, null, "ALL");
         SignatureResult testSignatureMessageESignCN = tokenAuthUserESignApi
-            .getSignature(null, messageToSign, null, null, null, null, "CN");
+                .getSignature(null, messageToSign, null, null, null, null, "CN");
         SignatureResult testSignatureMessageESignCNOOULCE = tokenAuthUserESignApi
-            .getSignature(null, messageToSign, null, null, null, null, "CN,O,OU,L,C,EMAILADDRESS");
+                .getSignature(null, messageToSign, null, null, null, null, "CN,O,OU,L,C,EMAILADDRESS");
 
         // Check if "ALL" sends the same result as "CN,O,OU,L,C,EMAILADDRESS"
         assertEquals(testSignatureHashESignCNOOULCE, testSignatureHashESignALL);

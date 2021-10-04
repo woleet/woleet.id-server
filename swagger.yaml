@@ -9,6 +9,7 @@ info:
     name: CC BY-NC-SA 4.0
 security:
   - CookieAuth: []
+  - APITokenAuth: []
 paths:
   /login:
     get:
@@ -44,8 +45,10 @@ paths:
         - Authentication
       summary: Log out from the system.
       operationId: logout
+      security:
+        - CookieAuth: []
       responses:
-        '200':
+        '204':
           description: User successfully logged out.
   /info:
     get:

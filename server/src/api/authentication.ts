@@ -14,7 +14,7 @@ export async function session(ctx: Context, next) {
     ctx.authorizedUser = {
       userId: ctx.session.userId,
       userRole: ctx.session.userRole
-    }
+    };
   }
   return next();
 }
@@ -121,9 +121,7 @@ export async function manager(ctx: Context, next) {
     throw new Unauthorized();
   }
 
-  if (ctx.authorizedUser &&
-    ctx.authorizedUser.userRole !== 'admin' &&
-    ctx.authorizedUser.userRole !== 'manager'
+  if (ctx.authorizedUser && ctx.authorizedUser.userRole !== 'admin' && ctx.authorizedUser.userRole !== 'manager'
     || (ctx.token && ctx.token.role !== 'admin')) {
     throw new Forbidden('Invalid user level');
   }

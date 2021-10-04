@@ -12,7 +12,8 @@ const router = new Router();
 const serverBase = path.join(__dirname, '../../..');
 
 router.get('/app-config', async function (ctx) {
-  const user = ctx.authorizedUser && ctx.authorizedUser.userId && serializeUserDTO(await getUserById(ctx.authorizedUser.userId)) || null;
+  const user = ctx.authorizedUser && ctx.authorizedUser.userId
+    && serializeUserDTO(await getUserById(ctx.authorizedUser.userId)) || null;
   const hasSession = !!(ctx.authorizedUser && ctx.authorizedUser.userId);
   const {
     enableOpenIDConnect, OIDCPProviderURL, logoURL,

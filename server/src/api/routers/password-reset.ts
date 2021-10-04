@@ -38,7 +38,8 @@ router.post('/', async function (ctx) {
 
   // Check if the requester is an authenticated manager
   const managerId = ctx.authorizedUser &&
-  (ctx.authorizedUser.userRole === 'manager' || ctx.authorizedUser.userRole === 'admin') ? ctx.authorizedUser.userId : null;
+  (ctx.authorizedUser.userRole === 'manager' || ctx.authorizedUser.userRole === 'admin') ?
+    ctx.authorizedUser.userId : null;
   let user;
 
   // If the requester is not an authenticated manager and the reset password function is blocked start warn the managers
