@@ -29,7 +29,7 @@ export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject,
   if (!apiToken) {
     throw new NotFoundAPITokenError();
   }
-  if (userRole === 'user' && apiToken.get('userId') !== userId) {
+  if (userRole && userRole === 'user' && userId && apiToken.get('userId') !== userId) {
     throw new APITokenOwnerMismatchError();
   }
   apiToken = await APIToken.update(id, attrs);
@@ -69,7 +69,7 @@ export async function deleteAPIToken(
   if (!apiToken) {
     throw new NotFoundAPITokenError();
   }
-  if (userRole === 'user' && apiToken.get('userId') !== userId) {
+  if (userRole && userRole === 'user' && userId && apiToken.get('userId') !== userId) {
     throw new APITokenOwnerMismatchError();
   }
 

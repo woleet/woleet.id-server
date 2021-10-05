@@ -43,11 +43,11 @@ router.post('/', async function (ctx) {
   let user;
 
   // If the requester is not an authenticated manager and the reset password function is blocked start warn the managers
-  if (getServerConfig().askForResetInput && !managerId) {
+  if (getServerConfig().askForResetInput && !managerId && !(ctx.token && ctx.token.role === 'admin')) {
     user = await askResetPasswordEmail(email);
   } else {
     try {
-      user = await sendResetPasswordEmail(email, managerId);
+      user = await sendResetPasswordEmail(email, managerId, ctx.token && ctx.token.role === 'admin');
     } catch {
       throw new NotFound(email + ' does not correspond to a user');
     }
