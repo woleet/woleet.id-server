@@ -161,3 +161,14 @@ export class APITokenOwnerMismatchError extends WIDSError {
 
   name = 'APITokenOwnerMismatchError';
 }
+
+export abstract class ForbiddenResourceError extends WIDSError {
+}
+
+export class ForbiddenAPITokenError extends ForbiddenResourceError {
+  constructor(m = 'You cannot access this API token') {
+    super(m);
+  }
+
+  name = 'ForbiddenAPITokenError';
+}

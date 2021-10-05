@@ -25,6 +25,9 @@ const errorHandler: IMiddleware = async function (ctx, next) {
     } else if (error instanceof errors.BlockedResourceError) {
       ctx.status = 403;
       ctx.body = { name: error.name, message: error.message, status: 403 };
+    } else if (error instanceof errors.ForbiddenResourceError) {
+      ctx.status = 403;
+      ctx.body = { name: error.name, message: error.message, status: 403 };
     } else if (error instanceof errors.NoDefaultKeyError) {
       ctx.status = 403;
       ctx.body = { name: error.name, message: error.message, status: 403 };
