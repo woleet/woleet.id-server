@@ -8,6 +8,7 @@ import { store as event } from '../../controllers/server-event';
 import { serializeUser } from '../serialize/user';
 import { BadRequest, Forbidden } from 'http-errors';
 import { production } from '../../config';
+import { getUserById } from '../../controllers/user';
 
 const vkid = validate.param('id', 'uuid');
 const vuid = validate.param('userId', 'uuid');
@@ -29,6 +30,13 @@ const router = new Router();
 router.post('/user/:userId/key', vuid, validate.body('createKey'), async function (ctx) {
   const { userId } = ctx.params;
   const key: ApiPostKeyObject = ctx.request.body;
+
+  if (ctx.authorizedUser && ctx.authorizedUser.userRole === 'manager') {
+    const user = await getUserById(userId);
+    if (user.role === 'admin') {
+      throw new Forbidden('Manager cannot create key for admin user');
+    }
+  }
 
   // Verify mnemonic phrase if provided
   if (key.phrase) {

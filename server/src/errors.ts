@@ -172,3 +172,11 @@ export class ForbiddenAPITokenError extends ForbiddenResourceError {
 
   name = 'ForbiddenAPITokenError';
 }
+
+export class ForbiddenUserError extends ForbiddenResourceError {
+  constructor(m = 'You cannot access this User') {
+    super(m);
+  }
+
+  name = 'ForbiddenUserError';
+}

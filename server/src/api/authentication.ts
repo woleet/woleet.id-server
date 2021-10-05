@@ -122,7 +122,7 @@ export async function manager(ctx: Context, next) {
   }
 
   if (ctx.authorizedUser && ctx.authorizedUser.userRole !== 'admin' && ctx.authorizedUser.userRole !== 'manager'
-    || (ctx.token && ctx.token.role !== 'admin')) {
+    && !(ctx.token && ctx.token.role === 'admin')) {
     throw new Forbidden('Invalid user level');
   }
 

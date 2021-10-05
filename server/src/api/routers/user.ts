@@ -123,7 +123,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
       throw new Forbidden('Only an admin can update another admin');
     }
   }
-  user = await updateUser(id, copy(update));
+  user = await updateUser(id, copy(update), ctx.authorizedUser ? ctx.authorizedUser.userRole : null);
 
   event.register({
     type: 'user.edit',
@@ -144,7 +144,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
  */
 router.delete('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
-  const user = await deleteUser(id);
+  const user = await deleteUser(id, ctx.authorizedUser ? ctx.authorizedUser.userRole : null);
 
   event.register({
     type: 'user.delete',
