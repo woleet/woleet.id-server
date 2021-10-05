@@ -28,10 +28,10 @@ export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject,
   debug('Update apiToken', attrs);
 
   let apiToken = await APIToken.getById(id);
-  const apiTokenUserId = apiToken.getDataValue('userId');
   if (!apiToken) {
     throw new NotFoundAPITokenError();
   }
+  const apiTokenUserId = apiToken.getDataValue('userId');
   if (userRole && userRole === 'user' && userId && apiTokenUserId !== userId) {
     throw new APITokenOwnerMismatchError();
   }
@@ -94,10 +94,10 @@ export async function deleteAPIToken(
 ): Promise<InternalAPITokenObject> {
 
   const apiToken = await APIToken.getById(id);
-  const apiTokenUserId = apiToken.getDataValue('userId');
   if (!apiToken) {
     throw new NotFoundAPITokenError();
   }
+  const apiTokenUserId = apiToken.getDataValue('userId');
   if (userRole && userRole === 'user' && userId && apiTokenUserId !== userId) {
     throw new APITokenOwnerMismatchError();
   }

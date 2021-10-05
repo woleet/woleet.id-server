@@ -49,7 +49,7 @@ public class ManagerTest {
             fail("Should not be able to create an admin with manager rights");
         }
         catch (ApiException e) {
-            assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         UserPut userPut = new UserPut();
