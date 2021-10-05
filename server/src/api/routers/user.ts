@@ -120,7 +120,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
     const authorizedUser = await getUserById(ctx.authorizedUser.userId);
     if ((update.role === 'admin' && authorizedUser.role !== 'admin')
       || (user.role === 'admin' && authorizedUser.role !== 'admin')) {
-      throw new Unauthorized('Only an admin can update another admin');
+      throw new Forbidden('Only an admin can update another admin');
     }
   }
   user = await updateUser(id, copy(update));
