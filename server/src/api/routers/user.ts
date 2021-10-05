@@ -6,7 +6,7 @@ import { buildUserFilters, serializeUser } from '../serialize/user';
 import { store as event } from '../../controllers/server-event';
 import { isKeyHeldByServer } from '../../controllers/key';
 import { getServerConfig } from '../../controllers/server-config';
-import { BadRequest, Unauthorized } from 'http-errors';
+import { BadRequest, Forbidden, Unauthorized } from 'http-errors';
 import { FindOptions } from 'sequelize';
 
 const vid = validate.param('id', 'uuid');
@@ -52,7 +52,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
   if (!(ctx.token && ctx.token.role === 'admin')) {
     const authorizedUser = await getUserById(ctx.authorizedUser.userId);
     if (user.role === 'admin' && authorizedUser.role !== 'admin') {
-      throw new Unauthorized('Only admin can create other admin');
+      throw new Forbidden('Only an admin can create another admin');
     }
   }
 
@@ -120,7 +120,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
     const authorizedUser = await getUserById(ctx.authorizedUser.userId);
     if ((update.role === 'admin' && authorizedUser.role !== 'admin')
       || (user.role === 'admin' && authorizedUser.role !== 'admin')) {
-      throw new Unauthorized('Only admin can update other admin');
+      throw new Unauthorized('Only an admin can update another admin');
     }
   }
   user = await updateUser(id, copy(update));
