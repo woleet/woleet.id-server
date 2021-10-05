@@ -177,9 +177,6 @@ public class CRUDExternalKeyApiTest extends CRUDApiTest {
         ExternalKeyPost post = (ExternalKeyPost) pPost.get();
         KeyGet get = (KeyGet) pGet.get();
         assertEquals(put.getName() != null ? put.getName() : post.getName(), get.getName());
-        // FIXME: because external keys are updated using the key API, which doesn't allow to modify the public key
-        //  at least in the swagger doc, we cannot test this).
-        //assertEquals(put.getPublicKey() != null ? put.getPublicKey() : post.getPublicKey(), get.getPublicKey());
         assertEquals(put.getStatus() != null ? put.getStatus() : post.getStatus(), get.getStatus());
         assertEquals(put.getDevice() != null ? put.getDevice() : post.getDevice(), get.getDevice());
         assertEquals(put.getExpiration() != null ? put.getExpiration() : post.getExpiration(), get.getExpiration());

@@ -106,8 +106,6 @@ public class UserApiTest {
         // Check that we can create users with admin token authentication
         Config.createTestUser(tokenAuthUserApi, UserRoleEnum.USER, UserModeEnum.SEAL);
         Config.createTestUser(tokenAuthUserApi, UserRoleEnum.ADMIN, UserModeEnum.SEAL);
-        Config.createTestUser(tokenAuthUserApi, UserRoleEnum.USER, UserModeEnum.ESIGN);
-        Config.createTestUser(tokenAuthUserApi, UserRoleEnum.ADMIN, UserModeEnum.ESIGN);
     }
 
     @Test
