@@ -15,23 +15,18 @@ package io.woleet.idserver.api;
 
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
-import io.woleet.idserver.api.model.*;
-
-import java.util.UUID;
-
+import io.woleet.idserver.api.model.APITokenGet;
+import io.woleet.idserver.api.model.APITokenPost;
+import io.woleet.idserver.api.model.APITokenPut;
+import io.woleet.idserver.api.model.UserGet;
 import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
 
 
 public class ApiTokenApiTest {
@@ -64,7 +59,7 @@ public class ApiTokenApiTest {
     public void userCreateAPITokenTest() throws ApiException {
         APITokenGet apiToken = userApiTokenApi.createAPIToken(apiTokenPost);
         assertNotNull(apiToken.getId());
-        assertEquals("Name should be equals", apiTokenPost.getName(), apiToken.getName());
+        assertEquals(apiTokenPost.getName(), apiToken.getName());
 
         // Try to create an admin token with the user auth
         try {
@@ -74,7 +69,7 @@ public class ApiTokenApiTest {
             fail("Should not be able to create an admin API token with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Try to create a token for another user with user credentials
@@ -87,7 +82,7 @@ public class ApiTokenApiTest {
             fail("Should not be able to create a token for another user with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 
@@ -107,7 +102,7 @@ public class ApiTokenApiTest {
             fail("Should not be able to delete an admin API token with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Try to delete other user token with the user auth
@@ -121,7 +116,7 @@ public class ApiTokenApiTest {
             fail("Should not be able to delete a token for on other user with the user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         adminApiTokenApi.deleteAPIToken(adminApiTokenGet.getId());
@@ -132,7 +127,7 @@ public class ApiTokenApiTest {
     public void userGetAPITokenByIdTest() throws ApiException {
         APITokenGet apiToken = userApiTokenApi.createAPIToken(apiTokenPost);
         APITokenGet apiTokenGet = userApiTokenApi.getAPITokenById(apiToken.getId());
-        assertEquals("Id should be equals", apiToken.getId(), apiTokenGet.getId());
+        assertEquals(apiToken.getId(), apiTokenGet.getId());
 
         // Try to get admin API token with user credentials
         ApiTokenApi adminApiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
@@ -144,7 +139,7 @@ public class ApiTokenApiTest {
             fail("Should not be able to get an admin API token with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Try to get other user token with the user auth
@@ -158,7 +153,7 @@ public class ApiTokenApiTest {
             fail("Should not be able to get an other user token with the user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         adminApiTokenApi.deleteAPIToken(adminApiTokenGet.getId());
@@ -182,8 +177,7 @@ public class ApiTokenApiTest {
         APITokenGet adminApiTokenGet = adminApiTokenApi.createAPIToken(apiTokenPost3);
 
         List<APITokenGet> apiTokenGetList = userApiTokenApi.getAPITokens();
-
-        for (APITokenGet apiTokenGet: apiTokenGetList) {
+        for (APITokenGet apiTokenGet : apiTokenGetList) {
             assertEquals("Should only get the user owned token", user.getId(), apiTokenGet.getUserId());
         }
         adminApiTokenApi.deleteAPIToken(adminApiTokenGet.getId());
@@ -196,7 +190,7 @@ public class ApiTokenApiTest {
         APITokenPut apiTokenPut = new APITokenPut();
         apiTokenPut.setName(Config.randomName());
         APITokenGet apiTokenGet = userApiTokenApi.updateAPIToken(apiToken.getId(), apiTokenPut);
-        assertEquals("Name should be equals", apiTokenPut.getName(), apiTokenGet.getName());
+        assertEquals(apiTokenPut.getName(), apiTokenGet.getName());
 
         // Try to update admin API token with the user auth
         ApiTokenApi adminApiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
@@ -208,7 +202,7 @@ public class ApiTokenApiTest {
             fail("Should not be able to update an admin API token with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Try to update other user token with the user auth
@@ -222,7 +216,7 @@ public class ApiTokenApiTest {
             fail("Should not be able to update an other user token with the user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         adminApiTokenApi.deleteAPIToken(adminApiTokenGet.getId());

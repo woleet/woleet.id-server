@@ -77,7 +77,7 @@ public class IdentityApiTest {
 
         // Prepare test data
         IdentityApi identityApi = new IdentityApi(Config.getNoAuthApiClient()
-            .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
+                .setBasePath(WOLEET_ID_SERVER_IDENTITY_BASEPATH));
         KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
         String leftData = Config.randomString(32);
 
@@ -87,7 +87,7 @@ public class IdentityApiTest {
             fail("Should not be able to get an identity with an invalid key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Check that we cannot get an identity from a public key that does not exist
@@ -96,7 +96,7 @@ public class IdentityApiTest {
             fail("Should not be able to get an identity with an non existing key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Check that server's default key and identity URL are set
@@ -124,13 +124,13 @@ public class IdentityApiTest {
         assertEquals(expiration, expiredIdentity.getKey().getExpiration());
         assertEquals(Key.StatusEnum.EXPIRED, expiredIdentity.getKey().getStatus());
         assertTrue(
-            "Expected " + expiredIdentity.getRightData()
-            + "to start with \"" + serverConfig.getIdentityURL()
-            + "\" but got \"" + expiredIdentity.getRightData() + "\"",
-            expiredIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
+                "Expected " + expiredIdentity.getRightData()
+                + "to start with \"" + serverConfig.getIdentityURL()
+                + "\" but got \"" + expiredIdentity.getRightData() + "\"",
+                expiredIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
         );
         assertTrue(Config.isValidSignature(expiredKey.getPubKey(), expiredIdentity.getSignature(),
-            leftData + expiredIdentity.getRightData()));
+                leftData + expiredIdentity.getRightData()));
 
         // Create a blocked key
         keyPost = new KeyPost();
@@ -150,13 +150,13 @@ public class IdentityApiTest {
         assertNull(blockedIdentity.getKey().getExpiration());
         assertEquals(Key.StatusEnum.VALID, blockedIdentity.getKey().getStatus());
         assertTrue(
-            "Expected " + blockedIdentity.getRightData()
-            + "to start with \"" + serverConfig.getIdentityURL()
-            + "\" but got \"" + blockedIdentity.getRightData() + "\"",
-            blockedIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
+                "Expected " + blockedIdentity.getRightData()
+                + "to start with \"" + serverConfig.getIdentityURL()
+                + "\" but got \"" + blockedIdentity.getRightData() + "\"",
+                blockedIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
         );
         assertTrue(Config.isValidSignature(blockedKey.getPubKey(), blockedIdentity.getSignature(),
-            leftData + blockedIdentity.getRightData()));
+                leftData + blockedIdentity.getRightData()));
 
         // Delete blocked key
         keyApi.deleteKey(blockedKey.getId());
@@ -181,13 +181,13 @@ public class IdentityApiTest {
         assertNotNull(revokedIdentity.getKey().getRevokedAt());
         assertEquals(Key.StatusEnum.REVOKED, revokedIdentity.getKey().getStatus());
         assertTrue(
-            "Expected " + revokedIdentity.getRightData()
-            + "to start with \"" + serverConfig.getIdentityURL()
-            + "\" but got \"" + revokedIdentity.getRightData() + "\"",
-            revokedIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
+                "Expected " + revokedIdentity.getRightData()
+                + "to start with \"" + serverConfig.getIdentityURL()
+                + "\" but got \"" + revokedIdentity.getRightData() + "\"",
+                revokedIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
         );
         assertTrue(Config.isValidSignature(revokedKey.getPubKey(), revokedIdentity.getSignature(),
-            leftData + revokedIdentity.getRightData()));
+                leftData + revokedIdentity.getRightData()));
 
         // Create an external key
         ExternalKeyPost externalKeyPost = new ExternalKeyPost();
@@ -246,13 +246,13 @@ public class IdentityApiTest {
         assertEquals(identityResult.getKey().getPubKey(), pubKey);
         assertEquals(Key.StatusEnum.VALID, identityResult.getKey().getStatus());
         assertTrue(
-            "Expected " + identityResult.getRightData()
-            + "to start with \"" + serverConfig.getIdentityURL()
-            + "\" but got \"" + identityResult.getRightData() + "\"",
-            identityResult.getRightData().startsWith(serverConfig.getIdentityURL())
+                "Expected " + identityResult.getRightData()
+                + "to start with \"" + serverConfig.getIdentityURL()
+                + "\" but got \"" + identityResult.getRightData() + "\"",
+                identityResult.getRightData().startsWith(serverConfig.getIdentityURL())
         );
         assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(),
-            leftData + identityResult.getRightData()));
+                leftData + identityResult.getRightData()));
 
         // Switch the server in strict mode (prevent identity exposure)
         serverConfig.setPreventIdentityExposure(true);
@@ -261,18 +261,18 @@ public class IdentityApiTest {
         // Create signature to test new identity endpoint
         String hashToSign = Config.randomHash();
         tokenAuthUserESignApi.getSignature(null, hashToSign, userESign.getId(), null, eSignatureKey.getPubKey(), null,
-            "CN,EMAILADDRESS");
+                "CN,EMAILADDRESS");
 
         // Check that we cannot get an identity from a mismatching signed identity
         String signedIdentity =
-            "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail()
-            + ",C=" + userESign.getIdentity().getCountry();
+                "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail()
+                + ",C=" + userESign.getIdentity().getCountry();
         try {
             identityApi.getIdentity(eSignatureKey.getPubKey(), signedIdentity, null);
             fail("Should not be able to get an identity with a signed identity mismatching the one which signed");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Check that we cannot get an identity from a mismatching public key
@@ -282,7 +282,7 @@ public class IdentityApiTest {
             fail("Should not be able to get an identity with a public key mismatching the one which signed");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Check that we cannot get an identity without providing a signed identity
@@ -291,7 +291,7 @@ public class IdentityApiTest {
             fail("Should not be able to get an identity without the signed identity");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Test signed identity

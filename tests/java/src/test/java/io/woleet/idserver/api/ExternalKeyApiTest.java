@@ -40,7 +40,7 @@ public class ExternalKeyApiTest {
             fail("Should not be able to assign a external key to a user in seal mode");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
     }
 }

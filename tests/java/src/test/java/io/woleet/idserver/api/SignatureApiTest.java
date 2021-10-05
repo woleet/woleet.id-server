@@ -227,7 +227,7 @@ public class SignatureApiTest {
             fail("Should not be able to get a signature with no credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+            assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
         // Try to sign with user credentials
@@ -236,7 +236,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+            assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
         // Try to sign with admin credentials
@@ -245,7 +245,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign with admin credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+            assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
         // Try to sign an invalid hash
@@ -254,7 +254,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign an invalid hash");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Try to sign using an invalid key
@@ -263,7 +263,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign using an invalid key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Try to sign using a non existing key
@@ -273,7 +273,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign using a non existing key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Try to sign using a non existing user (userId)
@@ -282,7 +282,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign using a non existing user");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Try to sign using a non existing user (customUserId)
@@ -291,7 +291,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign using a non existing user");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Try to sign using a non existing key
@@ -301,7 +301,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign using a non existing key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Try to sign as a different user
@@ -310,7 +310,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign as a different user");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+            assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
         // Try to sign with a non owned key
@@ -322,7 +322,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign with a non owned key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Try to sign using an esign user key with an admin token
@@ -334,7 +334,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign using an esign user key with an admin token");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+            assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
         // Try to sign as an esign user with an admin token
@@ -343,7 +343,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign as an esign user with an admin token");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_UNAUTHORIZED, e.getCode());
+            assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
         // Switch the server not to fallback on default key
@@ -356,7 +356,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign using a non existing server's default key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Switch back the server config to fallback on default key
@@ -480,7 +480,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign with a blocked key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Delete user's default key
@@ -495,7 +495,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign with a user which doesn't have a default key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Try to sign using as a user which doesn't have a default key
@@ -504,7 +504,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign with as user which doesn't have a default key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Try to sign as admin using a non existing key
@@ -513,7 +513,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign using a non existing key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
         // Try to sign as user using a non existing key
@@ -522,7 +522,7 @@ public class SignatureApiTest {
             fail("Should not be able to sign using a non existing key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
     }
 

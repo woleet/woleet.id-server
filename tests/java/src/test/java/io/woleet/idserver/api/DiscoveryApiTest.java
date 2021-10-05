@@ -78,7 +78,7 @@ public class DiscoveryApiTest {
             fail("Should not be able to discover a user using an invalid key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
             return;
         }
 
@@ -88,7 +88,7 @@ public class DiscoveryApiTest {
             fail("Should not be able to discover a user using a non existing key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
             return;
         }
 
@@ -107,7 +107,7 @@ public class DiscoveryApiTest {
             fail("Should not be able to discover user's key using a non existing user identifier");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_NOT_FOUND, e.getCode());
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
             return;
         }
 

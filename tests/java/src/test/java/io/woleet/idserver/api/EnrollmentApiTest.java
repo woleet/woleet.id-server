@@ -52,7 +52,7 @@ public class EnrollmentApiTest {
             fail("Should not be able to create an already expired enrollment");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
     }
 
@@ -69,7 +69,7 @@ public class EnrollmentApiTest {
             fail("Should not be able to create an enrollment object with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 
@@ -88,7 +88,7 @@ public class EnrollmentApiTest {
             fail("Should not be able to delete an enrollment object with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 
@@ -103,7 +103,7 @@ public class EnrollmentApiTest {
             fail("Should not be able to get all enrollments object with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 
@@ -119,7 +119,7 @@ public class EnrollmentApiTest {
             fail("Should not be able to create an enrollment for a seal user");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
     }
 
@@ -136,7 +136,7 @@ public class EnrollmentApiTest {
             fail("Should not be able to create an enrollment with an already expired key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
     }
 }

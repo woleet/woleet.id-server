@@ -67,7 +67,7 @@ public class UserApiTest {
             fail("Should not be able to create an user object with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Check that we cannot create an esign user without an email
@@ -76,7 +76,7 @@ public class UserApiTest {
             fail("Should not be able to create an esign user without an email");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Build a seal user without an organization
@@ -90,7 +90,7 @@ public class UserApiTest {
             fail("Should not be able to create a seal user without an organization");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Check that we cannot create a seal user (explicit mode) without an organization
@@ -100,7 +100,7 @@ public class UserApiTest {
             fail("Should not be able to create a seal user without an organization");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Check that we can create users with admin token authentication
@@ -120,7 +120,7 @@ public class UserApiTest {
             fail("Should not be able to get a user object with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Get the test user and check that it matches (except temporal properties)
@@ -150,7 +150,7 @@ public class UserApiTest {
             fail("Should not be able to delete a user object with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 
@@ -165,7 +165,7 @@ public class UserApiTest {
             fail("Should not be able to get all users object with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Get the admin user by his role and username

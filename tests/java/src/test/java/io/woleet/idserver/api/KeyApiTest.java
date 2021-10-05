@@ -42,7 +42,7 @@ public class KeyApiTest {
             fail("Should not be able to create a key object with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 
@@ -55,7 +55,7 @@ public class KeyApiTest {
             fail("Should not be able to delete a key with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 
@@ -68,7 +68,7 @@ public class KeyApiTest {
             fail("Should not be able to get all keys with user credentials");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 
@@ -84,7 +84,7 @@ public class KeyApiTest {
             fail("Should not be able to create an already expired key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Expire a key and check that the expiration status and date is valid
@@ -113,7 +113,7 @@ public class KeyApiTest {
             fail("Should not be able to update a revoked key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Check that we cannot delete a revoked key
@@ -122,7 +122,7 @@ public class KeyApiTest {
             fail("Should not be able to delete a revoked key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // TODO: check that we cannot use a revoked key to sign
