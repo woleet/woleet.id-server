@@ -30,7 +30,7 @@ export class APITokenCreateCardComponent extends ErrorMessageProvider implements
 
   async ngOnInit() {
     if (!this.userList$) {
-      this.userList$ = this.userService.getAll();
+      this.userList$ = this.userService.getAll().then(userList => userList.filter(user => this.isAdmin() || user.role !== 'admin'));
     }
   }
 
