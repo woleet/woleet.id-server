@@ -60,11 +60,11 @@ public class UserApiTest {
         fullIdentity.commonName(COMMON_NAME);
         userESign.setIdentity(fullIdentity);
 
-        // Try to create a user with user credentials
+        // Try to create a user with user rights
         try {
             UserApi userAuthApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
             userAuthApi.createUser(userESign);
-            fail("Should not be able to create an user object with user credentials");
+            fail("Should not be able to create an user object with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -112,10 +112,10 @@ public class UserApiTest {
     public void getUserByIdTest() throws ApiException, NoSuchFieldException, IllegalAccessException {
         UserApi userAuthApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
 
-        // Try to get a user with user credentials
+        // Try to get a user with user rights
         try {
             userAuthApi.getUserById(user.getId());
-            fail("Should not be able to get a user object with user credentials");
+            fail("Should not be able to get a user object with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -142,10 +142,10 @@ public class UserApiTest {
     public void deleteUserTest() throws ApiException {
         UserApi userAuthApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
 
-        // Try to delete a user with user credentials
+        // Try to delete a user with user rights
         try {
             userAuthApi.deleteUser(user.getId());
-            fail("Should not be able to delete a user object with user credentials");
+            fail("Should not be able to delete a user object with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -155,12 +155,12 @@ public class UserApiTest {
     @Test
     public void getUsersTest() throws ApiException {
 
-        // Try to get all users with user credentials
+        // Try to get all users with user rights
         try {
             UserApi userAuthUserApi = new UserApi(Config.getAuthApiClient(user.getUsername(), "pass"));
             userAuthUserApi.getUsers(null, null, null, null, null, null, null, null, null, null, null, null, null, null,
                     null, null);
-            fail("Should not be able to get all users object with user credentials");
+            fail("Should not be able to get all users object with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());

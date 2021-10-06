@@ -12,6 +12,7 @@ public class UserApiOperations {
     public static abstract class UserApiOperation extends SecurityTest.Operation {
 
         UserApi userApi = null;
+        APITokenGet adminAPITokenGet = null;
 
         void init(SecurityTest.Authentication authentication) throws ApiException {
             this.authentication = authentication;
@@ -46,22 +47,28 @@ public class UserApiOperations {
                                     "Bearer " + new ApiTokenApi(Config.getAuthApiClient(userGet.getUsername(), "pass"))
                                             .createAPIToken(new APITokenPost()
                                                     .name("test-" + authentication.name())
-                                                    .userId(userGet.getId())
-                                            )
-                                            .getValue()
+                                                    .userId(userGet.getId())).getValue()
                             )
                     );
                     break;
 
                 case TOKEN_AUTH:
+                    adminAPITokenGet = new ApiTokenApi(Config.getAdminAuthApiClient())
+                            .createAPIToken(new APITokenPost().name("test-" + authentication.name()));
                     userApi = new UserApi(
                             Config.getNoAuthApiClient().addDefaultHeader(
-                                    "Authorization",
-                                    "Bearer " + new ApiTokenApi(Config.getAdminAuthApiClient())
-                                            .createAPIToken(new APITokenPost().name("test-" + authentication.name()))
-                                            .getValue()
+                                    "Authorization", "Bearer " + adminAPITokenGet.getValue()
                             )
                     );
+                    break;
+            }
+        }
+
+        void cleanup(SecurityTest.Authentication authentication) throws ApiException {
+            switch (authentication) {
+                case TOKEN_AUTH:
+                    new ApiTokenApi(Config.getAdminAuthApiClient())
+                            .deleteAPIToken(adminAPITokenGet.getId());
                     break;
             }
         }

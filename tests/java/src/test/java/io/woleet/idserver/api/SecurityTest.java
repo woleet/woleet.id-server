@@ -50,6 +50,8 @@ public class SecurityTest {
 
         abstract void init(Authentication authentication) throws ApiException;
 
+        abstract void cleanup(Authentication authentication) throws ApiException;
+
         abstract void check();
 
         abstract void run() throws ApiException;
@@ -109,6 +111,7 @@ public class SecurityTest {
                     else
                         logger.error(t.getMessage());
                 }
+                operation.cleanup(authentication);
             }
         }
     }

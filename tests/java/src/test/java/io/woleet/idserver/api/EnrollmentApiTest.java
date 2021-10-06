@@ -61,12 +61,12 @@ public class EnrollmentApiTest {
         UserGet user = Config.createTestUser();
         EnrollmentApi userAuthApi = new EnrollmentApi(Config.getAuthApiClient(user.getUsername(), "pass"));
 
-        // Try to create an enrollment with user credentials
+        // Try to create an enrollment with user rights
         try {
             enrollmentPost.setName(Config.randomName());
             enrollmentPost.setUserId(userESign.getId());
             userAuthApi.createEnrollment(enrollmentPost);
-            fail("Should not be able to create an enrollment object with user credentials");
+            fail("Should not be able to create an enrollment object with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -79,13 +79,13 @@ public class EnrollmentApiTest {
         EnrollmentApi userAuthApi = new EnrollmentApi(Config.getAuthApiClient(user.getUsername(), "pass"));
         EnrollmentApi enrollmentApi = new EnrollmentApi(Config.getAdminAuthApiClient());
 
-        // Try to delete an enrollment with user credentials
+        // Try to delete an enrollment with user rights
         try {
             enrollmentPost.setName(Config.randomName());
             enrollmentPost.setUserId(userESign.getId());
             EnrollmentGet enrollmentGet = enrollmentApi.createEnrollment(enrollmentPost);
             userAuthApi.deleteEnrollment(enrollmentGet.getId());
-            fail("Should not be able to delete an enrollment object with user credentials");
+            fail("Should not be able to delete an enrollment object with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -97,10 +97,10 @@ public class EnrollmentApiTest {
         UserGet user = Config.createTestUser();
         EnrollmentApi userAuthApi = new EnrollmentApi(Config.getAuthApiClient(user.getUsername(), "pass"));
 
-        // Try to get all enrollments with user credentials
+        // Try to get all enrollments with user rights
         try {
             userAuthApi.getEnrollments();
-            fail("Should not be able to get all enrollments object with user credentials");
+            fail("Should not be able to get all enrollments object with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());

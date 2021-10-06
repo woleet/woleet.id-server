@@ -230,19 +230,19 @@ public class SignatureApiTest {
             assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to sign with user credentials
+        // Try to sign with user rights
         try {
             userAuthApi.getSignature(Config.randomHash(), null, null, null, null, null, null);
-            fail("Should not be able to sign with user credentials");
+            fail("Should not be able to sign with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to sign with admin credentials
+        // Try to sign with admin rights
         try {
             adminAuthApi.getSignature(Config.randomHash(), null, null, null, null, null, null);
-            fail("Should not be able to sign with admin credentials");
+            fail("Should not be able to sign with admin rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());

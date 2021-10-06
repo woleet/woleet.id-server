@@ -34,12 +34,12 @@ public class KeyApiTest {
     @Test
     public void userCreateKeyTest() {
 
-        // Try to create a key with user credentials
+        // Try to create a key with user rights
         try {
             KeyPost keyPost = new KeyPost();
             keyPost.setName(Config.randomName());
             userAuthKeyApi.createKey(userSeal.getId(), keyPost);
-            fail("Should not be able to create a key object with user credentials");
+            fail("Should not be able to create a key object with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -49,10 +49,10 @@ public class KeyApiTest {
     @Test
     public void userDeleteKeyTest() {
 
-        // Try to delete a key with user credentials
+        // Try to delete a key with user rights
         try {
             userAuthKeyApi.deleteKey(userSeal.getDefaultKeyId());
-            fail("Should not be able to delete a key with user credentials");
+            fail("Should not be able to delete a key with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -62,10 +62,10 @@ public class KeyApiTest {
     @Test
     public void userGetUserKeysTest() {
 
-        // Try to get all keys with user credentials
+        // Try to get all keys with user rights
         try {
             userAuthKeyApi.getUserKeys(userSeal.getId());
-            fail("Should not be able to get all keys with user credentials");
+            fail("Should not be able to get all keys with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());

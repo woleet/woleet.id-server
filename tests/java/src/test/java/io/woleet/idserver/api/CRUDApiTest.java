@@ -250,7 +250,7 @@ public abstract class CRUDApiTest {
         // Create an object to delete
         ObjectGet objectGet = createTestObject();
 
-        // Delete the object with admin credentials
+        // Delete the object with admin rights
         adminAuthApi.deleteObject(objectGet.getId());
 
         // Try to delete an object with no credentials
@@ -278,7 +278,7 @@ public abstract class CRUDApiTest {
         // Create an object to get
         ObjectGet objectGet = createTestObject();
 
-        // Get all objects with admin credentials and check that the object is within the results
+        // Get all objects with admin rights and check that the object is within the results
         List<ObjectGet> objects = adminAuthApi.getAllObjects();
         assertTrue(objects.contains(objectGet));
 
@@ -305,7 +305,7 @@ public abstract class CRUDApiTest {
         ObjectGet objectGet = adminAuthApi.createObject(objectPost.setFullAttributes());
         verifyObjectValid(objectGet);
 
-        // Get and verify an object with admin credentials
+        // Get and verify an object with admin rights
         objectGet = adminAuthApi.getObjectById(objectGet.getId());
         verifyObjectValid(objectGet);
         verifyObjectsEquals(objectPost, objectGet);
@@ -319,10 +319,10 @@ public abstract class CRUDApiTest {
             assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to get an object with user credentials
+        // Try to get an object with user rights
         try {
             userAuthApi.getObjectById(objectGet.getId());
-            fail("Should not be able to get an object with user credentials");
+            fail("Should not be able to get an object with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -346,7 +346,7 @@ public abstract class CRUDApiTest {
         ObjectGet objectGet = adminAuthApi.createObject(objectPost.setFullAttributes());
         verifyObjectValid(objectGet);
 
-        // Update and verify an object with admin credentials
+        // Update and verify an object with admin rights
         ObjectPut objectPut = newObjectPut();
         objectPut.update();
         objectGet = adminAuthApi.updateObject(objectGet.getId(), objectPut);
@@ -365,10 +365,10 @@ public abstract class CRUDApiTest {
             assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to update an object with user credentials
+        // Try to update an object with user rights
         try {
             userAuthApi.updateObject(objectGet.getId(), objectPut);
-            fail("Should not be able to get an object with user credentials");
+            fail("Should not be able to get an object with user rights");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
