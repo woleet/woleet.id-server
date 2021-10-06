@@ -16,7 +16,7 @@ public class SecurityTest {
     private static final Logger logger = LoggerFactory.getLogger(SecurityTest.class);
 
     // True if tests must stop on error
-    private static final boolean stopOnError = false;
+    private static final boolean stopOnError = true;
 
     @Before
     public void setUp() throws Exception {

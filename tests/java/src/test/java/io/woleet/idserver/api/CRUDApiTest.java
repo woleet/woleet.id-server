@@ -120,7 +120,7 @@ public abstract class CRUDApiTest {
     }
 
     private ObjectGet createTestObject() throws ApiException {
-        return createTestObject(newApi(Config.getAdminAuthApiClient()));
+        return createTestObject(adminAuthApi);
     }
 
     @Before
