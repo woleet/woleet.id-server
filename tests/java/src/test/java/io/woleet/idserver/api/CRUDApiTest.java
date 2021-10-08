@@ -262,10 +262,10 @@ public abstract class CRUDApiTest {
             assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to delete a non existing object
+        // Try to delete a non-existing object
         try {
             adminAuthApi.deleteObject(Config.randomUUID());
-            fail("Should not be able to delete a non existing object");
+            fail("Should not be able to delete a non-existing object");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
@@ -328,10 +328,10 @@ public abstract class CRUDApiTest {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-        // Try to get a non existing object
+        // Try to get a non-existing object
         try {
             adminAuthApi.getObjectById(Config.randomUUID());
-            fail("Should not be able to get a non existing object");
+            fail("Should not be able to get a non-existing object");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
@@ -374,10 +374,10 @@ public abstract class CRUDApiTest {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-        // Try to update a non existing object
+        // Try to update a non-existing object
         try {
             adminAuthApi.updateObject(Config.randomUUID(), objectPut);
-            fail("Should not be able to get a non existing object");
+            fail("Should not be able to get a non-existing object");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());

@@ -164,23 +164,23 @@ public class SignatureApiTest {
         noAuthApi = new SignatureApi(Config.getNoAuthApiClient()
                 .setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH));
 
-        // Create one helper API with admin rights using token authentication
+        // Create a token API with admin rights
         apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
-        apiTokenAdmin = apiTokenApi.createAPIToken(new APITokenPost().name("test-admin"));
+
+        // Create a helper API with admin rights using token authentication
+        apiTokenAdmin = Config.createTestApiToken(null);
         ApiClient apiClientAdmin = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
         apiClientAdmin.addDefaultHeader("Authorization", "Bearer " + apiTokenAdmin.getValue());
         tokenAuthAdminApi = new SignatureApi(apiClientAdmin);
 
-        // Create two helper APIs with user rights using token authentication
-        APITokenPost apiTokenUser = new APITokenPost();
-        apiTokenUser.setName("test-user");
-        apiTokenUser.setUserId(userSeal.getId());
-        apiTokenUserSeal = apiTokenApi.createAPIToken(apiTokenUser);
-        apiTokenUser.setUserId(userESign.getId());
-        apiTokenUserESign = apiTokenApi.createAPIToken(apiTokenUser);
+        // Create a helper API with seal user rights using token authentication
+        apiTokenUserSeal = Config.createTestApiToken(userSeal.getId());
         ApiClient apiClientUserSeal = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
         apiClientUserSeal.addDefaultHeader("Authorization", "Bearer " + apiTokenUserSeal.getValue());
         tokenAuthUserSealApi = new SignatureApi(apiClientUserSeal);
+
+        // Create a helper API with esign user rights using token authentication
+        apiTokenUserESign = Config.createTestApiToken(userESign.getId());
         ApiClient apiClientUserESign = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
         apiClientUserESign.addDefaultHeader("Authorization", "Bearer " + apiTokenUserESign.getValue());
         tokenAuthUserESignApi = new SignatureApi(apiClientUserESign);
@@ -188,22 +188,8 @@ public class SignatureApiTest {
 
     @After
     public void tearDown() throws Exception {
-
-        // This code is called before setUp() is called, so API token can be null
-        if (apiTokenAdmin != null) {
-            apiTokenApi.deleteAPIToken(apiTokenAdmin.getId());
-            apiTokenAdmin = null;
-        }
-        if (apiTokenUserSeal != null) {
-            apiTokenApi.deleteAPIToken(apiTokenUserSeal.getId());
-            apiTokenUserSeal = null;
-        }
-        if (apiTokenUserESign != null) {
-            apiTokenApi.deleteAPIToken(apiTokenUserESign.getId());
-            apiTokenUserESign = null;
-        }
-
         Config.deleteAllTestUsers();
+        Config.deleteAllTestAPITokens();
     }
 
     @Test
@@ -266,39 +252,39 @@ public class SignatureApiTest {
             assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
-        // Try to sign using a non existing key
+        // Try to sign using a non-existing key
         try {
             tokenAuthAdminApi.getSignature(hashToSign, null, null, null, "1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG", null,
                     null);
-            fail("Should not be able to sign using a non existing key");
+            fail("Should not be able to sign using a non-existing key");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
-        // Try to sign using a non existing user (userId)
+        // Try to sign using a non-existing user (userId)
         try {
             tokenAuthAdminApi.getSignature(hashToSign, null, Config.randomUUID(), null, null, null, null);
-            fail("Should not be able to sign using a non existing user");
+            fail("Should not be able to sign using a non-existing user");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
-        // Try to sign using a non existing user (customUserId)
+        // Try to sign using a non-existing user (customUserId)
         try {
-            tokenAuthAdminApi.getSignature(hashToSign, null, null, "non existing customUserId", null, null, null);
-            fail("Should not be able to sign using a non existing user");
+            tokenAuthAdminApi.getSignature(hashToSign, null, null, "non-existing customUserId", null, null, null);
+            fail("Should not be able to sign using a non-existing user");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
-        // Try to sign using a non existing key
+        // Try to sign using a non-existing key
         try {
             tokenAuthAdminApi.getSignature(hashToSign, null, null, null, "1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG", null,
                     null);
-            fail("Should not be able to sign using a non existing key");
+            fail("Should not be able to sign using a non-existing key");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
@@ -313,7 +299,7 @@ public class SignatureApiTest {
             assertEquals(HttpStatus.SC_UNAUTHORIZED, e.getCode());
         }
 
-        // Try to sign with a non owned key
+        // Try to sign with a non-owned key
         try {
             KeyApi keyApi = new KeyApi(Config.getAdminAuthApiClient());
             KeyGet keyGet = keyApi.getKeyById(userESign.getDefaultKeyId());
@@ -350,10 +336,10 @@ public class SignatureApiTest {
         serverConfigApi.updateServerConfig(new ServerConfig().fallbackOnDefaultKey(false));
         TimeUnit.MILLISECONDS.sleep(1000L);
 
-        // Try to sign using a non existing server's default key
+        // Try to sign using a non-existing server's default key
         try {
             tokenAuthAdminApi.getSignature(hashToSign, null, null, null, null, null, null);
-            fail("Should not be able to sign using a non existing server's default key");
+            fail("Should not be able to sign using a non-existing server's default key");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
@@ -471,11 +457,16 @@ public class SignatureApiTest {
         assertTrue(apiTokenUserSeal.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
                    && apiTokenUserSeal.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
 
+        // Check that API token's last used time is close to current time
+        apiTokenUserESign = apiTokenApi.getAPITokenById(apiTokenUserESign.getId());
+        assertTrue(apiTokenUserESign.getLastUsed() < System.currentTimeMillis() + 60L * 1000L
+                   && apiTokenUserESign.getLastUsed() > System.currentTimeMillis() - 60L * 1000L);
+
         // Try to sign with a blocked key
         try {
             KeyPut keyPut = new KeyPut();
             keyPut.setStatus(KeyStatusEnum.BLOCKED);
-            KeyGet blockedKey = keyApi.updateKey(keyGet.getId(), keyPut);
+            keyApi.updateKey(keyGet.getId(), keyPut);
             tokenAuthAdminApi.getSignature(hashToSign, null, null, null, pubKey, null, null);
             fail("Should not be able to sign with a blocked key");
         }
@@ -507,19 +498,19 @@ public class SignatureApiTest {
             assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
-        // Try to sign as admin using a non existing key
+        // Try to sign as admin using a non-existing key
         try {
             tokenAuthAdminApi.getSignature(hashToSign, null, null, null, pubKey, null, null);
-            fail("Should not be able to sign using a non existing key");
+            fail("Should not be able to sign using a non-existing key");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
-        // Try to sign as user using a non existing key
+        // Try to sign as user using a non-existing key
         try {
             tokenAuthUserSealApi.getSignature(hashToSign, null, null, null, pubKey, null, null);
-            fail("Should not be able to sign using a non existing key");
+            fail("Should not be able to sign using a non-existing key");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
@@ -542,7 +533,7 @@ public class SignatureApiTest {
 
         // Create a test user with a full identity
         FullIdentity testFullIdentity = new FullIdentity();
-        testFullIdentity.setCommonName(Config.TEST_USERS_COMMONNAME_PREFIX + problematicString);
+        testFullIdentity.setCommonName(Config.TEST_NAME_PREFIX + problematicString);
         testFullIdentity.setOrganization("O" + problematicString);
         testFullIdentity.setOrganizationalUnit("OU" + problematicString);
         testFullIdentity.setLocality("L" + problematicString);

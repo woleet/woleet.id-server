@@ -85,7 +85,7 @@ public class DiscoveryApiTest {
         // Try to discover a user using a non-existing key
         try {
             discoveryApiAdmin.discoverUserByPubKey("3Beer3irc1vgs76ENA4coqsEQpGZeM5CTd");
-            fail("Should not be able to discover a user using a non existing key");
+            fail("Should not be able to discover a user using a non-existing key");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
@@ -104,7 +104,7 @@ public class DiscoveryApiTest {
         // Try to discover user's keys using a non-existing user identifier
         try {
             discoveryApiAdmin.discoverUserKeys(Config.randomUUID());
-            fail("Should not be able to discover user's key using a non existing user identifier");
+            fail("Should not be able to discover user's key using a non-existing user identifier");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
@@ -126,7 +126,7 @@ public class DiscoveryApiTest {
     public void discoverUsersTest() throws ApiException {
 
         // Search the test user by his common name
-        List<UserDisco> users = discoveryApiUser.discoverUsers(null, null, Config.TEST_USERS_COMMONNAME_PREFIX);
+        List<UserDisco> users = discoveryApiUser.discoverUsers(null, null, Config.TEST_NAME_PREFIX);
         assertEquals(1, users.size());
         assertEquals(users.get(0).getId(), user.getId());
 
@@ -134,7 +134,7 @@ public class DiscoveryApiTest {
         UserDisco testUser = users.get(0);
 
         // Search the test user by his username
-        users = discoveryApiUser.discoverUsers(null, null, Config.TEST_USERS_USERNAME_PREFIX);
+        users = discoveryApiUser.discoverUsers(null, null, Config.TEST_USERNAME_PREFIX);
         assertEquals(1, users.size());
         assertEquals(users.get(0).getId(), user.getId());
 

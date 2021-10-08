@@ -195,13 +195,13 @@ public class UserApiTest {
         assertEquals(secondUser, users.get(0));
 
         // Search the test user by his common name (like)
-        users = userApi.getUsers(null, null, Config.TEST_USERS_COMMONNAME_PREFIX, null, null, null, null,
-                null, null, null, null, null, null, null, null, null);
+        users = userApi.getUsers(null, null, Config.TEST_NAME_PREFIX, null, null, null, null, null, null, null, null,
+                null, null, null, null, null);
         assertEquals(1, users.size());
         assertEquals(users.get(0).getId(), user.getId());
 
         // Search the test user by his common name (like) and by his mode, role, mode and username (exact match)
-        users = userApi.getUsers(0, 2, Config.TEST_USERS_COMMONNAME_PREFIX, UserModeEnum.SEAL.getValue(),
+        users = userApi.getUsers(0, 2, Config.TEST_NAME_PREFIX, UserModeEnum.SEAL.getValue(),
                 UserRoleEnum.USER.getValue(), null, user.getUsername(), null, null, null, null, null, null, null, null,
                 null);
         assertEquals(1, users.size());

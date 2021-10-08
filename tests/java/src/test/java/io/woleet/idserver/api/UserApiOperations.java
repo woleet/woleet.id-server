@@ -6,17 +6,17 @@ import io.woleet.idserver.api.model.*;
 import org.apache.http.HttpStatus;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 public class UserApiOperations {
 
     public static abstract class UserApiOperation extends SecurityTest.Operation {
 
         UserApi userApi = null;
-        APITokenGet adminAPITokenGet = null;
+        UserGet userGet = null;
 
         void init(SecurityTest.Authentication authentication) throws ApiException {
             this.authentication = authentication;
-            UserGet userGet = null;
             switch (authentication) {
                 case NO_AUTH:
                     userApi = new UserApi(Config.getNoAuthApiClient());
@@ -41,58 +41,24 @@ public class UserApiOperations {
                 case TOKEN_AUTH_ADMIN:
                     if (userGet == null)
                         userGet = Config.createTestUser(UserRoleEnum.ADMIN);
-                    userApi = new UserApi(
-                            Config.getNoAuthApiClient().addDefaultHeader(
-                                    "Authorization",
-                                    "Bearer " + new ApiTokenApi(Config.getAuthApiClient(userGet.getUsername(), "pass"))
-                                            .createAPIToken(new APITokenPost()
-                                                    .name("test-" + authentication.name())
-                                                    .userId(userGet.getId())).getValue()
-                            )
-                    );
+                    APITokenGet apiTokenGet = Config.createTestApiToken(userGet.getId());
+                    userApi = new UserApi(Config.getNoAuthApiClient()
+                            .addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue()));
                     break;
 
                 case TOKEN_AUTH:
-                    adminAPITokenGet = new ApiTokenApi(Config.getAdminAuthApiClient())
-                            .createAPIToken(new APITokenPost().name("test-" + authentication.name()));
-                    userApi = new UserApi(
-                            Config.getNoAuthApiClient().addDefaultHeader(
-                                    "Authorization", "Bearer " + adminAPITokenGet.getValue()
-                            )
-                    );
+                    apiTokenGet = Config.createTestApiToken(null);
+                    userApi = new UserApi(Config.getNoAuthApiClient()
+                            .addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue()));
                     break;
-            }
-        }
 
-        void cleanup(SecurityTest.Authentication authentication) throws ApiException {
-            switch (authentication) {
-                case TOKEN_AUTH:
-                    new ApiTokenApi(Config.getAdminAuthApiClient())
-                            .deleteAPIToken(adminAPITokenGet.getId());
-                    break;
-            }
-        }
-
-        /**
-         * By default, users cannot do any operation, while admins and managers can do all operations.
-         * Otherwise, this method must be overloaded.
-         */
-        @Override
-        void check() {
-            switch (authentication) {
-                case COOKIE_AUTH_MANAGER:
-                case COOKIE_AUTH_ADMIN:
-                case TOKEN_AUTH_MANAGER:
-                case TOKEN_AUTH_ADMIN:
-                case TOKEN_AUTH:
-                    shouldSucceed();
-                    break;
-                case NO_AUTH:
-                    shouldFailWith(HttpStatus.SC_UNAUTHORIZED);
-                    break;
                 default:
-                    shouldFailWith(HttpStatus.SC_FORBIDDEN);
+                    fail("Unexpected authentication");
             }
+        }
+
+        void cleanup() {
+            userGet = null;
         }
     }
 

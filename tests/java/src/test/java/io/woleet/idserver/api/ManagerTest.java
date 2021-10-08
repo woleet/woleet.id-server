@@ -31,51 +31,6 @@ public class ManagerTest {
     }
 
     @Test
-    public void managerRoleUserTest() throws ApiException {
-
-        UserApi managerAuthUserApi = new UserApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
-
-        // Try to create a user with manager rights
-        UserGet userTest = Config.createTestUser(managerAuthUserApi, UserRoleEnum.USER, UserModeEnum.SEAL);
-        assertEquals(UserRoleEnum.USER, userTest.getRole());
-
-        // Try to create a manager with manager rights
-        UserGet managerTest = Config.createTestUser(managerAuthUserApi, UserRoleEnum.MANAGER, UserModeEnum.SEAL);
-        assertEquals(UserRoleEnum.MANAGER, managerTest.getRole());
-
-        // Try to create an admin with manager rights
-        try {
-            Config.createTestUser(managerAuthUserApi, UserRoleEnum.ADMIN, UserModeEnum.SEAL);
-            fail("Should not be able to create an admin with manager rights");
-        }
-        catch (ApiException e) {
-            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
-        }
-
-        UserPut userPut = new UserPut();
-
-        // Try to modify a user role with manager rights
-        userPut.setRole(UserRoleEnum.MANAGER);
-        userTest = managerAuthUserApi.updateUser(userTest.getId(), userPut);
-        assertEquals(userPut.getRole(), userTest.getRole());
-
-        // Try to modify a manager role with manager rights
-        userPut.setRole(UserRoleEnum.USER);
-        managerTest = managerAuthUserApi.updateUser(managerTest.getId(), userPut);
-        assertEquals(userPut.getRole(), managerTest.getRole());
-
-        // Try to modify an admin role with manager rights
-        try {
-            UserGet adminTest = Config.createTestUser(UserRoleEnum.ADMIN);
-            managerAuthUserApi.updateUser(adminTest.getId(), userPut);
-            fail("Should not be able to modify an admin role with manager rights");
-        }
-        catch (ApiException e) {
-            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
-        }
-    }
-
-    @Test
     public void managerRoleKeyTest() throws ApiException {
 
         KeyApi managerAuthKeyApi = new KeyApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
@@ -189,59 +144,5 @@ public class ManagerTest {
         managerAuthEnrollmentApi.deleteEnrollment(enrollmentGetUser.getId());
         managerAuthEnrollmentApi.deleteEnrollment(enrollmentGetManager.getId());
         managerAuthEnrollmentApi.deleteEnrollment(enrollmentGetAdmin.getId());
-    }
-
-    @Test
-    public void managerRoleAPITokenTest() throws ApiException {
-
-        ApiTokenApi managerAuthApiTokenApi = new ApiTokenApi(Config.getAuthApiClient(manager.getUsername(), "pass"));
-
-        APITokenPost apiTokenPost = new APITokenPost();
-        apiTokenPost.setName(Config.randomName());
-
-        // Try to create an admin API token with manager rights
-        try {
-            managerAuthApiTokenApi.createAPIToken(apiTokenPost);
-            fail("Should not be able to create an admin API token with manager rights");
-        }
-        catch (ApiException e) {
-            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
-        }
-
-        // Try to create a token for an admin user with manager rights
-        try {
-            UserGet adminTest = Config.createTestUser(UserRoleEnum.ADMIN);
-            apiTokenPost.setUserId(adminTest.getId());
-            managerAuthApiTokenApi.createAPIToken(apiTokenPost);
-            fail("Should not be able to create an API token for an admin user with manager rights");
-        }
-        catch (ApiException e) {
-            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
-        }
-
-        // Try to create a manager token with manager rights
-        UserGet managerTest = Config.createTestUser(UserRoleEnum.MANAGER);
-        apiTokenPost.setUserId(managerTest.getId());
-        APITokenGet apiTokenGetManager = managerAuthApiTokenApi.createAPIToken(apiTokenPost);
-        assertEquals(apiTokenPost.getUserId(), apiTokenGetManager.getUserId());
-
-        // Try to create a user token with manager rights
-        UserGet userTest = Config.createTestUser(UserRoleEnum.USER);
-        apiTokenPost.setUserId(userTest.getId());
-        APITokenGet apiTokenGetUser = managerAuthApiTokenApi.createAPIToken(apiTokenPost);
-        assertEquals(apiTokenPost.getUserId(), apiTokenGetUser.getUserId());
-
-        APITokenPut apiTokenPut = new APITokenPut();
-        apiTokenPut.setName("test");
-
-        // Try to modify a token with manager rights
-        apiTokenGetManager = managerAuthApiTokenApi.updateAPIToken(apiTokenGetManager.getId(), apiTokenPut);
-        assertEquals(apiTokenPut.getName(), apiTokenGetManager.getName());
-        apiTokenGetUser = managerAuthApiTokenApi.updateAPIToken(apiTokenGetUser.getId(), apiTokenPut);
-        assertEquals(apiTokenPut.getName(), apiTokenGetUser.getName());
-
-        // Try to delete a token with manager rights
-        managerAuthApiTokenApi.deleteAPIToken(apiTokenGetManager.getId());
-        managerAuthApiTokenApi.deleteAPIToken(apiTokenGetUser.getId());
     }
 }

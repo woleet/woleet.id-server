@@ -39,30 +39,19 @@ public class IdentityApiTest {
         // Start from a clean state
         tearDown();
 
-        // Create test user;
+        // Create test users
         userSeal = Config.createTestUser(UserModeEnum.SEAL);
         userESign = Config.createTestUser(UserModeEnum.ESIGN);
 
-        // Create one helper API with user rights using token authentication
-        apiTokenApi = new ApiTokenApi(Config.getAdminAuthApiClient());
-        APITokenPost apiTokenUser = new APITokenPost();
-        apiTokenUser.setName("test-user");
-        apiTokenUser.setUserId(userESign.getId());
-        apiTokenUserESignGet = apiTokenApi.createAPIToken(apiTokenUser);
+        // Create a helper API with user rights using token authentication
         ApiClient apiClientUserESign = Config.getNoAuthApiClient().setBasePath(WOLEET_ID_SERVER_SIGNATURE_BASEPATH);
-        apiClientUserESign.addDefaultHeader("Authorization", "Bearer " + apiTokenUserESignGet.getValue());
+        apiClientUserESign.addDefaultHeader("Authorization",
+                "Bearer " + Config.createTestApiToken(userESign.getId()).getValue());
         tokenAuthUserESignApi = new SignatureApi(apiClientUserESign);
     }
 
     @After
     public void tearDown() throws Exception {
-
-        // This code is called before setUp() is called, so API token can be null
-        if (apiTokenUserESignGet != null) {
-            apiTokenApi.deleteAPIToken(apiTokenUserESignGet.getId());
-            apiTokenUserESignGet = null;
-        }
-
         Config.deleteAllTestUsers();
     }
 
@@ -93,7 +82,7 @@ public class IdentityApiTest {
         // Check that we cannot get an identity from a public key that does not exist
         try {
             identityApi.getIdentity("1iBDiJNw1moBD37mqjCVQNxGbEeqXtWnUG", null, null);
-            fail("Should not be able to get an identity with an non existing key");
+            fail("Should not be able to get an identity with an non-existing key");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());

@@ -2,6 +2,7 @@ package io.woleet.idserver.api;
 
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
+import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,7 @@ public class SecurityTest {
     @After
     public void tearDown() throws Exception {
         Config.deleteAllTestUsers();
+        Config.deleteAllTestAPITokens();
     }
 
     enum Authentication {
@@ -50,9 +52,32 @@ public class SecurityTest {
 
         abstract void init(Authentication authentication) throws ApiException;
 
-        abstract void cleanup(Authentication authentication) throws ApiException;
+        abstract void cleanup() throws ApiException;
 
-        abstract void check();
+        /**
+         * By default, users cannot do any operation, while admins and managers can do all operations.
+         * Otherwise, this method must be overloaded.
+         */
+        void check() {
+            switch (authentication) {
+                case COOKIE_AUTH_MANAGER:
+                case COOKIE_AUTH_ADMIN:
+                case TOKEN_AUTH_MANAGER:
+                case TOKEN_AUTH_ADMIN:
+                case TOKEN_AUTH:
+                    shouldSucceed();
+                    break;
+                case COOKIE_AUTH_USER:
+                case TOKEN_AUTH_USER:
+                    shouldFailWith(HttpStatus.SC_FORBIDDEN);
+                    break;
+                case NO_AUTH:
+                    shouldFailWith(HttpStatus.SC_UNAUTHORIZED);
+                    break;
+                default:
+                    fail("Unexpected authentication");
+            }
+        }
 
         abstract void run() throws ApiException;
 
@@ -95,6 +120,20 @@ public class SecurityTest {
                 new UserApiOperations.DeleteManager(),
                 new UserApiOperations.DeleteAdmin(),
                 new UserApiOperations.ListUsers(),
+
+                new ApiTokenApiOperations.CreateUserApiToken(),
+                new ApiTokenApiOperations.CreateManagerApiToken(),
+                new ApiTokenApiOperations.CreateAdminApiToken(),
+                new ApiTokenApiOperations.GetUserApiToken(),
+                new ApiTokenApiOperations.GetManagerApiToken(),
+                new ApiTokenApiOperations.GetAdminApiToken(),
+                new ApiTokenApiOperations.UpdateUserApiToken(),
+                new ApiTokenApiOperations.UpdateManagerApiToken(),
+                new ApiTokenApiOperations.UpdateAdminApiToken(),
+                new ApiTokenApiOperations.DeleteUserApiToken(),
+                new ApiTokenApiOperations.DeleteManagerApiToken(),
+                new ApiTokenApiOperations.DeleteAdminApiToken(),
+                new ApiTokenApiOperations.ListApiTokens(),
         };
 
         for (Operation operation : operations) {
@@ -111,7 +150,7 @@ public class SecurityTest {
                     else
                         logger.error(t.getMessage());
                 }
-                operation.cleanup(authentication);
+                operation.cleanup();
             }
         }
     }
