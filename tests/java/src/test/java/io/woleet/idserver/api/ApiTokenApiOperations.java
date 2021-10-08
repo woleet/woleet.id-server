@@ -1,5 +1,6 @@
 package io.woleet.idserver.api;
 
+import io.woleet.idserver.ApiClient;
 import io.woleet.idserver.ApiException;
 import io.woleet.idserver.Config;
 import io.woleet.idserver.api.model.*;
@@ -7,95 +8,51 @@ import org.apache.http.HttpStatus;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ApiTokenApiOperations {
 
-    public static abstract class ApiTokenApiOperation extends SecurityTest.Operation {
-
-        ApiTokenApi apiTokenApi = null;
-        UserGet userGet = null;
-
-        void init(SecurityTest.Authentication authentication) throws ApiException {
-            this.authentication = authentication;
-            switch (authentication) {
-                case NO_AUTH:
-                    apiTokenApi = new ApiTokenApi(Config.getNoAuthApiClient());
-                    break;
-
-                case COOKIE_AUTH_USER:
-                    userGet = Config.createTestUser(UserRoleEnum.USER);
-                case COOKIE_AUTH_MANAGER:
-                    if (userGet == null)
-                        userGet = Config.createTestUser(UserRoleEnum.MANAGER);
-                case COOKIE_AUTH_ADMIN:
-                    if (userGet == null)
-                        userGet = Config.createTestUser(UserRoleEnum.ADMIN);
-                    apiTokenApi = new ApiTokenApi(Config.getAuthApiClient(userGet.getUsername(), "pass"));
-                    break;
-
-                case TOKEN_AUTH_USER:
-                    userGet = Config.createTestUser(UserRoleEnum.USER);
-                case TOKEN_AUTH_MANAGER:
-                    if (userGet == null)
-                        userGet = Config.createTestUser(UserRoleEnum.MANAGER);
-                case TOKEN_AUTH_ADMIN:
-                    if (userGet == null)
-                        userGet = Config.createTestUser(UserRoleEnum.ADMIN);
-                    APITokenGet apiTokenGet = Config.createTestApiToken(userGet.getId());
-                    apiTokenApi = new ApiTokenApi(Config.getNoAuthApiClient()
-                            .addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue()));
-                    break;
-
-                case TOKEN_AUTH:
-                    apiTokenGet = Config.createTestApiToken(null);
-                    apiTokenApi = new ApiTokenApi(Config.getNoAuthApiClient()
-                            .addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue()));
-                    break;
-
-                default:
-                    fail("Unexpected authentication");
-            }
-        }
-
-        void cleanup() {
-            userGet = null;
+    public static abstract class ApiTokenApiOperation extends SecurityTest.Operation<ApiTokenApi> {
+        @Override
+        ApiTokenApi getApi(ApiClient apiClient) {
+            return new ApiTokenApi(apiClient);
         }
     }
 
     static class CreateUserApiToken extends ApiTokenApiOperation {
         void run() throws ApiException {
             UserGet userGet = Config.createTestUser(UserRoleEnum.USER, UserModeEnum.ESIGN);
-            apiTokenApi.createAPIToken(new APITokenPost().name("test-user").userId(userGet.getId()));
+            api.createAPIToken(new APITokenPost().name("test-user").userId(userGet.getId()));
         }
     }
 
     static class CreateManagerApiToken extends ApiTokenApiOperation {
         void run() throws ApiException {
             UserGet userGet = Config.createTestUser(UserRoleEnum.MANAGER, UserModeEnum.ESIGN);
-            apiTokenApi.createAPIToken(new APITokenPost().name("test-manager").userId(userGet.getId()));
+            api.createAPIToken(new APITokenPost().name("test-manager").userId(userGet.getId()));
         }
     }
 
     static class CreateAdminApiToken extends ApiTokenApiOperation {
         void run() throws ApiException {
             UserGet userGet = Config.createTestUser(UserRoleEnum.ADMIN, UserModeEnum.ESIGN);
-            apiTokenApi.createAPIToken(new APITokenPost().name("test-admin").userId(userGet.getId()));
+            api.createAPIToken(new APITokenPost().name("test-admin").userId(userGet.getId()));
         }
 
         @Override
-        void check() {
+        void runAndCheck() {
             switch (authentication) {
                 case COOKIE_AUTH_ADMIN:
                 case TOKEN_AUTH_ADMIN:
                 case TOKEN_AUTH:
-                    shouldSucceed();
+                    runAndCheckSuccess();
                     break;
                 case NO_AUTH:
-                    shouldFailWith(HttpStatus.SC_UNAUTHORIZED);
+                    runAndCheckFailure(HttpStatus.SC_UNAUTHORIZED);
                     break;
                 default:
-                    shouldFailWith(HttpStatus.SC_FORBIDDEN);
+                    runAndCheckFailure(HttpStatus.SC_FORBIDDEN);
             }
         }
     }
@@ -104,7 +61,7 @@ public class ApiTokenApiOperations {
         void run() throws ApiException {
             UserGet userGet = Config.createTestUser(UserRoleEnum.USER, UserModeEnum.ESIGN);
             APITokenGet apiTokenGet = Config.createTestApiToken(userGet.getId());
-            apiTokenApi.getAPITokenById(apiTokenGet.getId());
+            api.getAPITokenById(apiTokenGet.getId());
         }
     }
 
@@ -112,7 +69,7 @@ public class ApiTokenApiOperations {
         void run() throws ApiException {
             UserGet userGet = Config.createTestUser(UserRoleEnum.MANAGER, UserModeEnum.ESIGN);
             APITokenGet apiTokenGet = Config.createTestApiToken(userGet.getId());
-            apiTokenApi.getAPITokenById(apiTokenGet.getId());
+            api.getAPITokenById(apiTokenGet.getId());
         }
     }
 
@@ -120,22 +77,22 @@ public class ApiTokenApiOperations {
         void run() throws ApiException {
             UserGet userGet = Config.createTestUser(UserRoleEnum.ADMIN, UserModeEnum.ESIGN);
             APITokenGet apiTokenGet = Config.createTestApiToken(userGet.getId());
-            apiTokenApi.getAPITokenById(apiTokenGet.getId());
+            api.getAPITokenById(apiTokenGet.getId());
         }
 
         @Override
-        void check() {
+        void runAndCheck() {
             switch (authentication) {
                 case COOKIE_AUTH_ADMIN:
                 case TOKEN_AUTH_ADMIN:
                 case TOKEN_AUTH:
-                    shouldSucceed();
+                    runAndCheckSuccess();
                     break;
                 case NO_AUTH:
-                    shouldFailWith(HttpStatus.SC_UNAUTHORIZED);
+                    runAndCheckFailure(HttpStatus.SC_UNAUTHORIZED);
                     break;
                 default:
-                    shouldFailWith(HttpStatus.SC_FORBIDDEN);
+                    runAndCheckFailure(HttpStatus.SC_FORBIDDEN);
             }
         }
     }
@@ -146,7 +103,7 @@ public class ApiTokenApiOperations {
             APITokenGet apiTokenGet = Config.createTestApiToken(userGet.getId());
             APITokenPut apiTokenPut = new APITokenPut();
             apiTokenPut.name("test-updated");
-            apiTokenApi.updateAPIToken(apiTokenGet.getId(), apiTokenPut);
+            api.updateAPIToken(apiTokenGet.getId(), apiTokenPut);
         }
     }
 
@@ -156,7 +113,7 @@ public class ApiTokenApiOperations {
             APITokenGet apiTokenGet = Config.createTestApiToken(userGet.getId());
             APITokenPut apiTokenPut = new APITokenPut();
             apiTokenPut.name("test-updated");
-            apiTokenApi.updateAPIToken(apiTokenGet.getId(), apiTokenPut);
+            api.updateAPIToken(apiTokenGet.getId(), apiTokenPut);
         }
     }
 
@@ -166,22 +123,22 @@ public class ApiTokenApiOperations {
             APITokenGet apiTokenGet = Config.createTestApiToken(userGet.getId());
             APITokenPut apiTokenPut = new APITokenPut();
             apiTokenPut.name("test-updated");
-            apiTokenApi.updateAPIToken(apiTokenGet.getId(), apiTokenPut);
+            api.updateAPIToken(apiTokenGet.getId(), apiTokenPut);
         }
 
         @Override
-        void check() {
+        void runAndCheck() {
             switch (authentication) {
                 case COOKIE_AUTH_ADMIN:
                 case TOKEN_AUTH_ADMIN:
                 case TOKEN_AUTH:
-                    shouldSucceed();
+                    runAndCheckSuccess();
                     break;
                 case NO_AUTH:
-                    shouldFailWith(HttpStatus.SC_UNAUTHORIZED);
+                    runAndCheckFailure(HttpStatus.SC_UNAUTHORIZED);
                     break;
                 default:
-                    shouldFailWith(HttpStatus.SC_FORBIDDEN);
+                    runAndCheckFailure(HttpStatus.SC_FORBIDDEN);
             }
         }
     }
@@ -190,7 +147,7 @@ public class ApiTokenApiOperations {
         void run() throws ApiException {
             UserGet userGet = Config.createTestUser(UserRoleEnum.USER, UserModeEnum.ESIGN);
             APITokenGet apiTokenGet = Config.createTestApiToken(userGet.getId());
-            apiTokenApi.deleteAPIToken(apiTokenGet.getId());
+            api.deleteAPIToken(apiTokenGet.getId());
         }
     }
 
@@ -198,7 +155,7 @@ public class ApiTokenApiOperations {
         void run() throws ApiException {
             UserGet userGet = Config.createTestUser(UserRoleEnum.MANAGER, UserModeEnum.ESIGN);
             APITokenGet apiTokenGet = Config.createTestApiToken(userGet.getId());
-            apiTokenApi.deleteAPIToken(apiTokenGet.getId());
+            api.deleteAPIToken(apiTokenGet.getId());
         }
     }
 
@@ -206,22 +163,22 @@ public class ApiTokenApiOperations {
         void run() throws ApiException {
             UserGet userGet = Config.createTestUser(UserRoleEnum.ADMIN, UserModeEnum.ESIGN);
             APITokenGet apiTokenGet = Config.createTestApiToken(userGet.getId());
-            apiTokenApi.deleteAPIToken(apiTokenGet.getId());
+            api.deleteAPIToken(apiTokenGet.getId());
         }
 
         @Override
-        void check() {
+        void runAndCheck() {
             switch (authentication) {
                 case COOKIE_AUTH_ADMIN:
                 case TOKEN_AUTH_ADMIN:
                 case TOKEN_AUTH:
-                    shouldSucceed();
+                    runAndCheckSuccess();
                     break;
                 case NO_AUTH:
-                    shouldFailWith(HttpStatus.SC_UNAUTHORIZED);
+                    runAndCheckFailure(HttpStatus.SC_UNAUTHORIZED);
                     break;
                 default:
-                    shouldFailWith(HttpStatus.SC_FORBIDDEN);
+                    runAndCheckFailure(HttpStatus.SC_FORBIDDEN);
             }
         }
     }
@@ -233,13 +190,13 @@ public class ApiTokenApiOperations {
             Config.createTestApiToken(null);
 
             // Create 2 tokens for the authenticated user
-            if (userGet != null) {
-                Config.createTestApiToken(userGet.getId());
-                Config.createTestApiToken(userGet.getId());
+            if (user != null) {
+                Config.createTestApiToken(user.getId());
+                Config.createTestApiToken(user.getId());
             }
 
             // Get all tokens
-            List<APITokenGet> apiTokens = apiTokenApi.getAPITokens();
+            List<APITokenGet> apiTokens = api.getAPITokens();
 
             // Count the number of tokens belonging to the admin or the authenticated user
             int nbAdminTokensFound = 0;
@@ -251,7 +208,7 @@ public class ApiTokenApiOperations {
                     nbAdminTokensFound++;
 
                 // One more token found for the authenticated user
-                if (userGet != null && userGet.getId().equals(apiToken.getUserId()))
+                if (user != null && user.getId().equals(apiToken.getUserId()))
                     nbUserTokensFound++;
             }
 
