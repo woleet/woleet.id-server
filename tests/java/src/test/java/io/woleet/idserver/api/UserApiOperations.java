@@ -136,7 +136,6 @@ public class UserApiOperations {
     }
 
     static class DeleteAdmin extends UserApiOperation {
-
         void run() throws ApiException {
             UserGet userGet = Config.createTestUser(UserRoleEnum.ADMIN, UserModeEnum.ESIGN);
             api.deleteUser(userGet.getId());
