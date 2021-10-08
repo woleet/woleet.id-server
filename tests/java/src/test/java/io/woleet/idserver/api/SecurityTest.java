@@ -23,11 +23,28 @@ public class SecurityTest {
     // True if tests must stop on error
     private static final boolean stopOnError = true;
 
+    // Pre-created users
+    private static UserGet userUser, managerUser, adminUser;
+
+    // Pre-created API tokens
+    private static APITokenGet userUserApiToken, managerUserApiToken, adminUserApiToken, adminApiToken;
+
     @Before
     public void setUp() throws Exception {
 
         // Start from a clean state
         tearDown();
+
+        // Pre-create users
+        userUser = Config.createTestUser(UserRoleEnum.USER);
+        managerUser = Config.createTestUser(UserRoleEnum.MANAGER);
+        adminUser = Config.createTestUser(UserRoleEnum.ADMIN);
+
+        // Pre-create API tokens
+        userUserApiToken = Config.createTestApiToken(userUser.getId());
+        managerUserApiToken = Config.createTestApiToken(managerUser.getId());
+        adminUserApiToken = Config.createTestApiToken(adminUser.getId());
+        adminApiToken = Config.createTestApiToken(null);
     }
 
     @After
@@ -60,14 +77,17 @@ public class SecurityTest {
      */
     abstract static class Operation<T> {
 
-        // The tested authentication
+        // The current authentication
         SecurityTest.Authentication authentication;
 
-        // The tested API
+        // The current tested API
         T api = null;
 
-        // The authenticated user (null no NO_AUTH or TOKEN_AUTH)
+        // The current authenticated user (null for NO_AUTH or TOKEN_AUTH)
         UserGet user = null;
+
+        // The current API token used for authentication (null for COOKIE_AUTH_*)
+        APITokenGet apiToken = null;
 
         /**
          * Get an instance of the API that need to be tested.
@@ -88,40 +108,47 @@ public class SecurityTest {
          * @param authentication The authentication method / user role to use to run the operation
          */
         void init(Authentication authentication) throws ApiException {
+
+            // Remember authentication
             this.authentication = authentication;
+
             switch (authentication) {
                 case NO_AUTH:
                     api = getApi(Config.getNoAuthApiClient());
                     break;
 
                 case COOKIE_AUTH_USER:
-                    user = Config.createTestUser(UserRoleEnum.USER);
+                    user = userUser;
                 case COOKIE_AUTH_MANAGER:
                     if (user == null)
-                        user = Config.createTestUser(UserRoleEnum.MANAGER);
+                        user = managerUser;
                 case COOKIE_AUTH_ADMIN:
                     if (user == null)
-                        user = Config.createTestUser(UserRoleEnum.ADMIN);
+                        user = adminUser;
                     api = getApi(Config.getAuthApiClient(user.getUsername(), "pass"));
                     break;
 
                 case TOKEN_AUTH_USER:
-                    user = Config.createTestUser(UserRoleEnum.USER);
+                    user = userUser;
+                    apiToken = userUserApiToken;
                 case TOKEN_AUTH_MANAGER:
                     if (user == null)
-                        user = Config.createTestUser(UserRoleEnum.MANAGER);
+                        user = managerUser;
+                    if (apiToken == null)
+                        apiToken = managerUserApiToken;
                 case TOKEN_AUTH_ADMIN:
                     if (user == null)
-                        user = Config.createTestUser(UserRoleEnum.ADMIN);
-                    APITokenGet apiTokenGet = Config.createTestApiToken(user.getId());
+                        user = adminUser;
+                    if (apiToken == null)
+                        apiToken = adminUserApiToken;
                     api = getApi(Config.getNoAuthApiClient()
-                            .addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue()));
+                            .addDefaultHeader("Authorization", "Bearer " + apiToken.getValue()));
                     break;
 
                 case TOKEN_AUTH:
-                    apiTokenGet = Config.createTestApiToken(null);
+                    apiToken = adminApiToken;
                     api = getApi(Config.getNoAuthApiClient()
-                            .addDefaultHeader("Authorization", "Bearer " + apiTokenGet.getValue()));
+                            .addDefaultHeader("Authorization", "Bearer " + apiToken.getValue()));
                     break;
 
                 default:
@@ -133,7 +160,10 @@ public class SecurityTest {
          * Cleanup resources required to run the operation.
          */
         void cleanup() {
+            authentication = null;
+            api = null;
             user = null;
+            apiToken = null;
         }
 
         /**

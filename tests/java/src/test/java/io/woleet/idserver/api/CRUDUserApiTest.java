@@ -77,7 +77,7 @@ public class CRUDUserApiTest extends CRUDApiTest {
         @Override
         CRUDApiTest.ObjectPost setMinimalAttributes() {
             UserPost userPost = (UserPost) objectBase;
-            String COMMON_NAME = Config.randomCommonName();
+            String COMMON_NAME = Config.randomName();
             String ORGANIZATION = "Woleet SAS";
             FullIdentity fullIdentity = new FullIdentity();
             fullIdentity.commonName(COMMON_NAME);
@@ -107,7 +107,7 @@ public class CRUDUserApiTest extends CRUDApiTest {
             userPost.setMode(UserModeEnum.SEAL);
 
             // Set identity information
-            String COMMON_NAME = Config.randomCommonName();
+            String COMMON_NAME = Config.randomName();
             String ORGANIZATION = "Woleet SAS";
             String ORGANIZATIONAL_UNIT = "Dev";
             String LOCALITY = "Rennes";
@@ -161,7 +161,7 @@ public class CRUDUserApiTest extends CRUDApiTest {
                 userPut.phone(PHONE);
 
             // Set identity information
-            String COMMON_NAME = Config.randomCommonName();
+            String COMMON_NAME = Config.randomName();
             String ORGANIZATION = Config.randomName();
             String ORGANIZATIONAL_UNIT = Config.randomName();
             String LOCALITY = Config.randomName();

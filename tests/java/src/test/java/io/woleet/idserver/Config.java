@@ -131,13 +131,6 @@ public class Config {
     }
 
     /**
-     * Create a new random common name.
-     */
-    public static String randomCommonName() {
-        return Config.TEST_NAME_PREFIX + randomString(32);
-    }
-
-    /**
      * Create a new random name (for token and keys).
      */
     public static String randomName() {
@@ -198,7 +191,7 @@ public class Config {
                 .createDefaultKey(true);
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity
-                .commonName(randomCommonName())
+                .commonName(randomName())
                 .organization("WOLEET SAS")
                 .userId(randomUUID().toString());
         return userApi.createUser(userPost.identity(fullIdentity));
@@ -234,7 +227,7 @@ public class Config {
 
     public static APITokenGet createTestApiToken(ApiTokenApi apiTokenApi, UUID userId) throws ApiException {
         APITokenPost apiTokenPost = new APITokenPost()
-                .name(TEST_NAME_PREFIX + randomName())
+                .name(randomName())
                 .userId(userId);
         return apiTokenApi.createAPIToken(apiTokenPost);
     }

@@ -44,7 +44,7 @@ public class UserApiTest {
         UserPost userESign;
         userESign = new UserPost();
         userESign.setMode(UserModeEnum.ESIGN);
-        String COMMON_NAME = Config.randomCommonName();
+        String COMMON_NAME = Config.randomName();
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity.commonName(COMMON_NAME);
         userESign.setIdentity(fullIdentity);

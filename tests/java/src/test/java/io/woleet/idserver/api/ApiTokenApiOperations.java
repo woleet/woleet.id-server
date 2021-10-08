@@ -186,19 +186,10 @@ public class ApiTokenApiOperations {
     static class ListApiTokens extends ApiTokenApiOperation {
         void run() throws ApiException {
 
-            // Create 1 admin token (with no user)
-            Config.createTestApiToken(null);
-
-            // Create 2 tokens for the authenticated user
-            if (user != null) {
-                Config.createTestApiToken(user.getId());
-                Config.createTestApiToken(user.getId());
-            }
-
             // Get all tokens
             List<APITokenGet> apiTokens = api.getAPITokens();
 
-            // Count the number of tokens belonging to the admin or the authenticated user
+            // Count the number of tokens belonging to the admin and to the authenticated user
             int nbAdminTokensFound = 0;
             int nbUserTokensFound = 0;
             for (APITokenGet apiToken : apiTokens) {
@@ -214,29 +205,26 @@ public class ApiTokenApiOperations {
 
             // For a manager, the list of tokens should not contain admin tokens
             if (authentication == SecurityTest.Authentication.COOKIE_AUTH_MANAGER) {
-                assertEquals(2, nbUserTokensFound);
-                assertTrue(apiTokens.size() >= 2);
+                assertEquals(1, nbUserTokensFound);
+                assertEquals(0, nbAdminTokensFound);
             }
             if (authentication == SecurityTest.Authentication.TOKEN_AUTH_MANAGER) {
-                assertEquals(3, nbUserTokensFound);
-                assertTrue(apiTokens.size() >= 3);
+                assertEquals(1, nbUserTokensFound);
+                assertEquals(0, nbAdminTokensFound);
             }
 
             // For an admin, the list of tokens should contain all tokens
             if (authentication == SecurityTest.Authentication.COOKIE_AUTH_ADMIN) {
-                assertEquals(2, nbUserTokensFound);
+                assertEquals(1, nbUserTokensFound);
                 assertTrue(nbAdminTokensFound >= 1);
-                assertTrue(apiTokens.size() >= 3);
             }
             if (authentication == SecurityTest.Authentication.TOKEN_AUTH_ADMIN) {
-                assertEquals(3, nbUserTokensFound);
+                assertEquals(1, nbUserTokensFound);
                 assertTrue(nbAdminTokensFound >= 1);
-                assertTrue(apiTokens.size() >= 4);
             }
             if (authentication == SecurityTest.Authentication.TOKEN_AUTH) {
                 assertEquals(0, nbUserTokensFound);
-                assertTrue(nbAdminTokensFound >= 2);
-                assertTrue(apiTokens.size() >= 2);
+                assertTrue(nbAdminTokensFound >= 1);
             }
         }
     }
