@@ -2,6 +2,7 @@ package io.woleet.idserver;
 
 import io.woleet.idserver.api.ApiTokenApi;
 import io.woleet.idserver.api.AuthenticationApi;
+import io.woleet.idserver.api.KeyApi;
 import io.woleet.idserver.api.UserApi;
 import io.woleet.idserver.api.model.*;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -234,6 +235,16 @@ public class Config {
 
     public static APITokenGet createTestApiToken(UUID userId) throws ApiException {
         return createTestApiToken(new ApiTokenApi(getAdminAuthApiClient()), userId);
+    }
+
+    public static KeyGet createTestKey(KeyApi keyApi, UUID userId) throws ApiException {
+        KeyPost keyPost = new KeyPost();
+        keyPost.name(randomName());
+        return keyApi.createKey(userId, keyPost);
+    }
+
+    public static KeyGet createTestKey(UUID userId) throws ApiException {
+        return createTestKey(new KeyApi(getAdminAuthApiClient()), userId);
     }
 
     /**

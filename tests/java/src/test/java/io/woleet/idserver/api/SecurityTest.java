@@ -252,6 +252,22 @@ public class SecurityTest {
                 new ApiTokenApiOperations.DeleteManagerApiToken(),
                 new ApiTokenApiOperations.DeleteAdminApiToken(),
                 new ApiTokenApiOperations.ListApiTokens(),
+
+                new KeyApiOperations.CreateUserKey(),
+                new KeyApiOperations.CreateManagerKey(),
+                new KeyApiOperations.CreateAdminKey(),
+                new KeyApiOperations.GetUserKey(),
+                new KeyApiOperations.GetManagerKey(),
+                new KeyApiOperations.GetAdminKey(),
+                new KeyApiOperations.UpdateUserKey(),
+                new KeyApiOperations.UpdateManagerKey(),
+                new KeyApiOperations.UpdateAdminKey(),
+                new KeyApiOperations.DeleteUserKey(),
+                new KeyApiOperations.DeleteManagerKey(),
+                new KeyApiOperations.DeleteAdminKey(),
+                new KeyApiOperations.ListUserKeys(),
+                new KeyApiOperations.ListManagerKeys(),
+                new KeyApiOperations.ListAdminKeys(),
         };
 
         // Run all operations with all authentication methods / user roles
