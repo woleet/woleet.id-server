@@ -25,6 +25,47 @@ server {
     include rules/proxy.conf;
   }
 
+  # Proxy all /oidcp calls to WIDS oidcp API
+  location ^~ /oidcp/ {
+    access_log on;
+    proxy_http_version 1.1;
+    proxy_hide_header X-Powered-By;
+    proxy_hide_header WWW-Authenticate;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Host $host:$server_port;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    proxy_redirect off;
+
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $http_connection;
+
+    proxy_pass http://${WOLEET_ID_SERVER_NGINX_SERVER_ADDRESS}:3003/oidcp/;
+  }
+
+  location = /.well-known/openid-configuration {
+    access_log on;
+    proxy_http_version 1.1;
+    proxy_hide_header X-Powered-By;
+    proxy_hide_header WWW-Authenticate;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Host $host:$server_port;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    proxy_redirect off;
+
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $http_connection;
+
+    proxy_pass http://${WOLEET_ID_SERVER_NGINX_SERVER_ADDRESS}:3003/oidcp/.well-known/openid-configuration;
+  }
+
   # Map base path to index.html and force re-validation
   location / {
     access_log on;

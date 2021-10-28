@@ -1,7 +1,6 @@
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import * as cors from '@koa/cors';
-import * as URL from 'url';
 import * as querystring from 'querystring';
 import { BadRequest, Unauthorized } from 'http-errors';
 import * as log from 'loglevel';
@@ -11,10 +10,10 @@ import { createSession, delSession } from '../controllers/authentication';
 import { getProvider, setProviderSession } from '../controllers/oidc-provider';
 import { session } from './authentication';
 import { getServerConfig } from '../controllers/server-config';
-import { cookies } from '../config';
-import { serializeUserDTO } from './serialize/userDTO';
 import * as bodyParser from 'koa-bodyparser';
 import { parse } from 'basic-auth';
+import { store as event } from '../controllers/server-event';
+import * as koaMount from 'koa-mount';
 
 const debug = Debug('id:oidc:app');
 
@@ -41,11 +40,49 @@ export function build(): Koa {
   provider.use(session);
   provider.use(bodyParser());
 
+  router.post('/login', async function (ctx) {
+    const body = ctx.request.body;
+    if (!body.basic) {
+      throw new BadRequest();
+    }
+
+    const basic = parse('Basic ' + body.basic);
+    if (!basic) {
+      throw new BadRequest();
+    }
+
+
+    const { name, pass } = basic;
+    const authorization = await createSession(name, pass);
+    if (!authorization) {
+      throw new Unauthorized();
+    }
+
+    event.register({
+      type: 'login',
+      authorizedUserId: authorization.user.id,
+      associatedTokenId: null,
+      associatedUserId: null,
+      associatedKeyId: null,
+      data: null
+    });
+    // ctx.cookies.set('session', authorization.token, cookies.options);
+
+    const returnTo = `https://${ctx.request.host}/oidcp/interaction/${body.grantId}/login?` + querystring.stringify({
+      userId: authorization.user.id
+    });
+    ctx.res.statusCode = 303; // eslint-disable-line no-param-reassign
+    ctx.res.setHeader('Location', returnTo);
+    ctx.res.setHeader('Content-Length', '0');
+
+    ctx.res.end();
+  });
+
   router.get('/interaction/:uid/login', async (ctx) => {
     const { userId } = ctx.query;
     const { prompt } = await provider.interactionDetails(ctx.req, ctx.res);
     if (prompt.name !== 'login') {
-      throw new Error('Should have the login interraction');
+      throw new Error('Should have the login interaction');
     }
 
     const result = {
@@ -133,53 +170,11 @@ export function build(): Koa {
     await next();
   });
 
-  // router.get('/auth/:id', async (ctx, next) => {
-    //   const config = getServerConfig();
-
-    //   debug('pre auth', ctx.oidc, `session=${ctx.session && ctx.session.id}`, `user=${ctx.session && ctx.session.userId}`);
-
-    //   if (!ctx.session) {
-    //     // #login-precondition
-    //     if (!ctx.header.referer) {
-    //       throw new BadRequest('Missing referer');
-    //     }
-
-    //     const referer = URL.parse(ctx.header.referer);
-
-    //     if (referer.protocol !== 'https:') {
-    //       throw new BadRequest('Invalid referer protocol');
-    //     }
-
-    //     if (!referer.host) {
-    //       throw new BadRequest('Invalid referer');
-    //     }
-
-    //     debug(`Login redirect URL will be set to ${ctx.request.url}`);
-
-    //     const redirect = Buffer.from(ctx.request.url).toString('base64');
-    //     const origin = Buffer.from(ctx.header.referer).toString('base64');
-    //     // redirect to UI to login
-    //     ctx.redirect(`${config.OIDCPInterfaceURL}/login?` + querystring.stringify({
-    //       origin: `oidcp=${origin}`,
-    //       redirect
-    //     }));
-
-    //     return;
-    //   }
-
-  //   await next();
-  // });
-
-  provider.use(cors({ credentials: true, origin: validateOrigin }));
+  provider.use(cors({ origin: '*' }));
   provider.use(router.routes());
 
-  return <Koa>provider.app;
-}
+  const overlay = new Koa();
+  overlay.use(koaMount('/oidcp', provider.app));
 
-function validateOrigin(ctx) {
-  const validDomains = [getServerConfig().OIDCPInterfaceURL, getServerConfig().OIDCPIssuerURL, getServerConfig().OIDCPProviderURL];
-  if (validDomains.indexOf(ctx.request.header.origin) !== -1) {
-    return ctx.request.header.origin;
-  }
-  return validDomains[0]; // we can't return void, so let's return one of the valid domains
+  return overlay;
 }

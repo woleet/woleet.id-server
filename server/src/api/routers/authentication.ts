@@ -18,44 +18,6 @@ import { parse } from 'basic-auth';
 
 const router = new Router();
 
-router.post('/login/oidc', async function (ctx) {
-  const body = ctx.request.body;
-  if (!body.basic) {
-    throw new BadRequest();
-  }
-
-  const basic = parse('Basic ' + body.basic);
-  if (!basic) {
-    throw new BadRequest();
-  }
-
-
-  const { name, pass } = basic;
-  const authorization = await createSession(name, pass);
-  if (!authorization) {
-    throw new Unauthorized();
-  }
-
-  event.register({
-    type: 'login',
-    authorizedUserId: authorization.user.id,
-    associatedTokenId: null,
-    associatedUserId: null,
-    associatedKeyId: null,
-    data: null
-  });
-  // ctx.cookies.set('session', authorization.token, cookies.options);
-
-  const returnTo = `${getServerConfig().OIDCPProviderURL}/interaction/${body.grantId}/login?` + querystring.stringify({
-    userId: authorization.user.id
-  });
-  ctx.res.statusCode = 303; // eslint-disable-line no-param-reassign
-  ctx.res.setHeader('Location', returnTo);
-  ctx.res.setHeader('Content-Length', '0');
-
-  ctx.res.end();
-});
-
 /**
  * @route: /login
  * @swagger

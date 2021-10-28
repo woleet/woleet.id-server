@@ -66,7 +66,7 @@ export class AuthService {
   async OIDCLogin(user: BasicAuthObject, grantId: string) {
     this.lock.incr();
     const basic = btoa(`${user.username}:${user.password}`);
-    await this.http.post(`${serverURL}/login/oidc`, { basic, grantId }).toPromise();
+    await this.http.post(`/oidcp/login`, { basic, grantId }).toPromise();
     this.lock.decr();
     return null;
   }

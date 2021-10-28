@@ -12,7 +12,6 @@ services:
       - ${WOLEET_ID_SERVER_API_PORT:-3000}:3000 # server API endpoints port
       - ${WOLEET_ID_SERVER_IDENTITY_PORT:-3001}:3001 # server /identity endpoint port
       - ${WOLEET_ID_SERVER_SIGNATURE_PORT:-3002}:3002 # server /sign and /discover endpoints port
-      - ${WOLEET_ID_SERVER_OIDCP_PORT:-3003}:3003 # server OpenID Connect Provider endpoints port
     networks:
       - client-server
     depends_on:
@@ -31,7 +30,6 @@ services:
       WOLEET_ID_SERVER_API_PORT: 3000
       WOLEET_ID_SERVER_IDENTITY_PORT: 3001
       WOLEET_ID_SERVER_SIGNATURE_PORT: 3002
-      WOLEET_ID_SERVER_OIDCP_PORT: 3003
       WOLEET_ID_SERVER_BEHIND_PROXY: 'true'
       WOLEET_ID_SERVER_PRODUCTION: ${WOLEET_ID_SERVER_PRODUCTION:-true}
       WOLEET_ID_SERVER_ENCRYPTION_SECRET: ${WOLEET_ID_SERVER_ENCRYPTION_SECRET}

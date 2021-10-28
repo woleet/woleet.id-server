@@ -14,6 +14,7 @@ services:
     tty: true
     environment:
       WOLEET_ID_SERVER_CACHE_TYPE: ${WOLEET_ID_SERVER_CACHE_TYPE:-local}
+      WOLEET_ID_SERVER_OIDC_KEY: ${WOLEET_ID_SERVER_OIDC_KEY:-random}
     networks:
       - postgres-server
     depends_on:

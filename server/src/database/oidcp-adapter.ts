@@ -160,4 +160,12 @@ export class OIDCAccount {
       updated_at: user.get('updatedAt'),
     };
   }
+
+  static async findAccount(ctx, id, token) { // eslint-disable-line no-unused-vars
+    // token is a reference to the token used for which a given account is being loaded,
+    //   it is undefined in scenarios where account claims are returned from authorization endpoint
+    // ctx is the koa request context
+    if (!store.get(id)) new OIDCAccount(id); // eslint-disable-line no-new
+    return store.get(id);
+  }
 }

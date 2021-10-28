@@ -3,11 +3,12 @@
 import { Provider } from 'oidc-provider';
 import * as Debug from 'debug';
 import { provider as providerConfiguration } from '../config.oidcp';
-import { SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
+import { cookies } from '../config';
+import { OIDCAccount, SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
 import { getServerConfig } from './server-config';
 import { oidcKey } from '../config';
-import { v4 as uuidv4 } from 'uuid';
-import { generateKeyPair } from 'crypto';
+import { generateKeyPairSync, createPrivateKey } from 'crypto';
+import { fromKeyLike } from 'jose/jwk/from_key_like';
 
 import * as log from 'loglevel';
 
@@ -34,34 +35,19 @@ function abortInit(message): void {
   provider = null;
 }
 
-const keystorePromise = (async () => {
-  let keys;
-  if (oidcKey !== 'random') {
-    keys = [{ oidcKey }];
-  } else {
-    let randomPrivateKey;
-    let randomPublicKey;
-    await generateKeyPair('rsa', {
-      modulusLength: 4096,
-      publicKeyEncoding: {
-        type: 'spki',
-        format: 'pem'
-      },
-      privateKeyEncoding: {
-        type: 'pkcs8',
-        format: 'pem',
-        cipher: 'aes-256-cbc',
-        passphrase: 'top secret'
-      }
-    }, async (err, publicKey, privateKey) => {
-      randomPrivateKey = privateKey;
-      randomPublicKey = publicKey;
-      keys = [randomPrivateKey];
+async function getJWKS() {
+  debug('getJWKS');
+  let oidcPrivateKey = oidcKey;
+  if (oidcPrivateKey === 'random') {
+    const {publicKey, privateKey} = generateKeyPairSync('rsa', {
+      modulusLength: 2048,
+      publicKeyEncoding: {type: 'spki', format: 'pem'},
+      privateKeyEncoding: {type: 'pkcs8', format: 'pem'}
     });
+    oidcPrivateKey = privateKey;
   }
-
-  return keys;
-})();
+  return await fromKeyLike(createPrivateKey(oidcPrivateKey))
+}
 
 async function configure(): Promise<void> {
   const { enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL, OIDCPClients } = getServerConfig();
@@ -91,10 +77,12 @@ async function configure(): Promise<void> {
 
   initialized = false;
   const adapter = Adapter;
-  const jwks = await keystorePromise;
+  const jwks = await getJWKS();
   const configuration = Object.assign(
-    {}, { ...{ jwks, cookies: { keys: ['tralalala'] }, clients }, ...providerConfiguration }
+    {}, { ...{ jwks, cookies: { keys: cookies.keys }, clients }, ...providerConfiguration }
   );
+  configuration.findAccount = OIDCAccount.findAccount;
+  configuration.interactions.url = interactionsUrl;
   provider = new Provider(OIDCPIssuerURL, { adapter, ...configuration });
   initialized = true;
 }
@@ -138,4 +126,8 @@ export function setProviderSession(ctx, userId) {
   if (initialized && provider) {
     return new (provider.Session)(ctx.req, ctx.res, { account: userId });
   }
+}
+
+async function interactionsUrl(ctx, interaction) {
+  return `/oidcp/interaction/${interaction.uid}`;
 }
