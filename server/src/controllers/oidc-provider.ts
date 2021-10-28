@@ -50,24 +50,20 @@ async function getJWKS() {
 }
 
 async function configure(): Promise<void> {
-  const { enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL, OIDCPClients } = getServerConfig();
+  const { enableOIDCP, OIDCPInterfaceURL, OIDCPClients } = getServerConfig();
 
-  debug('Init OIDCP with:\n' + JSON.stringify({ enableOIDCP, OIDCPInterfaceURL, OIDCPIssuerURL }, null, 2));
+  debug('Init OIDCP with:\n' + JSON.stringify({ enableOIDCP, OIDCPInterfaceURL }, null, 2));
 
   if (!enableOIDCP) {
     return abortInit('Skipping OpenID Connect Provider configuration');
   }
 
-  if (!OIDCPIssuerURL) {
-    return abortInit('No OIDCPIssuerURL set while OIDCP is enabled, skipping configuration');
+  if (!OIDCPInterfaceURL) {
+    return abortInit('No OIDCPInterfaceURL set while OIDCP is enabled, skipping configuration');
   }
 
   if (!OIDCPClients || OIDCPClients.length === 0) {
     return abortInit('No OIDCPClients set while OIDCP is enabled, skipping configuration');
-  }
-
-  if (!OIDCPInterfaceURL) {
-    return abortInit('No OIDCPInterfaceURL set while OIDCP is enabled, skipping configuration');
   }
 
   const clients = OIDCPClients.map((client) => Object.assign({}, client, {
@@ -83,7 +79,7 @@ async function configure(): Promise<void> {
   );
   configuration.findAccount = OIDCAccount.findAccount;
   configuration.interactions.url = interactionsUrl;
-  provider = new Provider(OIDCPIssuerURL, { adapter, ...configuration });
+  provider = new Provider(OIDCPInterfaceURL + '/oidcp', { adapter, ...configuration });
   initialized = true;
 }
 

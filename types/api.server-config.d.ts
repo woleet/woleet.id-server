@@ -30,8 +30,6 @@ interface ApiServerConfig {
 
   // Open ID Connect Provider config
   OIDCPInterfaceURL: string | null;
-  OIDCPProviderURL: string | null;
-  OIDCPIssuerURL: string | null;
   OIDCPClients: ApiOIDCPClient[] | null;
   enableOIDCP: boolean;
 
@@ -93,8 +91,6 @@ interface ApiServerConfigUpdate {
 
   // Open ID Connect Provider config
   OIDCPInterfaceURL?: string;
-  OIDCPProviderURL?: string;
-  OIDCPIssuerURL?: string;
   OIDCPClients?: ApiOIDCPClient[];
   enableOIDCP?: boolean;
 

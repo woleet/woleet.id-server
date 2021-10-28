@@ -9,9 +9,9 @@ const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 export function redirectForOIDCProvider(store, config, redirect) {
   store.del(LOGIN_REDIRECT_KEY);
   log.warn(`Redirect found on login path: interrupting workflow to perform redirection!`);
-  if (config.OIDCPProviderURL) {
+  if (config.OIDCPHOIDCPInterfaceURLOST) {
     log.info(`Performing redirection to ${redirect}`);
-    document.location.href = config.OIDCPProviderURL + redirect;
+    document.location.href = config.OIDCPInterfaceURL + redirect;
   } else {
     log.warn(`Redirect found but OIDC is disabled`);
   }

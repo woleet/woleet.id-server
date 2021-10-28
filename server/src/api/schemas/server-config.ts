@@ -27,8 +27,6 @@ const updateConfig = Joi.object().keys(<DefineJoiModelAttributes<ApiServerConfig
   // OIDCP config
   enableOIDCP: Joi.boolean(),
   OIDCPInterfaceURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
-  OIDCPProviderURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
-  OIDCPIssuerURL: Joi.string().uri({ scheme: ['https'] }).allow(null),
   OIDCPClients: Joi.array().items(oidcpClient).allow(null),
   keyExpirationOffset: Joi.string().allow(null),
   enrollmentExpirationOffset: Joi.string().allow(null),

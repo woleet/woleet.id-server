@@ -16,7 +16,7 @@ const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 export class AppConfigService {
 
   private _appConfig: {
-    OIDCPProviderURL: string,
+    OIDCPInterfaceURL: string,
     enableOpenIDConnect: boolean,
     hasSession: boolean,
     logoURL: string,

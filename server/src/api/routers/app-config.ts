@@ -15,11 +15,11 @@ router.get('/app-config', async function (ctx) {
   const user = ctx.session && ctx.session.userId && serializeUserDTO(await getUserById(ctx.session.userId)) || null;
   const hasSession = !!(ctx.session && ctx.session.userId);
   const {
-    enableOpenIDConnect, OIDCPProviderURL, logoURL,
+    enableOpenIDConnect, OIDCPInterfaceURL, logoURL,
     HTMLFrame, enableSMTP, webClientURL, contact, organizationName, askForResetInput
   } = getServerConfig();
   ctx.body = {
-    enableOpenIDConnect: enableOpenIDConnect, OIDCPProviderURL, hasSession, user, logoURL,
+    enableOpenIDConnect: enableOpenIDConnect, OIDCPInterfaceURL, hasSession, user, logoURL,
     HTMLFrame, enableSMTP: enableSMTP, webClientURL, contact, organizationName, askForResetInput
   };
 });

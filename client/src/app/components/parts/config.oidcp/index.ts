@@ -34,8 +34,6 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
 
   ngOnInit() {
     this.form = new FormGroup({
-      providerURL: new FormControl({ value: '', }, [secureUrlValidator]),
-      issuerURL: new FormControl({ value: '', }, [secureUrlValidator]),
       interfaceURL: new FormControl({ value: '' }, [secureUrlValidator])
     });
 
@@ -53,12 +51,9 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
       }
 
       const guessInterface = `${window.location.origin}`;
-      const guessProvider = `https://${window.location.hostname}:3003`;
 
       this.enableOIDCP$.next(config.enableOIDCP);
 
-      this.form.get('issuerURL').setValue(config.OIDCPIssuerURL || '');
-      this.form.get('providerURL').setValue(config.OIDCPProviderURL || guessProvider);
       this.form.get('interfaceURL').setValue(config.OIDCPInterfaceURL || guessInterface);
 
       this.oidcpClients = copy(config.OIDCPClients || []);
@@ -87,16 +82,12 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
 
   update() {
     this.updated = true;
-    const OIDCPIssuerURL = this.form.get('issuerURL').value || null;
-    const OIDCPProviderURL = this.form.get('providerURL').value || null;
     const OIDCPInterfaceURL = this.form.get('interfaceURL').value || null;
     const OIDCPClients = this.oidcpClients;
     OIDCPClients.forEach((c) => c.redirect_uris = c.redirect_uris.filter(e => !!e));
     const enableOIDCP = this._enableOIDCP;
     this.configService.updateConfig({
       enableOIDCP,
-      OIDCPProviderURL,
-      OIDCPIssuerURL,
       OIDCPInterfaceURL,
       OIDCPClients
     });
