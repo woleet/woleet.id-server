@@ -1,13 +1,12 @@
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
-import * as cors from '@koa/cors';
 import * as querystring from 'querystring';
 import { BadRequest, Unauthorized } from 'http-errors';
 import * as log from 'loglevel';
 import * as Debug from 'debug';
 import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
 import { createSession, delSession } from '../controllers/authentication';
-import { getProvider, setProviderSession } from '../controllers/oidc-provider';
+import { getProvider } from '../controllers/oidc-provider';
 import { session } from './authentication';
 import { getServerConfig } from '../controllers/server-config';
 import * as bodyParser from 'koa-bodyparser';
@@ -66,7 +65,6 @@ export function build(): Koa {
       associatedKeyId: null,
       data: null
     });
-    // ctx.cookies.set('session', authorization.token, cookies.options);
 
     const returnTo = `https://${ctx.request.host}/oidcp/interaction/${body.grantId}/login?` + querystring.stringify({
       userId: authorization.user.id
@@ -90,11 +88,6 @@ export function build(): Koa {
         accountId: userId,
       },
     };
-
-    await setProviderSession(ctx, userId);
-
-    // ctx.cookies.set('session', authorization.token, cookies.options);
-    // ctx.body = { user: serializeUserDTO(authorization.user) };
 
     return provider.interactionFinished(ctx.req, ctx.res, result, {
       mergeWithLastSubmission: false,
@@ -170,7 +163,6 @@ export function build(): Koa {
     await next();
   });
 
-  provider.use(cors({ origin: '*' }));
   provider.use(router.routes());
 
   const overlay = new Koa();

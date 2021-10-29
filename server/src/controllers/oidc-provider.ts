@@ -79,6 +79,11 @@ async function configure(): Promise<void> {
   );
   configuration.findAccount = OIDCAccount.findAccount;
   configuration.interactions.url = interactionsUrl;
+  configuration.cookies.names = {
+    interaction: '_oidcp_interaction',
+    resume: '_oidcp_interaction_resume',
+    session: '_oidcp_session'
+  };
   provider = new Provider(OIDCPInterfaceURL + '/oidcp', { adapter, ...configuration });
   initialized = true;
 }
@@ -116,12 +121,6 @@ export function stopOIDCProvider(): Promise<void> {
       resolve();
     }
   });
-}
-
-export function setProviderSession(ctx, userId) {
-  if (initialized && provider) {
-    return new (provider.Session)(ctx.req, ctx.res, { account: userId });
-  }
 }
 
 async function interactionsUrl(ctx, interaction) {
