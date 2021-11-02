@@ -30,9 +30,6 @@ public class IdentityApiTest {
 
     private SignatureApi tokenAuthUserESignApi;
 
-    private ApiTokenApi apiTokenApi;
-    private APITokenGet apiTokenUserESignGet;
-
     @Before
     public void setUp() throws Exception {
 
