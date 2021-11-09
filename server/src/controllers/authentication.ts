@@ -12,6 +12,14 @@ export function lookForUser(login: string): Promise<SequelizeUserObject> {
 
 export async function createSession(login: string, password: string)
   : Promise<{ token: string, user: InternalUserObject }> {
+
+  const user = await getUserFromUserPass(login, password);
+  const token = await sessionStore.create(user.user);
+  return { token, user: user.user };
+}
+
+export async function getUserFromUserPass(login: string, password: string)
+  : Promise<{ user: InternalUserObject }> {
   const user = await lookForUser(login);
   if (!user) {
     return null;
@@ -36,13 +44,11 @@ export async function createSession(login: string, password: string)
     return null;
   }
 
-  const token = await sessionStore.create(user);
-
   user.set('lastLogin', new Date);
 
   await user.save();
 
-  return { token, user: user.get() };
+  return { user: user.get() };
 }
 
 export async function createOAuthSession(user): Promise<{ token: string, user: InternalUserObject }> {

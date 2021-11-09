@@ -6,17 +6,13 @@ import { serverURL } from './config';
 import { switchNetworkError } from '@interceptors/network-error';
 import { ErrorService } from '@services/error';
 import { LocalStorageService } from './local-storage';
-import { keys } from '@app/config';
 import { parse } from 'qs';
-import { redirectForOIDC, redirectForOIDCProvider } from '@services/util';
-
-const LOGIN_REDIRECT_KEY = keys.LOGIN_REDIRECT;
 
 @Injectable({ providedIn: 'root' })
 export class AppConfigService {
 
   private _appConfig: {
-    OIDCPInterfaceURL: string,
+    OIDCPProviderURL: string,
     enableOpenIDConnect: boolean,
     hasSession: boolean,
     logoURL: string,
@@ -28,27 +24,10 @@ export class AppConfigService {
     organizationName: string,
     askForResetInput: boolean
   };
-  bootOnLogin = false;
 
   constructor(
     private errorService: ErrorService,
     private store: LocalStorageService) {
-
-    const params = parse(location.search.substring(1));
-    log.debug(`Boot on ${location.href}`);
-
-    this.bootOnLogin = location.pathname === '/login';
-    if (this.bootOnLogin) {
-      log.debug('Forwarded login parameters', params);
-      if (params.origin && params.origin.startsWith('oidcp') && params.redirect) {
-        try {
-          const redirect = atob(params.redirect);
-          store.set(LOGIN_REDIRECT_KEY, redirect);
-        } catch {
-          errorService.setError('redirect-parameter', new Error(params.redirect));
-        }
-      }
-    }
   }
 
   async loadConfig() {
@@ -61,26 +40,11 @@ export class AppConfigService {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', `${serverURL}/app-config`);
-
       xhr.withCredentials = true;
-
       xhr.addEventListener('readystatechange', () => {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
           const config = JSON.parse(xhr.responseText);
           this._appConfig = config;
-          const redirect = this.store.get(LOGIN_REDIRECT_KEY);
-          if (!config.hasSession) {
-            log.debug(`User has no session, clear localstorage`);
-            if (this.bootOnLogin && redirect && config.enableOpenIDConnect) {
-              log.info(`Automatic use of OIDCP`);
-              redirectForOIDC();
-            }
-          } else {
-            log.debug('User has a session, checking for redirect request...');
-            if (this.bootOnLogin && redirect) {
-              redirectForOIDCProvider(this.store, config, redirect);
-            }
-          }
           resolve(this._appConfig);
         } else if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status === 0 || xhr.status > 499) {

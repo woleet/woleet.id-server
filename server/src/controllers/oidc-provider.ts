@@ -3,8 +3,7 @@
 import { Provider } from 'oidc-provider';
 import * as Debug from 'debug';
 import { provider as providerConfiguration } from '../config.oidcp';
-import { cookies } from '../config';
-import { OIDCAccount, SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
+import { SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
 import { getServerConfig } from './server-config';
 import { oidcKey } from '../config';
 import { generateKeyPairSync, createPrivateKey } from 'crypto';
@@ -50,16 +49,16 @@ async function getJWKS() {
 }
 
 async function configure(): Promise<void> {
-  const { enableOIDCP, OIDCPInterfaceURL, OIDCPClients } = getServerConfig();
+  const { enableOIDCP, OIDCPProviderURL, OIDCPClients } = getServerConfig();
 
-  debug('Init OIDCP with:\n' + JSON.stringify({ enableOIDCP, OIDCPInterfaceURL }, null, 2));
+  debug('Init OIDCP with:\n' + JSON.stringify({ enableOIDCP, OIDCPProviderURL }, null, 2));
 
   if (!enableOIDCP) {
     return abortInit('Skipping OpenID Connect Provider configuration');
   }
 
-  if (!OIDCPInterfaceURL) {
-    return abortInit('No OIDCPInterfaceURL set while OIDCP is enabled, skipping configuration');
+  if (!OIDCPProviderURL) {
+    return abortInit('No OIDCPProviderURL set while OIDCP is enabled, skipping configuration');
   }
 
   if (!OIDCPClients || OIDCPClients.length === 0) {
@@ -75,16 +74,9 @@ async function configure(): Promise<void> {
   const adapter = Adapter;
   const jwks = await getJWKS();
   const configuration = Object.assign(
-    {}, { ...{ jwks, cookies: { keys: cookies.keys }, clients }, ...providerConfiguration }
+    {}, { ...{ jwks, clients }, ...providerConfiguration }
   );
-  configuration.findAccount = OIDCAccount.findAccount;
-  configuration.interactions.url = interactionsUrl;
-  configuration.cookies.names = {
-    interaction: '_oidcp_interaction',
-    resume: '_oidcp_interaction_resume',
-    session: '_oidcp_session'
-  };
-  provider = new Provider(OIDCPInterfaceURL + '/oidcp', { adapter, ...configuration });
+  provider = new Provider(OIDCPProviderURL, { adapter, ...configuration });
   initialized = true;
 }
 
@@ -121,8 +113,4 @@ export function stopOIDCProvider(): Promise<void> {
       resolve();
     }
   });
-}
-
-async function interactionsUrl(ctx, interaction) {
-  return `/oidcp/interaction/${interaction.uid}`;
 }

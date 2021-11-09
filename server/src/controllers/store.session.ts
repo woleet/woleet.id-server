@@ -7,9 +7,9 @@ const debug = Debug('id:sessions');
 
 export class SessionStore {
 
-  async create(user: SequelizeUserObject): Promise<string> {
-    const userId = user.getDataValue('id');
-    const userRole = user.getDataValue('role');
+  async create(user: InternalUserObject): Promise<string> {
+    const userId = user.id;
+    const userRole = user.role;
 
     // Session identifier is built from the user identifier concatenated with % and a random string
     const sessionId = userId + '%' + uuidv4();

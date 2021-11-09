@@ -14,8 +14,8 @@
   <mat-divider></mat-divider>
   <br>
   <form [formGroup]="form">
-    <mat-form-field class="w-100" *ngIf="form.get('interfaceURL')  as f">
-      <input matInput placeholder="Interface URL" formControlName="interfaceURL" (input)="change()"
+    <mat-form-field class="w-100" *ngIf="form.get('providerURL')  as f">
+      <input matInput placeholder="ProviderURL URL" formControlName="providerURL" (input)="change()"
         [required]="enableOIDCP$ | async">
       <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
     </mat-form-field>

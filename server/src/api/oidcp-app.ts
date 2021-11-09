@@ -1,24 +1,29 @@
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
-import * as querystring from 'querystring';
 import { BadRequest, Unauthorized } from 'http-errors';
 import * as log from 'loglevel';
 import * as Debug from 'debug';
 import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
-import { createSession, delSession } from '../controllers/authentication';
+import { getUserFromUserPass } from '../controllers/authentication';
 import { getProvider } from '../controllers/oidc-provider';
 import { session } from './authentication';
-import { getServerConfig } from '../controllers/server-config';
 import * as bodyParser from 'koa-bodyparser';
-import { parse } from 'basic-auth';
 import { store as event } from '../controllers/server-event';
-import * as koaMount from 'koa-mount';
+import * as render from 'koa-ejs';
+const path = require('path');
 
 const debug = Debug('id:oidc:app');
 
 export function build(): Koa {
-  const router = new Router();
   const provider = getProvider();
+  const router = new Router();
+
+  render(provider.app, {
+    cache: false,
+    viewExt: 'ejs',
+    layout: '_layout',
+    root: path.join(__dirname, '../../assets/views'),
+  });
 
   router.use(async (ctx, next) => {
     ctx.set('Pragma', 'no-cache');
@@ -39,20 +44,15 @@ export function build(): Koa {
   provider.use(session);
   provider.use(bodyParser());
 
-  router.post('/login', async function (ctx) {
+  router.post('/interaction/:uid/login', async (ctx) => {
+    const { prompt } = await provider.interactionDetails(ctx.req, ctx.res);
+    if (prompt.name !== 'login') {
+      throw new Error('Should have the login interaction');
+    }
+
     const body = ctx.request.body;
-    if (!body.basic) {
-      throw new BadRequest();
-    }
 
-    const basic = parse('Basic ' + body.basic);
-    if (!basic) {
-      throw new BadRequest();
-    }
-
-
-    const { name, pass } = basic;
-    const authorization = await createSession(name, pass);
+    const authorization = await getUserFromUserPass(body.login, body.password);
     if (!authorization) {
       throw new Unauthorized();
     }
@@ -66,26 +66,9 @@ export function build(): Koa {
       data: null
     });
 
-    const returnTo = `https://${ctx.request.host}/oidcp/interaction/${body.grantId}/login?` + querystring.stringify({
-      userId: authorization.user.id
-    });
-    ctx.res.statusCode = 303; // eslint-disable-line no-param-reassign
-    ctx.res.setHeader('Location', returnTo);
-    ctx.res.setHeader('Content-Length', '0');
-
-    ctx.res.end();
-  });
-
-  router.get('/interaction/:uid/login', async (ctx) => {
-    const { userId } = ctx.query;
-    const { prompt } = await provider.interactionDetails(ctx.req, ctx.res);
-    if (prompt.name !== 'login') {
-      throw new Error('Should have the login interaction');
-    }
-
     const result = {
       login: {
-        accountId: userId,
+        accountId: authorization.user.id,
       },
     };
 
@@ -94,59 +77,38 @@ export function build(): Koa {
     });
   });
 
-  router.get('/interaction/:grant', async (ctx, next) => {
-    const interactionDetails = await provider.interactionDetails(ctx.req, ctx.res);
-    switch (interactionDetails.prompt.name) {
+  router.get('/interaction/:uid', async (ctx, next) => {
+    const { uid, prompt, params, session } = await provider.interactionDetails(ctx.req, ctx.res);
+    const client = await provider.Client.find(params.client_id);
+
+    switch (prompt.name) {
       case 'login': {
-        const config = getServerConfig();
-        let redirect_uri = '/auth?';
-        const queryString = Object.keys(interactionDetails.params).map((key) => {
-          return encodeURIComponent(key) + '=' + encodeURIComponent(interactionDetails.params[key]);
-        }).join('&');
-        redirect_uri += queryString;
-        const redirect = Buffer.from(redirect_uri).toString('base64');
-        const origin = Buffer.from(ctx.header.referer).toString('base64');
-        const grantId = interactionDetails.uid;
-        // redirect to UI to login
-        ctx.redirect(`${config.OIDCPInterfaceURL}/login?` + querystring.stringify({
-          origin: `oidcp=${origin}`,
-          redirect,
-          grantId
-        }));
-        return;
+        return ctx.render('login', {
+          client,
+          uid,
+          details: prompt.details,
+          params,
+          title: 'Sign-in',
+          google: ctx.google,
+          session: session ? debug(session) : undefined,
+          dbg: {
+            params: debug(params),
+            prompt: debug(prompt),
+          },
+        });
       }
       case 'consent': {
-        const { params, session: { accountId } } = interactionDetails;
-        let { grantId } = interactionDetails;
-        let grant;
-
-        if (grantId) {
-          // we'll be modifying existing grant in existing session
-          grant = await provider.Grant.find(grantId);
-        } else {
-          // we're establishing a new grant
-          grant = new provider.Grant({
-            accountId,
-            clientId: params.client_id,
-          });
-
-          grant.addOIDCScope('openid email profile signature');
-          grant.addOIDCClaims(['email', 'email_verified', 'name', 'nickname', 'preferred_username', 'updated_at']);
-          await grant.save();
-        }
-
-        grantId = await grant.save();
-
-        const consent: any = {};
-        if (!interactionDetails.grantId) {
-          // we don't have to pass grantId to consent, we're just modifying existing one
-          consent.grantId = grantId;
-        }
-
-        const result = { consent };
-
-        return provider.interactionFinished(ctx.req, ctx.res, result, {
-          mergeWithLastSubmission: true,
+        return ctx.render('interaction', {
+          client,
+          uid,
+          details: prompt.details,
+          params,
+          title: 'Authorize',
+          session: session ? debug(session) : undefined,
+          dbg: {
+            params: debug(params),
+            prompt: debug(prompt),
+          },
         });
       }
       default:
@@ -154,19 +116,56 @@ export function build(): Koa {
     }
   });
 
-  router.get('/session/end', async (ctx, next) => {
-
-    if (ctx.session) {
-      await delSession(ctx.session.id);
+  router.post('/interaction/:uid/confirm', async (ctx) => {
+    const interactionDetails = await provider.interactionDetails(ctx.req, ctx.res);
+    const { prompt, params, session: { accountId } } = interactionDetails;
+    if (prompt.name !== 'consent') {
+      throw new Error('Should have the consent interaction');
     }
-    ctx.cookies.set('session', null);
-    await next();
+
+    let { grantId } = interactionDetails;
+    let grant;
+
+    if (grantId) {
+      // we'll be modifying existing grant in existing session
+      grant = await provider.Grant.find(grantId);
+    } else {
+      // we're establishing a new grant
+      grant = new provider.Grant({
+        accountId,
+        clientId: params.client_id,
+      });
+    }
+
+    if (prompt.details.missingOIDCScope) {
+      grant.addOIDCScope(prompt.details.missingOIDCScope.join(' '));
+    }
+    if (prompt.details.missingOIDCClaims) {
+      grant.addOIDCClaims(prompt.details.missingOIDCClaims);
+    }
+    if (prompt.details.missingResourceScopes) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [indicator, scope] of Object.entries(prompt.details.missingResourceScopes)) {
+        // @ts-ignore
+        grant.addResourceScope(indicator, scope.join(' '));
+      }
+    }
+
+    grantId = await grant.save();
+
+    const consent = {} as any;
+    if (!interactionDetails.grantId) {
+      // we don't have to pass grantId to consent, we're just modifying existing one
+      consent.grantId = grantId;
+    }
+
+    const result = { consent };
+    return provider.interactionFinished(ctx.req, ctx.res, result, {
+      mergeWithLastSubmission: true,
+    });
   });
 
+
   provider.use(router.routes());
-
-  const overlay = new Koa();
-  overlay.use(koaMount('/oidcp', provider.app));
-
-  return overlay;
+  return provider.app;
 }

@@ -158,7 +158,7 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
       exit('FATAL: Cannot stop the OIDCP server', err);
     }
   }
-  if (up.OIDCPInterfaceURL || up.OIDCPClients || up.enableOIDCP) {
+  if (up.OIDCPProviderURL || up.OIDCPClients || up.enableOIDCP) {
     debug('Update OIDC Provider with', { up });
     try {
       await fns.updateOIDCProvider();

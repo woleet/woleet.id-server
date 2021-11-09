@@ -252,7 +252,7 @@ declare global {
     openIDConnectClientRedirectURL?: string;
 
     // Open ID Connect Provider config
-    OIDCPInterfaceURL?: string;
+    OIDCPProviderURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
 
@@ -307,7 +307,7 @@ declare global {
     openIDConnectClientRedirectURL?: string;
 
     // Open ID Connect Provider config
-    OIDCPInterfaceURL?: string;
+    OIDCPProviderURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
 
@@ -362,7 +362,7 @@ declare global {
     openIDConnectClientRedirectURL?: string;
 
     // Open ID Connect Provider config
-    OIDCPInterfaceURL?: string;
+    OIDCPProviderURL?: string;
     OIDCPClients?: ApiOIDCPClient[];
     enableOIDCP?: boolean;
 

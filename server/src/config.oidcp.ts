@@ -1,3 +1,6 @@
+import { cookies } from "./config";
+import { OIDCAccount } from "./database/oidcp-adapter";
+
 // https://github.com/panva/node-oidc-provider/blob/master/docs/configuration.md
 export const provider: any = {
   acrValues: ['urn:mace:incommon:iap:bronze'],
@@ -5,6 +8,15 @@ export const provider: any = {
     url(ctx, interaction) { // eslint-disable-line no-unused-vars
       return `/interaction/${interaction.uid}`;
     },
+  },
+  findAccount: OIDCAccount.findAccount,
+  cookies: {
+    keys: cookies.keys,
+    names: {
+      interaction: '_oidcp_interaction',
+      resume: '_oidcp_interaction_resume',
+      session: '_oidcp_session'
+    }
   },
   claims: {
     email: ['email', 'email_verified'],

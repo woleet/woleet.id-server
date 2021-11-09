@@ -1,0 +1,24 @@
+#
+# OpenID Connect endpoint proxy
+#
+
+server {
+  listen 3003 ssl default_server;
+  listen [::]:3003 ssl;
+
+  resolver ${WOLEET_ID_SERVER_NGINX_RESOLVER};
+
+  server_name localhost;
+  root /usr/share/nginx/html;
+
+  # SSL configuration
+  include rules/ssl.conf;
+
+  include rules/handle497.conf;
+  include rules/handle500.conf;
+
+  set $proxy_target ${WOLEET_ID_SERVER_NGINX_SERVER_ADDRESS}:3003;
+  location / {
+    include rules/proxy.conf;
+  }
+}

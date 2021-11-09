@@ -16,8 +16,6 @@ import { SealIdentityListPageComponent } from '@pages/seal-identity.list';
 import { UserKeyPageComponent } from '@pages/user.key';
 import { UserDetailPageComponent } from '@pages/user.detail';
 import { ErrorPageComponent } from '@components/pages/error';
-import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
-import { OIDCProviderInteractionComponent } from '@pages/oidcp-interaction';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { EnrollmentPageComponent } from '@pages/enrollment';
 
@@ -63,18 +61,6 @@ const routes: Routes = [
     path: 'user/:id', data: { title: 'User detail' },
     component: UserDetailPageComponent,
     canActivate: [IsManager]
-  },
-  {
-    path: 'oauth/callback',
-    data: { title: 'Please wait...', hideNav: true },
-    component: OAuthRedirectComponent,
-    canActivate: [IsAnonymous]
-  },
-  {
-    path: 'oidcp-interaction/:action/:grant',
-    data: { title: 'OIDC Provider interaction', hideNav: true },
-    component: OIDCProviderInteractionComponent,
-    canActivate: [IsUser]
   },
   {
     path: 'users',
