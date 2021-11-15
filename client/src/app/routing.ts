@@ -18,6 +18,7 @@ import { UserDetailPageComponent } from '@pages/user.detail';
 import { ErrorPageComponent } from '@components/pages/error';
 import { ResetPasswordPageComponent } from '@pages/reset-password';
 import { EnrollmentPageComponent } from '@pages/enrollment';
+import { OAuthRedirectComponent } from '@components/pages/oauth-redirect';
 
 const routes: Routes = [
   {
@@ -61,6 +62,12 @@ const routes: Routes = [
     path: 'user/:id', data: { title: 'User detail' },
     component: UserDetailPageComponent,
     canActivate: [IsManager]
+  },
+  {
+    path: 'oauth/callback',
+    data: { title: 'Please wait...', hideNav: true },
+    component: OAuthRedirectComponent,
+    canActivate: [IsAnonymous]
   },
   {
     path: 'users',

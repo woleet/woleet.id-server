@@ -38,4 +38,8 @@ export class LoginPageComponent {
       this.errorMsg = 'Unable to login';
     }
   }
+
+  openid() {
+    return this.authService.openid();
+  }
 }

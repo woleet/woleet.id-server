@@ -83,6 +83,7 @@ import { NeedConfigGuardService } from '@services/guards/config';
 import { ConfigService } from '@services/config';
 import { StopPropagationDirective } from '@directives/stop-propagation';
 import { StopRipplePropagationDirective } from '@directives/stop-ripple-propagation';
+import { OAuthRedirectComponent } from '@pages/oauth-redirect';
 import { AppConfigService } from '@services/boot';
 import { ConfigOpenIDComponent } from '@components/parts/config.openid';
 import { ConfigOIDCPComponent } from '@components/parts/config.oidcp';
@@ -138,6 +139,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     StopPropagationDirective,
     StopRipplePropagationDirective,
     ErrorPageComponent,
+    OAuthRedirectComponent,
     IntlTelInputComponent,
     ConfigLogoUrlComponent,
     ConfigHTMLFrameUrlComponent,

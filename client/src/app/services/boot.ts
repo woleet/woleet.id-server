@@ -6,7 +6,6 @@ import { serverURL } from './config';
 import { switchNetworkError } from '@interceptors/network-error';
 import { ErrorService } from '@services/error';
 import { LocalStorageService } from './local-storage';
-import { parse } from 'qs';
 
 @Injectable({ providedIn: 'root' })
 export class AppConfigService {

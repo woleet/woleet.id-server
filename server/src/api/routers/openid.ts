@@ -68,7 +68,7 @@ router.get('/callback', async function (ctx) {
 
   let tokenSet;
   try {
-    tokenSet = await client.authorizationCallback(
+    tokenSet = await client.callback(
       getClientRedirectURL() /* TODO: check arg */,
       ctx.query,
       { response_type: 'code', state, nonce }

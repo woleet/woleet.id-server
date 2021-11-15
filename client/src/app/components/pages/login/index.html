@@ -1,6 +1,6 @@
 <logo [logoURL]="config.logoURL"></logo>
 <html-frame [HTMLFrame]="config.HTMLFrame"></html-frame>
-<div class="form-container" *ngIf="(!config.enableOpenIDConnect)">
+<div class="form-container">
   <form role="form" (submit)="login()" #f="ngForm">
     <div>
       <mat-form-field class="w-100">
