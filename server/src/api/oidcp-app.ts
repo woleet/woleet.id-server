@@ -165,6 +165,16 @@ export function build(): Koa {
     });
   });
 
+  router.get('/interaction/:uid/abort', async (ctx) => {
+    const result = {
+      error: 'access_denied',
+      error_description: 'End-User aborted interaction',
+    };
+
+    return provider.interactionFinished(ctx.req, ctx.res, result, {
+      mergeWithLastSubmission: false,
+    });
+  });
 
   provider.use(router.routes());
   return provider.app;
