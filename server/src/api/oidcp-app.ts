@@ -42,9 +42,12 @@ export function build(): Koa {
   });
 
   provider.use(session);
-  provider.use(bodyParser());
 
-  router.post('/interaction/:uid/login', async (ctx) => {
+  const body = bodyParser({
+    text: false, json: false, patchNode: true, patchKoa: true,
+  });
+
+  router.post('/interaction/:uid/login', body, async (ctx) => {
     const { prompt } = await provider.interactionDetails(ctx.req, ctx.res);
     if (prompt.name !== 'login') {
       throw new Error('Should have the login interaction');
