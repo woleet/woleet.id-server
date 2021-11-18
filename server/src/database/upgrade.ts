@@ -376,6 +376,47 @@ async function upgrade16(sequelize) {
   }
 }
 
+async function upgrade17(sequelize) {
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const config = cfg.getDataValue('config');
+  if (config.version < 17) {
+    log.warn('Removing old OIDCP caches tables');
+
+    const tablesToDrop = [
+    'Sessions',
+    'AccessTokens',
+    'AuthorizationCodes',
+    'RefreshTokens',
+    'DeviceCodes',
+    'ClientCredentials',
+    'Clients',
+    'InitialAccessTokens',
+    'RegistrationAccessTokens'];
+
+    tablesToDrop.forEach(async tableToDrop => {
+      const dropLogs = await sequelize.query(`DROP TABLE IF EXISTS "${tableToDrop}";`);
+      log.warn(`Dropping table ${tableToDrop} if it exists`, dropLogs);
+    });
+
+    if ((config as any).OIDCPInterfaceURL) {
+      log.warn('Cleaning OIDCPInterfaceURL configuration data');
+      delete (config as any).OIDCPInterfaceURL;
+    }
+
+    if ((config as any).OIDCPIssuerURL) {
+      log.warn('Cleaning OIDCPIssuerURL configuration data');
+      delete (config as any).OIDCPIssuerURL;
+    }
+
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 17 }) });
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
@@ -393,6 +434,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade14(sequelize);
   await upgrade15(sequelize);
   await upgrade16(sequelize);
+  await upgrade17(sequelize);
 }
 
 async function postUpgrade3() {
