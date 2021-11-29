@@ -14,6 +14,9 @@ export async function createSession(login: string, password: string)
   : Promise<{ token: string, user: InternalUserObject }> {
 
   const user = await getUserFromUserPass(login, password);
+  if (!user) {
+    return null;
+  }
   const token = await sessionStore.create(user.user);
   return { token, user: user.user };
 }
