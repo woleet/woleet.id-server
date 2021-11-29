@@ -75,7 +75,6 @@ import { APITokenService } from '@services/api-token';
 import { PageDataService } from '@services/page-data';
 import { ServerConfigService } from '@services/server-config';
 import { EnrollmentService } from '@services/enrollment';
-import { AllowCredentialsInterceptorService } from '@interceptors/allow-credentials';
 import { NetworkErrorInterceptorService } from '@interceptors/network-error';
 import { UnauthorizedInterceptorService } from '@interceptors/unauthorized';
 import { ForbiddenInterceptorService } from '@interceptors/forbidden';
@@ -224,7 +223,7 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     AdminGuardService, UserGuardService, AnonymousGuardService, ErrorGuardService, NoErrorGuardService, ManagerGuardService,
     NeedConfigGuardService, KeyService, ExternalKeyService, UserService, InfoService, ConfigService, APITokenService,
     PageDataService, ServerConfigService, EnrollmentService, UnauthorizedInterceptorService, ForbiddenInterceptorService,
-    NetworkErrorInterceptorService, AllowCredentialsInterceptorService, LocalStorageService
+    NetworkErrorInterceptorService, LocalStorageService
   ],
   bootstrap: [AppComponent]
 })
