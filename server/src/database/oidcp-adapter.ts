@@ -96,6 +96,15 @@ export class SequelizeAdapter {
     }
   }
 
+  async revokeByGrantId(grantId) { // eslint-disable-line class-methods-use-this
+    debug(`revoke ${grantId}`);
+    const promises = [];
+    grantable.forEach((name) => {
+      promises.push(models.get(name).destroy({ where: { grantId } }));
+    });
+    await Promise.all(promises);
+  }
+
   async consume(id) {
     debug(`consume ${id}`);
     await this.model.update({ consumedAt: new Date() }, { where: { id } });

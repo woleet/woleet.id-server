@@ -47,40 +47,6 @@ export const provider: any = {
     Interaction: 1 * 60 * 60, // 1 hour in seconds
     Session: 1 * 60 * 60 * 24, // 1 day in seconds
   },
-  logoutSource: async function logoutSource(ctx, form) {
-    // @param ctx - koa request context
-    // @param form - form source (id="op.logoutForm") to be embedded in the page and submitted by
-    //   the End-User
-    ctx.body = `<!DOCTYPE html>
-  <head>
-  <title>Logging out</title>
-  </head>
-  <body>
-  <div>
-    ${form}
-    <script>
-      (function(){
-        function logout() {
-          var form = document.getElementById('op.logoutForm');
-          var input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = 'logout';
-          input.value = 'yes';
-          form.appendChild(input);
-          form.submit();
-        }
-        function rpLogoutOnly() {
-          var form = document.getElementById('op.logoutForm');
-          form.submit();
-        }
-
-        logout();
-      })();
-    </script>
-  </div>
-  </body>
-  </html>`;
-  },
   renderError: async function renderError(ctx, out, error) {
     ctx.type = 'html';
     ctx.body = `<!DOCTYPE html>

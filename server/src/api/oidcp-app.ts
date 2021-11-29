@@ -8,6 +8,7 @@ import { getUserFromUserPass } from '../controllers/authentication';
 import { getProvider } from '../controllers/oidc-provider';
 import { session } from './authentication';
 import * as bodyParser from 'koa-bodyparser';
+import * as cors from '@koa/cors';
 import { store as event } from '../controllers/server-event';
 import * as render from 'koa-ejs';
 const path = require('path');
@@ -180,5 +181,6 @@ export function build(): Koa {
   });
 
   provider.use(router.routes());
+  provider.use(cors());
   return provider.app;
 }

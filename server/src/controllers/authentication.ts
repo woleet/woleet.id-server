@@ -51,25 +51,6 @@ export async function getUserFromUserPass(login: string, password: string)
   return { user: user.get() };
 }
 
-export async function createOAuthSession(user): Promise<{ token: string, user: InternalUserObject }> {
-  if (!user) {
-    return null;
-  }
-
-  // A blocked user cannot login
-  if (user.getDataValue('status') === 'blocked') {
-    return null;
-  }
-
-  const token = await sessionStore.create(user);
-
-  user.set('lastLogin', new Date);
-
-  await user.save();
-
-  return { token, user: user.get() };
-}
-
 export async function delSession(id: string): Promise<void> {
   return sessionStore.del(id);
 }
