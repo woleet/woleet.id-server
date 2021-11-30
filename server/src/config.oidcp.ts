@@ -1,14 +1,9 @@
 import { cookies } from "./config";
 import { OIDCAccount } from "./database/oidcp-adapter";
 
-// https://github.com/panva/node-oidc-provider/blob/master/docs/configuration.md
+// https://github.com/panva/node-oidc-provider/blob/v7.x/docs/README.md#configuration-options
 export const provider: any = {
   acrValues: ['urn:mace:incommon:iap:bronze'],
-  interactions: {
-    url(ctx, interaction) { // eslint-disable-line no-unused-vars
-      return `/interaction/${interaction.uid}`;
-    },
-  },
   findAccount: OIDCAccount.findAccount,
   cookies: {
     keys: cookies.keys,
@@ -34,7 +29,7 @@ export const provider: any = {
     introspection: { enabled: true },    // defaults to false
     revocation: { enabled: true }       // defaults to false
   },
-  // https://github.com/panva/node-oidc-provider/blob/master/docs/configuration.md#scopes
+  // https://github.com/panva/node-oidc-provider/blob/v7.x/docs/README.md#scopes
   scopes: ['openid', 'offline_access', 'signature'],
   subjectTypes: ['public', 'pairwise'],
   responseTypes: ['code'],

@@ -5,9 +5,6 @@ import { createSession, delSession } from '../../controllers/authentication';
 import { store as event } from '../../controllers/server-event';
 import { cookies } from '../../config';
 import { serializeUserDTO } from '../serialize/userDTO';
-import { getServerConfig } from '../../controllers/server-config';
-import * as querystring from 'querystring';
-import { parse } from 'basic-auth';
 
 /**
  * Authentication

@@ -33,6 +33,7 @@ export class SequelizeAdapter {
       data,
       ...(data.grantId ? { grantId: data.grantId } : undefined),
       ...(data.userCode ? { userCode: data.userCode } : undefined),
+      ...(data.uid ? { uid: data.uid } : undefined),
       ...(expiresIn ? { expiresAt: new Date(Date.now() + (expiresIn * 1000)) } : undefined),
     });
   }
@@ -124,20 +125,11 @@ export class OIDCAccount {
 
   accountId: uuid;
 
-  static async findByLogin(login) {
-    debug(`findByLogin ${login}`);
-    // login is used only for "Password Grant" authentication
-    throw new Error('Find by login should not be called');
-  }
-
-  static async findById(ctx, id, token) {
-    debug(`findById ${id}`);
+  static async findAccount(ctx, id, token) { // eslint-disable-line no-unused-vars
     // token is a reference to the token used for which a given account is being loaded,
     //   it is undefined in scenarios where account claims are returned from authorization endpoint
     // ctx is the koa request context
-    if (!store.get(id)) {
-      store.set(id, new OIDCAccount(id));
-    }
+    if (!store.get(id)) new OIDCAccount(id); // eslint-disable-line no-new
     return store.get(id);
   }
 
@@ -168,13 +160,5 @@ export class OIDCAccount {
       preferred_username: user.get('username'),
       updated_at: user.get('updatedAt'),
     };
-  }
-
-  static async findAccount(ctx, id, token) { // eslint-disable-line no-unused-vars
-    // token is a reference to the token used for which a given account is being loaded,
-    //   it is undefined in scenarios where account claims are returned from authorization endpoint
-    // ctx is the koa request context
-    if (!store.get(id)) new OIDCAccount(id); // eslint-disable-line no-new
-    return store.get(id);
   }
 }

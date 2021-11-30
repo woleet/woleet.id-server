@@ -45,7 +45,7 @@ async function getJWKS() {
     });
     oidcPrivateKey = privateKey;
   }
-  return await fromKeyLike(createPrivateKey(oidcPrivateKey))
+  return await fromKeyLike(createPrivateKey(oidcPrivateKey));
 }
 
 async function configure(): Promise<void> {

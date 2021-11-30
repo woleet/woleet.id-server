@@ -19,11 +19,13 @@ export function build(): Koa {
   const provider = getProvider();
   const router = new Router();
 
+  // This is the configuration koa-ejs use to display oidc login/logout pages
+  //  these pages are stored in the asset/oidcp-views folder
   render(provider.app, {
     cache: false,
     viewExt: 'ejs',
     layout: '_layout',
-    root: path.join(__dirname, '../../assets/views'),
+    root: path.join(__dirname, '../../assets/oidcp-views'),
   });
 
   router.use(async (ctx, next) => {
