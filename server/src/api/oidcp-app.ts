@@ -15,6 +15,7 @@ const path = require('path');
 
 const debug = Debug('id:oidc:app');
 
+// Original example: https://github.com/panva/node-oidc-provider/blob/v7.x/example/routes/koa.js
 export function build(): Koa {
   const provider = getProvider();
   const router = new Router();
