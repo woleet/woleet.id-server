@@ -44,14 +44,10 @@ export class AuthService {
     }
   }
 
-  async login(user: BasicAuthObject, origin?: string, redirect?: string, grantId?: string): Promise<ApiUserDTOObject | null> {
+  async login(user: BasicAuthObject): Promise<ApiUserDTOObject | null> {
     this.lock.incr();
     const headers = (new HttpHeaders()).append('Authorization', 'Basic ' + btoa(`${user.username}:${user.password}`));
-    let queryString = '';
-    if (origin && redirect && grantId) {
-      queryString = '&grantId=' + grantId;
-    }
-    const auth: AuthResponseObject = await this.http.get<AuthResponseObject>(`${serverURL}/login` + queryString, { headers })
+    const auth: AuthResponseObject = await this.http.get<AuthResponseObject>(`${serverURL}/login`, { headers })
       .toPromise()
       .catch(() => null);
     this.lock.decr();

@@ -73,6 +73,10 @@ async function configure(): Promise<void> {
   initialized = false;
   const adapter = Adapter;
   const jwks = await getJWKS();
+
+  // Takes the config.oidcp.ts file and enhance it with some dynamic parameters:
+  //  - Configured clients
+  //  - A private RSA key formatted as jwks
   const configuration = Object.assign(
     {}, { ...{ jwks, clients }, ...providerConfiguration }
   );

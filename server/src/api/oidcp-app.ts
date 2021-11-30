@@ -46,11 +46,13 @@ export function build(): Koa {
 
   provider.use(session);
 
-  const body = bodyParser({
+  // Custom configuration of koa-bodyparser to be used by node-oidc-provider
+  const bodyparser = bodyParser({
     text: false, json: false, patchNode: true, patchKoa: true,
   });
 
-  router.post('/interaction/:uid/login', body, async (ctx) => {
+  //Endpoint called by the login page rendered by the koa-ejs middleware
+  router.post('/interaction/:uid/login', bodyparser, async (ctx) => {
     const { prompt } = await provider.interactionDetails(ctx.req, ctx.res);
     if (prompt.name !== 'login') {
       throw new Error('Should have the login interaction');
@@ -83,6 +85,7 @@ export function build(): Koa {
     });
   });
 
+  // This endpoint renders the login / consent page if needed
   router.get('/interaction/:uid', async (ctx, next) => {
     const { uid, prompt, params, session } = await provider.interactionDetails(ctx.req, ctx.res);
     const client = await provider.Client.find(params.client_id);
@@ -95,7 +98,6 @@ export function build(): Koa {
           details: prompt.details,
           params,
           title: 'Sign-in',
-          google: ctx.google,
           session: session ? debug(session) : undefined,
           dbg: {
             params: debug(params),
@@ -122,6 +124,7 @@ export function build(): Koa {
     }
   });
 
+  //Endpoint called by the consent page rendered by the koa-ejs middleware
   router.post('/interaction/:uid/confirm', async (ctx) => {
     const interactionDetails = await provider.interactionDetails(ctx.req, ctx.res);
     const { prompt, params, session: { accountId } } = interactionDetails;
@@ -176,7 +179,6 @@ export function build(): Koa {
       error: 'access_denied',
       error_description: 'End-User aborted interaction',
     };
-
     return provider.interactionFinished(ctx.req, ctx.res, result, {
       mergeWithLastSubmission: false,
     });
