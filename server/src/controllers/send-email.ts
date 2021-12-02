@@ -83,7 +83,8 @@ export async function askResetPasswordEmail(email: string): Promise<InternalUser
   return user.get();
 }
 
-export async function sendResetPasswordEmail(email: string, managerId: string, isCalledByAdminToken: boolean = false): Promise<InternalUserObject> {
+export async function sendResetPasswordEmail(email: string, managerId: string, isCalledByAdminToken: boolean = false):
+  Promise<InternalUserObject> {
 
   // Check that user exists
   let user = await User.getByEmail(email);
@@ -91,8 +92,8 @@ export async function sendResetPasswordEmail(email: string, managerId: string, i
     throw new NotFoundUserError();
   }
 
-  // Build a password reset token: if a manager or the admin token holder initiated the procedure, the token expires after 7 days,
-  // if it's the user himself, then the token expired 1 hour later
+  // Build a password reset token: if a manager or the admin token holder initiated the procedure,
+  // the token expires after 7 days, if it's the user himself, then the token expired 1 hour later
   let token: string;
   const uuid = uuidv4();
   if (managerId && (user.getDataValue('id') !== managerId)) {
@@ -170,7 +171,8 @@ export async function sendKeyEnrollmentEmail(user: InternalUserObject, enrollmen
   return;
 }
 
-export async function sendEnrollmentFinalizeEmail(userName: string, address: string, success: boolean, reason: string): Promise<void> {
+export async function sendEnrollmentFinalizeEmail(userName: string, address: string, success: boolean, reason: string):
+  Promise<void> {
   const config = getServerConfig();
   const logo = getLogo(config);
   const subject = 'Key registration ' + (success ? 'success' : 'failure');

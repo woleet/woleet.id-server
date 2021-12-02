@@ -28,21 +28,21 @@ export async function token(ctx: Context, next) {
 
     // Check if API token exists
     if (parts.length === 2 && parts[0] === 'Bearer') {
-      const token: InternalTokenObject = await apiTokenStore.getByValue(parts[1]);
-      if (token) {
-        if (token.status === 'expired') {
+      const tokenObject: InternalTokenObject = await apiTokenStore.getByValue(parts[1]);
+      if (tokenObject) {
+        if (tokenObject.status === 'expired') {
           throw new Unauthorized('Expired token');
         }
-        if (token.status === 'blocked') {
+        if (tokenObject.status === 'blocked') {
           throw new Unauthorized('Blocked token');
         }
-        ctx.token = token;
-        if (token.userId) {
-          const user = await getUserById(token.userId);
+        ctx.token = tokenObject;
+        if (tokenObject.userId) {
+          const userObject: InternalUserObject = await getUserById(tokenObject.userId);
           ctx.authorizedUser = {
-            userId: user.id,
-            userRole: user.role
-          }
+            userId: userObject.id,
+            userRole: userObject.role
+          };
         }
         return next();
       }
@@ -53,7 +53,6 @@ export async function token(ctx: Context, next) {
 }
 
 export async function bearerAuth(ctx: Context, next) {
-
   const { header } = ctx.request;
 
   // Check if "authorization" header is set
@@ -62,23 +61,22 @@ export async function bearerAuth(ctx: Context, next) {
 
     // Check if API token exists
     if (parts.length === 2 && parts[0] === 'Bearer') {
-      const token: InternalTokenObject = (await apiTokenStore.getByValue(parts[1]))
+      const tokenObject: InternalTokenObject = await apiTokenStore.getByValue(parts[1])
         || (isInitialized() && await oauthAccessTokenStore.get(parts[1]));
-      if (token) {
-        ctx.token = token;
-
-        if (token) {
-          if (!token.scope.includes('signature')) {
+      if (tokenObject) {
+        ctx.token = tokenObject;
+        if (tokenObject) {
+          if (!tokenObject.scope.includes('signature')) {
             throw new Unauthorized('Missing signature scope');
           }
 
-          if (token.userId) {
-            if (ctx.query.userId && ctx.query.userId !== token.userId) {
+          if (tokenObject.userId) {
+            if (ctx.query.userId && ctx.query.userId !== tokenObject.userId) {
               throw new Unauthorized('Mismatch userId');
             }
           }
 
-          switch (token.status) {
+          switch (tokenObject.status) {
             case 'active':
               return next();
             case 'expired':
