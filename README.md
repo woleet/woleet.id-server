@@ -80,7 +80,7 @@ You must have the following software installed and configured:
 If your system matches these conditions, you can install Woleet.ID Server by running:
 
 ```bash
-bash < (curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh)
+bash <(curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh)
 ```
 
 As described below, you will need a certificate and its key on the computer you execute this script.
