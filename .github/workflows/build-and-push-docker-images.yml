@@ -9,6 +9,9 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
       - name: Set up Docker Buildx
         id: docker_setup_buildx
         uses: docker/setup-buildx-action@v1
@@ -26,7 +29,7 @@ jobs:
 
       - name: Get API version
         id: swagger_api_version
-        run: echo "::set-output name=WOLEET_ID_SERVER_API_VERSION::$(cat swagger.yaml | grep 'version' | grep -oE '([[:digit:]]+.?)+')"
+        run: echo "::set-output name=WOLEET_ID_SERVER_API_VERSION::$(cat $GITHUB_WORKSPACE/swagger.yaml | grep 'version' | grep -oE '([[:digit:]]+.?)+')"
 
       - name: Build and push Client
         id: docker_build_push_client
