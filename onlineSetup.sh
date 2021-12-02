@@ -67,7 +67,7 @@ installWids() {
   fi
 
   LATEST_TAG="0.0.0"
-  TAGS=($(git tag | grep -E '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sort -r))
+  TAGS=($(git tag | grep -E '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sort --reverse --version-sort))
   for TAG in "${TAGS[@]}"
   do
     CLIENT_STATUS="$(curl --silent -f -lSL "https://hub.docker.com/v2/repositories/${WOLEET_ID_SERVER_REGISTRY:-wids}/client/tags/${TAG}" > /dev/null 2>&1; echo "$?")"
