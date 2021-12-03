@@ -1,6 +1,8 @@
 package io.woleet.idserver;
 
+import io.woleet.idserver.api.ApiTokenApi;
 import io.woleet.idserver.api.AuthenticationApi;
+import io.woleet.idserver.api.KeyApi;
 import io.woleet.idserver.api.UserApi;
 import io.woleet.idserver.api.model.*;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -20,9 +22,9 @@ public class Config {
     // True if tests are to be debugged
     private static final boolean debug = false;
 
-    // Initialize data needed to test users
-    public static final String TEST_USERS_COMMONNAME_PREFIX = "#tester#-";
-    public static final String TEST_USERS_USERNAME_PREFIX = "tester_";
+    // Initialize data needed by tests
+    public static final String TEST_NAME_PREFIX = "#tester#-";
+    public static final String TEST_USERNAME_PREFIX = "tester_";
 
     // Get API base path from the environment
     public static String WOLEET_ID_SERVER_API_BASEPATH = System.getenv("WOLEET_ID_SERVER_API_BASEPATH");
@@ -107,10 +109,10 @@ public class Config {
     public static String randomString(int length) {
         Random random = new Random();
         char[] charSet = {'a', 'z', '0', '9', 'é', 'à', '京', '都'};
-        String s = new String();
+        StringBuilder s = new StringBuilder();
         while (length-- > 0)
-            s += charSet[random.nextInt(charSet.length)];
-        return s;
+            s.append(charSet[random.nextInt(charSet.length)]);
+        return s.toString();
     }
 
     /**
@@ -126,21 +128,14 @@ public class Config {
      * Create a new random user name.
      */
     public static String randomUsername() {
-        return Config.TEST_USERS_USERNAME_PREFIX + randomHash().substring(0, 8);
-    }
-
-    /**
-     * Create a new random common name.
-     */
-    public static String randomCommonName() {
-        return Config.TEST_USERS_COMMONNAME_PREFIX + randomString(32);
+        return Config.TEST_USERNAME_PREFIX + randomHash().substring(0, 8);
     }
 
     /**
      * Create a new random name (for token and keys).
      */
     public static String randomName() {
-        return Config.TEST_USERS_COMMONNAME_PREFIX + randomString(32);
+        return Config.TEST_NAME_PREFIX + randomString(32);
     }
 
     /**
@@ -168,10 +163,10 @@ public class Config {
      */
     public static void deleteAllTestUsers() throws ApiException {
         UserApi userApi = new UserApi(getAdminAuthApiClient());
-        List<UserGet> users = userApi.getUsers(null, null, null, null, null, null, null, null, null, null, null, null, null,
-                null, null, null);
+        List<UserGet> users = userApi.getUsers(null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, null, null);
         for (UserGet user : users) {
-            if (user.getIdentity().getCommonName().startsWith(TEST_USERS_COMMONNAME_PREFIX))
+            if (user.getIdentity().getCommonName().startsWith(TEST_NAME_PREFIX))
                 userApi.deleteUser(user.getId());
         }
     }
@@ -197,10 +192,10 @@ public class Config {
                 .createDefaultKey(true);
         FullIdentity fullIdentity = new FullIdentity();
         fullIdentity
-                .commonName(randomCommonName())
+                .commonName(randomName())
                 .organization("WOLEET SAS")
                 .userId(randomUUID().toString());
-        return userApi.createUser((UserPost) userPost.identity(fullIdentity));
+        return userApi.createUser(userPost.identity(fullIdentity));
     }
 
     public static UserGet createTestUser() throws ApiException {
@@ -217,6 +212,39 @@ public class Config {
 
     public static UserGet createTestUser(UserRoleEnum userRoleEnum, UserModeEnum userModeEnum) throws ApiException {
         return createTestUser(new UserApi(getAdminAuthApiClient()), userRoleEnum, userModeEnum);
+    }
+
+    /**
+     * Delete all API tokens created by the tests.
+     */
+    public static void deleteAllTestAPITokens() throws ApiException {
+        ApiTokenApi apiTokenApi = new ApiTokenApi(getAdminAuthApiClient());
+        List<APITokenGet> apiTokens = apiTokenApi.getAPITokens();
+        for (APITokenGet apiToken : apiTokens) {
+            if (apiToken.getName().startsWith(TEST_NAME_PREFIX))
+                apiTokenApi.deleteAPIToken(apiToken.getId());
+        }
+    }
+
+    public static APITokenGet createTestApiToken(ApiTokenApi apiTokenApi, UUID userId) throws ApiException {
+        APITokenPost apiTokenPost = new APITokenPost()
+                .name(randomName())
+                .userId(userId);
+        return apiTokenApi.createAPIToken(apiTokenPost);
+    }
+
+    public static APITokenGet createTestApiToken(UUID userId) throws ApiException {
+        return createTestApiToken(new ApiTokenApi(getAdminAuthApiClient()), userId);
+    }
+
+    public static KeyGet createTestKey(KeyApi keyApi, UUID userId) throws ApiException {
+        KeyPost keyPost = new KeyPost();
+        keyPost.name(randomName());
+        return keyApi.createKey(userId, keyPost);
+    }
+
+    public static KeyGet createTestKey(UUID userId) throws ApiException {
+        return createTestKey(new KeyApi(getAdminAuthApiClient()), userId);
     }
 
     /**

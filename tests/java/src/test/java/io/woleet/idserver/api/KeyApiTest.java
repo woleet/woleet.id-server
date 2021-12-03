@@ -34,41 +34,41 @@ public class KeyApiTest {
     @Test
     public void userCreateKeyTest() {
 
-        // Try to create a key with user credentials
+        // Try to create a key with user rights
         try {
             KeyPost keyPost = new KeyPost();
             keyPost.setName(Config.randomName());
             userAuthKeyApi.createKey(userSeal.getId(), keyPost);
-            fail("Should not be able to create a key object with user credentials");
+            fail("Should not be able to create a key object with user rights");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 
     @Test
     public void userDeleteKeyTest() {
 
-        // Try to delete a key with user credentials
+        // Try to delete a key with user rights
         try {
             userAuthKeyApi.deleteKey(userSeal.getDefaultKeyId());
-            fail("Should not be able to delete a key with user credentials");
+            fail("Should not be able to delete a key with user rights");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 
     @Test
     public void userGetUserKeysTest() {
 
-        // Try to get all keys with user credentials
+        // Try to get all keys with user rights
         try {
             userAuthKeyApi.getUserKeys(userSeal.getId());
-            fail("Should not be able to get all keys with user credentials");
+            fail("Should not be able to get all keys with user rights");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
     }
 
@@ -84,7 +84,7 @@ public class KeyApiTest {
             fail("Should not be able to create an already expired key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_BAD_REQUEST, e.getCode());
+            assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
         // Expire a key and check that the expiration status and date is valid
@@ -113,7 +113,7 @@ public class KeyApiTest {
             fail("Should not be able to update a revoked key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // Check that we cannot delete a revoked key
@@ -122,7 +122,7 @@ public class KeyApiTest {
             fail("Should not be able to delete a revoked key");
         }
         catch (ApiException e) {
-            assertEquals("Invalid return code", HttpStatus.SC_FORBIDDEN, e.getCode());
+            assertEquals(HttpStatus.SC_FORBIDDEN, e.getCode());
         }
 
         // TODO: check that we cannot use a revoked key to sign

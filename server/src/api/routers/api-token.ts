@@ -7,6 +7,7 @@ import {
 import { serializeAPIToken } from '../serialize/api-token';
 import { store as event } from '../../controllers/server-event';
 import { Forbidden } from 'http-errors';
+import { getUserById } from '../../controllers/user';
 
 const vid = validate.param('id', 'uuid');
 
@@ -36,19 +37,22 @@ const router = new Router({ prefix: '/api-token' });
 router.post('/', validate.body('createApiToken'), async function (ctx) {
   const token: ApiPostAPITokenObject = ctx.request.body;
 
-  if (!token.userId && ctx.session.userRole !== 'admin') {
-    throw new Forbidden('Only admin can create other admin API token');
+  if (ctx.authorizedUser && !token.userId && (ctx.authorizedUser.userRole !== 'admin')) {
+    throw new Forbidden('Only an admin can create other admin API token');
   }
 
-  if (ctx.session.userRole === 'user' && (token.userId !== ctx.session.userId)) {
-    throw new Forbidden('User can only create token for themselves');
+  if (ctx.authorizedUser && token.userId) {
+    const user = await getUserById(token.userId);
+    if (user.role === 'admin' && ctx.authorizedUser.userRole !== 'admin') {
+      throw new Forbidden('Only an admin can create API token for admin user');
+    }
   }
 
   const created = await createAPIToken(token);
 
   event.register({
     type: 'token.create',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: created.id,
     associatedUserId: token.userId || null,
     associatedKeyId: null,
@@ -64,7 +68,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
  *  operationId: getAPITokenList
  */
 router.get('/list', async function (ctx) {
-  const apiTokens = ctx.session.userRole === 'user' ? await getAPITokensByUser(ctx.session.userId) : await getAllAPITokens();
+  const apiTokens = await getAllAPITokens(ctx.authorizedUser ? ctx.authorizedUser.userRole : null);
   ctx.body = await Promise.all(apiTokens.map(serializeAPIToken));
 });
 
@@ -77,8 +81,11 @@ router.get('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const apiToken = await getAPITokenById(id);
 
-  if (ctx.session.userRole === 'user' && (apiToken.userId !== ctx.session.userId)) {
-    throw new Forbidden('User can only get their own token');
+  if (ctx.authorizedUser && apiToken.userId) {
+    const user = await getUserById(apiToken.userId);
+    if (user.role === 'admin' && ctx.authorizedUser.userRole !== 'admin') {
+      throw new Forbidden('Only an admin can get admin users API token');
+    }
   }
 
   ctx.body = await serializeAPIToken(apiToken);
@@ -94,11 +101,11 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
   const { id } = ctx.params;
   const update: ApiPutAPITokenObject = ctx.request.body;
 
-  const apiToken = await updateAPIToken(id, update, ctx.session.userId, ctx.session.userRole);
+  const apiToken = await updateAPIToken(id, update, ctx.authorizedUser && ctx.authorizedUser.userRole);
 
   event.register({
     type: 'token.edit',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: apiToken.id,
     associatedUserId: apiToken.userId || null,
     associatedKeyId: null,
@@ -116,11 +123,11 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
  */
 router.delete('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
-  const apiToken = await deleteAPIToken(id, ctx.session.userId, ctx.session.userRole);
+  const apiToken = await deleteAPIToken(id, ctx.authorizedUser && ctx.authorizedUser.userRole);
 
   event.register({
     type: 'token.delete',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: apiToken.id,
     associatedUserId: null,
     associatedKeyId: null,

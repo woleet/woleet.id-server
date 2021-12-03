@@ -9,7 +9,6 @@ fi
 
 CLIENT_IMAGE="${WOLEET_ID_SERVER_REGISTRY:-wids}/client:${WOLEET_ID_SERVER_VERSION:-latest}"
 SERVER_IMAGE="${WOLEET_ID_SERVER_REGISTRY:-wids}/server:${WOLEET_ID_SERVER_VERSION:-latest}"
-export WOLEET_ID_SERVER_API_VERSION="$(cat swagger.yaml | grep 'version' | grep -oE '([[:digit:]]+.?)+')"
 
 display_usage_app() {
   echo "usage: $0 [start|stop|restart|build|push|check|logs|backup|restore|upgrade|ha-start|ha-stop|ha-restart|create-secret-ha|delete-secret-ha|update-secret-ha]"
@@ -248,7 +247,7 @@ then
   docker build -f Dockerfile.client -t "$CLIENT_IMAGE" .
   echo "Done."
   echo "Building server image ($SERVER_IMAGE)..."
-  docker build -f Dockerfile.server -t "$SERVER_IMAGE" .
+  docker build -f Dockerfile.server -t "$SERVER_IMAGE" --build-arg WOLEET_ID_SERVER_API_VERSION_BUILDTIME="$(cat swagger.yaml | grep 'version' | grep -oE '([[:digit:]]+.?)+')" .
   echo "Done."
 elif [[ "$operation" == "backup" ]]
 then

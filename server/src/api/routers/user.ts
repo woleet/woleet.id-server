@@ -6,7 +6,7 @@ import { buildUserFilters, serializeUser } from '../serialize/user';
 import { store as event } from '../../controllers/server-event';
 import { isKeyHeldByServer } from '../../controllers/key';
 import { getServerConfig } from '../../controllers/server-config';
-import { BadRequest, Unauthorized } from 'http-errors';
+import { BadRequest, Forbidden, Unauthorized } from 'http-errors';
 import { FindOptions } from 'sequelize';
 
 const vid = validate.param('id', 'uuid');
@@ -49,16 +49,18 @@ router.post('/', validate.body('createUser'), async function (ctx) {
     throw new BadRequest('The organization is mandatory for seal users');
   }
 
-  const authorizedUser = await getUserById(ctx.session.userId);
-  if (user.role === 'admin' && authorizedUser.role !== 'admin') {
-    throw new Unauthorized('Only admin can create other admin');
+  if (!(ctx.token && ctx.token.role === 'admin')) {
+    const authorizedUser = await getUserById(ctx.authorizedUser.userId);
+    if (user.role === 'admin' && authorizedUser.role !== 'admin') {
+      throw new Forbidden('Only an admin can create another admin');
+    }
   }
 
   const created = await createUser(copy(user));
 
   event.register({
     type: 'user.create',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
     associatedUserId: created.id,
     associatedKeyId: null,
@@ -114,16 +116,18 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
 
   let user = await getUserById(id);
 
-  const authorizedUser = await getUserById(ctx.session.userId);
-  if ((update.role === 'admin' && authorizedUser.role !== 'admin')
-    || (user.role === 'admin' && authorizedUser.role !== 'admin')) {
-    throw new Unauthorized('Only admin can update other admin');
+  if (!(ctx.token && ctx.token.role === 'admin')) {
+    const authorizedUser = await getUserById(ctx.authorizedUser.userId);
+    if ((update.role === 'admin' && authorizedUser.role !== 'admin')
+      || (user.role === 'admin' && authorizedUser.role !== 'admin')) {
+      throw new Forbidden('Only an admin can update another admin');
+    }
   }
-  user = await updateUser(id, copy(update));
+  user = await updateUser(id, copy(update), ctx.authorizedUser ? ctx.authorizedUser.userRole : null);
 
   event.register({
     type: 'user.edit',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
     associatedUserId: user.id,
     associatedKeyId: null,
@@ -140,11 +144,11 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
  */
 router.delete('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
-  const user = await deleteUser(id);
+  const user = await deleteUser(id, ctx.authorizedUser ? ctx.authorizedUser.userRole : null);
 
   event.register({
     type: 'user.delete',
-    authorizedUserId: ctx.session.userId,
+    authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
     associatedUserId: user.id,
     associatedKeyId: null,

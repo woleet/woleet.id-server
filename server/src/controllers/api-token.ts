@@ -1,10 +1,12 @@
-import { APIToken } from '../database';
+import { APIToken, User } from '../database';
 
 import * as crypto from 'crypto';
 import * as Debug from 'debug';
-import { APITokenOwnerMismatchError, NotFoundAPITokenError } from '../errors';
+import { APITokenOwnerMismatchError, ForbiddenAPITokenError, NotFoundAPITokenError } from '../errors';
 import { store } from './store.api-token';
 import { secureModule } from '../config';
+import { getUserById } from './user';
+import { FindOptions, Op, Sequelize } from 'sequelize';
 
 const debug = Debug('id:ctr');
 
@@ -22,15 +24,22 @@ export async function createAPIToken(apiToken: ApiPostAPITokenObject): Promise<I
 }
 
 export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject,
-                                     userId: string, userRole: UserRoleEnum): Promise<InternalAPITokenObject> {
+  userRole: UserRoleEnum): Promise<InternalAPITokenObject> {
   debug('Update apiToken', attrs);
 
   let apiToken = await APIToken.getById(id);
   if (!apiToken) {
     throw new NotFoundAPITokenError();
   }
-  if (userRole === 'user' && apiToken.get('userId') !== userId) {
-    throw new APITokenOwnerMismatchError();
+  const apiTokenUserId = apiToken.getDataValue('userId');
+  if (userRole && userRole === 'manager') {
+    if (!apiTokenUserId) {
+      throw new ForbiddenAPITokenError();
+    }
+    const user = await getUserById(apiTokenUserId);
+    if (user.role === 'admin') {
+      throw new ForbiddenAPITokenError();
+    }
   }
   apiToken = await APIToken.update(id, attrs);
 
@@ -51,8 +60,24 @@ export async function getAPITokenById(id: string): Promise<InternalAPITokenObjec
   return apiToken.get();
 }
 
-export async function getAllAPITokens(): Promise<InternalAPITokenObject[]> {
-  const apiTokens = await APIToken.getAll();
+export async function getAllAPITokens(userRole: string): Promise<InternalAPITokenObject[]> {
+  let apiTokens;
+  if (userRole === 'manager') {
+    const opts: FindOptions = {
+      include: [{
+        model: User.model,
+        where: {
+          role: {
+            [Op.ne]: 'admin'
+          }
+        }
+      }]
+
+    };
+    apiTokens = await APIToken.getAll(opts);
+  } else {
+    apiTokens = await APIToken.getAll();
+  }
   return apiTokens.map((apiToken) => apiToken.get());
 }
 
@@ -62,15 +87,22 @@ export async function getAPITokensByUser(userId: string): Promise<InternalAPITok
 }
 
 export async function deleteAPIToken(
-  id: string, userId: string, userRole: UserRoleEnum
+  id: string, userRole: UserRoleEnum
 ): Promise<InternalAPITokenObject> {
 
   const apiToken = await APIToken.getById(id);
   if (!apiToken) {
     throw new NotFoundAPITokenError();
   }
-  if (userRole === 'user' && apiToken.get('userId') !== userId) {
-    throw new APITokenOwnerMismatchError();
+  const apiTokenUserId = apiToken.getDataValue('userId');
+  if (userRole && userRole === 'manager') {
+    if (!apiToken.get('userId')) {
+      throw new ForbiddenAPITokenError();
+    }
+    const user = await getUserById(apiTokenUserId);
+    if (user.role === 'admin') {
+      throw new ForbiddenAPITokenError();
+    }
   }
 
   await APIToken.delete(id);

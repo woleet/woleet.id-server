@@ -105,7 +105,7 @@ router.get('/callback', async function (ctx) {
 
     if (session.user.x500CommonName !== info.name) {
       const user = session.user;
-      await updateUser(user.id, { identity: { commonName: info.name } });
+      await updateUser(user.id, { identity: { commonName: info.name } }, null);
       user.x500CommonName = info.name;
     }
   } else {

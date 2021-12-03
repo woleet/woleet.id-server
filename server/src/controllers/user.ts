@@ -1,7 +1,7 @@
 import { User } from '../database';
 
 import * as Debug from 'debug';
-import { NotFoundUserError, TokenResetPasswordInvalid } from '../errors';
+import { ForbiddenUserError, NotFoundUserError, TokenResetPasswordInvalid } from '../errors';
 import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
@@ -66,13 +66,17 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
   return newUser.get();
 }
 
-export async function updateUser(id: string, attrs: ApiPutUserObject): Promise<InternalUserObject> {
+export async function updateUser(id: string, attrs: ApiPutUserObject, userRole: UserRoleEnum): Promise<InternalUserObject> {
   const update: any = attrs;
 
   // Check user existence
   const userUpdated = await User.getById(id);
   if (!userUpdated) {
     throw new NotFoundUserError();
+  }
+
+  if (userRole === 'manager' && userUpdated.getDataValue('role') === 'admin') {
+    throw new ForbiddenUserError();
   }
 
   // Encrypt password if provided
@@ -122,13 +126,20 @@ export async function getUsers(opts: FindOptions<any>): Promise<InternalUserObje
   return users.map((user) => user.get());
 }
 
-export async function deleteUser(id: string): Promise<InternalUserObject> {
+export async function deleteUser(id: string, userRole: UserRoleEnum): Promise<InternalUserObject> {
 
+
+  const user = await User.getById(id);
   // Check user existence
-  const user = await User.delete(id);
   if (!user) {
     throw new NotFoundUserError();
   }
+
+  if (userRole === 'manager' && user.getDataValue('role') === 'admin') {
+    throw new ForbiddenUserError();
+  }
+
+  await User.delete(id);
 
   // Delete all user sessions
   await store.delSessionsWithUser(id);

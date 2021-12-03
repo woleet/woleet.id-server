@@ -51,9 +51,11 @@ router.get('/login', async function (ctx) {
  *  operationId: logout
  */
 router.all('/logout', async function (ctx) {
-  if (ctx.session) {
-    delSession(ctx.session.id);
+  if (!ctx.session) {
+    throw new Unauthorized();
   }
+
+  delSession(ctx.session.id);
   ctx.cookies.set('session', null);
 
   // Return an empty body

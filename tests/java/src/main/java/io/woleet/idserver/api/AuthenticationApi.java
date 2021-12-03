@@ -92,7 +92,7 @@ public class AuthenticationApi {
         final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
-        String[] localVarAuthNames = new String[] { "CookieAuth" };
+        String[] localVarAuthNames = new String[] { "APITokenAuth", "CookieAuth" };
         return localVarApiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
 
@@ -277,7 +277,7 @@ public class AuthenticationApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> User successfully logged out. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> User successfully logged out. </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call logoutCall(final ApiCallback _callback) throws ApiException {
@@ -325,7 +325,7 @@ public class AuthenticationApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> User successfully logged out. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> User successfully logged out. </td><td>  -  </td></tr>
      </table>
      */
     public void logout() throws ApiException {
@@ -340,7 +340,7 @@ public class AuthenticationApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> User successfully logged out. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> User successfully logged out. </td><td>  -  </td></tr>
      </table>
      */
     public ApiResponse<Void> logoutWithHttpInfo() throws ApiException {
@@ -357,7 +357,7 @@ public class AuthenticationApi {
      * @http.response.details
      <table summary="Response Details" border="1">
         <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        <tr><td> 200 </td><td> User successfully logged out. </td><td>  -  </td></tr>
+        <tr><td> 204 </td><td> User successfully logged out. </td><td>  -  </td></tr>
      </table>
      */
     public okhttp3.Call logoutAsync(final ApiCallback<Void> _callback) throws ApiException {

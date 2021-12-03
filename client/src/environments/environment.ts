@@ -2,7 +2,7 @@
 // `ng build|serve --prod` then `environment.prod.ts` will be used instead.
 
 export const environment = {
-  version: '0.11.1',
+  version: '0.11.2',
   production: false,
   serverURL: '/api',
 };

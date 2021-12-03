@@ -10,6 +10,7 @@
 
 # IDE - IntelliJ
 **/.idea/
+**/.run/
 
 # IDE - VSCode
 .vscode/*

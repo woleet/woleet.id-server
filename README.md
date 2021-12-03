@@ -80,7 +80,7 @@ You must have the following software installed and configured:
 If your system matches these conditions, you can install Woleet.ID Server by running:
 
 ```bash
-bash < (curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh)
+bash <(curl -s -o-  https://raw.githubusercontent.com/woleet/woleet.id-server/master/onlineSetup.sh)
 ```
 
 As described below, you will need a certificate and its key on the computer you execute this script.
@@ -113,6 +113,24 @@ You need to set two environment variables pointing to the certificate and its as
 ```bash
 export WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE={path to certificate .crt file}
 export WOLEET_ID_SERVER_HTTP_TLS_KEY={path to certificate .key file}
+```
+
+### Renew TLS certificate
+
+#### Normal mode
+
+Just update the certificates files and do:
+
+```bash
+docker restart woleetid-server_wid-client_1
+```
+
+#### HA mode
+
+In HA mode you will need to restart the whole stack to update the certificates once file are updated
+
+```bash
+./app.sh ha-restart
 ```
 
 ## Database

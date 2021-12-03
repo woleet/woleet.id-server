@@ -32,6 +32,10 @@ public class Example {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost");
     
+    // Configure HTTP bearer authorization: APITokenAuth
+    HttpBearerAuth APITokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("APITokenAuth");
+    APITokenAuth.setBearerToken("BEARER TOKEN");
+
     // Configure API key authorization: CookieAuth
     ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
     CookieAuth.setApiKey("YOUR API KEY");
@@ -66,7 +70,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[CookieAuth](../README.md#CookieAuth)
+[APITokenAuth](../README.md#APITokenAuth), [CookieAuth](../README.md#CookieAuth)
 
 ### HTTP request headers
 
@@ -102,6 +106,10 @@ public class Example {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost");
     
+    // Configure HTTP bearer authorization: APITokenAuth
+    HttpBearerAuth APITokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("APITokenAuth");
+    APITokenAuth.setBearerToken("BEARER TOKEN");
+
     // Configure API key authorization: CookieAuth
     ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
     CookieAuth.setApiKey("YOUR API KEY");
@@ -136,7 +144,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[CookieAuth](../README.md#CookieAuth)
+[APITokenAuth](../README.md#APITokenAuth), [CookieAuth](../README.md#CookieAuth)
 
 ### HTTP request headers
 
@@ -173,6 +181,10 @@ public class Example {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost");
     
+    // Configure HTTP bearer authorization: APITokenAuth
+    HttpBearerAuth APITokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("APITokenAuth");
+    APITokenAuth.setBearerToken("BEARER TOKEN");
+
     // Configure API key authorization: CookieAuth
     ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
     CookieAuth.setApiKey("YOUR API KEY");
@@ -207,7 +219,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[CookieAuth](../README.md#CookieAuth)
+[APITokenAuth](../README.md#APITokenAuth), [CookieAuth](../README.md#CookieAuth)
 
 ### HTTP request headers
 
@@ -246,6 +258,10 @@ public class Example {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost");
     
+    // Configure HTTP bearer authorization: APITokenAuth
+    HttpBearerAuth APITokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("APITokenAuth");
+    APITokenAuth.setBearerToken("BEARER TOKEN");
+
     // Configure API key authorization: CookieAuth
     ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
     CookieAuth.setApiKey("YOUR API KEY");
@@ -276,7 +292,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[CookieAuth](../README.md#CookieAuth)
+[APITokenAuth](../README.md#APITokenAuth), [CookieAuth](../README.md#CookieAuth)
 
 ### HTTP request headers
 
@@ -310,6 +326,10 @@ public class Example {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
     defaultClient.setBasePath("http://localhost");
     
+    // Configure HTTP bearer authorization: APITokenAuth
+    HttpBearerAuth APITokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("APITokenAuth");
+    APITokenAuth.setBearerToken("BEARER TOKEN");
+
     // Configure API key authorization: CookieAuth
     ApiKeyAuth CookieAuth = (ApiKeyAuth) defaultClient.getAuthentication("CookieAuth");
     CookieAuth.setApiKey("YOUR API KEY");
@@ -346,7 +366,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[CookieAuth](../README.md#CookieAuth)
+[APITokenAuth](../README.md#APITokenAuth), [CookieAuth](../README.md#CookieAuth)
 
 ### HTTP request headers
 
