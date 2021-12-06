@@ -16,14 +16,14 @@ display_usage_app() {
 
 start-local() {
   local old_server
-  old_server=$(docker ps | grep "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-server_1" | cut -d' ' -f 1)
+  old_server=$(docker-compose -f docker-compose.yml -f docker-compose.local.yml ps --quiet wid-server)
   docker-compose -f docker-compose.yml -f docker-compose.local.yml --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" up -d
 
   # If WOLEET_ID_SERVER_ENCRYPTION_SECRET it not set, attaching to the server's container to enter it via CLI
   if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
   then
     local server
-    server=$(docker ps | grep "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-server_1" | cut -d' ' -f 1)
+    server=$(docker-compose -f docker-compose.yml -f docker-compose.local.yml ps --quiet wid-server)
 
     if [ "$server" == "$old_server" ]
     then
@@ -155,7 +155,7 @@ backup() {
   if [[ -d $BACKUP_PATH ]]
   then
     echo "Create dump_$(date +%Y-%m-%d_%H_%M_%S).sql in $BACKUP_PATH."
-    docker exec "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" pg_dumpall -c -U postgres -h /var/run/postgresql >"$BACKUP_PATH/dump_$(date +%Y-%m-%d_%H_%M_%S).sql"
+    docker-compose -f docker-compose.yml -f docker-compose.local.yml exec wid-postgres pg_dumpall -c -U postgres -h /var/run/postgresql >"$BACKUP_PATH/dump_$(date +%Y-%m-%d_%H_%M_%S).sql"
   else
     echo "This path does not exist!"
   fi
@@ -171,17 +171,17 @@ restore() {
   RESTORE_FILE="$1"
   if [[ ${RESTORE_FILE##*.} == sql ]]
   then
-    docker exec "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" psql -U postgres -h /var/run/postgresql -c "REVOKE CONNECT ON DATABASE wid FROM ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
-    docker exec "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" psql -U postgres -h /var/run/postgresql -c "SELECT pid, pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${WOLEET_ID_SERVER_POSTGRES_DB:-wid}' AND pid <> pg_backend_pid();"
-    docker exec -i "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" psql -U postgres -h /var/run/postgresql < "$RESTORE_FILE"
-    docker exec "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" psql -U postgres -h /var/run/postgresql -c "GRANT CONNECT ON DATABASE wid TO ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
-    if [[ $(docker ps -q --filter name="${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1" --filter status=running | wc -w) -eq 1 ]]; then
-      docker restart "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-postgres_1"
-      if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
-      then
-        echo "No WOLEET_ID_SERVER_ENCRYPTION_SECRET environment set, attaching to container ${server}..."
-        docker attach "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}_wid-server_1" --detach-keys='ctrl-c'
-      fi
+    postgres_docker_id=$(docker-compose -f docker-compose.yml -f docker-compose.local.yml ps --quiet wid-postgres)
+    docker exec "$postgres_docker_id" psql -U postgres -h /var/run/postgresql -c "REVOKE CONNECT ON DATABASE wid FROM ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
+    docker exec "$postgres_docker_id" psql -U postgres -h /var/run/postgresql -c "SELECT pid, pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${WOLEET_ID_SERVER_POSTGRES_DB:-wid}' AND pid <> pg_backend_pid();"
+    docker exec -i "$postgres_docker_id" psql -U postgres -h /var/run/postgresql < "$RESTORE_FILE"
+    docker exec "$postgres_docker_id" psql -U postgres -h /var/run/postgresql -c "GRANT CONNECT ON DATABASE wid TO ${WOLEET_ID_SERVER_POSTGRES_USER:-pguser};"
+    docker-compose -f docker-compose.yml -f docker-compose.local.yml restart wid-postgres
+    docker-compose -f docker-compose.yml -f docker-compose.local.yml restart wid-server
+    if [[ -z "$WOLEET_ID_SERVER_ENCRYPTION_SECRET" ]]
+    then
+      echo "No WOLEET_ID_SERVER_ENCRYPTION_SECRET environment set, attaching to container ${server}..."
+      docker attach $(docker-compose -f docker-compose.yml -f docker-compose.local.yml ps --quiet wid-server) --detach-keys='ctrl-c'
     fi
   else
     echo "${RESTORE_FILE} is not a dump file"
