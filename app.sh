@@ -16,7 +16,7 @@ display_usage_app() {
 
 start-local() {
   local old_server
-  old_server=$(docker-compose -f docker-compose.yml -f docker-compose.local.yml ps --quiet wid-server)
+  old_server=$(docker-compose -f docker-compose.yml -f docker-compose.local.yml ps --quiet wid-server || true)
   docker-compose -f docker-compose.yml -f docker-compose.local.yml --project-name "${WOLEET_ID_SERVER_PROJECT_NAME:-woleetid-server}" up -d
 
   # If WOLEET_ID_SERVER_ENCRYPTION_SECRET it not set, attaching to the server's container to enter it via CLI
