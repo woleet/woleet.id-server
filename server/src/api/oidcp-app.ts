@@ -190,13 +190,9 @@ export function build(): Koa {
   });
 
   router.get('/interaction/:uid/abort', async (ctx) => {
-    const result = {
-      error: 'access_denied',
-      error_description: 'End-User aborted interaction',
-    };
-    return provider.interactionFinished(ctx.req, ctx.res, result, {
-      mergeWithLastSubmission: false,
-    });
+    const { params } = await provider.interactionDetails(ctx.req, ctx.res);
+    const redirectURI = new URL(params.redirect_uri);
+    ctx.redirect(redirectURI.origin);
   });
 
   provider.use(router.routes());
