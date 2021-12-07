@@ -54,7 +54,8 @@ export function build(): Koa {
 
   // Endpoint called by the login page rendered by the koa-ejs middleware
   router.post('/interaction/:uid/login', bodyparser, async (ctx) => {
-    const { prompt } = await provider.interactionDetails(ctx.req, ctx.res);
+    const { uid, prompt, params, session } = await provider.interactionDetails(ctx.req, ctx.res);
+    const client = await provider.Client.find(params.client_id);
     if (prompt.name !== 'login') {
       throw new Error('Should have the login interaction');
     }
@@ -63,7 +64,19 @@ export function build(): Koa {
 
     const authorization = await getUserFromUserPass(body.login, body.password);
     if (!authorization) {
-      throw new Unauthorized();
+      return ctx.render('login', {
+        error: new Unauthorized(),
+        client,
+        uid,
+        details: prompt.details,
+        params,
+        title: 'Sign-in',
+        session: session ? debug(session) : undefined,
+        dbg: {
+          params: debug(params),
+          prompt: debug(prompt),
+        },
+      });
     }
 
     event.register({
@@ -94,6 +107,7 @@ export function build(): Koa {
     switch (prompt.name) {
       case 'login': {
         return ctx.render('login', {
+          error: null,
           client,
           uid,
           details: prompt.details,

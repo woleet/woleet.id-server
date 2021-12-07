@@ -1,6 +1,14 @@
 <form autocomplete="off" action="/interaction/<%= uid %>/login" method="post">
-  <input required type="text" name="login" placeholder="Username or email" <% if (!params.login_hint) { %>autofocus="on"<% } else { %> value="<%= params.login_hint %>" <% } %>>
-  <input required type="password" name="password" placeholder="Password" <% if (params.login_hint) { %>autofocus="on"<% } %>>
+  <input required type="text" name="login" placeholder="Username or email" <% if (!params.login_hint) { %>autofocus="on"
+    <% } else { %> value="<%= params.login_hint %>" <% } %>>
+  <input required type="password" name="password" placeholder="Password" <% if (params.login_hint) { %>autofocus="on"
+    <% } %>>
 
-  <button type="submit" class="login login-submit">LOGIN</button>
+  <% if (error) { %>
+    <div class="error">
+      Unable to login
+    </div>
+  <% } %>
+
+  <button type="submit" class="login login-submit"><span>LOGIN</span></button>
 </form>
