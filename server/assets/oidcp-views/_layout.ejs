@@ -1,177 +1,170 @@
 <!DOCTYPE html>
-<html >
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Sign-in</title>
-    <style>
-      @import url(https://fonts.googleapis.com/css?family=Roboto:400,100);
+<html>
 
-      body {
-        font-family: 'Roboto', sans-serif;
-        background-color: rgba(247, 248, 248, 1);
-        margin: 0;
-        height: 100%;
-        padding-top: 48px;
-      }
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Sign-in</title>
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Roboto:400,100);
 
-      .login-card {
-        width: 75%;
-        margin: 0 auto;
-        padding-top: 2em;
-      }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: rgba(247, 248, 248, 1);
+      margin: 0;
+      height: 100%;
+      padding-top: 48px;
+    }
 
-      .login-card h1 {
-        font-weight: 100;
-        text-align: center;
-        font-size: 2.3em;
-      }
+    .login-card {
+      width: 75%;
+      margin: 0 auto;
+      padding-top: 2em;
+    }
 
-      .login-card [type=submit] {
-        width: 100%;
-        display: block;
-        margin-bottom: 10px;
-        position: relative;
-      }
+    .login-card h1 {
+      font-weight: 100;
+      text-align: center;
+      font-size: 2.3em;
+    }
 
-      .login-card input[type=text], input[type=email], input[type=password] {
-        height: 44px;
-        font-size: 16px;
-        width: 100%;
-        margin-bottom: 1.25em;
-        -webkit-appearance: none;
-        background: #fff;
-        border: 1px solid #d9d9d9;
-        border-top: 1px solid #c0c0c0;
-        padding: 0 8px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-      }
+    .login-card [type=submit] {
+      width: 100%;
+      display: block;
+      margin-bottom: 10px;
+      position: relative;
+    }
 
-      .login {
-        text-align: center;
-        font-size: 14px;
-        font-family: 'Arial', sans-serif;
-        font-weight: 700;
-        height: 36px;
-        padding: 0 8px;
-      }
+    .login-card input[type=text],
+    input[type=email],
+    input[type=password] {
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 1.25em;
+      -webkit-appearance: none;
+      border: 0;
+      border-bottom: 1px solid #9a9a9b;
+      border-top: 0.84375em solid transparent;
+      background-color: rgba(247, 248, 248, 1);
+      padding: 8px 0;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+    }
 
-      .login-submit {
-        border: 0px;
-        color: #fff;
-        text-shadow: 0 1px rgba(0,0,0,0.1);
-        background-color: #4814ad;
-      }
+    input:focus-visible {
+      outline: none;
+    }
 
-      .login-card a {
-        text-decoration: none;
-        color: #666;
-        font-weight: 400;
-        text-align: center;
-        display: inline-block;
-        opacity: 0.6;
-      }
+    .login {
+      text-align: center;
+      font-size: 14px;
+      font-family: 'Arial', sans-serif;
+      font-weight: 700;
+      height: 36px;
+      padding: 0 8px;
+    }
 
-      .login-help {
-        color: #666;
-        width: 100%;
-        text-align: center;
-        font-size: 12px;
-      }
+    .login-submit {
+      border: 0px;
+      color: #fff;
+      text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+      background-color: #4814ad;
+      border-radius: 4px;
+      margin-top: 2rem;
+      box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+    }
 
-      .login-client-image img {
-        margin-bottom: 20px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 20%;
-      }
+    .login-submit:focus-visible {
+      outline: none;
+    }
 
-      .login-card input[type=checkbox] {
-        margin-bottom: 10px;
-      }
+    .login-card a {
+      text-decoration: none;
+      color: #666;
+      font-weight: 400;
+      text-align: center;
+      display: inline-block;
+      opacity: 0.6;
+    }
 
-      .login-card label {
-        color: #999;
-      }
+    .login-help {
+      color: #666;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+    }
 
-      .grant-debug {
-        margin-top: 20px;
-        text-align: center;
-        font-family: Fixed, monospace;
-        width: 100%;
-        font-size: 12px;
-        color: #999;
-      }
+    .login-client-image img {
+      margin-bottom: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 20%;
+    }
 
-      .grant-debug div {
-        padding-top: 10px;
-      }
+    .login-card input[type=checkbox] {
+      margin-bottom: 10px;
+    }
 
-      .login-help + form {
-        margin-top: 10px;
-      }
+    .login-card label {
+      color: #999;
+    }
 
-      .claims {
-        background-color: #fff;
-        padding-block: 10px;
-        padding-inline: 20px;
-        margin-bottom: 1.25em;
-      }
+    .grant-debug {
+      margin-top: 20px;
+      text-align: center;
+      font-family: Fixed, monospace;
+      width: 100%;
+      font-size: 12px;
+      color: #999;
+    }
 
-      ul {
-        font-weight: 100;
-        list-style-type: circle;
-      }
+    .grant-debug div {
+      padding-top: 10px;
+    }
 
-      button {
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="login-card">
-      <h1><%= title %></h1>
-      <%- body %>
-      <div class="login-help">
-        <a href="/interaction/<%= uid %>/abort">[ Cancel ]</a>
-        <% if (client.tosUri) { %>
-          <a href="<%= client.tosUri %>">[ Terms of Service ]</a>
-        <% } %>
-        <% if (client.policyUri) { %>
-          <a href="<%= client.policyUri %>">[ Privacy Policy ]</a>
-        <% } %>
-      </div>
+    .login-help+form {
+      margin-top: 10px;
+    }
+
+    .claims {
+      margin-bottom: 1.25em;
+    }
+
+    ul {
+      font-weight: 100;
+      list-style-type: circle;
+    }
+
+    li {
+      margin: 1rem 0;
+    }
+
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-card">
+    <h1><%= title %></h1>
+    <%- body %>
+    <div class="login-help">
+      <% if (uid) { %>
+      <a href="/interaction/<%= uid %>/abort">[ Cancel ]</a>
+      <% } %>
+      <% if (client) { %>
+      <% if (client.tosUri) { %>
+      <a href="<%= client.tosUri %>">[ Terms of Service ]</a>
+      <% } %>
+      <% if (client.policyUri) { %>
+      <a href="<%= client.policyUri %>">[ Privacy Policy ]</a>
+      <% } %>
+      <% } %>
     </div>
-    <div class="grant-debug">
-      <details>
-        <summary style="text-align: center;">(Click to expand) DEBUG information</summary>
-        <div>
-          <strong>uid</strong>: <%= uid %>
-        </div>
+  </div>
+</body>
 
-        <% if (session) { %>
-        <div>
-          SESSION <br>
-         ========= <br>
-          <%- session %>
-        </div>
-        <% } %>
-
-        <div>
-          PARAMS <br>
-         ======== <br>
-          <%- dbg.params %>
-        </div>
-
-        <div>
-          PROMPT <br>
-         ======== <br>
-          <%- dbg.prompt %>
-        </div>
-      </details>
-    </div>
-  </body>
 </html>

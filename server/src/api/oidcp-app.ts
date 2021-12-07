@@ -6,7 +6,7 @@ import * as Debug from 'debug';
 import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
 import { getUserFromUserPass } from '../controllers/authentication';
 import { getProvider } from '../controllers/oidc-provider';
-import { session } from './authentication';
+import { session as sessionAuth } from './authentication';
 import * as bodyParser from 'koa-bodyparser';
 import * as cors from '@koa/cors';
 import { store as event } from '../controllers/server-event';
@@ -45,14 +45,14 @@ export function build(): Koa {
     }
   });
 
-  provider.use(session);
+  provider.use(sessionAuth);
 
   // Custom configuration of koa-bodyparser to be used by node-oidc-provider
   const bodyparser = bodyParser({
     text: false, json: false, patchNode: true, patchKoa: true,
   });
 
-  //Endpoint called by the login page rendered by the koa-ejs middleware
+  // Endpoint called by the login page rendered by the koa-ejs middleware
   router.post('/interaction/:uid/login', bodyparser, async (ctx) => {
     const { prompt } = await provider.interactionDetails(ctx.req, ctx.res);
     if (prompt.name !== 'login') {
@@ -125,7 +125,7 @@ export function build(): Koa {
     }
   });
 
-  //Endpoint called by the consent page rendered by the koa-ejs middleware
+  // Endpoint called by the consent page rendered by the koa-ejs middleware
   router.post('/interaction/:uid/confirm', async (ctx) => {
     const interactionDetails = await provider.interactionDetails(ctx.req, ctx.res);
     const { prompt, params, session: { accountId } } = interactionDetails;

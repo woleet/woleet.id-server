@@ -1,5 +1,5 @@
-import { cookies } from "./config";
-import { OIDCAccount } from "./database/oidcp-adapter";
+import { cookies } from './config';
+import { OIDCAccount } from './database/oidcp-adapter';
 
 // https://github.com/panva/node-oidc-provider/blob/v7.x/docs/README.md#configuration-options
 export const provider: any = {
@@ -27,7 +27,11 @@ export const provider: any = {
     claimsParameter: { enabled: true },  // defaults to false
     encryption: { enabled: true },       // defaults to false
     introspection: { enabled: true },    // defaults to false
-    revocation: { enabled: true }       // defaults to false
+    revocation: { enabled: true },       // defaults to false
+    rpInitiatedLogout: {
+      enabled: true,
+      logoutSource,
+    }
   },
   // https://github.com/panva/node-oidc-provider/blob/v7.x/docs/README.md#scopes
   scopes: ['openid', 'offline_access', 'signature'],
@@ -63,3 +67,12 @@ export const provider: any = {
       </html>`;
   }
 };
+
+async function logoutSource(ctx, form) {
+  return ctx.render('logout', {
+    form,
+    uid: null,
+    client: null,
+    title: 'Sign-out',
+  });
+}
