@@ -15,7 +15,7 @@
   <br>
   <form [formGroup]="form">
     <mat-form-field class="w-100" *ngIf="form.get('providerURL')  as f">
-      <input matInput placeholder="ProviderURL URL" formControlName="providerURL" (input)="change()"
+      <input matInput placeholder="Provider URL" formControlName="providerURL" (input)="change()"
         [required]="enableOIDCP$ | async">
       <mat-error *ngIf="f.invalid">{{ getErrorMessage(f) }}</mat-error>
     </mat-form-field>
