@@ -1,4 +1,4 @@
-import { Model, STRING, UUID, UUIDV4, JSON, DATE, ModelCtor, BuildOptions } from 'sequelize';
+import { DATE, JSON, Model, ModelCtor, STRING, UUID, UUIDV4 } from 'sequelize';
 import { sequelize } from '../sequelize';
 
 export const grantable = new Set<OIDCTokenEnum>([

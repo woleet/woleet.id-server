@@ -62,7 +62,6 @@ export class ConfigOIDCPComponent extends ErrorMessageProvider implements OnInit
       this.formValid$.next(this.isFormValid());
     }));
 
-
     this.registerSubscription(this.formLocked$.subscribe((locked) => {
       if (locked) {
         this.form.disable();

@@ -425,8 +425,18 @@ declare global {
 
   /* OIDC Provider */
 
-  type OIDCTokenEnum = 'Session' | 'AccessToken' | 'AuthorizationCode' | 'RefreshToken'
-    | 'DeviceCode' | 'ClientCredentials' | 'Client' | 'InitialAccessToken' | 'RegistrationAccessToken' | 'Interaction' | 'Grant';
+  type OIDCTokenEnum =
+    'Session'
+    | 'AccessToken'
+    | 'AuthorizationCode'
+    | 'RefreshToken'
+    | 'DeviceCode'
+    | 'ClientCredentials'
+    | 'Client'
+    | 'InitialAccessToken'
+    | 'RegistrationAccessToken'
+    | 'Interaction'
+    | 'Grant';
 
   interface OIDCToken {
     id: string;

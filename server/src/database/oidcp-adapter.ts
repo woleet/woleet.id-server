@@ -12,7 +12,6 @@ type OptionalAttributesOf<T> = {
   [P in keyof T]?: T[P];
 };
 
-
 // Original source: https://github.com/panva/node-oidc-provider/blob/v7.x/example/adapters/contributed/sequelize.js
 export class SequelizeAdapter {
 

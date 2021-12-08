@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "0.11.2",
+  "version": "0.12.0",
   "description": "Woleet.ID Server Node.js server",
   "scripts": {
     "setAPIVersion": "WOLEET_ID_SERVER_API_VERSION=$(cat ../swagger.yaml | grep 'version' | grep -oE '([[:digit:]]+.?)+')",
@@ -45,8 +45,8 @@
     "mustache": "4.2.0",
     "node-cache": "5.1.2",
     "nodemailer": "6.7.2",
-    "oidc-provider": "7.9.0",
-    "openid-client": "4.7.4",
+    "oidc-provider": "7.10.4",
+    "openid-client": "5.1.0",
     "pg": "8.4.2",
     "pg-hstore": "2.3.4",
     "pg-native": "3.0.0",

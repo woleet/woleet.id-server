@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://wid-client.woleet.localhost:3000",
+    "target": "https://localhost:3000",
     "secure": false,
     "pathRewrite": {
       "^/api": ""

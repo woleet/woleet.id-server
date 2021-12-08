@@ -65,7 +65,7 @@ export const ports = {
   api: (getenv('API_PORT', 3000)),
   identity: (getenv('IDENTITY_PORT', 3001)),
   signature: (getenv('SIGNATURE_PORT', 3002)),
-  oidcp: 3003
+  oidcp: (getenv('OIDCP_PORT', 3003))
 };
 
 export const db = {

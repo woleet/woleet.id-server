@@ -388,15 +388,15 @@ async function upgrade17(sequelize) {
     log.warn('Removing old OIDCP caches tables');
 
     const tablesToDrop = [
-    'Sessions',
-    'AccessTokens',
-    'AuthorizationCodes',
-    'RefreshTokens',
-    'DeviceCodes',
-    'ClientCredentials',
-    'Clients',
-    'InitialAccessTokens',
-    'RegistrationAccessTokens'];
+      'Sessions',
+      'AccessTokens',
+      'AuthorizationCodes',
+      'RefreshTokens',
+      'DeviceCodes',
+      'ClientCredentials',
+      'Clients',
+      'InitialAccessTokens',
+      'RegistrationAccessTokens'];
 
     tablesToDrop.forEach(async tableToDrop => {
       const dropLogs = await sequelize.query(`DROP TABLE IF EXISTS "${tableToDrop}";`);

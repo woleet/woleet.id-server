@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "0.11.2",
+  "version": "0.12.0",
   "description": "Woleet.ID Server web client",
   "scripts": {
     "postinstall": "node patch.js",

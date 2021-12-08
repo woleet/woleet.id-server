@@ -11,6 +11,7 @@ import * as bodyParser from 'koa-bodyparser';
 import * as cors from '@koa/cors';
 import { store as event } from '../controllers/server-event';
 import * as render from 'koa-ejs';
+
 const path = require('path');
 
 const debug = Debug('id:oidc:app');

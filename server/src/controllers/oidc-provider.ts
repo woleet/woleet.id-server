@@ -6,7 +6,7 @@ import { provider as providerConfiguration } from '../config.oidcp';
 import { SequelizeAdapter as Adapter } from '../database/oidcp-adapter';
 import { getServerConfig } from './server-config';
 import { oidcKey } from '../config';
-import { generateKeyPairSync, createPrivateKey } from 'crypto';
+import { createPrivateKey, generateKeyPairSync } from 'crypto';
 import { fromKeyLike } from 'jose/jwk/from_key_like';
 
 import * as log from 'loglevel';
@@ -38,10 +38,10 @@ async function getJWKS() {
   debug('getJWKS');
   let oidcPrivateKey = oidcKey;
   if (oidcPrivateKey === 'random') {
-    const {publicKey, privateKey} = generateKeyPairSync('rsa', {
+    const { publicKey, privateKey } = generateKeyPairSync('rsa', {
       modulusLength: 2048,
-      publicKeyEncoding: {type: 'spki', format: 'pem'},
-      privateKeyEncoding: {type: 'pkcs8', format: 'pem'}
+      publicKeyEncoding: { type: 'spki', format: 'pem' },
+      privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
     });
     oidcPrivateKey = privateKey;
   }

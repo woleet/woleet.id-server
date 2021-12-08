@@ -12,11 +12,7 @@
     <div>A client application requests the right to use:</div>
     <ul>
       <% missingOIDCScope.forEach((scope) => { %>
-        <% if (scope !== 'signature') { %>
-          <li><%= scope %></li>
-        <% } else { %>
-          <li>your signature keys</li>
-        <% } %>
+          <li>Your <%= scope %></li>
       <% }) %>
     </ul>
   <% } %>

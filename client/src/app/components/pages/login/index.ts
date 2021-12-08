@@ -21,12 +21,10 @@ export class LoginPageComponent {
     this.user = { username: '', password: '' };
     this.lock$ = authService.lock$;
     this.config = appConfigService.getConfig();
-
   }
 
   async login() {
-    let user;
-    user = await this.authService.login(this.user);
+    const user = await this.authService.login(this.user);
     log.debug('Successfully logged in', user);
     if (user) {
       if (user.role === 'admin' || user.role === 'manager') {
