@@ -307,7 +307,7 @@ public class IdentityApiTest {
         UserPut userPut = new UserPut().username(USERNAME).email(EMAIL);
         userESign = userApi.updateUser(userESign.getId(), userPut);
 
-        // Test changed user identity
+        // Test if the signature is still verifiable with a change on the user identity
         SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), signedIdentity, null);
         assertNull(SignatureIdentity.getSignature());
         assertNull(SignatureIdentity.getRightData());
