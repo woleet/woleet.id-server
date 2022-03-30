@@ -124,7 +124,6 @@ export const serverConfig = {
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     preventIdentityExposure: true, // identity URL contract V2 is activated by default on a fresh server
     signatureURL: `${server.protocol}://${server.host}:${ports.signature}`,
-    fallbackOnDefaultKey: true,
     organizationName: 'Woleet',
     mailOnboardingTemplate: readFileSync(
       path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), { encoding: 'ascii' }),
