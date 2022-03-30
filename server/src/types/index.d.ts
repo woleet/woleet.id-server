@@ -418,6 +418,7 @@ declare global {
   interface InternalSignedIdentityObject extends SignedIdentityObject, CommonInternalProperties {
     signedIdentity: string;
     publicKey: string;
+    lastUsedOn: number;
   }
 
   interface SequelizeSignedIdentityObject extends Model<InternalSignedIdentityObject, ApiPostSignedIdentityObject> {

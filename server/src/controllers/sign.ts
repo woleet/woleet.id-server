@@ -215,9 +215,12 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
   if (signedIdentity) {
     const hash = crypto.createHash('sha256');
     const signedIdentityHash = hash.update(signedIdentity).digest('hex');
-    if (!await SignedIdentity.getByPublicKeyAndSignedIdentity(publicKey, signedIdentityHash)) {
-      await SignedIdentity.create({ signedIdentity: signedIdentityHash, publicKey });
+    let usedSignedIdentity = await SignedIdentity.getByPublicKeyAndSignedIdentity(publicKey, signedIdentityHash);
+    if (!usedSignedIdentity) {
+      usedSignedIdentity = await SignedIdentity.create({ signedIdentity: signedIdentityHash, publicKey });
     }
+    // Update the date
+    updateLastUsed(usedSignedIdentity.getDataValue('id'));
   }
 
   return {
@@ -230,4 +233,9 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
     signedIssuerDomain,
     signature
   };
+}
+
+export async function updateLastUsed(id: string) {
+  const now = new Date();
+  SignedIdentity.update(id, { lastUsedOn: now });
 }

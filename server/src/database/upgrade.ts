@@ -417,6 +417,23 @@ async function upgrade17(sequelize) {
   }
 }
 
+async function upgrade18(sequelize) {
+  log.warn('Checking for update of the "signedIdentities" model...');
+  await ServerConfig.model.sync();
+  const cfg = await ServerConfig.getById(CONFIG_ID);
+  if (!cfg) {
+    return;
+  }
+
+  const config = cfg.getDataValue('config');
+  if (config.version < 18) {
+    log.warn('Need to add the lastUsedOn date in "signedIdentities" table');
+    const lastUsedOn = await sequelize.query(`ALTER TABLE "signedIdentities" ADD COLUMN "lastUsedOn" TIMESTAMPTZ;`);
+    log.debug(lastUsedOn);
+    await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 18 }) });
+  }
+}
+
 export async function upgrade(sequelize: Sequelize) {
   await upgrade1(sequelize);
   await upgrade2(sequelize);
@@ -435,6 +452,7 @@ export async function upgrade(sequelize: Sequelize) {
   await upgrade15(sequelize);
   await upgrade16(sequelize);
   await upgrade17(sequelize);
+  await upgrade18(sequelize);
 }
 
 async function postUpgrade3() {
