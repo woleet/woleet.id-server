@@ -254,10 +254,22 @@ public class IdentityApiTest {
         tokenAuthUserESignApi.getSignature(null, hashToSign, userESign.getId(), null, eSignatureKey.getPubKey(), null,
                 "CN,EMAILADDRESS");
 
-        // Check that we cannot get an identity from a mismatching signed identity
+        // Check that we cannot get an identity from a mismatching signed identity (Add a field)
         String signedIdentity =
                 "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail()
                 + ",C=" + userESign.getIdentity().getCountry();
+        try {
+            identityApi.getIdentity(eSignatureKey.getPubKey(), signedIdentity, null);
+            fail("Should not be able to get an identity with a signed identity mismatching the one which signed");
+        }
+        catch (ApiException e) {
+            assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
+        }
+
+        // Check that we cannot get an identity from a mismatching signed identity (Change a field)
+        String USERNAME = Config.randomUsername();
+        String EMAIL = USERNAME + "@woleet.com";
+        signedIdentity = "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + EMAIL;
         try {
             identityApi.getIdentity(eSignatureKey.getPubKey(), signedIdentity, null);
             fail("Should not be able to get an identity with a signed identity mismatching the one which signed");
@@ -302,8 +314,6 @@ public class IdentityApiTest {
         assertEquals(Key.StatusEnum.VALID, SignatureIdentity.getKey().getStatus());
 
         // Change the user email address
-        String USERNAME = Config.randomUsername();
-        String EMAIL = USERNAME + "@woleet.com";
         UserPut userPut = new UserPut().username(USERNAME).email(EMAIL);
         userESign = userApi.updateUser(userESign.getId(), userPut);
 
