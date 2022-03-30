@@ -90,11 +90,6 @@ public class IdentityApiTest {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
-        // Check that server's default key and identity URL are set
-        assertTrue(serverConfig.getFallbackOnDefaultKey());
-        assertNotNull(serverConfig.getIdentityURL());
-        assertNotNull(serverConfig.getDefaultKeyId());
-
         // Create a key that expired in 500ms
         KeyPost keyPost = new KeyPost();
         keyPost.setName(Config.randomName());
@@ -189,12 +184,13 @@ public class IdentityApiTest {
         // Delete expired key
         keyApi.deleteKey(expiredKey.getId());
 
-        // Get server's default public key
-        String serverDefaultPubKey = keyApi.getKeyById(serverConfig.getDefaultKeyId()).getPubKey();
-        assertNotNull(serverDefaultPubKey);
+        // Get seal user's default public key
+        String sealDefaultPubKey = keyApi.getKeyById(userSeal.getDefaultKeyId()).getPubKey();
+        assertNotNull(sealDefaultPubKey);
 
         // Get esign user's default public key
         String esignDefaultPubKey = keyApi.getKeyById(userESign.getDefaultKeyId()).getPubKey();
+        assertNotNull(esignDefaultPubKey);
 
         // Test esign user identity from its default key
         IdentityResult eSignatureIdentity = identityApi.getIdentity(esignDefaultPubKey, null, null);
@@ -209,17 +205,17 @@ public class IdentityApiTest {
         assertNull(eSignatureIdentity.getKey().getExpiration());
         assertEquals(Key.StatusEnum.VALID, eSignatureIdentity.getKey().getStatus());
 
-        // Test server identity from its default key
-        IdentityResult defaultIdentity = identityApi.getIdentity(serverDefaultPubKey, null, leftData);
+        // Test seal user's identity from its default key
+        IdentityResult defaultIdentity = identityApi.getIdentity(sealDefaultPubKey, null, leftData);
         assertNotNull(defaultIdentity.getSignature());
         assertNotNull(defaultIdentity.getIdentity());
         assertNotNull(defaultIdentity.getIdentity().getCommonName());
         assertNotNull(defaultIdentity.getKey());
         assertNotNull(defaultIdentity.getKey().getName());
-        assertEquals(defaultIdentity.getKey().getPubKey(), serverDefaultPubKey);
+        assertEquals(defaultIdentity.getKey().getPubKey(), sealDefaultPubKey);
         assertEquals(Key.StatusEnum.VALID, defaultIdentity.getKey().getStatus());
         assertTrue(defaultIdentity.getRightData().startsWith(serverConfig.getIdentityURL()));
-        assertTrue(Config.isValidSignature(serverDefaultPubKey, defaultIdentity.getSignature(),
+        assertTrue(Config.isValidSignature(sealDefaultPubKey, defaultIdentity.getSignature(),
                 leftData + defaultIdentity.getRightData()));
 
         // Switch the server in strict mode (prevent identity exposure)
@@ -258,7 +254,7 @@ public class IdentityApiTest {
         // Check that we cannot get an identity from a mismatching public key
         signedIdentity = "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail();
         try {
-            identityApi.getIdentity(serverDefaultPubKey, signedIdentity, null);
+            identityApi.getIdentity(sealDefaultPubKey, signedIdentity, null);
             fail("Should not be able to get an identity with a public key mismatching the one which signed");
         }
         catch (ApiException e) {
@@ -267,7 +263,7 @@ public class IdentityApiTest {
 
         // Check that we cannot get an identity without providing a signed identity
         try {
-            identityApi.getIdentity(serverDefaultPubKey, null, null);
+            identityApi.getIdentity(esignDefaultPubKey, null, null);
             fail("Should not be able to get an identity without the signed identity");
         }
         catch (ApiException e) {
