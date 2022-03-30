@@ -320,5 +320,14 @@ public class IdentityApiTest {
         assertNotNull(identityNew.getKey().getPubKey());
         assertNull(identityNew.getKey().getExpiration());
         assertEquals(Key.StatusEnum.VALID, identityNew.getKey().getStatus());
+
+        // Commented out: this SHOULD work but we need to work on this
+//        // Delete the user and his key
+//        Config.deleteAllTestUsers();
+//
+//        // Test the identity returned after deleting the user and his key
+//        // (it should be the same if the signed identity is the same)
+//        identityAfter = identityApi.getIdentity(esignDefaultPubKey, signedIdentity, null);
+//        assertEquals(identityNew, identityAfter);
     }
 }
