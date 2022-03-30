@@ -55,7 +55,7 @@ export async function initServerConfig() {
       config.organizationName = 'Woleet';
     }
   } else {
-    log.warn('Creating a new one along with a default admin user...');
+    log.warn('Creating a new server configuration with a default admin user...');
     let admin;
     try {
       admin = await createUser({
@@ -63,16 +63,14 @@ export async function initServerConfig() {
         role: 'admin',
         username: 'admin',
         identity: { commonName: 'Admin' },
-        createDefaultKey: true,
-        sendKeyEnrollmentMail: false
+        mode: 'esign'
       });
+      log.info(`Created user "admin" with id ${admin.id}`);
     } catch (err) {
       return exit(`Cannot create user "admin": ${err.message}`, err);
     }
 
-    log.info(`Created user "admin" with id ${admin.id}`);
-
-    const conf = await setServerConfig(Object.assign({}, serverConfig.default, { defaultKeyId: admin.defaultKeyId }));
+    const conf = await setServerConfig(serverConfig.default);
     const printedConf = Object.assign({}, conf);
     delete printedConf.mailKeyEnrollmentTemplate;
     delete printedConf.mailOnboardingTemplate;
