@@ -30,6 +30,8 @@ public class IdentityApiTest {
 
     private SignatureApi tokenAuthUserESignApi;
 
+    private UserApi userApi;
+
     @Before
     public void setUp() throws Exception {
 
@@ -45,6 +47,9 @@ public class IdentityApiTest {
         apiClientUserESign.addDefaultHeader("Authorization",
                 "Bearer " + Config.createTestApiToken(userESign.getId()).getValue());
         tokenAuthUserESignApi = new SignatureApi(apiClientUserESign);
+
+        // Create a user API with admin rights using cookie authentication
+        userApi = new UserApi(Config.getAdminAuthApiClient());
     }
 
     @After
@@ -289,6 +294,28 @@ public class IdentityApiTest {
         assertNotNull(SignatureIdentity.getKey());
         assertEquals(userESign.getIdentity().getCommonName(), SignatureIdentity.getIdentity().getCommonName());
         assertEquals(userESign.getEmail(), SignatureIdentity.getIdentity().getEmailAddress());
+        assertNull(SignatureIdentity.getIdentity().getCountry());
+        assertNotNull(SignatureIdentity.getKey());
+        assertEquals(keyPost.getName(), SignatureIdentity.getKey().getName());
+        assertNotNull(SignatureIdentity.getKey().getPubKey());
+        assertNull(SignatureIdentity.getKey().getExpiration());
+        assertEquals(Key.StatusEnum.VALID, SignatureIdentity.getKey().getStatus());
+
+        // Change the user email address
+        String USERNAME = Config.randomUsername();
+        String EMAIL = USERNAME + "@woleet.com";
+        UserPut userPut = new UserPut().username(USERNAME).email(EMAIL);
+        userESign = userApi.updateUser(userESign.getId(), userPut);
+
+        // Test changed user identity
+        SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), signedIdentity, null);
+        assertNull(SignatureIdentity.getSignature());
+        assertNull(SignatureIdentity.getRightData());
+        assertNotNull(SignatureIdentity.getIdentity());
+        assertNotNull(SignatureIdentity.getIdentity().getCommonName());
+        assertNotNull(SignatureIdentity.getKey());
+        assertEquals(userESign.getIdentity().getCommonName(), SignatureIdentity.getIdentity().getCommonName());
+        assertNotEquals(userESign.getEmail(), SignatureIdentity.getIdentity().getEmailAddress());
         assertNull(SignatureIdentity.getIdentity().getCountry());
         assertNotNull(SignatureIdentity.getKey());
         assertEquals(keyPost.getName(), SignatureIdentity.getKey().getName());
