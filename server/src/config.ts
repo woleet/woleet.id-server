@@ -120,7 +120,7 @@ export const events = {
 
 export const serverConfig = {
   default: {
-    version: 18, // data model version
+    version: 17, // data model version
     identityURL: `${server.protocol}://${server.host}:${ports.identity}/identity`,
     preventIdentityExposure: true, // identity URL contract V2 is activated by default on a fresh server
     signatureURL: `${server.protocol}://${server.host}:${ports.signature}`,

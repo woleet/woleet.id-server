@@ -114,12 +114,7 @@ public class IdentityApiTest {
         assertNotNull(expiredIdentity.getKey().getPubKey());
         assertEquals(expiration, expiredIdentity.getKey().getExpiration());
         assertEquals(Key.StatusEnum.EXPIRED, expiredIdentity.getKey().getStatus());
-        assertTrue(
-                "Expected " + expiredIdentity.getRightData()
-                + "to start with \"" + serverConfig.getIdentityURL()
-                + "\" but got \"" + expiredIdentity.getRightData() + "\"",
-                expiredIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
-        );
+        assertTrue(expiredIdentity.getRightData().startsWith(serverConfig.getIdentityURL()));
         assertTrue(Config.isValidSignature(expiredKey.getPubKey(), expiredIdentity.getSignature(),
                 leftData + expiredIdentity.getRightData()));
 
@@ -140,12 +135,7 @@ public class IdentityApiTest {
         assertNotNull(blockedIdentity.getKey().getPubKey());
         assertNull(blockedIdentity.getKey().getExpiration());
         assertEquals(Key.StatusEnum.VALID, blockedIdentity.getKey().getStatus());
-        assertTrue(
-                "Expected " + blockedIdentity.getRightData()
-                + "to start with \"" + serverConfig.getIdentityURL()
-                + "\" but got \"" + blockedIdentity.getRightData() + "\"",
-                blockedIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
-        );
+        assertTrue(blockedIdentity.getRightData().startsWith(serverConfig.getIdentityURL()));
         assertTrue(Config.isValidSignature(blockedKey.getPubKey(), blockedIdentity.getSignature(),
                 leftData + blockedIdentity.getRightData()));
 
@@ -155,10 +145,10 @@ public class IdentityApiTest {
         // Create a revoked key
         keyPost = new KeyPost();
         keyPost.setName(Config.randomName());
+        KeyGet keyToRevoke = keyApi.createKey(userSeal.getId(), keyPost);
         KeyPut keyPut = new KeyPut();
         keyPut.setStatus(KeyStatusEnum.REVOKED);
-        KeyGet CreatedRevokedKey = keyApi.createKey(userSeal.getId(), keyPost);
-        KeyGet revokedKey = keyApi.updateKey(CreatedRevokedKey.getId(), keyPut);
+        KeyGet revokedKey = keyApi.updateKey(keyToRevoke.getId(), keyPut);
 
         // Test revoked key identity
         IdentityResult revokedIdentity = identityApi.getIdentity(revokedKey.getPubKey(), null, leftData);
@@ -171,12 +161,7 @@ public class IdentityApiTest {
         assertNotNull(revokedIdentity.getKey().getPubKey());
         assertNotNull(revokedIdentity.getKey().getRevokedAt());
         assertEquals(Key.StatusEnum.REVOKED, revokedIdentity.getKey().getStatus());
-        assertTrue(
-                "Expected " + revokedIdentity.getRightData()
-                + "to start with \"" + serverConfig.getIdentityURL()
-                + "\" but got \"" + revokedIdentity.getRightData() + "\"",
-                revokedIdentity.getRightData().startsWith(serverConfig.getIdentityURL())
-        );
+        assertTrue(revokedIdentity.getRightData().startsWith(serverConfig.getIdentityURL()));
         assertTrue(Config.isValidSignature(revokedKey.getPubKey(), revokedIdentity.getSignature(),
                 leftData + revokedIdentity.getRightData()));
 
@@ -201,20 +186,18 @@ public class IdentityApiTest {
         // Delete external key
         keyApi.deleteKey(externalKey.getId());
 
-        // Get server's default public key
-        String pubKey = keyApi.getKeyById(serverConfig.getDefaultKeyId()).getPubKey();
-        assertNotNull(pubKey);
-
         // Delete expired key
         keyApi.deleteKey(expiredKey.getId());
 
-        // Create esign user and key
-        keyPost = new KeyPost();
-        keyPost.setName(Config.randomName());
-        KeyGet eSignatureKey = keyApi.createKey(userESign.getId(), keyPost);
+        // Get server's default public key
+        String serverDefaultPubKey = keyApi.getKeyById(serverConfig.getDefaultKeyId()).getPubKey();
+        assertNotNull(serverDefaultPubKey);
 
-        // Test esign key identity
-        IdentityResult eSignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), null, null);
+        // Get esign user's default public key
+        String esignDefaultPubKey = keyApi.getKeyById(userESign.getDefaultKeyId()).getPubKey();
+
+        // Test esign user identity from its default key
+        IdentityResult eSignatureIdentity = identityApi.getIdentity(esignDefaultPubKey, null, null);
         assertNull(eSignatureIdentity.getSignature());
         assertNull(eSignatureIdentity.getRightData());
         assertNotNull(eSignatureIdentity.getIdentity());
@@ -222,56 +205,50 @@ public class IdentityApiTest {
         assertNotNull(eSignatureIdentity.getKey());
         assertEquals(userESign.getIdentity().getCommonName(), eSignatureIdentity.getIdentity().getCommonName());
         assertNotNull(eSignatureIdentity.getKey());
-        assertEquals(keyPost.getName(), eSignatureIdentity.getKey().getName());
         assertNotNull(eSignatureIdentity.getKey().getPubKey());
         assertNull(eSignatureIdentity.getKey().getExpiration());
         assertEquals(Key.StatusEnum.VALID, eSignatureIdentity.getKey().getStatus());
 
-        // Get and verify server's default identity
-        IdentityResult identityResult = identityApi.getIdentity(pubKey, null, leftData);
-        assertNotNull(identityResult.getSignature());
-        assertNotNull(identityResult.getIdentity());
-        assertNotNull(identityResult.getIdentity().getCommonName());
-        assertNotNull(identityResult.getKey());
-        assertNotNull(identityResult.getKey().getName());
-        assertEquals(identityResult.getKey().getPubKey(), pubKey);
-        assertEquals(Key.StatusEnum.VALID, identityResult.getKey().getStatus());
-        assertTrue(
-                "Expected " + identityResult.getRightData()
-                + "to start with \"" + serverConfig.getIdentityURL()
-                + "\" but got \"" + identityResult.getRightData() + "\"",
-                identityResult.getRightData().startsWith(serverConfig.getIdentityURL())
-        );
-        assertTrue(Config.isValidSignature(pubKey, identityResult.getSignature(),
-                leftData + identityResult.getRightData()));
+        // Test server identity from its default key
+        IdentityResult defaultIdentity = identityApi.getIdentity(serverDefaultPubKey, null, leftData);
+        assertNotNull(defaultIdentity.getSignature());
+        assertNotNull(defaultIdentity.getIdentity());
+        assertNotNull(defaultIdentity.getIdentity().getCommonName());
+        assertNotNull(defaultIdentity.getKey());
+        assertNotNull(defaultIdentity.getKey().getName());
+        assertEquals(defaultIdentity.getKey().getPubKey(), serverDefaultPubKey);
+        assertEquals(Key.StatusEnum.VALID, defaultIdentity.getKey().getStatus());
+        assertTrue(defaultIdentity.getRightData().startsWith(serverConfig.getIdentityURL()));
+        assertTrue(Config.isValidSignature(serverDefaultPubKey, defaultIdentity.getSignature(),
+                leftData + defaultIdentity.getRightData()));
 
         // Switch the server in strict mode (prevent identity exposure)
         serverConfig.setPreventIdentityExposure(true);
         serverConfigApi.updateServerConfig(serverConfig);
 
-        // Create signature to test new identity endpoint
+        // Create signature to test the identity endpoint in strict mode
         String hashToSign = Config.randomHash();
-        tokenAuthUserESignApi.getSignature(null, hashToSign, userESign.getId(), null, eSignatureKey.getPubKey(), null,
+        tokenAuthUserESignApi.getSignature(null, hashToSign, userESign.getId(), null, esignDefaultPubKey, null,
                 "CN,EMAILADDRESS");
 
-        // Check that we cannot get an identity from a mismatching signed identity (Add a field)
+        // Check that we cannot get an identity from a mismatching signed identity (add a field)
         String signedIdentity =
                 "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail()
                 + ",C=" + userESign.getIdentity().getCountry();
         try {
-            identityApi.getIdentity(eSignatureKey.getPubKey(), signedIdentity, null);
+            identityApi.getIdentity(esignDefaultPubKey, signedIdentity, null);
             fail("Should not be able to get an identity with a signed identity mismatching the one which signed");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getCode());
         }
 
-        // Check that we cannot get an identity from a mismatching signed identity (Change a field)
-        String USERNAME = Config.randomUsername();
-        String EMAIL = USERNAME + "@woleet.com";
-        signedIdentity = "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + EMAIL;
+        // Check that we cannot get an identity from a mismatching signed identity (change a field)
+        String NEW_USERNAME = Config.randomUsername();
+        String NEW_EMAIL = NEW_USERNAME + "@woleet.com";
+        signedIdentity = "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + NEW_EMAIL;
         try {
-            identityApi.getIdentity(eSignatureKey.getPubKey(), signedIdentity, null);
+            identityApi.getIdentity(esignDefaultPubKey, signedIdentity, null);
             fail("Should not be able to get an identity with a signed identity mismatching the one which signed");
         }
         catch (ApiException e) {
@@ -281,7 +258,7 @@ public class IdentityApiTest {
         // Check that we cannot get an identity from a mismatching public key
         signedIdentity = "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail();
         try {
-            identityApi.getIdentity(pubKey, signedIdentity, null);
+            identityApi.getIdentity(serverDefaultPubKey, signedIdentity, null);
             fail("Should not be able to get an identity with a public key mismatching the one which signed");
         }
         catch (ApiException e) {
@@ -290,47 +267,58 @@ public class IdentityApiTest {
 
         // Check that we cannot get an identity without providing a signed identity
         try {
-            identityApi.getIdentity(pubKey, null, null);
+            identityApi.getIdentity(serverDefaultPubKey, null, null);
             fail("Should not be able to get an identity without the signed identity");
         }
         catch (ApiException e) {
             assertEquals(HttpStatus.SC_BAD_REQUEST, e.getCode());
         }
 
-        // Test signed identity
-        IdentityResult SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), signedIdentity, null);
-        assertNull(SignatureIdentity.getSignature());
-        assertNull(SignatureIdentity.getRightData());
-        assertNotNull(SignatureIdentity.getIdentity());
-        assertNotNull(SignatureIdentity.getIdentity().getCommonName());
-        assertNotNull(SignatureIdentity.getKey());
-        assertEquals(userESign.getIdentity().getCommonName(), SignatureIdentity.getIdentity().getCommonName());
-        assertEquals(userESign.getEmail(), SignatureIdentity.getIdentity().getEmailAddress());
-        assertNull(SignatureIdentity.getIdentity().getCountry());
-        assertNotNull(SignatureIdentity.getKey());
-        assertEquals(keyPost.getName(), SignatureIdentity.getKey().getName());
-        assertNotNull(SignatureIdentity.getKey().getPubKey());
-        assertNull(SignatureIdentity.getKey().getExpiration());
-        assertEquals(Key.StatusEnum.VALID, SignatureIdentity.getKey().getStatus());
+        // Test the identity returned before changing the user identity
+        IdentityResult identityBefore = identityApi.getIdentity(esignDefaultPubKey, signedIdentity, null);
+        assertNull(identityBefore.getSignature());
+        assertNull(identityBefore.getRightData());
+        assertNotNull(identityBefore.getIdentity());
+        assertNotNull(identityBefore.getIdentity().getCommonName());
+        assertNotNull(identityBefore.getKey());
+        assertEquals(userESign.getIdentity().getCommonName(), identityBefore.getIdentity().getCommonName());
+        assertEquals(userESign.getEmail(), identityBefore.getIdentity().getEmailAddress());
+        assertNull(identityBefore.getIdentity().getCountry());
+        assertNotNull(identityBefore.getKey());
+        assertNotNull(identityBefore.getKey().getPubKey());
+        assertNull(identityBefore.getKey().getExpiration());
+        assertEquals(Key.StatusEnum.VALID, identityBefore.getKey().getStatus());
 
-        // Change the user email address
-        UserPut userPut = new UserPut().username(USERNAME).email(EMAIL);
+        // Change the user identity (username, email, common name and country)
+        UserPut userPut = new UserPut().username(NEW_USERNAME).email(NEW_EMAIL);
+        userPut.identity(new FullIdentity().commonName(Config.randomName()).country("EN"));
         userESign = userApi.updateUser(userESign.getId(), userPut);
 
-        // Test if the signature is still verifiable with a change on the user identity
-        SignatureIdentity = identityApi.getIdentity(eSignatureKey.getPubKey(), signedIdentity, null);
-        assertNull(SignatureIdentity.getSignature());
-        assertNull(SignatureIdentity.getRightData());
-        assertNotNull(SignatureIdentity.getIdentity());
-        assertNotNull(SignatureIdentity.getIdentity().getCommonName());
-        assertNotNull(SignatureIdentity.getKey());
-        assertEquals(userESign.getIdentity().getCommonName(), SignatureIdentity.getIdentity().getCommonName());
-        assertNotEquals(userESign.getEmail(), SignatureIdentity.getIdentity().getEmailAddress());
-        assertNull(SignatureIdentity.getIdentity().getCountry());
-        assertNotNull(SignatureIdentity.getKey());
-        assertEquals(keyPost.getName(), SignatureIdentity.getKey().getName());
-        assertNotNull(SignatureIdentity.getKey().getPubKey());
-        assertNull(SignatureIdentity.getKey().getExpiration());
-        assertEquals(Key.StatusEnum.VALID, SignatureIdentity.getKey().getStatus());
+        // Test the identity returned after changing the user identity
+        // (it should be the same if the signed identity is the same)
+        IdentityResult identityAfter = identityApi.getIdentity(esignDefaultPubKey, signedIdentity, null);
+        assertEquals(identityBefore, identityAfter);
+
+        // Sign using the new identity
+        hashToSign = Config.randomHash();
+        tokenAuthUserESignApi.getSignature(null, hashToSign, userESign.getId(), null, esignDefaultPubKey, null,
+                "CN,EMAILADDRESS");
+
+        // Test the identity returned after changing the user identity
+        // (it should be the new identity if the signed identity is updated)
+        signedIdentity = "CN=" + userESign.getIdentity().getCommonName() + ",EMAILADDRESS=" + userESign.getEmail();
+        IdentityResult identityNew = identityApi.getIdentity(esignDefaultPubKey, signedIdentity, leftData);
+        assertNull(identityNew.getSignature());
+        assertNull(identityNew.getRightData());
+        assertNotNull(identityNew.getIdentity());
+        assertNotNull(identityNew.getIdentity().getCommonName());
+        assertNotNull(identityNew.getKey());
+        assertEquals(userESign.getIdentity().getCommonName(), identityNew.getIdentity().getCommonName());
+        assertEquals(userESign.getEmail(), identityNew.getIdentity().getEmailAddress());
+        assertNull(identityNew.getIdentity().getCountry());
+        assertNotNull(identityNew.getKey());
+        assertNotNull(identityNew.getKey().getPubKey());
+        assertNull(identityNew.getKey().getExpiration());
+        assertEquals(Key.StatusEnum.VALID, identityNew.getKey().getStatus());
     }
 }

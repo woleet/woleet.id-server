@@ -9,5 +9,4 @@ interface ApiSignedIdentityObject extends SignedIdentityObject, ApiCommonPropert
 interface ApiPostSignedIdentityObject extends SignedIdentityObject {
   signedIdentity: string;
   publicKey: string;
-  lastUsedOn?: Date;
 }

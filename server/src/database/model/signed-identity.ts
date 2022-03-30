@@ -1,12 +1,11 @@
-import { DATE, ForeignKeyConstraintError, STRING, UUID, UUIDV4 } from 'sequelize';
+import { ForeignKeyConstraintError, STRING, UUID, UUIDV4 } from 'sequelize';
 import { InvalidForeignUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 
 const SignedIdentityModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
   signedIdentity: { type: STRING, allowNull: false },
-  publicKey: { type: STRING, allowNull: false },
-  lastUsedOn: { type: DATE, defaultValue: null }
+  publicKey: { type: STRING, allowNull: false }
 };
 
 class SignedIdentityAccess extends AbstractInstanceAccess<InternalSignedIdentityObject, ApiPostSignedIdentityObject> {
