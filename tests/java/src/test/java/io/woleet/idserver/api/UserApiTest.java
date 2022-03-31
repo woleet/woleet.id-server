@@ -160,8 +160,8 @@ public class UserApiTest {
         // Remember the admin user
         UserGet adminUser = users.get(0);
 
-        // Get the admin user by his email
-        users = userApi.getUsers(null, null, null, null, null, adminUser.getEmail(), null, null, null, null,
+        // Get the admin user by his username
+        users = userApi.getUsers(null, null, null, null, null, null, "admin", null, null, null,
                 null, null, null, null, null, null);
         assertEquals(1, users.size());
         assertEquals(adminUser.getEmail(), users.get(0).getEmail());

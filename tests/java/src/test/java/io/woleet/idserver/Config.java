@@ -46,18 +46,18 @@ public class Config {
     }
 
     /**
-     * Return a new API client with credentials set for a specific user.
+     * Return a new API client with credentials set for a given user.
      *
-     * @param user The user name/email for which to create an API client
-     * @param pass The user password
+     * @param user     The username/email of the user
+     * @param password The password of the user
      * @return a new API client for the given user
      */
-    public static ApiClient getAuthApiClient(String user, String pass) throws ApiException {
+    public static ApiClient getAuthApiClient(String user, String password) throws ApiException {
 
         // Get a new authenticated API client
         ApiClient apiClient = getNoAuthApiClient();
         apiClient.setUsername(user);
-        apiClient.setPassword(pass);
+        apiClient.setPassword(password);
 
         // Login and set the session cookie for future calls
         AuthenticationApi authenticationApi = new AuthenticationApi(apiClient);
@@ -125,7 +125,7 @@ public class Config {
     }
 
     /**
-     * Create a new random user name.
+     * Create a new random username.
      */
     public static String randomUsername() {
         return Config.TEST_USERNAME_PREFIX + randomHash().substring(0, 8);
