@@ -12,7 +12,7 @@ RUN mkdir -p /build/server-runtime
 COPY server/package.json /build/server-runtime/
 COPY server/package-lock.json /build/server-runtime/
 COPY server/patch.js /build/server-runtime/
-RUN cd /build/server-runtime && npm i --production
+RUN cd /build/server-runtime && npm i --production && npm run postinstall
 
 # Install runtime and dev dependencies
 RUN mkdir -p /build/server
