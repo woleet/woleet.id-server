@@ -175,17 +175,25 @@ Woleet.ID Server have prebuilt images on DockerHub:
 <https://hub.docker.com/r/wids/client>  
 <https://hub.docker.com/r/wids/server>
 
-If the `WOLEET_ID_SERVER_VERSION` environment variable is set, app.sh and docker-compose.yml will use the specified version (> 0.5.0).
+If the `WOLEET_ID_SERVER_VERSION` environment variable is set, `app.sh` and `docker-compose.yml` will use the specified version (> 0.5.0).
 
-If you want to see the differences between versions, you can go to the Release tab of GitHub.
+If you want to see the differences between versions, you can go to the [Release tab of GitHub](https://github.com/woleet/woleet.id-server/releases).
 
-If you have this project cloned and checked out to a commit that match with a tag (for example, when using onlineSetup.sh to install the project) you can use
+## Upgrade
+
+If you have this project cloned and checked out to a commit that match with a tag (which is the case if you used `onlineSetup.sh` to install the project) you can use
 
 ```bash
 ./app.sh upgrade
 ```
 
-to upgrade the repo to the latest tagged version, it will also set the `WOLEET_ID_SERVER_VERSION` environment variable to the latest one in the file `configuration.sh`.
+to upgrade the repo to the latest tagged version. This also sets the `WOLEET_ID_SERVER_VERSION` environment variable to the latest one in the file `configuration.sh`.
+
+Then, you need to restart the server to effectively use the upgraded version:
+
+```bash
+./app.sh start
+```
 
 ## Docker
 
@@ -226,7 +234,7 @@ export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoint
 ./app.sh build
 ```
 
-> NOTE: If you want Woleet.ID Server's Docker images to be stored on a specific Docker registry, you can set the WOLEET_ID_SERVER_REGISTRY environment variable.
+> NOTE: If you want Woleet.ID Server's Docker images to be stored on a specific Docker registry, you can set the `WOLEET_ID_SERVER_REGISTRY` environment variable.
 
 # Start the server
 
@@ -312,7 +320,7 @@ The identity URL is the public URL of the `/identity` endpoint.
 - Select the `Settings` menu
 - Enter the identity URL as you expose it to the internet: as an example, if your server domain is `idserver.acme.com`, the identity URL would be `https://idserver.acme.com:3001/identity`.
 
-> WARNING: It is recommended to serve the identity URL on the default HTTPS port 443. To do this, simply set WOLEET_ID_SERVER_IDENTITY_PORT to 443.
+> WARNING: It is recommended to serve the identity URL on the default HTTPS port 443. To do this, simply set `WOLEET_ID_SERVER_IDENTITY_PORT` to 443.
 
 # Use Woleet.ID Server with an OpenID Connect provider
 
@@ -382,7 +390,7 @@ You can tune the configuration by using global variables, but the preferred way 
 ```bash
 git clone git@github.com:woleet/woleet.id-server.git
 cd woleet.id-server
-./app.sh upgrade # In this case it is used to create a configuration.sh file with WOLEET_ID_SERVER_VERSION set
+./app.sh upgrade # In this case it is used to create a configuration.sh file with `WOLEET_ID_SERVER_VERSION` set
 ```
 
 ### Configure the project
