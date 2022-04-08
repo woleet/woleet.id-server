@@ -76,7 +76,8 @@ public class UserPostAllOf {
    * If true create a key holded by the server when this user is created.
    * @return createDefaultKey
   **/
-  @ApiModelProperty(required = true, value = "If true create a key holded by the server when this user is created.")
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "If true create a key holded by the server when this user is created.")
 
   public Boolean getCreateDefaultKey() {
     return createDefaultKey;

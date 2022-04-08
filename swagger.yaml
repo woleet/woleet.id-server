@@ -1293,7 +1293,6 @@ components:
         - type: object
           required:
             - identity
-            - createDefaultKey
           properties:
             password:
               $ref: '#/components/schemas/Password'
