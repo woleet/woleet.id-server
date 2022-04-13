@@ -2,6 +2,7 @@ import { BOOLEAN, CHAR, DATE, ENUM, ForeignKeyConstraintError, STRING, UUID, UUI
 import { InvalidForeignUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 import { User } from '..';
+import { ApiFullPostKeyObject, InternalKeyObject, SequelizeKeyObject } from '../../types';
 
 const KeyModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },

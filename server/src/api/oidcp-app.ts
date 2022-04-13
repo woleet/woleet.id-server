@@ -169,7 +169,6 @@ export function build(): Koa {
       grant.addOIDCClaims(prompt.details.missingOIDCClaims);
     }
     if (prompt.details.missingResourceScopes) {
-      // eslint-disable-next-line no-restricted-syntax
       for (const [indicator, scope] of Object.entries(prompt.details.missingResourceScopes)) {
         // @ts-ignore
         grant.addResourceScope(indicator, scope.join(' '));

@@ -2,11 +2,12 @@ import { APIToken, User } from '../database';
 
 import * as crypto from 'crypto';
 import * as Debug from 'debug';
-import { APITokenOwnerMismatchError, ForbiddenAPITokenError, NotFoundAPITokenError } from '../errors';
+import { ForbiddenAPITokenError, NotFoundAPITokenError } from '../errors';
 import { store } from './store.api-token';
 import { secureModule } from '../config';
 import { getUserById } from './user';
-import { FindOptions, Op, Sequelize } from 'sequelize';
+import { FindOptions, Op } from 'sequelize';
+import { InternalAPITokenObject } from '../types';
 
 const debug = Debug('id:ctr');
 
@@ -24,7 +25,7 @@ export async function createAPIToken(apiToken: ApiPostAPITokenObject): Promise<I
 }
 
 export async function updateAPIToken(id: string, attrs: ApiPutAPITokenObject,
-  userRole: UserRoleEnum): Promise<InternalAPITokenObject> {
+                                     userRole: UserRoleEnum): Promise<InternalAPITokenObject> {
   debug('Update apiToken', attrs);
 
   let apiToken = await APIToken.getById(id);

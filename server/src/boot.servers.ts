@@ -15,6 +15,7 @@ import { Server } from 'net';
 import { setServerConfig } from './controllers/server-config';
 import { Enrollment } from './database';
 import { monitorSignatureRequest } from './controllers/enrollment';
+import { Dictionary } from './types';
 
 const apps: Dictionary<Server> = {};
 
@@ -79,7 +80,7 @@ export function bootServers(): Promise<void> {
 
       server.on('listening', () => {
         log.info(`${name.split('-').join(', ')} listening on port ${port}.`);
-        resolve();
+        resolve(null);
       });
 
       apps[name] = server;
@@ -116,7 +117,7 @@ export async function bootOIDCProvider(): Promise<void> {
       server.on('listening', () => {
         log.info(`OIDCP server listening on port ${port}.`);
         resolved = true;
-        resolve();
+        resolve(null);
       });
 
       server.on('error', (err) => {
@@ -132,7 +133,7 @@ export async function bootOIDCProvider(): Promise<void> {
         }
       });
     } else {
-      resolve();
+      resolve(null);
     }
   });
 }

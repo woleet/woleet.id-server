@@ -1,3 +1,5 @@
+import { InternalKeyObject } from '../../types';
+
 export function serializeKey(key: InternalKeyObject): ApiKeyObject {
   const dates = {
     expiration: +key.expiration || null,

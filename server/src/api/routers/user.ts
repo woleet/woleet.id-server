@@ -77,6 +77,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
  */
 router.get('/list', async function (ctx) {
   const query = ctx.query;
+  // @ts-ignore
   const opts: FindOptions<any> = { where: buildUserFilters(query) as object, offset: query.offset, limit: query.limit };
   const users = await getUsers(opts);
   ctx.body = users.map((user) => serializeUser(user));

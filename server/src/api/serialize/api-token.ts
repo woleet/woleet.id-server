@@ -1,4 +1,5 @@
 import { secureModule } from '../../config';
+import { InternalAPITokenObject } from '../../types';
 
 export async function serializeAPIToken(token: InternalAPITokenObject): Promise<ApiAPITokenObject> {
   const dates = {

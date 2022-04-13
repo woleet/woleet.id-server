@@ -1,5 +1,6 @@
 import * as Joi from 'joi';
 import { Name } from './misc';
+import { DefineJoiModelAttributes } from '../../types';
 
 const apiTokenStatusEnum = ['active', 'blocked'];
 

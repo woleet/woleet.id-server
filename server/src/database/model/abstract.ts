@@ -21,6 +21,7 @@ export abstract class AbstractInstanceAccess<TAttribute, TPost> {
 
   async create(obj: TPost): Promise<Model<TAttribute, TPost>> {
     try {
+      // @ts-ignore
       return await this.model.create(obj);
     } catch (err) {
       this.handleError(err);

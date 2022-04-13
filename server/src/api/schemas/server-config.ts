@@ -1,5 +1,6 @@
 import * as Joi from 'joi';
 import { uuid } from './misc';
+import { DefineJoiModelAttributes } from '../../types';
 
 const oidcpClient = Joi.object().keys(<DefineJoiModelAttributes<ApiOIDCPClient>>{
   token_endpoint_auth_method: Joi.string().min(1),

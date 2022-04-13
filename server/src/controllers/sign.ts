@@ -8,6 +8,7 @@ import {
   BlockedKeyError, BlockedUserError, ExpiredKeyError, KeyNotHeldByServerError, KeyOwnerMismatchError, NoDefaultKeyError,
   NotFoundKeyError, NotFoundUserError, RevokedKeyError, ServerNotReadyError
 } from '../errors';
+import { SequelizeKeyObject, SequelizeUserObject } from '../types';
 
 export function signMessage(key: SequelizeKeyObject, message: string, compressed = true): Promise<string> {
   const privateKey = Buffer.from(key.getDataValue('privateKey'), 'hex');
@@ -40,7 +41,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
 
     // Get the user from the key if not set
     if (!user) {
-      user = <SequelizeUserObject> <unknown> key.getDataValue('user');
+      user = <SequelizeUserObject><unknown>key.getDataValue('user');
 
       // Check that the user is a seal
       if (user.getDataValue('mode') === 'esign') {
@@ -88,7 +89,7 @@ export async function sign({ hashToSign, messageToSign, pubKey, userId, customUs
       throw new Error(`Cannot find default key (${defaultKeyId})`);
     }
     if (!user) {
-      user = <SequelizeUserObject> <unknown> key.getDataValue('user');
+      user = <SequelizeUserObject><unknown>key.getDataValue('user');
     }
   }
 

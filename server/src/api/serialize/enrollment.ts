@@ -1,3 +1,5 @@
+import { InternalEnrollmentObject } from '../../types';
+
 export function serializeEnrollment(enrollment: InternalEnrollmentObject): ApiEnrollmentObject {
   const dates = {
     expiration: +enrollment.expiration || null,

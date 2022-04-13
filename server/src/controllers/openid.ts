@@ -7,6 +7,7 @@ import { getServerConfig } from './server-config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { mapIdentityFromAPIToInternal } from './user';
+import { InternalUserObject } from '../types';
 
 const debug = Debug('id:ctrl:openid');
 

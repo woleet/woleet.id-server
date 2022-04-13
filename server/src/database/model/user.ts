@@ -1,6 +1,7 @@
 import { CHAR, DATE, DOUBLE, ENUM, Op, STRING, UniqueConstraintError, UUID, UUIDV4 } from 'sequelize';
 import { DuplicatedUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
+import { ApiFullPostUserObject, InternalUserObject, SequelizeUserObject } from '../../types';
 
 const UserModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },

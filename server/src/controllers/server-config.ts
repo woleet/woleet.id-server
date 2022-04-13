@@ -8,6 +8,7 @@ import * as path from 'path';
 import * as https from 'https';
 import { getAgent } from './utils/agent';
 import { cacheLock } from '../cacheLock';
+import { InternalServerConfigObject, ServerConfigError, ServerConfigUpdate } from '../types';
 
 const debug = Debug('id:ctrl:config');
 
@@ -221,7 +222,7 @@ async function checkProofDeskConfigChange(up: ServerConfigUpdate): Promise<strin
           try {
             const json = JSON.parse(data);
             if (!json.error) {
-              resolve();
+              resolve(null);
             } else {
               log.error(json.error);
               await setServerConfig({ enableProofDesk: false });

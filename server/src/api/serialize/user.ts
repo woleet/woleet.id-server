@@ -1,6 +1,7 @@
 import { serializeUserIdentity } from './identity';
 import { Op } from 'sequelize';
 import { mapIdentityFromAPIToInternal } from '../../controllers/user';
+import { InternalUserObject } from '../../types';
 
 export function serializeUser(user: InternalUserObject, withDates = true): ApiUserObject {
   let dates = null;

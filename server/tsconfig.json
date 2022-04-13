@@ -2,13 +2,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist",
-    "target": "es2017",
+    "target": "es6",
     "module": "commonjs",
-    "moduleResolution": "node",
-    "typeRoots": [
-      "node_modules/@types",
-      "./types"
-    ]
+    "moduleResolution": "node"
   },
   "include": [
     "src/**/*.ts",

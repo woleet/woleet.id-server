@@ -1,4 +1,5 @@
 import { serializeUserIdentity } from './identity';
+import { InternalUserObject } from '../../types';
 
 export function serializeUserDTO(user: InternalUserObject): ApiUserDTOObject {
   return {

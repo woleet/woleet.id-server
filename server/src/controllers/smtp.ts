@@ -32,7 +32,7 @@ async function configure() {
         reject(error.response);
       } else {
         log.info('Server is ready to take our messages');
-        resolve();
+        resolve(null);
       }
     });
   });
