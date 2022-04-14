@@ -43,7 +43,7 @@ async function _boot() {
         await initializeOIDC();
         return;
       } catch (err) {
-        log.error('Cannot initialize OpenID Connect, it will be automatically disabled!', err);
+        log.error('Cannot initialize OpenID Connect, it will be automatically disabled.', err);
       }
       return setServerConfig({ enableOpenIDConnect: false });
     })
@@ -52,7 +52,7 @@ async function _boot() {
         await initializeOIDCProvider();
         return;
       } catch (err) {
-        log.error('Cannot initialize OpenID Connect Provider, it will be automatically disabled!', err);
+        log.error('Cannot initialize OpenID Connect Provider, it will be automatically disabled.', err);
       }
     })
     .then(async () => {
@@ -60,7 +60,7 @@ async function _boot() {
         await initializeSMTP();
         return;
       } catch (err) {
-        log.error('Cannot initialize SMTP, it will be automatically disabled!', err);
+        log.error('Cannot initialize SMTP, it will be automatically disabled.', err);
       }
       return setServerConfig({ enableSMTP: false });
     })

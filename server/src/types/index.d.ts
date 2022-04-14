@@ -203,6 +203,22 @@ interface Session {
 
 /* Events */
 
+type ServerEventTypeEnum =
+  'signature'
+  | 'config.edit'
+  | 'login'
+  | 'error'
+  | 'enrollment.create' | 'enrollment.create-signature-request'
+  | 'enrollment.delete' | 'enrollment.edit'
+  | 'key.create' | 'key.edit' | 'key.delete'
+  | 'user.create' | 'user.edit' | 'user.delete'
+  | 'token.create' | 'token.edit' | 'token.delete'
+  ;
+
+interface ServerEvent {
+  type: ServerEventTypeEnum;
+}
+
 interface InternalServerEventObject extends ServerEvent, CommonInternalProperties {
   data: Object;
   occurredAt: Date;
@@ -242,14 +258,14 @@ interface InternalServerConfigObject extends ServerConfig {
   fallbackOnDefaultKey: boolean;
   allowUserToSign: boolean;
 
-  // Open ID Connect config
+  // OpenID Connect config
   enableOpenIDConnect: boolean;
   openIDConnectURL?: string;
   openIDConnectClientId?: string;
   openIDConnectClientSecret?: string;
   openIDConnectClientRedirectURL?: string;
 
-  // Open ID Connect Provider config
+  // OpenID Connect Provider config
   OIDCPProviderURL?: string;
   OIDCPClients?: ApiOIDCPClient[];
   enableOIDCP?: boolean;
@@ -297,14 +313,14 @@ interface ServerConfigUpdate extends ServerConfig {
   fallbackOnDefaultKey?: boolean;
   allowUserToSign?: boolean;
 
-  // Open ID Connect config
+  // OpenID Connect config
   enableOpenIDConnect?: boolean;
   openIDConnectURL?: string;
   openIDConnectClientId?: string;
   openIDConnectClientSecret?: string;
   openIDConnectClientRedirectURL?: string;
 
-  // Open ID Connect Provider config
+  // OpenID Connect Provider config
   OIDCPProviderURL?: string;
   OIDCPClients?: ApiOIDCPClient[];
   enableOIDCP?: boolean;
@@ -352,14 +368,14 @@ interface ServerConfigCreate extends ServerConfig {
   fallbackOnDefaultKey?: boolean;
   allowUserToSign?: boolean;
 
-  // Open ID Connect config
+  // OpenID Connect config
   enableOpenIDConnect?: boolean;
   openIDConnectURL?: string;
   openIDConnectClientId?: string;
   openIDConnectClientSecret?: string;
   openIDConnectClientRedirectURL?: string;
 
-  // Open ID Connect Provider config
+  // OpenID Connect Provider config
   OIDCPProviderURL?: string;
   OIDCPClients?: ApiOIDCPClient[];
   enableOIDCP?: boolean;

@@ -46,12 +46,10 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
     const query = { where: { publicKey } };
 
     if (userId) {
-      // tslint:disable-next-line:no-string-literal
       query.where['userId'] = userId;
     }
 
     if (loadUser) {
-      // tslint:disable-next-line:no-string-literal
       query['include'] = [{ model: User.model }];
     }
 

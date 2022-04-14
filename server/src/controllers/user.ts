@@ -123,7 +123,7 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
   return user.get();
 }
 
-export async function getUsers(opts: FindOptions<any>): Promise<InternalUserObject[]> {
+export async function getUsers(opts: FindOptions): Promise<InternalUserObject[]> {
   const users = await User.getAll(opts);
   return users.map((user) => user.get());
 }

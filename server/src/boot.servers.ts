@@ -46,7 +46,7 @@ export function bootServers(): Promise<void> {
 
   const promises = definitions.map(({ name, port, router }) => {
 
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
 
       log.info(`Starting ${name} server on port ${port}...`);
 
@@ -80,7 +80,7 @@ export function bootServers(): Promise<void> {
 
       server.on('listening', () => {
         log.info(`${name.split('-').join(', ')} listening on port ${port}.`);
-        resolve(null);
+        resolve();
       });
 
       apps[name] = server;
@@ -103,7 +103,7 @@ export async function bootOIDCProvider(): Promise<void> {
   }
 
   const port = ports.oidcp;
-  await new Promise((resolve) => {
+  await new Promise<void>((resolve) => {
     if (isOIDCPInitialized()) {
       log.info(`Starting OIDCP server on port ${port}...`);
 
@@ -117,23 +117,22 @@ export async function bootOIDCProvider(): Promise<void> {
       server.on('listening', () => {
         log.info(`OIDCP server listening on port ${port}.`);
         resolved = true;
-        resolve(null);
+        resolve();
       });
 
       server.on('error', (err) => {
         log.error('OIDCP server encountered an error, it will be disabled as a precaution! Please check your configuration.');
         if (resolved) {
-          return exit(`Open ID Connect Provider's server encountered an error: ${err.message}`, err);
+          return exit(`OpenID Connect Provider's server encountered an error: ${err.message}`, err);
         } else {
-          // disable
           log.warn('OIDCP server encountered an error before listening, it will be softly disabled');
           log.warn('Full trace is:', err);
           setActiveServer(null);
-          setServerConfig({ enableOIDCP: false }).then(resolve);
+          setServerConfig({ enableOIDCP: false }).then(() => resolve());
         }
       });
     } else {
-      resolve(null);
+      resolve();
     }
   });
 }

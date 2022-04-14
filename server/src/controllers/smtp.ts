@@ -26,13 +26,13 @@ async function configure() {
 
   transporter = await nodemailer.createTransport(JSON.parse(SMTPConfig));
 
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     transporter.verify(function (error, success) {
       if (error) {
         reject(error.response);
       } else {
         log.info('Server is ready to take our messages');
-        resolve(null);
+        resolve();
       }
     });
   });

@@ -1,7 +1,7 @@
 import { validate } from '../schemas';
 import * as Router from 'koa-router';
 import { getAllKeysOfUser, getOwnerByPubKey } from '../../controllers/key';
-import { buildUserFilters, serializeUser } from '../serialize/user';
+import { buildUserFilterFromQueryParams, serializeUser } from '../serialize/user';
 import { getUserById, getUsers } from '../../controllers/user';
 import { bearerAuth } from '../authentication';
 import { getServerConfig } from '../../controllers/server-config';
@@ -79,8 +79,7 @@ router.get('/user', async function (ctx) {
  */
 router.get('/users', async function (ctx) {
   const query = ctx.query;
-  // @ts-ignore
-  const opts: FindOptions<any> = { where: buildUserFilters(query) as object, offset: query.offset, limit: query.limit };
+  const opts: FindOptions = { where: buildUserFilterFromQueryParams(query), offset: query.offset, limit: query.limit };
   const users = await getUsers(opts);
   ctx.body = users.map((user) => serializeUser(user, false));
 });
