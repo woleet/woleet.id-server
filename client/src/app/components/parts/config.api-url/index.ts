@@ -62,7 +62,7 @@ export class ConfigAPIUrlComponent extends ErrorMessageProvider implements OnIni
 
   beginEdit() {
     this.editMode = true;
-    const guessClientURL = environment.production ? `${window.location.origin}` + environment.serverURL : environment.serverURL;
+    const guessClientURL = `${window.location.origin}` + environment.serverURL;
     if (this.form.value === undefined) {
       this.form.setValue(guessClientURL);
     }

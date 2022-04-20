@@ -153,7 +153,7 @@ export class ServerConfigService {
   getTCU() {
     this.http.get(`${serverURL}/assets/custom_TCU.pdf`, { responseType: 'arraybuffer' })
       .subscribe(res => {
-        const blob = new Blob([res], { type: 'application/pdf' });
+        const blob = new Blob([res], { type: 'application/octet-stream' });
         const blobURL = window.URL.createObjectURL(blob);
         const tempLink = document.createElement('a');
         tempLink.style.display = 'none';
@@ -163,7 +163,7 @@ export class ServerConfigService {
           tempLink.setAttribute('target', '_blank');
         }
         document.body.appendChild(tempLink);
-        tempLink.click();
+        tempLink.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
         document.body.removeChild(tempLink);
       }, error => {
         log.error('File download error', JSON.stringify(error));
