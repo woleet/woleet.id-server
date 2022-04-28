@@ -70,18 +70,3 @@ interface ApiResetPasswordObject {
   token: string;
   password: string;
 }
-
-interface ApiFilterUsersObject extends UserObject {
-  mode?: UserModeEnum;
-  role?: UserRoleEnum;
-  commonName?: string;
-  organization?: string;
-  organizationalUnit?: string;
-  locality?: string;
-  country?: string;
-  userId?: string;
-  email?: string;
-  status?: UserStatusEnum;
-  countryCallingCode?: string;
-  phone?: string;
-}

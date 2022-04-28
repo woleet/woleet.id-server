@@ -6,6 +6,7 @@ import { encode } from './utils/password';
 import { createKey } from './key';
 import { store } from './store.session';
 import { FindOptions } from 'sequelize';
+import { InternalIdentityObject, InternalUserObject } from '../types';
 
 const debug = Debug('id:ctr');
 
@@ -66,7 +67,8 @@ export async function createUser(user: ApiPostUserObject): Promise<InternalUserO
   return newUser.get();
 }
 
-export async function updateUser(id: string, attrs: ApiPutUserObject, userRole: UserRoleEnum): Promise<InternalUserObject> {
+export async function updateUser(id: string, attrs: ApiPutUserObject,
+                                 userRole: UserRoleEnum): Promise<InternalUserObject> {
   const update: any = attrs;
 
   // Check user existence
@@ -121,13 +123,12 @@ export async function getUserById(id: string): Promise<InternalUserObject> {
   return user.get();
 }
 
-export async function getUsers(opts: FindOptions<any>): Promise<InternalUserObject[]> {
+export async function getUsers(opts: FindOptions): Promise<InternalUserObject[]> {
   const users = await User.getAll(opts);
   return users.map((user) => user.get());
 }
 
 export async function deleteUser(id: string, userRole: UserRoleEnum): Promise<InternalUserObject> {
-
 
   const user = await User.getById(id);
   // Check user existence

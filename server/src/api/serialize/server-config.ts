@@ -1,3 +1,5 @@
+import { InternalServerConfigObject, ServerConfigError } from '../../types';
+
 export function serializeServerConfig(config: InternalServerConfigObject & ServerConfigError): ApiServerConfig {
   const {
     fallbackOnDefaultKey,

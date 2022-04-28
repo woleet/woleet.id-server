@@ -8,6 +8,7 @@ import { readFileSync } from 'fs';
 import { BadRequest } from 'http-errors';
 import * as path from 'path';
 import * as log from 'loglevel';
+import { InternalKeyObject, InternalServerConfigObject, InternalUserObject } from '../types';
 
 const MANAGER_RESET_PASSWORD_TOKEN_LIFETIME = 7 * 24 * 3600 * 1000;
 const USER_RESET_PASSWORD_TOKEN_LIFETIME = 3600 * 1000;

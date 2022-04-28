@@ -2,6 +2,7 @@ import { Key, User } from '../database';
 import { NotFoundKeyError, NotFoundUserError, RevokedKeyError } from '../errors';
 import { secureModule } from '../config';
 import { sendKeyRevocationEmail } from './send-email';
+import { InternalKeyObject, InternalUserObject } from '../types';
 
 /**
  * Key

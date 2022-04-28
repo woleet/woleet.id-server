@@ -5,6 +5,7 @@ import { User } from './index';
 
 import * as assert from 'assert';
 import * as Debug from 'debug';
+import { OIDCToken, OIDCTokenEnum, UUID } from '../types';
 
 const debug = Debug('id:oidc:adapter');
 
@@ -98,7 +99,7 @@ export class SequelizeAdapter {
     }
   }
 
-  async revokeByGrantId(grantId) { // eslint-disable-line class-methods-use-this
+  async revokeByGrantId(grantId) {
     debug(`revoke ${grantId}`);
     const promises = [];
     grantable.forEach((name) => {
@@ -117,20 +118,19 @@ const store = new Map();
 
 export class OIDCAccount {
 
-  constructor(id?: uuid) {
+  constructor(id?: UUID) {
     assert(id, 'Missing id');
     debug(`OIDCAccount ${id}`);
     this.accountId = id;
     store.set(this.accountId, this);
   }
 
-  accountId: uuid;
+  accountId: UUID;
 
-  static async findAccount(ctx, id, token) { // eslint-disable-line no-unused-vars
+  static async findAccount(ctx, id, token) {
     // token is a reference to the token used for which a given account is being loaded,
     //   it is undefined in scenarios where account claims are returned from authorization endpoint
     // ctx is the koa request context
-    if (!store.get(id)) new OIDCAccount(id); // eslint-disable-line no-new
     return store.get(id);
   }
 
@@ -142,7 +142,7 @@ export class OIDCAccount {
    *   loading some claims from external resources etc. based on this detail
    *   or not return them in id tokens but only userinfo and so on.
    */
-  async claims(use, scope) { // eslint-disable-line no-unused-vars
+  async claims(use, scope) {
     debug(`claims ${use} ${scope}`);
 
     const id = this.accountId;

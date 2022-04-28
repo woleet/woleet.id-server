@@ -2,6 +2,7 @@ import { BOOLEAN, CHAR, DATE, ENUM, ForeignKeyConstraintError, STRING, UUID, UUI
 import { InvalidForeignUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
 import { User } from '..';
+import { ApiFullPostKeyObject, InternalKeyObject, SequelizeKeyObject } from '../../types';
 
 const KeyModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },
@@ -45,12 +46,10 @@ class KeyAccess extends AbstractInstanceAccess<InternalKeyObject, ApiFullPostKey
     const query = { where: { publicKey } };
 
     if (userId) {
-      // tslint:disable-next-line:no-string-literal
       query.where['userId'] = userId;
     }
 
     if (loadUser) {
-      // tslint:disable-next-line:no-string-literal
       query['include'] = [{ model: User.model }];
     }
 

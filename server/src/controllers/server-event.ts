@@ -3,7 +3,7 @@ import { ServerEvent } from '../database';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { events as config } from '../config';
-import { FindOptions } from 'sequelize';
+import { ServerEventCreate } from '../types';
 
 const debug = Debug('id:events');
 

@@ -5,6 +5,7 @@ import { store as oauthAccessTokenStore } from '../controllers/store.oauth-token
 import { getUserById } from '../controllers/user';
 import { isInitialized } from '../controllers/oidc-provider';
 import { Context } from 'koa';
+import { InternalTokenObject, InternalUserObject } from '../types';
 
 export async function session(ctx: Context, next) {
   ctx.sessions = sessionStore;

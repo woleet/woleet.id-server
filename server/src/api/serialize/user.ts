@@ -1,6 +1,7 @@
 import { serializeUserIdentity } from './identity';
-import { Op } from 'sequelize';
+import { Op, WhereOptions } from 'sequelize';
 import { mapIdentityFromAPIToInternal } from '../../controllers/user';
+import { InternalUserObject } from '../../types';
 
 export function serializeUser(user: InternalUserObject, withDates = true): ApiUserObject {
   let dates = null;
@@ -27,7 +28,7 @@ export function serializeUser(user: InternalUserObject, withDates = true): ApiUs
   }, dates);
 }
 
-export function buildUserFilters(query): ApiFilterUsersObject {
+export function buildUserFilterFromQueryParams(query): WhereOptions {
 
   // If a search filter is specified, build it
   // (like match on email, username, x500CommonName, x500Organization or x500OrganizationalUnit)
@@ -55,7 +56,7 @@ export function buildUserFilters(query): ApiFilterUsersObject {
   const otherFilters = { mode, role, email, username, status, countryCallingCode, phone };
 
   // Concatenate exact match filters
-  let filters: object = Object.assign(otherFilters, identityFilters);
+  let filters: any = Object.assign(otherFilters, identityFilters);
 
   // Cleanup undefined properties
   Object.keys(filters).forEach(key => filters[key] === undefined && delete filters[key]);
@@ -65,5 +66,5 @@ export function buildUserFilters(query): ApiFilterUsersObject {
     filters = { [Op.and]: [filters, searchFilter] };
   }
 
-  return filters;
+  return filters as WhereOptions;
 }

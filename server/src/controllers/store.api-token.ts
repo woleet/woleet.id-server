@@ -2,6 +2,7 @@ import * as LRU from 'lru-cache';
 import { Cache } from 'lru-cache';
 import * as crypto from 'crypto';
 import { APIToken } from '../database';
+import { InternalTokenObject, SequelizeAPITokenObject } from '../types';
 
 function serialize(token: SequelizeAPITokenObject): InternalTokenObject {
   const t = token.get();

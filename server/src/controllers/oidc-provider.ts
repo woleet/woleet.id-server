@@ -19,7 +19,7 @@ let initialized = false;
 
 export function getProvider() {
   if (!initialized) {
-    throw new Error('Provider not initialized!');
+    throw new Error('Provider not initialized');
   }
   return provider;
 }

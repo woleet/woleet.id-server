@@ -8,6 +8,7 @@ import * as path from 'path';
 import * as https from 'https';
 import { getAgent } from './utils/agent';
 import { cacheLock } from '../cacheLock';
+import { InternalServerConfigObject, ServerConfigError, ServerConfigUpdate } from '../types';
 
 const debug = Debug('id:ctrl:config');
 
@@ -132,7 +133,7 @@ async function checkOIDCConfigChange(up: ServerConfigUpdate) {
     try {
       await fns.updateOIDCClient();
     } catch (err) {
-      log.error('Cannot initialize OpenID Connect, it will be automatically disabled!', err);
+      log.error('Cannot initialize OpenID Connect, it will be automatically disabled.', err);
       await setServerConfig({ enableOpenIDConnect: false });
       return 'Cannot initialize OpenID Connect, check your configuration.';
     }
@@ -143,9 +144,9 @@ function OIDCPSafeReboot() {
   debug('Reboot OIDCP');
   return fns.bootOIDCProvider()
     .catch((err) => {
-      log.error('Cannot reboot OpenID Connect, it will be automatically disabled!');
+      log.error('Cannot reboot OpenID Connect, it will be automatically disabled.');
       setServerConfig({ enableOIDCP: false });
-      exit('FATAL: This error should have been handled', err);
+      exit('FATAL: Cannot boot the OIDCP server', err);
     });
 }
 
@@ -164,7 +165,7 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
       await fns.updateOIDCProvider();
       await OIDCPSafeReboot();
     } catch (err) {
-      log.error('Cannot initialize OpenID Connect, it will be automatically disabled!', err);
+      log.error('Cannot initialize OpenID Connect, it will be automatically disabled.', err);
       await setServerConfig({ enableOpenIDConnect: false });
       return err ? err.message : 'Cannot initialize OpenID Connect, check your configuration.';
     }
@@ -179,7 +180,7 @@ async function checkSMTPConfigChange(up: ServerConfigUpdate) {
     try {
       await fns.updateSMTP();
     } catch (err) {
-      log.error('Cannot initialize SMTP, it will be automatically disabled!', err);
+      log.error('Cannot initialize SMTP, it will be automatically disabled.', err);
       await setServerConfig({ enableSMTP: false });
       // syntaxt error have a message, configuration error doesn't
       if (err) {
@@ -221,11 +222,11 @@ async function checkProofDeskConfigChange(up: ServerConfigUpdate): Promise<strin
           try {
             const json = JSON.parse(data);
             if (!json.error) {
-              resolve();
+              resolve(null);
             } else {
               log.error(json.error);
               await setServerConfig({ enableProofDesk: false });
-              resolve('Connection with proofDesk blocked: ' + json.error);
+              resolve('Connection with ProofDesk blocked: ' + json.error);
             }
           } catch (err) {
             log.error('Response is not a JSON (bad URL?)');

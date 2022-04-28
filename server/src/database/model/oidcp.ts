@@ -1,5 +1,6 @@
 import { DATE, JSON, Model, ModelCtor, STRING, UUID, UUIDV4 } from 'sequelize';
 import { sequelize } from '../sequelize';
+import { OIDCToken, OIDCTokenEnum } from '../../types';
 
 export const grantable = new Set<OIDCTokenEnum>([
   'AccessToken',

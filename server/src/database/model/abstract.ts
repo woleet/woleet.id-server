@@ -1,11 +1,11 @@
-import { FindOptions, Sequelize, Model, ModelAttributes, ModelOptions, ModelCtor } from 'sequelize';
+import { FindOptions, Model, ModelAttributes, ModelOptions, ModelStatic, Sequelize } from 'sequelize';
 import { sequelize } from '../sequelize';
 
 export abstract class AbstractInstanceAccess<TAttribute, TPost> {
   client: Sequelize;
-  model: ModelCtor<Model<TAttribute, TPost>>;
+  model: ModelStatic<Model<TAttribute, TPost>>;
 
-  constructor() {
+  protected constructor() {
     this.client = sequelize;
   }
 
@@ -19,7 +19,7 @@ export abstract class AbstractInstanceAccess<TAttribute, TPost> {
     this.model = this.client.define(modelName, attributes, options);
   }
 
-  async create(obj: TPost): Promise<Model<TAttribute, TPost>> {
+  async create(obj): Promise<Model<TAttribute, TPost>> {
     try {
       return await this.model.create(obj);
     } catch (err) {
@@ -43,7 +43,7 @@ export abstract class AbstractInstanceAccess<TAttribute, TPost> {
     }
   }
 
-  async getAll(opts: FindOptions<any> = {}): Promise<Model<TAttribute, TPost>[]> {
+  async getAll(opts: FindOptions = {}): Promise<Model<TAttribute, TPost>[]> {
 
     // By default, sort object from the newest to the oldest
     if (!opts.order) {

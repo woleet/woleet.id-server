@@ -13,6 +13,7 @@ import * as log from 'loglevel';
 import { cacheLock } from '../cacheLock';
 import { BadRequest } from 'http-errors';
 import { getUserById } from './user';
+import { InternalEnrollmentObject, InternalUserObject } from '../types';
 
 const TCUPath = path.join(__dirname, '../../assets/custom_TCU.pdf');
 

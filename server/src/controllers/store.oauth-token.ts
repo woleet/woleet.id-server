@@ -3,6 +3,7 @@ import { Cache } from 'lru-cache';
 
 import { getProvider } from './oidc-provider';
 import * as log from 'loglevel';
+import { InternalOauthTokenObject, InternalTokenObject } from '../types';
 
 function serialize(token: InternalOauthTokenObject): InternalTokenObject {
   return {

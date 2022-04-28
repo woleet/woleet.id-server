@@ -1,6 +1,7 @@
 import { DATE, ENUM, ForeignKeyConstraintError, STRING, UUID, UUIDV4 } from 'sequelize';
 import { InvalidForeignUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
+import { InternalEnrollmentObject, SequelizeEnrollmentObject } from '../../types';
 
 const EnrollmentModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },

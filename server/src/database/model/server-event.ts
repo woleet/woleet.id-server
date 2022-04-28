@@ -2,6 +2,7 @@ import { DATE, ENUM, JSON, Model, UUID, UUIDV4 } from 'sequelize';
 
 import { AbstractInstanceAccess } from './abstract';
 import { events as eventsConfig } from '../../config';
+import { InternalServerEventObject, ServerEventCreate } from '../../types';
 
 const ServerEventModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },

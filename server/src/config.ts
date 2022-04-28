@@ -1,5 +1,3 @@
-// tslint:disable:radix
-
 import { SetOption } from 'cookies';
 import * as fs from 'fs';
 import { readFileSync } from 'fs';

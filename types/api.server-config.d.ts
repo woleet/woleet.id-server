@@ -21,14 +21,14 @@ interface ApiServerConfig {
   logoURL?: string | null;
   HTMLFrame?: string | null;
 
-  // Open ID Connect config
+  // OpenID Connect config
   enableOpenIDConnect: boolean;
   openIDConnectURL: string | null;
   openIDConnectClientId: string | null;
   openIDConnectClientSecret: string | null;
   openIDConnectClientRedirectURL: string | null;
 
-  // Open ID Connect Provider config
+  // OpenID Connect Provider config
   OIDCPProviderURL: string | null;
   OIDCPClients: ApiOIDCPClient[] | null;
   enableOIDCP: boolean;
@@ -82,14 +82,14 @@ interface ApiServerConfigUpdate {
   fallbackOnDefaultKey?: boolean;
   allowUserToSign?: boolean;
 
-  // Open ID Connect config
+  // OpenID Connect config
   enableOpenIDConnect?: boolean;
   openIDConnectURL?: string;
   openIDConnectClientId?: string;
   openIDConnectClientSecret?: string;
   openIDConnectClientRedirectURL?: string;
 
-  // Open ID Connect Provider config
+  // OpenID Connect Provider config
   OIDCPProviderURL?: string;
   OIDCPClients?: ApiOIDCPClient[];
   enableOIDCP?: boolean;

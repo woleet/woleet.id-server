@@ -1,3 +1,5 @@
+import { InternalUserObject } from '../../types';
+
 export function serializeUserIdentity(user: InternalUserObject, hideUserId = false) {
   return {
     commonName: user.x500CommonName,

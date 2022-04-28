@@ -1,6 +1,7 @@
 import { User } from '../database';
 import { store as sessionStore } from './store.session';
 import { validate } from './utils/password';
+import { InternalUserObject, SequelizeUserObject } from '../types';
 
 export function lookForUser(login: string): Promise<SequelizeUserObject> {
   if (login.search('@') !== -1) {

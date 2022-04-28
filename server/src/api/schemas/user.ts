@@ -1,5 +1,6 @@
 import * as Joi from 'joi';
 import { CountryCode, DirectoryString, SafeWord, uuid, Word } from './misc';
+import { DefineJoiModelAttributes } from '../../types';
 
 const userRoleEnum = ['user', 'admin', 'manager'];
 const userStatusEnum = ['active', 'blocked'];

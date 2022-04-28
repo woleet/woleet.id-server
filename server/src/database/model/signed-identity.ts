@@ -1,6 +1,7 @@
 import { ForeignKeyConstraintError, STRING, UUID, UUIDV4 } from 'sequelize';
 import { InvalidForeignUserError } from '../../errors';
 import { AbstractInstanceAccess } from './abstract';
+import { InternalSignedIdentityObject, SequelizeSignedIdentityObject } from '../../types';
 
 const SignedIdentityModel = {
   id: { type: UUID, defaultValue: UUIDV4, primaryKey: true },

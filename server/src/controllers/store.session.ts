@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { session as config } from '../config';
 import { cacheLock as cacheLock } from '../cacheLock';
 import * as Debug from 'debug';
+import { InternalUserObject, Session } from '../types';
 
 const debug = Debug('id:sessions');
 

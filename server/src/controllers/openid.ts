@@ -7,6 +7,7 @@ import { getServerConfig } from './server-config';
 import * as Debug from 'debug';
 import * as log from 'loglevel';
 import { mapIdentityFromAPIToInternal } from './user';
+import { InternalUserObject } from '../types';
 
 const debug = Debug('id:ctrl:openid');
 
@@ -28,13 +29,13 @@ async function configure() {
 
   if (!config.openIDConnectURL) {
     debug('No openIDConnectURL set, skipping configuration');
-    log.warn('No openIDConnectURL set while Open ID Connect is enabled, skipping configuration');
+    log.warn('No openIDConnectURL set while OpenID Connect is enabled, skipping configuration');
     return;
   }
 
   if (!config.openIDConnectClientRedirectURL) {
     debug('No openIDConnectClientRedirectURL set, skipping configuration');
-    log.warn('No openIDConnectClientRedirectURL set while Open ID Connect is enabled, skipping configuration');
+    log.warn('No openIDConnectClientRedirectURL set while OpenID Connect is enabled, skipping configuration');
     return;
   }
 
