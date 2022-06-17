@@ -161,31 +161,20 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     DialogKeyDeleteComponent,
     UserFilterPipe
   ],
-  entryComponents: [
-    DialogResetPasswordComponent,
-    DialogMailResetComponent,
-    DialogAskResetComponent,
-    DialogIdentityDeleteComponent,
-    DialogKeyDeleteComponent
-  ],
   imports: [
     // angular
     BrowserAnimationsModule,
     BrowserModule,
-
     // forms
     FormsModule,
-
     // material
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     MatTabsModule,
     MatRadioModule,
-
     // http
     HttpClientModule,
-
     // nav
     LayoutModule,
     MatRippleModule,
@@ -203,10 +192,8 @@ export function startupServiceFactory(appConfigService: AppConfigService): Funct
     MatDatepickerModule,
     MatNativeDateModule,
     MatStepperModule,
-
     // app
     AppRoutingModule,
-
     // dialog
     MatDialogModule
   ],
