@@ -3,7 +3,6 @@
   "version": "0.12.0",
   "description": "Woleet.ID Server web client",
   "scripts": {
-    "postinstall": "node patch.js",
     "ng": "npx ng",
     "dev": "npx ng serve --port 4220 -o --ssl --disable-host-check --ssl-key $WOLEET_ID_SERVER_HTTP_TLS_KEY --ssl-cert $WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE",
     "dev:prod": "npx ng serve --port 4220 -o --configuration production --ssl --ssl-key $WOLEET_ID_SERVER_HTTP_TLS_KEY --ssl-cert $WOLEET_ID_SERVER_HTTP_TLS_CERTIFICATE",
@@ -49,6 +48,7 @@
     "@typescript-eslint/parser": "5.27.1",
     "core-js": "2.6.12",
     "eslint": "8.17.0",
+    "stream": "^0.0.2",
     "tslint": "6.1.3",
     "typescript": "4.6.4"
   }

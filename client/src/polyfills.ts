@@ -42,7 +42,6 @@
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
 import 'core-js/es7/reflect';
 
-import 'hammerjs';
 // import 'hammerjs';
 
 /**
@@ -65,7 +64,7 @@ import 'hammerjs';
  */
 import 'zone.js';  // Included with Angular CLI.
 
-
+(window as any).global = window;
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
