@@ -97,7 +97,7 @@
   </div>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="submit()" [disabled]="formLocked || f.invalid || !phoneValid">
-      {{ mode == 'edit' ? 'SAVE' : mode == 'create' ? 'CREATE' : 'UNKNOWN' }}
+      {{ mode === 'edit' ? 'SAVE' : mode === 'create' ? 'CREATE' : 'UNKNOWN' }}
     </button>
     <button mat-button [disabled]="formLocked" (click)="triggerCancel()">CANCEL</button>
   </mat-card-actions>

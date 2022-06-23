@@ -1,9 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
 @import 'styles-variables';
 @import 'styles-reset';
-@import '~@angular/material/theming';
 
-@include mat-core();
+@include mat.core();
 
 body {
   background-color: #e4e7ea;
@@ -43,13 +43,13 @@ $woleet-palette: (
   )
 );
 
-$primary: mat-palette($woleet-palette);
-$warn: mat-palette($mat-red);
-$accent: mat-palette($mat-red, 400);
-@include angular-material-theme(mat-light-theme($primary, $accent));
+$primary: mat.define-palette($woleet-palette);
+$warn: mat.define-palette(mat.$red-palette);
+$accent: mat.define-palette(mat.$red-palette, 400);
+@include mat.all-component-themes(mat.define-light-theme($primary, $accent));
 
 .dark-theme {
-  @include angular-material-theme(mat-dark-theme($primary, $accent));
+  @include mat.all-component-themes(mat.define-dark-theme($primary, $accent));
 }
 
 .btn-h {
@@ -75,12 +75,12 @@ $accent: mat-palette($mat-red, 400);
 }
 
 .error-card {
-  @include mat-elevation(2);
-  color: mat-color($mat-red, 300);
+  @include mat.elevation(2);
+  color: mat.get-color-from-palette(mat.$red-palette, 300);
 }
 
 .text-gray {
-  color: mat-color($mat-gray, 500);
+  color: mat.get-color-from-palette(mat.$gray-palette, 500);
 }
 
 .text-slim {
@@ -100,7 +100,7 @@ $accent: mat-palette($mat-red, 400);
     height: 48px;
     width: 48px;
     font-size: 48px;
-    color: mat-color($mat-gray, 500);
+    color: mat.get-color-from-palette(mat.$gray-palette, 500);
   }
 
   code {
@@ -117,7 +117,7 @@ $accent: mat-palette($mat-red, 400);
     height: 48px;
     width: 48px;
     font-size: 48px;
-    color: mat-color($mat-gray, 500);
+    color: mat.get-color-from-palette(mat.$gray-palette, 500);
   }
 
   code {

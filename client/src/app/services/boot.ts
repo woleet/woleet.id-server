@@ -48,7 +48,7 @@ export class AppConfigService {
         } else if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status === 0 || xhr.status > 499) {
             this.errorService.setError(switchNetworkError(xhr.response), xhr.response);
-            resolve();
+            resolve(xhr.response);
           }
 
           log.error('Cannot get initial configuration', xhr.response);
