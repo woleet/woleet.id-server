@@ -12,3 +12,9 @@
 
   <button type="submit" class="login login-submit"><span>LOGIN</span></button>
 </form>
+
+<% if (openIDConnectEnabled) { %>
+  <form autocomplete="off" action="/oauth/<%= uid %>/login" method="get">
+    <button type="submit" class="login login-submit"><span>OpenID LOGIN</span></button>
+  </form>
+<% } %>

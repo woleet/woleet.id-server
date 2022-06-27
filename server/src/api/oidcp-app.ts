@@ -1,16 +1,19 @@
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
-import { BadRequest, Unauthorized } from 'http-errors';
+import * as bodyParser from 'koa-bodyparser';
+import * as render from 'koa-ejs';
+import * as cors from '@koa/cors';
 import * as log from 'loglevel';
 import * as Debug from 'debug';
+import { BadRequest, Unauthorized } from 'http-errors';
 import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
 import { getUserFromUserPass } from '../controllers/authentication';
 import { getProvider } from '../controllers/oidc-provider';
 import { session as sessionAuth } from './authentication';
-import * as bodyParser from 'koa-bodyparser';
-import * as cors from '@koa/cors';
 import { store as event } from '../controllers/server-event';
-import * as render from 'koa-ejs';
+import { oauthCallbackEndpoint, oauthLoginEndpoint } from '../controllers/openid';
+import { store as sessionStore } from '../controllers/store.session';
+import { getServerConfig } from '../controllers/server-config';
 
 const path = require('path');
 
@@ -57,16 +60,19 @@ export function build(): Koa {
   router.post('/interaction/:uid/login', bodyparser, async (ctx) => {
     const { uid, prompt, params, session } = await provider.interactionDetails(ctx.req, ctx.res);
     const client = await provider.Client.find(params.client_id);
+    const openIDConnectEnabled = getServerConfig().enableOpenIDConnect;
     if (prompt.name !== 'login') {
       throw new Error('Should have the login interaction');
     }
 
     const body = ctx.request.body;
 
-    const authorization = await getUserFromUserPass(body.login, body.password);
-    if (!authorization) {
+    const userId = (await getUserFromUserPass(body.login, body.password)).user.id;
+
+    if (!userId) {
       return ctx.render('login', {
         error: new Unauthorized(),
+        openIDConnectEnabled,
         client,
         uid,
         details: prompt.details,
@@ -82,7 +88,7 @@ export function build(): Koa {
 
     event.register({
       type: 'login',
-      authorizedUserId: authorization.user.id,
+      authorizedUserId: userId,
       associatedTokenId: null,
       associatedUserId: null,
       associatedKeyId: null,
@@ -91,24 +97,28 @@ export function build(): Koa {
 
     const result = {
       login: {
-        accountId: authorization.user.id,
+        accountId: userId,
       },
     };
 
-    return provider.interactionFinished(ctx.req, ctx.res, result, {
+    const interactionFinished  = await provider.interactionFinished(ctx.req, ctx.res, result, {
       mergeWithLastSubmission: false,
     });
+
+    return interactionFinished;
   });
 
   // This endpoint renders the login / consent page if needed
   router.get('/interaction/:uid', async (ctx, next) => {
     const { uid, prompt, params, session } = await provider.interactionDetails(ctx.req, ctx.res);
     const client = await provider.Client.find(params.client_id);
+    const openIDConnectEnabled = getServerConfig().enableOpenIDConnect;
 
     switch (prompt.name) {
       case 'login': {
         return ctx.render('login', {
           error: null,
+          openIDConnectEnabled,
           client,
           uid,
           details: prompt.details,
@@ -192,6 +202,50 @@ export function build(): Koa {
     const { params } = await provider.interactionDetails(ctx.req, ctx.res);
     const redirectURI = new URL(params.redirect_uri);
     ctx.redirect(redirectURI.origin);
+  });
+
+  // OpenID login endpoint used as a bridge
+  router.get('/oauth/:uid/login', async (ctx) => {
+    // Uses the standard login function but stores the uid of the interaction in the Oauth LRU cache
+    await oauthLoginEndpoint(ctx, `${provider.issuer}/oauth/callback`, ctx.request.params.uid);
+  });
+
+  // OpenID bridge callback endpoint
+  router.get('/oauth/callback', async (ctx) => {
+    // Uses the standard callback function but retrieves the uid of the interaction in the Oauth LRU cache
+    const callbackOutput = await oauthCallbackEndpoint(ctx, `${provider.issuer}/oauth/callback`);
+    // Redirect to a special post login page with the interaction uid
+    ctx.redirect(`${provider.issuer}/interaction/${callbackOutput.interaction}/oauthlogin`);
+  });
+
+  // OpenID login custom post login page that extract the userId from the session cookie
+  router.get('/interaction/:uid/oauthlogin', async (ctx) => {
+    const session = (await sessionStore.get(ctx.cookies.get('session')));
+    ctx.cookies.set('session', null);
+    if (!session) { throw new Unauthorized('Unauthorized'); }
+
+    const userId = session.userId;
+
+    event.register({
+      type: 'login',
+      authorizedUserId: userId,
+      associatedTokenId: null,
+      associatedUserId: null,
+      associatedKeyId: null,
+      data: null
+    });
+
+    const result = {
+      login: {
+        accountId: userId,
+      },
+    };
+
+    const interactionFinished  = await provider.interactionFinished(ctx.req, ctx.res, result, {
+      mergeWithLastSubmission: false,
+    });
+
+    return interactionFinished;
   });
 
   provider.use(router.routes());
