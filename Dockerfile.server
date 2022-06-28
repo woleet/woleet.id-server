@@ -1,4 +1,4 @@
-FROM node:12.21.0-alpine3.12
+FROM node:12.22.12-alpine3.14
 
 RUN apk add --no-cache python3 git gcc g++ make bash postgresql-dev --virtual .build-deps
 
@@ -12,14 +12,14 @@ RUN mkdir -p /build/server-runtime
 COPY server/package.json /build/server-runtime/
 COPY server/package-lock.json /build/server-runtime/
 COPY server/patch.js /build/server-runtime/
-RUN cd /build/server-runtime && npm i --production && npm run postinstall
+RUN cd /build/server-runtime && npm i -g npm@7.5.6 && npm i --production && npm run postinstall
 
 # Install runtime and dev dependencies
 RUN mkdir -p /build/server
 COPY server/package.json /build/server/
 COPY server/package-lock.json /build/server/
 COPY server/patch.js /build/server/
-RUN cd /build/server && npm i --ignore-scripts && npm run postinstall
+RUN cd /build/server && npm i -g npm@7.5.6 && npm i --ignore-scripts && npm run postinstall
 
 # Copy sources
 COPY server /build/server
@@ -33,7 +33,7 @@ RUN cd /build/server && npm run build && \
   mv /build/server-runtime/node_modules /build/app/node_modules
 
 # https://docs.docker.com/develop/develop-images/multistage-build/
-FROM node:12.21.0-alpine3.12
+FROM node:12.22.12-alpine3.14
 
 ARG WOLEET_ID_SERVER_API_VERSION_BUILDTIME
 ENV WOLEET_ID_SERVER_API_VERSION=$WOLEET_ID_SERVER_API_VERSION_BUILDTIME

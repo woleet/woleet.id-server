@@ -1,11 +1,11 @@
-FROM node:14.16.0-alpine3.11
+FROM node:12.22.12-alpine3.14
 
 RUN mkdir -p /build/client
 
 COPY client/package.json /build/client
 COPY client/package-lock.json /build/client
 
-RUN cd /build/client && npm i
+RUN cd /build/client && npm i -g npm@7.5.6 && npm i
 
 COPY client /build/client
 COPY types /build/types
