@@ -236,6 +236,8 @@ export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoint
 
 > NOTE: If you want Woleet.ID Server's Docker images to be stored on a specific Docker registry, you can set the `WOLEET_ID_SERVER_REGISTRY` environment variable.
 
+If you want to build the server component without docker tou will need to install libpq for your OS (mandatory for using pg-native), follow instructions here: <https://www.npmjs.com/package/pg-native>
+
 # Start the server
 
 ```bash
