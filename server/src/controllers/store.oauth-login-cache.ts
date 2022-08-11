@@ -12,7 +12,7 @@ type OauthLoginCacheObject = {
 
 export class OauthLoginCache {
 
-  oAuthExpirationSeconds = 30 * 60;
+  oAuthExpirationSeconds = 5 * 60;
 
   async set(oauth: string, payload: OauthLoginCacheObject) {
     await this._setCache(oauth, payload);
