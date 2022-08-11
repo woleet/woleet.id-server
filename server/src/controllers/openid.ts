@@ -1,7 +1,5 @@
 import * as Debug from 'debug';
 import * as log from 'loglevel';
-import * as LRU from 'lru-cache';
-import { Cache } from 'lru-cache';
 import { Issuer } from 'openid-client';
 import { v4 as uuidv4 } from 'uuid';
 import { randomBytes } from 'crypto';
@@ -15,13 +13,12 @@ import { cookies } from '../config';
 import { User } from '../database';
 import { updateUser } from '../controllers/user';
 import { store as sessionStore } from './store.session';
+import { oauthLoginCache } from './store.oauth-login-cache';
 
 const debug = Debug('id:ctrl:openid');
 
 let client = null;
 let redirectURL = null;
-
-const lru: Cache<string, { state: string, nonce: string, interaction: string}> = new LRU({ maxAge: 90 * 1000, max: 1000 });
 
 export const getClientRedirectURL = () => redirectURL;
 
@@ -125,7 +122,7 @@ export async function oauthLoginEndpoint(ctx, redirectURL = getClientRedirectURL
     nonce
   });
 
-  lru.set(oauth, { state, nonce, interaction });
+  await oauthLoginCache.set(oauth, { state, nonce, interaction });
   ctx.cookies.set('openidserv', oauth, cookies.options);
   ctx.redirect(url);
 }
@@ -149,7 +146,7 @@ export async function oauthCallbackEndpoint(ctx, redirectURL = getClientRedirect
   }
 
   ctx.cookies.set('openidserv', null);
-  const oauthSession = lru.get(oauth);
+  const oauthSession = await oauthLoginCache.get(oauth);
 
   if (!oauthSession) {
     throw new BadRequest('Invalid OAuth session');
