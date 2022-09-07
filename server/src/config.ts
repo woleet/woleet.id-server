@@ -152,7 +152,7 @@ export const secureModule = new SecureModule;
 
 const serverEventTransport = new winston.transports.DailyRotateFile({
   filename: 'server-event-%DATE%.log',
-  datePattern: 'YYYY-MM-DD-HH',
+  datePattern: 'YYYY-MM-DD',
   zippedArchive: true,
   frequency: '1d',
   dirname: getenv('LOG_DIRNAME', '.'),
