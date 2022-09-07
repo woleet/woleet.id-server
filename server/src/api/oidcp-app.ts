@@ -10,7 +10,7 @@ import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
 import { getUserFromUserPass } from '../controllers/authentication';
 import { getProvider } from '../controllers/oidc-provider';
 import { session as sessionAuth } from './authentication';
-import { store as event } from '../controllers/server-event';
+import { serverEventLogger } from '../config';
 import { oauthCallbackEndpoint, oauthLoginEndpoint } from '../controllers/openid';
 import { store as sessionStore } from '../controllers/store.session';
 import { getServerConfig } from '../controllers/server-config';
@@ -86,7 +86,7 @@ export function build(): Koa {
       });
     }
 
-    event.register({
+    serverEventLogger.info({
       type: 'login',
       authorizedUserId: userId,
       associatedTokenId: null,
@@ -226,7 +226,7 @@ export function build(): Koa {
 
     const userId = session.userId;
 
-    event.register({
+    serverEventLogger.info({
       type: 'login',
       authorizedUserId: userId,
       associatedTokenId: null,

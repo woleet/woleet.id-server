@@ -1,8 +1,8 @@
 import { IMiddleware } from 'koa-router';
 import { HttpError, NotFound } from 'http-errors';
 import * as errors from '../errors';
-import { store as event } from '../controllers/server-event';
 import * as log from 'loglevel';
+import { serverEventLogger } from '../config';
 
 const errorHandler: IMiddleware = async function (ctx, next) {
   try {
@@ -47,7 +47,7 @@ const errorHandler: IMiddleware = async function (ctx, next) {
       log.error('Unhandled error:', error.message);
       log.error('Stack:', error.stack);
 
-      event.register({
+      serverEventLogger.error({
         type: 'error',
         authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
         associatedTokenId: null,

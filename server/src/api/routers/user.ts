@@ -3,7 +3,7 @@ import { copy } from '../../controllers/utils/copy';
 import { validate } from '../schemas';
 import { createUser, deleteUser, getUserById, getUsers, updateUser } from '../../controllers/user';
 import { buildUserFilterFromQueryParams, serializeUser } from '../serialize/user';
-import { store as event } from '../../controllers/server-event';
+import { serverEventLogger } from '../../config';
 import { isKeyHeldByServer } from '../../controllers/key';
 import { getServerConfig } from '../../controllers/server-config';
 import { BadRequest, Forbidden } from 'http-errors';
@@ -58,7 +58,7 @@ router.post('/', validate.body('createUser'), async function (ctx) {
 
   const created = await createUser(copy(user));
 
-  event.register({
+  serverEventLogger.info({
     type: 'user.create',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
@@ -125,7 +125,7 @@ router.put('/:id', vid, validate.body('updateUser'), async function (ctx) {
   }
   user = await updateUser(id, copy(update), ctx.authorizedUser ? ctx.authorizedUser.userRole : null);
 
-  event.register({
+  serverEventLogger.info({
     type: 'user.edit',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
@@ -146,7 +146,7 @@ router.delete('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const user = await deleteUser(id, ctx.authorizedUser ? ctx.authorizedUser.userRole : null);
 
-  event.register({
+  serverEventLogger.info({
     type: 'user.delete',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,

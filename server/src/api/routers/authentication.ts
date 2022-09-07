@@ -2,7 +2,7 @@ import { BadRequest, Unauthorized } from 'http-errors';
 import * as auth from 'basic-auth';
 import * as Router from 'koa-router';
 import { createSession, delSession } from '../../controllers/authentication';
-import { store as event } from '../../controllers/server-event';
+import { serverEventLogger } from '../../config';
 import { cookies } from '../../config';
 import { serializeUserDTO } from '../serialize/userDTO';
 
@@ -32,7 +32,7 @@ router.get('/login', async function (ctx) {
     throw new Unauthorized();
   }
 
-  event.register({
+  serverEventLogger.info({
     type: 'login',
     authorizedUserId: authorization.user.id,
     associatedTokenId: null,

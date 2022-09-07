@@ -1,5 +1,5 @@
 import * as Router from 'koa-router';
-import { store as event } from '../../controllers/server-event';
+import { serverEventLogger } from '../../config';
 import { serializeUser } from '../serialize/user';
 import { createSignatureRequest, getEnrollmentUser, monitorSignatureRequest } from '../../controllers/enrollment';
 import { BadRequest } from 'http-errors';
@@ -48,7 +48,7 @@ router.post('/enrollment/:id/create-signature-request', async function (ctx) {
   }
 
   // Register signature request creation event
-  event.register({
+  serverEventLogger.info({
     type: 'enrollment.create-signature-request',
     authorizedUserId: null,
     associatedTokenId: null,

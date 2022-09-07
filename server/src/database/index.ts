@@ -2,7 +2,6 @@ import { ConnectionError } from 'sequelize';
 import { sequelize } from './sequelize';
 import * as Debug from 'debug';
 import { APIToken } from './model/api-token';
-import { ServerEvent } from './model/server-event';
 import { ServerConfig } from './model/server-config';
 import { User } from './model/user';
 import { Key } from './model/key';
@@ -53,7 +52,7 @@ Key.model.beforeDestroy(async (key) => {
   await user.save();
 });
 
-export { User, Key, APIToken, ServerEvent, ServerConfig, Enrollment, SignedIdentity };
+export { User, Key, APIToken, ServerConfig, Enrollment, SignedIdentity };
 
 export async function init() {
   let attempts = db.connectionAttempts;

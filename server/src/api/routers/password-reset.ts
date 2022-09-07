@@ -3,7 +3,7 @@ import { copy } from '../../controllers/utils/copy';
 import { serializeUser } from '../serialize/user';
 import { updatePassword } from '../../controllers/user';
 import { askResetPasswordEmail, sendResetPasswordEmail } from '../../controllers/send-email';
-import { store as event } from '../../controllers/server-event';
+import { serverEventLogger } from '../../config';
 import { getServerConfig } from '../../controllers/server-config';
 import { BadRequest, NotFound, Unauthorized } from 'http-errors';
 
@@ -53,7 +53,7 @@ router.post('/', async function (ctx) {
     }
   }
 
-  event.register({
+  serverEventLogger.info({
     type: 'user.edit',
     authorizedUserId: managerId,
     associatedTokenId: null,
@@ -90,7 +90,7 @@ router.post('/validate', async function (ctx) {
     throw new Unauthorized('Invalid token');
   }
 
-  event.register({
+  serverEventLogger.info({
     type: 'user.edit',
     authorizedUserId: null,
     associatedTokenId: null,

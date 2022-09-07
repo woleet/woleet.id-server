@@ -1,5 +1,5 @@
 import * as Router from 'koa-router';
-import { store as event } from '../../controllers/server-event';
+import { serverEventLogger } from '../../config';
 import {
   createEnrollment, deleteEnrollment, getAllEnrollment, getEnrollmentById, putEnrollment
 } from '../../controllers/enrollment';
@@ -57,7 +57,7 @@ router.post('/enrollment', validate.body('createEnrollment'), async function (ct
   const created = await createEnrollment(enrollment);
 
   // Register enrollment creation event
-  event.register({
+  serverEventLogger.info({
     type: 'enrollment.create',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
@@ -80,7 +80,7 @@ router.put('/enrollment/:id', async function (ctx) {
   const { id } = ctx.params;
   const updated = await putEnrollment(id, enrollment);
 
-  event.register({
+  serverEventLogger.info({
     type: 'enrollment.edit',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
@@ -106,7 +106,7 @@ router.delete('/enrollment/:id', async function (ctx) {
   const { id } = ctx.params;
   const deleted = await deleteEnrollment(id);
 
-  event.register({
+  serverEventLogger.info({
     type: 'enrollment.delete',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,

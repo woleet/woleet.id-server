@@ -219,32 +219,6 @@ interface ServerEvent {
   type: ServerEventTypeEnum;
 }
 
-interface InternalServerEventObject extends ServerEvent, CommonInternalProperties {
-  data: Object;
-  occurredAt: Date;
-  authorizedUserId: string;
-  authorizedTokenId: string;
-  associatedTokenId: string;
-  associatedUserId: string;
-  associatedKeyId: string;
-  authorizedUser?: InternalUserObject;
-  authorizedToken?: InternalUserObject;
-  associatedToken?: InternalAPITokenObject;
-  associatedUser?: InternalUserObject;
-  associatedKey?: InternalKeyObject;
-}
-
-interface ServerEventCreate {
-  data?: Object;
-  type: ServerEventTypeEnum;
-  authorizedUserId?: string;
-  authorizedTokenId?: string;
-  associatedTokenId?: string;
-  associatedUserId?: string;
-  associatedKeyId?: string;
-  occurredAt?: Date;
-}
-
 /* Server config */
 interface InternalServerConfigObject extends ServerConfig {
   version: number;

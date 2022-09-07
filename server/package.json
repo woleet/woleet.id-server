@@ -54,6 +54,8 @@
     "redlock": "4.2.0",
     "rxjs": "6.6.7",
     "sequelize": "6.21.1",
-    "timestring": "6.0.0"
+    "timestring": "6.0.0",
+    "winston": "^3.8.1",
+    "winston-daily-rotate-file": "^4.7.1"
   }
 }

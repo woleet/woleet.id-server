@@ -5,7 +5,7 @@ import {
   createAPIToken, deleteAPIToken, getAllAPITokens, getAPITokenById, getAPITokensByUser, updateAPIToken
 } from '../../controllers/api-token';
 import { serializeAPIToken } from '../serialize/api-token';
-import { store as event } from '../../controllers/server-event';
+import { serverEventLogger } from '../../config';
 import { Forbidden } from 'http-errors';
 import { getUserById } from '../../controllers/user';
 
@@ -50,7 +50,7 @@ router.post('/', validate.body('createApiToken'), async function (ctx) {
 
   const created = await createAPIToken(token);
 
-  event.register({
+  serverEventLogger.info({
     type: 'token.create',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: created.id,
@@ -103,7 +103,7 @@ router.put('/:id', vid, validate.body('updateApiToken'), async function (ctx) {
 
   const apiToken = await updateAPIToken(id, update, ctx.authorizedUser && ctx.authorizedUser.userRole);
 
-  event.register({
+  serverEventLogger.info({
     type: 'token.edit',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: apiToken.id,
@@ -125,7 +125,7 @@ router.delete('/:id', vid, async function (ctx) {
   const { id } = ctx.params;
   const apiToken = await deleteAPIToken(id, ctx.authorizedUser && ctx.authorizedUser.userRole);
 
-  event.register({
+  serverEventLogger.info({
     type: 'token.delete',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: apiToken.id,

@@ -3,7 +3,7 @@ import { BadRequest, Unauthorized } from 'http-errors';
 import { sign } from '../../controllers/sign';
 import { validate } from '../schemas';
 import { bearerAuth } from '../authentication';
-import { store as event } from '../../controllers/server-event';
+import { serverEventLogger } from '../../config';
 import { getServerConfig } from '../../controllers/server-config';
 import { Context } from 'koa';
 import { getUserById } from '../../controllers/user';
@@ -69,7 +69,7 @@ async function getSignature(ctx) {
 
   const identityURL = getServerConfig().identityURL;
 
-  event.register({
+  serverEventLogger.info({
     type: 'signature',
     authorizedUserId: ctx.token.userId,
     authorizedTokenId: ctx.token.type === 'api' ? ctx.token.id : null,

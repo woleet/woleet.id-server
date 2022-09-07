@@ -4,7 +4,7 @@ import {
   createExternalKey, createKey, deleteKey, exportKey, getAllKeysOfUser, getKeyById, getOwner, updateKey
 } from '../../controllers/key';
 import { serializeKey } from '../serialize/key';
-import { store as event } from '../../controllers/server-event';
+import { serverEventLogger } from '../../config';
 import { serializeUser } from '../serialize/user';
 import { BadRequest, Forbidden } from 'http-errors';
 import { production } from '../../config';
@@ -60,7 +60,7 @@ router.post('/user/:userId/key', vuid, validate.body('createKey'), async functio
     throw new BadRequest(error);
   }
 
-  event.register({
+  serverEventLogger.info({
     type: 'key.create',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
@@ -94,7 +94,7 @@ router.post('/user/:userId/extern-key', vuid, validate.body('createExternKey'), 
     throw new BadRequest(error);
   }
 
-  event.register({
+  serverEventLogger.info({
     type: 'key.create',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
@@ -164,7 +164,7 @@ router.put('/key/:id', vkid, validate.body('updateKey'), async function (ctx) {
   const update: ApiPutKeyObject = ctx.request.body;
   const key = await updateKey(id, update);
 
-  event.register({
+  serverEventLogger.info({
     type: 'key.edit',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
@@ -186,7 +186,7 @@ router.delete('/key/:id', vkid, async function (ctx) {
   const { id } = ctx.params;
   const key = await deleteKey(id);
 
-  event.register({
+  serverEventLogger.info({
     type: 'key.delete',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,

@@ -3,7 +3,7 @@ import * as body from 'koa-body';
 import { BadRequest } from 'http-errors';
 import { validate } from '../schemas';
 import { defaultTCU, getServerConfig, setServerConfig, updateTCU } from '../../controllers/server-config';
-import { store as event } from '../../controllers/server-event';
+import { serverEventLogger } from '../../config';
 import { serializeServerConfig } from '../serialize/server-config';
 import { getKeyById, getOwner } from '../../controllers/key';
 import { admin } from '../authentication';
@@ -46,7 +46,7 @@ router.put('/', validate.body('updateConfig'), async function (ctx) {
 
   config = await setServerConfig(ctx.request.body);
 
-  event.register({
+  serverEventLogger.info({
     type: 'config.edit',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
@@ -67,7 +67,7 @@ router.post('/TCU', body({ multipart: true }), async function (ctx) {
     throw new BadRequest('Cannot upload this file');
   }
 
-  event.register({
+  serverEventLogger.info({
     type: 'config.edit',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,
@@ -83,7 +83,7 @@ router.get('/TCU/default', async function (ctx) {
 
   await defaultTCU();
 
-  event.register({
+  serverEventLogger.info({
     type: 'config.edit',
     authorizedUserId: ctx.authorizedUser && ctx.authorizedUser.userId ? ctx.authorizedUser.userId : null,
     associatedTokenId: null,

@@ -1,6 +1,8 @@
 import { SetOption } from 'cookies';
 import * as fs from 'fs';
 import { readFileSync } from 'fs';
+import  *  as  winston  from  'winston';
+import  'winston-daily-rotate-file';
 import * as path from 'path';
 import * as log from 'loglevel';
 import * as crypto from 'crypto';
@@ -147,3 +149,22 @@ export const cookies: { keys: string[], options: SetOption } = {
 export const oidcKey = getenv('OIDC_KEY', 'random');
 
 export const secureModule = new SecureModule;
+
+const serverEventTransport = new winston.transports.DailyRotateFile({
+  filename: 'server-event-%DATE%.log',
+  datePattern: 'YYYY-MM-DD-HH',
+  zippedArchive: true,
+  frequency: '1d',
+  dirname: getenv('LOG_DIRNAME', '.'),
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  )
+});
+
+// Winston logger
+export const serverEventLogger = winston.createLogger({
+  transports: [
+    serverEventTransport
+  ]
+});
