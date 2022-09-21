@@ -1,5 +1,5 @@
 import { loadServerConfig, setServerConfig } from './controllers/server-config';
-import * as log from 'loglevel';
+import { logger } from './config';
 import * as Debug from 'debug';
 import { Key } from './database';
 import { randomBytes } from 'crypto';
@@ -15,7 +15,7 @@ const debug = Debug('id:boot.server-config');
 export async function initServerConfig() {
   const config = await loadServerConfig();
   if (config) {
-    log.info(`Server configuration successfully restored`);
+    logger.info(`Server configuration successfully restored`);
     const printedConf = config;
     delete printedConf.mailKeyEnrollmentTemplate;
     delete printedConf.mailOnboardingTemplate;
@@ -24,38 +24,38 @@ export async function initServerConfig() {
 
     const key = await Key.model.findOne({ where: { holder: 'server', status: 'active' } });
     if (!key) {
-      log.warn('No private key in the database, cannot check secret restoration');
+      logger.warn('No private key in the database, cannot check secret restoration');
       return;
     }
 
-    log.info('Checking that the secret is correct...');
+    logger.info('Checking that the secret is correct...');
     try {
       await signMessage(key, randomBytes(32).toString('hex'));
     } catch (err) {
-      log.warn(err.message);
+      logger.warn(err.message);
       throw new Error('Secret is not the same that the previously set one');
     }
     if (!config.mailOnboardingTemplate) {
-      log.warn('The onboarding template is set to default');
+      logger.warn('The onboarding template is set to default');
       config.mailOnboardingTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultOnboardingMailTemplate.html'), { encoding: 'ascii' });
     }
     if (!config.mailResetPasswordTemplate) {
-      log.warn('The reset password template is set to default');
+      logger.warn('The reset password template is set to default');
       config.mailResetPasswordTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultPasswordResetMailTemplate.html'), { encoding: 'ascii' });
     }
     if (!config.mailKeyEnrollmentTemplate) {
-      log.warn('The key enrollment mail template is set to default');
+      logger.warn('The key enrollment mail template is set to default');
       config.mailKeyEnrollmentTemplate = readFileSync(
         path.join(__dirname, '../assets/defaultKeyEnrollmentMailTemplate.html'), { encoding: 'ascii' });
     }
     if (!config.organizationName) {
-      log.warn('The organization name is set as Woleet');
+      logger.warn('The organization name is set as Woleet');
       config.organizationName = 'Woleet';
     }
   } else {
-    log.warn('Creating a new server configuration with a default admin user...');
+    logger.warn('Creating a new server configuration with a default admin user...');
     let admin;
     try {
       admin = await createUser({
@@ -65,7 +65,7 @@ export async function initServerConfig() {
         identity: { commonName: 'Admin' },
         mode: 'esign'
       });
-      log.info(`Created user "admin" with id ${admin.id}`);
+      logger.info(`Created user "admin" with id ${admin.id}`);
     } catch (err) {
       return exit(`Cannot create user "admin": ${err.message}`, err);
     }
@@ -75,6 +75,6 @@ export async function initServerConfig() {
     delete printedConf.mailKeyEnrollmentTemplate;
     delete printedConf.mailOnboardingTemplate;
     delete printedConf.mailResetPasswordTemplate;
-    log.info(`Created new server configuration with defaults: ${JSON.stringify(printedConf, null, 2)}`);
+    logger.info(`Created new server configuration with defaults: ${JSON.stringify(printedConf, null, 2)}`);
   }
 }

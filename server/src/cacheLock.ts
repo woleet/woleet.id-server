@@ -1,6 +1,6 @@
 import { cacheConfig } from './config';
 import { exit } from './exit';
-import * as log from 'loglevel';
+import { logger } from './config';
 import * as Redis from 'ioredis';
 import * as Redlock from 'redlock';
 import * as NodeCache from 'node-cache';
@@ -73,13 +73,13 @@ export class CacheLock {
         // Here redlock is configured to retry indefinitely when trying to get a lock.
         try {
           const redlock = new Redlock([this.redis], { retryCount });
-          log.info(`Trying to take redis lock: ${lockName}`);
+          logger.info(`Trying to take redis lock: ${lockName}`);
           const lock = await redlock.lock(lockName, 5 * 60 * 1000); // TTL is 5 minutes, after this delay this lock will be destroyed
           await functionToCall();
-          log.info(`Releasing redis lock: ${lockName}`);
+          logger.info(`Releasing redis lock: ${lockName}`);
           lock.unlock();
         } catch (err) {
-          log.info(`The redis lock for ${lockName} is already taken`);
+          logger.info(`The redis lock for ${lockName} is already taken`);
         }
         break;
       }

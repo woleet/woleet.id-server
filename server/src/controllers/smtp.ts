@@ -1,7 +1,7 @@
 import * as nodemailer from 'nodemailer';
 import { getServerConfig } from './server-config';
 import * as Debug from 'debug';
-import * as log from 'loglevel';
+import { logger } from '../config';
 
 const debug = Debug('id:ctrl:openid');
 
@@ -18,7 +18,7 @@ async function configure() {
 
   if (!config.SMTPConfig) {
     debug('No SMTPConfig set, skipping configuration');
-    log.warn('No SMTPConfig set while SMTP is enabled, skipping configuration');
+    logger.warn('No SMTPConfig set while SMTP is enabled, skipping configuration');
     return;
   }
 
@@ -31,7 +31,7 @@ async function configure() {
       if (error) {
         reject(error.response);
       } else {
-        log.info('Server is ready to take our messages');
+        logger.info('Server is ready to take our messages');
         resolve();
       }
     });

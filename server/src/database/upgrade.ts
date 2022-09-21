@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import * as log from 'loglevel';
+import { logger } from '../config';
 import * as read from 'read';
 import * as crypto from 'crypto';
 import { APIToken, Key, ServerConfig, User } from '.';
@@ -22,7 +22,7 @@ async function getConfig() {
 }
 
 async function upgrade1(sequelize) {
-  log.warn('Checking for update of the "serverConfig" model...');
+  logger.warn('Checking for update of the "serverConfig" model...');
   let old;
   try {
     const [model] = await sequelize.query(`SELECT *
@@ -33,8 +33,8 @@ async function upgrade1(sequelize) {
   }
 
   if (old) {
-    log.warn('Need to upgrade configuration model...');
-    log.warn('Old model value is', JSON.stringify(old, null, 2));
+    logger.warn('Need to upgrade configuration model...');
+    logger.warn('Old model value is', JSON.stringify(old, null, 2));
     const config = Object.assign({}, old);
     delete config.id;
     delete config.createdAt;
@@ -42,76 +42,76 @@ async function upgrade1(sequelize) {
 
     await ServerConfig.model.sync();
 
-    log.warn('Copying old configuration to new table...');
+    logger.warn('Copying old configuration to new table...');
     const { createdAt, updatedAt } = old;
     await ServerConfig.create({ config, createdAt, updatedAt });
 
-    log.warn('Dropping old configuration table...');
+    logger.warn('Dropping old configuration table...');
     await sequelize.query('DROP TABLE "ServerConfigs";');
   }
 }
 
 async function upgrade2(sequelize) {
-  log.warn('Checking for update of the "keys" model...');
+  logger.warn('Checking for update of the "keys" model...');
   const config = await getConfig();
   if (config && !config.version) {
-    log.warn('Need to add "expiration" column to the "keys" table');
+    logger.warn('Need to add "expiration" column to the "keys" table');
     const res = await sequelize.query(`ALTER TABLE "keys"
         ADD COLUMN expiration TIMESTAMP WITH TIME ZONE;`);
-    log.debug(res);
+        logger.debug(res);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign({ version: 1 }, config) });
   }
 }
 
 async function upgrade3(sequelize) {
-  log.warn('Checking for update of the "keys" model...');
+  logger.warn('Checking for update of the "keys" model...');
   const config = await getConfig();
   if (config && config.version < 2) {
     doPostUpgrade3 = true;
-    log.warn('Need to add "privateKeyIV" and "mnemonicEntropyIV" column to the "keys" table');
+    logger.warn('Need to add "privateKeyIV" and "mnemonicEntropyIV" column to the "keys" table');
     const privateKeyIV = await sequelize.query(`ALTER TABLE "keys"
         ADD COLUMN "privateKeyIV" CHAR(${16 * 2});`);
-    log.debug(privateKeyIV);
+    logger.debug(privateKeyIV);
     const mnemonicEntropyIV = await sequelize.query(`ALTER TABLE "keys"
         ADD COLUMN "mnemonicEntropyIV" CHAR(${16 * 2});`);
-    log.debug(mnemonicEntropyIV);
+    logger.debug(mnemonicEntropyIV);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 2 }) });
   }
 }
 
 async function upgrade4(sequelize) {
-  log.warn('Checking for update of the "user" model...');
+  logger.warn('Checking for update of the "user" model...');
   const config = await getConfig();
   if (config && config.version < 4) {
-    log.warn('Need to add "phone" and "countryCallingCode" column to the "users" table');
+    logger.warn('Need to add "phone" and "countryCallingCode" column to the "users" table');
     const phone = await sequelize.query(`ALTER TABLE "users"
         ADD COLUMN "phone" VARCHAR;`);
-    log.debug(phone);
+        logger.debug(phone);
     const countryCallingCode = await sequelize.query(`ALTER TABLE "users"
         ADD COLUMN "countryCallingCode" VARCHAR;`);
-    log.debug(countryCallingCode);
+        logger.debug(countryCallingCode);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 4 }) });
   }
 }
 
 async function upgrade5(sequelize) {
-  log.warn('Checking for update of the "apiToken" model...');
+  logger.warn('Checking for update of the "apiToken" model...');
   const config = await getConfig();
   if (config && config.version < 5) {
     doPostUpgrade5 = true;
-    log.warn('Need to add "hash" and "valueIV" column to the "apiToken" table');
+    logger.warn('Need to add "hash" and "valueIV" column to the "apiToken" table');
     const hash = await sequelize.query(`ALTER TABLE "apiTokens"
         ADD COLUMN "hash" CHAR(${32 * 2});`);
-    log.debug(hash);
+        logger.debug(hash);
     const valueIV = await sequelize.query(`ALTER TABLE "apiTokens"
         ADD COLUMN "valueIV" CHAR(${16 * 2});`);
-    log.debug(valueIV);
+        logger.debug(valueIV);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 5 }) });
   }
 }
 
 async function upgrade6(sequelize) {
-  log.warn('Checking for update of the "keys" model...');
+  logger.warn('Checking for update of the "keys" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -121,17 +121,17 @@ async function upgrade6(sequelize) {
   const config = cfg.getDataValue('config');
   if (config.version < 6) {
     doPostUpgrade3 = true;
-    log.warn('Need to change "privateKeyIV" and "mnemonicEntropyIV" type to handle 24 mnemonics words');
+    logger.warn('Need to change "privateKeyIV" and "mnemonicEntropyIV" type to handle 24 mnemonics words');
     const privateKey = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "privateKey" TYPE VARCHAR;`);
-    log.debug(privateKey);
+    logger.debug(privateKey);
     const mnemonicEntropy = await sequelize.query(`ALTER TABLE "keys" ALTER COLUMN "mnemonicEntropy" TYPE VARCHAR;`);
-    log.debug(mnemonicEntropy);
+    logger.debug(mnemonicEntropy);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 6 }) });
   }
 }
 
 async function upgrade7(sequelize) {
-  log.warn('Checking for update of the "users" model...');
+  logger.warn('Checking for update of the "users" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -140,16 +140,16 @@ async function upgrade7(sequelize) {
 
   const config = cfg.getDataValue('config');
   if (config.version < 7) {
-    log.warn('Need to add "tokenResetPassword" column to the "users" table');
+    logger.warn('Need to add "tokenResetPassword" column to the "users" table');
     const tokenResetPassword = await sequelize.query(`ALTER TABLE "users"
         ADD COLUMN "tokenResetPassword" VARCHAR;`);
-    log.debug(tokenResetPassword);
+        logger.debug(tokenResetPassword);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 7 }) });
   }
 }
 
 async function upgrade8(sequelize) {
-  log.warn('Checking for update of the "keys" model...');
+  logger.warn('Checking for update of the "keys" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -159,32 +159,32 @@ async function upgrade8(sequelize) {
   const config = cfg.getDataValue('config');
   if (config.version < 8) {
     doPostUpgrade8 = true;
-    log.warn('Need to add "holder" column to the "key" table');
+    logger.warn('Need to add "holder" column to the "key" table');
     const holder = await sequelize.query(`ALTER TABLE "keys"
         ADD COLUMN "holder" VARCHAR;`);
-    log.debug(holder);
-    log.warn('Need to change "mnemonicEntropy" column to the "key" table');
+        logger.debug(holder);
+        logger.warn('Need to change "mnemonicEntropy" column to the "key" table');
     const mnemonicEntropy = await sequelize.query(`ALTER TABLE "keys"
         ALTER COLUMN "mnemonicEntropy" DROP NOT NULL;`);
-    log.debug(mnemonicEntropy);
-    log.warn('Need to change "mnemonicEntropyIV" column to the "key" table');
+        logger.debug(mnemonicEntropy);
+        logger.warn('Need to change "mnemonicEntropyIV" column to the "key" table');
     const mnemonicEntropyIV = await sequelize.query(`ALTER TABLE "keys"
         ALTER COLUMN "mnemonicEntropyIV" DROP NOT NULL;`);
-    log.debug(mnemonicEntropyIV);
-    log.warn('Need to change "privateKey" column to the "key" table');
+        logger.debug(mnemonicEntropyIV);
+        logger.warn('Need to change "privateKey" column to the "key" table');
     const privateKey = await sequelize.query(`ALTER TABLE "keys"
         ALTER COLUMN "privateKey" DROP NOT NULL;`);
-    log.debug(privateKey);
-    log.warn('Need to change "privateKeyIV" column to the "key" table');
+        logger.debug(privateKey);
+        logger.warn('Need to change "privateKeyIV" column to the "key" table');
     const privateKeyIV = await sequelize.query(`ALTER TABLE "keys"
         ALTER COLUMN "privateKeyIV" DROP NOT NULL;`);
-    log.debug(privateKeyIV);
+        logger.debug(privateKeyIV);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 8 }) });
   }
 }
 
 async function upgrade9(sequelize) {
-  log.warn('Checking for update of the "onboardings" table...');
+  logger.warn('Checking for update of the "onboardings" table...');
   await ServerConfig.model.sync();
 
   let old;
@@ -195,13 +195,13 @@ async function upgrade9(sequelize) {
   }
 
   if (old) {
-    log.warn('Rename onboardings table to enrollments...');
+    logger.warn('Rename onboardings table to enrollments...');
     const [rename] = await sequelize.query('ALTER TABLE "onboardings" RENAME TO "enrollments";');
   }
 }
 
 async function upgrade10(sequelize) {
-  log.warn('Checking for update of the "keys" model...');
+  logger.warn('Checking for update of the "keys" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -211,16 +211,16 @@ async function upgrade10(sequelize) {
   const config = cfg.getDataValue('config');
   if (config.version < 10) {
     doPostUpgrade10 = true;
-    log.warn('Need to add "device" column to the "key" table');
+    logger.warn('Need to add "device" column to the "key" table');
     const deviceKey = await sequelize.query(`ALTER TABLE "keys"
         ADD COLUMN "device" VARCHAR;`);
-    log.debug(deviceKey);
+        logger.debug(deviceKey);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 10 }) });
   }
 }
 
 async function upgrade11(sequelize) {
-  log.warn('Checking for update of the "enrollments" model and "serverEvents" type...');
+  logger.warn('Checking for update of the "enrollments" model and "serverEvents" type...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   let enrollmentExist = false;
@@ -237,25 +237,25 @@ async function upgrade11(sequelize) {
   const config = cfg.getDataValue('config');
   if (config.version < 11) {
     if (enrollmentExist) {
-      log.warn('Need to add "device" and "name" column to the "enrollments" table');
+      logger.warn('Need to add "device" and "name" column to the "enrollments" table');
       const deviceEnroll = await sequelize.query(`ALTER TABLE "enrollments"
           ADD COLUMN "device" VARCHAR;`);
-      log.debug(deviceEnroll);
+          logger.debug(deviceEnroll);
       const nameEnroll = await sequelize.query(`ALTER TABLE "enrollments"
           ADD COLUMN "name" VARCHAR;`);
-      log.debug(nameEnroll);
+          logger.debug(nameEnroll);
     }
-    log.warn('Need to add "enrollment.edit" and "enrollment.delete" type to the "serverEvent" table');
+    logger.warn('Need to add "enrollment.edit" and "enrollment.delete" type to the "serverEvent" table');
     const deleteEnrollmentServerEvent = await sequelize.query(`ALTER TYPE "enum_serverEvents_type" ADD VALUE 'enrollment.delete';`);
-    log.debug(deleteEnrollmentServerEvent);
+    logger.debug(deleteEnrollmentServerEvent);
     const editEnrollmentServerEvent = await sequelize.query(`ALTER TYPE "enum_serverEvents_type" ADD VALUE 'enrollment.edit';`);
-    log.debug(editEnrollmentServerEvent);
+    logger.debug(editEnrollmentServerEvent);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 11 }) });
   }
 }
 
 async function upgrade12(sequelize) {
-  log.warn('Checking for update of the "enrollments" model...');
+  logger.warn('Checking for update of the "enrollments" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -273,13 +273,13 @@ async function upgrade12(sequelize) {
   const config = cfg.getDataValue('config');
   if (config.version < 12) {
     if (enrollmentExist) {
-      log.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
+      logger.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
       const signatureRequestIdEnroll = await sequelize.query(`ALTER TABLE "enrollments"
           ADD COLUMN "signatureRequestId" VARCHAR;`);
-      log.debug(signatureRequestIdEnroll);
+      logger.debug(signatureRequestIdEnroll);
       const keyExpiration = await sequelize.query(`ALTER TABLE "enrollments"
           ADD COLUMN "keyExpiration" TIMESTAMPTZ;`);
-      log.debug(keyExpiration);
+      logger.debug(keyExpiration);
     }
 
     const configTCUUpdate: any = config;
@@ -291,7 +291,7 @@ async function upgrade12(sequelize) {
 }
 
 async function upgrade13(sequelize) {
-  log.warn('Checking for update of the "apiTokens" model...');
+  logger.warn('Checking for update of the "apiTokens" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -300,16 +300,16 @@ async function upgrade13(sequelize) {
 
   const config = cfg.getDataValue('config');
   if (config.version < 13) {
-    log.warn('Need to add "userId" column to the "apiToken" table');
+    logger.warn('Need to add "userId" column to the "apiToken" table');
     const userId = await sequelize.query(`ALTER TABLE "apiTokens"
         ADD COLUMN "userId" UUID;`);
-    log.debug(userId);
+    logger.debug(userId);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 13 }) });
   }
 }
 
 async function upgrade14(sequelize) {
-  log.warn('Checking for update of the "keys" model...');
+  logger.warn('Checking for update of the "keys" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -317,18 +317,18 @@ async function upgrade14(sequelize) {
   }
   const config = cfg.getDataValue('config');
   if (config.version < 14) {
-    log.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
+    logger.warn('Need to add "signatureRequestId" and "keyExpiration" column to the "enrollments" table');
     const editKeysStatusEvent = await sequelize.query(`ALTER TYPE "enum_keys_status" ADD VALUE 'revoked';`);
-    log.debug(editKeysStatusEvent);
+    logger.debug(editKeysStatusEvent);
     const keyRevokedAt = await sequelize.query(`ALTER TABLE "keys"
         ADD COLUMN "revokedAt" TIMESTAMPTZ;`);
-    log.debug(keyRevokedAt);
+    logger.debug(keyRevokedAt);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 14 }) });
   }
 }
 
 async function upgrade15(sequelize) {
-  log.warn('Checking for update of the "users" model...');
+  logger.warn('Checking for update of the "users" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -337,30 +337,30 @@ async function upgrade15(sequelize) {
 
   const config = cfg.getDataValue('config');
   if (config.version < 15) {
-    log.warn('Need to add the mode enum in "users" table');
+    logger.warn('Need to add the mode enum in "users" table');
     const enum_users_type = await sequelize.query(`CREATE TYPE "enum_users_mode" AS ENUM ('seal', 'esign');`);
-    log.debug(enum_users_type);
-    log.warn('Need to add "type" column to the "users" table');
+    logger.debug(enum_users_type);
+    logger.warn('Need to add "type" column to the "users" table');
     const users_type = await sequelize.query(`ALTER TABLE "users"
         ADD COLUMN "mode" enum_users_mode;`);
-    log.debug(users_type);
+    logger.debug(users_type);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 15 }) });
     await Key.model.sync();
     const users = await User.model.findAll();
 
-    log.warn(`${users.length} users to update...`);
+    logger.warn(`${users.length} users to update...`);
 
     for (const user of users) {
-      log.warn(`Updating key ${user.get('id')} ...`);
+      logger.warn(`Updating key ${user.get('id')} ...`);
       user.set('mode', 'seal');
       await user.save();
-      log.debug(`Updated key ${user.get('id')}`);
+      logger.debug(`Updated key ${user.get('id')}`);
     }
   }
 }
 
 async function upgrade16(sequelize) {
-  log.warn('Checking for update of the "users" model...');
+  logger.warn('Checking for update of the "users" model...');
   await ServerConfig.model.sync();
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
@@ -369,9 +369,9 @@ async function upgrade16(sequelize) {
 
   const config = cfg.getDataValue('config');
   if (config.version < 16) {
-    log.warn('Need to add "manager" enums to the "enum_users_role" table');
+    logger.warn('Need to add "manager" enums to the "enum_users_role" table');
     const userManager = await sequelize.query(`ALTER TYPE "enum_users_role" ADD VALUE 'manager';`);
-    log.debug(userManager);
+    logger.debug(userManager);
     await ServerConfig.update(CONFIG_ID, { config: Object.assign(config, { version: 16 }) });
   }
 }
@@ -385,7 +385,7 @@ async function upgrade17(sequelize) {
 
   const config = cfg.getDataValue('config');
   if (config.version < 17) {
-    log.warn('Removing old OIDCP caches tables');
+    logger.warn('Removing old OIDCP caches tables');
 
     const tablesToDrop = [
       'Sessions',
@@ -400,16 +400,16 @@ async function upgrade17(sequelize) {
 
     tablesToDrop.forEach(async tableToDrop => {
       const dropLogs = await sequelize.query(`DROP TABLE IF EXISTS "${tableToDrop}";`);
-      log.warn(`Dropping table ${tableToDrop} if it exists`, dropLogs);
+      logger.warn(`Dropping table ${tableToDrop} if it exists`, dropLogs);
     });
 
     if ((config as any).OIDCPInterfaceURL) {
-      log.warn('Cleaning OIDCPInterfaceURL configuration data');
+      logger.warn('Cleaning OIDCPInterfaceURL configuration data');
       delete (config as any).OIDCPInterfaceURL;
     }
 
     if ((config as any).OIDCPIssuerURL) {
-      log.warn('Cleaning OIDCPIssuerURL configuration data');
+      logger.warn('Cleaning OIDCPIssuerURL configuration data');
       delete (config as any).OIDCPIssuerURL;
     }
 
@@ -438,29 +438,29 @@ export async function upgrade(sequelize: Sequelize) {
 }
 
 async function postUpgrade3() {
-  log.warn('Checking for post-update of the "keys" model...');
+  logger.warn('Checking for post-update of the "keys" model...');
 
   if (doPostUpgrade3 === true) {
     await Key.model.sync();
     const testKey = await Key.model.findOne();
 
     if (!testKey) {
-      log.warn(`No key to update`);
+      logger.warn(`No key to update`);
       return;
     }
 
-    log.warn('Need to re-encrypt keys, we will ask you to enter your encryption secret (again) if not set as environment variable');
+    logger.warn('Need to re-encrypt keys, we will ask you to enter your encryption secret (again) if not set as environment variable');
 
     let secret = process.env[secretEnvVariableName] || '';
 
     if (!secret) {
-      log.warn(`No ${secretEnvVariableName} environment set, please enter encryption secret:`);
+      logger.warn(`No ${secretEnvVariableName} environment set, please enter encryption secret:`);
       const options = { prompt: '>', silent: true };
       const _read = promisify(read);
       while (!secret) {
         secret = await _read(options);
         if (!secret) {
-          log.warn('Encryption secret must not be empty, please type it:');
+          logger.warn('Encryption secret must not be empty, please type it:');
         }
       }
     }
@@ -469,7 +469,7 @@ async function postUpgrade3() {
       .update(secret, 'utf8')
       .digest();
 
-    log.warn('Checking that the secret is correct...');
+    logger.warn('Checking that the secret is correct...');
 
     function decrypt(data: Buffer) {
       const decipher = crypto.createDecipher('aes-256-cbc', _secret);
@@ -479,18 +479,18 @@ async function postUpgrade3() {
     try {
       decrypt(Buffer.from(testKey.getDataValue('privateKey'), 'hex'));
     } catch (err) {
-      log.error('Cannot decrypt key! Please check that the secret is correct and try again');
+      logger.error('Cannot decrypt key! Please check that the secret is correct and try again');
       throw new Error('Cannot decrypt key');
     }
 
-    log.warn('Secret is corretcly set, re-encypting all keys');
+    logger.warn('Secret is corretcly set, re-encypting all keys');
 
     const keys = await Key.model.findAll();
 
-    log.warn(`${keys.length} keys to update...`);
+    logger.warn(`${keys.length} keys to update...`);
 
     for (const key of keys) {
-      log.warn(`Updating key ${key.get('id')} ...`);
+      logger.warn(`Updating key ${key.get('id')} ...`);
       {
         const p = decrypt(Buffer.from(key.getDataValue('privateKey'), 'hex'));
         const { data, iv } = await secureModule.encrypt(p);
@@ -504,7 +504,7 @@ async function postUpgrade3() {
         key.set('mnemonicEntropy', data.toString('hex'));
       }
       await key.save();
-      log.debug(`Updated key ${key.get('id')}`);
+      logger.debug(`Updated key ${key.get('id')}`);
     }
   }
 }
@@ -515,15 +515,15 @@ async function postUpgrade8() {
     await Key.model.sync();
     const keys = await Key.model.findAll();
 
-    log.warn(`${keys.length} keys to update...`);
+    logger.warn(`${keys.length} keys to update...`);
 
     for (const key of keys) {
-      log.warn(`Updating key ${key.get('id')} ...`);
+      logger.warn(`Updating key ${key.get('id')} ...`);
       {
         key.set('holder', 'server');
       }
       await key.save();
-      log.debug(`Updated key ${key.get('id')}`);
+      logger.debug(`Updated key ${key.get('id')}`);
     }
   }
 }
@@ -534,39 +534,39 @@ async function postUpgrade10() {
     await Key.model.sync();
     const keys = await Key.model.findAll();
 
-    log.warn(`${keys.length} keys to update...`);
+    logger.warn(`${keys.length} keys to update...`);
 
     for (const key of keys) {
-      log.warn(`Updating key ${key.get('id')} ...`);
+      logger.warn(`Updating key ${key.get('id')} ...`);
       if (key.get('holder') === 'server') {
         key.set('device', 'server');
       }
       await key.save();
-      log.debug(`Updated key ${key.get('id')}`);
+      logger.debug(`Updated key ${key.get('id')}`);
     }
   }
 }
 
 async function afterInitUpgrade5() {
-  log.warn('Checking for after-init-update of the "apiToken" model...');
+  logger.warn('Checking for after-init-update of the "apiToken" model...');
 
   if (doPostUpgrade5 === true) {
     await APIToken.model.sync();
     const testToken = await APIToken.model.findOne();
 
     if (!testToken) {
-      log.warn(`No token to update`);
+      logger.warn(`No token to update`);
       return;
     }
 
-    log.warn('Need to encrypt tokens');
+    logger.warn('Need to encrypt tokens');
 
     const tokens = await APIToken.model.findAll();
 
-    log.warn(`${tokens.length} tokens to update...`);
+    logger.warn(`${tokens.length} tokens to update...`);
 
     for (const token of tokens) {
-      log.warn(`Updating token ${token.get('id')} ...`);
+      logger.warn(`Updating token ${token.get('id')} ...`);
       {
         const bin = Buffer.from(token.getDataValue('value'), 'base64');
         const hash = crypto.createHash('sha256').update(bin).digest('hex');
@@ -576,7 +576,7 @@ async function afterInitUpgrade5() {
         token.set('valueIV', iv.toString('hex'));
       }
       await token.save();
-      log.debug(`Updated token ${token.get('id')}`);
+      logger.debug(`Updated token ${token.get('id')}`);
     }
   }
 }

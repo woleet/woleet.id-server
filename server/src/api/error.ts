@@ -1,7 +1,7 @@
 import { IMiddleware } from 'koa-router';
 import { HttpError, NotFound } from 'http-errors';
 import * as errors from '../errors';
-import * as log from 'loglevel';
+import { logger } from '../config';
 import { serverEventLogger } from '../config';
 
 const errorHandler: IMiddleware = async function (ctx, next) {
@@ -44,8 +44,8 @@ const errorHandler: IMiddleware = async function (ctx, next) {
       ctx.status = 202;
       ctx.body = { name: error.name, message: error.message, status: 202 };
     } else {
-      log.error('Unhandled error:', error.message);
-      log.error('Stack:', error.stack);
+      logger.error('Unhandled error:', error.message);
+      logger.error('Stack:', error.stack);
 
       serverEventLogger.error({
         type: 'error',

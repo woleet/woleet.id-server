@@ -7,7 +7,6 @@ import * as Router from 'koa-router';
 
 import '../../../types/api.api-token';
 import '../../../types/api.server-config';
-import '../../../types/api.server-event';
 import '../../../types/api.user';
 import '../../../types/api.key';
 import '../../../types/api';

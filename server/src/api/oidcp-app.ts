@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 import * as render from 'koa-ejs';
 import * as cors from '@koa/cors';
-import * as log from 'loglevel';
+import { logger } from '../config';
 import * as Debug from 'debug';
 import { BadRequest, Unauthorized } from 'http-errors';
 import { SessionNotFound } from 'oidc-provider/lib/helpers/errors';
@@ -43,7 +43,7 @@ export function build(): Koa {
         ctx.status = err.status;
         throw new BadRequest(err.message);
       } else {
-        log.error('OIDC error', err);
+        logger.error('OIDC error', err);
         throw err;
       }
     }

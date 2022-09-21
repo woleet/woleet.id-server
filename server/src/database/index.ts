@@ -10,7 +10,7 @@ import { SignedIdentity } from './model/signed-identity';
 import { getServerConfig, setServerConfig } from '../controllers/server-config';
 import { afterInitUpgrade, postUpgrade, upgrade } from './upgrade';
 import { db } from '../config';
-import * as log from 'loglevel';
+import { logger } from '../config';
 import wait from '../controllers/utils/wait';
 
 const debug = Debug('id:db');
@@ -72,7 +72,7 @@ export async function init() {
       return !keys.length;
     } catch (err) {
       if (attempts && err instanceof ConnectionError) {
-        log.warn(`Cannot connect to database, retrying in ${db.retryDelay}ms`);
+        logger.warn(`Cannot connect to database, retrying in ${db.retryDelay}ms`);
         await wait(db.retryDelay);
         continue;
       }

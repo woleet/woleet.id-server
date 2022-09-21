@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { sendEnrollmentFinalizeEmail, sendKeyEnrollmentEmail } from './send-email';
 import * as timestring from 'timestring';
 import { getAgent } from './utils/agent';
-import * as log from 'loglevel';
+import { logger } from '../config';
 import { cacheLock } from '../cacheLock';
 import { BadRequest } from 'http-errors';
 import { getUserById } from './user';
@@ -209,13 +209,13 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
               subscriber.next(JSON.parse(data));
               break;
             default:
-              log.error('Cannot get signature request', { code: res.statusCode, data });
+              logger.error('Cannot get signature request', { code: res.statusCode, data });
               break;
           }
         });
       });
       req.on('error', (error) => {
-        log.error('Cannot get signature request', error);
+        logger.error('Cannot get signature request', error);
       });
     }, 1000 * 60);
     return () => clearInterval(interval);
@@ -229,7 +229,7 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
         try {
           await testEnrollmentExpiration(enrollmentId);
         } catch (error) {
-          log.error(error);
+          logger.error(error);
           signatureRequestSubscriber.unsubscribe();
         }
 
@@ -241,7 +241,7 @@ export async function monitorSignatureRequest(signatureRequestId: string, enroll
       }, 0);
     },
     (error) => {
-      log.error(error);
+      logger.error(error);
     }
   );
 }
@@ -281,7 +281,7 @@ async function finalizeEnrollment(enrollmentId: string, signatureRequest: any) {
     // Send a enrollment success email to the admin
     await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, true, null);
   } catch (error) {
-    log.error('Cannot finalize enrollment', error.original.detail);
+    logger.error('Cannot finalize enrollment', error.original.detail);
 
     // Send a enrollment failure email to the admin
     await sendEnrollmentFinalizeEmail(user.x500CommonName, publicKey, false, error.errors[0].message);
@@ -322,16 +322,16 @@ async function setAnchorProperties(signatureRequest: any, properties: string) {
     res.on('end', async () => {
       switch (res.statusCode) {
         case 200:
-          log.debug(data);
+          logger.debug(data);
           break;
         default:
-          log.error({ code: res.statusCode, data });
+          logger.error({ code: res.statusCode, data });
           break;
       }
     });
   });
   req.on('error', (error) => {
-    log.error(error);
+    logger.error(error);
   });
   req.write(body);
   req.end();
@@ -379,10 +379,10 @@ async function testEnrollmentExpiration(enrollmentId: string) {
       res.on('end', async () => {
         switch (res.statusCode) {
           case 200:
-            log.debug(data);
+            logger.debug(data);
             break;
           default:
-            log.error({ code: res.statusCode, data });
+            logger.error({ code: res.statusCode, data });
             break;
         }
       });

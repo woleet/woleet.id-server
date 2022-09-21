@@ -1,4 +1,4 @@
-import * as log from 'loglevel';
+import { logger } from './config';
 import { cookies, ports, production, server as config } from './config';
 import * as Koa from 'koa';
 import * as morgan from 'koa-morgan';
@@ -24,13 +24,13 @@ function startServer(app, port): Server {
   app.keys = cookies.keys;
 
   if (config.proxy) {
-    log.warn('Server configured to trust proxy');
+    logger.warn('Server configured to trust proxy');
     app.proxy = true;
   }
 
   let server;
   if (config.cert && config.key) {
-    log.info('Using TLS');
+    logger.info('Using TLS');
     const { key, cert } = config;
     const options: ServerOptions = { key, cert };
     server = createServer(options, app.callback());
@@ -42,13 +42,13 @@ function startServer(app, port): Server {
 }
 
 export function bootServers(): Promise<void> {
-  log.info('Starting servers...');
+  logger.info('Starting servers...');
 
   const promises = definitions.map(({ name, port, router }) => {
 
     return new Promise<void>((resolve) => {
 
-      log.info(`Starting ${name} server on port ${port}...`);
+      logger.info(`Starting ${name} server on port ${port}...`);
 
       const app = new Koa();
 
@@ -56,9 +56,9 @@ export function bootServers(): Promise<void> {
         if (!ctx.secure) {
           const forwardedProto = ctx.get('x-forwarded-proto');
           if (!forwardedProto) {
-            log.warn(`x-forwarded-proto header not detected, please configure your proxy to do so.`);
+            logger.warn(`x-forwarded-proto header not detected, please configure your proxy to do so.`);
           } else if (forwardedProto !== 'https') {
-            log.warn(`x-forwarded-proto header is set to ${forwardedProto}, please configure your proxy to use SSL.`);
+            logger.warn(`x-forwarded-proto header is set to ${forwardedProto}, please configure your proxy to use SSL.`);
           }
         }
         return next();
@@ -79,7 +79,7 @@ export function bootServers(): Promise<void> {
       server.on('error', (err) => exit(`Server ${name} encountered an error: ${err.message}`, err));
 
       server.on('listening', () => {
-        log.info(`${name.split('-').join(', ')} listening on port ${port}.`);
+        logger.info(`${name.split('-').join(', ')} listening on port ${port}.`);
         resolve();
       });
 
@@ -105,7 +105,7 @@ export async function bootOIDCProvider(): Promise<void> {
   const port = ports.oidcp;
   await new Promise<void>((resolve) => {
     if (isOIDCPInitialized()) {
-      log.info(`Starting OIDCP server on port ${port}...`);
+      logger.info(`Starting OIDCP server on port ${port}...`);
 
       let resolved = false;
       const app = oidcProviderAppFactory();
@@ -115,18 +115,18 @@ export async function bootOIDCProvider(): Promise<void> {
       setActiveServer(server);
 
       server.on('listening', () => {
-        log.info(`OIDCP server listening on port ${port}.`);
+        logger.info(`OIDCP server listening on port ${port}.`);
         resolved = true;
         resolve();
       });
 
       server.on('error', (err) => {
-        log.error('OIDCP server encountered an error, it will be disabled as a precaution! Please check your configuration.');
+        logger.error('OIDCP server encountered an error, it will be disabled as a precaution! Please check your configuration.');
         if (resolved) {
           return exit(`OpenID Connect Provider's server encountered an error: ${err.message}`, err);
         } else {
-          log.warn('OIDCP server encountered an error before listening, it will be softly disabled');
-          log.warn('Full trace is:', err);
+          logger.warn('OIDCP server encountered an error before listening, it will be softly disabled');
+          logger.warn('Full trace is:', err);
           setActiveServer(null);
           setServerConfig({ enableOIDCP: false }).then(() => resolve());
         }
@@ -146,7 +146,7 @@ export async function rebootAllEnrollmentMonitor() {
       if (enrollment.getDataValue('signatureRequestId')) {
         const enrollmentId = enrollment.getDataValue('id');
         monitorSignatureRequest(enrollment.getDataValue('signatureRequestId'), enrollmentId);
-        log.info('Monitoring enrollment id:', enrollmentId, 'name:', enrollment.getDataValue('name'));
+        logger.info('Monitoring enrollment id:', enrollmentId, 'name:', enrollment.getDataValue('name'));
       }
     });
   });

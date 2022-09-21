@@ -7,7 +7,7 @@ import { getServerConfig } from './server-config';
 import { readFileSync } from 'fs';
 import { BadRequest } from 'http-errors';
 import * as path from 'path';
-import * as log from 'loglevel';
+import { logger } from '../config';
 import { InternalKeyObject, InternalServerConfigObject, InternalUserObject } from '../types';
 
 const MANAGER_RESET_PASSWORD_TOKEN_LIFETIME = 7 * 24 * 3600 * 1000;
@@ -142,7 +142,7 @@ export async function sendResetPasswordEmail(email: string, managerId: string, i
   try {
     await sendEmail(email, subject, html);
   } catch (err) {
-    log.error(err);
+    logger.error(err);
   }
 
   return user.get();
@@ -166,7 +166,7 @@ export async function sendKeyEnrollmentEmail(user: InternalUserObject, enrollmen
   try {
     await sendEmail(user.email, subject, html);
   } catch (err) {
-    log.error(err);
+    logger.error(err);
   }
 
   return;
@@ -193,7 +193,7 @@ export async function sendEnrollmentFinalizeEmail(userName: string, address: str
   try {
     await sendEmail(config.contact, subject, html);
   } catch (err) {
-    log.error(err);
+    logger.error(err);
   }
 }
 
@@ -235,7 +235,7 @@ export async function sendKeyRevocationEmail(user: InternalUserObject, key: Inte
       }
     });
   } catch (err) {
-    log.error(err);
+    logger.error(err);
   }
 }
 
@@ -243,9 +243,9 @@ export async function sendEmail(email: string, subject: string, html: any) {
   const transporter = getTransporter();
   await transporter.sendMail(MailTemplate(email, subject, html), function (err, info) {
     if (err) {
-      log.error(err);
+      logger.error(err);
     } else {
-      log.info('Message sent', info);
+      logger.info('Message sent', info);
     }
   });
 }

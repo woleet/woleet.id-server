@@ -9,7 +9,7 @@ import { oidcKey } from '../config';
 import { createPrivateKey, generateKeyPairSync } from 'crypto';
 import { fromKeyLike } from 'jose/jwk/from_key_like';
 
-import * as log from 'loglevel';
+import { logger } from '../config';
 
 const debug = Debug('id:oidcp');
 
@@ -30,7 +30,7 @@ export function isInitialized() {
 
 function abortInit(message): void {
   initialized = false;
-  log.warn(message);
+  logger.warn(message);
   provider = null;
 }
 
@@ -106,14 +106,14 @@ export function getActiveServer() {
 export function stopOIDCProvider(): Promise<void> {
   return new Promise((resolve) => {
     if (server) {
-      log.info('Shutting down OIDCP server...');
+      logger.info('Shutting down OIDCP server...');
       server.close(() => {
-        log.info('OIDCP server is now down');
+        logger.info('OIDCP server is now down');
         setActiveServer(null);
         resolve();
       });
     } else {
-      log.info('Nothing to do, OIDCP server is already down');
+      logger.info('Nothing to do, OIDCP server is already down');
       resolve();
     }
   });

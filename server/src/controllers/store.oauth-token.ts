@@ -2,7 +2,7 @@ import * as LRU from 'lru-cache';
 import { Cache } from 'lru-cache';
 
 import { getProvider } from './oidc-provider';
-import * as log from 'loglevel';
+import { logger } from '../config';
 import { InternalOauthTokenObject, InternalTokenObject } from '../types';
 
 function serialize(token: InternalOauthTokenObject): InternalTokenObject {
@@ -40,7 +40,7 @@ export class OauthAccessTokenStore {
 
     const accessToken: InternalOauthTokenObject = await getProvider().AccessToken.find(value);
     if (!accessToken) {
-      log.warn(`Attempt to log in with invalid token ${value}`);
+      logger.warn(`Attempt to log in with invalid token ${value}`);
       return null;
     }
 

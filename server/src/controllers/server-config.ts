@@ -1,7 +1,7 @@
 import { ServerConfig } from '../database';
 import { serverConfig } from '../config';
 import * as Debug from 'debug';
-import * as log from 'loglevel';
+import { logger } from '../config';
 import { exit } from '../exit';
 import { createReadStream, createWriteStream } from 'fs';
 import * as path from 'path';
@@ -29,7 +29,7 @@ function setInMemoryConfig(newConfig: InternalServerConfigObject): void {
 export async function loadServerConfig(): Promise<InternalServerConfigObject> {
   const cfg = await ServerConfig.getById(CONFIG_ID);
   if (!cfg) {
-    log.warn('No configuration found in database');
+    logger.warn('No configuration found in database');
     return;
   }
   setInMemoryConfig(cfg.get().config);
@@ -54,7 +54,7 @@ export async function updateTCU(file) {
   const reader = createReadStream(file.path);
   const stream = createWriteStream(TCUPath);
   reader.pipe(stream);
-  log.info('Updating TCU file');
+  logger.info('Updating TCU file');
 }
 
 // Create a stream to overwrite the current TCU pdf with the default TCU pdf
@@ -62,7 +62,7 @@ export async function defaultTCU() {
   const reader = createReadStream(defaultTCUPath);
   const stream = createWriteStream(TCUPath);
   reader.pipe(stream);
-  log.info('Reset TCU file to default value');
+  logger.info('Reset TCU file to default value');
 }
 
 export async function setServerConfig(up: ServerConfigUpdate): Promise<InternalServerConfigObject & ServerConfigError> {
@@ -133,7 +133,7 @@ async function checkOIDCConfigChange(up: ServerConfigUpdate) {
     try {
       await fns.updateOIDCClient();
     } catch (err) {
-      log.error('Cannot initialize OpenID Connect, it will be automatically disabled.', err);
+      logger.error('Cannot initialize OpenID Connect, it will be automatically disabled.', err);
       await setServerConfig({ enableOpenIDConnect: false });
       return 'Cannot initialize OpenID Connect, check your configuration.';
     }
@@ -144,7 +144,7 @@ function OIDCPSafeReboot() {
   debug('Reboot OIDCP');
   return fns.bootOIDCProvider()
     .catch((err) => {
-      log.error('Cannot reboot OpenID Connect, it will be automatically disabled.');
+      logger.error('Cannot reboot OpenID Connect, it will be automatically disabled.');
       setServerConfig({ enableOIDCP: false });
       exit('FATAL: Cannot boot the OIDCP server', err);
     });
@@ -165,7 +165,7 @@ async function checkOIDCPConfigChange(up: ServerConfigUpdate) {
       await fns.updateOIDCProvider();
       await OIDCPSafeReboot();
     } catch (err) {
-      log.error('Cannot initialize OpenID Connect, it will be automatically disabled.', err);
+      logger.error('Cannot initialize OpenID Connect, it will be automatically disabled.', err);
       await setServerConfig({ enableOpenIDConnect: false });
       return err ? err.message : 'Cannot initialize OpenID Connect, check your configuration.';
     }
@@ -180,7 +180,7 @@ async function checkSMTPConfigChange(up: ServerConfigUpdate) {
     try {
       await fns.updateSMTP();
     } catch (err) {
-      log.error('Cannot initialize SMTP, it will be automatically disabled.', err);
+      logger.error('Cannot initialize SMTP, it will be automatically disabled.', err);
       await setServerConfig({ enableSMTP: false });
       // syntaxt error have a message, configuration error doesn't
       if (err) {
@@ -224,18 +224,18 @@ async function checkProofDeskConfigChange(up: ServerConfigUpdate): Promise<strin
             if (!json.error) {
               resolve(null);
             } else {
-              log.error(json.error);
+              logger.error(json.error);
               await setServerConfig({ enableProofDesk: false });
               resolve('Connection with ProofDesk blocked: ' + json.error);
             }
           } catch (err) {
-            log.error('Response is not a JSON (bad URL?)');
+            logger.error('Response is not a JSON (bad URL?)');
             await setServerConfig({ enableProofDesk: false });
             resolve('Response is not a JSON (bad URL?)');
           }
         });
       }).on('error', async (err) => {
-        log.error(err.message);
+        logger.error(err.message);
         await setServerConfig({ enableProofDesk: false });
         resolve(err.message);
       });

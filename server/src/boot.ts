@@ -12,21 +12,21 @@ import { bootOIDCProvider, bootServers } from './boot.servers';
 import { initServerConfig } from './boot.server-config';
 import { exit } from './exit';
 import { cacheLock } from './cacheLock';
-import * as log from 'loglevel';
+import { logger } from './config';
 
 async function _boot() {
   await initdb()
     .catch((err) => exit(`Cannot initialize database: ${err.message}`, err))
     .then((isFirst) => {
       if (isFirst) {
-        log.warn(`${secretEnvVariableName} secret is used to encrypt your keys. ` +
+        logger.warn(`${secretEnvVariableName} secret is used to encrypt your keys. ` +
           `You can set it as an environmental variable or enter it each time you restart Woleet.ID Server. ` +
           `Without this secret you cannot recover your keys.`);
       }
     })
     .then(() => secureModule.init(secretEnvVariableName))
     .then(() => {
-      log.info('Secure module successfully initialized');
+      logger.info('Secure module successfully initialized');
     })
     .catch((err) => exit(`Cannot initialize secret: ${err.message}`, err))
     .then(() => postinitdb())
@@ -43,7 +43,7 @@ async function _boot() {
         await initializeOIDC();
         return;
       } catch (err) {
-        log.error('Cannot initialize OpenID Connect, it will be automatically disabled.', err);
+        logger.error('Cannot initialize OpenID Connect, it will be automatically disabled.', err);
       }
       return setServerConfig({ enableOpenIDConnect: false });
     })
@@ -52,7 +52,7 @@ async function _boot() {
         await initializeOIDCProvider();
         return;
       } catch (err) {
-        log.error('Cannot initialize OpenID Connect Provider, it will be automatically disabled.', err);
+        logger.error('Cannot initialize OpenID Connect Provider, it will be automatically disabled.', err);
       }
     })
     .then(async () => {
@@ -60,14 +60,14 @@ async function _boot() {
         await initializeSMTP();
         return;
       } catch (err) {
-        log.error('Cannot initialize SMTP, it will be automatically disabled.', err);
+        logger.error('Cannot initialize SMTP, it will be automatically disabled.', err);
       }
       return setServerConfig({ enableSMTP: false });
     })
     .catch((err) => exit(`Cannot update server config: ${err.message}`, err))
     .then(() => bootServers())
     .catch((err) => exit(`Cannot start servers: ${err.message}`, err))
-    .then(() => log.info('All done. You can now detach the CLI (ctrl+c)'));
+    .then(() => logger.info('All done. You can now detach the CLI (ctrl+c)'));
 }
 
 cacheLock.doLockByCache('boot', _boot);

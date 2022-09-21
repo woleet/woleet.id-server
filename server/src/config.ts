@@ -1,30 +1,33 @@
 import { SetOption } from 'cookies';
 import * as fs from 'fs';
 import { readFileSync } from 'fs';
-import  *  as  winston  from  'winston';
-import  'winston-daily-rotate-file';
+import * as  winston from 'winston';
+import 'winston-daily-rotate-file';
 import * as path from 'path';
-import * as log from 'loglevel';
 import * as crypto from 'crypto';
 import * as assert from 'assert';
 import * as chalk from 'chalk';
 
 import { SecureModule } from '@woleet/woleet-secure-module';
 
-// Logger setup
+const myFormat = winston.format.printf(({ level, message, timestamp }) => {
+  return `[${timestamp}] ${level}: ${message}`;
+});
 
-const originalFactory = log.methodFactory;
-// @ts-ignore-next-line
-log.methodFactory = function (methodName, logLevel, loggerName) {
-  const rawMethod = originalFactory(methodName, logLevel, loggerName);
-  const colors = { trace: 'grey', debug: 'cyan', info: 'green', warn: 'yellow', error: 'red' };
+const loggerTransport = new winston.transports.Console({
+  format: winston.format.combine(
+    winston.format.colorize(),
+    winston.format.timestamp(),
+    myFormat
+  )
+});
 
-  return function () {
-    const level = chalk[colors[methodName]].bold(`[${methodName}]`);
-    const date = new Date().toISOString();
-    rawMethod.apply(log, [`${date} ${level}`].concat(...arguments));
-  };
-};
+// Winston logger
+export const logger = winston.createLogger({
+  transports: [
+    loggerTransport
+  ]
+});
 
 const prefix = 'WOLEET_ID_SERVER_';
 
@@ -39,7 +42,7 @@ if (fs.existsSync(dockerSwarmSecretFilePath)) {
 function getenv<T = string>(name: string, fallback: T = null): T {
   const value = process.env[prefix + name];
   if (!value && fallback !== null) {
-    log.warn(`No value found for '${prefix + name}', defaulting to '${JSON.stringify(fallback)}'`);
+    logger.warn(`No value found for '${prefix + name}', defaulting to '${JSON.stringify(fallback)}'`);
   }
   if (fallback !== null) {
     switch (typeof fallback) {
@@ -54,9 +57,9 @@ function getenv<T = string>(name: string, fallback: T = null): T {
 
 export const production = getenv('PRODUCTION', true);
 
-log.setLevel(production ? 'info' : 'debug');
+loggerTransport.level = production ? 'info' : 'debug';
 
-log[production ? 'info' : 'warn'](
+logger[production ? 'info' : 'warn'](
   // @ts-ignore
   `Running server in ${chalk.bold(production ? chalk.green('PRODUCTION') : chalk.red('DEVELOPMENT'))} mode`
 );
@@ -162,7 +165,7 @@ const serverEventTransport = new winston.transports.DailyRotateFile({
   )
 });
 
-// Winston logger
+// Winston server event logger
 export const serverEventLogger = winston.createLogger({
   transports: [
     serverEventTransport

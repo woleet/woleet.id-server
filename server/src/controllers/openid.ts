@@ -1,5 +1,5 @@
 import * as Debug from 'debug';
-import * as log from 'loglevel';
+import { logger } from '../config';
 import { Issuer } from 'openid-client';
 import { v4 as uuidv4 } from 'uuid';
 import { randomBytes } from 'crypto';
@@ -35,13 +35,13 @@ async function configure() {
 
   if (!config.openIDConnectURL) {
     debug('No openIDConnectURL set, skipping configuration');
-    log.warn('No openIDConnectURL set while OpenID Connect is enabled, skipping configuration');
+    logger.warn('No openIDConnectURL set while OpenID Connect is enabled, skipping configuration');
     return;
   }
 
   if (!config.openIDConnectClientRedirectURL) {
     debug('No openIDConnectClientRedirectURL set, skipping configuration');
-    log.warn('No openIDConnectClientRedirectURL set while OpenID Connect is enabled, skipping configuration');
+    logger.warn('No openIDConnectClientRedirectURL set while OpenID Connect is enabled, skipping configuration');
     return;
   }
 
@@ -162,7 +162,7 @@ export async function oauthCallbackEndpoint(ctx, redirectURL = getClientRedirect
       { response_type: 'code', state, nonce }
     );
   } catch (err) {
-    log.warn(err);
+    logger.warn(err);
     throw new BadRequest(err.message);
   }
 
@@ -170,7 +170,7 @@ export async function oauthCallbackEndpoint(ctx, redirectURL = getClientRedirect
   try {
     info = await client.userinfo(tokenSet);
   } catch (err) {
-    log.warn(err);
+    logger.warn(err);
     throw new BadRequest(err.message);
   }
 
