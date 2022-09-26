@@ -29,6 +29,9 @@ Thumbs.db
 # Databse
 db
 
+# Log
+log
+
 # Dump
 *.sql
 

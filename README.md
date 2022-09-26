@@ -236,7 +236,7 @@ The daily log files will be stored in a directory that you can define with the e
 export WOLEET_ID_SERVER_LOG_DIRNAME={directory name where you want to store them}
 ```
 
-By default the logs will be stored in the log directory in the server directory.
+By default the logs will be stored in the log directory.
 
 # Build the server
 
