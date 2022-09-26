@@ -158,7 +158,7 @@ const serverEventTransport = new winston.transports.DailyRotateFile({
   datePattern: 'YYYY-MM-DD',
   zippedArchive: true,
   frequency: '1d',
-  dirname: getenv('LOG_DIRNAME', '.'),
+  dirname: getenv('LOG_DIRNAME', '../log'),
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json()
