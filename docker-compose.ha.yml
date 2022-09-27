@@ -25,6 +25,8 @@ services:
       WOLEET_ID_SERVER_REDIS_PORT: ${WOLEET_ID_SERVER_REDIS_PORT:-6379}
       WOLEET_ID_SERVER_COOKIE_KEY: ${WOLEET_ID_SERVER_COOKIE_KEY}
       WOLEET_ID_SERVER_OIDC_KEY: ${WOLEET_ID_SERVER_OIDC_KEY}
+      WOLEET_ID_SERVER_LOG_DIRNAME: ${WOLEET_ID_SERVER_LOG_DIRNAME:-/vars/log/wids}
+      WOLEET_ID_SERVER_DAILY_ROTATE_FILE: ${WOLEET_ID_SERVER_DAILY_ROTATE_FILE:-true}
     secrets:
       - source: encryption-secret
         target: /usr/src/app/dist/src/encryption_secret

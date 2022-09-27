@@ -153,7 +153,7 @@ export const oidcKey = getenv('OIDC_KEY', 'random');
 
 export const secureModule = new SecureModule;
 
-const serverEventTransport = new winston.transports.DailyRotateFile({
+const serverEventTransportDailyRotateFile = new winston.transports.DailyRotateFile({
   filename: 'server-event-%DATE%.log',
   datePattern: 'YYYY-MM-DD',
   zippedArchive: true,
@@ -165,9 +165,16 @@ const serverEventTransport = new winston.transports.DailyRotateFile({
   )
 });
 
+const serverEventTransportConsole = new winston.transports.Console({
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  )
+});
+
 // Winston server event logger
 export const serverEventLogger = winston.createLogger({
   transports: [
-    serverEventTransport
+    getenv('DAILY_ROTATE_FILE', true) ? serverEventTransportDailyRotateFile : serverEventTransportConsole
   ]
 });

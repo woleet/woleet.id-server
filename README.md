@@ -230,9 +230,10 @@ export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoint
 
 ## Log directory
 
-The daily log files will be stored in a directory that you can define with the environment variable:
+You choose or not to have your server log stored and if you choose to, daily log files will be stored in a directory that you can define with the environment variable:
 
 ```bash
+export WOLEET_ID_SERVER_DAILY_ROTATE_FILE={boolean true if you want to store your log}
 export WOLEET_ID_SERVER_LOG_DIRNAME={directory name where you want to store them}
 ```
 
