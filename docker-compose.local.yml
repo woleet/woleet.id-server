@@ -15,9 +15,9 @@ services:
     environment:
       WOLEET_ID_SERVER_CACHE_TYPE: ${WOLEET_ID_SERVER_CACHE_TYPE:-local}
       WOLEET_ID_SERVER_OIDC_KEY: ${WOLEET_ID_SERVER_OIDC_KEY:-random}
-      WOLEET_ID_SERVER_DAILY_ROTATE_FILE: ${WOLEET_ID_SERVER_DAILY_ROTATE_FILE:-true}
+      WOLEET_ID_SERVER_EVENT_FILE: ${WOLEET_ID_SERVER_EVENT_FILE:-true}
     volumes:
-      - ${WOLEET_ID_SERVER_LOG_DIRNAME:-./log}:/var/log/wids
+      - ${WOLEET_ID_SERVER_EVENT_LOG_DIRNAME:-./log}:/usr/src/log
     networks:
       - postgres-server
     depends_on:

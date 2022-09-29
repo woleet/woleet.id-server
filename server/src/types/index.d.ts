@@ -200,24 +200,6 @@ interface Session {
   oauth?: Object;
 }
 
-/* Events */
-
-type ServerEventTypeEnum =
-  'signature'
-  | 'config.edit'
-  | 'login'
-  | 'error'
-  | 'enrollment.create' | 'enrollment.create-signature-request'
-  | 'enrollment.delete' | 'enrollment.edit'
-  | 'key.create' | 'key.edit' | 'key.delete'
-  | 'user.create' | 'user.edit' | 'user.delete'
-  | 'token.create' | 'token.edit' | 'token.delete'
-  ;
-
-interface ServerEvent {
-  type: ServerEventTypeEnum;
-}
-
 /* Server config */
 interface InternalServerConfigObject extends ServerConfig {
   version: number;

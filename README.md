@@ -228,13 +228,13 @@ export WOLEET_ID_SERVER_OIDCP_PORT={port where to expose OpenID Connect endpoint
 
 > WARNING: it is not recommended to expose these ports outside your organization's network, except for the Identity endpoint, which must be accessible publicly via the identity URL.
 
-## Log directory
+## Server events log directory
 
-You choose or not to have your server log stored and if you choose to, daily log files will be stored in a directory that you can define with the environment variable:
+You choose or not to have your server events log stored and if you choose to, daily log files will be stored in a directory that you can define with the environment variable:
 
 ```bash
-export WOLEET_ID_SERVER_DAILY_ROTATE_FILE={boolean true if you want to store your log}
-export WOLEET_ID_SERVER_LOG_DIRNAME={directory name where you want to store them}
+export WOLEET_ID_SERVER_EVENT_FILE={boolean true (default in ./app.sh start) if you want to store your log, false (default in ./app.sh ha-start)if you want to have logs outputted on stdout as json}
+export WOLEET_ID_SERVER_EVENT_LOG_DIRNAME={directory name where you want to store them}
 ```
 
 By default the logs will be stored in the log directory.

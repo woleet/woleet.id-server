@@ -158,7 +158,7 @@ const serverEventTransportDailyRotateFile = new winston.transports.DailyRotateFi
   datePattern: 'YYYY-MM-DD',
   zippedArchive: true,
   frequency: '1d',
-  dirname: getenv('LOG_DIRNAME', '../log'),
+  dirname: getenv('EVENT_LOG_DIRNAME', '../log'),
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json()
@@ -175,6 +175,6 @@ const serverEventTransportConsole = new winston.transports.Console({
 // Winston server event logger
 export const serverEventLogger = winston.createLogger({
   transports: [
-    getenv('DAILY_ROTATE_FILE', true) ? serverEventTransportDailyRotateFile : serverEventTransportConsole
+    getenv('EVENT_FILE', true) ? serverEventTransportDailyRotateFile : serverEventTransportConsole
   ]
 });
