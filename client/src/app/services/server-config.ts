@@ -150,6 +150,10 @@ export class ServerConfigService {
       });
   }
 
+  getTCUURL() {
+    return `${serverURL}/assets/custom_TCU.pdf`;
+  }
+
   getTCU() {
     this.http.get(`${serverURL}/assets/custom_TCU.pdf`, { responseType: 'arraybuffer' })
       .subscribe(res => {

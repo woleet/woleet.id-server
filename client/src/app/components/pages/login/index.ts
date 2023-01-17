@@ -5,6 +5,7 @@ import { mainRoute } from '@app/config';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AppConfigService } from '@services/boot';
+import { ServerConfigService } from '@services/server-config';
 
 @Component({
   templateUrl: './index.html',
@@ -17,7 +18,8 @@ export class LoginPageComponent {
   errorMsg: string = null;
   config: any;
 
-  constructor(private authService: AuthService, appConfigService: AppConfigService, private router: Router) {
+  constructor(private authService: AuthService, appConfigService: AppConfigService,
+              private router: Router, private serverConfigService: ServerConfigService) {
     this.user = { username: '', password: '' };
     this.lock$ = authService.lock$;
     this.config = appConfigService.getConfig();
@@ -39,5 +41,9 @@ export class LoginPageComponent {
 
   openid() {
     return this.authService.openid();
+  }
+
+  getTCUURL() {
+    return this.serverConfigService.getTCUURL();
   }
 }
