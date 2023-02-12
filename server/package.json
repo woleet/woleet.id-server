@@ -45,7 +45,7 @@
     "mustache": "4.2.0",
     "node-cache": "5.1.2",
     "nodemailer": "6.7.2",
-    "oidc-provider": "7.10.4",
+    "oidc-provider": "8.1.0",
     "openid-client": "5.1.0",
     "pg": "8.4.2",
     "pg-hstore": "2.3.4",
