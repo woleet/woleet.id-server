@@ -51,7 +51,7 @@ export function getServerConfig(): InternalServerConfigObject {
 
 // Create a stream to overwrite the current TCU pdf with the new TCU pdf
 export async function updateTCU(file) {
-  const reader = createReadStream(file.path);
+  const reader = createReadStream(file.filepath);
   const stream = createWriteStream(TCUPath);
   reader.pipe(stream);
   logger.info('Updating TCU file');
