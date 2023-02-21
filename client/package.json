@@ -26,7 +26,7 @@
     "@angular/router": "13.3.11",
     "bs58check": "2.1.2",
     "deep-copy": "1.4.2",
-    "deep-object-diff": "1.1.7",
+    "deep-object-diff": "1.1.9",
     "libphonenumber-js": "1.10.7",
     "loglevel": "1.8.0",
     "rxjs": "6.6.7",
